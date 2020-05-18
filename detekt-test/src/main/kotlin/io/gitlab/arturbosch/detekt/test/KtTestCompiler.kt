@@ -36,7 +36,8 @@ object KtTestCompiler : KtCompiler() {
         val file = psiFileFactory.createFileFromText(
             filename,
             KotlinLanguage.INSTANCE,
-            StringUtilRt.convertLineSeparators(content)) as? KtFile
+            StringUtilRt.convertLineSeparators(content)
+        ) as? KtFile
         file?.putUserData(ABSOLUTE_PATH, filename)
         return file ?: error("kotlin file expected")
     }

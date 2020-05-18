@@ -17,7 +17,8 @@ class UnnecessarySafeCallSpec : Spek({
     describe("check unnecessary safe operators") {
 
         it("reports a simple safe operator usage") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     val a = 1
                     val b = a?.toString()
@@ -28,7 +29,8 @@ class UnnecessarySafeCallSpec : Spek({
         }
 
         it("reports a chained safe operator usage") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     val a = 1
                     val b = a?.plus(42)
@@ -39,7 +41,8 @@ class UnnecessarySafeCallSpec : Spek({
         }
 
         it("reports multiple chained safe operator usage") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     val a = 1
                     val b = a?.plus(42)?.minus(24)
@@ -53,7 +56,8 @@ class UnnecessarySafeCallSpec : Spek({
     describe("check valid safe operators usage") {
 
         it("does not report a simple safe operator usage on nullable type") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     val a : Int? = 1
                     val b = a?.plus(42)

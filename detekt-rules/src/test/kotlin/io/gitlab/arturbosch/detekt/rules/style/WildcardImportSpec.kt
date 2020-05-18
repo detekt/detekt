@@ -14,7 +14,8 @@ class WildcardImportSpec : Spek({
     describe("WildcardImport rule") {
 
         context("a kt file with wildcard imports") {
-            val code = """
+            val code =
+                """
                 package org
 
                 import io.gitlab.arturbosch.detekt.*
@@ -67,7 +68,8 @@ class WildcardImportSpec : Spek({
             }
 
             it("ignores the default values") {
-                val code2 = """
+                val code2 =
+                    """
                     import java.util.*
                     import kotlinx.android.synthetic.*
                 """
@@ -78,7 +80,8 @@ class WildcardImportSpec : Spek({
         }
 
         context("a kt file with no wildcard imports") {
-            val code = """
+            val code =
+                """
             package org
 
             import org.spekframework.spek2.Spek

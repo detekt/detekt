@@ -28,10 +28,12 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Function names should follow the naming convention set in the configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Function names should follow the naming convention set in the configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val functionPattern by LazyRegex(FUNCTION_PATTERN, "([a-z][a-zA-Z0-9]*)|(`.*`)")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
@@ -46,12 +48,14 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !function.identifierName().matches(functionPattern) &&
-            function.identifierName() != function.typeReference?.name) {
+            function.identifierName() != function.typeReference?.name
+        ) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atName(function),
-                    message = "Function names should match the pattern: $functionPattern")
+                    message = "Function names should match the pattern: $functionPattern"
+                )
             )
         }
     }

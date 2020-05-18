@@ -11,7 +11,8 @@ class ConstructorParameterNamingSpec : Spek({
     describe("parameters in a constructor of a class") {
 
         it("should detect no violations") {
-            val code = """
+            val code =
+                """
                 class C(val param: String, private val privateParam: String)
 
                 class D {
@@ -23,7 +24,8 @@ class ConstructorParameterNamingSpec : Spek({
         }
 
         it("should find some violations") {
-            val code = """
+            val code =
+                """
                 class C(val PARAM: String, private val PRIVATE_PARAM: String)
 
                 class C {
@@ -35,14 +37,16 @@ class ConstructorParameterNamingSpec : Spek({
         }
 
         it("should find a violation in the correct text locaction") {
-            val code = """
+            val code =
+                """
                 class C(val PARAM: String)
             """
             assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
         }
 
         it("should not complain about override") {
-            val code = """
+            val code =
+                """
                 class C(override val PARAM: String) : I
 
                 interface I { val PARAM: String }
@@ -51,7 +55,8 @@ class ConstructorParameterNamingSpec : Spek({
         }
 
         it("should not complain about override") {
-            val code = """
+            val code =
+                """
                 class C(override val PARAM: String) : I
 
                 interface I { val PARAM: String }

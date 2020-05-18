@@ -13,7 +13,8 @@ class PrintStackTraceSpec : Spek({
         context("catch clauses with printStacktrace methods") {
 
             it("prints a stacktrace") {
-                val code = """
+                val code =
+                    """
                 fun x() {
                     try {
                     } catch (e: Exception) {
@@ -24,7 +25,8 @@ class PrintStackTraceSpec : Spek({
             }
 
             it("does not print a stacktrace") {
-                val code = """
+                val code =
+                    """
                 fun x() {
                     try {
                     } catch (e: Exception) {
@@ -42,7 +44,8 @@ class PrintStackTraceSpec : Spek({
         context("a stacktrace printed by a thread") {
 
             it("prints one") {
-                val code = """
+                val code =
+                    """
                 fun x() {
                     Thread.dumpStack()
 

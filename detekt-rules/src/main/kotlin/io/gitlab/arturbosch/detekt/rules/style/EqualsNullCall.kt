@@ -25,9 +25,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("EqualsNullCall", Severity.Style,
-            "Equals() method is called with null as parameter. Consider using == to compare to null.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "EqualsNullCall", Severity.Style,
+        "Equals() method is called with null as parameter. Consider using == to compare to null.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (expression.calleeExpression?.text == "equals" && hasNullParameter(expression)) {

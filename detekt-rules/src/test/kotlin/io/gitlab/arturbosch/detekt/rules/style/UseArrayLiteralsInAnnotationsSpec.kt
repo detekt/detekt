@@ -12,21 +12,25 @@ class UseArrayLiteralsInAnnotationsSpec : Spek({
     describe("suggests replacing arrayOf with [] syntax") {
 
         it("finds an arrayOf usage") {
-            val findings = subject.compileAndLint("""
-            annotation class Test(val values: Array<String>)
-            @Test(arrayOf("value"))
-            fun test() = Unit
-        """.trimIndent())
+            val findings = subject.compileAndLint(
+                """
+                annotation class Test(val values: Array<String>)
+                @Test(arrayOf("value"))
+                fun test() = Unit
+                """.trimIndent()
+            )
 
             assertThat(findings).hasSize(1)
         }
 
         it("expects [] syntax") {
-            val findings = subject.compileAndLint("""
-            annotation class Test(val values: Array<String>)
-            @Test(["value"])
-            fun test() = Unit
-        """.trimIndent())
+            val findings = subject.compileAndLint(
+                """
+                annotation class Test(val values: Array<String>)
+                @Test(["value"])
+                fun test() = Unit
+                """.trimIndent()
+            )
 
             assertThat(findings).isEmpty()
         }

@@ -42,10 +42,12 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("unused")
 
-    override val issue: Issue = Issue("UnusedPrivateClass",
-            Severity.Maintainability,
-            "Private class is unused.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UnusedPrivateClass",
+        Severity.Maintainability,
+        "Private class is unused.",
+        Debt.FIVE_MINS
+    )
 
     override fun visit(root: KtFile) {
         super.visit(root)
@@ -73,8 +75,8 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                 privateClasses.add(klass)
             }
             klass.getSuperTypeList()?.entries
-                    ?.mapNotNull { it.typeReference }
-                    ?.forEach { registerAccess(it) }
+                ?.mapNotNull { it.typeReference }
+                ?.forEach { registerAccess(it) }
             super.visitClass(klass)
         }
 
@@ -89,19 +91,19 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
             // Try with the type with generics (e.g. Foo<Any>, Foo<Any>?)
             (typeReference.typeElement?.orInnerType() as? KtUserType)
-                    ?.referencedName
-                    ?.run { namedClasses.add(this) }
+                ?.referencedName
+                ?.run { namedClasses.add(this) }
 
             // Try with the type being a generic argument of other type (e.g. List<Foo>, List<Foo?>)
             typeReference.typeElement?.typeArgumentsAsTypes
-                    ?.asSequence()
-                    ?.filterNotNull()
-                    ?.map { it.orInnerType() }
-                    ?.forEach {
-                        namedClasses.add(it.text)
-                        // Recursively register for nested generic types (e.g. List<List<Foo>>)
-                        if (it is KtTypeReference) registerAccess(it)
-                    }
+                ?.asSequence()
+                ?.filterNotNull()
+                ?.map { it.orInnerType() }
+                ?.forEach {
+                    namedClasses.add(it.text)
+                    // Recursively register for nested generic types (e.g. List<List<Foo>>)
+                    if (it is KtTypeReference) registerAccess(it)
+                }
         }
 
         override fun visitParameter(parameter: KtParameter) {
@@ -144,18 +146,18 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
             checkReceiverForClassUsage(expression.receiverExpression)
             if (expression.isEmptyLHS) {
                 expression.safeAs<KtCallableReferenceExpression>()
-                        ?.callableReference
-                        ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
-                        ?.let { namedClasses.add(it.getReferencedName()) }
+                    ?.callableReference
+                    ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
+                    ?.let { namedClasses.add(it.getReferencedName()) }
             }
             super.visitDoubleColonExpression(expression)
         }
 
         private fun checkReceiverForClassUsage(receiver: KtExpression?) {
             (receiver as? KtNameReferenceExpression)
-                    ?.text
-                    ?.takeIf { looksLikeAClassName(it) }
-                    ?.let { namedClasses.add(it) }
+                ?.text
+                ?.takeIf { looksLikeAClassName(it) }
+                ?.let { namedClasses.add(it) }
         }
 
         override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
@@ -166,7 +168,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         // Without symbol solving it is hard to tell if this is really a class or part of a package.
         // We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
         private fun looksLikeAClassName(maybeClassName: String) =
-                maybeClassName.firstOrNull()?.isUpperCase() == true
+            maybeClassName.firstOrNull()?.isUpperCase() == true
     }
 }
 

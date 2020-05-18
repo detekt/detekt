@@ -14,11 +14,13 @@ class EmptyKtFile(config: Config) : EmptyRule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (file.text.isNullOrBlank()) {
-            report(CodeSmell(
-                issue,
-                Entity.atPackageOrFirstDecl(file),
-                "The empty Kotlin file ${file.name} can be removed."
-            ))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atPackageOrFirstDecl(file),
+                    "The empty Kotlin file ${file.name} can be removed."
+                )
+            )
         }
     }
 }

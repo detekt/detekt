@@ -19,19 +19,22 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     private val rootDir: File = createTempDirectoryForTest(prefix = "applyPlugin").toFile()
     private val randomString = UUID.randomUUID().toString()
 
-    private val settingsContent = """
+    private val settingsContent =
+        """
         |rootProject.name = "rootDir-project"
         |include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
         |
         """.trimMargin()
 
-    private val baselineContent = """
+    private val baselineContent =
+        """
         |<some>
         |   <xml/>
         |</some>
         """.trimMargin()
 
-    private val configFileContent = """
+    private val configFileContent =
+        """
         |build:
         |  maxIssues: 5
         |style:
@@ -42,7 +45,8 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     /**
      * Each generated file is different so the artifacts are not cached in between test runs
      */
-    private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
+    private fun ktFileContent(className: String, withCodeSmell: Boolean = false) =
+        """
     |internal class $className(
     |   val randomDefaultValue: String = "$randomString"
     |) {

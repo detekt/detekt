@@ -16,7 +16,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("reports undocumented public properties in companion object") {
-            val code = """
+            val code =
+                """
                 class Test {
                     companion object {
                         val a = 1
@@ -38,7 +39,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report documented public property") {
-            val code = """
+            val code =
+                """
                 /**
                  * Comment
                  */
@@ -48,7 +50,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report documented public property in class") {
-            val code = """
+            val code =
+                """
                 class Test {
                     /**
                     * Comment
@@ -60,7 +63,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report undocumented, public and overridden property in class") {
-            val code = """
+            val code =
+                """
                 interface I {
                     /**
                      * Comment
@@ -76,7 +80,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report undocumented internal and private property") {
-            val code = """
+            val code =
+                """
                 class Test {
                     internal val a = 1
                     private val b = 1
@@ -86,7 +91,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report local variables") {
-            val code = """
+            val code =
+                """
                 fun commented(x: Int) {
                     var a = x
                 }
@@ -95,7 +101,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report public properties in internal class") {
-            val code = """
+            val code =
+                """
                 internal class NoComments {
                     public val a = 1
                     val b = 1
@@ -105,7 +112,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report public properties in private class") {
-            val code = """
+            val code =
+                """
                 private class NoComments {
                     public val a = 1
                     val b = 1
@@ -115,7 +123,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report properties in a secondary constructor") {
-            val code = """
+            val code =
+                """
                 class Test() {
                     constructor(a: Int) : this()
                 }
@@ -124,7 +133,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report undocumented non-public properties in a primary constructor") {
-            val code = """
+            val code =
+                """
                 class Test1(internal val a: Int)
                 class Test2(b: Int)
             """
@@ -137,7 +147,8 @@ class UndocumentedPublicPropertySpec : Spek({
         }
 
         it("does not report documented public properties in a primary constructor") {
-            val code = """
+            val code =
+                """
                 /**
                 * @property a int1
                 * [b] int2
@@ -152,7 +163,8 @@ class UndocumentedPublicPropertySpec : Spek({
         describe("public properties in nested classes") {
 
             it("reports undocumented public properties in nested classes") {
-                val code = """
+                val code =
+                    """
                 class Outer { 
                     class Inner {
                         val i = 0
@@ -167,7 +179,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("reports undocumented public properties in inner classes") {
-                val code = """
+                val code =
+                    """
                 class Outer {
                     inner class Inner {
                         val i = 0
@@ -178,7 +191,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("reports undocumented public properties inside objects") {
-                val code = """
+                val code =
+                    """
                 object Outer {
                     class Inner {
                         val i = 0
@@ -189,7 +203,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("does not report undocumented and non-public properties in nested classes") {
-                val code = """
+                val code =
+                    """
                 internal class Outer {
                     class Inner {
                         val i = 0
@@ -200,7 +215,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("does not report undocumented and non-public properties in inner classes") {
-                val code = """
+                val code =
+                    """
                 internal class Outer {
                     inner class Inner {
                         val i = 0
@@ -214,7 +230,8 @@ class UndocumentedPublicPropertySpec : Spek({
         describe("public properties in primary constructors inside nested classes") {
 
             it("reports undocumented public properties in nested classes") {
-                val code = """
+                val code =
+                    """
                 class Outer(val a: Int) {
                     class Inner(val b: Int) {
                         class InnerInner(val c: Int)
@@ -225,7 +242,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("reports undocumented public properties in inner classes") {
-                val code = """
+                val code =
+                    """
                 class Outer(val a: Int) {
                     inner class Inner(val b: Int)
                 }
@@ -234,7 +252,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("reports undocumented public properties inside objects") {
-                val code = """
+                val code =
+                    """
                 object Outer {
                     class Inner(val a: Int)
                 }
@@ -243,7 +262,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("does not report undocumented and non-public properties in nested classes") {
-                val code = """
+                val code =
+                    """
                 internal class Outer(val a: Int) {
                     class Inner(val b: Int)
                 }
@@ -252,7 +272,8 @@ class UndocumentedPublicPropertySpec : Spek({
             }
 
             it("does not report undocumented and non-public properties in inner classes") {
-                val code = """
+                val code =
+                    """
                 internal class Outer(val a: Int) {
                     inner class Inner(val b: Int)
                 }

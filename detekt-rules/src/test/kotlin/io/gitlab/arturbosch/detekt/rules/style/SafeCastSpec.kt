@@ -11,7 +11,8 @@ class SafeCastSpec : Spek({
     describe("SafeCast rule") {
 
         it("reports negated expression") {
-            val code = """
+            val code =
+                """
                 fun test(element: Int) {
                     val cast = if (element !is Number) {
                         null
@@ -23,7 +24,8 @@ class SafeCastSpec : Spek({
         }
 
         it("reports expression") {
-            val code = """
+            val code =
+                """
                 fun test(element: Int) {
                     val cast = if (element is Number) {
                         element
@@ -35,7 +37,8 @@ class SafeCastSpec : Spek({
         }
 
         it("does not report wrong condition") {
-            val code = """
+            val code =
+                """
                 fun test(element: Int) {
                     val other = 3
                     val cast = if (element == other) {
@@ -48,7 +51,8 @@ class SafeCastSpec : Spek({
         }
 
         it("does not report wrong else clause") {
-            val code = """
+            val code =
+                """
                 fun test(element: Int) {
                     val cast = if (element is Number) {
                         element

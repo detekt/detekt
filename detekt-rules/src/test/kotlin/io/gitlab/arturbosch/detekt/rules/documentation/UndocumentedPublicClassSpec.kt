@@ -9,38 +9,44 @@ import org.spekframework.spek2.style.specification.describe
 class UndocumentedPublicClassSpec : Spek({
     val subject by memoized { UndocumentedPublicClass() }
 
-    val inner = """
+    val inner =
+        """
             /** Some doc */
             class TestInner {
                 inner class Inner
             }"""
 
-    val innerObject = """
+    val innerObject =
+        """
             /** Some doc */
             class TestInner {
                 object Inner
             }"""
 
-    val innerInterface = """
+    val innerInterface =
+        """
             /** Some doc */
             class TestInner {
                 interface Something
             }"""
 
-    val nested = """
+    val nested =
+        """
             /** Some doc */
             class TestNested {
                 class Nested
             }"""
 
-    val nestedPublic = """
+    val nestedPublic =
+        """
             /** Some doc */
             class TestNested {
                 public class Nested
             }
             """
 
-    val nestedPrivate = """
+    val nestedPrivate =
+        """
             /** Some doc */
             class TestNested {
                 private class Nested
@@ -109,7 +115,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report non-public nested classes") {
-            val code = """
+            val code =
+                """
             internal class Outer {
                 class Nested
                 inner class Inner
@@ -119,7 +126,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report non-public nested interfaces") {
-            val code = """
+            val code =
+                """
             internal class Outer {
                 interface Inner
             }
@@ -128,7 +136,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report non-public nested objects") {
-            val code = """
+            val code =
+                """
             internal class Outer {
                 object Inner
             }
@@ -137,7 +146,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report for documented public object") {
-            val code = """
+            val code =
+                """
             /**
              * Class docs not being recognized.
              */
@@ -156,7 +166,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report for anonymous objects") {
-            val code = """
+            val code =
+                """
             fun main(args: Array<String>) {
                 val value = object : Iterator<Int> {
                     override fun hasNext() = true
@@ -168,7 +179,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should report for enum classes") {
-            val code = """
+            val code =
+                """
             enum class Enum {
                 CONSTANT
             }
@@ -177,7 +189,8 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report for enum constants") {
-            val code = """
+            val code =
+                """
             /** Some doc */
             enum class Enum {
                 CONSTANT

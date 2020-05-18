@@ -9,7 +9,8 @@ class ComplexConditionSpec : Spek({
 
     describe("ComplexCondition rule") {
 
-        val code = """
+        val code =
+            """
             val a = if (5 > 4 && 4 < 6 || (3 < 5 || 2 < 5)) { 42 } else { 24 }
 
             fun complexConditions() {

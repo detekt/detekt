@@ -11,7 +11,7 @@ class EnumNamingSpec : Spek({
 
         it("should detect no violation") {
             val findings = EnumNaming().compileAndLint(
-                    """
+                """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
                 }
@@ -21,7 +21,8 @@ class EnumNamingSpec : Spek({
         }
 
         it("enum name that start with lowercase") {
-            val code = """
+            val code =
+                """
                 enum class WorkFlow {
                     default
                 }"""
@@ -29,7 +30,8 @@ class EnumNamingSpec : Spek({
         }
 
         it("reports an underscore in enum name") {
-            val code = """
+            val code =
+                """
                 enum class WorkFlow {
                     _Default
                 }"""
@@ -37,7 +39,8 @@ class EnumNamingSpec : Spek({
         }
 
         it("no reports an underscore in enum name because it's suppressed") {
-            val code = """
+            val code =
+                """
                 enum class WorkFlow {
                     @Suppress("EnumNaming") _Default
                 }"""
@@ -45,7 +48,8 @@ class EnumNamingSpec : Spek({
         }
 
         it("reports the correct text location in enum name") {
-            val code = """
+            val code =
+                """
                 enum class WorkFlow {
                     _Default,
                 }"""

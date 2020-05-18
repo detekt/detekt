@@ -16,12 +16,12 @@ class AnnotationExcluder(
     constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
 
     private val resolvedAnnotations = root.importList
-            ?.imports
-            ?.asSequence()
-            ?.filterNot { it.isAllUnder }
-            ?.mapNotNull { it.importedFqName?.asString() }
-            ?.map { it.substringAfterLast('.') to it }
-            ?.toMap() ?: emptyMap()
+        ?.imports
+        ?.asSequence()
+        ?.filterNot { it.isAllUnder }
+        ?.mapNotNull { it.importedFqName?.asString() }
+        ?.map { it.substringAfterLast('.') to it }
+        ?.toMap() ?: emptyMap()
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern

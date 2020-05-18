@@ -9,7 +9,8 @@ class NamingRulesSpec : Spek({
 
     describe("naming like in constants is allowed for destructuring and lambdas") {
         it("should not detect any") {
-            val code = """
+            val code =
+                """
                 data class D(val i: Int, val j: Int)
                 fun doStuff() {
                     val (_, HOLY_GRAIL) = D(5, 4)

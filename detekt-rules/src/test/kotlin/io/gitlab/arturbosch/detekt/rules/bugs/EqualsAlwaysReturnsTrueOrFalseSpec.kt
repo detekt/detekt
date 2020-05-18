@@ -22,7 +22,8 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
         }
 
         it("detects and doesn't crash when return expression is annotated - #2021") {
-            val code = """
+            val code =
+                """
                 class C {
                     override fun equals(other: Any?): Boolean {
                         @Suppress("UnsafeCallOnNullableType")
@@ -34,7 +35,8 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
         }
 
         it("detects and doesn't crash when the equals method contains no return expression - #2103") {
-            val code = """
+            val code =
+                """
                 open class SuperClass
                 
                 data class Item(val text: String) : SuperClass() {

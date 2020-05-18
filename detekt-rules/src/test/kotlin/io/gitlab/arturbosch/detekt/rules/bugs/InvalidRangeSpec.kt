@@ -12,7 +12,8 @@ class InvalidRangeSpec : Spek({
     describe("check for loop conditions") {
 
         it("does not report correct bounds in for loop conditions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 2..2) {}
                     for (i in 2 downTo 2) {}
@@ -24,7 +25,8 @@ class InvalidRangeSpec : Spek({
         }
 
         it("reports incorrect bounds in for loop conditions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 2..1) { }
                     for (i in 1 downTo 2) { }
@@ -35,7 +37,8 @@ class InvalidRangeSpec : Spek({
         }
 
         it("reports nested loops with incorrect bounds in for loop conditions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 2..2) {
                         for (i in 2..1) { }

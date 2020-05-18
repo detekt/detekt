@@ -12,7 +12,8 @@ class FunctionNamingSpec : Spek({
     describe("FunctionNaming rule") {
 
         it("allows FunctionName as alias for suppressing") {
-            val code = """
+            val code =
+                """
             @Suppress("FunctionName")
             fun MY_FUN() {}
         """
@@ -20,7 +21,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("ignores functions in classes matching excludeClassPattern") {
-            val code = """
+            val code =
+                """
             class WhateverTest {
                 fun SHOULD_NOT_BE_FLAGGED() {}
             }
@@ -30,7 +32,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("flags functions inside functions") {
-            val code = """
+            val code =
+                """
             class C : I {
                 override fun shouldNotBeFlagged() {
                     fun SHOULD_BE_FLAGGED() { }
@@ -42,7 +45,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("ignores overridden functions by default") {
-            val code = """
+            val code =
+                """
             class C : I {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
             }
@@ -52,7 +56,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("does not report when the function name is identical to the type of the result") {
-            val code = """
+            val code =
+                """
             interface Foo
             private class FooImpl : Foo
 
@@ -63,7 +68,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("flags functions with bad names inside overridden functions by default") {
-            val code = """
+            val code =
+                """
             class C : I {
                 override fun SHOULD_BE_FLAGGED() {
                     fun SHOULD_BE_FLAGGED() {}
@@ -75,7 +81,8 @@ class FunctionNamingSpec : Spek({
         }
 
         it("doesn't ignore overridden functions if ignoreOverridden is false") {
-            val code = """
+            val code =
+                """
             class C : I {
                 override fun SHOULD_BE_FLAGGED() {}
             }

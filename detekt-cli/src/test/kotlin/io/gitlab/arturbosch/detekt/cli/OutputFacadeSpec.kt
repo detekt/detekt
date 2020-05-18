@@ -57,7 +57,8 @@ internal class OutputFacadeSpec : Spek({
             assertThat(printStream.toString()).contains(
                 "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",
                 "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$LN",
-                "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN")
+                "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN"
+            )
         }
     }
 })

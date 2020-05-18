@@ -33,20 +33,20 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val functionParameterNamingRule = FunctionParameterNaming(config)
 
     override val rules: List<Rule> = listOf(
-            variableNamingRule,
-            variableMinNameLengthRule,
-            variableMaxNameLengthRule,
-            topLevelPropertyRule,
-            objectConstantNamingRule,
-            packageNamingRule,
-            classOrObjectNamingRule,
-            enumEntryNamingRule,
-            functionNamingRule,
-            functionMaxNameLengthRule,
-            functionMinNameLengthRule,
-            forbiddenClassNameRule,
-            constructorParameterNamingRule,
-            functionParameterNamingRule
+        variableNamingRule,
+        variableMinNameLengthRule,
+        variableMaxNameLengthRule,
+        topLevelPropertyRule,
+        objectConstantNamingRule,
+        packageNamingRule,
+        classOrObjectNamingRule,
+        enumEntryNamingRule,
+        functionNamingRule,
+        functionMaxNameLengthRule,
+        functionMinNameLengthRule,
+        forbiddenClassNameRule,
+        constructorParameterNamingRule,
+        functionParameterNamingRule
     )
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -100,5 +100,5 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     }
 
     private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
-            this.getNonStrictParentOfType<KtObjectDeclaration>() != null
+        this.getNonStrictParentOfType<KtObjectDeclaration>() != null
 }

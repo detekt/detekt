@@ -38,12 +38,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             }
             ruleSet.configuration
                 .forEach { configuration ->
-                if (configuration.defaultValue.isYamlList()) {
-                    list(configuration.name, configuration.defaultValue.toList())
-                } else {
-                    keyValue { configuration.name to configuration.defaultValue }
+                    if (configuration.defaultValue.isYamlList()) {
+                        list(configuration.name, configuration.defaultValue.toList())
+                    } else {
+                        keyValue { configuration.name to configuration.defaultValue }
+                    }
                 }
-            }
             rules.forEach { rule ->
                 node(rule.name) {
                     keyValue { "active" to "${rule.active}" }
@@ -55,58 +55,63 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     }
                     rule.configuration
                         .forEach { configuration ->
-                        if (configuration.defaultValue.isYamlList()) {
-                            list(configuration.name, configuration.defaultValue.toList())
-                        } else if (configuration.deprecated == null) {
-                            keyValue { configuration.name to configuration.defaultValue }
+                            if (configuration.defaultValue.isYamlList()) {
+                                list(configuration.name, configuration.defaultValue.toList())
+                            } else if (configuration.deprecated == null) {
+                                keyValue { configuration.name to configuration.defaultValue }
+                            }
                         }
-                    }
                 }
             }
             emptyLine()
         }
     }
 
-    private fun defaultBuildConfiguration(): String = """
-      build:
-        maxIssues: 0
-        excludeCorrectable: false
-        weights:
-          # complexity: 2
-          # LongParameterList: 1
-          # style: 1
-          # comments: 1
-    """.trimIndent()
+    private fun defaultBuildConfiguration(): String =
+        """
+        build:
+          maxIssues: 0
+          excludeCorrectable: false
+          weights:
+            # complexity: 2
+            # LongParameterList: 1
+            # style: 1
+            # comments: 1
+        """.trimIndent()
 
-    private fun defaultConfigConfiguration(): String = """
-      config:
-        validation: true
-        # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
-        excludes: ''
-    """.trimIndent()
+    private fun defaultConfigConfiguration(): String =
+        """
+        config:
+          validation: true
+          # when writing own rules with new properties, exclude the property path
+          # e.g.: 'my_rule_set,.*>.*>[my_property]'
+          excludes: ''
+        """.trimIndent()
 
-    private fun defaultProcessorsConfiguration(): String = """
-      processors:
-        active: true
-        exclude:
-          - 'DetektProgressListener'
-        # - 'FunctionCountProcessor'
-        # - 'PropertyCountProcessor'
-        # - 'ClassCountProcessor'
-        # - 'PackageCountProcessor'
-        # - 'KtFileCountProcessor'
-    """.trimIndent()
+    private fun defaultProcessorsConfiguration(): String =
+        """
+        processors:
+          active: true
+          exclude:
+            - 'DetektProgressListener'
+          # - 'FunctionCountProcessor'
+          # - 'PropertyCountProcessor'
+          # - 'ClassCountProcessor'
+          # - 'PackageCountProcessor'
+          # - 'KtFileCountProcessor'
+        """.trimIndent()
 
-    private fun defaultConsoleReportsConfiguration(): String = """
-      console-reports:
-        active: true
-        exclude:
-           - 'ProjectStatisticsReport'
-           - 'ComplexityReport'
-           - 'NotificationReport'
-        #  - 'FindingsReport'
-           - 'FileBasedFindingsReport'
-    """.trimIndent()
+    private fun defaultConsoleReportsConfiguration(): String =
+        """
+        console-reports:
+          active: true
+          exclude:
+             - 'ProjectStatisticsReport'
+             - 'ComplexityReport'
+             - 'NotificationReport'
+          #  - 'FindingsReport'
+             - 'FileBasedFindingsReport'
+        """.trimIndent()
 
     private fun String.isYamlList() = trim().startsWith("-")
 

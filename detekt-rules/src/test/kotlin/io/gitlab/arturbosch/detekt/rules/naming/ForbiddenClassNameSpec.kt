@@ -12,29 +12,37 @@ class ForbiddenClassNameSpec : Spek({
     describe("ForbiddenClassName rule") {
 
         it("should report classes with forbidden names") {
-            val code = """
+            val code =
+                """
                 class TestManager {} // violation
                 class TestProvider {} // violation
                 class TestHolder"""
-            assertThat(ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("Manager", "Provider"))))
-                    .compileAndLint(code))
-                    .hasSize(2)
+            assertThat(
+                ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("Manager", "Provider"))))
+                    .compileAndLint(code)
+            )
+                .hasSize(2)
         }
 
         it("should report a class that starts with a forbidden name") {
             val code = "class TestProvider {}"
-            assertThat(ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("test"))))
-                    .compileAndLint(code))
-                    .hasSize(1)
+            assertThat(
+                ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("test"))))
+                    .compileAndLint(code)
+            )
+                .hasSize(1)
         }
 
         it("should report classes with forbidden names using config string") {
-            val code = """
+            val code =
+                """
                 class TestManager {} // violation
                 class TestProvider {} // violation
                 class TestHolder"""
-            assertThat(ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Manager, Provider")))
-                .compileAndLint(code))
+            assertThat(
+                ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Manager, Provider")))
+                    .compileAndLint(code)
+            )
                 .hasSize(2)
         }
     }

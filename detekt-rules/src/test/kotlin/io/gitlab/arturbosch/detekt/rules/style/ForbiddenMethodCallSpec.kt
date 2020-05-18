@@ -17,7 +17,8 @@ class ForbiddenMethodCallSpec : Spek({
     describe("ForbiddenMethodCall rule") {
 
         it("should report nothing by default") {
-            val code = """
+            val code =
+                """
             import java.lang.System
             fun main() {
             System.out.println("hello")
@@ -28,7 +29,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report nothing when methods are blank") {
-            val code = """
+            val code =
+                """
             import java.lang.System
             fun main() {
             System.out.println("hello")
@@ -43,7 +45,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report nothing when methods do not match") {
-            val code = """
+            val code =
+                """
             import java.lang.System
             fun main() {
             System.out.println("hello")
@@ -56,7 +59,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report method call when using the fully qualified name") {
-            val code = """
+            val code =
+                """
             fun main() {
             java.lang.System.out.println("hello")
             }
@@ -69,7 +73,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report method call when not using the fully qualified name") {
-            val code = """
+            val code =
+                """
             import java.lang.System.out
             fun main() {
             out.println("hello")
@@ -83,7 +88,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report multiple different methods") {
-            val code = """
+            val code =
+                """
             import java.lang.System
             fun main() {
             System.out.println("hello")
@@ -98,7 +104,8 @@ class ForbiddenMethodCallSpec : Spek({
         }
 
         it("should report multiple different methods config with sting") {
-            val code = """
+            val code =
+                """
             import java.lang.System
             fun main() {
             System.out.println("hello")

@@ -27,15 +27,18 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 class UnusedImports(config: Config) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Unused Imports are dead code and should be removed.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "Unused Imports are dead code and should be removed.",
+        Debt.FIVE_MINS
+    )
 
     companion object {
-        private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
-                "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
-                "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
+        private val operatorSet = setOf(
+            "unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
+            "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
+            "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate"
+        )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
         private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
@@ -60,10 +63,10 @@ class UnusedImports(config: Config) : Rule(config) {
 
         fun unusedImports(): List<KtImportDirective> {
             fun KtImportDirective.isFromSamePackage() =
-                    importedFqName?.parent() == currentPackage && alias == null
+                importedFqName?.parent() == currentPackage && alias == null
 
             fun KtImportDirective.isNotUsed() =
-                    aliasName !in namedReferences && identifier() !in namedReferences
+                aliasName !in namedReferences && identifier() !in namedReferences
 
             return imports?.filter { it.isFromSamePackage() || it.isNotUsed() }.orEmpty()
         }
@@ -85,9 +88,9 @@ class UnusedImports(config: Config) : Rule(config) {
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
             expression
-                    .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
-                    ?.takeIf { it.children.isEmpty() }
-                    ?.run { namedReferences.add(text.trim('`')) }
+                .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
+                ?.takeIf { it.children.isEmpty() }
+                ?.run { namedReferences.add(text.trim('`')) }
             super.visitReferenceExpression(expression)
         }
 
@@ -95,8 +98,8 @@ class UnusedImports(config: Config) : Rule(config) {
             val kdoc = dcl.docComment?.getDefaultSection()
 
             kdoc?.getChildrenOfType<KDocTag>()
-                    ?.map { it.text }
-                    ?.forEach { handleKDoc(it) }
+                ?.map { it.text }
+                ?.forEach { handleKDoc(it) }
 
             kdoc?.getContent()?.let {
                 handleKDoc(it)
@@ -106,8 +109,8 @@ class UnusedImports(config: Config) : Rule(config) {
 
         private fun handleKDoc(content: String) {
             kotlinDocReferencesRegExp.findAll(content, 0)
-                    .map { it.groupValues[1] }
-                    .forEach { namedReferences.add(it.split(".")[0]) }
+                .map { it.groupValues[1] }
+                .forEach { namedReferences.add(it.split(".")[0]) }
             kotlinDocBlockTagReferenceRegExp.find(content)?.let {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferences.add(str.split(".")[0])

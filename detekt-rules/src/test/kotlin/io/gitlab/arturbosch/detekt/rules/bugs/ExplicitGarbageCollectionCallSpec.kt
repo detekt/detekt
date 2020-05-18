@@ -12,7 +12,8 @@ class ExplicitGarbageCollectionCallSpec : Spek({
     describe("ExplicitGarbageCollectionCall rule") {
 
         it("reports garbage collector calls") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     System.gc()
                     Runtime.getRuntime().gc()

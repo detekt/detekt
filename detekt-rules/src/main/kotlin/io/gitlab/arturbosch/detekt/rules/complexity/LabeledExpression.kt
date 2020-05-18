@@ -63,10 +63,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("LabeledExpression",
-            Severity.Maintainability,
-            "Expression with labels increase complexity and affect maintainability.",
-            Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(
+        "LabeledExpression",
+        Severity.Maintainability,
+        "Expression with labels increase complexity and affect maintainability.",
+        Debt.TWENTY_MINS
+    )
 
     private val ignoredLabels = valueOrDefaultCommaSeparated(IGNORED_LABELS, emptyList())
         .map { it.removePrefix("*").removeSuffix("*") }
@@ -94,7 +96,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
     private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean {
         return !klass.isInner() ||
-                expression.getStrictParentOfType<KtNamedFunction>()?.isExtensionDeclaration() == true
+            expression.getStrictParentOfType<KtNamedFunction>()?.isExtensionDeclaration() == true
     }
 
     private fun getClassHierarchy(element: KtElement, classes: MutableList<KtClass>) {

@@ -11,7 +11,8 @@ class CommentOverPrivateMethodSpec : Spek({
     describe("CommentOverPrivateFunction rule") {
 
         it("reports private method with a comment") {
-            val code = """
+            val code =
+                """
                 class Test {
                     /**
                      * asdf
@@ -22,7 +23,8 @@ class CommentOverPrivateMethodSpec : Spek({
         }
 
         it("does not report public method with a comment") {
-            val code = """
+            val code =
+                """
                 /**
                  * asdf
                  */
@@ -31,7 +33,8 @@ class CommentOverPrivateMethodSpec : Spek({
         }
 
         it("does not report public method in a class with a comment") {
-            val code = """
+            val code =
+                """
                 class Test {
                     /**
                      * asdf

@@ -13,7 +13,8 @@ class NamingConventionLengthSpec : Spek({
     describe("NamingRules rule") {
 
         it("should not report underscore variable names") {
-            val code = """
+            val code =
+                """
                 fun getResult(): Pair<String, String> = TODO()
                 fun function() {
                     val (_, status) = getResult()
@@ -39,7 +40,8 @@ class NamingConventionLengthSpec : Spek({
             }
 
             it("does not report a variable with only a single underscore") {
-                val code = """
+                val code =
+                    """
             class C {
                 val prop: (Int) -> Unit = { _ -> Unit }
             }"""

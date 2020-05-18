@@ -12,7 +12,8 @@ class ReturnCountSpec : Spek({
     describe("ReturnCount rule") {
 
         context("a file with an if condition guard clause and 2 returns") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 if (x < 4) return 0
                 when (x) {
@@ -31,7 +32,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with an if condition guard clause with body and 2 returns") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 if (x < 4) {
                     println("x x is less than 4")
@@ -59,7 +61,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("too-complicated if does not count as a guard clause") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 if (x < 4) {
                     println("x x is less than 4")
@@ -91,7 +94,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with an ELVIS operator guard clause and 2 returns") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 val y = x ?: return 0
                 when (x) {
@@ -110,7 +114,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with 2 returns and an if condition guard clause which is not the first statement") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -129,7 +134,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -148,7 +154,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with multiple guard clauses") {
-            val code = """
+            val code =
+                """
                 fun multipleGuards(a: Int?, b: Any?, c: Int?) {
                     if(a == null) return
                     val models = b as? Int ?: return
@@ -160,25 +167,30 @@ class ReturnCountSpec : Spek({
 
                     return
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             it("should not count all four guard clauses") {
-                val findings = ReturnCount(TestConfig(
-                    ReturnCount.EXCLUDE_GUARD_CLAUSES to "true"
-                )).compileAndLint(code)
+                val findings = ReturnCount(
+                    TestConfig(
+                        ReturnCount.EXCLUDE_GUARD_CLAUSES to "true"
+                    )
+                ).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should count all four guard clauses") {
-                val findings = ReturnCount(TestConfig(
-                    ReturnCount.EXCLUDE_GUARD_CLAUSES to "false"
-                )).compileAndLint(code)
+                val findings = ReturnCount(
+                    TestConfig(
+                        ReturnCount.EXCLUDE_GUARD_CLAUSES to "false"
+                    )
+                ).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
 
         context("a file with 3 returns") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -206,7 +218,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a file with 2 returns") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -233,7 +246,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a function is ignored") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -245,16 +259,21 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flagged") {
-                val findings = ReturnCount(TestConfig(mapOf(
-                    ReturnCount.MAX to "2",
-                    ReturnCount.EXCLUDED_FUNCTIONS to "test")
-                )).compileAndLint(code)
+                val findings = ReturnCount(
+                    TestConfig(
+                        mapOf(
+                            ReturnCount.MAX to "2",
+                            ReturnCount.EXCLUDED_FUNCTIONS to "test"
+                        )
+                    )
+                ).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
 
         context("a subset of functions are ignored") {
-            val code = """
+            val code =
+                """
             fun test1(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -284,16 +303,21 @@ class ReturnCountSpec : Spek({
         """
 
             it("should flag none of the ignored functions") {
-                val findings = ReturnCount(TestConfig(mapOf(
-                    ReturnCount.MAX to "2",
-                    ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
-                )).compileAndLint(code)
+                val findings = ReturnCount(
+                    TestConfig(
+                        mapOf(
+                            ReturnCount.MAX to "2",
+                            ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2"
+                        )
+                    )
+                ).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
 
         context("a function with inner object") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 val a = object {
                     fun test2(x: Int): Int {
@@ -319,7 +343,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a function with 2 inner object") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 val a = object {
                     fun test2(x: Int): Int {
@@ -354,7 +379,8 @@ class ReturnCountSpec : Spek({
         }
 
         context("a function with 2 inner object and exceeded max") {
-            val code = """
+            val code =
+                """
             fun test(x: Int): Int {
                 val a = object {
                     fun test2(x: Int): Int {
@@ -392,7 +418,8 @@ class ReturnCountSpec : Spek({
 
         context("function with multiple labeled return statements") {
 
-            val code = """
+            val code =
+                """
             fun readUsers(name: String): Flowable<User> {
             return userDao.read(name)
                 .flatMap {
@@ -409,16 +436,20 @@ class ReturnCountSpec : Spek({
 
             it("should count labeled returns from lambda when activated") {
                 val findings = ReturnCount(
-                    TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))).lint(code)
+                    TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))
+                ).lint(code)
                 assertThat(findings).hasSize(1)
             }
 
             it("should be empty when labeled returns are de-activated") {
                 val findings = ReturnCount(
-                    TestConfig(mapOf(
-                        ReturnCount.EXCLUDE_LABELED to "true",
-                        ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
-                    ))).lint(code)
+                    TestConfig(
+                        mapOf(
+                            ReturnCount.EXCLUDE_LABELED to "true",
+                            ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
+                        )
+                    )
+                ).lint(code)
                 assertThat(findings).isEmpty()
             }
         }

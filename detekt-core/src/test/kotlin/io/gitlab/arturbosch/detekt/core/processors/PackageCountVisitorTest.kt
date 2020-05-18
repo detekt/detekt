@@ -12,13 +12,13 @@ class PackageCountVisitorTest : Spek({
 
         it("twoClassesInSeparatePackage") {
             val files = arrayOf(
-                    compileForTest(path.resolve("Default.kt")),
-                    compileForTest(path.resolve("../empty/EmptyEnum.kt"))
+                compileForTest(path.resolve("Default.kt")),
+                compileForTest(path.resolve("../empty/EmptyEnum.kt"))
             )
             val count = files
-                    .map { getData(it) }
-                    .distinct()
-                    .count()
+                .map { getData(it) }
+                .distinct()
+                .count()
             assertThat(count).isEqualTo(2)
         }
     }

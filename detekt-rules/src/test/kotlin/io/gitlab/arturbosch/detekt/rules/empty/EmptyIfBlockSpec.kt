@@ -13,7 +13,8 @@ class EmptyIfBlockSpec : Spek({
     describe("EmptyIfBlock rule") {
 
         it("reports empty if with trailing semicolon") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0);
@@ -24,7 +25,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("reports empty if with trailing semicolon on new line") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0)
@@ -36,7 +38,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("reports empty if with trailing semicolon and braces") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0); {
@@ -48,7 +51,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("does not report nonempty if with braces") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0) {
@@ -60,7 +64,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("does not report nonempty if without braces") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0) i++
@@ -70,7 +75,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("does not report nonempty if without braces but semicolon") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0) i++;
@@ -80,7 +86,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("does not report empty if but nonempty else") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0) ;
@@ -91,7 +98,8 @@ class EmptyIfBlockSpec : Spek({
         }
 
         it("does not report empty if and else-if but nonempty else") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     var i = 0
                     if (i == 0) ;

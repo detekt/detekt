@@ -11,7 +11,8 @@ class ThrowingExceptionFromFinallySpec : Spek({
     describe("ThrowingExceptionFromFinally rule") {
 
         it("should report a throw expression") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } finally {
@@ -24,7 +25,8 @@ class ThrowingExceptionFromFinallySpec : Spek({
         }
 
         it("should report a nested throw expression") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } finally {
@@ -35,7 +37,8 @@ class ThrowingExceptionFromFinallySpec : Spek({
         }
 
         it("should not report a finally expression without a throw expression") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } finally {

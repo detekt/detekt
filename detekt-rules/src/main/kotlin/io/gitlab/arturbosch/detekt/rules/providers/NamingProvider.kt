@@ -19,7 +19,8 @@ class NamingProvider : DefaultRuleSetProvider {
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(
-            ruleSetId, listOf(
+            ruleSetId,
+            listOf(
                 MatchingDeclarationName(config),
                 MemberNameEqualsClassName(config),
                 NamingRules(config),

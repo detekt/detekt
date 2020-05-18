@@ -16,7 +16,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("reports mutable property in class body") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
                     var s: String? = null
                 }
@@ -25,7 +26,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("reports mutable private property in class body") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
                     var s: String = ""
                         private set
@@ -35,7 +37,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("reports lateinit property in class body") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
                     lateinit var s: String
                 }
@@ -49,7 +52,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("does not report readonly property in class body") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
                     val s: String? = null
                 }
@@ -58,7 +62,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("does not report lazy property in class body") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
                     val s: String by lazy { "" }
                 }
@@ -67,7 +72,8 @@ class DataClassShouldBeImmutableSpec : Spek({
         }
 
         it("does not report mutable variables in non-data classes") {
-            val code = """
+            val code =
+                """
                 class C(var i: Int) {
                     val s: String by lazy { "" }
                 }

@@ -9,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
     val subject by memoized {
         ThrowingExceptionsWithoutMessageOrCause(
-                TestConfig(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to listOf("IllegalArgumentException"))
+            TestConfig(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to listOf("IllegalArgumentException"))
         )
     }
 
@@ -17,7 +17,8 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
 
         context("several exception calls") {
 
-            val code = """
+            val code =
+                """
                 fun x() {
                     IllegalArgumentException(IllegalArgumentException())
                     IllegalArgumentException("foo")
@@ -38,7 +39,8 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
         context("a test code which asserts an exception") {
 
             it("does not report a call to this exception") {
-                val code = """
+                val code =
+                    """
                 fun test() {
                     org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
                 }

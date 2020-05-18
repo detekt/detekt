@@ -35,11 +35,14 @@ inline fun <reified T : Args> parseArguments(
     }
 
     val violations = mutableListOf<String>()
-    validateCli(cli, object : MessageCollector {
-        override fun plusAssign(msg: String) {
-            violations += msg
+    validateCli(
+        cli,
+        object : MessageCollector {
+            override fun plusAssign(msg: String) {
+                violations += msg
+            }
         }
-    })
+    )
     if (violations.isNotEmpty()) {
         violations.forEach(errorPrinter::println)
         errorPrinter.println()

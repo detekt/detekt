@@ -46,7 +46,8 @@ abstract class DslTestBuilder {
     }
 
     fun build(): DslGradleRunner {
-        val mainBuildFileContent = """
+        val mainBuildFileContent =
+            """
             |$gradleBuildConfig
             |$detektConfig
             """.trimMargin()
@@ -67,7 +68,8 @@ abstract class DslTestBuilder {
         override val gradleBuildName: String = "build.gradle"
         override val gradlePluginsSection = GROOVY_PLUGINS_SECTION
         override val gradleApplyPlugins = GROOVY_APPLY_PLUGINS
-        override val gradleBuildConfig: String = """
+        override val gradleBuildConfig: String =
+            """
             |$gradlePluginsSection
             |
             |$gradleRepositoriesSection
@@ -82,7 +84,8 @@ abstract class DslTestBuilder {
         override val gradleBuildName: String = "build.gradle.kts"
         override val gradlePluginsSection = KOTLIN_PLUGINS_SECTION
         override val gradleApplyPlugins = KOTLIN_APPLY_PLUGINS
-        override val gradleBuildConfig: String = """
+        override val gradleBuildConfig: String =
+            """
             |$gradlePluginsSection
             |
             |$gradleRepositoriesSection
@@ -97,21 +100,24 @@ abstract class DslTestBuilder {
         fun kotlin(): DslTestBuilder = KotlinBuilder()
         fun groovy(): DslTestBuilder = GroovyBuilder()
 
-        private const val GROOVY_PLUGINS_SECTION = """
+        private const val GROOVY_PLUGINS_SECTION =
+            """
             |plugins {
             |   id "org.jetbrains.kotlin.jvm"
             |   id "io.gitlab.arturbosch.detekt"
             |}
             |"""
 
-        private const val KOTLIN_PLUGINS_SECTION = """
+        private const val KOTLIN_PLUGINS_SECTION =
+            """
             |plugins {
             |   kotlin("jvm")
             |   id("io.gitlab.arturbosch.detekt")
             |}
             |"""
 
-        private const val REPOSITORIES_SECTION = """
+        private const val REPOSITORIES_SECTION =
+            """
             |repositories {
             |   mavenLocal()
             |   mavenCentral()
@@ -119,12 +125,14 @@ abstract class DslTestBuilder {
             |}
             |"""
 
-        private const val GROOVY_APPLY_PLUGINS = """
+        private const val GROOVY_APPLY_PLUGINS =
+            """
             |apply plugin: "kotlin"
             |apply plugin: "io.gitlab.arturbosch.detekt"
             |"""
 
-        private const val KOTLIN_APPLY_PLUGINS = """
+        private const val KOTLIN_APPLY_PLUGINS =
+            """
             |plugins.apply("kotlin")
             |plugins.apply("io.gitlab.arturbosch.detekt")
             |"""

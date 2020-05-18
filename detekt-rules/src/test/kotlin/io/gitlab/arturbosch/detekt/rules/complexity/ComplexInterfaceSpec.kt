@@ -15,7 +15,8 @@ class ComplexInterfaceSpec : Spek({
     describe("ComplexInterface rule positives") {
 
         context("interface members") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f1()
                     fun f2()
@@ -35,7 +36,8 @@ class ComplexInterfaceSpec : Spek({
         }
 
         context("nested interface members") {
-            val code = """
+            val code =
+                """
                 class I {
                     interface Nested {
                         fun f1()
@@ -57,7 +59,8 @@ class ComplexInterfaceSpec : Spek({
         }
 
         context("interface with static declarations") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f1()
                     companion object {
@@ -79,7 +82,8 @@ class ComplexInterfaceSpec : Spek({
         }
 
         context("private functions") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f1()
                     fun f2()
@@ -99,7 +103,8 @@ class ComplexInterfaceSpec : Spek({
         }
 
         context("private members") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f1()
                     fun f2()
@@ -123,7 +128,8 @@ class ComplexInterfaceSpec : Spek({
     describe("ComplexInterface rule negatives") {
 
         it("does not report a simple interface ") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f()
                     fun fImpl() {
@@ -138,7 +144,8 @@ class ComplexInterfaceSpec : Spek({
         }
 
         it("does not report a simple interface with a companion object") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun f()
 

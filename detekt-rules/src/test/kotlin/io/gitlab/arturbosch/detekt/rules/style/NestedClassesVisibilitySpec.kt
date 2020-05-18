@@ -11,7 +11,8 @@ class NestedClassesVisibilitySpec : Spek({
     describe("NestedClassesVisibility rule") {
 
         it("reports explicit public visibility in nested objects/classes/interfaces") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     public interface A
                     public object B
@@ -22,7 +23,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("reports explicit public visibility in nested classes inside an enum") {
-            val code = """
+            val code =
+                """
                 internal enum class Outer {
                     A;
                     public class C
@@ -32,7 +34,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested internal classes and interfaces") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                      class A
                      internal class B
@@ -44,7 +47,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested private classes") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     private class A
                 }
@@ -53,7 +57,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested public enums") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     public enum class E { E1; }
                 }
@@ -62,7 +67,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report companion object that is explicitly public") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     public companion object C
                 } 
@@ -71,7 +77,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report companion object") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     companion object C
                 } 
@@ -80,7 +87,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested classes inside a private class") {
-            val code = """
+            val code =
+                """
                 private class Outer {
                      class A
                 }
@@ -89,7 +97,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested internal classes inside an interface") {
-            val code = """
+            val code =
+                """
                 internal interface Outer {
                      class A
                 }
@@ -98,7 +107,8 @@ class NestedClassesVisibilitySpec : Spek({
         }
 
         it("does not report nested classes with a nesting depth higher than 1") {
-            val code = """
+            val code =
+                """
                 internal class Outer {
                     class C1 {
                         public class C2

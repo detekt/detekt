@@ -18,7 +18,8 @@ object PreferToOverPairSyntaxSpec : Spek({
     describe("PreferToOverPairSyntax rule") {
 
         it("reports if pair is created using pair constructor") {
-            val code = """
+            val code =
+                """
                 val pair1 = Pair(1, 2)
                 val pair2: Pair<Int, Int> = Pair(1, 2)
                 val pair3 = Pair(Pair(1, 2), Pair(3, 4))
@@ -32,7 +33,8 @@ object PreferToOverPairSyntaxSpec : Spek({
         }
 
         it("does not report if a non-Kotlin Pair class was used") {
-            val code = """
+            val code =
+                """
                 val pair1 = Pair(1, 2)
                 val pair2: Pair<Int, Int> = Pair(1, 2)
                 val pair3 = Pair(Pair(1, 2), Pair(3, 4))

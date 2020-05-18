@@ -24,7 +24,8 @@ class TooGenericExceptionCaughtSpec : Spek({
 
     describe("a file with a caught exception which is ignored") {
 
-        val code = """
+        val code =
+            """
             class MyTooGenericException : RuntimeException()
 
             fun f() {
@@ -56,8 +57,8 @@ class TooGenericExceptionCaughtSpec : Spek({
 
         it("should not fail when disabled with invalid regex on allowed exception names") {
             val configRules = mapOf(
-                    "active" to "false",
-                    TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*MyException"
+                "active" to "false",
+                TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*MyException"
             )
             val config = TestConfig(configRules)
             val rule = TooGenericExceptionCaught(config)

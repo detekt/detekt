@@ -29,13 +29,15 @@ class TxtOutputReportSpec : Spek({
             val detektion = TestDetektion(
                 createFinding(ruleName = "TestSmellA"),
                 createFinding(ruleName = "TestSmellB"),
-                createFinding(ruleName = "TestSmellC"))
-            val renderedText = """
+                createFinding(ruleName = "TestSmellC")
+            )
+            val renderedText =
+                """
                 TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
                 TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
                 TestSmellC - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
 
-            """.trimIndent()
+                """.trimIndent()
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
     }

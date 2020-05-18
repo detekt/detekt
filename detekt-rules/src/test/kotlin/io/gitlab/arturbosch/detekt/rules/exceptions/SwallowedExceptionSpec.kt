@@ -12,7 +12,8 @@ class SwallowedExceptionSpec : Spek({
     describe("SwallowedException rule") {
 
         it("reports a swallowed exception") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: Exception) {
@@ -24,7 +25,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports swallowed exceptions only using exception strings") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -38,7 +40,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports swallowed exceptions only using exception strings via variables") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -54,7 +57,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports swallowed exceptions only using exception strings via variables in 'if' block") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -74,7 +78,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports swallowed exceptions when it has multiple throw expressions") {
-            val code = """
+            val code =
+                """
                 fun f(condition: Boolean) {
                     try {
                         println()
@@ -90,7 +95,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports swallowed exceptions when it has multiple throw expressions 2") {
-            val code = """
+            val code =
+                """
                 fun f(condition: Boolean) {
                     try {
                         println()
@@ -106,7 +112,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("reports a swallowed exception that is not logged") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: Exception) {
@@ -124,7 +131,8 @@ class SwallowedExceptionSpec : Spek({
                 val rule = SwallowedException(config)
 
                 it("ignores given exception type in configuration") {
-                    val code = """
+                    val code =
+                        """
                     fun f() {
                         try {
                         } catch (e: IllegalArgumentException) {
@@ -135,7 +143,8 @@ class SwallowedExceptionSpec : Spek({
                 }
 
                 it("reports exception type that is missing in the configuration") {
-                    val code = """
+                    val code =
+                        """
                     fun f() {
                         try {
                         } catch (e: Exception) {
@@ -153,7 +162,8 @@ class SwallowedExceptionSpec : Spek({
             val rule = SwallowedException(config)
 
             it("ignores given exception name") {
-                val code = """
+                val code =
+                    """
                     fun f() {
                         try {
                         } catch (myIgnore: IllegalArgumentException) {
@@ -164,7 +174,8 @@ class SwallowedExceptionSpec : Spek({
             }
 
             it("reports exception name") {
-                val code = """
+                val code =
+                    """
                     fun f() {
                         try {
                         } catch (e: IllegalArgumentException) {
@@ -176,7 +187,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("does not report wrapped exceptions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -190,7 +202,8 @@ class SwallowedExceptionSpec : Spek({
         }
 
         it("does not report used exception variables") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalArgumentException) {

@@ -19,7 +19,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -44,7 +44,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -60,7 +60,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -76,7 +76,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -101,7 +101,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if ignored acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -126,7 +126,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -160,7 +160,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should still be reported even if acceptableDecimalLength is 7") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "7"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "7"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -194,7 +194,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     }
 
     describe("a property named serialVersionUID in an object that implements Serializable") {
-        val code = """
+        val code =
+            """
             import java.io.Serializable
             
             object TestSerializable : Serializable {
@@ -209,7 +210,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     }
 
     describe("a property named serialVersionUID in an object that does not implement Serializable") {
-        val code = """
+        val code =
+            """
             object TestSerializable {
                 private val serialVersionUID = 314159L
             }
@@ -222,7 +224,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     }
 
     describe("a property named serialVersionUID in an object that does not implement Serializable") {
-        val code = """
+        val code =
+            """
             object TestSerializable {
                 private val serialVersionUID = 314_159L
             }
@@ -237,7 +240,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     describe("a property named serialVersionUID in a companion object inside a serializable class") {
 
         it("does not report a negative serialVersionUID number") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
                 
                 class Test : Serializable {
@@ -250,7 +254,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
 
         it("does not report a positive serialVersionUID number") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
                 
                 class Test : Serializable {
@@ -266,7 +271,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     describe("a property named serialVersionUID number in a serializable class") {
 
         it("does not report a negative serialVersionUID number") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
                 
                 class Test : Serializable {
@@ -278,7 +284,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
 
         it("does not report a positive serialVersionUID number") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
                 
                 class Test : Serializable {
@@ -300,7 +307,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if acceptableDecimalLength is 6") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "6"))
+                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "6"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }

@@ -45,10 +45,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  */
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ForEachOnRange",
-            Severity.Performance,
-            "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "ForEachOnRange",
+        Severity.Performance,
+        "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
+        Debt.FIVE_MINS
+    )
 
     private val minimumRangeSize = 3
     private val rangeOperators = setOf("..", "downTo", "until", "step")

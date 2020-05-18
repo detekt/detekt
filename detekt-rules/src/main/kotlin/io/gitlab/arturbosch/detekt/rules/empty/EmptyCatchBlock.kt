@@ -19,10 +19,10 @@ class EmptyCatchBlock(config: Config) : EmptyRule(
     config = config,
     description =
         "Empty catch block detected. " +
-        "Empty catch blocks indicate that an exception is ignored and not handled.",
+            "Empty catch blocks indicate that an exception is ignored and not handled.",
     codeSmellMessage =
         "Empty catch block detected. If the exception can be safely ignored, " +
-        "name the exception according to one of the exemptions as per the configuration of this rule."
+            "name the exception according to one of the exemptions as per the configuration of this rule."
 ) {
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)

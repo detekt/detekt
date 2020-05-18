@@ -49,10 +49,12 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  */
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("SpreadOperator", Severity.Performance,
-            "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
-                    "method which has a very high performance penalty.",
-            Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(
+        "SpreadOperator", Severity.Performance,
+        "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
+            "method which has a very high performance penalty.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitValueArgumentList(list: KtValueArgumentList) {
         super.visitValueArgumentList(list)
@@ -70,7 +72,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
                             issue,
                             Entity.from(list),
                             "Used in this way a spread operator causes a full copy of the array to be created before " +
-                                    "calling a method which has a very high performance penalty."
+                                "calling a method which has a very high performance penalty."
                         )
                     )
                 }
@@ -85,7 +87,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
         val resolvedCall = getArgumentExpression().getResolvedCall(bindingContext) ?: return false
         val calleeDescriptor = resolvedCall.resultingDescriptor
         return calleeDescriptor is ConstructorDescriptor ||
-                CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall) ||
-                DescriptorUtils.getFqName(calleeDescriptor).asString() == "kotlin.arrayOfNulls"
+            CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall) ||
+            DescriptorUtils.getFqName(calleeDescriptor).asString() == "kotlin.arrayOfNulls"
     }
 }

@@ -15,9 +15,12 @@ class CoroutinesProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "coroutines"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
-            GlobalCoroutineUsage(config),
-            RedundantSuspendModifier(config)
-        ))
+        return RuleSet(
+            ruleSetId,
+            listOf(
+                GlobalCoroutineUsage(config),
+                RedundantSuspendModifier(config)
+            )
+        )
     }
 }

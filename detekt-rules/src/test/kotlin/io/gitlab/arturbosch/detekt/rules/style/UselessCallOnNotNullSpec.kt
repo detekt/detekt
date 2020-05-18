@@ -17,53 +17,63 @@ object UselessCallOnNotNullSpec : Spek({
 
     describe("UselessCallOnNotNull rule") {
         it("reports when calling orEmpty on a list") {
-            val code = """val testList = listOf("string").orEmpty()"""
+            val code =
+                """val testList = listOf("string").orEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling orEmpty on a nullable list") {
-            val code = """val testList = listOf("string")?.orEmpty()"""
+            val code =
+                """val testList = listOf("string")?.orEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling orEmpty in a chain") {
-            val code = """val testList = listOf("string").orEmpty().map { }"""
+            val code =
+                """val testList = listOf("string").orEmpty().map { }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling isNullOrBlank on a nullable type") {
-            val code = """val testString = ""?.isNullOrBlank()"""
+            val code =
+                """val testString = ""?.isNullOrBlank()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling isNullOrEmpty on a nullable type") {
-            val code = """val testString = ""?.isNullOrEmpty()"""
+            val code =
+                """val testString = ""?.isNullOrEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling isNullOrEmpty on a string") {
-            val code = """val testString = "".isNullOrEmpty()"""
+            val code =
+                """val testString = "".isNullOrEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling orEmpty on a string") {
-            val code = """val testString = "".orEmpty()"""
+            val code =
+                """val testString = "".orEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling orEmpty on a sequence") {
-            val code = """val testSequence = listOf(1).asSequence().orEmpty()"""
+            val code =
+                """val testSequence = listOf(1).asSequence().orEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("reports when calling orEmpty on a list with a platform type") {
             // System.getenv().keys.toList() will be of type List<String!>.
-            val code = """val testSequence = System.getenv().keys.toList().orEmpty()"""
+            val code =
+                """val testSequence = System.getenv().keys.toList().orEmpty()"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
         it("only reports on a Kotlin list") {
-            val code = """
+            val code =
+                """
                 fun String.orEmpty(): List<Char> = this.toCharArray().asList()
 
                 val noList = "str".orEmpty()

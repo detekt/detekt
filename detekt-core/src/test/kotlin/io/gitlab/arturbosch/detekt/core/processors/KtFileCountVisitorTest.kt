@@ -12,12 +12,12 @@ class KtFileCountVisitorTest : Spek({
 
         it("twoFiles") {
             val files = arrayOf(
-                    compileForTest(path.resolve("Default.kt")),
-                    compileForTest(path.resolve("Test.kt"))
+                compileForTest(path.resolve("Default.kt")),
+                compileForTest(path.resolve("Test.kt"))
             )
             val count = files
-                    .map { getData(it) }
-                    .sum()
+                .map { getData(it) }
+                .sum()
             assertThat(count).isEqualTo(2)
         }
     }

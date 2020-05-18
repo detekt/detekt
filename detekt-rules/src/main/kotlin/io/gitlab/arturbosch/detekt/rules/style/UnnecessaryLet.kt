@@ -40,8 +40,10 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "The `let` usage is unnecessary", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "The `let` usage is unnecessary", Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -64,10 +66,12 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                 val hasOneRef = lambdaBody.countVarRefs(lambdaParameter?.text ?: IT_LITERAL) == 1
 
                 if ((isLetWithExplicitParam || isLetWithImplicitParam) && hasOneRef) {
-                    report(CodeSmell(
+                    report(
+                        CodeSmell(
                             issue, Entity.from(expression),
                             "let expression can be omitted"
-                    ))
+                        )
+                    )
                 }
             }
         }
@@ -83,4 +87,4 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 private fun KtBlockExpression?.hasOnlyOneStatement() = this?.children?.size == 1
 
 private fun PsiElement.countVarRefs(varName: String): Int =
-        children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }
+    children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }

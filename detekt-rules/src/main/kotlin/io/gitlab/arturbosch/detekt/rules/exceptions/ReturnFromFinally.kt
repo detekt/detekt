@@ -31,8 +31,10 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ReturnFromFinally", Severity.Defect,
-        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ReturnFromFinally", Severity.Defect,
+        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS
+    )
 
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
@@ -40,8 +42,10 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         val innerFunctions = finallySection.finalExpression
             .collectDescendantsOfType<KtNamedFunction>()
         finallySection.finalExpression
-            .collectDescendantsOfType<KtReturnExpression> { isNotInInnerFunction(it, innerFunctions) &&
-                    canFilterLabeledExpression(it) }
+            .collectDescendantsOfType<KtReturnExpression> {
+                isNotInInnerFunction(it, innerFunctions) &&
+                    canFilterLabeledExpression(it)
+            }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 

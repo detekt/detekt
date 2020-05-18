@@ -18,11 +18,14 @@ class PerformanceProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "performance"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 ForEachOnRange(config),
                 SpreadOperator(config),
                 UnnecessaryTemporaryInstantiation(config),
                 ArrayPrimitive(config)
-        ))
+            )
+        )
     }
 }

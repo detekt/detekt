@@ -38,19 +38,24 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
  */
 class UnnecessaryApply(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "The `apply` usage is unnecessary", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "The `apply` usage is unnecessary", Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         if (expression.isApplyExpr() &&
-                expression.hasOnlyOneMemberAccessStatement() &&
-                expression.receiverIsUnused(bindingContext)) {
-            report(CodeSmell(
+            expression.hasOnlyOneMemberAccessStatement() &&
+            expression.receiverIsUnused(bindingContext)
+        ) {
+            report(
+                CodeSmell(
                     issue, Entity.from(expression),
                     "apply expression can be omitted"
-            ))
+                )
+            )
         }
     }
 }
@@ -65,13 +70,13 @@ private fun KtCallExpression.receiverIsUnused(context: BindingContext): Boolean 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
 
     fun KtExpression.notAnAssignment() =
-            safeAs<KtBinaryExpression>()
-                    ?.operationToken != KtTokens.EQ
+        safeAs<KtBinaryExpression>()
+            ?.operationToken != KtTokens.EQ
 
     fun KtExpression.isMemberAccess() =
-            this is KtReferenceExpression ||
-                    this is KtCallExpression ||
-                    this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
+        this is KtReferenceExpression ||
+            this is KtCallExpression ||
+            this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
 
     val lambdaBody = firstLambdaArg?.bodyExpression
     if (lambdaBody?.children?.size == 1) {

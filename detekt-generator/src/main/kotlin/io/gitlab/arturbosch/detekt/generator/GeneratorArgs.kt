@@ -8,23 +8,31 @@ import java.nio.file.Path
 
 class GeneratorArgs : Args {
 
-    @Parameter(names = ["--input", "-i"],
+    @Parameter(
+        names = ["--input", "-i"],
         required = true,
-        description = "Input paths to analyze.")
+        description = "Input paths to analyze."
+    )
     private var input: String? = null
 
-    @Parameter(names = ["--documentation", "-d"],
+    @Parameter(
+        names = ["--documentation", "-d"],
         required = true,
-        converter = ExistingPathConverter::class, description = "Output path for generated documentation.")
+        converter = ExistingPathConverter::class, description = "Output path for generated documentation."
+    )
     private var documentation: Path? = null
 
-    @Parameter(names = ["--config", "-c"],
+    @Parameter(
+        names = ["--config", "-c"],
         required = true,
-        converter = ExistingPathConverter::class, description = "Output path for generated detekt config.")
+        converter = ExistingPathConverter::class, description = "Output path for generated detekt config."
+    )
     private var config: Path? = null
 
-    @Parameter(names = ["--help", "-h"],
-        help = true, description = "Shows the usage.")
+    @Parameter(
+        names = ["--help", "-h"],
+        help = true, description = "Shows the usage."
+    )
     override var help: Boolean = false
 
     val inputPath: List<Path> by lazy {

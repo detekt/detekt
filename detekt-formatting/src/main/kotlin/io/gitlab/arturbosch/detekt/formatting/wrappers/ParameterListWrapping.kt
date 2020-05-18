@@ -23,8 +23,10 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     private val indentSize = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        EditorConfig.merge(it,
-                indentSize = indentSize)
+        EditorConfig.merge(
+            it,
+            indentSize = indentSize
+        )
     }
 
     companion object {

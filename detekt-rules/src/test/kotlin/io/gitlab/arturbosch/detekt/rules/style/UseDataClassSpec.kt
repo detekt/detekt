@@ -24,7 +24,8 @@ class UseDataClassSpec : Spek({
         describe("does not report invalid data class candidates") {
 
             it("does not report a valid class") {
-                val code = """
+                val code =
+                    """
                     class NoDataClassCandidate(val i: Int) {
                         val i2: Int = 0
                         fun f() {
@@ -37,7 +38,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report a candidate class with additional method") {
-                val code = """
+                val code =
+                    """
                     class NoDataClassCandidateWithAdditionalMethod(val i: Int) {
                         fun f1() {
                             println()
@@ -48,14 +50,16 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report a candidate class with a private constructor") {
-                val code = """
+                val code =
+                    """
                     class NoDataClassCandidateWithOnlyPrivateCtor1 private constructor(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("does not report a candidate class with a private explicit constructor") {
-                val code = """
+                val code =
+                    """
                     class NoDataClassCandidateWithOnlyPrivateCtor2 {
                         private constructor(i: Int)
                     }
@@ -64,7 +68,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report a candidate sealed class") {
-                val code = """
+                val code =
+                    """
                     sealed class NoDataClassBecauseItsSealed {
                         data class Success(val any: Any) : NoDataClassBecauseItsSealed()
                         data class Error(val error: Throwable) : NoDataClassBecauseItsSealed()
@@ -74,7 +79,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report a candidate enum class") {
-                val code = """
+                val code =
+                    """
                     enum class EnumNoDataClass(val i: Int) {
                         FIRST(1), SECOND(2);
                     }
@@ -83,7 +89,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report a candidate annotation class") {
-                val code = """
+                val code =
+                    """
                     annotation class AnnotationNoDataClass(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
@@ -93,14 +100,16 @@ class UseDataClassSpec : Spek({
         describe("does report data class candidates") {
 
             it("does report a data class candidate") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidate1(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does report a candidate class with extra property") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidateWithProperties(val i: Int) {
                         val i2: Int = 0
                     }
@@ -109,7 +118,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does report a candidate class with extra public constructor") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidate2(val s: String) {
                         private constructor(i: Int) : this(i.toString())
                     }
@@ -118,7 +128,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does report a candidate class with both a private and public constructor") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidate3 private constructor(val s: String) {
                         constructor(i: Int) : this(i.toString())
                     }
@@ -127,7 +138,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does report a candidate class with overridden data class methods") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidateWithOverriddenMethods(val i: Int) {
                         override fun equals(other: Any?): Boolean {
                             return super.equals(other)
@@ -147,7 +159,8 @@ class UseDataClassSpec : Spek({
         describe("copy method") {
 
             it("does report with copy method") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String): D = D(a, b)
                     }
@@ -156,7 +169,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does report with copy method which has an implicit return type") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) = D(a, b)
                     }
@@ -165,7 +179,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report with copy method which has no parameters") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(): D = D(0, "")
                     }
@@ -174,7 +189,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report with copy method which has more parameters than the primary constructor") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String, c: String): D = D(a, b + c)
                     }
@@ -183,7 +199,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report with copy method which has different parameter types") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: Int): D = D(a, b.toString())
                     }
@@ -192,7 +209,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report with copy method which has different parameter types 2") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String?): D = D(a, b.toString())
                     }
@@ -201,7 +219,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report with copy method which has a different return type") {
-                val code = """
+                val code =
+                    """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) {
                         }
@@ -214,13 +233,15 @@ class UseDataClassSpec : Spek({
         describe("does report class with vars and allowVars") {
 
             it("does not report class with mutable constructor parameter") {
-                val code = """class DataClassCandidateWithVar(var i: Int)"""
+                val code =
+                    """class DataClassCandidateWithVar(var i: Int)"""
                 val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
             it("does not report class with mutable properties") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidateWithProperties(var i: Int) {
                         var i2: Int = 0
                     }
@@ -230,7 +251,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report class with both mutable property and immutable parameters") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidateWithMixedProperties(val i: Int) {
                         var i2: Int = 0
                     }
@@ -240,7 +262,8 @@ class UseDataClassSpec : Spek({
             }
 
             it("does not report class with both mutable parameter and immutable property") {
-                val code = """
+                val code =
+                    """
                     class DataClassCandidateWithMixedProperties(var i: Int) {
                         val i2: Int = 0
                     }
@@ -255,7 +278,8 @@ class UseDataClassSpec : Spek({
         }
 
         it("does not report a class which has an ignored annotation") {
-            val code = """
+            val code =
+                """
                 import kotlin.SinceKotlin
 
                 @SinceKotlin("1.0.0")
@@ -266,7 +290,8 @@ class UseDataClassSpec : Spek({
         }
 
         it("does not report a class with a delegated property") {
-            val code = """
+            val code =
+                """
                 import kotlin.properties.Delegates
                 class C(val i: Int) {
                     var prop: String by Delegates.observable("") {
@@ -278,7 +303,8 @@ class UseDataClassSpec : Spek({
         }
 
         it("reports class with nested delegation") {
-            val code = """
+            val code =
+                """
                 import kotlin.properties.Delegates
                 class C(val i: Int) {
                     var prop: C = C(1).apply {

@@ -11,7 +11,8 @@ class NumberOfLoopsProcessorSpec : Spek({
     describe("Number of Loops sample rule") {
 
         it("should expect two loops") {
-            val code = """
+            val code =
+                """
             fun main() {
                 for (i in 0..10) {
                     while (i < 5) {

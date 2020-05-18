@@ -10,7 +10,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
     describe("UnnecessaryAnnotationUseSiteTarget rule") {
 
         context("Unnecessary @param: in a property constructor") {
-            val code = """
+            val code =
+                """
                 class C(@param:Asdf private val foo: String)
 
                 annotation class Asdf
@@ -19,7 +20,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
         }
 
         context("Unnecessary @param: in a constructor") {
-            val code = """
+            val code =
+                """
                 class C(@param:Asdf foo: String)
 
                 annotation class Asdf
@@ -28,7 +30,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
         }
 
         context("Necessary @get:") {
-            val code = """
+            val code =
+                """
                 class C(@get:Asdf private val foo: String)
 
                 annotation class Asdf
@@ -37,7 +40,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
         }
 
         context("Necessary @property:") {
-            val code = """
+            val code =
+                """
                 class C(@property:Asdf private val foo: String)
 
                 annotation class Asdf
@@ -46,7 +50,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
         }
 
         context("Unnecessary @property:") {
-            val code = """
+            val code =
+                """
                 class C {
                     @property:Asdf private val foo: String = "bar"
                 }
@@ -57,7 +62,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
         }
 
         context("Unnecessary @property: at a top level property") {
-            val code = """
+            val code =
+                """
                 @property:Asdf private val foo: String = "bar"
 
                 annotation class Asdf

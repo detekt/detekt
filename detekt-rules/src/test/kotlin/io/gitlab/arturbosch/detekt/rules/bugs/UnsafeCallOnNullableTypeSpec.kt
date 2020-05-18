@@ -17,7 +17,8 @@ class UnsafeCallOnNullableTypeSpec : Spek({
     describe("check all variants of safe/unsafe calls on nullable types") {
 
         it("reports unsafe call on nullable type") {
-            val code = """
+            val code =
+                """
                 fun test(str: String?) {
                     println(str!!.length)
                 }
@@ -26,7 +27,8 @@ class UnsafeCallOnNullableTypeSpec : Spek({
         }
 
         it("does not report unsafe call on platform type") {
-            val code = """
+            val code =
+                """
                 import java.util.UUID
 
                 val version = UUID.randomUUID()!!
@@ -35,7 +37,8 @@ class UnsafeCallOnNullableTypeSpec : Spek({
         }
 
         it("does not report safe call on nullable type") {
-            val code = """
+            val code =
+                """
                 fun test(str: String?) {
                     println(str?.length)
                 }
@@ -44,7 +47,8 @@ class UnsafeCallOnNullableTypeSpec : Spek({
         }
 
         it("does not report safe call in combination with the elvis operator") {
-            val code = """
+            val code =
+                """
                 fun test(str: String?) {
                     println(str?.length ?: 0)
                 }

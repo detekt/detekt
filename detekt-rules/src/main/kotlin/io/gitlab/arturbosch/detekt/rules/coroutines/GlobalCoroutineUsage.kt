@@ -49,7 +49,8 @@ class GlobalCoroutineUsage(config: Config = Config.empty) : Rule(config) {
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         if (expression.receiverExpression.text == "GlobalScope" &&
-            expression.getCalleeExpressionIfAny()?.text in listOf("launch", "async")) {
+            expression.getCalleeExpressionIfAny()?.text in listOf("launch", "async")
+        ) {
             report(CodeSmell(issue, Entity.from(expression), MESSAGE))
         }
 

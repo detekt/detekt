@@ -13,7 +13,8 @@ class RuleSetProviderCollectorSpec : Spek({
 
     describe("RuleSetProviderCollector rule") {
         context("a non-RuleSetProvider class extending nothing") {
-            val code = """
+            val code =
+                """
             package foo
 
             class SomeRandomClass {
@@ -29,7 +30,8 @@ class RuleSetProviderCollectorSpec : Spek({
         }
 
         context("a non-RuleSetProvider class extending a class that is not related to rules") {
-            val code = """
+            val code =
+                """
             package foo
 
             class SomeRandomClass: SomeOtherClass {
@@ -45,7 +47,8 @@ class RuleSetProviderCollectorSpec : Spek({
         }
 
         context("a RuleSetProvider without documentation") {
-            val code = """
+            val code =
+                """
             package foo
 
             class TestProvider: RuleSetProvider {
@@ -56,12 +59,13 @@ class RuleSetProviderCollectorSpec : Spek({
         """
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
         context("a correct RuleSetProvider class extending RuleSetProvider but missing parameters") {
-            val code = """
+            val code =
+                """
             package foo
 
             class TestProvider: RuleSetProvider {
@@ -73,7 +77,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -81,7 +85,8 @@ class RuleSetProviderCollectorSpec : Spek({
             val description = "This is a description"
             val ruleSetId = "test"
             val ruleName = "TestRule"
-            val code = """
+            val code =
+                """
             package foo
 
             /**
@@ -135,7 +140,8 @@ class RuleSetProviderCollectorSpec : Spek({
             val description = "This is a description"
             val ruleSetId = "test"
             val ruleName = "TestRule"
-            val code = """
+            val code =
+                """
             package foo
 
             /**
@@ -162,7 +168,8 @@ class RuleSetProviderCollectorSpec : Spek({
         context("a RuleSetProvider with missing name") {
             val description = "This is a description"
             val ruleName = "TestRule"
-            val code = """
+            val code =
+                """
             package foo
 
             /**
@@ -179,14 +186,15 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
         context("a RuleSetProvider with missing description") {
             val ruleSetId = "test"
             val ruleName = "TestRule"
-            val code = """
+            val code =
+                """
             package foo
 
             class TestProvider: RuleSetProvider {
@@ -202,13 +210,14 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
         context("a RuleSetProvider with no rules") {
             val ruleSetId = "test"
-            val code = """
+            val code =
+                """
             package foo
 
             class TestProvider: RuleSetProvider {
@@ -222,7 +231,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -231,7 +240,8 @@ class RuleSetProviderCollectorSpec : Spek({
             val ruleSetId = "test"
             val ruleName = "TestRule"
             val secondRuleName = "SecondRule"
-            val code = """
+            val code =
+                """
             package foo
 
             /**

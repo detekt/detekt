@@ -16,7 +16,7 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
     private val endOfSentenceFormat = EndOfSentenceFormat(config)
 
     override val rules = listOf(
-            endOfSentenceFormat
+        endOfSentenceFormat
     )
 
     override fun visitDeclaration(dcl: KtDeclaration) {
@@ -35,13 +35,15 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
 @Suppress("MemberNameEqualsClassName")
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Maintainability,
-            "The first sentence in a KDoc comment should end with correct punctuation.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
+        "The first sentence in a KDoc comment should end with correct punctuation.",
+        Debt.FIVE_MINS
+    )
 
     private val endOfSentenceFormat =
-            Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
+        Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
     private val htmlTag = Regex("<.+>")
 
     fun verify(declaration: KtDeclaration) {
@@ -51,8 +53,12 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
                 return
             }
             if (!endOfSentenceFormat.containsMatchIn(text) && !text.lastArgumentMatchesUrl()) {
-                report(CodeSmell(issue, Entity.from(declaration),
-                        "The first sentence of this KDoc does not end with the correct punctuation."))
+                report(
+                    CodeSmell(
+                        issue, Entity.from(declaration),
+                        "The first sentence of this KDoc does not end with the correct punctuation."
+                    )
+                )
             }
         }
     }

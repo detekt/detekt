@@ -10,7 +10,8 @@ import org.spekframework.spek2.style.specification.describe
 class HtmlUtilsSpec : Spek({
 
     describe("HTML snippet code") {
-        val code = """
+        val code =
+            """
             package cases
             // reports 1 - line with just one space
 
@@ -27,14 +28,15 @@ class HtmlUtilsSpec : Spek({
                 // reports 1
                 }
             }
-        """.trimIndent().splitToSequence('\n')
+            """.trimIndent().splitToSequence('\n')
 
         it("all line") {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 1), 34)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment
@@ -55,7 +57,8 @@ class HtmlUtilsSpec : Spek({
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 26)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment
@@ -76,7 +79,8 @@ class HtmlUtilsSpec : Spek({
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 66)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment

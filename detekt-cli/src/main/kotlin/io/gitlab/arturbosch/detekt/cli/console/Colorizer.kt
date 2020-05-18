@@ -7,7 +7,8 @@ private val RESET = Color(0)
 private val RED = Color(31)
 private val YELLOW = Color(33)
 
-private val escapeSequenceRegex = """$ESC\[\d+m""".toRegex()
+private val escapeSequenceRegex =
+    """$ESC\[\d+m""".toRegex()
 
 private data class Color(private val value: Byte) {
     val escapeSequence: String

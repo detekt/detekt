@@ -15,7 +15,8 @@ import java.util.regex.PatternSyntaxException
 
 class EmptyCodeSpec : Spek({
 
-    val regexTestingCode = """
+    val regexTestingCode =
+        """
             fun f() {
                 try {
                 } catch (foo: Exception) {
@@ -29,7 +30,8 @@ class EmptyCodeSpec : Spek({
         }
 
         it("findsEmptyNestedCatch") {
-            val code = """
+            val code =
+                """
             fun f() {
                 try {
                 } catch (ignore: Exception) {
@@ -42,7 +44,8 @@ class EmptyCodeSpec : Spek({
         }
 
         it("doesNotReportIgnoredOrExpectedException") {
-            val code = """
+            val code =
+                """
             fun f() {
                 try {
                 } catch (ignore: IllegalArgumentException) {
@@ -53,7 +56,8 @@ class EmptyCodeSpec : Spek({
         }
 
         it("doesNotReportEmptyCatchWithConfig") {
-            val code = """
+            val code =
+                """
             fun f() {
                 try {
                 } catch (foo: Exception) {
@@ -124,8 +128,10 @@ class EmptyCodeSpec : Spek({
         }
 
         it("doesNotFailWithInvalidRegexWhenDisabled") {
-            val configValues = mapOf("active" to "false",
-                    EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
+            val configValues = mapOf(
+                "active" to "false",
+                EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
+            )
             val config = TestConfig(configValues)
             assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
         }

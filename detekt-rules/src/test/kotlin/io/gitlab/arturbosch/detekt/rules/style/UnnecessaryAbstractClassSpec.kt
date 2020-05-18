@@ -11,9 +11,13 @@ import org.spekframework.spek2.style.specification.describe
 class UnnecessaryAbstractClassSpec : Spek({
 
     val subject by memoized {
-        UnnecessaryAbstractClass(TestConfig(mapOf(
-                UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
-        )))
+        UnnecessaryAbstractClass(
+            TestConfig(
+                mapOf(
+                    UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
+                )
+            )
+        )
     }
 
     val wrapper by memoized(
@@ -26,7 +30,8 @@ class UnnecessaryAbstractClassSpec : Spek({
         context("abstract classes with no concrete members") {
 
             it("reports an abstract class with no concrete member") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract val i: Int
                         abstract fun f()
@@ -40,7 +45,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("does not report an abstract class with concrete members derived from a base class") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract fun f()
                         val i: Int = 0
@@ -59,7 +65,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             val message = "An abstract class without an abstract member can be refactored to a concrete class."
 
             it("reports no abstract members in abstract class") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         val i: Int = 0
                         fun f() {}
@@ -70,7 +77,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("reports no abstract members in nested abstract class inside a concrete class") {
-                val code = """
+                val code =
+                    """
                     class Outer {
                         abstract class Inner {
                             fun f() {}
@@ -82,7 +90,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("reports no abstract members in nested abstract class inside an interface") {
-                val code = """
+                val code =
+                    """
                     interface Inner {
                         abstract class A {
                             fun f() {}
@@ -106,7 +115,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("reports an abstract class with no abstract member derived from a class with abstract members") {
-                val code = """
+                val code =
+                    """
                     abstract class Base {
                         abstract val i: Int
                         abstract fun f()
@@ -130,7 +140,8 @@ class UnnecessaryAbstractClassSpec : Spek({
         context("abstract classes with members") {
 
             it("does not report an abstract class with members and an abstract class derived from it") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract val i: Int
                         fun f() {}
@@ -144,7 +155,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("does not report an abstract class with a constructor and an abstract class derived from it") {
-                val code = """
+                val code =
+                    """
                     abstract class A(val i: Int) {
                         abstract fun f()
                     }
@@ -157,7 +169,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("does not report an abstract class with a function derived from an interface") {
-                val code = """
+                val code =
+                    """
                     abstract class A : Interface {
                         fun g() {}
                     }
@@ -170,7 +183,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("does not report empty abstract classes") {
-                val code = """
+                val code =
+                    """
                     abstract class A
                     abstract class B()
                 """
@@ -178,7 +192,8 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
 
             it("does not report abstract classes with module annotation") {
-                val code = """
+                val code =
+                    """
                     import jdk.nashorn.internal.ir.annotations.Ignore
                     
                     @Ignore

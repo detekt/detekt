@@ -19,7 +19,8 @@ class ForbiddenVoidSpec : Spek({
 
     describe("ForbiddenVoid rule") {
         it("should report all Void type usage") {
-            val code = """
+            val code =
+                """
                 lateinit var c: () -> Void
 
                 fun method(param: Void) {
@@ -32,7 +33,8 @@ class ForbiddenVoidSpec : Spek({
         }
 
         it("should not report Void class literal") {
-            val code = """
+            val code =
+                """
                 val clazz = java.lang.Void::class
                 val klass = Void::class
             """
@@ -41,7 +43,8 @@ class ForbiddenVoidSpec : Spek({
         }
 
         it("does not report when functions or classes are called 'Void'") {
-            val code = """
+            val code =
+                """
                 class Void {
                     fun void() {}
                     val void = "string"
@@ -62,7 +65,8 @@ class ForbiddenVoidSpec : Spek({
             val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))
 
             it("should not report Void in overriding function declarations") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         @Suppress("ForbiddenVoid")
                         abstract fun method(param: Void) : Void
@@ -80,7 +84,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should not report Void in overriding function declarations with parameterized types") {
-                val code = """
+                val code =
+                    """
                     class Foo<T> {}
 
                     abstract class A {
@@ -100,7 +105,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should report Void in body of overriding function even") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract fun method(param: String)
                     }
@@ -117,7 +123,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should report Void in not overridden function declarations") {
-                val code = """
+                val code =
+                    """
                     fun method(param: Void) : Void {
                         return param
                     }
@@ -131,7 +138,8 @@ class ForbiddenVoidSpec : Spek({
             val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true"))
 
             it("should not report Void in generic type declaration") {
-                val code = """
+                val code =
+                    """
                     interface A<T>
 
                     class B {
@@ -152,7 +160,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should not report Void in nested generic type definition") {
-                val code = """
+                val code =
+                    """
                     interface A<T>
                     interface B<T>
                     class C : A<B<Void>>
@@ -163,7 +172,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should not report Void in definition with multiple generic parameters") {
-                val code = """
+                val code =
+                    """
                     val foo = mutableMapOf<Int, Void>()
                 """
 
@@ -172,7 +182,8 @@ class ForbiddenVoidSpec : Spek({
             }
 
             it("should report non-generic Void type usage") {
-                val code = """
+                val code =
+                    """
                     lateinit var c: () -> Void
 
                     fun method(param: Void) {

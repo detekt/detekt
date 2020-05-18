@@ -28,7 +28,8 @@ class MemberNameEqualsClassNameSpec : Spek({
         context("some classes with methods which don't have the same name") {
 
             it("does not report a nested function with the same name as the class") {
-                val code = """
+                val code =
+                    """
                     class MethodNameNotEqualsClassName {
                         fun nestedFunction() {
                             fun MethodNameNotEqualsClassName() {}
@@ -39,7 +40,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("does not report a function with same name in nested class") {
-                val code = """
+                val code =
+                    """
                     class MethodNameNotEqualsClassName {
                         class NestedNameEqualsTopClassName {
                             fun MethodNameNotEqualsClassName() {}
@@ -50,7 +52,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("does not report a function with the same name as a companion object") {
-                val code = """
+                val code =
+                    """
                     class StaticMethodNameEqualsObjectName {
                         companion object A {
                             fun A() {}
@@ -64,7 +67,8 @@ class MemberNameEqualsClassNameSpec : Spek({
         context("some classes with members which have the same name") {
 
             it("reports a method which is named after the class") {
-                val code = """
+                val code =
+                    """
                     class MethodNameEqualsClassName {
                         fun methodNameEqualsClassName() {}
                     }
@@ -73,7 +77,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a method which is named after the object") {
-                val code = """
+                val code =
+                    """
                     object MethodNameEqualsObjectName {
                         fun MethodNameEqualsObjectName() {}
                     }
@@ -82,7 +87,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a property which is named after the class") {
-                val code = """
+                val code =
+                    """
                     class PropertyNameEqualsClassName {
                         val propertyNameEqualsClassName = 0
                     }
@@ -91,7 +97,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a property which is named after the object") {
-                val code = """
+                val code =
+                    """
                     object PropertyNameEqualsObjectName {
                         val propertyNameEqualsObjectName = 0
                     }
@@ -100,7 +107,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a companion object function which is named after the class") {
-                val code = """
+                val code =
+                    """
                     class StaticMethodNameEqualsClassName {
                         companion object {
                             fun StaticMethodNameEqualsClassName() {}
@@ -111,7 +119,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a method which is named after the class even when it's inside another one") {
-                val code = """
+                val code =
+                    """
                     class MethodNameContainer {
                         class MethodNameEqualsNestedClassName {
                             fun MethodNameEqualsNestedClassName() {}
@@ -122,7 +131,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("doesn't report overridden methods which are named after the class") {
-                val code = """
+                val code =
+                    """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override fun AbstractMethodNameEqualsClassName() {}
                     }
@@ -134,7 +144,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("doesn't report an methods which are named after the interface") {
-                val code = """
+                val code =
+                    """
                     interface MethodNameEqualsInterfaceName {
                         fun MethodNameEqualsInterfaceName() {}
                     }
@@ -143,7 +154,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports overridden methods which are named after the class if they are not ignored") {
-                val code = """
+                val code =
+                    """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override fun AbstractMethodNameEqualsClassName() {}
                     }
@@ -155,7 +167,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("doesn't report overridden properties which are named after the class") {
-                val code = """
+                val code =
+                    """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override val AbstractMethodNameEqualsClassName = ""
                     }
@@ -167,7 +180,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports overridden properties which are named after the class if they are not ignored") {
-                val code = """
+                val code =
+                    """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override val AbstractMethodNameEqualsClassName = ""
                     }
@@ -182,7 +196,8 @@ class MemberNameEqualsClassNameSpec : Spek({
         context("some companion object functions named after the class (factory functions)") {
 
             it("reports a function which has no return type") {
-                val code = """
+                val code =
+                    """
                     class WrongFactoryClass1 {
 
                         companion object {
@@ -194,7 +209,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a function which has the wrong return type") {
-                val code = """
+                val code =
+                    """
                     class WrongFactoryClass2 {
 
                         companion object {
@@ -208,7 +224,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports a body-less function which has the wrong return type") {
-                val code = """
+                val code =
+                    """
                     class WrongFactoryClass3 {
                     
                         companion object {
@@ -220,7 +237,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("doesn't report a factory function") {
-                val code = """
+                val code =
+                    """
                     open class A {
                         companion object {
                             fun a(condition: Boolean): A {
@@ -237,7 +255,8 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("doesn't report a body-less factory function") {
-                val code = """
+                val code =
+                    """
                     open class A {
                       companion object {
                         fun a(condition: Boolean) = if (condition) B() else C()

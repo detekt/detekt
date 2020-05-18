@@ -65,7 +65,7 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
     private fun KtTypeReference.isPartOfOverriddenSignature() =
         (isPartOfReturnTypeOfFunction() || isParameterTypeOfFunction()) &&
-                getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
+            getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
 
     private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
         getStrictParentOfType<KtNamedFunction>()

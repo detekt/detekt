@@ -12,7 +12,8 @@ class UntilInsteadOfRangeToSpec : Spek({
     describe("UntilInsteadOfRangeTo rule") {
 
         it("reports for '..'") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 0 .. 10 - 1) {}
                 }"""
@@ -20,7 +21,8 @@ class UntilInsteadOfRangeToSpec : Spek({
         }
 
         it("does not report if rangeTo not used") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 0 until 10 - 1) {}
                     for (i in 10 downTo 2 - 1) {}
@@ -29,7 +31,8 @@ class UntilInsteadOfRangeToSpec : Spek({
         }
 
         it("does not report if upper value isn't a binary expression") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 0 .. 10) {}
                 }"""
@@ -37,7 +40,8 @@ class UntilInsteadOfRangeToSpec : Spek({
         }
 
         it("does not report if not minus one") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 0 .. 10 + 1) {}
                     for (i in 0 .. 10 - 2) {}

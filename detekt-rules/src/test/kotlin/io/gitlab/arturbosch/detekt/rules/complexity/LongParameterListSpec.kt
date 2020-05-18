@@ -9,19 +9,21 @@ import org.spekframework.spek2.style.specification.describe
 class LongParameterListSpec : Spek({
 
     val defaultThreshold = 2
-    val defaultConfig = TestConfig(mapOf(
-        LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
-        LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
-    ))
+    val defaultConfig = TestConfig(
+        mapOf(
+            LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
+            LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
+        )
+    )
 
     val subject by memoized { LongParameterList(defaultConfig) }
 
     describe("LongParameterList rule") {
 
         val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
-                "The current threshold is set to $defaultThreshold."
+            "The current threshold is set to $defaultThreshold."
         val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
-                "The current threshold is set to $defaultThreshold."
+            "The current threshold is set to $defaultThreshold."
 
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int) {}"
@@ -79,10 +81,12 @@ class LongParameterListSpec : Spek({
         }
 
         it("does not report long parameter list for constructors of data classes if asked") {
-            val config = TestConfig(mapOf(
-                LongParameterList.IGNORE_DATA_CLASSES to "true",
-                LongParameterList.CONSTRUCTOR_THRESHOLD to "1"
-            ))
+            val config = TestConfig(
+                mapOf(
+                    LongParameterList.IGNORE_DATA_CLASSES to "true",
+                    LongParameterList.CONSTRUCTOR_THRESHOLD to "1"
+                )
+            )
             val rule = LongParameterList(config)
             val code = "data class Data(val a: Int)"
             assertThat(rule.compileAndLint(code)).isEmpty()
@@ -90,11 +94,13 @@ class LongParameterListSpec : Spek({
 
         describe("constructors and functions with ignored annotations") {
 
-            val config = TestConfig(mapOf(
-                LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated", "kotlin.Deprecated"),
-                LongParameterList.FUNCTION_THRESHOLD to 1,
-                LongParameterList.CONSTRUCTOR_THRESHOLD to 1
-            ))
+            val config = TestConfig(
+                mapOf(
+                    LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated", "kotlin.Deprecated"),
+                    LongParameterList.FUNCTION_THRESHOLD to 1,
+                    LongParameterList.CONSTRUCTOR_THRESHOLD to 1
+                )
+            )
             val rule = LongParameterList(config)
 
             it("does not report long parameter list for constructors if file is annotated with ignored annotation") {
@@ -103,7 +109,8 @@ class LongParameterListSpec : Spek({
             }
 
             it("does not report long parameter list for functions if file is annotated with ignored annotation") {
-                val code = """
+                val code =
+                    """
                     @file:javax.annotation.Generated 
                     class Data { 
                         fun foo(a: Int) {} 
@@ -118,7 +125,8 @@ class LongParameterListSpec : Spek({
             }
 
             it("does not report long parameter list for functions if class is annotated with ignored annotation") {
-                val code = """
+                val code =
+                    """
                     @javax.annotation.Generated class Data { 
                         fun foo(a: Int) {} 
                     }
@@ -132,7 +140,8 @@ class LongParameterListSpec : Spek({
             }
 
             it("does not report long parameter list for functions if function is annotated with ignored annotation") {
-                val code = """class Data {
+                val code =
+                    """class Data {
                     @kotlin.Deprecated(message = "") fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }
                 """
                 assertThat(rule.compileAndLint(code)).isEmpty()

@@ -11,39 +11,40 @@ import java.util.regex.PatternSyntaxException
 class NamingConventionCustomPatternTest : Spek({
 
     val configCustomRules =
-            object : TestConfig() {
-                override fun subConfig(key: String): TestConfig = this
+        object : TestConfig() {
+            override fun subConfig(key: String): TestConfig = this
 
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : Any> valueOrDefault(key: String, default: T): T =
-                        when (key) {
-                            FunctionNaming.FUNCTION_PATTERN -> "^`.+`$" as T
-                            ClassNaming.CLASS_PATTERN -> "^aBbD$" as T
-                            VariableNaming.VARIABLE_PATTERN -> "^123var$" as T
-                            TopLevelPropertyNaming.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
-                            EnumNaming.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
-                            PackageNaming.PACKAGE_PATTERN -> "^(package_1)$" as T
-                            FunctionMaxLength.MAXIMUM_FUNCTION_NAME_LENGTH -> 50 as T
-                            else -> default
-                        }
-            }
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : Any> valueOrDefault(key: String, default: T): T =
+                when (key) {
+                    FunctionNaming.FUNCTION_PATTERN -> "^`.+`$" as T
+                    ClassNaming.CLASS_PATTERN -> "^aBbD$" as T
+                    VariableNaming.VARIABLE_PATTERN -> "^123var$" as T
+                    TopLevelPropertyNaming.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
+                    EnumNaming.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
+                    PackageNaming.PACKAGE_PATTERN -> "^(package_1)$" as T
+                    FunctionMaxLength.MAXIMUM_FUNCTION_NAME_LENGTH -> 50 as T
+                    else -> default
+                }
+        }
     val testConfig = object : TestConfig() {
         override fun subConfig(key: String): TestConfig =
-                when (key) {
-                    FunctionNaming::class.simpleName -> configCustomRules
-                    FunctionMaxLength::class.simpleName -> configCustomRules
-                    ClassNaming::class.simpleName -> configCustomRules
-                    VariableNaming::class.simpleName -> configCustomRules
-                    TopLevelPropertyNaming::class.simpleName -> configCustomRules
-                    EnumNaming::class.simpleName -> configCustomRules
-                    PackageNaming::class.simpleName -> configCustomRules
-                    else -> this
-                }
+            when (key) {
+                FunctionNaming::class.simpleName -> configCustomRules
+                FunctionMaxLength::class.simpleName -> configCustomRules
+                ClassNaming::class.simpleName -> configCustomRules
+                VariableNaming::class.simpleName -> configCustomRules
+                TopLevelPropertyNaming::class.simpleName -> configCustomRules
+                EnumNaming::class.simpleName -> configCustomRules
+                PackageNaming::class.simpleName -> configCustomRules
+                else -> this
+            }
 
         override fun <T : Any> valueOrDefault(key: String, default: T): T = default
     }
 
-    val excludeClassPatternVariableRegexCode = """
+    val excludeClassPatternVariableRegexCode =
+        """
             class Bar {
                 val MYVar = 3
             }
@@ -52,7 +53,8 @@ class NamingConventionCustomPatternTest : Spek({
                 val MYVar = 3
             }"""
 
-    val excludeClassPatternFunctionRegexCode = """
+    val excludeClassPatternFunctionRegexCode =
+        """
             class Bar {
                 fun MYFun() {}
             }
@@ -65,7 +67,9 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("should use custom name for method and class") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 fun `name with back ticks`(){
                   val `123var` = ""
@@ -75,29 +79,39 @@ class NamingConventionCustomPatternTest : Spek({
                   const val lowerCaseConst = ""
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for constant") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 companion object {
                   const val lowerCaseConst = ""
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for enum") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 enum class aBbD {
                     enum1, enum2
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for package") {
@@ -106,7 +120,8 @@ class NamingConventionCustomPatternTest : Spek({
         }
 
         it("shouldExcludeClassesFromVariableNaming") {
-            val code = """
+            val code =
+                """
             class Bar {
                 val MYVar = 3
             }
@@ -120,8 +135,8 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("shouldNotFailWithInvalidRegexWhenDisabledVariableNaming") {
             val configValues = mapOf(
-                    "active" to "false",
-                    VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                "active" to "false",
+                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
             )
             val config = TestConfig(configValues)
             assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
@@ -135,7 +150,8 @@ class NamingConventionCustomPatternTest : Spek({
         }
 
         it("shouldExcludeClassesFromFunctionNaming") {
-            val code = """
+            val code =
+                """
             class Bar {
                 fun MYFun() {}
             }
@@ -149,8 +165,8 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming") {
             val configRules = mapOf(
-                    "active" to "false",
-                    FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                "active" to "false",
+                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
             )
             val config = TestConfig(configRules)
             assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()

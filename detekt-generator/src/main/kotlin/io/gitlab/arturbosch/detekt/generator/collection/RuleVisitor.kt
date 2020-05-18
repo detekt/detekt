@@ -40,15 +40,17 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
         }
 
-        return Rule(name, description, nonCompliant, compliant,
-                active, severity, debt, aliases, parent, configuration, autoCorrect)
+        return Rule(
+            name, description, nonCompliant, compliant,
+            active, severity, debt, aliases, parent, configuration, autoCorrect
+        )
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
         val isRule = list.entries
-                ?.asSequence()
-                ?.map { it.typeAsUserType?.referencedName }
-                ?.any { ruleClasses.contains(it) } ?: false
+            ?.asSequence()
+            ?.map { it.typeAsUserType?.referencedName }
+            ?.any { ruleClasses.contains(it) } ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name
@@ -92,7 +94,8 @@ internal class RuleVisitor : DetektVisitor() {
                 extractCompliantDocumentation(comment, compliantIndex)
             }
             compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains a compliant without a noncompliant code definition")
+                "Rule $name contains a compliant without a noncompliant code definition"
+            )
             else -> description = comment
         }
     }
@@ -101,12 +104,13 @@ internal class RuleVisitor : DetektVisitor() {
         val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
         if (nonCompliantEndIndex == -1) {
             throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains an incorrect noncompliant code definition")
+                "Rule $name contains an incorrect noncompliant code definition"
+            )
         }
         description = comment.substring(0, nonCompliantIndex).trim()
         nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
-                .trimStartingLineBreaks()
-                .trimEnd()
+            .trimStartingLineBreaks()
+            .trimEnd()
     }
 
     private fun extractCompliantDocumentation(comment: String, compliantIndex: Int) {
@@ -114,31 +118,36 @@ internal class RuleVisitor : DetektVisitor() {
         if (compliantIndex != -1) {
             if (compliantEndIndex == -1) {
                 throw InvalidCodeExampleDocumentationException(
-                        "Rule $name contains an incorrect compliant code definition")
+                    "Rule $name contains an incorrect compliant code definition"
+                )
             }
             compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
-                    .trimStartingLineBreaks()
-                    .trimEnd()
+                .trimStartingLineBreaks()
+                .trimEnd()
         }
     }
 
     private fun extractAliases(klass: KtClass) {
         val initializer = klass.getProperties()
-                .singleOrNull { it.name == "defaultRuleIdAliases" }
-                ?.initializer
+            .singleOrNull { it.name == "defaultRuleIdAliases" }
+            ?.initializer
         if (initializer != null) {
-            aliases = (initializer as? KtCallExpression
-                ?: throw InvalidAliasesDeclaration())
-                    .valueArguments
-                    .joinToString(", ") { it.text.replace("\"", "") }
+            aliases = (
+                initializer as? KtCallExpression
+                    ?: throw InvalidAliasesDeclaration()
+                )
+                .valueArguments
+                .joinToString(", ") { it.text.replace("\"", "") }
         }
     }
 
     private fun extractIssueSeverityAndDebt(klass: KtClass) {
-        val arguments = (klass.getProperties()
+        val arguments = (
+            klass.getProperties()
                 .singleOrNull { it.name == "issue" }
-                ?.initializer as? KtCallExpression)
-                ?.valueArguments ?: emptyList()
+                ?.initializer as? KtCallExpression
+            )
+            ?.valueArguments ?: emptyList()
 
         if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
             severity = getArgument(arguments[1], "Severity")
@@ -163,10 +172,10 @@ internal class RuleVisitor : DetektVisitor() {
 
     companion object {
         private val ruleClasses = listOf(
-                io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-                FormattingRule::class.simpleName,
-                ThresholdRule::class.simpleName,
-                EmptyRule::class.simpleName
+            io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
+            FormattingRule::class.simpleName,
+            ThresholdRule::class.simpleName,
+            EmptyRule::class.simpleName
         )
 
         private const val TAG_ACTIVE = "active"

@@ -54,7 +54,8 @@ class ModifierOrderSpec : Spek({
         context("an overridden function") {
 
             it("should report incorrectly ordered modifiers") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract fun test()
                     }
@@ -65,7 +66,8 @@ class ModifierOrderSpec : Spek({
             }
 
             it("should not report correctly ordered modifiers") {
-                val code = """
+                val code =
+                    """
                     abstract class A {
                         abstract fun test()
                     }
@@ -79,7 +81,8 @@ class ModifierOrderSpec : Spek({
         context("a tailrec function") {
 
             it("should report incorrectly ordered modifiers") {
-                val code = """
+                val code =
+                    """
                     public class A {
                         tailrec private fun foo(x: Double = 1.0): Double = 1.0
                     }
@@ -88,7 +91,8 @@ class ModifierOrderSpec : Spek({
             }
 
             it("should not report correctly ordered modifiers") {
-                val code = """
+                val code =
+                    """
                     public class A {
                         private tailrec fun foo(x: Double = 1.0): Double = 1.0
                     }

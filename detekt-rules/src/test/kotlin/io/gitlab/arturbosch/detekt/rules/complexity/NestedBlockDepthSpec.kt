@@ -21,7 +21,8 @@ class NestedBlockDepthSpec : Spek({
         }
 
         it("should detect too nested block depth") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (true) {
@@ -39,7 +40,8 @@ class NestedBlockDepthSpec : Spek({
         }
 
         it("should not detect valid nested block depth") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (true) {
@@ -52,7 +54,8 @@ class NestedBlockDepthSpec : Spek({
         }
 
         it("does not report valid nested if else branches") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (true) {
@@ -66,7 +69,8 @@ class NestedBlockDepthSpec : Spek({
         }
 
         it("reports deeply nested if else branches") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (true) {

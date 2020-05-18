@@ -12,7 +12,8 @@ class EmptyConstructorSpec : Spek({
     describe("EmptyDefaultConstructor rule") {
 
         it("should not report empty constructors for annotation classes with expect or actual keyword - #1362") {
-            val code = """
+            val code =
+                """
             expect annotation class NeedsConstructor()
             actual annotation class NeedsConstructor actual constructor()
 

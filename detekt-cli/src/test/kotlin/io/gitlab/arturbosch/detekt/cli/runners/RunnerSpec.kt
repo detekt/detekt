@@ -123,7 +123,8 @@ class RunnerSpec : Spek({
             beforeEachTest {
                 val args = createCliArgs(
                     "--input", inputPath.toString(),
-                    "--config-resource", "/configs/max-issues-0.yml")
+                    "--config-resource", "/configs/max-issues-0.yml"
+                )
 
                 try {
                     Runner(args, outPrintStream, errPrintStream).execute()

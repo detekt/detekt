@@ -23,7 +23,8 @@ object RedundantSuspendModifierSpec : Spek({
     describe("RedundantSuspendModifier") {
 
         it("reports when public function returns expression of platform type") {
-            val code = """
+            val code =
+                """
                 import kotlin.coroutines.Continuation
                 import kotlin.coroutines.resume
                 import kotlin.coroutines.suspendCoroutine
@@ -42,7 +43,8 @@ object RedundantSuspendModifierSpec : Spek({
         }
 
         it("does not report when private") {
-            val code = """
+            val code =
+                """
                 import kotlin.coroutines.Continuation
                 import kotlin.coroutines.resume
                 import kotlin.coroutines.suspendCoroutine
@@ -59,7 +61,8 @@ object RedundantSuspendModifierSpec : Spek({
         }
 
         it("does not report when public function returns expression of platform type") {
-            val code = """
+            val code =
+                """
                 class RedundantClass {
                     open suspend fun redundantSuspend() {
                         println("hello world")
@@ -70,7 +73,8 @@ object RedundantSuspendModifierSpec : Spek({
         }
 
         it("ignores when iterator is suspending") {
-            val code = """
+            val code =
+                """
                 class SuspendingIterator {
                     suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                 }
@@ -85,7 +89,8 @@ object RedundantSuspendModifierSpec : Spek({
         }
 
         it("ignores when suspending function used in property delegate") {
-            val code = """
+            val code =
+                """
                 class SuspendingIterator {
                     suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                 }

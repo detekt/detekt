@@ -14,7 +14,8 @@ class EmptyFunctionBlockSpec : Spek({
     describe("EmptyFunctionBlock rule") {
 
         it("should flag function with protected modifier") {
-            val code = """
+            val code =
+                """
                 class A {
                     protected fun stuff() {}
                 }"""
@@ -22,7 +23,8 @@ class EmptyFunctionBlockSpec : Spek({
         }
 
         it("should not flag function with open modifier") {
-            val code = """
+            val code =
+                """
                 open class A {
                     open fun stuff() {}
                 }"""
@@ -30,7 +32,8 @@ class EmptyFunctionBlockSpec : Spek({
         }
 
         it("should not flag a default function in an interface") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun stuff() {}
                 }"""
@@ -38,7 +41,8 @@ class EmptyFunctionBlockSpec : Spek({
         }
 
         it("should flag the nested empty function") {
-            val code = """
+            val code =
+                """
                 fun a() {
                     fun b() {}
                 }"""
@@ -47,7 +51,8 @@ class EmptyFunctionBlockSpec : Spek({
 
         context("some overridden functions") {
 
-            val code = """
+            val code =
+                """
                 fun empty() {}
 
                 open class Base {
@@ -81,7 +86,8 @@ class EmptyFunctionBlockSpec : Spek({
         }
 
         context("some overridden functions") {
-            val code = """
+            val code =
+                """
                 private interface Listener {
                     fun listenThis()
 

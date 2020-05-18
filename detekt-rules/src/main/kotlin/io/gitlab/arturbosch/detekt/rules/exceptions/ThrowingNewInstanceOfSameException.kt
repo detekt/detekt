@@ -39,9 +39,11 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  */
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ThrowingNewInstanceOfSameException", Severity.Defect,
-            "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "ThrowingNewInstanceOfSameException", Severity.Defect,
+        "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val parameterName = catchClause.catchParameter?.name
@@ -49,8 +51,8 @@ class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(c
         val throwExpression = catchClause.catchBody?.findDescendantOfType<KtThrowExpression> {
             val thrownExpression = it.thrownExpression as? KtCallExpression
             thrownExpression != null &&
-                    createsSameExceptionType(thrownExpression, typeReference) &&
-                    hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
+                createsSameExceptionType(thrownExpression, typeReference) &&
+                hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
         }
         if (throwExpression != null) {
             report(CodeSmell(issue, Entity.from(throwExpression), issue.description))

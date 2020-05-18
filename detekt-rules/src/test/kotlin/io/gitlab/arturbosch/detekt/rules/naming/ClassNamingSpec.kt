@@ -11,7 +11,7 @@ class ClassNamingSpec : Spek({
 
         it("should detect no violations") {
             val findings = ClassNaming().compileAndLint(
-                    """
+                """
                     class MyClassWithNumbers5
 
                     class NamingConventions {
@@ -23,7 +23,7 @@ class ClassNamingSpec : Spek({
 
         it("should find two violations") {
             val findings = ClassNaming().compileAndLint(
-                    """
+                """
                     class _NamingConventions
 
                     class namingConventions {}

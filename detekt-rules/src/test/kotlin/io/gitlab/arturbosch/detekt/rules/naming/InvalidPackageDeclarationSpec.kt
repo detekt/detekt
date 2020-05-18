@@ -20,7 +20,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
     describe("InvalidPackageDeclaration rule") {
 
         it("should pass if package declaration is correct") {
-            val source = """
+            val source =
+                """
                 package foo.bar
                 
                 class C
@@ -38,7 +39,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
         }
 
         it("should report if package declaration does not match source location") {
-            val source = """
+            val source =
+                """
                 package foo
                 
                 class C
@@ -54,7 +56,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
             val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example"))
 
             it("should pass if file is located within the root package") {
-                val source = """
+                val source =
+                    """
                     package com.example
                     
                     class C
@@ -65,7 +68,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
             }
 
             it("should pass if file is located relative to root package") {
-                val source = """
+                val source =
+                    """
                     package com.example.foo.bar
                     
                     class C
@@ -77,7 +81,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
             }
 
             it("should pass if file is located in directory corresponding to package declaration") {
-                val source = """
+                val source =
+                    """
                     package com.example.foo.bar
                     
                     class C
@@ -89,7 +94,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
             }
 
             it("should report if package declaration does not match") {
-                val source = """
+                val source =
+                    """
                     package com.example.foo.baz
                     
                     class C
@@ -100,7 +106,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
             it("should report if file path matches root package but package declaration differs") {
-                val source = """
+                val source =
+                    """
                     package io.foo.bar
                     
                     class C

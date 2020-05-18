@@ -36,7 +36,9 @@ class PotentialBugProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "potential-bugs"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 Deprecation(config),
                 DuplicateCaseInWhenExpression(config),
                 EqualsAlwaysReturnsTrueOrFalse(config),
@@ -59,6 +61,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 UnsafeCast(config),
                 UselessPostfixExpression(config),
                 WrongEqualsTypeParameter(config)
-        ))
+            )
+        )
     }
 }

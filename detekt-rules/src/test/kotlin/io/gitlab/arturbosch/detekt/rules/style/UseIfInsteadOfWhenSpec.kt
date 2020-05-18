@@ -12,7 +12,8 @@ object UseIfInsteadOfWhenSpec : Spek({
     describe("UseIfInsteadOfWhen rule") {
 
         it("reports when using two branches") {
-            val code = """
+            val code =
+                """
                 fun function(): Boolean? {
                     val x = null
                     when (x) {
@@ -25,7 +26,8 @@ object UseIfInsteadOfWhenSpec : Spek({
         }
 
         it("does not report when using one branch") {
-            val code = """
+            val code =
+                """
                 fun function(): Boolean? {
                     val x = null
                     when (x) {
@@ -37,7 +39,8 @@ object UseIfInsteadOfWhenSpec : Spek({
         }
 
         it("does not report when using more than two branches") {
-            val code = """
+            val code =
+                """
                 fun function(): Boolean? {
                     val x = null
                     when (x) {
@@ -51,7 +54,8 @@ object UseIfInsteadOfWhenSpec : Spek({
         }
 
         it("does not report when second branch is not 'else'") {
-            val code = """
+            val code =
+                """
                 fun function(): Boolean? {
                     val x = null
                     when (x) {

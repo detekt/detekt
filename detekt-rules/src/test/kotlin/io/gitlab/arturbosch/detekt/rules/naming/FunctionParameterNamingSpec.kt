@@ -11,7 +11,8 @@ class FunctionParameterNamingSpec : Spek({
     describe("parameters in a function of a class") {
 
         it("should detect no violations") {
-            val code = """
+            val code =
+                """
                 class C {
                     fun someStuff(param: String) {}
                 }
@@ -20,7 +21,8 @@ class FunctionParameterNamingSpec : Spek({
         }
 
         it("should not detect violations in overridden function by default") {
-            val code = """
+            val code =
+                """
                 class C : I {
                     override fun someStuff(`object`: String) {}
                 }
@@ -30,7 +32,8 @@ class FunctionParameterNamingSpec : Spek({
         }
 
         it("should detect violations in overridden function if ignoreOverridden is false") {
-            val code = """
+            val code =
+                """
                 class C : I {
                     override fun someStuff(`object`: String) {}
                 }
@@ -41,7 +44,8 @@ class FunctionParameterNamingSpec : Spek({
         }
 
         it("should find some violations") {
-            val code = """
+            val code =
+                """
                 class C {
                     fun someStuff(PARAM: String) {}
                 }
@@ -55,7 +59,8 @@ class FunctionParameterNamingSpec : Spek({
         val config = TestConfig(mapOf(FunctionParameterNaming.EXCLUDE_CLASS_PATTERN to "Excluded"))
 
         it("should not detect function parameter") {
-            val code = """
+            val code =
+                """
                 class Excluded {
                     fun f(PARAM: Int) {}
                 }

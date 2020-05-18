@@ -18,7 +18,8 @@ class EmptyClassBlockSpec : Spek({
         }
 
         it("does not report class with comments in the body") {
-            val code = """
+            val code =
+                """
                 class SomeClass {
                     // Some comment to explain what this class is supposed to do
                 }
@@ -27,7 +28,8 @@ class EmptyClassBlockSpec : Spek({
         }
 
         it("does not report class with multiline comments in the body") {
-            val code = """
+            val code =
+                """
                 class SomeClass {
                     /*
                     Some comment to explain what this class is supposed to do
@@ -38,7 +40,8 @@ class EmptyClassBlockSpec : Spek({
         }
 
         it("reports the empty nested class body") {
-            val code = """
+            val code =
+                """
                 class SomeClass {
                     class EmptyClass {}
                 }
@@ -54,7 +57,8 @@ class EmptyClassBlockSpec : Spek({
         }
 
         it("does not report the object if it is of an anonymous class") {
-            val code = """
+            val code =
+                """
                 open class Open
 
                 fun f() {

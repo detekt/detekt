@@ -10,7 +10,8 @@ internal class CreateBaselineTaskDslTest : Spek({
         listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
             describe("using ${builder.gradleBuildName}") {
                 it("can be executed when baseline file is specified") {
-                    val detektConfig = """
+                    val detektConfig =
+                        """
                         |detekt {
                         |   baseline = file("build/baseline.xml")
                         |}

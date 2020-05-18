@@ -11,7 +11,8 @@ import java.util.regex.PatternSyntaxException
 class LateinitUsageSpec : Spek({
 
     describe("LateinitUsage rule") {
-        val code = """
+        val code =
+            """
             import kotlin.SinceKotlin
 
             class SomeRandomTest {

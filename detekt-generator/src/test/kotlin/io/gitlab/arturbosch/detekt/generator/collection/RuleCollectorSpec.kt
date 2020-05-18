@@ -38,7 +38,8 @@ class RuleCollectorSpec : Spek({
 
         it("collects the rule name") {
             val name = "SomeRandomClass"
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -50,7 +51,8 @@ class RuleCollectorSpec : Spek({
 
         it("collects the rule description") {
             val description = "description"
-            val code = """
+            val code =
+                """
                 /**
                  * $description
                  */
@@ -62,7 +64,8 @@ class RuleCollectorSpec : Spek({
 
         it("has a multi paragraph description") {
             val description = "description"
-            val code = """
+            val code =
+                """
                 /**
                  * $description
                  *
@@ -76,7 +79,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("is not active") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -87,7 +91,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("is active tag present") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @active
@@ -99,7 +104,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("is auto-correctable tag is present") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @autoCorrect
@@ -111,7 +117,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("is active if the tag is there and has a description") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @active description about the active tag
@@ -123,7 +130,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("collects the issue property") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -139,7 +147,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("contains no configuration options by default") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -150,7 +159,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("contains one configuration option with correct formatting") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration config - description (default: `'[A-Z$]'`)
@@ -165,7 +175,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("contains multiple configuration options") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration config - description (default: `''`)
@@ -178,7 +189,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("config option doesn't have a default value") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration config - description
@@ -189,7 +201,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has a blank default value") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration config - description (default: ``)
@@ -200,7 +213,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has an incorrectly delimited default value") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration config - description (default: true)
@@ -211,7 +225,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("contains a misconfigured configuration option") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  * @configuration something: description
@@ -222,7 +237,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("contains compliant and noncompliant code examples") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  *
@@ -242,7 +258,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has wrong noncompliant code example declaration") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  *
@@ -255,7 +272,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has wrong compliant code example declaration") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  *
@@ -271,7 +289,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has wrong compliant without noncompliant code example declaration") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  *
@@ -286,7 +305,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has wrong issue style property") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -303,7 +323,8 @@ class RuleCollectorSpec : Spek({
         }
 
         it("has wrong aliases property structure") {
-            val code = """
+            val code =
+                """
                 /**
                  * description
                  */
@@ -322,7 +343,8 @@ class RuleCollectorSpec : Spek({
 
         it("contains tabs in KDoc") {
             val description = "\tdescription"
-            val code = """
+            val code =
+                """
                 /**
                  * $description
                  */

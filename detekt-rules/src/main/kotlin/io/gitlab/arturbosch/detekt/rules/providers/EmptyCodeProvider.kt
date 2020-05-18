@@ -16,8 +16,11 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "empty-blocks"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 EmptyBlocks(config)
-        ))
+            )
+        )
     }
 }

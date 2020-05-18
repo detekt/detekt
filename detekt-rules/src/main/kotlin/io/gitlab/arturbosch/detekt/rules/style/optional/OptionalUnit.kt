@@ -40,10 +40,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Return type of 'Unit' is unnecessary and can be safely removed.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "Return type of 'Unit' is unnecessary and can be safely removed.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.funKeyword == null) return
@@ -58,11 +59,15 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitBlockExpression(expression: KtBlockExpression) {
         expression.statements
-                .filter { it is KtNameReferenceExpression && it.text == UNIT }
-                .onEach {
-                    report(CodeSmell(issue, Entity.from(expression),
-                            "A single Unit expression is unnecessary and can safely be removed"))
-                }
+            .filter { it is KtNameReferenceExpression && it.text == UNIT }
+            .onEach {
+                report(
+                    CodeSmell(
+                        issue, Entity.from(expression),
+                        "A single Unit expression is unnecessary and can safely be removed"
+                    )
+                )
+            }
         super.visitBlockExpression(expression)
     }
 
@@ -85,7 +90,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         function.getStrictParentOfType<KtClass>()?.isInterface() ?: false
 
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
-            "defines a return type of Unit. This is unnecessary and can safely be removed."
+        "defines a return type of Unit. This is unnecessary and can safely be removed."
 
     companion object {
         private const val UNIT = "Unit"

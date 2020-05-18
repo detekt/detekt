@@ -12,7 +12,8 @@ class ReturnFromFinallySpec : Spek({
     describe("ReturnFromFinally rule") {
 
         context("a finally block with a return statement") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } finally {
@@ -28,7 +29,8 @@ class ReturnFromFinallySpec : Spek({
         }
 
         context("a finally block with no return statement") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } finally {
@@ -43,7 +45,8 @@ class ReturnFromFinallySpec : Spek({
         }
 
         context("a finally block with a nested return statement") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } finally {
@@ -61,7 +64,8 @@ class ReturnFromFinallySpec : Spek({
         }
 
         context("a finally block with a return in an inner function") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } finally {
@@ -80,7 +84,8 @@ class ReturnFromFinallySpec : Spek({
         }
 
         context("a finally block with a return as labelled expression") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } finally {

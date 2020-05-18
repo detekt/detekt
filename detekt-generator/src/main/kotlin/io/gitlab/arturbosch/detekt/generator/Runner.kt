@@ -16,10 +16,13 @@ class Runner(
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
 
-    private fun createCompiler(path: Path) = KtTreeCompiler.instance(ProcessingSettings(
-        listOf(path),
-        outPrinter = outPrinter,
-        errPrinter = errPrinter))
+    private fun createCompiler(path: Path) = KtTreeCompiler.instance(
+        ProcessingSettings(
+            listOf(path),
+            outPrinter = outPrinter,
+            errPrinter = errPrinter
+        )
+    )
 
     fun execute() {
         val time = measureTimeMillis {

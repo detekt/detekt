@@ -83,7 +83,8 @@ private fun createReportUrl(ruleName: String, throwable: Throwable): String {
         .lineSequence()
         .take(STACK_TRACE_LINES_TO_SHOW)
         .joinToString("\n")
-    val bodyMessage = """
+    val bodyMessage =
+        """
             |I found an error in the html report:
             |- Rule: $ruleName
             |- Detekt version: ${whichDetekt() ?: "<WRITE HERE THE VERSION OF DETEKT THAT YOU ARE USING>"}

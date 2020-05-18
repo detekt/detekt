@@ -37,7 +37,8 @@ class TrailingWhitespaceSpec : Spek({
         context("negative cases") {
 
             it("does not report a class and function declaration with no whitespaces at the end") {
-                val code = """
+                val code =
+                    """
                     class C {
 
                         fun f() {
@@ -45,13 +46,14 @@ class TrailingWhitespaceSpec : Spek({
                             println("Another message") ;
                         }
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 rule.visit(code.toKtFileContent())
                 assertThat(rule.findings).isEmpty()
             }
 
             it("does not report an indentation inside multi-line strings") {
-                val code = """
+                val code =
+                    """
                     val multiLineStringWithIndents = ""${'"'}
                         Should ignore indent on the next line
                         

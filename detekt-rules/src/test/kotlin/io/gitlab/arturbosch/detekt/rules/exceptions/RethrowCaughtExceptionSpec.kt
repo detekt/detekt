@@ -11,7 +11,8 @@ class RethrowCaughtExceptionSpec : Spek({
     describe("RethrowCaughtException rule") {
 
         it("reports when the same exception is rethrown") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -23,7 +24,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("reports when the same exception succeeded by dead code is rethrown") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -36,7 +38,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("reports when the same nested exception is rethrown") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (outer: IllegalStateException) {
@@ -51,7 +54,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("does not report a wrapped exception") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -63,7 +67,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("does not report wrapped exceptions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -77,7 +82,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("does not report logged exceptions") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {
@@ -92,7 +98,8 @@ class RethrowCaughtExceptionSpec : Spek({
         }
 
         it("does not report when taking specific actions before throwing the exception") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     try {
                     } catch (e: IllegalStateException) {

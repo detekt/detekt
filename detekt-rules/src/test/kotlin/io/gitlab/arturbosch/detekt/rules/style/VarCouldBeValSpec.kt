@@ -12,7 +12,8 @@ class VarCouldBeValSpec : Spek({
     describe("local declarations in functions") {
 
         it("does not report variables that are re-assigned") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 a = 2
@@ -22,7 +23,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("does not report variables that are re-assigned with assignment operator") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 a += 2
@@ -32,7 +34,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("does not report variables that are re-assigned with postfix operators") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 a++
@@ -42,7 +45,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("does not report variables that are re-assigned with infix operators") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 --a
@@ -52,7 +56,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("does not report variables that are re-assigned inside scope functions") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 a.also {
@@ -64,7 +69,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("reports variables that are not re-assigned, but used in expressions") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 val b = a + 2
@@ -77,7 +83,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("reports variables that are not re-assigned, but used in function calls") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var a = 1
                 something(a)
@@ -90,7 +97,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("reports variables that are not re-assigned, but shadowed by one that is") {
-            val code = """
+            val code =
+                """
             fun test() {
                 var shadowed = 1
                 fun nestedFunction() {
@@ -111,7 +119,8 @@ class VarCouldBeValSpec : Spek({
     describe("this-prefixed properties - #1257") {
 
         it("finds unused field and local") {
-            val code = """
+            val code =
+                """
                 fun createObject() = object {
                     private var myVar: String? = null
                     fun assign(value: String?) {
@@ -123,7 +132,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("should not report this-prefixed property") {
-            val code = """
+            val code =
+                """
                 fun createObject() = object {
                     private var myVar: String? = null
                     fun assign(value: String?) {
@@ -135,7 +145,8 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("should report unused local variable") {
-            val code = """
+            val code =
+                """
                 fun createObject() = object {
                     private var myVar: String? = null
                     fun assign(value: String?) {

@@ -12,7 +12,8 @@ object GlobalCoroutineUsageSpec : Spek({
     describe("GlobalCoroutineUsage rule") {
 
         it("should report GlobalScope.launch") {
-            val code = """
+            val code =
+                """
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.GlobalScope
                 import kotlinx.coroutines.launch
@@ -25,7 +26,8 @@ object GlobalCoroutineUsageSpec : Spek({
         }
 
         it("should report GlobalScope.async") {
-            val code = """
+            val code =
+                """
                 import kotlinx.coroutines.async
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.GlobalScope
@@ -38,7 +40,8 @@ object GlobalCoroutineUsageSpec : Spek({
         }
 
         it("should not report bar(GlobalScope)") {
-            val code = """
+            val code =
+                """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.GlobalScope
 
@@ -52,7 +55,8 @@ object GlobalCoroutineUsageSpec : Spek({
         }
 
         it("should not report `val scope = GlobalScope`") {
-            val code = """
+            val code =
+                """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.GlobalScope
 

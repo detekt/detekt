@@ -20,7 +20,8 @@ internal class DetektTaskIntegrationTest : Spek({
 
                     it("build succeeds with more issues than threshold if enabled") {
 
-                        val config = """
+                        val config =
+                            """
                             |detekt {
                             |   ignoreFailures = true
                             |}
@@ -37,7 +38,8 @@ internal class DetektTaskIntegrationTest : Spek({
                     }
                     it("build fails with more issues than threshold successfully if disabled") {
 
-                        val config = """
+                        val config =
+                            """
                             |detekt {
                             |   ignoreFailures = false
                             |}

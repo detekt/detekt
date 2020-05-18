@@ -48,7 +48,8 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
         if (expression.isOnlyExpressionInLambda()) return
 
         if (expression.isIllegalStateException() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)) {
+            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

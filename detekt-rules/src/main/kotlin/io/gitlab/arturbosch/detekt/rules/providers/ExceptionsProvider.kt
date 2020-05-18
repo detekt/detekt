@@ -27,7 +27,9 @@ class ExceptionsProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "exceptions"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 TooGenericExceptionCaught(config),
                 ExceptionRaisedInUnexpectedLocation(config),
                 TooGenericExceptionThrown(config),
@@ -41,6 +43,7 @@ class ExceptionsProvider : DefaultRuleSetProvider {
                 RethrowCaughtException(config),
                 ThrowingNewInstanceOfSameException(config),
                 SwallowedException(config)
-        ))
+            )
+        )
     }
 }

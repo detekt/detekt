@@ -11,7 +11,8 @@ class NotImplementedDeclarationSpec : Spek({
     describe("NotImplementedDeclaration rule") {
 
         it("reports NotImplementedErrors") {
-            val code = """
+            val code =
+                """
             fun f() {
                 if (1 == 1) throw NotImplementedError()
                 throw NotImplementedError()
@@ -20,7 +21,8 @@ class NotImplementedDeclarationSpec : Spek({
         }
 
         it("reports TODO method calls") {
-            val code = """
+            val code =
+                """
             fun f() {
                 TODO("not implemented")
                 TODO()
@@ -29,7 +31,8 @@ class NotImplementedDeclarationSpec : Spek({
         }
 
         it("does not report TODO comments") {
-            val code = """
+            val code =
+                """
             fun f() {
                 // TODO
             }"""

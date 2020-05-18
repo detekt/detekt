@@ -18,7 +18,8 @@ object HasPlatformTypeSpec : Spek({
     describe("Deprecation detection") {
 
         it("reports when public function returns expression of platform type") {
-            val code = """
+            val code =
+                """
                 class Person {
                     fun apiCall() = System.getProperty("propertyName")
                 }
@@ -27,7 +28,8 @@ object HasPlatformTypeSpec : Spek({
         }
 
         it("does not report when private") {
-            val code = """
+            val code =
+                """
                 class Person {
                     private fun apiCall() = System.getProperty("propertyName")
                 }
@@ -36,7 +38,8 @@ object HasPlatformTypeSpec : Spek({
         }
 
         it("does not report when public function returns expression of platform type and type explicitly declared") {
-            val code = """
+            val code =
+                """
                 class Person {
                     fun apiCall(): String = System.getProperty("propertyName")
                 }
@@ -45,7 +48,8 @@ object HasPlatformTypeSpec : Spek({
         }
 
         it("reports when property initiated with platform type") {
-            val code = """
+            val code =
+                """
                 class Person {
                     val name = System.getProperty("name")
                 }
@@ -54,7 +58,8 @@ object HasPlatformTypeSpec : Spek({
         }
 
         it("does not report when private") {
-            val code = """
+            val code =
+                """
                 class Person {
                     private val name = System.getProperty("name")
                 }
@@ -63,7 +68,8 @@ object HasPlatformTypeSpec : Spek({
         }
 
         it("does not report when property initiated with platform type and type explicitly declared") {
-            val code = """
+            val code =
+                """
                 class Person {
                     val name: String = System.getProperty("name")
                 }

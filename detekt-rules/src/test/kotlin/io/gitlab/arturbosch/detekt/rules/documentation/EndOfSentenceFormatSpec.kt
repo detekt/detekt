@@ -11,7 +11,8 @@ class EndOfSentenceFormatSpec : Spek({
     describe("KDocStyle rule") {
 
         it("reports invalid KDoc endings on classes") {
-            val code = """
+            val code =
+                """
             /** Some doc */
             class Test {
             }
@@ -20,7 +21,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings on objects") {
-            val code = """
+            val code =
+                """
             /** Some doc */
             object Test {
             }
@@ -29,7 +31,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings on properties") {
-            val code = """
+            val code =
+                """
             class Test {
                 /** Some doc */
                 val test = 3
@@ -39,7 +42,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings on top-level functions") {
-            val code = """
+            val code =
+                """
             /** Some doc */
             fun test() = 3
             """
@@ -47,7 +51,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings on functions") {
-            val code = """
+            val code =
+                """
             class Test {
                 /** Some doc */
                 fun test() = 3
@@ -57,7 +62,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings") {
-            val code = """
+            val code =
+                """
             class Test {
                 /** Some doc-- */
                 fun test() = 3
@@ -67,7 +73,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("reports invalid KDoc endings in block") {
-            val code = """
+            val code =
+                """
             /**
              * Something off abc@@
              */
@@ -78,7 +85,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not validate first sentence KDoc endings in a multi sentence comment") {
-            val code = """
+            val code =
+                """
             /**
              * This sentence is correct.
              *
@@ -91,7 +99,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc which doesn't contain any real sentence") {
-            val code = """
+            val code =
+                """
             /**
              */
             class Test {
@@ -101,7 +110,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc which doesn't contain any real sentence but many tags") {
-            val code = """
+            val code =
+                """
             /**
              * @configuration this - just an example (default: `150`)
              *
@@ -114,7 +124,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc which doesn't contain any real sentence but html tags") {
-            val code = """
+            val code =
+                """
             /**
              *
              * <noncompliant>
@@ -133,7 +144,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc ending with periods") {
-            val code = """
+            val code =
+                """
             /**
              * Something correct.
              */
@@ -144,7 +156,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc ending with questionmarks") {
-            val code = """
+            val code =
+                """
             /**
              * Something correct?
              */
@@ -155,7 +168,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc ending with exclamation marks") {
-            val code = """
+            val code =
+                """
             /**
              * Something correct!
              */
@@ -166,7 +180,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report KDoc ending with colon") {
-            val code = """
+            val code =
+                """
             /**
              * Something correct:
              */
@@ -177,7 +192,8 @@ class EndOfSentenceFormatSpec : Spek({
         }
 
         it("does not report URLs in comments") {
-            val code = """
+            val code =
+                """
             /** http://www.google.com */
             class Test1 {
             }

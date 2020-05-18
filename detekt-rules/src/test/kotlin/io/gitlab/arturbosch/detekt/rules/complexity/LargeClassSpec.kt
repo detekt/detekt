@@ -22,7 +22,8 @@ class LargeClassSpec : Spek({
     describe("files without classes should not be considered") {
 
         it("should not report anything in files without classes") {
-            val code = """
+            val code =
+                """
                 val i = 0 
 
                 fun f() {

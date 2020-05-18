@@ -11,7 +11,8 @@ class ThrowingNewInstanceOfSameExceptionSpec : Spek({
     describe("ThrowingNewInstanceOfSameException rule") {
 
         context("a catch block which rethrows a new instance of the caught exception") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } catch (e: IllegalStateException) {
@@ -27,7 +28,8 @@ class ThrowingNewInstanceOfSameExceptionSpec : Spek({
         }
 
         context("a catch block which rethrows a new instance of another exception") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } catch (e: IllegalStateException) {
@@ -43,7 +45,8 @@ class ThrowingNewInstanceOfSameExceptionSpec : Spek({
         }
 
         context("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
-            val code = """
+            val code =
+                """
             fun x() {
                 try {
                 } catch (e: IllegalStateException) {

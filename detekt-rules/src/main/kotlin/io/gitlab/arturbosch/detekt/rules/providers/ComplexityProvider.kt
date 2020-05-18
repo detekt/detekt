@@ -25,7 +25,9 @@ class ComplexityProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "complexity"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 LongParameterList(config),
                 LongMethod(config),
                 LargeClass(config),
@@ -37,6 +39,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
                 TooManyFunctions(config),
                 ComplexCondition(config),
                 LabeledExpression(config)
-        ))
+            )
+        )
     }
 }

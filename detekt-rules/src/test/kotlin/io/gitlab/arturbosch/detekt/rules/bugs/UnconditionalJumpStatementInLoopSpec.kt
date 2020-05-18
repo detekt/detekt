@@ -22,25 +22,29 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
         }
 
         it("does not report an conditional elvis continue") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
                         return compute(i) ?: continue
                 }
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings).isEmpty()
         }
 
         it("reports conditional elvis return") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
                         return compute(i) ?: return
                 }
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings).hasSize(1)
         }

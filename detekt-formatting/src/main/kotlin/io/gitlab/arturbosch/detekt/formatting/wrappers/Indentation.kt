@@ -25,9 +25,11 @@ class Indentation(config: Config) : FormattingRule(config) {
     private val continuationIndentSize = valueOrDefault(CONTINUATION_INDENT_SIZE, DEFAULT_CONTINUATION_INDENT)
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        EditorConfig.merge(it,
-                indentSize = indentSize,
-                continuationIndentSize = continuationIndentSize)
+        EditorConfig.merge(
+            it,
+            indentSize = indentSize,
+            continuationIndentSize = continuationIndentSize
+        )
     }
 
     companion object {

@@ -17,7 +17,8 @@ class UnnecessaryNotNullOperatorSpec : Spek({
     describe("check unnecessary not null operators") {
 
         it("reports a simple not null operator usage") {
-            val code = """
+            val code =
+                """
                 val a = 1
                 val b = a!!
                 """
@@ -27,7 +28,8 @@ class UnnecessaryNotNullOperatorSpec : Spek({
         }
 
         it("reports a chained not null operator usage") {
-            val code = """
+            val code =
+                """
                 val a = 1
                 val b = a!!.plus(42)
                 """
@@ -37,7 +39,8 @@ class UnnecessaryNotNullOperatorSpec : Spek({
         }
 
         it("reports multiple chained not null operator usage") {
-            val code = """
+            val code =
+                """
                 val a = 1
                 val b = a!!.plus(42)!!
                 """
@@ -50,7 +53,8 @@ class UnnecessaryNotNullOperatorSpec : Spek({
     describe("check valid not null operators usage") {
 
         it("does not report a simple not null operator usage on nullable type") {
-            val code = """
+            val code =
+                """
                 val a : Int? = 1
                 val b = a!!
                 """

@@ -21,7 +21,8 @@ class UseRequireSpec : Spek({
     describe("UseRequire rule") {
 
         it("reports if a precondition throws an IllegalArgumentException") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException()
                     doSomething()
@@ -30,7 +31,8 @@ class UseRequireSpec : Spek({
         }
 
         it("reports if a precondition throws an IllegalArgumentException with more details") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException("More details")
                     doSomething()
@@ -39,7 +41,8 @@ class UseRequireSpec : Spek({
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) {
                     if (a < 0) throw java.lang.IllegalArgumentException()
                     doSomething()
@@ -48,7 +51,8 @@ class UseRequireSpec : Spek({
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) {
                     if (a < 0) throw kotlin.IllegalArgumentException()
                     doSomething()
@@ -57,7 +61,8 @@ class UseRequireSpec : Spek({
         }
 
         it("does not report if a precondition throws a different kind of exception") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) {
                     if (a < 0) throw SomeBusinessException()
                     doSomething()
@@ -66,7 +71,8 @@ class UseRequireSpec : Spek({
         }
 
         it("does not report an issue if the exception thrown has a message and a cause") {
-            val code = """
+            val code =
+                """
                 private fun x(a: Int): Nothing {
                     doSomething()
                     throw IllegalArgumentException("message", cause)
@@ -75,24 +81,28 @@ class UseRequireSpec : Spek({
         }
 
         it("does not report an issue if the exception thrown as the only action in a block") {
-            val code = """
+            val code =
+                """
                 fun unsafeRunSync(): A =
                     foo.fold({ throw IllegalArgumentException("message") }, ::identity)"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report an issue if the exception thrown unconditionally") {
-            val code = """fun doThrow() = throw IllegalArgumentException("message")"""
+            val code =
+                """fun doThrow() = throw IllegalArgumentException("message")"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report an issue if the exception thrown unconditionally in a function block") {
-            val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
+            val code =
+                """fun doThrow() { throw IllegalArgumentException("message") }"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report if the exception thrown has a non-String argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
                 }
@@ -101,7 +111,8 @@ class UseRequireSpec : Spek({
         }
 
         it("does not report if the exception thrown has a String literal argument and a non-String argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
                 }
@@ -110,7 +121,8 @@ class UseRequireSpec : Spek({
         }
 
         it("does not report if the exception thrown has a non-String literal argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     val s = ""
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
@@ -122,7 +134,8 @@ class UseRequireSpec : Spek({
         context("with binding context") {
 
             it("does not report if the exception thrown has a non-String argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
                     }
@@ -131,7 +144,8 @@ class UseRequireSpec : Spek({
             }
 
             it("does not report if the exception thrown has a String literal argument and a non-String argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
                     }
@@ -140,7 +154,8 @@ class UseRequireSpec : Spek({
             }
 
             it("reports if the exception thrown has a non-String literal argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         val s = ""
                         if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
@@ -153,7 +168,8 @@ class UseRequireSpec : Spek({
         context("throw is not after a precondition") {
 
             it("does not report an issue if the exception is inside a when") {
-                val code = """
+                val code =
+                    """
                     fun whenOrThrow(item : List<*>) = when(item) {
                         is ArrayList<*> -> 1
                         is LinkedList<*> -> 2
@@ -164,7 +180,8 @@ class UseRequireSpec : Spek({
             }
 
             it("does not report an issue if the exception is after a block") {
-                val code = """
+                val code =
+                    """
                     fun doSomethingOrThrow(test: Int): Int {
                         var index = 0
                         repeat(test){
@@ -178,7 +195,8 @@ class UseRequireSpec : Spek({
             }
 
             it("does not report an issue if the exception is after a elvis operator") {
-                val code = """
+                val code =
+                    """
                     fun tryToCastOrThrow(list: List<*>) : LinkedList<*> {
                         val subclass = list as? LinkedList
                             ?: throw IllegalArgumentException("List is not a LinkedList")

@@ -18,7 +18,8 @@ class ImplicitDefaultLocaleSpec : Spek({
     describe("ImplicitDefault rule") {
 
         it("reports String.format call with template but without explicit locale") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     String.format("%d", 1)
                 }"""
@@ -26,7 +27,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("does not report String.format call with explicit locale") {
-            val code = """
+            val code =
+                """
                 import java.util.Locale
                 fun x() {
                     String.format(Locale.US, "%d", 1)
@@ -35,7 +37,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("reports String.toUpperCase() call without explicit locale") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     val s = "deadbeef"
                     s.toUpperCase()
@@ -44,7 +47,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("does not report String.toUpperCase() call with explicit locale") {
-            val code = """
+            val code =
+                """
                 import java.util.Locale
                 fun x() {
                     val s = "deadbeef"
@@ -54,7 +58,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("reports String.toLowerCase() call without explicit locale") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     val s = "deadbeef"
                     s.toLowerCase()
@@ -63,7 +68,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("does not report String.toLowerCase() call with explicit locale") {
-            val code = """
+            val code =
+                """
                 import java.util.Locale
                 fun x() {
                     val s = "deadbeef"
@@ -73,7 +79,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("reports String?.toUpperCase() call without explicit locale") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     val s: String? = "deadbeef"
                     s?.toUpperCase()
@@ -82,7 +89,8 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
         it("reports String?.toLowerCase() call without explicit locale") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     val s: String? = "deadbeef"
                     s?.toLowerCase()

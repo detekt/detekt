@@ -12,7 +12,8 @@ class UnreachableCodeSpec : Spek({
     describe("UnreachableCode rule") {
 
         it("reports unreachable code after return") {
-            val code = """
+            val code =
+                """
                 fun f(i: Int) {
                     if (i == 0) {
                         return
@@ -24,7 +25,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("reports unreachable code after return in lambda") {
-            val code = """
+            val code =
+                """
                 fun f(s: String): Boolean {
                     s.let {
                         return it.length < 3
@@ -37,7 +39,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("reports unreachable code after return with label") {
-            val code = """
+            val code =
+                """
                 fun f(ints: List<Int>): List<Int> {
                     return ints.map f@{
                         if (it == 0) {
@@ -52,7 +55,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("reports unreachable code after throwing an exception") {
-            val code = """
+            val code =
+                """
                 fun f(i: Int) {
                     if (i == 0) {
                         throw IllegalArgumentException()
@@ -64,7 +68,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("reports unreachable code after break and continue") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     for (i in 1..2) {
                         break
@@ -80,7 +85,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("does not report reachable code after conditional return with label") {
-            val code = """
+            val code =
+                """
                 fun f(ints: List<Int>) {
                     ints.forEach {
                         if (it == 0) return@forEach
@@ -92,7 +98,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("does not report reachable code after if") {
-            val code = """
+            val code =
+                """
                 fun f(i: Int) {
                     if (i == 0) {
                         println()
@@ -104,7 +111,8 @@ class UnreachableCodeSpec : Spek({
         }
 
         it("does not report reachable code in if body") {
-            val code = """
+            val code =
+                """
                 fun f(i: Int) {
                     if (i == 0) {
                         println(i)

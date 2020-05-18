@@ -26,10 +26,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UnnecessaryNotNullOperator",
-            Severity.Defect,
-            "Unnecessary not-null unary operator (!!) detected.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UnnecessaryNotNullOperator",
+        Severity.Defect,
+        "Unnecessary not-null unary operator (!!) detected.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)
@@ -37,8 +39,13 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
         val compilerReports = bindingContext.diagnostics.forElement(expression.operationReference)
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {
-            report(CodeSmell(issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
-                    "not-null (!!) operators"))
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    "${expression.text} contains an unnecessary " +
+                        "not-null (!!) operators"
+                )
+            )
         }
     }
 }

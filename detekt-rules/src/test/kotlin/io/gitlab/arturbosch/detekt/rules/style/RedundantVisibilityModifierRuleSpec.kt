@@ -10,7 +10,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
     describe("RedundantVisibilityModifier rule") {
         it("does not report overridden function of abstract class w/ public modifier") {
-            val code = """
+            val code =
+                """
                 abstract class A {
                     abstract protected fun A()
                 }
@@ -23,7 +24,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report overridden function of abstract class w/o public modifier") {
-            val code = """
+            val code =
+                """
                 abstract class A {
                     abstract protected fun A()
                 }
@@ -36,7 +38,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report overridden function of interface") {
-            val code = """
+            val code =
+                """
                 interface A {
                     fun A()
                 }
@@ -49,7 +52,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("reports public function in class") {
-            val code = """
+            val code =
+                """
                 class Test{
                     public fun A() {}
                 }
@@ -58,7 +62,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report function in class w/o modifier") {
-            val code = """
+            val code =
+                """
                 class Test{
                     fun A() {}
                 }
@@ -67,7 +72,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("reports public class") {
-            val code = """
+            val code =
+                """
                 public class Test(){
                     fun test(){}
                 }
@@ -76,7 +82,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("reports interface w/ public modifier") {
-            val code = """
+            val code =
+                """
                 public interface Test{
                     public fun test()
                 }
@@ -85,7 +92,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("reports field w/ public modifier") {
-            val code = """
+            val code =
+                """
                 class Test{
                     public val str : String = "test"
                 }
@@ -94,7 +102,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report field w/o public modifier") {
-            val code = """
+            val code =
+                """
                 class Test{
                     val str : String = "test"
                 }
@@ -103,7 +112,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report overridden field w/o public modifier") {
-            val code = """
+            val code =
+                """
                 abstract class A {
                     abstract val test: String
                 }
@@ -116,7 +126,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         }
 
         it("does not report overridden field w/ public modifier") {
-            val code = """
+            val code =
+                """
                 abstract class A {
                     abstract val test: String
                 }

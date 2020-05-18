@@ -44,7 +44,8 @@ class BaselineFormatSpec : Spek({
 
             val savedBaseline = Baseline(
                 Blacklist(setOf("4", "2", "2")),
-                Whitelist(setOf("1", "2", "3")))
+                Whitelist(setOf("1", "2", "3"))
+            )
 
             it("has a new line at the end of the written baseline file") {
                 val tempFile = createTempFileForTest("baseline1", ".xml")

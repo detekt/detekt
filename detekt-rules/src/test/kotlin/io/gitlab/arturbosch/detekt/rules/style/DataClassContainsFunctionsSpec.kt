@@ -12,7 +12,8 @@ class DataClassContainsFunctionsSpec : Spek({
     describe("DataClassContainsFunctions rule") {
 
         context("flagged functions in data class") {
-            val code = """
+            val code =
+                """
                 data class C(val s: String) {
                     fun f() {}
 
@@ -39,7 +40,8 @@ class DataClassContainsFunctionsSpec : Spek({
         }
 
         it("does not report a non-data class without a function") {
-            val code = """
+            val code =
+                """
                 class C {
                     fun f() {}
                 }
@@ -48,7 +50,8 @@ class DataClassContainsFunctionsSpec : Spek({
         }
 
         it("does not report a data class with overridden functions") {
-            val code = """
+            val code =
+                """
                 data class C(val i: Int) {
 
                     override fun hashCode(): Int {

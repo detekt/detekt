@@ -11,7 +11,8 @@ internal class BaselineHandler : DefaultHandler() {
     private val blackIds = mutableSetOf<String>()
 
     internal fun createBaseline() = Baseline(
-            Blacklist(blackIds), Whitelist(whiteIds))
+        Blacklist(blackIds), Whitelist(whiteIds)
+    )
 
     override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
         when (qName) {

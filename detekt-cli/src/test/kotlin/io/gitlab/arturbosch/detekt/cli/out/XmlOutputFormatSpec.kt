@@ -15,12 +15,20 @@ import org.spekframework.spek2.style.specification.describe
 
 class XmlOutputFormatSpec : Spek({
 
-    val entity1 = Entity("Sample1", "com.sample.Sample1", "",
-            Location(SourceLocation(11, 1), TextLocation(0, 10),
-                    "abcd", "src/main/com/sample/Sample1.kt"))
-    val entity2 = Entity("Sample2", "com.sample.Sample2", "",
-            Location(SourceLocation(22, 2), TextLocation(0, 20),
-                    "efgh", "src/main/com/sample/Sample2.kt"))
+    val entity1 = Entity(
+        "Sample1", "com.sample.Sample1", "",
+        Location(
+            SourceLocation(11, 1), TextLocation(0, 10),
+            "abcd", "src/main/com/sample/Sample1.kt"
+        )
+    )
+    val entity2 = Entity(
+        "Sample2", "com.sample.Sample2", "",
+        Location(
+            SourceLocation(22, 2), TextLocation(0, 20),
+            "efgh", "src/main/com/sample/Sample2.kt"
+        )
+    )
 
     val outputFormat = XmlOutputReport()
 
@@ -98,7 +106,8 @@ class XmlOutputFormatSpec : Spek({
                         entity = entity1
                     )
 
-                    val expected = """
+                    val expected =
+                        """
                     <?xml version="1.0" encoding="utf-8"?>
                     <checkstyle version="4.3">
                     <file name="${finding.location.file}">

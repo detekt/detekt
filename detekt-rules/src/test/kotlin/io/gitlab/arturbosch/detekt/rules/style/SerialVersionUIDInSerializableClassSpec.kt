@@ -12,7 +12,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
     describe("SerialVersionUIDInSerializableClass rule") {
 
         it("reports class with no serialVersionUID") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable
@@ -21,7 +22,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("reports class with wrong datatype") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {
@@ -34,7 +36,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("reports class with wrong explicitly defined datatype") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {
@@ -47,7 +50,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("reports class with wrong naming and without const modifier") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {
@@ -69,7 +73,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("does not report an interface that implements Serializable") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 interface I : Serializable
@@ -78,7 +83,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("does not report UID constant with positive value") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {
@@ -91,7 +97,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("does not report UID constant with negative value") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {
@@ -104,7 +111,8 @@ class SerialVersionUIDInSerializableClassSpec : Spek({
         }
 
         it("does not report UID constant with explicit Long type") {
-            val code = """
+            val code =
+                """
                 import java.io.Serializable
 
                 class C : Serializable {

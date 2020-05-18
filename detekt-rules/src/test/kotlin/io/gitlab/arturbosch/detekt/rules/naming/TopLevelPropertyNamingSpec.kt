@@ -12,7 +12,8 @@ class TopLevelPropertyNamingSpec : Spek({
     describe("constants on top level") {
 
         it("should not detect any constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
             """
@@ -20,7 +21,8 @@ class TopLevelPropertyNamingSpec : Spek({
         }
 
         it("should detect five constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 const val MyNAME = "Artur"
                 const val name = "Artur"
                 const val nAme = "Artur"
@@ -34,7 +36,8 @@ class TopLevelPropertyNamingSpec : Spek({
     describe("variables on top level") {
 
         it("should not report any") {
-            val code = """
+            val code =
+                """
                 val name = "Artur"
                 val nAme8 = "Artur"
                 private val _name = "Artur"
@@ -50,14 +53,16 @@ class TopLevelPropertyNamingSpec : Spek({
         }
 
         it("should report non private top level property using underscore") {
-            val code = """
+            val code =
+                """
                 val _nAme = "Artur"
             """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should report private top level property using two underscores") {
-            val code = """
+            val code =
+                """
                 private val __NAME = "Artur"
             """
             io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)

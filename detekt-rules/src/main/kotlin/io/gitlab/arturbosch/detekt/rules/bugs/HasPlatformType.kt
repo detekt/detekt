@@ -48,7 +48,8 @@ class HasPlatformType(config: Config) : Rule(config) {
         super.visitKtElement(element)
 
         if (bindingContext != BindingContext.EMPTY && element is KtCallableDeclaration &&
-            element.hasImplicitPlatformType()) {
+            element.hasImplicitPlatformType()
+        ) {
             report(
                 CodeSmell(
                     issue,

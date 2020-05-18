@@ -26,7 +26,8 @@ internal class CliArgsSpec : Spek({
             val cli = parseArguments<CliArgs>(
                 arrayOf("--input", "$projectPath"),
                 NullPrintStream(),
-                NullPrintStream())
+                NullPrintStream()
+            )
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
         }
@@ -37,7 +38,8 @@ internal class CliArgsSpec : Spek({
             val cli = parseArguments<CliArgs>(
                 arrayOf("--input", "$mainPath,$testPath"),
                 NullPrintStream(),
-                NullPrintStream())
+                NullPrintStream()
+            )
             assertThat(cli.inputPaths).hasSize(2)
             assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
         }

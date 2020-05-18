@@ -29,11 +29,13 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (!file.hasValidLicense()) {
-            report(CodeSmell(
-                issue,
-                Entity.atPackageOrFirstDecl(file),
-                "Expected license not found or incorrect in the file: ${file.name}."
-            ))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atPackageOrFirstDecl(file),
+                    "Expected license not found or incorrect in the file: ${file.name}."
+                )
+            )
         }
     }
 

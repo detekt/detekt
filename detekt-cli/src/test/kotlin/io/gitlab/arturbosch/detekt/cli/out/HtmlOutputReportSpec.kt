@@ -212,7 +212,8 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
     }
 }
 
-private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
+private val generatedRegex =
+    """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val replacement = "generated with..."
 
 private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {

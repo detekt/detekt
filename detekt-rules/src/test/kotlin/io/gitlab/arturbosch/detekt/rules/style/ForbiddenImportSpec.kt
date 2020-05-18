@@ -8,7 +8,8 @@ import org.spekframework.spek2.style.specification.describe
 
 class ForbiddenImportSpec : Spek({
     describe("ForbiddenImport rule") {
-        val code = """
+        val code =
+            """
             package foo
 
             import kotlin.jvm.JvmField
@@ -55,8 +56,13 @@ class ForbiddenImportSpec : Spek({
 
         it("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names list") {
             val findings =
-                ForbiddenImport(TestConfig(mapOf(
-                    ForbiddenImport.IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField")))).lint(code)
+                ForbiddenImport(
+                    TestConfig(
+                        mapOf(
+                            ForbiddenImport.IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField")
+                        )
+                    )
+                ).lint(code)
             assertThat(findings).hasSize(2)
         }
 

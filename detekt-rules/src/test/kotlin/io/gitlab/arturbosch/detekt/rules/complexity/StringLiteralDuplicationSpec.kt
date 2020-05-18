@@ -17,7 +17,8 @@ class StringLiteralDuplicationSpec : Spek({
         context("many hardcoded strings") {
 
             it("reports 3 equal hardcoded strings") {
-                val code = """
+                val code =
+                    """
                 class Duplication {
                     var s1 = "lorem"
                     fun f(s: String = "lorem") {
@@ -28,14 +29,16 @@ class StringLiteralDuplicationSpec : Spek({
             }
 
             it("does not report 2 equal hardcoded strings") {
-                val code = """val str = "lorem" + "lorem" + "ipsum""""
+                val code =
+                    """val str = "lorem" + "lorem" + "ipsum""""
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
 
         context("strings in annotations") {
 
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class A
                 @Suppress("unused")
@@ -56,7 +59,8 @@ class StringLiteralDuplicationSpec : Spek({
 
         context("strings with less than 5 characters") {
 
-            val code = """val str = "amet" + "amet" + "amet""""
+            val code =
+                """val str = "amet" + "amet" + "amet""""
 
             it("does not report strings with 4 characters") {
                 assertThat(subject.compileAndLint(code)).isEmpty()
@@ -70,13 +74,15 @@ class StringLiteralDuplicationSpec : Spek({
 
         context("strings with values to match for the regex") {
 
-            val regexTestingCode = """
+            val regexTestingCode =
+                """
                 val str1 = "lorem" + "lorem" + "lorem"
                 val str2 = "ipsum" + "ipsum" + "ipsum"
             """
 
             it("does not report lorem or ipsum according to config in regex") {
-                val code = """
+                val code =
+                    """
                     val str1 = "lorem" + "lorem" + "lorem"
                     val str2 = "ipsum" + "ipsum" + "ipsum"
                 """
@@ -86,8 +92,8 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("should not fail with invalid regex when disabled") {
                 val configValues = mapOf(
-                        "active" to "false",
-                        StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
+                    "active" to "false",
+                    StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
                 )
                 val config = TestConfig(configValues)
                 assertFindingWithConfig(regexTestingCode, config, 0)
@@ -104,7 +110,8 @@ class StringLiteralDuplicationSpec : Spek({
         describe("saves string literal references") {
 
             it("reports 3 locations for 'lorem'") {
-                val code = """
+                val code =
+                    """
                 class Duplication {
                     var s1 = "lorem"
                     fun f(s: String = "lorem") {
@@ -120,7 +127,8 @@ class StringLiteralDuplicationSpec : Spek({
         describe("multiline strings with string interpolation") {
 
             it("does not report duplicated parts in multiline strings") {
-                val code = """
+                val code =
+                    """
                     // does not report because it treats the multiline string parts as one string
                     val str = ""${'"'}
                         |

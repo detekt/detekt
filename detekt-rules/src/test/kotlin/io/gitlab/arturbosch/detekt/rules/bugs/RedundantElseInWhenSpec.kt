@@ -18,7 +18,8 @@ object RedundantElseInWhenSpec : Spek({
     describe("RedundantElseInWhen rule") {
         context("enum") {
             it("reports when `when` expression used as statement contains `else` case when all cases already covered") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -39,7 +40,8 @@ object RedundantElseInWhenSpec : Spek({
             }
 
             it("reports when `when` expression contains `else` case when all cases already covered") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -60,7 +62,8 @@ object RedundantElseInWhenSpec : Spek({
             }
 
             it("does not report when `when` expression contains `else` case when not all cases explicitly covered") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -85,7 +88,8 @@ object RedundantElseInWhenSpec : Spek({
             }
 
             it("does not report when `when` expression does not contain else case") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -118,7 +122,8 @@ object RedundantElseInWhenSpec : Spek({
         }
         context("sealed classes") {
             it("reports when `when` expression used as statement contains `else` case when all cases already covered") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -139,7 +144,8 @@ object RedundantElseInWhenSpec : Spek({
             }
 
             it("reports when `when` expression contains `else` case when all cases already covered") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -160,7 +166,8 @@ object RedundantElseInWhenSpec : Spek({
             }
 
             it("does not report when `when` expression contains `else` case when not all cases explicitly covered") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -184,7 +191,8 @@ object RedundantElseInWhenSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
             it("does not report when `when` expression does not contain else case") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -203,7 +211,8 @@ object RedundantElseInWhenSpec : Spek({
         }
         context("standard when") {
             it("does not report when `when` not checking for missing cases") {
-                val code = """
+                val code =
+                    """
                     fun whenChecks() {
                         val x = 3
                         val s = "3"

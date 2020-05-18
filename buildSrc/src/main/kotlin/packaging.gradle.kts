@@ -33,29 +33,37 @@ subprojects {
 
         setPublications(detektPublication)
 
-        pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-            repo = "code-analysis"
-            name = "detekt"
-            userOrg = "arturbosch"
-            setLicenses("Apache-2.0")
-            vcsUrl = "https://github.com/detekt/detekt"
+        pkg(
+            delegateClosureOf<BintrayExtension.PackageConfig> {
+                repo = "code-analysis"
+                name = "detekt"
+                userOrg = "arturbosch"
+                setLicenses("Apache-2.0")
+                vcsUrl = "https://github.com/detekt/detekt"
 
-            version(delegateClosureOf<BintrayExtension.VersionConfig> {
-                name = project.version as? String
-                released = Date().toString()
+                version(
+                    delegateClosureOf<BintrayExtension.VersionConfig> {
+                        name = project.version as? String
+                        released = Date().toString()
 
-                gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
-                    sign = true
-                })
+                        gpg(
+                            delegateClosureOf<BintrayExtension.GpgConfig> {
+                                sign = true
+                            }
+                        )
 
-                mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
-                    sync = true
-                    user = mavenCentralUser
-                    password = mavenCentralPassword
-                    close = "1"
-                })
-            })
-        })
+                        mavenCentralSync(
+                            delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
+                                sync = true
+                                user = mavenCentralUser
+                                password = mavenCentralPassword
+                                close = "1"
+                            }
+                        )
+                    }
+                )
+            }
+        )
     }
 
     val sourcesJar by tasks.creating(Jar::class) {
@@ -112,18 +120,24 @@ subprojects {
 
     configure<ArtifactoryPluginConvention> {
         setContextUrl("https://oss.jfrog.org/artifactory")
-        publish(delegateClosureOf<PublisherConfig> {
-            repository(delegateClosureOf<GroovyObject> {
-                setProperty("repoKey", "oss-snapshot-local")
-                setProperty("username", bintrayUser)
-                setProperty("password", bintrayKey)
-                setProperty("maven", true)
-            })
-            defaults(delegateClosureOf<GroovyObject> {
-                invokeMethod("publications", detektPublication)
-                setProperty("publishArtifacts", true)
-                setProperty("publishPom", true)
-            })
-        })
+        publish(
+            delegateClosureOf<PublisherConfig> {
+                repository(
+                    delegateClosureOf<GroovyObject> {
+                        setProperty("repoKey", "oss-snapshot-local")
+                        setProperty("username", bintrayUser)
+                        setProperty("password", bintrayKey)
+                        setProperty("maven", true)
+                    }
+                )
+                defaults(
+                    delegateClosureOf<GroovyObject> {
+                        invokeMethod("publications", detektPublication)
+                        setProperty("publishArtifacts", true)
+                        setProperty("publishPom", true)
+                    }
+                )
+            }
+        )
     }
 }

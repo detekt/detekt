@@ -48,9 +48,11 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("RethrowCaughtException", Severity.CodeSmell,
-            "Do not rethrow a caught exception of the same type.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "RethrowCaughtException", Severity.CodeSmell,
+        "Do not rethrow a caught exception of the same type.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionName = catchClause.catchParameter?.name ?: return

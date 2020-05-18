@@ -44,7 +44,8 @@ private class DefaultCliInvoker : DetektInvoker {
         try {
             val loader = ClassLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
-            val runner = clazz.getMethod("buildRunner",
+            val runner = clazz.getMethod(
+                "buildRunner",
                 Array<String>::class.java,
                 PrintStream::class.java,
                 PrintStream::class.java

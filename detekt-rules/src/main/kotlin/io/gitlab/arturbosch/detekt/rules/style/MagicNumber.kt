@@ -87,15 +87,18 @@ import java.util.Locale
 @Suppress("TooManyFunctions")
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
-                    "and hence it's unclear what the purpose of this number is. " +
-                    "It's better to declare such numbers as constants and give them a proper name. " +
-                    "By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
+            "and hence it's unclear what the purpose of this number is. " +
+            "It's better to declare such numbers as constants and give them a proper name. " +
+            "By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
+        Debt.TEN_MINS
+    )
 
     private val ignoredNumbers = valueOrDefaultCommaSeparated(IGNORE_NUMBERS, listOf("-1", "0", "1", "2"))
-            .map { parseAsDouble(it) }
-            .sorted()
+        .map { parseAsDouble(it) }
+        .sorted()
 
     private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
     private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
@@ -105,12 +108,13 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
     private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
     private val ignoreCompanionObjectPropertyDeclaration =
-            valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
+        valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
     private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
-                expression.isPartOfConstructorOrFunctionConstant()) {
+            expression.isPartOfConstructorOrFunctionConstant()
+        ) {
             return
         }
 
@@ -123,8 +127,13 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
         val number = parseAsDoubleOrNull(rawNumber) ?: return
         if (!ignoredNumbers.contains(number)) {
-            report(CodeSmell(issue, Entity.from(expression), "This expression contains a magic number." +
-                    " Consider defining it to a well named constant."))
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    "This expression contains a magic number." +
+                        " Consider defining it to a well named constant."
+                )
+            )
         }
     }
 
@@ -160,11 +169,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun normalizeForParsingAsDouble(text: String): String {
         return text.trim()
-                .toLowerCase(Locale.US)
-                .replace("_", "")
-                .removeSuffix("l")
-                .removeSuffix("d")
-                .removeSuffix("f")
+            .toLowerCase(Locale.US)
+            .replace("_", "")
+            .removeSuffix("l")
+            .removeSuffix("d")
+            .removeSuffix("f")
     }
 
     private fun KtConstantExpression.isNamedArgument(): Boolean {
@@ -185,17 +194,17 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
         return parent is KtParameter &&
-                when (parent.parent.parent) {
-                    is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
-                    else -> false
-                }
+            when (parent.parent.parent) {
+                is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
+                else -> false
+            }
     }
 
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
         val rangeOperators = setOf("downTo", "until", "step")
         return if (theParent is KtBinaryExpression) theParent.operationToken == KtTokens.RANGE ||
-                theParent.operationReference.getReferencedName() in rangeOperators
+            theParent.operationReference.getReferencedName() in rangeOperators
         else false
     }
 
@@ -219,7 +228,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
 
     private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
-            (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+        (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
 
     companion object {
         const val IGNORE_NUMBERS = "ignoreNumbers"

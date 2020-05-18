@@ -46,7 +46,8 @@ val generateDefaultDetektVersionFile by tasks.registering {
 
     doFirst {
         defaultDetektVersionFile.parentFile.mkdirs()
-        defaultDetektVersionFile.writeText("""
+        defaultDetektVersionFile.writeText(
+            """
             package io.gitlab.arturbosch.detekt
 
             internal const val DEFAULT_DETEKT_VERSION = "$version"

@@ -12,7 +12,9 @@ class UnusedImportsSpec : Spek({
     describe("UnusedImports rule") {
 
         it("does not report infix operators") {
-            assertThat(subject.lint("""
+            assertThat(
+                subject.lint(
+                    """
                 import tasks.success
 
                 fun main() {
@@ -20,11 +22,14 @@ class UnusedImportsSpec : Spek({
                     } success {
                     }
                 }"""
-            )).isEmpty()
+                )
+            ).isEmpty()
         }
 
         it("does not report imports in documentation") {
-            assertThat(subject.lint("""
+            assertThat(
+                subject.lint(
+                    """
                 import tasks.success
                 import tasks.failure
                 import tasks.undefined
@@ -41,11 +46,13 @@ class UnusedImportsSpec : Spek({
                   }
                 }
                 """
-            )).isEmpty()
+                )
+            ).isEmpty()
         }
 
         it("should ignore import for link") {
-            val lint = subject.lint("""
+            val lint = subject.lint(
+                """
                 import tasks.success
                 import tasks.failure
                 import tasks.undefined
@@ -67,7 +74,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("reports imports from the current package") {
-            val lint = subject.lint("""
+            val lint = subject.lint(
+                """
                 package test
                 import test.SomeClass
 
@@ -81,7 +89,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report KDoc references with method calls") {
-            val code = """
+            val code =
+                """
                 package com.example
 
                 import android.text.TextWatcher
@@ -98,7 +107,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("reports imports with different cases") {
-            val lint = subject.lint("""
+            val lint = subject.lint(
+                """
                 import p.a
                 import p.B6 // positive
                 import p.B as B12 // positive
@@ -125,7 +135,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report imports in same package when inner") {
-            val lint = subject.lint("""
+            val lint = subject.lint(
+                """
                 package test
 
                 import test.Outer.Inner
@@ -140,7 +151,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report KDoc @see annotation linking to class") {
-            val code = """
+            val code =
+                """
                 import tasks.success
 
                 /**
@@ -153,7 +165,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report KDoc @see annotation linking to class with description") {
-            val code = """
+            val code =
+                """
                 import tasks.success
 
                 /**
@@ -166,7 +179,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("reports KDoc @see annotation that does not link to class") {
-            val code = """
+            val code =
+                """
                 import tasks.success
 
                 /**
@@ -179,7 +193,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("reports KDoc @see annotation that links after description") {
-            val code = """
+            val code =
+                """
                 import tasks.success
 
                 /**
@@ -192,7 +207,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report imports in KDoc") {
-            val code = """
+            val code =
+                """
                 import tasks.success   // here
                 import tasks.undefined // and here
 
@@ -209,7 +225,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("should not report import alias as unused when the alias is used") {
-            val code = """
+            val code =
+                """
                 import test.forEach as foreach
                 fun foo() = listOf().iterator().foreach {}
             """
@@ -217,7 +234,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("should not report used alias even when import is from same package") {
-            val code = """
+            val code =
+                """
                 package com.example
 
                 import com.example.foo as myFoo // from same package but with alias, check alias usage
@@ -231,7 +249,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("should not report import of provideDelegate operator overload - #1608") {
-            val code = """
+            val code =
+                """
                 import org.gradle.api.tasks.WriteProperties
                 import org.gradle.kotlin.dsl.getValue
                 import org.gradle.kotlin.dsl.provideDelegate // this line specifically should not be reported
@@ -245,7 +264,8 @@ class UnusedImportsSpec : Spek({
         }
 
         it("should not report import of componentN operator") {
-            val code = """
+            val code =
+                """
                 import com.example.MyClass.component1
                 import com.example.MyClass.component2
                 import com.example.MyClass.component543

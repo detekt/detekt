@@ -13,7 +13,8 @@ class ObjectPropertyNamingSpec : Spek({
         val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public constants complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PublicConst.negative}
                 }
@@ -22,7 +23,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect public constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PublicConst.positive}
                 }
@@ -31,7 +33,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should not detect private constants complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PrivateConst.negative}
                 }
@@ -40,7 +43,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect private constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PrivateConst.positive}
                 }
@@ -49,7 +53,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should report constants not complying to the naming rules at the right position") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PublicConst.positive}
                 }
@@ -63,7 +68,8 @@ class ObjectPropertyNamingSpec : Spek({
         val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public constants complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 class C {
                     companion object {
                         ${PublicConst.negative}
@@ -74,7 +80,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect public constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 class C {
                     companion object {
                         ${PublicConst.positive}
@@ -85,7 +92,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should not detect private constants complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 class C {
                     companion object {
                         ${PrivateConst.negative}
@@ -96,7 +104,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect private constants not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 class C {
                     companion object {
                         ${PrivateConst.positive}
@@ -107,7 +116,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should report constants not complying to the naming rules at the right position") {
-            val code = """
+            val code =
+                """
                 class C {
                     companion object {
                         ${PublicConst.positive}
@@ -123,7 +133,8 @@ class ObjectPropertyNamingSpec : Spek({
         val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public variables complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PublicVal.negative}
                 }
@@ -132,7 +143,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect public variables not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PublicVal.positive}
                 }
@@ -141,7 +153,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should not detect private variables complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     ${PrivateVal.negative}
                 }
@@ -150,7 +163,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should detect private variables not complying to the naming rules") {
-            val code = """
+            val code =
+                """
                 object O {
                     private val __NAME = "Artur"
                 }
@@ -161,14 +175,17 @@ class ObjectPropertyNamingSpec : Spek({
 
     describe("variables and constants in objects with custom config") {
 
-        val config = TestConfig(mapOf(
+        val config = TestConfig(
+            mapOf(
                 ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
                 ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
-        ))
+            )
+        )
         val subject = ObjectPropertyNaming(config)
 
         it("should not detect constants in object with underscores") {
-            val code = """
+            val code =
+                """
                 object O {
                     const val _NAME = "Artur"
                     const val _name = "Artur"
@@ -178,7 +195,8 @@ class ObjectPropertyNamingSpec : Spek({
         }
 
         it("should not detect private properties in object") {
-            val code = """
+            val code =
+                """
                 object O {
                     private val __NAME = "Artur"
                     private val _1234 = "Artur"
@@ -190,12 +208,15 @@ class ObjectPropertyNamingSpec : Spek({
 
     describe("local properties") {
         it("should not detect local properties") {
-            val config = TestConfig(mapOf(
-                ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
-            ))
+            val config = TestConfig(
+                mapOf(
+                    ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
+                )
+            )
             val subject = ObjectPropertyNaming(config)
 
-            val code = """
+            val code =
+                """
                 object O {
                     fun foo() {
                         val somethingElse = 1
@@ -211,14 +232,16 @@ class ObjectPropertyNamingSpec : Spek({
 @Suppress("UnnecessaryAbstractClass")
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
 
-    val negative = """
+    val negative =
+        """
                     ${visibility()}${const()}val MY_NAME_8 = "Artur"
                     ${visibility()}${const()}val MYNAME = "Artur"
                     ${visibility()}${const()}val MyNAME = "Artur"
                     ${visibility()}${const()}val name = "Artur"
                     ${visibility()}${const()}val nAme = "Artur"
                     ${visibility()}${const()}val serialVersionUID = 42L"""
-    val positive = """${visibility()}${const()}val _nAme = "Artur""""
+    val positive =
+        """${visibility()}${const()}val _nAme = "Artur""""
 
     private fun visibility() = if (isPrivate) "private " else ""
     private fun const() = if (isConst) "const " else ""

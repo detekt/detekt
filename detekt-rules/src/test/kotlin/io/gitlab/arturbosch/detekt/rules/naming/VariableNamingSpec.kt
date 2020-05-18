@@ -12,7 +12,8 @@ class VariableNamingSpec : Spek({
     describe("properties in classes") {
 
         it("should detect all positive cases") {
-            val code = """
+            val code =
+                """
                 class C {
                     private val _FIELD = 5
                     val FIELD get() = _FIELD
@@ -28,7 +29,8 @@ class VariableNamingSpec : Spek({
         }
 
         it("checks all negative cases") {
-            val code = """
+            val code =
+                """
                 class C {
                     private val _field = 5
                     val field get() = _field
@@ -39,7 +41,8 @@ class VariableNamingSpec : Spek({
         }
 
         it("should not flag overridden member properties by default") {
-            val code = """
+            val code =
+                """
                 class C : I {
                     override val SHOULD_NOT_BE_FLAGGED = "banana"
                 }
@@ -54,7 +57,8 @@ class VariableNamingSpec : Spek({
         }
 
         it("doesn't ignore overridden member properties if ignoreOverridden is false") {
-            val code = """
+            val code =
+                """
                 class C : I {
                     override val SHOULD_BE_FLAGGED = "banana"
                 }

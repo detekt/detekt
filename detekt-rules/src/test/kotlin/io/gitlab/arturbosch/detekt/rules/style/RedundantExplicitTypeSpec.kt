@@ -18,7 +18,8 @@ object RedundantExplicitTypeSpec : Spek({
     describe("RedundantExplicitType") {
 
         it("reports explicit type for boolean") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Boolean = true
                 }
@@ -27,7 +28,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for integer") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Int = 3
                 }
@@ -36,7 +38,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for long") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Long = 3L
                 }
@@ -45,7 +48,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for float") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Float = 3.0f
                 }
@@ -54,7 +58,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for double") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Double = 3.0
                 }
@@ -63,7 +68,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for char") {
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x: Char = 'f'
                 }
@@ -73,7 +79,8 @@ object RedundantExplicitTypeSpec : Spek({
 
         it("reports explicit type for string template") {
             val substitute = "\$x"
-            val code = """
+            val code =
+                """
                 fun function() {
                     val x = 3
                     val y: String = "$substitute"
@@ -83,7 +90,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for name reference expression") {
-            val code = """
+            val code =
+                """
                 object Test
 
                 fun foo() {
@@ -94,7 +102,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("reports explicit type for call expression") {
-            val code = """
+            val code =
+                """
                 interface Person {
                     val firstName: String
                 }
@@ -109,7 +118,8 @@ object RedundantExplicitTypeSpec : Spek({
         }
 
         it("does not report explicit type for call expression when type is an interface") {
-            val code = """
+            val code =
+                """
                 interface Person {
                     val firstName: String
                 }

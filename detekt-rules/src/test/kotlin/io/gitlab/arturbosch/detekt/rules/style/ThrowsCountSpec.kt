@@ -11,7 +11,8 @@ class ThrowsCountSpec : Spek({
 
     describe("ThrowsCount rule") {
 
-        val code = """
+        val code =
+            """
             fun f1(x: Int) {
                 when (x) {
                     1 -> throw IOException()

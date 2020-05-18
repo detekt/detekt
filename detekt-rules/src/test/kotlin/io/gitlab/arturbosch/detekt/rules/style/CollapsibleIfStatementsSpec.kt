@@ -12,7 +12,8 @@ class CollapsibleIfStatementsSpec : Spek({
     describe("CollapsibleIfStatements rule") {
 
         it("reports if statements which can be merged") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {}
@@ -24,7 +25,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("reports nested if statements which can be merged") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {
@@ -38,7 +40,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report else-if") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {}
                     else if (1 == 1) {
@@ -50,7 +53,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report if-else") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {}
@@ -61,7 +65,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report if-elseif-else") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {}
@@ -73,7 +78,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report if with statements in the if body") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) ;
@@ -85,7 +91,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report nested if-else") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {
@@ -97,7 +104,8 @@ class CollapsibleIfStatementsSpec : Spek({
         }
 
         it("does not report nested if-elseif") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     if (true) {
                         if (1 == 1) {

@@ -18,7 +18,8 @@ object MissingWhenCaseSpec : Spek({
     describe("MissingWhenCase rule") {
         context("enum") {
             it("reports when `when` expression used as statement and not all cases covered") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -39,7 +40,8 @@ object MissingWhenCaseSpec : Spek({
             }
 
             it("does not report when `when` expression used as statement and all cases covered") {
-                val code = """
+                val code =
+                    """
                 enum class Color {
                     RED,
                     GREEN,
@@ -66,7 +68,8 @@ object MissingWhenCaseSpec : Spek({
         }
         context("sealed classes") {
             it("reports when `when` expression used as statement and not all cases covered") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -87,7 +90,8 @@ object MissingWhenCaseSpec : Spek({
             }
 
             it("does not report when `when` expression used as statement and all cases covered") {
-                val code = """
+                val code =
+                    """
                     sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
@@ -115,7 +119,8 @@ object MissingWhenCaseSpec : Spek({
         }
         context("standard when") {
             it("does not report when `when` not checking for missing cases") {
-                val code = """
+                val code =
+                    """
                     fun whenChecks() {
                         val x = 3
                         val s = "3"

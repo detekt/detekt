@@ -40,12 +40,14 @@ class LongParameterList(
     config: Config = Config.empty
 ) : Rule(config) {
 
-    override val issue = Issue("LongParameterList",
-            Severity.Maintainability,
-            "The more parameters a function has the more complex it is. Long parameter lists are often " +
-                    "used to control complex algorithms and violate the Single Responsibility Principle. " +
-                    "Prefer functions with short parameter lists.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "LongParameterList",
+        Severity.Maintainability,
+        "The more parameters a function has the more complex it is. Long parameter lists are often " +
+            "used to control complex algorithms and violate the Single Responsibility Principle. " +
+            "Prefer functions with short parameter lists.",
+        Debt.TWENTY_MINS
+    )
 
     private val functionThreshold: Int =
         valueOrDefault(FUNCTION_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_FUNCTION_THRESHOLD))
@@ -104,14 +106,18 @@ class LongParameterList(
 
         if (parameterNumber >= threshold) {
             val parameterPrint = function.valueParameters.joinToString(separator = ", ") {
-                    it.nameAsSafeName.identifier + ": " + it.typeReference?.text
+                it.nameAsSafeName.identifier + ": " + it.typeReference?.text
             }
 
-            report(ThresholdedCodeSmell(issue,
+            report(
+                ThresholdedCodeSmell(
+                    issue,
                     Entity.from(parameterList),
                     Metric("SIZE", parameterNumber, threshold),
                     "The $identifier($parameterPrint) has too many parameters. " +
-                            "The current threshold is set to $threshold."))
+                        "The current threshold is set to $threshold."
+                )
+            )
         }
     }
 

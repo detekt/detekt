@@ -27,10 +27,12 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  */
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Variable names should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Variable names should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
     private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
@@ -59,10 +61,13 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(property: KtProperty, message: String) {
-        report(CodeSmell(
-            issue,
-            Entity.atName(property),
-            message = message))
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(property),
+                message = message
+            )
+        )
     }
 
     companion object {

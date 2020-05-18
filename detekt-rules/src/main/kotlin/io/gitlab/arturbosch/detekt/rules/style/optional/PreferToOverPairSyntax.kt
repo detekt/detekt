@@ -29,9 +29,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("PreferToOverPairSyntax", Severity.Style,
-            "Pair was created using the Pair constructor, using the to syntax is preferred.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "PreferToOverPairSyntax", Severity.Style,
+        "Pair was created using the Pair constructor, using the to syntax is preferred.",
+        Debt.FIVE_MINS
+    )
 
     @Suppress("ReturnCount")
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
@@ -43,9 +45,13 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
         if (subjectType.fqNameOrNull()?.asString() == PAIR_CONSTRUCTOR_REFERENCE_NAME) {
             val (firstArg, secondArg) = callReference.valueArguments.map { it.text }
 
-            report(CodeSmell(issue, Entity.from(expression),
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
                     message = "Pair is created by using the pair constructor. " +
-                            "This can replaced by `$firstArg to $secondArg`"))
+                        "This can replaced by `$firstArg to $secondArg`"
+                )
+            )
         }
 
         super.visitSimpleNameExpression(expression)

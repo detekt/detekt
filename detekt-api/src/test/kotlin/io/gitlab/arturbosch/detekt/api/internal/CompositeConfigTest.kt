@@ -12,10 +12,12 @@ class CompositeConfigTest : Spek({
         val first = yamlConfig("detekt.yml")
         val compositeConfig = CompositeConfig(second, first)
 
-        it("""
+        it(
+            """
             should have style sub config with active false which is overridden
             in `second` config regardless of default value
-        """) {
+        """
+        ) {
             val styleConfig = compositeConfig.subConfig("style").subConfig("WildcardImport")
             assertThat(styleConfig.valueOrDefault("active", true)).isEqualTo(false)
             assertThat(styleConfig.valueOrDefault("active", false)).isEqualTo(false)

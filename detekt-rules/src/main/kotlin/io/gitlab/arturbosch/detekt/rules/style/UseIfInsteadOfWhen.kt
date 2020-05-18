@@ -27,17 +27,20 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UseIfInsteadOfWhen",
-            Severity.Style,
-            "Binary expressions are better expressed using an 'if' expression than a 'when' expression.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UseIfInsteadOfWhen",
+        Severity.Style,
+        "Binary expressions are better expressed using an 'if' expression than a 'when' expression.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
 
         if (expression.entries.size == 2 &&
             expression.elseExpression != null &&
-            expression.entries.none { it.conditions.size > 1 }) {
+            expression.entries.none { it.conditions.size > 1 }
+        ) {
             report(
                 CodeSmell(
                     issue,

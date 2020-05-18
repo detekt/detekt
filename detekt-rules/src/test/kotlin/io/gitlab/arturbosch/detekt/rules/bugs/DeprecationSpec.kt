@@ -18,7 +18,8 @@ object DeprecationSpec : Spek({
     describe("Deprecation detection") {
 
         it("reports when supertype is deprecated") {
-            val code = """
+            val code =
+                """
                 @Deprecated("deprecation message")
                 abstract class Foo {
                     abstract fun bar() : Int
@@ -36,7 +37,8 @@ object DeprecationSpec : Spek({
         }
 
         it("does not report when supertype is not deprecated") {
-            val code = """
+            val code =
+                """
                 abstract class Oof : Foo() {
                     fun spam() {
                     }

@@ -11,7 +11,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
     describe("CommentOverPrivateProperty rule") {
 
         it("reports private property with a comment") {
-            val code = """
+            val code =
+                """
                 /**
                  * asdf
                  */
@@ -20,7 +21,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
         }
 
         it("does not report public property with a comment") {
-            val code = """
+            val code =
+                """
                 /**
                  * asdf
                  */
@@ -29,7 +31,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
         }
 
         it("reports private property in class with a comment") {
-            val code = """
+            val code =
+                """
                     class Test {
                     /**
                      * asdf
@@ -40,7 +43,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
         }
 
         it("does not report public property with a comment") {
-            val code = """
+            val code =
+                """
                 class Test {
                     /**
                      * asdf

@@ -20,7 +20,8 @@ class UnusedPrivateMemberSpec : Spek({
         destructor = { it.dispose() }
     )
 
-    val regexTestingCode = """
+    val regexTestingCode =
+        """
                 class Test {
                     private val used = "This is used"
                     private val unused = "This is not used"
@@ -45,7 +46,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("interface functions") {
 
         it("should not report parameters in interface functions") {
-            val code = """
+            val code =
+                """
                 interface UserPlugin {
                     fun plug(application: Application)
                     fun unplug()
@@ -58,7 +60,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("expect functions") {
 
         it("should not report parameters in expect class functions") {
-            val code = """
+            val code =
+                """
                 expect class Foo {
                     fun bar(i: Int)
                     fun baz(i: Int, s: String)
@@ -68,7 +71,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("should not report parameters in expect functions") {
-            val code = """
+            val code =
+                """
                 expect fun bar(i: Int)
                 expect fun baz(i: Int, s: String)
             """
@@ -76,7 +80,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("should not report parameters in expect class with constructor") {
-            val code = """
+            val code =
+                """
                 expect class Foo1(private val bar: String) {}
                 expect class Foo2(bar: String) {}
             """
@@ -87,7 +92,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("actual functions") {
 
         it("reports unused parameters in actual functions") {
-            val code = """
+            val code =
+                """
                 actual class Foo {
                     actual fun bar(i: Int) {}
                     actual fun baz(i: Int, s: String) {}
@@ -97,7 +103,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports unused parameters in constructors") {
-            val code = """
+            val code =
+                """
                 actual class Foo actual constructor(private val bar: String) {}
             """
             assertThat(subject.lint(code)).hasSize(1)
@@ -115,7 +122,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("overridden functions") {
 
         it("should not report parameters in not private functions") {
-            val code = """
+            val code =
+                """
                 override fun funA() {
                     objectA.resolve(valA, object : MyCallback {
                         override fun onResolveFailed(throwable: Throwable) {
@@ -131,7 +139,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("classes accessing constants from companion objects") {
 
         it("should not report used constants") {
-            val code = """
+            val code =
+                """
                 class A {
                     companion object {
                         private const val MY_CONST = 42
@@ -150,7 +159,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("several classes with properties") {
 
         it("reports an unused member") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val unused = "This is not used"
 
@@ -163,7 +173,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report unused public members") {
-            val code = """
+            val code =
+                """
                 class Test {
                     val unused = "This is not used"
 
@@ -176,7 +187,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used members") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val used = "This is used"
 
@@ -189,7 +201,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used members but reports unused members") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val used = "This is used"
                     private val unused = "This is not used"
@@ -222,7 +235,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("several classes with properties and local properties") {
 
         it("reports an unused member") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val unused = "This is not used"
 
@@ -236,7 +250,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used members") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val used = "This is used"
 
@@ -250,7 +265,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports unused local properties") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val used = "This is used"
 
@@ -267,7 +283,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("loop iterators") {
 
         it("should not depend on evaluation order of functions or properties") {
-            val code = """
+            val code =
+                """
                 fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
 
                 val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
@@ -277,7 +294,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("doesn't report loop properties") {
-            val code = """
+            val code =
+                """
                 class Test {
                     fun use() {
                         for (i in 0 until 10) {
@@ -290,7 +308,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports unused loop property") {
-            val code = """
+            val code =
+                """
                 class Test {
                     fun use() {
                         for (i in 0 until 10) {
@@ -302,7 +321,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports unused loop property in indexed array") {
-            val code = """
+            val code =
+                """
                 class Test {
                     fun use() {
                         val array = intArrayOf(1, 2, 3)
@@ -316,7 +336,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports all unused loop properties in indexed array") {
-            val code = """
+            val code =
+                """
                 class Test {
                     fun use() {
                         val array = intArrayOf(1, 2, 3)
@@ -329,7 +350,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used loop properties in indexed array") {
-            val code = """
+            val code =
+                """
                 class Test {
                     fun use() {
                         val array = intArrayOf(1, 2, 3)
@@ -347,7 +369,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("properties used to initialize other properties") {
 
         it("does not report properties used by other properties") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val used = "This is used"
                     private val text = used
@@ -361,7 +384,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report properties used by inner classes") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val unused = "This is not used"
 
@@ -376,7 +400,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("function parameters") {
         it("reports single parameters if they are unused") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1)
 
@@ -390,7 +415,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports two parameters if they are unused and called the same in different methods") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1)
                 val value2 = usedMethod2(1)
@@ -409,7 +435,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report single parameters if they used in return statement") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1)
 
@@ -423,7 +450,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report single parameters if they used in function") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1)
 
@@ -437,7 +465,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports parameters that are unused in return statement") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1, 2)
 
@@ -451,7 +480,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports parameters that are unused in function") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod(1, 2)
 
@@ -467,7 +497,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("top level function parameters") {
         it("reports single parameters if they are unused") {
-            val code = """
+            val code =
+                """
             fun function(unusedParameter: Int): Int {
                 return 5
             }
@@ -477,7 +508,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report single parameters if they used in return statement") {
-            val code = """
+            val code =
+                """
             fun function(used: Int): Int {
                 return used
             }
@@ -487,7 +519,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report single parameters if they used in function") {
-            val code = """
+            val code =
+                """
             fun function(used: Int) {
                 println(used)
             }
@@ -497,7 +530,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports parameters that are unused in return statement") {
-            val code = """
+            val code =
+                """
             fun function(unusedParameter: Int, usedParameter: Int): Int {
                 return usedParameter
             }
@@ -507,7 +541,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports parameters that are unused in function") {
-            val code = """
+            val code =
+                """
             fun function(unusedParameter: Int, usedParameter: Int) {
                 println(usedParameter)
             }
@@ -519,7 +554,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("unused private functions") {
         it("does not report used private functions") {
-            val code = """
+            val code =
+                """
             class Test {
                 val value = usedMethod()
 
@@ -533,7 +569,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports unused private functions") {
-            val code = """
+            val code =
+                """
             class Test {
                 private fun unusedFunction(): Int {
                     return 5
@@ -545,7 +582,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report function used in interface - #1613") {
-            val code = """
+            val code =
+                """
                 interface Bar {
                     fun doSomething() {
                         doSomethingElse()
@@ -561,7 +599,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("private functions only used by unused private functions") {
 
         it("reports the non called private function") {
-            val code = """
+            val code =
+                """
             class Test {
                 private fun unusedFunction(): Int {
                     return someOtherUnusedFunction()
@@ -580,7 +619,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("unused class declarations which are allowed") {
 
         it("does not report the unused private property") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private val ignored = ""
                 }"""
@@ -588,7 +628,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report the unused private function and parameter") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private fun ignored(ignored: Int) {}
                 }"""
@@ -599,7 +640,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("nested class declarations") {
 
         it("reports unused nested private property") {
-            val code = """
+            val code =
+                """
                 class Test {
                     class Inner {
                         private val unused = 1
@@ -609,7 +651,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used nested private property") {
-            val code = """
+            val code =
+                """
                 class Test {
                     class Inner {
                         private val used = 1
@@ -622,21 +665,24 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("parameters in primary constructors") {
         it("reports unused private property") {
-            val code = """
+            val code =
+                """
                 class Test(private val unused: Any)
                 """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports unused parameter") {
-            val code = """
+            val code =
+                """
                 class Test(unused: Any)
                 """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report used parameter for calling super") {
-            val code = """
+            val code =
+                """
                 class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
                 """
@@ -644,7 +690,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used parameter in init block") {
-            val code = """
+            val code =
+                """
                 class Test(used: Any) {
                     init {
                         used.toString()
@@ -655,7 +702,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report used parameter to initialize property") {
-            val code = """
+            val code =
+                """
                 class Test(used: Any) {
                     val usedString = used.toString()
                 }
@@ -664,14 +712,16 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report public property") {
-            val code = """
+            val code =
+                """
                 class Test(val unused: Any)
                 """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private property used in init block") {
-            val code = """
+            val code =
+                """
                 class Test(private val used: Any) {
                     init { used.toString() }
                 }
@@ -680,7 +730,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private property used in function") {
-            val code = """
+            val code =
+                """
                 class Test(private val used: Any) {
                     fun something() {
                         used.toString()
@@ -693,7 +744,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("error messages") {
         it("are specific for function parameters") {
-            val code = """
+            val code =
+                """
                 fun foo(unused: Int){}
             """
 
@@ -703,7 +755,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("are specific for local variables") {
-            val code = """
+            val code =
+                """
                 fun foo(){ val unused = 1 }
             """
 
@@ -713,7 +766,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("are specific for private functions") {
-            val code = """
+            val code =
+                """
             class Test {
                 private fun unusedFunction(): Int {
                     return 5
@@ -729,7 +783,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("suppress unused parameter warning annotations") {
         it("does not report annotated parameters") {
-            val code = """
+            val code =
+                """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
             """
 
@@ -737,7 +792,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports parameters without annotation") {
-            val code = """
+            val code =
+                """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
             """
 
@@ -748,7 +804,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report parameters in annotated function") {
-            val code = """
+            val code =
+                """
                 @Suppress("UNUSED_PARAMETER")
                 fun foo(unused: String, otherUnused: String){}
             """
@@ -757,7 +814,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report parameters in annotated class") {
-            val code = """
+            val code =
+                """
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
                     fun foo(unused: String, otherUnused: String){}
@@ -769,7 +827,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report parameters in annotated object") {
-            val code = """
+            val code =
+                """
                 @Suppress("UNUSED_PARAMETER")
                 object Test {
                     fun foo(unused: String){}
@@ -780,7 +839,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report parameters in class with annotated outer class") {
-            val code = """
+            val code =
+                """
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
                     fun foo(unused: String){}
@@ -795,7 +855,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report parameters in annotated file") {
-            val code = """
+            val code =
+                """
                 @file:Suppress("UNUSED_PARAMETER")
 
                 class Test {
@@ -813,7 +874,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("suppress unused property warning annotations") {
         it("does not report annotated private constructor properties") {
-            val code = """
+            val code =
+                """
                 class Test(@Suppress("unused") private val foo: String) {}
             """
 
@@ -821,7 +883,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports private constructor properties without annotation") {
-            val code = """
+            val code =
+                """
                 class Test(
                     @Suppress("unused") private val foo: String,
                     private val bar: String
@@ -835,7 +898,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private constructor properties in annotated class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test(
                     private val foo: String,
@@ -847,7 +911,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private constructor properties in class with annotated outer class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test(
                     private val foo: String,
@@ -863,7 +928,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private constructor properties in annotated file") {
-            val code = """
+            val code =
+                """
                 @file:Suppress("unused")
 
                 class Test(
@@ -880,7 +946,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report annotated private properties") {
-            val code = """
+            val code =
+                """
                 class Test {
                     @Suppress("unused") private val foo: String
                 }
@@ -890,7 +957,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports private properties without annotation") {
-            val code = """
+            val code =
+                """
                 class Test {
                     @Suppress("unused") private val foo: String
                     private val bar: String
@@ -904,7 +972,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private properties in annotated class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test {
                     private val foo: String
@@ -916,7 +985,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private properties in class with annotated outer class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test {
                     private val foo: String
@@ -932,7 +1002,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private properties in annotated file") {
-            val code = """
+            val code =
+                """
                 @file:Suppress("unused")
 
                 class Test {
@@ -951,7 +1022,8 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("suppress unused function warning annotations") {
         it("does not report annotated private functions") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 private fun foo(): String = ""
             """
@@ -960,7 +1032,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("reports private functions without annotation") {
-            val code = """
+            val code =
+                """
                 private fun foo(): String = ""
             """
 
@@ -971,7 +1044,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private functions in annotated class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test {
                     private fun foo(): String = ""
@@ -982,7 +1056,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private functions in class with annotated outer class") {
-            val code = """
+            val code =
+                """
                 @Suppress("unused")
                 class Test {
                     private fun foo(): String = ""
@@ -998,7 +1073,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report private functions in annotated file") {
-            val code = """
+            val code =
+                """
                 @file:Suppress("unused")
                 class Test {
                     private fun foo(): String = ""
@@ -1017,7 +1093,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("main methods") {
 
         it("does not report the args parameter of the main function inside an object") {
-            val code = """
+            val code =
+                """
                 object O {
 
                     @JvmStatic
@@ -1030,7 +1107,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("does not report the args parameter of the main function as top level function") {
-            val code = """
+            val code =
+                """
                 fun main(args: Array<String>) {
                     println("b")
                 }
@@ -1042,7 +1120,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("operators") {
 
         it("does not report used plus operator - #1354") {
-            val code = """
+            val code =
+                """
                 import java.util.Date
                 class Foo {
                     val bla: Date = Date(System.currentTimeMillis()) + 300L
@@ -1055,7 +1134,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("report unused minus operator") {
-            val code = """
+            val code =
+                """
                 import java.util.Date
                 class Foo {
                     companion object {
@@ -1070,7 +1150,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("same named functions") {
 
         it("report it when the file has same named functions") {
-            val code = """
+            val code =
+                """
                 class Test {
                     private fun f(): Int {
                         return 5
@@ -1087,7 +1168,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("report it when the class has same named functions") {
-            val code = """
+            val code =
+                """
                 class Test {
                     val value = f(1)
 
@@ -1108,7 +1190,8 @@ class UnusedPrivateMemberSpec : Spek({
         }
 
         it("report it when the class has same named extension functions") {
-            val code = """
+            val code =
+                """
                 class Test {
                     val value = 1.f()
                 

@@ -76,12 +76,14 @@ interface Config {
  * A configuration which keeps track of the config it got sub-config'ed from by the [subConfig] function.
  * It's main usage is to recreate the property-path which was taken when using the [subConfig] function repeatedly.
  */
-@Deprecated("""
+@Deprecated(
+    """
 A Config is a long lived object and is derived via subConfig a lot.
 Keeping track of the parent it was derived, creates long-lived object chains which takes the GC longer to release them.
 It can even lead to OOM if detekt get's embedded in an other application which reuses the top most Config object. 
 The property 'parentPath' of the Config interface can be used as a replacement for parent.key calls.
-""")
+"""
+)
 interface HierarchicalConfig : Config {
     /**
      * Returns the parent config which encloses this config part.

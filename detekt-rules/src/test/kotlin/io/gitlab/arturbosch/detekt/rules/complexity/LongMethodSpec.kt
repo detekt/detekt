@@ -12,7 +12,8 @@ class LongMethodSpec : Spek({
     describe("nested functions can be long") {
 
         it("should find two long methods") {
-            val code = """
+            val code =
+                """
                 fun longMethod() { // 5 lines
                     println()
                     println()
@@ -32,7 +33,8 @@ class LongMethodSpec : Spek({
         }
 
         it("should not find too long methods") {
-            val code = """
+            val code =
+                """
                 fun methodOk() { // 3 lines
                     println()
                     fun localMethodOk() { // 4 lines

@@ -28,8 +28,8 @@ class FileProcessorLocatorSpec : Spek({
 
             assertThat(processorClasses).isNotEmpty
             processorClasses
-                    .filter { clazz -> processors.firstOrNull { clazz == it.javaClass } == null }
-                    .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
+                .filter { clazz -> processors.firstOrNull { clazz == it.javaClass } == null }
+                .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
         }
 
         it("has disabled processors") {
@@ -42,6 +42,6 @@ class FileProcessorLocatorSpec : Spek({
 
 private fun getProcessorClasses(): List<Class<out FileProcessListener>> {
     return Reflections("io.gitlab.arturbosch.detekt.core.processors")
-            .getSubTypesOf(FileProcessListener::class.java)
-            .filter { !Modifier.isAbstract(it.modifiers) }
+        .getSubTypesOf(FileProcessListener::class.java)
+        .filter { !Modifier.isAbstract(it.modifiers) }
 }

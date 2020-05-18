@@ -10,19 +10,19 @@ import java.nio.file.Path
 class BaselineFacade(private val baselineFile: Path) {
 
     private val listings: Pair<Whitelist, Blacklist>? =
-            if (baselineExists()) {
-                val format = BaselineFormat().read(baselineFile)
-                format.whitelist to format.blacklist
-            } else null
+        if (baselineExists()) {
+            val format = BaselineFormat().read(baselineFile)
+            format.whitelist to format.blacklist
+        } else null
 
     fun filter(smells: List<Finding>) =
-            if (listings != null) {
-                val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
-                val blackFiltered = whiteFiltered.filterNot { finding ->
-                    listings.second.ids.contains(finding.baselineId)
-                }
-                blackFiltered
-            } else smells
+        if (listings != null) {
+            val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
+            val blackFiltered = whiteFiltered.filterNot { finding ->
+                listings.second.ids.contains(finding.baselineId)
+            }
+            blackFiltered
+        } else smells
 
     fun create(smells: List<Finding>) {
         val blacklist = if (baselineExists()) {

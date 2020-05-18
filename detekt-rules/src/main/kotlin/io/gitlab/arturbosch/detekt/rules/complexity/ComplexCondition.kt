@@ -45,9 +45,11 @@ class ComplexCondition(
     threshold: Int = DEFAULT_CONDITIONS_COUNT
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("ComplexCondition", Severity.Maintainability,
-            "Complex conditions should be simplified and extracted into well-named methods if necessary.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ComplexCondition", Severity.Maintainability,
+        "Complex conditions should be simplified and extracted into well-named methods if necessary.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -77,11 +79,15 @@ class ComplexCondition(
             val conditionString = longestBinExpr.text
             val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
             if (count >= threshold) {
-                report(ThresholdedCodeSmell(issue,
+                report(
+                    ThresholdedCodeSmell(
+                        issue,
                         Entity.from(condition),
                         Metric("SIZE", count, threshold),
                         "This condition is too complex ($count). " +
-                                "Defined complexity threshold for conditions is set to '$threshold'"))
+                            "Defined complexity threshold for conditions is set to '$threshold'"
+                    )
+                )
             }
         }
     }

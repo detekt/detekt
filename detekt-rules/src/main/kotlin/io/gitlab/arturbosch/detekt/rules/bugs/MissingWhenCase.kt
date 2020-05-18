@@ -87,7 +87,7 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue, Entity.from(expression),
                         "When expression is missing cases: ${enumMissingCases.joinToString()}. Either add missing " +
-                                "cases or a default `else` case."
+                            "cases or a default `else` case."
                     )
                 )
             }
@@ -101,7 +101,7 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue, Entity.from(expression),
                         "When expression is missing cases: ${sealedClassMissingCases.joinToString()}. Either add " +
-                                "missing cases or a default `else` case."
+                            "missing cases or a default `else` case."
                     )
                 )
             }

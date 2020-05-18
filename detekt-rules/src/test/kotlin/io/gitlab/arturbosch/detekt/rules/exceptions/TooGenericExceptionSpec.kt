@@ -26,7 +26,8 @@ class TooGenericExceptionSpec : Spek({
     }
 })
 
-const val tooGenericExceptionCode = """
+const val tooGenericExceptionCode =
+    """
         fun main() {
         try {
             throw Throwable()

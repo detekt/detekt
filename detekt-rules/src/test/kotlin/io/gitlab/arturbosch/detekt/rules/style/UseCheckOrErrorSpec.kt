@@ -21,7 +21,8 @@ class UseCheckOrErrorSpec : Spek({
     describe("UseCheckOrError rule") {
 
         it("reports if a an IllegalStateException is thrown") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     doSomething()
                     if (a < 0) throw IllegalStateException()
@@ -30,7 +31,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("reports if a an IllegalStateException is thrown with an error message") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     doSomething()
                     if (a < 0) throw IllegalStateException("More details")
@@ -39,7 +41,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("reports if a an IllegalStateException is thrown as default case of a when expression") {
-            val code = """
+            val code =
+                """
                 fun x(a: Int) =
                     when (a) {
                         1 -> doSomething()
@@ -49,7 +52,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("reports if an IllegalStateException is thrown by its fully qualified name") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     doSomething()
                     if (a < 0) throw java.lang.IllegalStateException()
@@ -58,7 +62,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("reports if an IllegalStateException is thrown by its fully qualified name using the kotlin type alias") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     doSomething()
                     if (a < 0) throw kotlin.IllegalStateException()
@@ -67,7 +72,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("does not report if any other kind of exception is thrown") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     doSomething()
                     if (a < 0) throw SomeBusinessException()
@@ -76,7 +82,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("does not report an issue if the exception thrown has a message and a cause") {
-            val code = """
+            val code =
+                """
                 private fun missing(): Nothing {
                     if  (cause != null) {
                         throw IllegalStateException("message", cause)
@@ -86,7 +93,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("does not report an issue if the exception thrown as the only action in a block") {
-            val code = """
+            val code =
+                """
                 fun unsafeRunSync(): A =
                     unsafeRunTimed(Duration.INFINITE)
                         .fold({ throw IllegalStateException("message") }, ::identity)"""
@@ -94,17 +102,20 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("reports an issue if the exception thrown as the only action in a function") {
-            val code = """fun doThrow() = throw IllegalStateException("message")"""
+            val code =
+                """fun doThrow() = throw IllegalStateException("message")"""
             assertThat(subject.lint(code)).hasSourceLocation(1, 17)
         }
 
         it("reports an issue if the exception thrown as the only action in a function block") {
-            val code = """fun doThrow() { throw IllegalStateException("message") }"""
+            val code =
+                """fun doThrow() { throw IllegalStateException("message") }"""
             assertThat(subject.lint(code)).hasSourceLocation(1, 17)
         }
 
         it("does not report if the exception thrown has a non-String argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     when(throwable) {
                         is NumberFormatException -> println("a")
@@ -116,7 +127,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("does not report if the exception thrown has a String literal argument and a non-String argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     when(throwable) {
                         is NumberFormatException -> println("a")
@@ -128,7 +140,8 @@ class UseCheckOrErrorSpec : Spek({
         }
 
         it("does not report if the exception thrown has a non-String literal argument") {
-            val code = """
+            val code =
+                """
                 fun test(throwable: Throwable) {
                     when(throwable) {
                         is NumberFormatException -> println("a")
@@ -142,7 +155,8 @@ class UseCheckOrErrorSpec : Spek({
         context("with binding context") {
 
             it("does not report if the exception thrown has a non-String argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         when(throwable) {
                             is NumberFormatException -> println("a")
@@ -154,7 +168,8 @@ class UseCheckOrErrorSpec : Spek({
             }
 
             it("does not report if the exception thrown has a String literal argument and a non-String argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         when(throwable) {
                             is NumberFormatException -> println("a")
@@ -166,7 +181,8 @@ class UseCheckOrErrorSpec : Spek({
             }
 
             it("reports if the exception thrown has a non-String literal argument") {
-                val code = """
+                val code =
+                    """
                     fun test(throwable: Throwable) {
                         when(throwable) {
                             is NumberFormatException -> println("a")

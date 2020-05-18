@@ -11,14 +11,16 @@ class UndocumentedPublicFunctionSpec : Spek({
     describe("UndocumentedPublicFunction rule") {
 
         it("reports undocumented public functions") {
-            val code = """
+            val code =
+                """
                 fun noComment1() {}
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("reports undocumented public functions in companion object") {
-            val code = """
+            val code =
+                """
                 class Test {
                     companion object {
                         fun noComment1() {}
@@ -30,7 +32,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report documented public function") {
-            val code = """
+            val code =
+                """
                 /**
                  * Comment
                  */
@@ -40,7 +43,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report documented public function in class") {
-            val code = """
+            val code =
+                """
 				class Test {
 					/**
 					*
@@ -52,7 +56,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report undocumented internal and private function") {
-            val code = """
+            val code =
+                """
                 class Test {
                     internal fun no1(){}
                     private fun no2(){}
@@ -62,7 +67,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report undocumented nested function") {
-            val code = """
+            val code =
+                """
                 /**
                  * Comment
                  */
@@ -74,7 +80,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report public functions in internal class") {
-            val code = """
+            val code =
+                """
     			internal class NoComments {
 					fun nope1() {}
 					public fun nope2() {}
@@ -84,7 +91,8 @@ class UndocumentedPublicFunctionSpec : Spek({
         }
 
         it("does not report public functions in private class") {
-            val code = """
+            val code =
+                """
     			private class NoComments {
 					fun nope1() {}
 					public fun nope2() {}

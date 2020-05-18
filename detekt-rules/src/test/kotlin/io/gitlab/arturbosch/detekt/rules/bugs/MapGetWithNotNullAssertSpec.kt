@@ -18,7 +18,8 @@ class MapGetWithNotNullAssertSpec : Spek({
     describe("check for MapGetWithNotNullAssert") {
 
         it("reports map[] with not null assertion") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map["key"]!!
@@ -27,7 +28,8 @@ class MapGetWithNotNullAssertSpec : Spek({
         }
 
         it("reports map.get() with not null assertion") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map.get("key")!!
@@ -36,7 +38,8 @@ class MapGetWithNotNullAssertSpec : Spek({
         }
 
         it("does not report map[] call without not-null assert") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map["key"]
@@ -45,7 +48,8 @@ class MapGetWithNotNullAssertSpec : Spek({
         }
 
         it("does not report map.getValue() call") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getValue("key")
@@ -54,7 +58,8 @@ class MapGetWithNotNullAssertSpec : Spek({
         }
 
         it("does not report map.getOrDefault() call") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrDefault("key", "")
@@ -63,7 +68,8 @@ class MapGetWithNotNullAssertSpec : Spek({
         }
 
         it("does not report map.getOrElse() call") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrElse("key", { "" })

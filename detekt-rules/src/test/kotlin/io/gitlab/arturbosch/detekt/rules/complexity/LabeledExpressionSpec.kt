@@ -13,7 +13,8 @@ class LabeledExpressionSpec : Spek({
     describe("LabeledExpression rule") {
 
         it("reports break and continue labels") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     loop@ for (i in 1..3) {
                         for (j in 1..3) {
@@ -27,7 +28,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("reports implicit return label") {
-            val code = """
+            val code =
+                """
                 fun f(range: IntRange) {
                     range.forEach {
                         if (it == 5) return@forEach
@@ -39,7 +41,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("reports explicit return label") {
-            val code = """
+            val code =
+                """
                 fun f(range: IntRange) {
                     range.forEach label@{
                         if (it == 5) return@label
@@ -51,7 +54,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("reports labels referencing inner and outer class") {
-            val code = """
+            val code =
+                """
                 class Outer {
                     inner class Inner {
                         fun f() {
@@ -69,7 +73,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report inner class referencing outer class") {
-            val code = """
+            val code =
+                """
             class Outer {
                 inner class Inner {
                     fun f() {
@@ -82,7 +87,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report inner class referencing outer class in extension function") {
-            val code = """
+            val code =
+                """
             class Outer {
                 inner class Inner {
                     fun Int.f() {
@@ -96,7 +102,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report nested class referencing outer class in extension function") {
-            val code = """
+            val code =
+                """
             class Outer {
                 class Nested {
                     fun Int.f() {
@@ -109,7 +116,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report inner classes referencing outer class in extension function") {
-            val code = """
+            val code =
+                """
             class Outer {
                 inner class Inner {
                     inner class InnerInner {
@@ -129,7 +137,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report excluded label") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     loop@ for (i in 1..5) {}
                 }
@@ -140,7 +149,8 @@ class LabeledExpressionSpec : Spek({
         }
 
         it("does not report excluded label config with string") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     loop@ for (i in 1..5) {}
                 }

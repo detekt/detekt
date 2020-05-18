@@ -14,7 +14,8 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded methods") {
 
             it("reports overloaded methods which exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Test {
                         fun x() {}
                         fun x(i: Int) {}
@@ -27,7 +28,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports overloaded top level methods which exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     fun x() {}
                     fun x(i: Int) {}
                     fun x(i: Int, j: Int) {}
@@ -36,11 +38,13 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods which do not exceed the threshold") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 class Test {
                     fun x() { }
                     fun x(i: Int) { }
-                }""")
+                }"""
+                )
                 assertThat(subject.findings.size).isZero()
             }
         }
@@ -48,18 +52,22 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded extensions methods") {
 
             it("does not report extension methods with a different receiver") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 fun Boolean.foo() {}
                 fun Int.foo() {}
-                fun Long.foo() {}""")
+                fun Long.foo() {}"""
+                )
                 assertThat(subject.findings.size).isZero()
             }
 
             it("reports extension methods with the same receiver") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 fun Int.foo() {}
                 fun Int.foo(i: Int) {}
-                fun Int.foo(i: String) {}""")
+                fun Int.foo(i: String) {}"""
+                )
                 assertThat(subject.findings.size).isEqualTo(1)
             }
         }
@@ -67,7 +75,8 @@ class MethodOverloadingSpec : Spek({
         context("several nested overloaded methods") {
 
             it("reports nested overloaded methods which exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Outer {
                         internal class Inner {
                             fun f() {}
@@ -80,7 +89,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report nested overloaded methods which do not exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Outer {
 
                         fun f() {}
@@ -98,7 +108,8 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded methods inside objects") {
 
             it("reports overloaded methods inside an object which exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     object Test {
                         fun f() {}
                         fun f(i: Int) {}
@@ -109,7 +120,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods inside an object which do not exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     object Test {
                         fun f() {}
                         fun f(i: Int) {}
@@ -119,7 +131,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports overloaded methods inside a companion object which exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Test {
                         companion object {
                             fun f() {}
@@ -132,7 +145,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods in a companion object that do not exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Test {
                         companion object {
                             fun f() {}
@@ -144,7 +158,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods in classes/objects that do not exceed the threshold") {
-                val code = """
+                val code =
+                    """
                     class Test {
 
                         fun f() {}
@@ -159,7 +174,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports overloaded methods inside an anonymous object expression") {
-                val code = """
+                val code =
+                    """
                     class A {
                     
                         fun f() {
@@ -178,7 +194,8 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded methods inside enum classes") {
 
             it("does not report overridden methods inside enum entries") {
-                val code = """
+                val code =
+                    """
                     enum class Test {
                         E1 {
                             override fun f() {}
@@ -197,7 +214,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports overloaded methods in enum entry") {
-                val code = """
+                val code =
+                    """
                     enum class Test {
                         E {
                             fun f(i: Int) {}
@@ -210,7 +228,8 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports overloaded methods in enum class") {
-                val code = """
+                val code =
+                    """
                     enum class Test {
                         E;
                     
@@ -229,7 +248,8 @@ class MethodOverloadingSpec : Spek({
         }
 
         it("does not report overloaded local functions") {
-            val code = """
+            val code =
+                """
                 fun top() {
                     fun f() {}
                     fun f(i: Int) {}

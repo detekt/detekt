@@ -30,15 +30,15 @@ internal fun PsiElement.searchClass(): String {
 internal fun PsiElement.buildFullSignature(): String {
     val signature = this.searchSignature()
     val fullClassSignature = this.parents.filter { it is KtClassOrObject }
-            .map { it.extractClassName() }
-            .fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
+        .map { it.extractClassName() }
+        .fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
     val filename = this.containingFile.name
     return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
-            if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature
+        if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature
 }
 
 private fun PsiElement.extractClassName() =
-        this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString() ?: ""
+    this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString() ?: ""
 
 private fun PsiElement.searchSignature(): String {
     return when (this) {
@@ -85,8 +85,9 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
         "Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
     }
     return getTextSafe(
-            { element.nameAsSafeName.identifier },
-            { element.text.substring(methodStart, methodEnd) })
+        { element.nameAsSafeName.identifier },
+        { element.text.substring(methodStart, methodEnd) }
+    )
 }
 
 /*

@@ -13,9 +13,11 @@ class CyclomaticComplexitySpec : Spek({
     describe("basic function expressions are tested") {
 
         it("counts for safe navigation") {
-            val code = compileContentForTest("""
-                    fun test() = null as? String ?: ""
-                """.trimIndent())
+            val code = compileContentForTest(
+                """
+                fun test() = null as? String ?: ""
+                """.trimIndent()
+            )
 
             val actual = CyclomaticComplexity.calculate(code)
 
@@ -23,9 +25,11 @@ class CyclomaticComplexitySpec : Spek({
         }
 
         it("counts if and && and || expressions") {
-            val code = compileContentForTest("""
-                    fun test() = if (true || true && false) 1 else 0
-                """.trimIndent())
+            val code = compileContentForTest(
+                """
+                fun test() = if (true || true && false) 1 else 0
+                """.trimIndent()
+            )
 
             val actual = CyclomaticComplexity.calculate(code)
 
@@ -33,21 +37,23 @@ class CyclomaticComplexitySpec : Spek({
         }
 
         it("counts while, continue and break") {
-            val code = compileContentForTest("""
-                    fun test(i: Int) {
-                        var j = i
-                        while(true) { // 1
-                            if (j == 5) { // 1
-                                continue // 1
-                            } else if (j == 2) { // 1
-                                break // 1
-                            } else {
-                                j += i
-                            }
+            val code = compileContentForTest(
+                """
+                fun test(i: Int) {
+                    var j = i
+                    while(true) { // 1
+                        if (j == 5) { // 1
+                            continue // 1
+                        } else if (j == 2) { // 1
+                            break // 1
+                        } else {
+                            j += i
                         }
-                        println("finished")
                     }
-                """.trimIndent())
+                    println("finished")
+                }
+                """.trimIndent()
+            )
 
             val actual = CyclomaticComplexity.calculate(code)
 
@@ -56,11 +62,12 @@ class CyclomaticComplexitySpec : Spek({
     }
 
     describe("counts function calls used for nesting") {
-        val code = compileContentForTest("""
-                    fun test(i: Int) {
-                        (1..10).forEach { println(it) }
-                    }
-                """.trimIndent()
+        val code = compileContentForTest(
+            """
+            fun test(i: Int) {
+                (1..10).forEach { println(it) }
+            }
+            """.trimIndent()
         )
 
         it("counts them by default") {
@@ -97,7 +104,8 @@ class CyclomaticComplexitySpec : Spek({
     describe("ignoreSimpleWhenEntries is false") {
 
         it("counts simple when branches as 1") {
-            val function = compileContentForTest("""
+            val function = compileContentForTest(
+                """
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> println("Epoch!")
@@ -105,7 +113,8 @@ class CyclomaticComplexitySpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """).getFunctionByName("test")
+            """
+            ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
                 ignoreSimpleWhenEntries = false
@@ -115,7 +124,8 @@ class CyclomaticComplexitySpec : Spek({
         }
 
         it("counts block when branches as 1") {
-            val function = compileContentForTest("""
+            val function = compileContentForTest(
+                """
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -125,7 +135,8 @@ class CyclomaticComplexitySpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """).getFunctionByName("test")
+            """
+            ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
                 ignoreSimpleWhenEntries = false
@@ -138,7 +149,8 @@ class CyclomaticComplexitySpec : Spek({
     describe("ignoreSimpleWhenEntries is true") {
 
         it("counts a when with only simple branches as 1") {
-            val function = compileContentForTest("""
+            val function = compileContentForTest(
+                """
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> println("Epoch!")
@@ -146,7 +158,8 @@ class CyclomaticComplexitySpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """).getFunctionByName("test")
+            """
+            ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
                 ignoreSimpleWhenEntries = true
@@ -156,7 +169,8 @@ class CyclomaticComplexitySpec : Spek({
         }
 
         it("does not count simple when branches") {
-            val function = compileContentForTest("""
+            val function = compileContentForTest(
+                """
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -169,7 +183,8 @@ class CyclomaticComplexitySpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """).getFunctionByName("test")
+            """
+            ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
                 ignoreSimpleWhenEntries = true
@@ -179,7 +194,8 @@ class CyclomaticComplexitySpec : Spek({
         }
 
         it("counts block when branches as 1") {
-            val function = compileContentForTest("""
+            val function = compileContentForTest(
+                """
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -194,7 +210,8 @@ class CyclomaticComplexitySpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """).getFunctionByName("test")
+            """
+            ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
                 ignoreSimpleWhenEntries = true

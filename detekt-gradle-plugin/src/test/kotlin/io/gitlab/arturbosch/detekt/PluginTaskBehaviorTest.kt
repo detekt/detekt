@@ -15,7 +15,8 @@ internal class PluginTaskBehaviorTest : Spek({
     val configFileName = "config.yml"
     val baselineFileName = "baseline.xml"
 
-    val detektConfig = """
+    val detektConfig =
+        """
                     |detekt {
                     |    config = files("$configFileName")
                     |    baseline = file("$baselineFileName")
@@ -63,7 +64,8 @@ internal class PluginTaskBehaviorTest : Spek({
             }
         }
         it("should run again after changing config") {
-            val configFileWithCommentsDisabled = """
+            val configFileWithCommentsDisabled =
+                """
                             |comments:
                             |  active: false
                         """.trimMargin()
@@ -80,7 +82,8 @@ internal class PluginTaskBehaviorTest : Spek({
             }
         }
         it("should run again after changing baseline") {
-            val changedBaselineContent = """
+            val changedBaselineContent =
+                """
                             |<some>
                             |    <more/>
                             |    <xml/>

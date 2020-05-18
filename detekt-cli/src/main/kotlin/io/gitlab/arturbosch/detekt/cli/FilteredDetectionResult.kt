@@ -11,8 +11,8 @@ class FilteredDetectionResult(detektion: Detektion, baselineFacade: BaselineFaca
 
     init {
         filteredFindings = detektion.findings
-                .map { (key, value) -> key to baselineFacade.filter(value) }
-                .toMap()
+            .map { (key, value) -> key to baselineFacade.filter(value) }
+            .toMap()
     }
 
     override val findings = filteredFindings

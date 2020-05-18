@@ -12,7 +12,8 @@ class ThrowingExceptionInMainSpec : Spek({
     describe("ThrowingExceptionInMain rule") {
 
         it("reports a runnable main function which throws an exception") {
-            val code = """
+            val code =
+                """
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
                 fun main() { throw IllegalArgumentException() }
             """
@@ -20,7 +21,8 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("reports runnable main functions with @JvmStatic annotation which throw an exception") {
-            val code = """
+            val code =
+                """
                 class A {
                     companion object {
                         @JvmStatic
@@ -44,7 +46,8 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report top level main functions with a wrong signature") {
-            val code = """
+            val code =
+                """
                 private fun main(args: Array<String>) { throw IllegalArgumentException() }
                 private fun main() { throw IllegalArgumentException() }
                 fun mai() { throw IllegalArgumentException() }
@@ -54,7 +57,8 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report top level main functions which throw no exception") {
-            val code = """
+            val code =
+                """
                 fun main(args: Array<String>) { }
                 fun main() { }
                 fun mai() { }
@@ -63,7 +67,8 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report top level main functions with expression body which throw no exception") {
-            val code = """
+            val code =
+                """
                 fun main(args: Array<String>) = ""
                 fun main() = Unit
             """
@@ -71,7 +76,8 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report main functions with no @JvmStatic annotation inside a class") {
-            val code = """
+            val code =
+                """
             class A {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
                 

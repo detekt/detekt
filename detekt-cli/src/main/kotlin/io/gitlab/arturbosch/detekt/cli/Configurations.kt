@@ -21,7 +21,8 @@ fun CliArgs.createFilters(): PathFilters? = PathFilters.of(
     (excludes ?: "")
         .trim()
         .commaSeparatedPattern(",", ";")
-        .toList())
+        .toList()
+)
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
     MultipleExistingPathConverter().convert(this)
@@ -48,8 +49,11 @@ fun CliArgs.loadConfiguration(): Config {
 
     if (failFast) {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
-        declaredConfig = FailFastConfig(declaredConfig
-            ?: initializedDefaultConfig, initializedDefaultConfig)
+        declaredConfig = FailFastConfig(
+            declaredConfig
+                ?: initializedDefaultConfig,
+            initializedDefaultConfig
+        )
     }
 
     if (!autoCorrect) {

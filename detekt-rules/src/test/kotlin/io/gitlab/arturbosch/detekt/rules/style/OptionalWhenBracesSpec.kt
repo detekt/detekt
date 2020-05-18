@@ -11,7 +11,8 @@ class OptionalWhenBracesSpec : Spek({
     describe("check optional braces in when expression") {
 
         it("does not report necessary braces") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     when (1) {
                         1 -> print(1)
@@ -29,7 +30,8 @@ class OptionalWhenBracesSpec : Spek({
         }
 
         it("reports unnecessary braces") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     when (1) {
                         1 -> { print(1) }
@@ -41,7 +43,8 @@ class OptionalWhenBracesSpec : Spek({
 
         context("the statement is a lambda expression") {
             it("does not report if the lambda has no arrow") {
-                val code = """
+                val code =
+                    """
                     fun test(b: Boolean): (Int) -> Int {
                         return when (b) {
                             true -> { { it + 100 } }
@@ -53,7 +56,8 @@ class OptionalWhenBracesSpec : Spek({
             }
 
             it("reports if the lambda has an arrow") {
-                val code = """
+                val code =
+                    """
                     fun test(b: Boolean): (Int) -> Int {
                         return when (b) {
                             true -> { { i -> i + 100 } }

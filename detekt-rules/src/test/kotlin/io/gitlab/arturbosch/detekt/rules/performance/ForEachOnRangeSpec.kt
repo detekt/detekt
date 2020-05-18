@@ -10,7 +10,8 @@ class ForEachOnRangeSpec : Spek({
     describe("ForEachOnRange rule") {
 
         context("a kt file with using a forEach on a range") {
-            val code = """
+            val code =
+                """
             fun test() {
                 (1..10).forEach {
                     println(it)
@@ -34,7 +35,8 @@ class ForEachOnRangeSpec : Spek({
         }
 
         context("a kt file with using any other method on a range") {
-            val code = """
+            val code =
+                """
             fun test() {
                 (1..10).isEmpty()
             }
@@ -47,7 +49,8 @@ class ForEachOnRangeSpec : Spek({
         }
 
         context("a kt file with using a forEach on a list") {
-            val code = """
+            val code =
+                """
             fun test() {
                 listOf(1, 2, 3).forEach {
                     println(it)

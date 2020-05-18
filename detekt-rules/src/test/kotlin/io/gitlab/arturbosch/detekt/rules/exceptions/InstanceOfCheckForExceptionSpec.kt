@@ -18,7 +18,8 @@ class InstanceOfCheckForExceptionSpec : Spek({
 
         it("has is and as checks") {
 
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } catch(e: Exception) {
@@ -32,7 +33,8 @@ class InstanceOfCheckForExceptionSpec : Spek({
         }
 
         it("has nested is and as checks") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } catch(e: Exception) {
@@ -46,7 +48,8 @@ class InstanceOfCheckForExceptionSpec : Spek({
         }
 
         it("has no instance of check") {
-            val code = """
+            val code =
+                """
                 fun x() {
                     try {
                     } catch(e: Exception) {
@@ -62,7 +65,8 @@ class InstanceOfCheckForExceptionSpec : Spek({
         }
 
         it("has no checks for the subtype of an exception") {
-            val code = """
+            val code =
+                """
                 interface I
                 
                 fun foo() {

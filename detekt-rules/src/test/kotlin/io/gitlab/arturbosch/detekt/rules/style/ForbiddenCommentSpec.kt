@@ -52,7 +52,8 @@ class ForbiddenCommentSpec : Spek({
             }
 
             it("should report violation in multiline comment") {
-                val code = """
+                val code =
+                    """
                    /*
                     TODO: I need to fix this.
                     */
@@ -62,7 +63,8 @@ class ForbiddenCommentSpec : Spek({
             }
 
             it("should report violation in KDoc") {
-                val code = """
+                val code =
+                    """
                     /*
                      * TODO: I need to fix this.
                      */
@@ -77,7 +79,8 @@ class ForbiddenCommentSpec : Spek({
 
             listOf(
                 TestConfig(mapOf(ForbiddenComment.VALUES to "Banana")),
-                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana"))))
+                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana")))
+            )
                 .forEach { config ->
                     val banana = "// Banana."
 

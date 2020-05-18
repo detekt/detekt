@@ -12,8 +12,12 @@ import java.nio.file.Paths
 class KtTreeCompilerSpec : Spek({
 
     fun fixture(vararg filters: String): KtTreeCompiler =
-        KtTreeCompiler(settings = createProcessingSettings(path,
-            pathFilters = PathFilters.of(emptyList(), filters.toList())))
+        KtTreeCompiler(
+            settings = createProcessingSettings(
+                path,
+                pathFilters = PathFilters.of(emptyList(), filters.toList())
+            )
+        )
 
     describe("tree compiler functionality") {
 

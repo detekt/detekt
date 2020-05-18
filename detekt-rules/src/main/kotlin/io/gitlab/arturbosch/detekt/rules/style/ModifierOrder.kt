@@ -52,29 +52,31 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  */
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Modifiers are not in the correct order.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Modifiers are not in the correct order.",
+        Debt.FIVE_MINS
+    )
 
     // subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
     private val order = arrayOf(
-            PUBLIC_KEYWORD, PROTECTED_KEYWORD, PRIVATE_KEYWORD, INTERNAL_KEYWORD,
-            EXPECT_KEYWORD, ACTUAL_KEYWORD,
-            FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD, SEALED_KEYWORD, CONST_KEYWORD,
-            EXTERNAL_KEYWORD,
-            OVERRIDE_KEYWORD,
-            LATEINIT_KEYWORD,
-            TAILREC_KEYWORD,
-            VARARG_KEYWORD,
-            SUSPEND_KEYWORD,
-            INNER_KEYWORD,
-            ENUM_KEYWORD, ANNOTATION_KEYWORD,
-            COMPANION_KEYWORD,
-            INLINE_KEYWORD,
-            INFIX_KEYWORD,
-            OPERATOR_KEYWORD,
-            DATA_KEYWORD
+        PUBLIC_KEYWORD, PROTECTED_KEYWORD, PRIVATE_KEYWORD, INTERNAL_KEYWORD,
+        EXPECT_KEYWORD, ACTUAL_KEYWORD,
+        FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD, SEALED_KEYWORD, CONST_KEYWORD,
+        EXTERNAL_KEYWORD,
+        OVERRIDE_KEYWORD,
+        LATEINIT_KEYWORD,
+        TAILREC_KEYWORD,
+        VARARG_KEYWORD,
+        SUSPEND_KEYWORD,
+        INNER_KEYWORD,
+        ENUM_KEYWORD, ANNOTATION_KEYWORD,
+        COMPANION_KEYWORD,
+        INLINE_KEYWORD,
+        INFIX_KEYWORD,
+        OPERATOR_KEYWORD,
+        DATA_KEYWORD
     )
 
     override fun visitModifierList(list: KtModifierList) {
@@ -89,9 +91,16 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
         if (modifiers != sortedModifiers) {
             val modifierString = sortedModifiers.joinToString(" ") { it.text }
 
-            report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,
-                    "Modifier order should be: $modifierString", Debt(mins = 1)), Entity.from(list),
-                    "Modifier order should be: $modifierString"))
+            report(
+                CodeSmell(
+                    Issue(
+                        javaClass.simpleName, Severity.Style,
+                        "Modifier order should be: $modifierString", Debt(mins = 1)
+                    ),
+                    Entity.from(list),
+                    "Modifier order should be: $modifierString"
+                )
+            )
         }
     }
 }

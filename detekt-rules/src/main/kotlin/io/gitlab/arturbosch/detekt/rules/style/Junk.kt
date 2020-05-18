@@ -13,6 +13,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  */
 internal fun findFirstKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? {
     return file.elementsInRange(TextRange.create(offset - line.length, offset))
-            .mapNotNull { it.getNonStrictParentOfType<KtElement>() }
-            .firstOrNull()
+        .mapNotNull { it.getNonStrictParentOfType<KtElement>() }
+        .firstOrNull()
 }

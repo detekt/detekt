@@ -28,15 +28,18 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UnnecessaryTemporaryInstantiation", Severity.Performance,
-            "Avoid temporary objects when converting primitive types to String.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UnnecessaryTemporaryInstantiation", Severity.Performance,
+        "Avoid temporary objects when converting primitive types to String.",
+        Debt.FIVE_MINS
+    )
 
     private val types: Set<String> = hashSetOf("Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double")
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (isPrimitiveWrapperType(expression.calleeExpression) &&
-                isToStringMethod(expression.nextSibling?.nextSibling)) {
+            isToStringMethod(expression.nextSibling?.nextSibling)
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

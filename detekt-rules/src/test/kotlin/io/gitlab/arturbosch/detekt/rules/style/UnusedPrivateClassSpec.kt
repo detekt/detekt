@@ -11,7 +11,8 @@ class UnusedPrivateClassSpec : Spek({
 
     describe("top level interfaces") {
         it("should report them if not used") {
-            val code = """
+            val code =
+                """
                 private interface Foo
                 class Bar
                 """
@@ -27,7 +28,8 @@ class UnusedPrivateClassSpec : Spek({
         describe("top level private classes") {
 
             it("should report them if not used") {
-                val code = """
+                val code =
+                    """
                 private class Foo
                 class Bar
                 """
@@ -41,7 +43,8 @@ class UnusedPrivateClassSpec : Spek({
             }
 
             it("should not report them if used as parent") {
-                val code = """
+                val code =
+                    """
                 private open class Foo
                 private class Bar : Foo()
                 """
@@ -55,7 +58,8 @@ class UnusedPrivateClassSpec : Spek({
             }
 
             it("should not report them used as generic parent type") {
-                val code = """
+                val code =
+                    """
                 class Bar
                 private interface Foo<in T> {
                     operator fun invoke(b: T): Unit
@@ -73,7 +77,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used inside a function") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 fun something() {
                     val foo: Foo = Foo()
@@ -86,7 +91,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as function parameter") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private object Bar {
                   fun bar(foo: Foo) = Unit
@@ -99,7 +105,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as nullable variable type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private val a: Foo? = null
                 """
@@ -110,7 +117,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as variable type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private lateinit var a: Foo
                 """
@@ -121,7 +129,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as generic type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private lateinit var foos: List<Foo>
                 """
@@ -132,7 +141,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as generic type in functions") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private var a = bar<Foo>()
 
@@ -147,7 +157,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as nested generic type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private lateinit var foos: List<List<Foo>>
                 """
@@ -158,7 +169,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as type with generics") {
-            val code = """
+            val code =
+                """
                 private class Foo<T>
                 private lateinit var foos: Foo<String>
                 """
@@ -169,7 +181,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as nullable type with generics") {
-            val code = """
+            val code =
+                """
                 private class Foo<T>
                 private var foos: Foo<String>? = Foo()
                 """
@@ -180,7 +193,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as non-argument constructor") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private val a = Foo()
                 """
@@ -191,7 +205,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as constructor with arguments") {
-            val code = """
+            val code =
+                """
                 private class Foo(val a: String)
                 private val a = Foo("test")
                 """
@@ -202,7 +217,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as function return type") {
-            val code = """
+            val code =
+                """
                 private class Foo(val a: String)
                 private object Bar {
                   fun foo(): Foo? = null
@@ -215,7 +231,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as lambda declaration parameter") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private val lambda: ((Foo) -> Unit)? = null
                 """
@@ -226,7 +243,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as lambda declaration return type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private val lambda: (() -> Foo)? = null
                 """
@@ -237,7 +255,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as lambda declaration generic type") {
-            val code = """
+            val code =
+                """
                 private class Foo
                 private val lambda: (() -> List<Foo>)? = null
                 """
@@ -248,7 +267,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("should not report them if used as inline object type") {
-            val code = """
+            val code =
+                """
                 private abstract class Foo {
                     abstract fun bar()
                 }
@@ -269,7 +289,8 @@ class UnusedPrivateClassSpec : Spek({
     describe("testcase for reported false positives") {
 
         it("does not crash when using wildcards in generics - #1345") {
-            val code = """
+            val code =
+                """
                 import kotlin.reflect.KClass
                 
                 private class Foo
@@ -282,7 +303,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("does not report (companion-)object/named-dot references - #1347") {
-            val code = """
+            val code =
+                """
                     class Test {
                         val items = Item.values().map { it.text }.toList()
                     }
@@ -300,7 +322,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("does not report classes that are used with ::class - #1390") {
-            val code = """
+            val code =
+                """
                     class UnusedPrivateClassTest {
 
                         private data class SomeClass(val name: String)
@@ -323,7 +346,8 @@ class UnusedPrivateClassSpec : Spek({
         }
 
         it("does not report used private annotations - #2093") {
-            val code = """
+            val code =
+                """
                 private annotation class Test1
                 private annotation class Test2
                 private annotation class Test3

@@ -21,10 +21,12 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
     describe("AbsentOrWrongFileLicense rule") {
         context("file with correct license header") {
             it("reports nothing") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     /* LICENSE */
                     package cases
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings).isEmpty()
             }
@@ -32,10 +34,12 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
 
         context("file with incorrect license header") {
             it("reports missed license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     /* WRONG LICENSE */
                     package cases
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings).hasSize(1)
             }
@@ -43,9 +47,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
 
         context("file with absent license header") {
             it("reports missed license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     package cases
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings).hasSize(1)
             }

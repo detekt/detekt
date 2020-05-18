@@ -12,7 +12,8 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
     describe("Duplicate Case In When Expression rule") {
 
         it("reports duplicated label in when") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     when (1) {
                         1 -> println()
@@ -28,7 +29,8 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
         }
 
         it("does not report duplicated label in when") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     when (1) {
                         1 -> println()

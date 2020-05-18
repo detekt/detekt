@@ -33,7 +33,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Style,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-                "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
     )
 

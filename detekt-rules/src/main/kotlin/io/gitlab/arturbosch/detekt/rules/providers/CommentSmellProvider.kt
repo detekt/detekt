@@ -22,7 +22,9 @@ class CommentSmellProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "comments"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 CommentOverPrivateFunction(config),
                 CommentOverPrivateProperty(config),
                 KDocStyle(config),
@@ -30,6 +32,7 @@ class CommentSmellProvider : DefaultRuleSetProvider {
                 UndocumentedPublicFunction(config),
                 UndocumentedPublicProperty(config),
                 AbsentOrWrongFileLicense(config)
-        ))
+            )
+        )
     }
 }

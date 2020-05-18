@@ -22,10 +22,12 @@ val generateDocumentation by tasks.registering {
 
     inputs.files(
         fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
-        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"))
+        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar")
+    )
     outputs.files(
         fileTree("${rootProject.rootDir}/detekt-generator/documentation"),
-        file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
+        file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+    )
 
     doLast {
         javaexec {
@@ -38,7 +40,8 @@ val generateDocumentation by tasks.registering {
                 "--documentation",
                 "${rootProject.rootDir}/docs/pages/documentation",
                 "--config",
-                "${rootProject.rootDir}/detekt-cli/src/main/resources")
+                "${rootProject.rootDir}/detekt-cli/src/main/resources"
+            )
         }
     }
 }
@@ -55,14 +58,18 @@ val verifyGeneratorOutput by tasks.registering {
 fun assertDefaultConfigUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff",
-            "${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+        commandLine = listOf(
+            "git", "diff",
+            "${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
+        )
         standardOutput = configDiff
     }
 
     if (configDiff.toString().isNotEmpty()) {
-        throw GradleException("The default-detekt-config.yml is not up-to-date. " +
-            "You can execute the generateDocumentation Gradle task to update it and commit the changed files.")
+        throw GradleException(
+            "The default-detekt-config.yml is not up-to-date. " +
+                "You can execute the generateDocumentation Gradle task to update it and commit the changed files."
+        )
     }
 }
 
@@ -76,8 +83,10 @@ fun assertDocumentationUpToDate() {
     }
 
     if (configDiff.toString().isNotEmpty()) {
-        throw GradleException("The detekt documentation is not up-to-date. " +
-            "Please build detekt locally to update it and commit the changed files.")
+        throw GradleException(
+            "The detekt documentation is not up-to-date. " +
+                "Please build detekt locally to update it and commit the changed files."
+        )
     }
 }
 

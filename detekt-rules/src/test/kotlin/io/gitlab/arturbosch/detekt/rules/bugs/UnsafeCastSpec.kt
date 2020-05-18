@@ -17,7 +17,8 @@ class UnsafeCastSpec : Spek({
     describe("check safe and unsafe casts") {
 
         it("reports cast that cannot succeed") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     println(s as Int)
                 }"""
@@ -25,7 +26,8 @@ class UnsafeCastSpec : Spek({
         }
 
         it("reports 'safe' cast that cannot succeed") {
-            val code = """
+            val code =
+                """
                 fun test(s: String) {
                     println((s as? Int) ?: 0)
                 }"""
@@ -33,7 +35,8 @@ class UnsafeCastSpec : Spek({
         }
 
         it("does not report cast that might succeed") {
-            val code = """
+            val code =
+                """
                 fun test(s: Any) {
                     println(s as Int)
                 }"""
@@ -41,7 +44,8 @@ class UnsafeCastSpec : Spek({
         }
 
         it("does not report 'safe' cast that might succeed") {
-            val code = """
+            val code =
+                """
                 fun test(s: Any) {
                     println((s as? Int) ?: 0)
                 }"""

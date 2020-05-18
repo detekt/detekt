@@ -19,7 +19,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     describe("Kotlin map") {
 
         it("reports map element access with get method") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mapOf<String, String>() 
                         val value = map.get("key") 
@@ -28,7 +29,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report safe map element access") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mapOf<String, String>() 
                         val value = map?.get("key") 
@@ -37,7 +39,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map put method usage") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
@@ -46,7 +49,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map element access with get method of non-abstract map") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = hashMapOf<String, String>() 
                         val value = map.get("key") 
@@ -55,7 +59,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map element insert with put method of non-abstract map") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = hashMapOf<String, String>() 
                         val value = map.put("key", "value") 
@@ -64,7 +69,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report map access with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mapOf<String, String>()
                         val value = map["key"] 
@@ -73,7 +79,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report map insert with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map["key"] = "value" 
@@ -82,7 +89,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map element access with get method from map in a chain") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = mapOf<String, String>()
                         val value = listOf("1", "2").associateBy { it }.get("1")
@@ -91,7 +99,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map element access with get method from non-abstract map") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = linkedMapOf<String, String>()
                         val value = map.get("key") 
@@ -102,7 +111,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
 
     describe("Kotlin list") {
         it("reports list element access with get method") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = listOf<String>() 
                         val value = list.get(0) 
@@ -111,7 +121,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports mutable list element access with get method") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = mutableListOf<String>()
                         val value = list.get(0) 
@@ -120,7 +131,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report element access with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = listOf<String>() 
                         val value = list[0] 
@@ -129,7 +141,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports element access with get method of non-abstract list") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = arrayListOf<String>() 
                         val value = list.get(0) 
@@ -141,7 +154,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     describe("Java map") {
 
         it("reports map element access with get method") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = map.get("key") 
@@ -150,7 +164,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map put method usage") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         map.put("key", "val") 
@@ -159,7 +174,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report map access with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = map["key"] 
@@ -168,7 +184,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report map insert with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         map["key"] = "value" 
@@ -177,7 +194,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("reports map element access with get method from map in a chain") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = listOf("1", "2").associateBy { it }.get("1") 
@@ -189,7 +207,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     describe("Java list") {
 
         it("reports list element access with get method") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = java.util.ArrayList<String>() 
                         val value = list.get(0) 
@@ -198,7 +217,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
 
         it("does not report element access with []") {
-            val code = """
+            val code =
+                """
                     fun f() {
                         val list = java.util.ArrayList<String>() 
                         val value = list[0] 
@@ -210,7 +230,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     describe("getters") {
 
         it("does not crash for getter") {
-            val code = """
+            val code =
+                """
                 class A {
                     val i: Int get() = 1 + 2
                     val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
@@ -223,7 +244,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     describe("fluent api doesn't crash") {
 
         it("does not crash for fluent api") {
-            val code = """
+            val code =
+                """
                 val string = ""
                     .toString()
             """

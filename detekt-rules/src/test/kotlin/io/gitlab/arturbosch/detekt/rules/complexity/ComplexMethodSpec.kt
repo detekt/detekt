@@ -19,30 +19,35 @@ class ComplexMethodSpec : Spek({
         context("different complex constructs") {
 
             it("counts different loops") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         for (i in 1..10) {}
                         while (true) {}
                         do {} while(true)
                         (1..10).forEach {}
                     }
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
 
             it("counts catch blocks") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
                     }
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
             }
 
             it("counts nested conditional statements") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         try {
                             while (true) {
@@ -57,7 +62,8 @@ class ComplexMethodSpec : Spek({
                             // only catches count
                         }
                     }
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
@@ -65,11 +71,12 @@ class ComplexMethodSpec : Spek({
 
         context("nesting functions") {
 
-            val code = """
-                    fun test() {
-                        for (i in 1..10) {}
-                        (1..10).forEach {}
-                    }
+            val code =
+                """
+                fun test() {
+                    for (i in 1..10) {}
+                    (1..10).forEach {}
+                }
                 """.trimIndent()
 
             fun execute(config: TestConfig, expectedValue: Int) {
@@ -114,8 +121,11 @@ class ComplexMethodSpec : Spek({
             val path = Case.ComplexMethods.path()
 
             it("does not report complex methods with a single when expression") {
-                val config = TestConfig(mapOf(
-                    ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
+                val config = TestConfig(
+                    mapOf(
+                        ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"
+                    )
+                )
                 val subject = ComplexMethod(config, threshold = 4)
 
                 assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(43, 5))
@@ -136,7 +146,8 @@ class ComplexMethodSpec : Spek({
             it("does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true") {
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
                 val subject = ComplexMethod(config)
-                val code = """
+                val code =
+                    """
                      fun f() {
                         val map = HashMap<Any, String>()
                         for ((key, value) in map) {
@@ -162,7 +173,8 @@ class ComplexMethodSpec : Spek({
 
         context("function containing object literal with many overridden functions") {
 
-            val code = """
+            val code =
+                """
             fun f(): List<Any> {
                 return object : List<Any> {
                     override val size: Int get() = TODO("not implemented")

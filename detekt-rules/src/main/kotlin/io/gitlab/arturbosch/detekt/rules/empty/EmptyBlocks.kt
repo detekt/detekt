@@ -48,21 +48,21 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
     private val emptyWhileBlock = EmptyWhileBlock(config)
 
     override val rules: List<Rule> = listOf(
-            emptyCatchBlock,
-            emptyClassBlock,
-            emptyDefaultConstructor,
-            emptyDoWhileBlock,
-            emptyElseBlock,
-            emptyFinallyBlock,
-            emptyForBlock,
-            emptyFunctionBlock,
-            emptyIfBlock,
-            emptyInitBlock,
-            emptyKtFile,
-            emptySecondaryConstructorBlock,
-            emptyTryBlock,
-            emptyWhenBlock,
-            emptyWhileBlock
+        emptyCatchBlock,
+        emptyClassBlock,
+        emptyDefaultConstructor,
+        emptyDoWhileBlock,
+        emptyElseBlock,
+        emptyFinallyBlock,
+        emptyForBlock,
+        emptyFunctionBlock,
+        emptyIfBlock,
+        emptyInitBlock,
+        emptyKtFile,
+        emptySecondaryConstructorBlock,
+        emptyTryBlock,
+        emptyWhenBlock,
+        emptyWhileBlock
     )
 
     override fun visitKtFile(file: KtFile) {

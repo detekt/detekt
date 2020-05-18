@@ -12,7 +12,8 @@ class MandatoryBracesLoopsSpec : Spek({
     describe("MandatoryBracesLoops rule for `for` loops") {
 
         it("does not report with braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) {
                     println(i)
@@ -24,7 +25,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report full loop on single line") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) println(i)
             }
@@ -34,7 +36,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report full loop on single line with multiple statements") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) println(i); print(' ')
             }
@@ -44,7 +47,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports multi-line without braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10)
                     println(i)
@@ -59,7 +63,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report on suppression") {
-            val code = """
+            val code =
+                """
             fun test() {
                 @Suppress("MandatoryBracesLoops")
                 for (i in 0..10)
@@ -71,7 +76,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops with braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) {
                     for (j in 0..10) {
@@ -85,7 +91,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops on single line") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) for (j in 0..10) println()
             }
@@ -95,7 +102,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop outer") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) 
                     for (j in 0..10) {
@@ -112,7 +120,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop inner") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10) {
                     for (j in 0..10)
@@ -128,7 +137,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports both violations in nested loop") {
-            val code = """
+            val code =
+                """
             fun test() {
                 for (i in 0..10)
                     for (j in 0..10)
@@ -147,7 +157,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports with multi-line if statement") {
-            val code = """
+            val code =
+                """
             fun test() {
                 // because if statements are expressions, this code properly prints "Odd" and "Even" 
                 for (i in 0..10) 
@@ -167,7 +178,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports inside of if statement without braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 // this if statement would also be reported, but we're only checking the loop
                 val i = 2
@@ -191,7 +203,8 @@ class MandatoryBracesLoopsSpec : Spek({
     describe("MandatoryBracesLoops rule for `while` loops") {
 
         it("does not report with braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 while(true) {
                     println()
@@ -203,7 +216,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report full loop on single line") {
-            val code = """
+            val code =
+                """
             fun test() {
                 while(true) println()
             }
@@ -213,7 +227,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports multi-line without braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 while (true)
                     println()
@@ -228,7 +243,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report on suppression") {
-            val code = """
+            val code =
+                """
             fun test() {
                 @Suppress("MandatoryBracesLoops")
                 while(true)
@@ -240,7 +256,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop inner") {
-            val code = """
+            val code =
+                """
             fun test() {
                 while (true) {
                     while (true)
@@ -259,7 +276,8 @@ class MandatoryBracesLoopsSpec : Spek({
     describe("MandatoryBracesLoops rule for `do while` loops") {
 
         it("does not report with braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 do {
                     println()
@@ -271,7 +289,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report full loop on single line") {
-            val code = """
+            val code =
+                """
             fun test() {
                 do println() while(true)
             }
@@ -281,7 +300,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports multi-line without braces") {
-            val code = """
+            val code =
+                """
             fun test() {
                 do
                     println()
@@ -297,7 +317,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report on suppression") {
-            val code = """
+            val code =
+                """
             fun test() {
                 @Suppress("MandatoryBracesLoops")
                 do
@@ -310,7 +331,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops with braces") {
-            val code = """		
+            val code =
+                """		
             fun test() {		
                 do {		
                     while (true) {		
@@ -324,7 +346,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops on single line") {
-            val code = """		
+            val code =
+                """		
             fun test() {		
                 var i = 0
                 do do i += 1 while(i < 5) while (i < 5)	
@@ -335,7 +358,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop outer") {
-            val code = """		
+            val code =
+                """		
             fun test() {		
                 do 		
                     do {		
@@ -353,7 +377,8 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop inner") {
-            val code = """
+            val code =
+                """
             fun test() {
                 do {
                     do

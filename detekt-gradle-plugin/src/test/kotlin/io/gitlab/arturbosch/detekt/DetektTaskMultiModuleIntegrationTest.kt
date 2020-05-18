@@ -15,15 +15,18 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
 
             describe("using ${builder.gradleBuildName}") {
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to all subprojects individually
                     |without sources in root project using the subprojects block
-                """.trimMargin()) {
+                """.trimMargin()
+                ) {
                     val projectLayout = ProjectLayout(0)
                         .withSubmodule("child1", 2)
                         .withSubmodule("child2", 4)
 
-                    val mainBuildFileContent: String = """
+                    val mainBuildFileContent: String =
+                        """
                         |${builder.gradlePluginsSection}
                         |
                         |allprojects {
@@ -54,15 +57,18 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                     }
                 }
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to main project
                     |and subprojects individually using the allprojects block
-                """.trimMargin()) {
+                """.trimMargin()
+                ) {
                     val projectLayout = ProjectLayout(1)
                         .withSubmodule("child1", 2)
                         .withSubmodule("child2", 4)
 
-                    val mainBuildFileContent: String = """
+                    val mainBuildFileContent: String =
+                        """
                         |${builder.gradlePluginsSection}
                         |
                         |allprojects {
@@ -96,7 +102,8 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                         .withSubmodule("child1", 2)
                         .withSubmodule("child2", 4)
 
-                    val mainBuildFileContent: String = """
+                    val mainBuildFileContent: String =
+                        """
                         |${builder.gradlePluginsSection}
                         |
                         |allprojects {
@@ -129,7 +136,8 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                 }
 
                 it("allows changing defaults in allprojects block that can be overwritten in subprojects") {
-                    val child2DetektConfig = """
+                    val child2DetektConfig =
+                        """
                         |detekt {
                         |   reportsDir = file("build/custom")
                         |}
@@ -139,7 +147,8 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                         .withSubmodule("child1", 2)
                         .withSubmodule("child2", 4, detektConfig = child2DetektConfig)
 
-                    val mainBuildFileContent: String = """
+                    val mainBuildFileContent: String =
+                        """
                         |${builder.gradlePluginsSection}
                         |
                         |allprojects {
@@ -178,7 +187,8 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                         .withSubmodule("child1", 2)
                         .withSubmodule("child2", 4)
 
-                    val detektConfig: String = """
+                    val detektConfig: String =
+                        """
                         |detekt {
                         |    input = files(
                         |       "${"$"}projectDir/src",

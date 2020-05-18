@@ -42,7 +42,8 @@ class UtilityClassWithPublicConstructorSpec : Spek({
         context("annotations class") {
 
             it("should not get triggered for utility class") {
-                val code = """
+                val code =
+                    """
                 @Retention(AnnotationRetention.SOURCE)
                 @StringDef(
                     Gender.MALE,

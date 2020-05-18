@@ -14,7 +14,8 @@ class OptionalUnitSpec : Spek({
 
         context("several functions which return Unit") {
 
-            val code = """
+            val code =
+                """
                 fun returnsUnit1(): Unit {
                     fun returnsUnitNested(): Unit {
                         return Unit
@@ -37,7 +38,8 @@ class OptionalUnitSpec : Spek({
             it("should report the correct violation message") {
                 findings.forEach {
                     assertThat(it.message).endsWith(
-                        " defines a return type of Unit. This is unnecessary and can safely be removed.")
+                        " defines a return type of Unit. This is unnecessary and can safely be removed."
+                    )
                 }
             }
         }
@@ -45,7 +47,8 @@ class OptionalUnitSpec : Spek({
         context("an overridden function which returns Unit") {
 
             it("should not report Unit return type in overridden function") {
-                val code = """
+                val code =
+                    """
                     interface I {
                         fun returnsUnit()
                     }
@@ -60,7 +63,8 @@ class OptionalUnitSpec : Spek({
 
         context("several lone Unit statements") {
 
-            val code = """
+            val code =
+                """
                 fun returnsNothing() {
                     Unit
                     val i: (Int) -> Unit = { _ -> Unit }
@@ -95,7 +99,8 @@ class OptionalUnitSpec : Spek({
         context("several Unit references") {
 
             it("should not report Unit reference") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                     fun returnsNothing(u: Unit, us: () -> String) {
                         val u1 = u is Unit
                         val u2: Unit = Unit
@@ -103,14 +108,16 @@ class OptionalUnitSpec : Spek({
                         Unit.equals(null)
                         val i: (Int) -> Unit = { _ -> }
                     }
-                """)
+                """
+                )
                 assertThat(findings).isEmpty()
             }
         }
 
         context("a default interface implementation") {
             it("should not report Unit as part of default interface implementations") {
-                val code = """
+                val code =
+                    """
                     interface Foo {
                         fun method(i: Int) = Unit
                     }

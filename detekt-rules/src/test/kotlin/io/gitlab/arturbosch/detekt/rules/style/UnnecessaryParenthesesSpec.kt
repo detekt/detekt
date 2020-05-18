@@ -27,7 +27,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("unnecessary parentheses in other parentheses") {
-            val code = """
+            val code =
+                """
                 fun x(a: String, b: String) {
                     if ((a equals b)) {
                         println("Test")
@@ -37,7 +38,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("does not report unnecessary parentheses around lambdas") {
-            val code = """
+            val code =
+                """
                 fun function (a: (input: String) -> Unit) {
                     a.invoke("TEST")
                 }
@@ -50,7 +52,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("doesn't report function calls containing lambdas and other parameters") {
-            val code = """
+            val code =
+                """
                 fun function (integer: Int, a: (input: String) -> Unit) {
                     a.invoke("TEST")
                 }
@@ -63,7 +66,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("does not report unnecessary parentheses when assigning a lambda to a val") {
-            val code = """
+            val code =
+                """
                 fun f() {
                     instance.copy(value = { false })
                 }"""
@@ -71,7 +75,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("does not report well behaved parentheses") {
-            val code = """
+            val code =
+                """
                 fun x(a: String, b: String) {
                     if (a equals b) {
                         println("Test")
@@ -81,7 +86,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("does not report well behaved parentheses in super constructors") {
-            val code = """
+            val code =
+                """
                 class TestSpek : SubjectSpek({
                     describe("a simple test") {
                         it("should do something") {
@@ -93,7 +99,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("does not report well behaved parentheses in constructors") {
-            val code = """
+            val code =
+                """
                 class TestSpek({
                     describe("a simple test") {
                         it("should do something") {
@@ -105,7 +112,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("should not report lambdas within super constructor calls") {
-            val code = """
+            val code =
+                """
                 class Clazz(
                     private val func: (X, Y) -> Z
                 ) {
@@ -116,7 +124,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("should not report call to function with two lambda parameters with one as block body") {
-            val code = """
+            val code =
+                """
                 class Clazz {
                     fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
                         first(1)
@@ -132,7 +141,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("should not report call to function with two lambda parameters") {
-            val code = """
+            val code =
+                """
                 class Clazz {
                     fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
                         first(1)
@@ -148,7 +158,8 @@ class UnnecessaryParenthesesSpec : Spek({
         }
 
         it("should not report call to function with multiple lambdas as parameters but also other parameters") {
-            val code = """
+            val code =
+                """
                 class Clazz {
                     fun test(text: String, first: () -> Unit, second: () -> Unit) {
                         first()

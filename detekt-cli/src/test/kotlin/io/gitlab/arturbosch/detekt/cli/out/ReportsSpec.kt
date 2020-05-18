@@ -74,13 +74,21 @@ internal class ReportsSpec : Spek({
             }
 
             it("should recognize custom output format") {
-                assertThat(reports).haveExactly(1,
-                    Condition(Predicate { it.kind == reportUnderTest },
-                        "Corresponds exactly to the test output report."))
+                assertThat(reports).haveExactly(
+                    1,
+                    Condition(
+                        Predicate { it.kind == reportUnderTest },
+                        "Corresponds exactly to the test output report."
+                    )
+                )
 
-                assertThat(extensions).haveExactly(1,
-                    Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
-                        "Is exactly the test output report."))
+                assertThat(extensions).haveExactly(
+                    1,
+                    Condition(
+                        Predicate { it is TestOutputReport && it.ending == "yml" },
+                        "Is exactly the test output report."
+                    )
+                )
             }
         }
 

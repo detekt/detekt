@@ -12,7 +12,8 @@ class WrongEqualsTypeParameterSpec : Spek({
     describe("WrongEqualsTypeParameter rule") {
 
         it("does not report Any? as parameter") {
-            val code = """
+            val code =
+                """
                 class A {
                     override fun equals(other: Any?): Boolean {
                         return super.equals(other)
@@ -22,7 +23,8 @@ class WrongEqualsTypeParameterSpec : Spek({
         }
 
         it("reports a String as parameter") {
-            val code = """
+            val code =
+                """
                 class A {
                     fun equals(other: String): Boolean {
                         return super.equals(other)
@@ -32,7 +34,8 @@ class WrongEqualsTypeParameterSpec : Spek({
         }
 
         it("does not report equals() with an additional parameter") {
-            val code = """
+            val code =
+                """
                 class A {
                     fun equals(other: Any?, i: Int): Boolean {
                         return super.equals(other)
@@ -42,7 +45,8 @@ class WrongEqualsTypeParameterSpec : Spek({
         }
 
         it("does not report an overridden equals() with a different signature") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun equals(other: Any?, i: Int): Boolean
                     fun equals(): Boolean
@@ -59,7 +63,8 @@ class WrongEqualsTypeParameterSpec : Spek({
         }
 
         it("does not report an interface declaration") {
-            val code = """
+            val code =
+                """
                 interface I {
                     fun equals(other: String)
                 }"""
@@ -67,7 +72,8 @@ class WrongEqualsTypeParameterSpec : Spek({
         }
 
         it("does not report top level functions") {
-            val code = """
+            val code =
+                """
                 fun equals(other: String) {}
                 fun equals(other: Any?) {}
                 """

@@ -31,7 +31,8 @@ class MultiRuleCollectorSpec : Spek({
         }
 
         it("collects all rules in fields and in the rule property") {
-            val code = """
+            val code =
+                """
                 class MyRule : MultiRule {
                     val p1 = Rule3()
                     val p2 = Rule4()

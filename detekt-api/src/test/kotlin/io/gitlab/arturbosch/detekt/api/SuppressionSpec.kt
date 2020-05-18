@@ -22,7 +22,8 @@ internal class SuppressionSpec : Spek({
     describe("detekt findings can be suppressed with @Suppress or @SuppressWarnings") {
 
         fun checkSuppression(annotation: String, argument: String): Boolean {
-            val annotated = """
+            val annotated =
+                """
             @$annotation("$argument")
             class Test {}
              """
@@ -132,7 +133,8 @@ internal class SuppressionSpec : Spek({
         }
 
         it("rule should be suppressed by detekt prefix in uppercase with dot separator") {
-            val ktFile = compileContentForTest("""
+            val ktFile = compileContentForTest(
+                """
             @file:Suppress("Detekt.ALL")
             object SuppressedWithDetektPrefix {
 
@@ -140,14 +142,16 @@ internal class SuppressionSpec : Spek({
                     println("FAILED TEST")
                 }
             }
-            """)
+            """
+            )
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }
 
         it("rule should be suppressed by detekt prefix in lowercase with colon separator") {
-            val ktFile = compileContentForTest("""
+            val ktFile = compileContentForTest(
+                """
             @file:Suppress("detekt:ALL")
             object SuppressedWithDetektPrefix {
 
@@ -155,14 +159,16 @@ internal class SuppressionSpec : Spek({
                     println("FAILED TEST")
                 }
             }
-            """)
+            """
+            )
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }
 
         it("rule should be suppressed by detekt prefix in all caps with colon separator") {
-            val ktFile = compileContentForTest("""
+            val ktFile = compileContentForTest(
+                """
             @file:Suppress("DETEKT:ALL")
             object SuppressedWithDetektPrefix {
 
@@ -170,7 +176,8 @@ internal class SuppressionSpec : Spek({
                     println("FAILED TEST")
                 }
             }
-            """)
+            """
+            )
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
@@ -180,7 +187,8 @@ internal class SuppressionSpec : Spek({
     describe("suppression based on aliases from config property") {
 
         it("allows to declare") {
-            val ktFile = compileContentForTest("""
+            val ktFile = compileContentForTest(
+                """
             @file:Suppress("detekt:MyTest")
             object SuppressedWithDetektPrefixAndCustomConfigBasedPrefix {
 
@@ -188,7 +196,8 @@ internal class SuppressionSpec : Spek({
                     println("FAILED TEST")
                 }
             }
-            """)
+            """
+            )
             val rule = TestRule(TestConfig(mutableMapOf("aliases" to "[MyTest]")))
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
@@ -197,9 +206,10 @@ internal class SuppressionSpec : Spek({
 
     describe("suppression's via rule set id") {
 
-        val code = """
+        val code =
+            """
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
-        """.trimIndent()
+            """.trimIndent()
         val config = yamlConfig("ruleset-suppression.yml").subConfig("complexity")
 
         it("reports without a suppression") {

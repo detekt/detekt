@@ -46,8 +46,10 @@ data class Location(
         fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
             return try {
                 val range = element.textRange
-                DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
-                    TextRange(range.startOffset + offset, range.endOffset + offset))
+                DiagnosticUtils.getLineAndColumnInPsiFile(
+                    element.containingFile,
+                    TextRange(range.startOffset + offset, range.endOffset + offset)
+                )
             } catch (e: IndexOutOfBoundsException) {
                 // #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)

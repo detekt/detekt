@@ -199,18 +199,20 @@ open class Detekt : SourceTask(), VerificationTask {
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
-        arguments.addAll(customReports.get().map {
-            val reportId = it.reportIdProp.orNull
-            val destination = it.destinationProperty.orNull
+        arguments.addAll(
+            customReports.get().map {
+                val reportId = it.reportIdProp.orNull
+                val destination = it.destinationProperty.orNull
 
-            checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
-            check(!DetektReportType.isWellKnownReportId(reportId)) {
-                "The custom report reportId may not be same as one of the default reports"
+                checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
+                check(!DetektReportType.isWellKnownReportId(reportId)) {
+                    "The custom report reportId may not be same as one of the default reports"
+                }
+                checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
+
+                CustomReportArgument(reportId, destination)
             }
-            checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
-
-            CustomReportArgument(reportId, destination)
-        })
+        )
 
         DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),

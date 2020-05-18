@@ -41,7 +41,8 @@ class EmptyBlocksMultiRuleSpec : Spek({
         }
 
         it("reports no duplicated findings - issue #1605") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLint(
+                """
                 class EmptyBlocks {
                     class EmptyClass {}
                     fun exceptionHandling() {
@@ -51,7 +52,8 @@ class EmptyBlocksMultiRuleSpec : Spek({
                         }
                     }
                 }
-            """)
+            """
+            )
             assertThat(findings).hasSize(2)
         }
     }
