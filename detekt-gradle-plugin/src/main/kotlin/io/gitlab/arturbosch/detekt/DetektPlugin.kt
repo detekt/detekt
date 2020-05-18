@@ -35,8 +35,6 @@ class DetektPlugin : Plugin<Project> {
         registerDetektTasks(project, extension)
         registerCreateBaselineTask(project, extension)
         registerGenerateConfigTask(project)
-
-        registerIdeaTasks(project, extension)
     }
 
     private fun registerDetektTasks(project: Project, extension: DetektExtension) {
@@ -114,22 +112,6 @@ class DetektPlugin : Plugin<Project> {
     private fun registerGenerateConfigTask(project: Project) =
         project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 
-    private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
-        project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-            it.ideaExtension = extension.idea
-        }
-
-        project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-            it.ideaExtension = extension.idea
-        }
-    }
-
     private fun existingInputDirectoriesProvider(
         project: Project,
         extension: DetektExtension
@@ -172,8 +154,6 @@ class DetektPlugin : Plugin<Project> {
 
     companion object {
         private const val DETEKT_TASK_NAME = "detekt"
-        private const val IDEA_FORMAT = "detektIdeaFormat"
-        private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
         private const val BASELINE = "detektBaseline"
         private val defaultExcludes = listOf("build/")
