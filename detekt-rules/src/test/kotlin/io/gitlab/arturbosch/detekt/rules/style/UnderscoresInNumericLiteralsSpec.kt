@@ -134,7 +134,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
     describe("an annotation with numeric literals 0 and 10") {
         val code = "fun setCustomDimension(@IntRange(from = 0, to = 10) index: Int, value: String?) {}"
-        
+
         it("should not be reported") {
             val findings = UnderscoresInNumericLiterals().lint(code)
             assertThat(findings).isEmpty()

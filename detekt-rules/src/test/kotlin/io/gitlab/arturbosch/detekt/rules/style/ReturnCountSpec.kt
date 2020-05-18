@@ -56,7 +56,6 @@ class ReturnCountSpec : Spek({
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
-
         }
 
         context("too-complicated if does not count as a guard clause") {
@@ -89,10 +88,7 @@ class ReturnCountSpec : Spek({
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
-
         }
-
-
 
         context("a file with an ELVIS operator guard clause and 2 returns") {
             val code = """
