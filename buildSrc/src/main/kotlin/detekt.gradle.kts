@@ -1,7 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.idea.DetektIdeaFormatTask
-import io.gitlab.arturbosch.detekt.idea.DetektIdeaInspectionTask
 
 plugins {
     id("io.gitlab.arturbosch.detekt")
@@ -98,22 +96,4 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     exclude(resourceFiles)
     exclude(buildFiles)
     baseline.set(baselineFile)
-}
-
-val userHome: String = System.getProperty("user.home")
-
-val detektIdeaInspect by tasks.registering(DetektIdeaInspectionTask::class) {
-    projectDirectory = file(project.rootDir.resolve("detekt-core/src"))
-    ideaDirectory = file("$userHome/.idea")
-    codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-    inspectionsProfile = "$userHome/.idea/inspect.xml"
-    report = file("${rootProject.buildDir}/reports")
-}
-
-val detektIdeaFormat by tasks.registering(DetektIdeaFormatTask::class) {
-    projectDirectory = file(project.rootDir)
-    ideaDirectory = file("$userHome/.idea")
-    codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-    inspectionsProfile = "$userHome/.idea/inspect.xml"
-    report = file("${rootProject.buildDir}/reports")
 }
