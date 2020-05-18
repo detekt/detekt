@@ -68,7 +68,6 @@ private fun KtCallExpression.receiverIsUnused(context: BindingContext): Boolean 
     } ?: false
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
-
     fun KtExpression.notAnAssignment() =
         safeAs<KtBinaryExpression>()
             ?.operationToken != KtTokens.EQ

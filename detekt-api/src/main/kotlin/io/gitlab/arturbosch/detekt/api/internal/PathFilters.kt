@@ -29,7 +29,6 @@ class PathFilters internal constructor(
     }
 
     fun isIgnored(path: Path): Boolean {
-
         fun isIncluded() = includes?.any { it.matches(path) }
         fun isExcluded() = excludes?.any { it.matches(path) }
 

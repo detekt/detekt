@@ -93,7 +93,6 @@ class ComplexCondition(
     }
 
     private fun frequency(source: String, part: String): Int {
-
         if (source.isEmpty() || part.isEmpty()) {
             return 0
         }

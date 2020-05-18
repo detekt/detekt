@@ -6,4 +6,7 @@ formatting:
     active: false
   Indentation:
     active: true
-    autoCorrect: true
+  NoEmptyFirstLineInMethodBlock:
+    active: true
+  AnnotationOnSeparateLine:
+    active: true

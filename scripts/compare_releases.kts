@@ -1,5 +1,5 @@
 // kotlinc throws a "const is only allowed for top level properties" for unknown reasons
-@file:Suppress("detekt.VariableNaming")
+@file:Suppress("detekt.VariableNaming", "AnnotationOnSeparateLine")
 
 import java.nio.file.Files
 import java.nio.file.Path

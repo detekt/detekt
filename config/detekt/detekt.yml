@@ -1,10 +1,6 @@
 build:
   maxIssues: 1
 
-# can be removed after 1.7.0 is published
-config:
-  excludes: 'complexity>ComplexInterface>includePrivateDeclarations'
-
 comments:
   CommentOverPrivateProperty:
     active: true
@@ -61,6 +57,10 @@ formatting:
   MaximumLineLength:
     active: false
   Indentation:
+    active: true
+  NoEmptyFirstLineInMethodBlock:
+    active: true
+  AnnotationOnSeparateLine:
     active: true
 
 naming:

@@ -24,7 +24,6 @@ fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression
 }
 
 fun KtExpression.isGuardClause(): Boolean {
-
     fun isIfConditionGuardClause(returnExpr: KtReturnExpression): Boolean {
         val ifExpr = this as? KtIfExpression
             ?: return false

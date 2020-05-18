@@ -25,7 +25,6 @@ open class DetektGenerateConfigTask : DefaultTask() {
 
     @TaskAction
     fun generateConfig() {
-
         val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
         val config = project.files("${configDir.canonicalPath}/$CONFIG_FILE")
 

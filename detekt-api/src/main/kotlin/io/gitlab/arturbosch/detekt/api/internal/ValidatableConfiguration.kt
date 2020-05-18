@@ -51,7 +51,6 @@ fun validateConfig(
 
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {
         for (prop in current.keys) {
-
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
 
             val matchedDeprecation = DEPRECATED_PROPERTIES

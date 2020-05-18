@@ -14,7 +14,6 @@ data class ProjectLayout(
         detektConfig: String? = null,
         srcDirs: List<String> = this.srcDirs
     ): ProjectLayout {
-
         val submodule = Submodule(
             name = name,
             numberOfSourceFilesPerSourceDir = numberOfSourceFilesPerSourceDir,
