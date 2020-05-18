@@ -8,6 +8,7 @@ import java.io.PrintStream
 import java.lang.reflect.InvocationTargetException
 
 internal interface DetektInvoker {
+
     fun invokeCli(
         arguments: List<CliArgument>,
         classpath: FileCollection,
@@ -20,7 +21,7 @@ internal interface DetektInvoker {
             if (project.isDryRunEnabled()) {
                 DryRunInvoker(project)
             } else {
-                DefaultCliInvoker(project)
+                DefaultCliInvoker()
             }
 
         private fun Project.isDryRunEnabled(): Boolean {
@@ -31,7 +32,7 @@ internal interface DetektInvoker {
     }
 }
 
-private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
+private class DefaultCliInvoker : DetektInvoker {
 
     override fun invokeCli(
         arguments: List<CliArgument>,
