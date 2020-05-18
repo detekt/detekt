@@ -4,3 +4,6 @@ formatting:
   autoCorrect: true
   MaximumLineLength:
     active: false
+  Indentation:
+    active: true
+    autoCorrect: true
