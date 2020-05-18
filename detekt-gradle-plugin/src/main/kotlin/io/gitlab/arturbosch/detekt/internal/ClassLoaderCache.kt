@@ -14,14 +14,21 @@ object ClassLoaderCache {
 
         if (lastClasspath == null) {
             cache(classpath)
-        } else {
-            if (!lastClasspath.minus(classpath).isEmpty) {
-                DefaultGroovyMethodsSupport.closeQuietly(lastLoader)
-                cache(classpath)
-            }
+        } else if (hasClasspathChanged(lastClasspath, classpath)) {
+            DefaultGroovyMethodsSupport.closeQuietly(lastLoader)
+            cache(classpath)
         }
 
         return loaderAndClasspath?.first ?: error("Cached or newly created detekt classloader expected.")
+    }
+
+    internal fun hasClasspathChanged(lastClasspath: FileCollection, currentClasspath: FileCollection): Boolean {
+        if (lastClasspath.files.size != currentClasspath.files.size) {
+            return true
+        }
+        return lastClasspath.sorted()
+            .zip(currentClasspath.sorted())
+            .any { (last, current) -> last != current || last.lastModified() != current.lastModified() }
     }
 
     private fun cache(classpath: FileCollection) {
