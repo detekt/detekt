@@ -37,6 +37,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
+import java.util.LinkedList
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
@@ -85,19 +86,32 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
     )
 
     override fun visit(root: KtFile) {
-        val sortedRules = activeRules.sortedBy { it.lastModifier() }
+        val sortedRules = getSortedRules()
         sortedRules.forEach { it.visit(root) }
         root.node.visitTokens { node ->
-            sortedRules.forEach { rule ->
-                (rule as? FormattingRule)?.runIfActive { this.apply(node) }
-            }
+            sortedRules.forEach { it.apply(node) }
         }
     }
 
-    private fun Rule.lastModifier(): Boolean {
-        val rule = (this as? FormattingRule)?.wrapping ?: return false
-        return rule is com.pinterest.ktlint.core.Rule.Modifier.Last ||
-            rule is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
+    private fun getSortedRules(): List<FormattingRule> {
+        val runFirstOnRoot = mutableListOf<FormattingRule>()
+        val other = mutableListOf<FormattingRule>()
+        val runLastOnRoot = mutableListOf<FormattingRule>()
+        val runLast = mutableListOf<FormattingRule>()
+        for (rule in activeRules.filterIsInstance<FormattingRule>()) {
+            when (rule.wrapping) {
+                is Last -> runLast.add(rule)
+                is RestrictToRoot -> runFirstOnRoot.add(rule)
+                is RestrictToRootLast -> runLastOnRoot.add(rule)
+                else -> other.add(rule)
+            }
+        }
+        return LinkedList<FormattingRule>().apply {
+            addAll(runFirstOnRoot)
+            addAll(other)
+            addAll(runLastOnRoot)
+            addAll(runLast)
+        }
     }
 
     private fun ASTNode.visitTokens(currentNode: (ASTNode) -> Unit) {
@@ -112,3 +126,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         return parent !is JavaDummyHolder && parent !is JavaDummyElement
     }
 }
+
+typealias RestrictToRoot = com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
+typealias RestrictToRootLast = com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
+typealias Last = com.pinterest.ktlint.core.Rule.Modifier.Last
