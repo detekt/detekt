@@ -38,10 +38,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("WrongEqualsTypeParameter", Severity.Defect,
-            "Wrong parameter type for equals() method found. " +
-                    "To correctly override the equals() method use Any?",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        "WrongEqualsTypeParameter",
+        Severity.Defect,
+        "Wrong parameter type for equals() method found. " +
+            "To correctly override the equals() method use Any?",
+        Debt.TEN_MINS
+    )
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {
@@ -52,8 +55,14 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.name == "equals" && !function.isTopLevel && function.hasWrongEqualsSignature()) {
-            report(CodeSmell(issue, Entity.from(function), "equals() methods should only take one parameter " +
-                    "of type Any?."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "equals() methods should only take one parameter " +
+                        "of type Any?."
+                )
+            )
         }
     }
 

@@ -31,7 +31,7 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
         if (!file.hasValidLicense()) {
             report(CodeSmell(
                 issue,
-                Entity.from(file),
+                Entity.atPackageOrFirstDecl(file),
                 "Expected license not found or incorrect in the file: ${file.name}."
             ))
         }

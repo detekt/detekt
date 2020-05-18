@@ -48,9 +48,14 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
     private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
         if (!function.isOverride() && !conversionFunctionPrefix.startWith(function.name)) {
-            report(CodeSmell(issue, Entity.from(function),
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
                     "The data class ${klass.name} contains functions which are not registered " +
-                            "conversion functions. The offending method is called ${function.name}"))
+                        "conversion functions. The offending method is called ${function.name}"
+                )
+            )
         }
     }
 

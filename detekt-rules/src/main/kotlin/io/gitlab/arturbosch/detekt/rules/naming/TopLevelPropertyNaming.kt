@@ -58,10 +58,13 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(property: KtProperty, message: String) {
-        report(CodeSmell(
-            issue,
-            Entity.from(property),
-            message = message))
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(property),
+                message = message
+            )
+        )
     }
 
     companion object {

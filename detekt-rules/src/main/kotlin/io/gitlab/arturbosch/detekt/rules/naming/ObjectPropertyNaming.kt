@@ -23,10 +23,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Property names inside objects should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Property names inside objects should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
     private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
@@ -61,10 +63,13 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(property: KtProperty, message: String) {
-        report(CodeSmell(
-            issue,
-            Entity.from(property),
-            message = message))
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(property),
+                message = message
+            )
+        )
     }
 
     companion object {

@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtFile
@@ -41,14 +40,14 @@ class MethodOverloading(
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
         file.getChildrenOfType<KtNamedFunction>().forEach { visitor.visitMethod(it) }
-        visitor.reportIfThresholdExceeded(file)
+        visitor.reportIfThresholdExceeded(Entity.atPackageOrFirstDecl(file))
         super.visitKtFile(file)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         val visitor = OverloadedMethodVisitor()
         classOrObject.accept(visitor)
-        visitor.reportIfThresholdExceeded(classOrObject)
+        visitor.reportIfThresholdExceeded(Entity.atName(classOrObject))
         super.visitClassOrObject(classOrObject)
     }
 
@@ -56,12 +55,16 @@ class MethodOverloading(
 
         private var methods = HashMap<String, Int>()
 
-        fun reportIfThresholdExceeded(element: PsiElement) {
-            methods.filterValues { it >= threshold }.forEach {
-                report(ThresholdedCodeSmell(issue,
-                        Entity.from(element),
-                        Metric("OVERLOAD SIZE: ", it.value, threshold),
-                        message = "The method '${it.key}' is overloaded ${it.value} times."))
+        fun reportIfThresholdExceeded(entity: Entity) {
+            for ((name, value) in methods.filterValues { it >= threshold }) {
+                report(
+                    ThresholdedCodeSmell(
+                        issue,
+                        entity,
+                        Metric("OVERLOAD SIZE: ", value, threshold),
+                        message = "The method '$name' is overloaded $value times."
+                    )
+                )
             }
         }
 

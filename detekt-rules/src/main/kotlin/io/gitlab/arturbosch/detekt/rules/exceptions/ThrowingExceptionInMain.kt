@@ -30,7 +30,7 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isMainFunction() && containsThrowExpression(function)) {
-            report(CodeSmell(issue, Entity.from(function), issue.description))
+            report(CodeSmell(issue, Entity.atName(function), issue.description))
         }
     }
 

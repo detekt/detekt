@@ -78,7 +78,7 @@ class ComplexMethod(
             report(
                 ThresholdedCodeSmell(
                     issue,
-                    Entity.from(function.nameIdentifier!!),
+                    Entity.atName(function),
                     Metric("MCC", complexity, threshold),
                     "The function ${function.nameAsSafeName} appears to be too complex ($complexity). " +
                             "Defined complexity threshold for methods is set to '$threshold'"

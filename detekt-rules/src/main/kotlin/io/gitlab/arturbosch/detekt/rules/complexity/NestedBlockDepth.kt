@@ -45,10 +45,14 @@ class NestedBlockDepth(
         visitor.visitNamedFunction(function)
         if (visitor.isTooDeep) {
             @Suppress("UnsafeCallOnNullableType")
-            report(ThresholdedCodeSmell(issue,
-                    Entity.from(function.nameIdentifier!!),
+            report(
+                ThresholdedCodeSmell(
+                    issue,
+                    Entity.atName(function),
                     Metric("SIZE", visitor.maxDepth, threshold),
-                    "Function ${function.name} is nested too deeply."))
+                    "Function ${function.name} is nested too deeply."
+                )
+            )
         }
     }
 

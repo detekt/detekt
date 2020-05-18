@@ -47,10 +47,13 @@ class LargeClass(
     override fun postVisit(root: KtFile) {
         for ((clazz, lines) in classToLinesCache) {
             if (lines >= threshold) {
-                report(ThresholdedCodeSmell(issue,
-                        Entity.from(clazz.nameIdentifier ?: clazz),
+                report(
+                    ThresholdedCodeSmell(
+                        issue,
+                        Entity.atName(clazz),
                         Metric("SIZE", lines, threshold),
-                        "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."))
+                        "Class ${clazz.name} is too large. Consider splitting it into smaller pieces.")
+                )
             }
         }
     }

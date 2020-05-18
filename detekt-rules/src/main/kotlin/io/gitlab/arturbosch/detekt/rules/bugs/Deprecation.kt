@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -27,9 +28,15 @@ class Deprecation(config: Config) : Rule(config) {
 
     override fun visitElement(element: PsiElement) {
         if (bindingContext == BindingContext.EMPTY) return
-        if (bindingContext.diagnostics.forElement(element).firstOrNull { it.factory == Errors.DEPRECATION } != null) {
-            report(CodeSmell(issue, Entity.from(element), "$element is deprecated."))
+        if (hasDeprecationCompilerWarnings(element)) {
+            val entity = if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element)
+            report(CodeSmell(issue, entity, "$element is deprecated."))
         }
         super.visitElement(element)
     }
+
+    private fun hasDeprecationCompilerWarnings(element: PsiElement) =
+        bindingContext.diagnostics
+            .forElement(element)
+            .firstOrNull { it.factory == Errors.DEPRECATION } != null
 }

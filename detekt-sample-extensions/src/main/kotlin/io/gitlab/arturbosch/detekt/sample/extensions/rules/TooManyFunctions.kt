@@ -26,7 +26,7 @@ class TooManyFunctions : Rule() {
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (amount > THRESHOLD) {
-            report(CodeSmell(issue, Entity.from(file),
+            report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file),
                 message = "The file ${file.name} has $amount function declarations. " +
                     "Threshold is specified with $THRESHOLD."))
         }

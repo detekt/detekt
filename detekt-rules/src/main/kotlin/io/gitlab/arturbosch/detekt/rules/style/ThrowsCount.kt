@@ -58,8 +58,14 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
                 .count()
 
             if (count > max) {
-                report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
-                        " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(function),
+                        "Too many throw statements in the function" +
+                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
+                    )
+                )
             }
         }
     }

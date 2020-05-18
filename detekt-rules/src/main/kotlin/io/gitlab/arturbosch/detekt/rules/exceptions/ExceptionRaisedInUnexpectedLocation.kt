@@ -43,7 +43,13 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
-            report(CodeSmell(issue, Entity.from(function), issue.description))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    issue.description
+                )
+            )
         }
     }
 

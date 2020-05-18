@@ -38,7 +38,7 @@ class FunctionNamingSpec : Spek({
             }
             interface I { fun shouldNotBeFlagged() }
         """
-            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 9)
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
         it("ignores overridden functions by default") {
@@ -71,7 +71,7 @@ class FunctionNamingSpec : Spek({
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """
-            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 9)
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
         it("doesn't ignore overridden functions if ignoreOverridden is false") {
@@ -83,8 +83,8 @@ class FunctionNamingSpec : Spek({
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(4, 15)
+                SourceLocation(2, 18),
+                SourceLocation(4, 19)
             )
         }
     }
