@@ -178,7 +178,7 @@ fun returnsNoValue() {}
 
    if the rule should check only annotated methods.
 
-* ``returnValueAnnotations`` (default: ``["*.CheckReturnValue", "*.CheckResult"]``)
+* ``returnValueAnnotations`` (default: ``['*.CheckReturnValue', '*.CheckResult']``)
 
    List of glob patterns to be used as inspection annotation
 

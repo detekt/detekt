@@ -434,7 +434,7 @@ potential-bugs:
   IgnoredReturnValue:
     active: false
     restrictToAnnotatedMethods: true
-    returnValueAnnotations: ["*.CheckReturnValue", "*.CheckResult"]
+    returnValueAnnotations: ['*.CheckReturnValue', '*.CheckResult']
   ImplicitDefaultLocale:
     active: false
   InvalidRange:
