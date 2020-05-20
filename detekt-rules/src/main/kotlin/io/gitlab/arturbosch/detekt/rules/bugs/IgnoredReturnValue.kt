@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * @configuration restrictToAnnotatedMethods - if the rule should check only annotated methods. (default: `true`)
  * @configuration returnValueAnnotations - List of glob patterns to be used as inspection annotation (default: `['*.CheckReturnValue', '*.CheckResult']`)
  */
-class IgnoredReturnValue(val config: Config = Config.empty) : Rule(config) {
+class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
             "IgnoredReturnValue",
