@@ -22,7 +22,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     listOf("hello")
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -33,7 +33,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOf("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -43,7 +43,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     listOf("hello").isEmpty().not()
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -53,7 +53,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     listOf("hello");println("foo")
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -63,7 +63,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     println("foo");listOf("hello")
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -73,7 +73,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     listOf("hello")//foo
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -84,7 +84,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo(input: Int) {
                     input.isTheAnswer()
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -103,7 +103,7 @@ object IgnoredReturnValueSpec : Spek({
                     var x: List<String>
                     x = listA()
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -115,7 +115,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     noReturnValue()
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -127,7 +127,7 @@ object IgnoredReturnValueSpec : Spek({
                 if (returnsBoolean()) {
                     // no-op
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -139,7 +139,7 @@ object IgnoredReturnValueSpec : Spek({
                 if (42 == returnsInt()) {
                     // no-op
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -149,7 +149,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun returnsInt() = 42
                 
                 println(returnsInt())
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -159,7 +159,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun returnsInt() = 42
                 
                 println(message = returnsInt())
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -178,7 +178,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -196,7 +196,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -214,7 +214,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello").isEmpty().not()
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -231,7 +231,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun foo() {
                     listOfChecked("hello");println("foo")
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -249,7 +249,7 @@ object IgnoredReturnValueSpec : Spek({
                     println("foo");listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 20)
@@ -267,7 +267,7 @@ object IgnoredReturnValueSpec : Spek({
                     /* foo */listOfChecked("hello")//foo
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 14)
@@ -284,7 +284,7 @@ object IgnoredReturnValueSpec : Spek({
                     input.isTheAnswer()
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(7, 11)
@@ -302,7 +302,7 @@ object IgnoredReturnValueSpec : Spek({
                     x = listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -318,7 +318,7 @@ object IgnoredReturnValueSpec : Spek({
                     noReturnValue()
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -333,7 +333,7 @@ object IgnoredReturnValueSpec : Spek({
                 if (returnsBoolean()) {
                     // no-op
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -348,7 +348,7 @@ object IgnoredReturnValueSpec : Spek({
                 if (42 == returnsInt()) {
                     // no-op
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -361,7 +361,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun returnsInt() = 42
                 
                 println(returnsInt())
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -374,7 +374,7 @@ object IgnoredReturnValueSpec : Spek({
                 fun returnsInt() = 42
                 
                 println(message = returnsInt())
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -399,7 +399,7 @@ object IgnoredReturnValueSpec : Spek({
                 } else {
                     returnsInt()
                 }
-            """.trimIndent()
+            """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -420,7 +420,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -438,7 +438,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -451,7 +451,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -472,7 +472,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
@@ -486,7 +486,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello")
                     return 42
                 }
-            """.trimIndent()
+            """
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(4, 5)
