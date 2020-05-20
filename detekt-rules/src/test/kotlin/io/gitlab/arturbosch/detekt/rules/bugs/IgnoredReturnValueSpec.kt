@@ -478,7 +478,7 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSourceLocation(8, 5)
         }
 
-        it("does not report when a function is not annotated") {
+        it("reports when a function is not annotated") {
             val code = """
                 fun listOfChecked(value: String) = listOf(value)
                 
