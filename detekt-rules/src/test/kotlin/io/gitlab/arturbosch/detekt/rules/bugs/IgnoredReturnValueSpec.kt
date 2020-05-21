@@ -91,7 +91,7 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when the return value is assigned to a pre-existing variable") {
             val code = """
-                package com.example
+                package com.test.ignoredreturnvalue
                 
                 annotation class CheckReturnValue
                 
