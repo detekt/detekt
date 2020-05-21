@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.core.KtCompiler
+import io.github.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.core.isFile
 import java.io.PrintStream
 
