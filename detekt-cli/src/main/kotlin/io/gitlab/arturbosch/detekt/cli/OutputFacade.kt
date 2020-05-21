@@ -13,7 +13,7 @@ class OutputFacade(
 ) {
 
     private val config = settings.config
-    private val reportPaths = arguments.reportPaths.toHashMap({ it.kind }, { it.path })
+    private val reportPaths = arguments.reportPaths.associateBy { it.kind }
 
     fun run() {
         val reports = ReportLocator(settings)
@@ -32,7 +32,7 @@ class OutputFacade(
     }
 
     private fun handleOutputReport(report: OutputReport, result: Detektion) {
-        val filePath = reportPaths[report.id]
+        val filePath = reportPaths[report.id]?.path
         if (filePath != null) {
             report.write(filePath, result)
             result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
