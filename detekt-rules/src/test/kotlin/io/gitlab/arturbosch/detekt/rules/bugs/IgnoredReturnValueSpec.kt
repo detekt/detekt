@@ -174,9 +174,9 @@ object IgnoredReturnValueSpec : Spek({
                 @CheckReturnValue
                 fun listOfChecked(value: String) = listOf(value)
                 
-                fun foo() : Int {
+                fun foo() {
                     listOfChecked("hello")
-                    return 42
+                    println("foo")
                 }
             """
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
@@ -410,7 +410,7 @@ object IgnoredReturnValueSpec : Spek({
 
         it("reports when a function is annotated with the custom annotation") {
             val code = """
-                package test
+                package com.custom
                 annotation class CustomReturn
                 
                 @CustomReturn
@@ -462,7 +462,7 @@ object IgnoredReturnValueSpec : Spek({
 
         it("reports when a function is annotated with a custom annotation") {
             val code = """
-                package test
+                package com.custom
                 annotation class CheckReturnValue
                 
                 @CheckReturnValue
