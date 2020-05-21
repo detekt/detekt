@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -37,19 +39,29 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  *     if (42 == returnsValue()) {}
  *     val x = returnsValue()
  * </compliant>
+ *
+ * @configuration restrictToAnnotatedMethods - if the rule should check only annotated methods. (default: `true`)
+ * @configuration returnValueAnnotations - List of glob patterns to be used as inspection annotation (default: `['*.CheckReturnValue', '*.CheckResult']`)
  */
 class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
-
-    private val requiredAnnotations = listOf(
-            "CheckReturnValue",
-            "CheckResult"
-    )
 
     override val issue: Issue = Issue(
             "IgnoredReturnValue",
             Severity.Defect,
             "This call returns a value which is ignored",
             Debt.TWENTY_MINS
+    )
+
+    private val annotationsRegexes = valueOrDefaultCommaSeparated(
+                RETURN_VALUE_ANNOTATIONS,
+                DEFAULT_RETURN_VALUE_ANNOTATIONS
+            )
+            .distinct()
+            .map { it.simplePatternToRegex() }
+
+    private val restrictToAnnotatedMethods = valueOrDefault(
+        RESTRICT_TO_ANNOTATED_METHODS,
+        DEFAULT_RESTRICT_TO_ANNOTATED_METHODS
     )
 
     @Suppress("ReturnCount")
@@ -59,12 +71,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         val returnType = resolvedCall.resultingDescriptor.returnType ?: return
-        val annotations = resolvedCall.resultingDescriptor.annotations
+        val annotations = resolvedCall.resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
 
         if (returnType.isUnit()) {
             return
         }
-        if (annotations.none { (it.fqName?.pathSegments()?.last()?.asString() in requiredAnnotations) }) {
+        if (restrictToAnnotatedMethods &&
+                annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
             return
         }
 
@@ -87,6 +100,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
                     )
             )
         }
+    }
+
+    companion object {
+        const val RESTRICT_TO_ANNOTATED_METHODS = "restrictToAnnotatedMethods"
+        const val DEFAULT_RESTRICT_TO_ANNOTATED_METHODS = true
+        const val RETURN_VALUE_ANNOTATIONS = "returnValueAnnotations"
+        val DEFAULT_RETURN_VALUE_ANNOTATIONS = listOf("*.CheckReturnValue", "*.CheckResult")
     }
 }
 

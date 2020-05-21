@@ -172,6 +172,16 @@ fun returnsNoValue() {}
 
 **Debt**: 20min
 
+#### Configuration options:
+
+* ``restrictToAnnotatedMethods`` (default: ``true``)
+
+   if the rule should check only annotated methods.
+
+* ``returnValueAnnotations`` (default: ``['*.CheckReturnValue', '*.CheckResult']``)
+
+   List of glob patterns to be used as inspection annotation
+
 #### Noncompliant Code:
 
 ```kotlin
