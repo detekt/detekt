@@ -110,7 +110,7 @@ private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
     private var counter = 0
 
     override fun visitKtFile(file: KtFile) {
-        if ("Library.kt" in file.absolutePath()) {
+        if ("Library.kt" in file.absolutePath().toString()) {
             libraryFileVisited = true
         } else {
             counter++

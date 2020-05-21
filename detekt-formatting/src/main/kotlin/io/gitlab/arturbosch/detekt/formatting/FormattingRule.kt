@@ -49,7 +49,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
         }
-        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.absolutePath())
+        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.absolutePath().toString())
     }
 
     open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null

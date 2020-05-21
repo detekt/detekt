@@ -7,13 +7,12 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
-import java.nio.file.Paths
 
 class KtFileModifier {
 
     fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {
         ktFiles.filter { it.modificationStamp > 0 }
-            .map { Paths.get(it.absolutePath()) to it.unnormalizeContent() }
+            .map { it.absolutePath() to it.unnormalizeContent() }
             .forEach {
                 notification.invoke(ModificationNotification(it.first))
                 Files.write(it.first, it.second.toByteArray())
