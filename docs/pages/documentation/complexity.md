@@ -243,7 +243,13 @@ Reports functions and constructors which have more parameters than a certain thr
 * ``ignoreAnnotated`` (default: ``[]``)
 
    ignore long parameters list for constructors or functions in the context of these
-annotation class names
+annotation class names (value is a comma separated string of the annotation class name); the most common case is for Dagger constructors that are annotated with @Inject, which can be ignored by doing this:
+
+```
+complexity:
+    LongParameterList:
+       ignoreAnnotated  'Inject'
+```
 
 ### MethodOverloading
 
