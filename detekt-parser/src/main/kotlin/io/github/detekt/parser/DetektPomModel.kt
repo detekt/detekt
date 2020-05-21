@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.parser
 
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions

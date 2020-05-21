@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.parser.createCompilerConfiguration
+import io.github.detekt.parser.createKotlinCoreEnvironment
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
-import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.parser
 
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
