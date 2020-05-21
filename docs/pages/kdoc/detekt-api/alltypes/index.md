@@ -245,11 +245,6 @@ An issue represents a problem in the codebase.
 ##### [org.jetbrains.kotlin.psi.KtElement](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-element/index.html)
 
 
-| (extensions in package io.gitlab.arturbosch.detekt.api.internal)
-
-##### [org.jetbrains.kotlin.psi.KtFile](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-file/index.html)
-
-
 |
 
 ##### [io.gitlab.arturbosch.detekt.api.LazyRegex](../io.gitlab.arturbosch.detekt.api/-lazy-regex/index.html)

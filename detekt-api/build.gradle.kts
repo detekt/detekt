@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation("org.yaml:snakeyaml:${Versions.SNAKEYAML}")
     api(kotlin("compiler-embeddable"))
+    api(project(":detekt-psi-utils"))
 
     testImplementation(project(":detekt-test"))
 }

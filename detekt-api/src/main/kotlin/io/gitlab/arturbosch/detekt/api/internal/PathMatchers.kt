@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
@@ -24,12 +22,3 @@ fun pathMatcher(pattern: String): PathMatcher {
 
 private const val USE_GLOB_MSG =
     "Only globbing patterns are supported as they are treated os-independently by the PathMatcher api."
-
-fun KtFile.absolutePath(): String =
-    getUserData(ABSOLUTE_PATH) ?: error("KtFile '$name' expected to have an absolute path.")
-
-fun KtFile.relativePath(): String =
-    getUserData(RELATIVE_PATH) ?: error("KtFile '$name' expected to have an relative path.")
-
-val RELATIVE_PATH: Key<String> = Key("relativePath")
-val ABSOLUTE_PATH: Key<String> = Key("absolutePath")

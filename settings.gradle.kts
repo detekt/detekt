@@ -8,6 +8,7 @@ include(
     "detekt-gradle-plugin",
     "detekt-metrics",
     "detekt-parser",
+    "detekt-psi-utils",
     "detekt-rules",
     "detekt-sample-extensions",
     "detekt-test"

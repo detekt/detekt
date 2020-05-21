@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.parser.createKotlinCoreEnvironment
-import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
-import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
+import io.github.detekt.psi.ABSOLUTE_PATH
+import io.github.detekt.psi.LINE_SEPARATOR
+import io.github.detekt.psi.RELATIVE_PATH
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
