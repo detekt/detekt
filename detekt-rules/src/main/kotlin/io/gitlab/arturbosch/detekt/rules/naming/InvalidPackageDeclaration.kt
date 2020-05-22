@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -7,11 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPackageDirective
-import java.nio.file.Paths
 
 /**
  * Reports when the package declaration is missing or the file location does not match the declared package.
@@ -43,7 +42,7 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         if (declaredPath.isNullOrBlank()) {
             root.reportInvalidPackageDeclaration("The file does not contain a package declaration.")
         } else {
-            val normalizedFilePath = Paths.get(root.absolutePath()).parent.toNormalizedForm()
+            val normalizedFilePath = root.absolutePath().parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
             val expectedPath =
                 if (normalizedRootPackage.isBlank()) {

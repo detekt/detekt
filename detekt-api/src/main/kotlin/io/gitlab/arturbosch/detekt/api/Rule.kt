@@ -1,12 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
-import java.nio.file.Paths
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -63,7 +62,7 @@ abstract class Rule(
             !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
-        filters?.isIgnored(Paths.get(root.absolutePath()))?.not() ?: true
+        filters?.isIgnored(root.absolutePath())?.not() ?: true
 
     /**
      * Simplified version of [Context.report] with rule defaults.

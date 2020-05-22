@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
+import io.github.detekt.psi.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.rules.naming.InvalidPackageDeclaration.Companion.ROOT_PACKAGE
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat

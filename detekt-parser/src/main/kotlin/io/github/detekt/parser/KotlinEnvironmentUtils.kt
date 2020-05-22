@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.parser
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots

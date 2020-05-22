@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
+import io.github.detekt.psi.LINE_SEPARATOR
+import io.github.detekt.psi.RELATIVE_PATH
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException

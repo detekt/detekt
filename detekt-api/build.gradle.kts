@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation("org.yaml:snakeyaml:${Versions.SNAKEYAML}")
     api(kotlin("compiler-embeddable"))
+    api(project(":detekt-psi-utils"))
 
     testImplementation(project(":detekt-test"))
 }
@@ -19,13 +20,5 @@ tasks.withType<DokkaTask>().configureEach {
         reportUndocumented = false
         @Suppress("MagicNumber")
         jdkVersion = 8
-    }
-}
-
-tasks.withType<Test> {
-    systemProperty("kotlinVersion", embeddedKotlinVersion)
-
-    doFirst {
-        systemProperty("testClasspath", classpath.joinToString(";"))
     }
 }

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.MultiRule
@@ -9,11 +10,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import java.nio.file.Paths
 
 fun RuleSetProvider.isActive(config: Config): Boolean =
     config.subConfig(ruleSetId)
@@ -24,11 +23,7 @@ fun RuleSetProvider.createRuleSet(config: Config): RuleSet =
 
 fun RuleSet.shouldAnalyzeFile(file: KtFile, config: Config): Boolean {
     val filters = config.subConfig(id).createPathFilters()
-    if (filters != null) {
-        val path = Paths.get(file.absolutePath())
-        return !filters.isIgnored(path)
-    }
-    return true
+    return filters == null || !filters.isIgnored(file.absolutePath())
 }
 
 fun RuleSet.visitFile(

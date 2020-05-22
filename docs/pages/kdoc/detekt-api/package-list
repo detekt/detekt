@@ -4,9 +4,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api$commaSeparatedPattern(kotlin.Str
 $dokka.location:io.gitlab.arturbosch.detekt.api$isSuppressedBy(org.jetbrains.kotlin.psi.KtAnnotated, kotlin.String, kotlin.collections.Set((kotlin.String)))io.gitlab.arturbosch.detekt.api/org.jetbrains.kotlin.psi.-kt-annotated/is-suppressed-by.html
 $dokka.location:io.gitlab.arturbosch.detekt.api$isSuppressedBy(org.jetbrains.kotlin.psi.KtElement, kotlin.String, kotlin.collections.Set((kotlin.String)))io.gitlab.arturbosch.detekt.api/org.jetbrains.kotlin.psi.-kt-element/is-suppressed-by.html
 $dokka.location:io.gitlab.arturbosch.detekt.api$simplePatternToRegex(kotlin.String)io.gitlab.arturbosch.detekt.api/kotlin.-string/simple-pattern-to-regex.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal$absolutePath(org.jetbrains.kotlin.psi.KtFile)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-file/absolute-path.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal$isSuppressedBy(org.jetbrains.kotlin.psi.KtAnnotated, kotlin.String, kotlin.collections.Set((kotlin.String)), kotlin.String)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-annotated/is-suppressed-by.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal$isSuppressedBy(org.jetbrains.kotlin.psi.KtElement, kotlin.String, kotlin.collections.Set((kotlin.String)), kotlin.String)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-element/is-suppressed-by.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal$relativePath(org.jetbrains.kotlin.psi.KtFile)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-file/relative-path.html
 io.gitlab.arturbosch.detekt.api
 io.gitlab.arturbosch.detekt.api.internal

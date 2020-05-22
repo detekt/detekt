@@ -149,14 +149,6 @@ which needs to be transferred from the detekt engine to the user.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.internal.DetektPomModel](../io.gitlab.arturbosch.detekt.api.internal/-detekt-pom-model/index.html)
-
-Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt
-Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE
-
-
-|
-
 ##### [io.gitlab.arturbosch.detekt.api.DetektVisitor](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html)
 
 Basic visitor which is used inside detekt.
@@ -251,11 +243,6 @@ An issue represents a problem in the codebase.
 | (extensions in package io.gitlab.arturbosch.detekt.api.internal)
 
 ##### [org.jetbrains.kotlin.psi.KtElement](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-element/index.html)
-
-
-| (extensions in package io.gitlab.arturbosch.detekt.api.internal)
-
-##### [org.jetbrains.kotlin.psi.KtFile](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-file/index.html)
 
 
 |

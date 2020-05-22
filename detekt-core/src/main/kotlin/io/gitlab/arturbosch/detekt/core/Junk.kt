@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
@@ -12,8 +11,6 @@ import java.nio.file.Path
 fun Path.exists(): Boolean = Files.exists(this)
 fun Path.isFile(): Boolean = Files.isRegularFile(this)
 fun Path.isDirectory(): Boolean = Files.isDirectory(this)
-
-val LINE_SEPARATOR: Key<String> = Key("lineSeparator")
 
 fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
     for ((key, findings) in other.entries) {
