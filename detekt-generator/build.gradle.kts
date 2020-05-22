@@ -82,8 +82,8 @@ fun assertDocumentationUpToDate() {
 }
 
 dependencies {
-    implementation(project(":detekt-cli"))
-    implementation(project(":detekt-core"))
+    implementation(project(":detekt-parser"))
+    implementation(project(":detekt-api"))
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
