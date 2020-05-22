@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
-import io.gitlab.arturbosch.detekt.test.resource
+import io.github.detekt.test.utils.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
