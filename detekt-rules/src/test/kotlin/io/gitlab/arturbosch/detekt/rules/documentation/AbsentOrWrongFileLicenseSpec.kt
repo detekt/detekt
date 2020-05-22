@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
-import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.resource
 import org.spekframework.spek2.Spek

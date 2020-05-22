@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

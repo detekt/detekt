@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

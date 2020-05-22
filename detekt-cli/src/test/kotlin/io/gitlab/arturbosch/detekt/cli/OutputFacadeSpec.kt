@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.test.StringPrintStream
+import io.github.detekt.test.utils.StringPrintStream
 import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat

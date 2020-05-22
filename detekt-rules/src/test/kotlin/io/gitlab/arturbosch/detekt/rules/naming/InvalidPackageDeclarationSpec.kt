@@ -4,7 +4,7 @@ import io.github.detekt.psi.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.rules.naming.InvalidPackageDeclaration.Companion.ROOT_PACKAGE
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek

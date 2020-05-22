@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
 import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

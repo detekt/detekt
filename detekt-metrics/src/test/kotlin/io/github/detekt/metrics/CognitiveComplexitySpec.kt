@@ -1,6 +1,6 @@
 package io.github.detekt.metrics
 
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

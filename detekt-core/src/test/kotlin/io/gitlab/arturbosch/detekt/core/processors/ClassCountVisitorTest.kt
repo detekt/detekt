@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.core.path
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.github.detekt.test.utils.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
@@ -12,8 +12,8 @@ class ClassCountVisitorTest : Spek({
 
         it("twoClassesInSeparateFile") {
             val files = arrayOf(
-                    compileForTest(path.resolve("Test.kt")),
-                    compileForTest(path.resolve("Default.kt"))
+                compileForTest(path.resolve("Test.kt")),
+                compileForTest(path.resolve("Default.kt"))
             )
             val count = getClassCount(files)
             assertThat(count).isEqualTo(2)
@@ -27,8 +27,8 @@ class ClassCountVisitorTest : Spek({
 
         it("testEnumAndInterface") {
             val files = arrayOf(
-                    compileForTest(path.resolve("../empty/EmptyEnum.kt")),
-                    compileForTest(path.resolve("../empty/EmptyInterface.kt"))
+                compileForTest(path.resolve("../empty/EmptyEnum.kt")),
+                compileForTest(path.resolve("../empty/EmptyInterface.kt"))
             )
             val count = getClassCount(files)
             assertThat(count).isEqualTo(2)

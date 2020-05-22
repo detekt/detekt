@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import io.github.detekt.psi.ABSOLUTE_PATH
 import io.github.detekt.parser.KtCompiler

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat

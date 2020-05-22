@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.test.utils.KotlinScriptEngine
+import io.github.detekt.test.utils.KtTestCompiler
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule

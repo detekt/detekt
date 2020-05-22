@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.compileForTest
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
-import io.gitlab.arturbosch.detekt.test.createTempFileForTest
+import io.github.detekt.test.utils.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException

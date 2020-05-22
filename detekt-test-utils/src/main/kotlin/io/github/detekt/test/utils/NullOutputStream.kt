@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import java.io.OutputStream
 

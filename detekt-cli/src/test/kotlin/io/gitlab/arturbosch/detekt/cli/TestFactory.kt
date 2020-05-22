@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.core.ModificationNotification
-import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Paths

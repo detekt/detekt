@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamed
