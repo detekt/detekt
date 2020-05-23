@@ -26,6 +26,8 @@ val shadowJar by tasks.registering(Jar::class) {
 
 tasks.build.configure { dependsOn(shadowJar) }
 
+val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
+
 val generateDocumentation by tasks.registering {
     dependsOn(tasks.build, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
@@ -33,9 +35,10 @@ val generateDocumentation by tasks.registering {
 
     inputs.files(
         fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
+        fileTree("${rootProject.rootDir}/detekt-formatting/src/main/kotlin"),
         file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"))
     outputs.files(
-        fileTree("${rootProject.rootDir}/detekt-generator/documentation"),
+        fileTree(documentationDir),
         file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
 
     doLast {
@@ -47,7 +50,7 @@ val generateDocumentation by tasks.registering {
                 "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
                     "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
                 "--documentation",
-                "${rootProject.rootDir}/docs/pages/documentation",
+                documentationDir,
                 "--config",
                 "${rootProject.rootDir}/detekt-cli/src/main/resources")
         }
@@ -81,7 +84,7 @@ fun assertDocumentationUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
         commandLine = listOf(
-            "git", "diff", "${rootProject.rootDir}/docs/pages/documentation", "${rootProject.rootDir}/docs/pages/kdoc"
+            "git", "diff", documentationDir, "${rootProject.rootDir}/docs/pages/kdoc"
         )
         standardOutput = configDiff
     }

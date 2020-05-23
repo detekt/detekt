@@ -76,7 +76,7 @@ subprojects {
 }
 
 configure(listOf(project(":detekt-rules"), project(":detekt-formatting"))) {
-    tasks.compileKotlin { finalizedBy(":detekt-generator:generateDocumentation") }
+    tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 }
 
 jacoco.toolVersion = Versions.JACOCO
