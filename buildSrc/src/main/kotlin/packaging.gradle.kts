@@ -11,6 +11,13 @@ plugins {
     id("com.jfrog.bintray") apply false
 }
 
+project(":detekt-cli") {
+    apply {
+        plugin("application")
+        plugin("com.github.johnrengelman.shadow")
+    }
+}
+
 subprojects {
 
     apply {
