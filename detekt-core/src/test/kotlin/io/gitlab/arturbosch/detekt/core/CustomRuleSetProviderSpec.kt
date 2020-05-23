@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.test.createProcessingSettings
-import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

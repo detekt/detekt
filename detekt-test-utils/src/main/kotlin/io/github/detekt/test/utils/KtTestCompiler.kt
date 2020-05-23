@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import io.github.detekt.psi.ABSOLUTE_PATH
-import io.gitlab.arturbosch.detekt.core.KtCompiler
+import io.github.detekt.parser.KtCompiler
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector

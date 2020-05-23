@@ -11,7 +11,8 @@ include(
     "detekt-psi-utils",
     "detekt-rules",
     "detekt-sample-extensions",
-    "detekt-test"
+    "detekt-test",
+    "detekt-test-utils"
 )
 
 pluginManagement {

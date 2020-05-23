@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
-import io.gitlab.arturbosch.detekt.test.NullPrintStream
-import io.gitlab.arturbosch.detekt.test.StringPrintStream
-import io.gitlab.arturbosch.detekt.test.resource
+import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.test.utils.StringPrintStream
+import io.github.detekt.test.utils.resource
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

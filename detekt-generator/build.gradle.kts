@@ -88,5 +88,5 @@ dependencies {
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
 
-    testImplementation(project(":detekt-test"))
+    testImplementation(project(":detekt-test-utils"))
 }

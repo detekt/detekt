@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.ast.visit
+import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
-import io.gitlab.arturbosch.detekt.test.compileForTest
-import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths

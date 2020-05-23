@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.test.createTempDirectoryForTest
+import io.github.detekt.test.utils.createTempDirectoryForTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File

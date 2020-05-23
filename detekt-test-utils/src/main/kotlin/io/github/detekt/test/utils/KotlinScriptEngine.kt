@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package io.github.detekt.test.utils
 
 import org.intellij.lang.annotations.Language
 import javax.script.ScriptException

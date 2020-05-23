@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings

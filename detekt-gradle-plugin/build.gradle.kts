@@ -7,7 +7,7 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
 
-    testImplementation(project(":detekt-test"))
+    testImplementation(project(":detekt-test-utils"))
 }
 
 gradlePlugin {

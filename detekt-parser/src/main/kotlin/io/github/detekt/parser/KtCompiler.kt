@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.core
+package io.github.detekt.parser
 
-import io.github.detekt.parser.createKotlinCoreEnvironment
 import io.github.detekt.psi.ABSOLUTE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
@@ -10,6 +9,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Files
 import java.nio.file.Path
 
 open class KtCompiler(
@@ -19,7 +19,7 @@ open class KtCompiler(
     protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
 
     fun compile(root: Path, subPath: Path): KtFile {
-        require(subPath.isFile()) { "Given sub path ($subPath) should be a regular file!" }
+        require(Files.isRegularFile(subPath)) { "Given sub path ($subPath) should be a regular file!" }
         val relativePath =
             (if (root == subPath) subPath.fileName
             else root.fileName.resolve(root.relativize(subPath))).normalize()

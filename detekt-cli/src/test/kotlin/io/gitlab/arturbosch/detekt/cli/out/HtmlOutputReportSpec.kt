@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createTempFileForTest
+import io.github.detekt.test.utils.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
 import io.mockk.mockk

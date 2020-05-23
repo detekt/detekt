@@ -1,8 +1,8 @@
-package io.gitlab.arturbosch.detekt.core
+package io.github.detekt.parser
 
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
-import io.gitlab.arturbosch.detekt.test.resource
+import io.github.detekt.test.utils.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
@@ -14,6 +14,7 @@ class KtCompilerTest : Spek({
 
     describe("Kotlin Compiler") {
 
+        val path = Paths.get(resource("/cases"))
         val ktCompiler = KtCompiler()
 
         it("Kotlin file has extra user data") {
