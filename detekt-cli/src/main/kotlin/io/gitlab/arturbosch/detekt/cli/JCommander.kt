@@ -5,20 +5,15 @@ import com.beust.jcommander.ParameterException
 import java.io.PrintStream
 
 @Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
-inline fun <reified T : Args> parseArguments(
+inline fun parseArguments(
     args: Array<out String>,
     outPrinter: PrintStream,
     errorPrinter: PrintStream,
-    validateCli: T.(MessageCollector) -> Unit = {}
-): T {
-    val cli = T::class.java.declaredConstructors
-        .firstOrNull()
-        ?.newInstance() as? T
-        ?: error("Could not create Args object for class ${T::class.java}")
+    validateCli: CliArgs.(MessageCollector) -> Unit = {}
+): CliArgs {
+    val cli = CliArgs()
 
-    val jCommander = JCommander()
-
-    jCommander.addObject(cli)
+    val jCommander = JCommander(cli)
     jCommander.programName = "detekt"
 
     try {

@@ -17,13 +17,13 @@ internal class CliArgsSpec : Spek({
     describe("Parsing the input path") {
 
         it("the current working directory is used if parameter is not set") {
-            val cli = parseArguments<CliArgs>(emptyArray(), NullPrintStream(), NullPrintStream())
+            val cli = parseArguments(emptyArray(), NullPrintStream(), NullPrintStream())
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
         }
 
         it("a single value is converted to a path") {
-            val cli = parseArguments<CliArgs>(
+            val cli = parseArguments(
                 arrayOf("--input", "$projectPath"),
                 NullPrintStream(),
                 NullPrintStream())
@@ -34,7 +34,7 @@ internal class CliArgsSpec : Spek({
         it("multiple input paths can be separated by comma") {
             val mainPath = projectPath.resolve("src/main").toAbsolutePath()
             val testPath = projectPath.resolve("src/test").toAbsolutePath()
-            val cli = parseArguments<CliArgs>(
+            val cli = parseArguments(
                 arrayOf("--input", "$mainPath,$testPath"),
                 NullPrintStream(),
                 NullPrintStream())
@@ -47,7 +47,7 @@ internal class CliArgsSpec : Spek({
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
             assertThatExceptionOfType(ParameterException::class.java)
-                .isThrownBy { parseArguments<CliArgs>(params, NullPrintStream(), NullPrintStream()).inputPaths }
+                .isThrownBy { parseArguments(params, NullPrintStream(), NullPrintStream()).inputPaths }
                 .withMessageContaining("does not exist")
         }
 

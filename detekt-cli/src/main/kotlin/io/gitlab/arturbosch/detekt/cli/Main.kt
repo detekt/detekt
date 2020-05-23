@@ -41,7 +41,7 @@ fun buildRunner(
     outputPrinter: PrintStream,
     errorPrinter: PrintStream
 ): Executable {
-    val arguments = parseArguments<CliArgs>(
+    val arguments = parseArguments(
         args,
         outputPrinter,
         errorPrinter
