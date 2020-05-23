@@ -12,6 +12,7 @@ dependencies {
 
 val shadowJar by tasks.registering(Jar::class) {
     archiveClassifier.set("all")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.runtimeClasspath.get().files.map { if (it.isDirectory) it else zipTree(it) })
     from(sourceSets.main.get().output)
     manifest {
@@ -23,8 +24,10 @@ val shadowJar by tasks.registering(Jar::class) {
     }
 }
 
+tasks.build.configure { dependsOn(shadowJar) }
+
 val generateDocumentation by tasks.registering {
-    dependsOn(shadowJar, ":detekt-api:dokka")
+    dependsOn(tasks.build, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
@@ -50,8 +53,6 @@ val generateDocumentation by tasks.registering {
         }
     }
 }
-
-tasks.build.configure { dependsOn(shadowJar) }
 
 val verifyGeneratorOutput by tasks.registering {
     dependsOn(generateDocumentation)
