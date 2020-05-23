@@ -50,10 +50,27 @@ internal class CliArgsSpec : Spek({
                 .isThrownBy { parseArguments(params, NullPrintStream(), NullPrintStream()).inputPaths }
                 .withMessageContaining("does not exist")
         }
+    }
+
+    describe("Valid combination of options for baseline feature") {
+
+        fun fixture(args: Array<String>) = parseArguments(args, NullPrintStream(), NullPrintStream())
 
         it("reports an error when using --create-baseline without a --baseline file") {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { buildRunner(arrayOf("--create-baseline"), NullPrintStream(), NullPrintStream()) }
+                .isThrownBy { fixture(arrayOf("--create-baseline")) }
+        }
+
+        it("reports an error when using --baseline file does not exist") {
+            val pathToNonExistentDirectory = projectPath.resolve("nonExistent").toString()
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                .isThrownBy { fixture(arrayOf("--baseline", pathToNonExistentDirectory)) }
+        }
+
+        it("reports an error when using --baseline file which is not a file") {
+            val directory = Paths.get(resource("/cases")).toString()
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                .isThrownBy { fixture(arrayOf("--baseline", directory)) }
         }
     }
 })

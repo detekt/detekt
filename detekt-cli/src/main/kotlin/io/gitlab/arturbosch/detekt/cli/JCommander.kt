@@ -2,14 +2,15 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import io.gitlab.arturbosch.detekt.core.exists
+import io.gitlab.arturbosch.detekt.core.isFile
 import java.io.PrintStream
 
 @Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
-inline fun parseArguments(
+fun parseArguments(
     args: Array<out String>,
     outPrinter: PrintStream,
-    errorPrinter: PrintStream,
-    validateCli: CliArgs.(MessageCollector) -> Unit = {}
+    errorPrinter: PrintStream
 ): CliArgs {
     val cli = CliArgs()
 
@@ -30,11 +31,20 @@ inline fun parseArguments(
     }
 
     val violations = mutableListOf<String>()
-    validateCli(cli, object : MessageCollector {
-        override fun plusAssign(msg: String) {
-            violations += msg
+    val baseline = cli.baseline
+
+    if (cli.createBaseline && baseline == null) {
+        violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
+    }
+
+    if (!cli.createBaseline && baseline != null) {
+        if (!baseline.exists()) {
+            violations += "The file specified by --baseline should exist '$baseline'."
+        } else if (!baseline.isFile()) {
+            violations += "The path specified by --baseline should be a file '$baseline'."
         }
-    })
+    }
+
     if (violations.isNotEmpty()) {
         violations.forEach(errorPrinter::println)
         errorPrinter.println()
