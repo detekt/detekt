@@ -58,13 +58,13 @@ subprojects {
         })
     }
 
-    val sourcesJar by tasks.creating(Jar::class) {
+    val sourcesJar by tasks.registering(Jar::class) {
         dependsOn(tasks.classes)
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
 
-    val javadocJar by tasks.creating(Jar::class) {
+    val javadocJar by tasks.registering(Jar::class) {
         from(tasks.javadoc)
         archiveClassifier.set("javadoc")
     }
@@ -77,14 +77,14 @@ subprojects {
     publishing {
         publications.register<MavenPublication>(detektPublication) {
             from(components["java"])
-            artifact(sourcesJar)
-            artifact(javadocJar)
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
             if (project.name == "detekt-cli") {
                 artifact(tasks.getByName("shadowJar"))
             }
-            groupId = this@subprojects.group as? String
-            artifactId = this@subprojects.name
-            version = this@subprojects.version as? String
+            groupId = project.group as? String
+            artifactId = project.name
+            version = project.version as? String
             pom {
                 description.set("Static code analysis for Kotlin")
                 name.set("detekt")
