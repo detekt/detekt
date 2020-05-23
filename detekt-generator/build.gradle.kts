@@ -1,22 +1,30 @@
 import java.io.ByteArrayOutputStream
 
-apply {
-    plugin("application")
-    plugin("com.github.johnrengelman.shadow")
+dependencies {
+    implementation(project(":detekt-parser"))
+    implementation(project(":detekt-api"))
+    implementation(project(":detekt-rules"))
+    implementation(project(":detekt-formatting"))
+    implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
+
+    testImplementation(project(":detekt-test-utils"))
 }
 
-application {
-    mainClassName = "io.gitlab.arturbosch.detekt.generator.Main"
-}
-
-val jar by tasks.getting(Jar::class) {
+val shadowJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("all")
+    from(configurations.runtimeClasspath.get().files.map { if (it.isDirectory) it else zipTree(it) })
+    from(sourceSets.main.get().output)
     manifest {
-        attributes.apply { put("Main-Class", "io.gitlab.arturbosch.detekt.generator.Main") }
+        attributes.apply {
+            put("Implementation-Title", project.name)
+            put("Implementation-Version", Versions.DETEKT)
+            put("Main-Class", "io.gitlab.arturbosch.detekt.generator.Main")
+        }
     }
 }
 
 val generateDocumentation by tasks.registering {
-    dependsOn(tasks.shadowJar, ":detekt-api:dokka")
+    dependsOn(shadowJar, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
@@ -42,6 +50,8 @@ val generateDocumentation by tasks.registering {
         }
     }
 }
+
+tasks.build.configure { dependsOn(shadowJar) }
 
 val verifyGeneratorOutput by tasks.registering {
     dependsOn(generateDocumentation)
@@ -79,14 +89,4 @@ fun assertDocumentationUpToDate() {
         throw GradleException("The detekt documentation is not up-to-date. " +
             "Please build detekt locally to update it and commit the changed files.")
     }
-}
-
-dependencies {
-    implementation(project(":detekt-parser"))
-    implementation(project(":detekt-api"))
-    implementation(project(":detekt-rules"))
-    implementation(project(":detekt-formatting"))
-    implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
-
-    testImplementation(project(":detekt-test-utils"))
 }
