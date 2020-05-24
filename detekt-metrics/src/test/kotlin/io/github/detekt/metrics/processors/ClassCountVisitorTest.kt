@@ -1,7 +1,6 @@
 package io.github.detekt.metrics.processors
 
-import io.github.detekt.metrics.path
-import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
@@ -12,23 +11,23 @@ class ClassCountVisitorTest : Spek({
 
         it("twoClassesInSeparateFile") {
             val files = arrayOf(
-                compileForTest(path.resolve("Test.kt")),
-                compileForTest(path.resolve("Default.kt"))
+                compileContentForTest(default),
+                compileContentForTest(classWithFields)
             )
             val count = getClassCount(files)
             assertThat(count).isEqualTo(2)
         }
 
         it("oneClassWithOneNestedClass") {
-            val file = compileForTest(path.resolve("ComplexClass.kt"))
+            val file = compileContentForTest(complexClass)
             val count = getClassCount(arrayOf(file))
             assertThat(count).isEqualTo(2)
         }
 
         it("testEnumAndInterface") {
             val files = arrayOf(
-                compileForTest(path.resolve("EmptyEnum.kt")),
-                compileForTest(path.resolve("EmptyInterface.kt"))
+                compileContentForTest(emptyEnum),
+                compileContentForTest(emptyInterface)
             )
             val count = getClassCount(files)
             assertThat(count).isEqualTo(2)
@@ -38,14 +37,13 @@ class ClassCountVisitorTest : Spek({
 
 private fun getClassCount(files: Array<KtFile>): Int {
     return files
-            .map { getData(it) }
-            .sum()
+        .map { getData(it) }
+        .sum()
 }
 
 private fun getData(file: KtFile): Int {
     return with(file) {
         accept(ClassCountVisitor())
-        @Suppress("UnsafeCallOnNullableType")
-        getUserData(numberOfClassesKey)!!
+        checkNotNull(getUserData(numberOfClassesKey))
     }
 }
