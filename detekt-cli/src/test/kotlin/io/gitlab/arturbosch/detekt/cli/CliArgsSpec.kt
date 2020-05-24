@@ -52,25 +52,38 @@ internal class CliArgsSpec : Spek({
         }
     }
 
-    describe("Valid combination of options for baseline feature") {
+    describe("Valid combination of options") {
 
         fun fixture(args: Array<String>) = parseArguments(args, NullPrintStream(), NullPrintStream())
 
-        it("reports an error when using --create-baseline without a --baseline file") {
-            assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { fixture(arrayOf("--create-baseline")) }
+        describe("Baseline feature") {
+
+            it("reports an error when using --create-baseline without a --baseline file") {
+                assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                    .isThrownBy { fixture(arrayOf("--create-baseline")) }
+            }
+
+            it("reports an error when using --baseline file does not exist") {
+                val pathToNonExistentDirectory = projectPath.resolve("nonExistent").toString()
+                assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                    .isThrownBy { fixture(arrayOf("--baseline", pathToNonExistentDirectory)) }
+            }
+
+            it("reports an error when using --baseline file which is not a file") {
+                val directory = Paths.get(resource("/cases")).toString()
+                assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                    .isThrownBy { fixture(arrayOf("--baseline", directory)) }
+            }
         }
 
-        it("reports an error when using --baseline file does not exist") {
-            val pathToNonExistentDirectory = projectPath.resolve("nonExistent").toString()
-            assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { fixture(arrayOf("--baseline", pathToNonExistentDirectory)) }
+        it("throws HelpRequest on --help") {
+            assertThatExceptionOfType(HelpRequest::class.java)
+                .isThrownBy { fixture(arrayOf("--help")) }
         }
 
-        it("reports an error when using --baseline file which is not a file") {
-            val directory = Paths.get(resource("/cases")).toString()
+        it("throws HandledArgumentViolation on wrong options") {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { fixture(arrayOf("--baseline", directory)) }
+                .isThrownBy { fixture(arrayOf("--unknown-to-us-all")) }
         }
     }
 })
