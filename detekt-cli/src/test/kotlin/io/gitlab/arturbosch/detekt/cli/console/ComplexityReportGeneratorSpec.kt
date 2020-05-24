@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.github.detekt.metrics.CognitiveComplexity
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.github.detekt.metrics.processors.commentLinesKey
@@ -31,7 +32,8 @@ internal class ComplexityReportGeneratorSpec : Spek({
                     "6 source lines of code (sloc)",
                     "5 logical lines of code (lloc)",
                     "4 comment lines of code (cloc)",
-                    "2 McCabe complexity (mcc)",
+                    "2 cyclomatic complexity (mcc)",
+                    "2 cognitive complexity",
                     "1 number of total code smells",
                     "66% comment source ratio",
                     "400 mcc per 1,000 lloc",
@@ -75,6 +77,7 @@ internal class ComplexityReportGeneratorSpec : Spek({
 
 private fun addData(detektion: Detektion) {
     detektion.addData(complexityKey, 2)
+    detektion.addData(CognitiveComplexity.KEY, 2)
     detektion.addData(linesKey, 1000)
     detektion.addData(sourceLinesKey, 6)
     detektion.addData(logicalLinesKey, 5)

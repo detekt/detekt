@@ -22,7 +22,8 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             "%,d source lines of code (sloc)".format(Locale.US, complexityMetric.sloc),
             "%,d logical lines of code (lloc)".format(Locale.US, complexityMetric.lloc),
             "%,d comment lines of code (cloc)".format(Locale.US, complexityMetric.cloc),
-            "%,d McCabe complexity (mcc)".format(Locale.US, complexityMetric.mcc),
+            "%,d cyclomatic complexity (mcc)".format(Locale.US, complexityMetric.mcc),
+            "%,d cognitive complexity".format(Locale.US, complexityMetric.cognitiveComplexity),
             "%,d number of total code smells".format(Locale.US, numberOfSmells),
             "%,d%% comment source ratio".format(Locale.US, commentSourceRatio),
             "%,d mcc per 1,000 lloc".format(Locale.US, mccPerThousandLines),
@@ -32,15 +33,18 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
 
     private fun cannotGenerate(): Boolean {
         return when {
-            complexityMetric.mcc == null -> true
+            null in setOf(
+                complexityMetric.mcc,
+                complexityMetric.cloc,
+                complexityMetric.cognitiveComplexity
+            ) -> true
             complexityMetric.lloc == null || complexityMetric.lloc == 0 -> true
             complexityMetric.sloc == null || complexityMetric.sloc == 0 -> true
-            complexityMetric.cloc == null -> true
             else -> {
                 numberOfSmells = complexityMetric.findings.sumBy { it.value.size }
                 smellPerThousandLines = numberOfSmells * 1000 / complexityMetric.lloc
-                mccPerThousandLines = complexityMetric.mcc * 1000 / complexityMetric.lloc
-                commentSourceRatio = complexityMetric.cloc * 100 / complexityMetric.sloc
+                mccPerThousandLines = complexityMetric.mcc!! * 1000 / complexityMetric.lloc
+                commentSourceRatio = complexityMetric.cloc!! * 100 / complexityMetric.sloc
                 false
             }
         }

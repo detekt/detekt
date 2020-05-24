@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.github.detekt.metrics.CognitiveComplexity
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.core.DetektResult
@@ -23,9 +24,7 @@ internal class ComplexityReportSpec : Spek({
                 val expectedContent = readResource("complexity-report.txt")
                 val detektion = createDetektion()
                 addData(detektion)
-                // Casting expectedContent to Any is workaround for
-                // https://github.com/joel-costigliola/assertj-core/issues/1440#issuecomment-465032464
-                assertThat(report.render(detektion)).isEqualTo(expectedContent as Any)
+                assertThat(report.render(detektion)).isEqualTo(expectedContent)
             }
 
             it("returns null for missing complexity metrics in report") {
@@ -41,6 +40,7 @@ private fun createDetektion(): Detektion = DetektResult(mapOf(Pair("Key", listOf
 
 private fun addData(detektion: Detektion) {
     detektion.addData(complexityKey, 2)
+    detektion.addData(CognitiveComplexity.KEY, 2)
     detektion.addData(linesKey, 10)
     detektion.addData(sourceLinesKey, 6)
     detektion.addData(logicalLinesKey, 5)
