@@ -1,10 +1,10 @@
 package io.github.detekt.metrics.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.github.detekt.metrics.processors.util.collectByType
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 class ClassCountProcessor : AbstractProjectMetricProcessor() {
 
@@ -18,6 +18,6 @@ class ClassCountVisitor : DetektVisitor() {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        file.putUserData(numberOfClassesKey, file.collectByType<KtClass>().size)
+        file.putUserData(numberOfClassesKey, file.collectDescendantsOfType<KtClass>().size)
     }
 }
