@@ -5,11 +5,7 @@ import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
 
-interface Args {
-    var help: Boolean
-}
-
-class CliArgs : Args {
+class CliArgs {
 
     @Parameter(
         names = ["--input", "-i"],
@@ -129,7 +125,7 @@ class CliArgs : Args {
         names = ["--help", "-h"],
         help = true, description = "Shows the usage."
     )
-    override var help: Boolean = false
+    var help: Boolean = false
 
     @Parameter(
         names = ["--run-rule"],

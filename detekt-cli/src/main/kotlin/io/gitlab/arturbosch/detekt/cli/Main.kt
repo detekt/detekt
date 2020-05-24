@@ -9,8 +9,6 @@ import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
-import io.gitlab.arturbosch.detekt.core.exists
-import io.gitlab.arturbosch.detekt.core.isFile
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -41,23 +39,7 @@ fun buildRunner(
     outputPrinter: PrintStream,
     errorPrinter: PrintStream
 ): Executable {
-    val arguments = parseArguments<CliArgs>(
-        args,
-        outputPrinter,
-        errorPrinter
-    ) { messages ->
-        val baseline = baseline
-        if (createBaseline && baseline == null) {
-            messages += "Creating a baseline.xml requires the --baseline parameter to specify a path."
-        }
-        if (!createBaseline && baseline != null) {
-            if (!baseline.exists()) {
-                messages += "The file specified by --baseline should exist '$baseline'."
-            } else if (!baseline.isFile()) {
-                messages += "The path specified by --baseline should be a file '$baseline'."
-            }
-        }
-    }
+    val arguments = parseArguments(args, outputPrinter, errorPrinter)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments)

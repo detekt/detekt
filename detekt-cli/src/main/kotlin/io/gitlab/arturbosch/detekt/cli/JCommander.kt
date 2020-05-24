@@ -2,23 +2,19 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import io.gitlab.arturbosch.detekt.core.exists
+import io.gitlab.arturbosch.detekt.core.isFile
 import java.io.PrintStream
 
 @Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
-inline fun <reified T : Args> parseArguments(
+fun parseArguments(
     args: Array<out String>,
     outPrinter: PrintStream,
-    errorPrinter: PrintStream,
-    validateCli: T.(MessageCollector) -> Unit = {}
-): T {
-    val cli = T::class.java.declaredConstructors
-        .firstOrNull()
-        ?.newInstance() as? T
-        ?: error("Could not create Args object for class ${T::class.java}")
+    errorPrinter: PrintStream
+): CliArgs {
+    val cli = CliArgs()
 
-    val jCommander = JCommander()
-
-    jCommander.addObject(cli)
+    val jCommander = JCommander(cli)
     jCommander.programName = "detekt"
 
     try {
@@ -35,11 +31,20 @@ inline fun <reified T : Args> parseArguments(
     }
 
     val violations = mutableListOf<String>()
-    validateCli(cli, object : MessageCollector {
-        override fun plusAssign(msg: String) {
-            violations += msg
+    val baseline = cli.baseline
+
+    if (cli.createBaseline && baseline == null) {
+        violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
+    }
+
+    if (!cli.createBaseline && baseline != null) {
+        if (!baseline.exists()) {
+            violations += "The file specified by --baseline should exist '$baseline'."
+        } else if (!baseline.isFile()) {
+            violations += "The path specified by --baseline should be a file '$baseline'."
         }
-    })
+    }
+
     if (violations.isNotEmpty()) {
         violations.forEach(errorPrinter::println)
         errorPrinter.println()

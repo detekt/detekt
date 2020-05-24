@@ -17,7 +17,7 @@ tasks.withType<DokkaTask>().configureEach {
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"
     configuration {
-        // suppresses undocumented classes but not dokka warnings https://github.com/Kotlin/dokka/issues/90
+        moduleName = project.name
         reportUndocumented = false
         @Suppress("MagicNumber")
         jdkVersion = 8

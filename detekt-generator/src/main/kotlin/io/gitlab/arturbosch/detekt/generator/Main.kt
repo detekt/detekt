@@ -2,25 +2,23 @@
 
 package io.gitlab.arturbosch.detekt.generator
 
-import io.gitlab.arturbosch.detekt.cli.parseArguments
-import io.gitlab.arturbosch.detekt.core.isFile
+import com.beust.jcommander.JCommander
 import java.nio.file.Files
+import kotlin.system.exitProcess
 
+@Suppress("detekt.SpreadOperator")
 fun main(args: Array<String>) {
-    val arguments = parseArguments<GeneratorArgs>(
-        args,
-        System.out,
-        System.err
-    ) { messages ->
-        if (Files.exists(documentationPath) && documentationPath.isFile()) {
-            messages += "Documentation path must be a directory."
-        }
+    val options = GeneratorArgs()
+    val parser = JCommander(options)
+    parser.parse(*args)
 
-        if (Files.exists(configPath) && configPath.isFile()) {
-            messages += "Config path must be a directory."
-        }
-        // input paths are validated by MultipleExistingPathConverter
+    if (options.help) {
+        parser.usage()
+        exitProcess(0)
     }
-    val executable = Runner(arguments, System.out, System.err)
-    executable.execute()
+
+    require(Files.isDirectory(options.documentationPath)) { "Documentation path must be a directory." }
+    require(Files.isDirectory(options.configPath)) { "Config path must be a directory." }
+
+    Generator(options).execute()
 }

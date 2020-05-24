@@ -1,34 +1,35 @@
 package io.gitlab.arturbosch.detekt.generator
 
-import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.github.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
 import io.gitlab.arturbosch.detekt.generator.printer.DetektPrinter
+import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
+import java.nio.file.Files
 import java.nio.file.Path
+import java.util.stream.Collectors
 import kotlin.system.measureTimeMillis
 
-class Runner(
+class Generator(
     private val arguments: GeneratorArgs,
-    private val outPrinter: PrintStream,
-    private val errPrinter: PrintStream
+    private val outPrinter: PrintStream = System.out
 ) {
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
 
-    private fun createCompiler(path: Path) = KtTreeCompiler.instance(ProcessingSettings(
-        listOf(path),
-        outPrinter = outPrinter,
-        errPrinter = errPrinter))
+    private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
+        Files.walk(root)
+            .filter { it.fileName.toString().endsWith(".kt") }
+            .map { parser.compile(root, it) }
+            .collect(Collectors.toList())
 
     fun execute() {
+        val parser = KtCompiler()
         val time = measureTimeMillis {
             val ktFiles = arguments.inputPath
-                .flatMap { createCompiler(it).compile(it) }
+                .flatMap { parseAll(parser, it) }
 
-            ktFiles.forEach { file ->
-                collector.visit(file)
-            }
+            ktFiles.forEach(collector::visit)
 
             printer.print(collector.items)
         }
