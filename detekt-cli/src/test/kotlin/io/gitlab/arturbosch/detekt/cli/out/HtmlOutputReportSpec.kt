@@ -1,20 +1,20 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.github.detekt.metrics.processors.commentLinesKey
+import io.github.detekt.metrics.processors.complexityKey
+import io.github.detekt.metrics.processors.linesKey
+import io.github.detekt.metrics.processors.logicalLinesKey
+import io.github.detekt.metrics.processors.sourceLinesKey
+import io.github.detekt.test.utils.createTempFileForTest
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.createEntity
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.cli.createIssue
-import io.github.detekt.metrics.processors.commentLinesKey
-import io.github.detekt.metrics.processors.complexityKey
-import io.github.detekt.metrics.processors.linesKey
-import io.github.detekt.metrics.processors.logicalLinesKey
-import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.github.detekt.test.utils.createTempFileForTest
-import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +24,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class HtmlOutputReportSpec : Spek({
 
@@ -131,7 +130,7 @@ class HtmlOutputReportSpec : Spek({
         }
 
         it("asserts that the generated HTML is the same as expected") {
-            val expected = Paths.get(resource("/reports/HtmlOutputFormatTest.html"))
+            val expected = resourceAsPath("/reports/HtmlOutputFormatTest.html")
             var result = htmlReport.render(createTestDetektionWithMultipleSmells())
             result = generatedRegex.replace(result, replacement)
 
