@@ -31,7 +31,7 @@ private fun getGradleVersionsUnderTest() =
     if (getJdkVersion() < 13) {
         listOf("5.0", "6.2.2")
     } else {
-        listOf("6.3")
+        listOf("6.4.1")
     }
 
 private fun getJdkVersion(): Int {
