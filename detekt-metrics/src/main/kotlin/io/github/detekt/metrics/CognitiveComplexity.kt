@@ -1,6 +1,7 @@
 package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -174,6 +175,8 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
     }
 
     companion object {
+
+        val KEY = Key<Int>("detekt.metrics.cognitive_complexity")
 
         private val logicalOps = setOf(KtTokens.ANDAND, KtTokens.OROR)
 

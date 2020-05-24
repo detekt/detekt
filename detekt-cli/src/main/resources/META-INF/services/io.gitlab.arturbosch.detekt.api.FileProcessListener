@@ -5,6 +5,7 @@ io.github.detekt.metrics.processors.ClassCountProcessor
 io.github.detekt.metrics.processors.FunctionCountProcessor
 io.github.detekt.metrics.processors.PropertyCountProcessor
 io.github.detekt.metrics.processors.ProjectComplexityProcessor
+io.github.detekt.metrics.processors.ProjectCognitiveComplexityProcessor
 io.github.detekt.metrics.processors.ProjectLLOCProcessor
 io.github.detekt.metrics.processors.ProjectCLOCProcessor
 io.github.detekt.metrics.processors.ProjectLOCProcessor
