@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
-import io.gitlab.arturbosch.detekt.core.processors.complexityKey
-import io.gitlab.arturbosch.detekt.core.processors.linesKey
-import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
-import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.github.detekt.metrics.processors.commentLinesKey
+import io.github.detekt.metrics.processors.complexityKey
+import io.github.detekt.metrics.processors.linesKey
+import io.github.detekt.metrics.processors.logicalLinesKey
+import io.github.detekt.metrics.processors.sourceLinesKey
 
 class ComplexityMetric(detektion: Detektion) {
 

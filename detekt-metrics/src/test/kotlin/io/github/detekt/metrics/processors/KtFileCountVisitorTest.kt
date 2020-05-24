@@ -1,0 +1,32 @@
+package io.github.detekt.metrics.processors
+
+import io.github.detekt.metrics.path
+import io.github.detekt.test.utils.compileForTest
+import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtFile
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+
+class KtFileCountVisitorTest : Spek({
+    describe("files") {
+
+        it("twoFiles") {
+            val files = arrayOf(
+                compileForTest(path.resolve("Default.kt")),
+                compileForTest(path.resolve("Test.kt"))
+            )
+            val count = files
+                    .map { getData(it) }
+                    .sum()
+            assertThat(count).isEqualTo(2)
+        }
+    }
+})
+
+private fun getData(file: KtFile): Int {
+    return with(file) {
+        accept(KtFileCountVisitor())
+        @Suppress("UnsafeCallOnNullableType")
+        getUserData(numberOfFilesKey)!!
+    }
+}
