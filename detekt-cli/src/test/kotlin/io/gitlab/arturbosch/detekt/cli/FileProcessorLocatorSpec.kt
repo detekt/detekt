@@ -41,7 +41,7 @@ class FileProcessorLocatorSpec : Spek({
 })
 
 private fun getProcessorClasses(): List<Class<out FileProcessListener>> {
-    return Reflections("io.gitlab.arturbosch.detekt.core.processors")
+    return Reflections("io.github.detekt.metrics.processors")
             .getSubTypesOf(FileProcessListener::class.java)
             .filter { !Modifier.isAbstract(it.modifiers) }
 }

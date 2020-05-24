@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.core.processors
+package io.github.detekt.metrics.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.core.processors.util.LLOC
+import io.github.detekt.metrics.processors.util.LLOC
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 

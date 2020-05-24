@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.core.processors
+package io.github.detekt.metrics.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.core.processors.util.collectByType
+import io.github.detekt.metrics.processors.util.collectByType
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile

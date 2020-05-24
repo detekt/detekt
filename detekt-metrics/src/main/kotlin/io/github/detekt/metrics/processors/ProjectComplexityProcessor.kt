@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.processors
+package io.github.detekt.metrics.processors
 
 import io.github.detekt.metrics.CyclomaticComplexity
 import io.gitlab.arturbosch.detekt.api.DetektVisitor

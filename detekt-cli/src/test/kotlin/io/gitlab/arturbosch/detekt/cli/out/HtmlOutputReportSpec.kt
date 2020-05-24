@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.createEntity
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.cli.createIssue
-import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
-import io.gitlab.arturbosch.detekt.core.processors.complexityKey
-import io.gitlab.arturbosch.detekt.core.processors.linesKey
-import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
-import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.github.detekt.metrics.processors.commentLinesKey
+import io.github.detekt.metrics.processors.complexityKey
+import io.github.detekt.metrics.processors.linesKey
+import io.github.detekt.metrics.processors.logicalLinesKey
+import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.github.detekt.test.utils.createTempFileForTest

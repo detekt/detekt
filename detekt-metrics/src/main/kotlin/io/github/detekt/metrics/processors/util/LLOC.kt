@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.processors.util
+package io.github.detekt.metrics.processors.util
 
 object LLOC {
 

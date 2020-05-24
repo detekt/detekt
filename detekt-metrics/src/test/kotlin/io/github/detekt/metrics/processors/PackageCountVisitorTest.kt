@@ -1,7 +1,6 @@
-package io.gitlab.arturbosch.detekt.core.processors
+package io.github.detekt.metrics.processors
 
-import io.gitlab.arturbosch.detekt.core.path
-import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
@@ -12,13 +11,13 @@ class PackageCountVisitorTest : Spek({
 
         it("twoClassesInSeparatePackage") {
             val files = arrayOf(
-                compileForTest(path.resolve("Default.kt")),
-                compileForTest(path.resolve("../empty/EmptyEnum.kt"))
+                compileContentForTest(default),
+                compileContentForTest(emptyEnum)
             )
             val count = files
-                    .map { getData(it) }
-                    .distinct()
-                    .count()
+                .map { getData(it) }
+                .distinct()
+                .count()
             assertThat(count).isEqualTo(2)
         }
     }
@@ -27,7 +26,6 @@ class PackageCountVisitorTest : Spek({
 private fun getData(file: KtFile): String {
     return with(file) {
         accept(PackageCountVisitor())
-        @Suppress("UnsafeCallOnNullableType")
-        getUserData(numberOfPackagesKey)!!
+        checkNotNull(getUserData(numberOfPackagesKey))
     }
 }

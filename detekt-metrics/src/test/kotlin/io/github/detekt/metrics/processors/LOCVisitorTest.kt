@@ -1,7 +1,6 @@
-package io.gitlab.arturbosch.detekt.core.processors
+package io.github.detekt.metrics.processors
 
-import io.gitlab.arturbosch.detekt.core.path
-import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -10,7 +9,7 @@ class LOCVisitorTest : Spek({
     describe("LOC Visitor") {
 
         it("defaultClass") {
-            val file = compileForTest(path.resolve("Default.kt"))
+            val file = compileContentForTest(default)
             val loc = with(file) {
                 accept(LOCVisitor())
                 getUserData(linesKey)
