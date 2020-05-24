@@ -228,7 +228,7 @@ As mentioned in...
 - [Kotlin Static Analysis — why and how?](https://proandroiddev.com/kotlin-static-analysis-why-and-how-a12042e34a98)
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
 - [Kotlin Static Analysis Tools](http://smyachenkov.com/posts/kotlin-static-analysis-tools/)
-- [Speeding up the detekt task in a multi-project Gradle build](https://madhead.me/posts/detekt-faster/)
+- [Speeding up the detekt task in a multi-project Gradle build](https://madhead.me/posts/detekt-faster/) (for detekt < 1.7.0)
 - [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
 
 Integrations:
