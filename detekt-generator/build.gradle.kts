@@ -10,22 +10,6 @@ dependencies {
     testImplementation(project(":detekt-test-utils"))
 }
 
-val shadowJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("all")
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from(configurations.runtimeClasspath.get().files.map { if (it.isDirectory) it else zipTree(it) })
-    from(sourceSets.main.get().output)
-    manifest {
-        attributes.apply {
-            put("Implementation-Title", project.name)
-            put("Implementation-Version", Versions.DETEKT)
-            put("Main-Class", "io.gitlab.arturbosch.detekt.generator.Main")
-        }
-    }
-}
-
-tasks.build.configure { dependsOn(shadowJar) }
-
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
 
 val generateDocumentation by tasks.registering {
@@ -43,9 +27,9 @@ val generateDocumentation by tasks.registering {
 
     doLast {
         javaexec {
-            main = "-jar"
+            classpath(configurations.runtimeClasspath.get(), sourceSets.main.get().output)
+            main = "io.gitlab.arturbosch.detekt.generator.Main"
             args = listOf(
-                "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar",
                 "--input",
                 "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
                     "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
