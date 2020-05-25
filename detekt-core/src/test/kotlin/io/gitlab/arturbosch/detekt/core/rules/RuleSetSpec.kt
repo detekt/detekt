@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
@@ -12,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
@@ -25,7 +25,7 @@ class RuleSetSpec : Spek({
         context("should rule set be used") {
 
             it("is explicitly deactivated") {
-                val config = yamlConfig("detekt.yml")
+                val config = yamlConfig("deactivated_ruleset.yml")
                 assertThat(TestProvider().isActive(config)).isFalse()
             }
 

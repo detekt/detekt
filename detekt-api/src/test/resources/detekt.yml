@@ -22,6 +22,3 @@ style:
   MagicNumber:
     active: true
     ignoreNumbers: ['-1', '0', '1', '2']
-
-comments:
-  active: false
