@@ -12,6 +12,7 @@ object Versions {
     const val KTLINT: String = "0.36.0"
     const val KOTLINX_HTML: String = "0.7.1"
     const val JACOCO: String = "0.8.5"
+    const val JGRAPHT: String = "1.4.0"
 
     fun currentOrSnapshot(): String {
         if (System.getProperty("snapshot")?.toBoolean() == true) {

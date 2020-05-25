@@ -1,7 +1,7 @@
 package io.github.detekt.test.utils
 
-import io.github.detekt.psi.ABSOLUTE_PATH
 import io.github.detekt.parser.KtCompiler
+import io.github.detekt.psi.ABSOLUTE_PATH
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -21,14 +21,13 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
 object KtTestCompiler : KtCompiler() {
 
-    private val root = Paths.get(resource("/"))
+    private val root = resourceAsPath("/")
 
     fun compile(path: Path) = compile(root, path)
 
