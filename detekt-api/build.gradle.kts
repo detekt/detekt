@@ -9,7 +9,7 @@ dependencies {
     api(kotlin("compiler-embeddable"))
     api(project(":detekt-psi-utils"))
 
-    testImplementation(project(":detekt-core"))
+    testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
 }
 

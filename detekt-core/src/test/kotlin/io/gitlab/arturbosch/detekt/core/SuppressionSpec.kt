@@ -1,10 +1,21 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +35,7 @@ internal class SuppressionSpec : Spek({
         fun checkSuppression(annotation: String, argument: String): Boolean {
             val annotated = """
             @$annotation("$argument")
-            class Test {}
+            class Test
              """
             val file = compileContentForTest(annotated)
             val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
@@ -111,21 +122,21 @@ internal class SuppressionSpec : Spek({
     describe("different suppression scenarios") {
 
         it("rule should be suppressed") {
-            val ktFile = compileForTest(Case.SuppressedObject.path())
+            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedObject.kt"))
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }
 
         it("findings are suppressed") {
-            val ktFile = compileForTest(Case.SuppressedElements.path())
+            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
             val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
             val findings = ruleSet.visitFile(ktFile, BindingContext.EMPTY)
             assertThat(findings.size).isZero()
         }
 
         it("rule should be suppressed by ALL") {
-            val ktFile = compileForTest(Case.SuppressedByAllObject.path())
+            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedByAllObject.kt"))
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
@@ -200,7 +211,7 @@ internal class SuppressionSpec : Spek({
         val code = """
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
         """.trimIndent()
-        val config = yamlConfig("ruleset-suppression.yml").subConfig("complexity")
+        val config = yamlConfig("/suppression/ruleset-suppression.yml").subConfig("complexity")
 
         it("reports without a suppression") {
             assertThat(TestLPL(config).lint(code)).isNotEmpty()
