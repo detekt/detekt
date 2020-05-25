@@ -1,8 +1,17 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.core.rules
 
-import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +23,7 @@ internal class MultiRuleSpec : Spek({
 
     describe("a multi rule") {
 
-        val file = compileForTest(Case.FilteredClass.path())
+        val file = compileForTest(resourceAsPath("/cases/Default.kt"))
 
         context("runs once on a KtFile for every rules and respects configured path filters") {
 
@@ -56,7 +65,6 @@ internal class MultiRuleSpec : Spek({
     }
 })
 
-@Suppress("UnusedPrivateClass") // bug: doesn't resolve usage as generic type
 private class MultiRuleProvider : RuleSetProvider {
     override val ruleSetId: String = "TestMultiRule"
     override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestMultiRule(config)))

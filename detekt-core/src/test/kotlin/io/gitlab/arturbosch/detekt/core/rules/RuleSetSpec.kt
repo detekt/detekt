@@ -1,10 +1,17 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.core.rules
 
-import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
-import io.gitlab.arturbosch.detekt.core.rules.isActive
-import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
@@ -29,7 +36,7 @@ class RuleSetSpec : Spek({
 
         context("should rule analyze a file") {
 
-            val file = compileForTest(Case.FilteredClass.path())
+            val file = compileForTest(resourceAsPath("/cases/Default.kt"))
 
             it("analyzes file with an empty config") {
                 val config = Config.empty
