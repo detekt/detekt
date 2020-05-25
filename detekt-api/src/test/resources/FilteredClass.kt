@@ -1,3 +1,0 @@
-@Suppress("unused")
-class FilteredClass {
-}
