@@ -132,6 +132,11 @@ These factory functions can have the same name as the class being created.
 
    ignores functions that have the override modifier
 
+* ``ignoreAnnotated`` (default: ``['Composable']``)
+
+   ignore naming for functions in the context of these
+annotation class names
+
 ### FunctionParameterNaming
 
 Reports function parameter names which do not follow the specified naming convention are used.
