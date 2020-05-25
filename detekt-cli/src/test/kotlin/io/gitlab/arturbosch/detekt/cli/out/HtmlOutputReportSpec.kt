@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
@@ -114,6 +115,7 @@ class HtmlOutputReportSpec : Spek({
         it("renders the complexity report correctly") {
             val detektion = TestDetektion()
             detektion.addData(complexityKey, 10)
+            detektion.addData(CognitiveComplexity.KEY, 10)
             detektion.addData(sourceLinesKey, 20)
             detektion.addData(logicalLinesKey, 10)
             detektion.addData(commentLinesKey, 2)
