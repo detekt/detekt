@@ -1,15 +1,14 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
+import io.github.detekt.test.utils.createTempDirectoryForTest
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.createFinding
-import io.github.detekt.test.utils.createTempDirectoryForTest
-import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class BaselineFacadeSpec : Spek({
 
@@ -24,7 +23,8 @@ class BaselineFacadeSpec : Spek({
 
         it("creates on top of an existing a baseline file") {
             val fullPath = dir.resolve("baseline2.xml")
-            val existingFile = Paths.get(resource("/smell-baseline.xml")).toFile()
+            val existingFile = resourceAsPath("/smell-baseline.xml").toFile()
+
             existingFile.copyTo(fullPath.toFile(), overwrite = true)
 
             assertNonEmptyBaseline(fullPath)
@@ -35,8 +35,7 @@ class BaselineFacadeSpec : Spek({
         }
 
         it("filters with an existing baseline file") {
-            val path = Paths.get(resource("/smell-baseline.xml"))
-            assertFilter(path)
+            assertFilter(resourceAsPath("/smell-baseline.xml"))
         }
     }
 })
