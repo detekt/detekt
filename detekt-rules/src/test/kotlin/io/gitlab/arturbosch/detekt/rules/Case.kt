@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.test.resource
+import io.github.detekt.test.utils.resourceAsPath
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /* Do not add new elements to this file. Instead, use inline code snippets within the tests.
    See https://github.com/detekt/detekt/issues/1089 */
@@ -44,5 +43,5 @@ enum class Case(val file: String) {
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
     UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
 
-    fun path(): Path = Paths.get(resource(file))
+    fun path(): Path = resourceAsPath(file)
 }

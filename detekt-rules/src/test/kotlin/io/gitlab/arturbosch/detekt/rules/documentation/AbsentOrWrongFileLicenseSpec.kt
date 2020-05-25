@@ -1,20 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
-import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.resource
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.PrintStream
 import java.net.URI
-import java.nio.file.Paths
 
 internal class AbsentOrWrongFileLicenseSpec : Spek({
 
@@ -57,11 +56,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
 private fun checkLicence(content: String): List<Finding> {
     val file = compileContentForTest(content)
 
-    val resource = resource("license-config.yml")
-    val config = YamlConfig.load(Paths.get(resource))
+    val resource = resourceAsPath("license-config.yml")
+    val config = YamlConfig.load(resource)
     LicenceHeaderLoaderExtension().apply {
         init(object : SetupContext {
-            override val configUris: Collection<URI> = listOf(resource)
+            override val configUris: Collection<URI> = listOf(resource.toUri())
             override val config: Config = config
             override val outPrinter: PrintStream = NullPrintStream()
             override val errPrinter: PrintStream = NullPrintStream()

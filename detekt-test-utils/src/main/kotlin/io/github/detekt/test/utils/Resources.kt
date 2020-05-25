@@ -1,6 +1,8 @@
 package io.github.detekt.test.utils
 
 import java.net.URI
+import java.nio.file.Path
+import java.nio.file.Paths
 
 internal object Resources
 
@@ -10,3 +12,5 @@ fun resource(name: String): URI {
     requireNotNull(resource) { "Make sure the resource '$name' exists!" }
     return resource.toURI()
 }
+
+fun resourceAsPath(name: String): Path = Paths.get(resource(name))

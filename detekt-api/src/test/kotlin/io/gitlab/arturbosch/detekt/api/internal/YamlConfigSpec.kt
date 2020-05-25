@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -92,13 +92,13 @@ class YamlConfigSpec : Spek({
     describe("yaml config") {
 
         it("loads the config from a given yaml file") {
-            val path = Paths.get(resource("detekt.yml"))
+            val path = resourceAsPath("detekt.yml")
             val config = YamlConfig.load(path)
             assertThat(config).isNotNull
         }
 
         it("loads the config from a given text file") {
-            val path = Paths.get(resource("detekt.txt"))
+            val path = resourceAsPath("detekt.txt")
             val config = YamlConfig.load(path)
             assertThat(config).isNotNull
         }
@@ -111,7 +111,7 @@ class YamlConfigSpec : Spek({
         }
 
         it("throws an exception on a directory") {
-            val path = Paths.get(resource("/config_validation"))
+            val path = resourceAsPath("/config_validation")
             Assertions.assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration must be a file")

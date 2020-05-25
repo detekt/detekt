@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
-import io.gitlab.arturbosch.detekt.test.resource
+import io.github.detekt.test.utils.resourceAsPath
 import java.nio.file.Files
-import java.nio.file.Paths
 
 internal fun readResource(filename: String): String {
-    val path = Paths.get(resource(filename))
+    val path = resourceAsPath(filename)
     return Files.readAllLines(path).joinToString("\n") + "\n"
 }
