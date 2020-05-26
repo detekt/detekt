@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
-import org.assertj.core.util.Objects.areEqual
+import java.util.Objects
 
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 
@@ -34,7 +34,7 @@ class FindingsAssert(actual: List<Finding>) :
         val expectedSources = expected.asSequence()
                 .sortedWith(compareBy({ it.line }, { it.column }))
 
-        if (!areEqual(actualSources.toList(), expectedSources.toList())) {
+        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
             failWithMessage("Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
         }
     }
@@ -54,7 +54,7 @@ class FindingsAssert(actual: List<Finding>) :
                 .map { (start, end) -> TextLocation(start, end) }
                 .sortedWith(compareBy({ it.start }, { it.end }))
 
-        if (!areEqual(actualSources.toList(), expectedSources.toList())) {
+        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
             failWithMessage("Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
         }
     }
