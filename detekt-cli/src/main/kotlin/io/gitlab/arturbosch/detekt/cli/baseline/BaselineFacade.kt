@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.cli.baselineId
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
