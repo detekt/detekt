@@ -8,31 +8,24 @@ import java.nio.file.Path
 
 class BaselineFacade(private val baselineFile: Path) {
 
-    private val listings: Pair<Whitelist, Blacklist>? =
-            if (baselineExists()) {
-                val format = BaselineFormat().read(baselineFile)
-                format.whitelist to format.blacklist
-            } else null
+    private val baseline: Baseline by lazy(LazyThreadSafetyMode.NONE) {
+        if (baselineExists()) {
+            BaselineFormat().read(baselineFile)
+        } else {
+            Baseline(emptySet(), emptySet())
+        }
+    }
 
-    fun filter(smells: List<Finding>) =
-            if (listings != null) {
-                val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
-                val blackFiltered = whiteFiltered.filterNot { finding ->
-                    listings.second.ids.contains(finding.baselineId)
-                }
-                blackFiltered
-            } else smells
+    fun filter(findings: List<Finding>): List<Finding> {
+        val whiteFiltered = findings.filterNot { finding -> baseline.whitelist.contains(finding.baselineId) }
+        return whiteFiltered.filterNot { finding -> baseline.blacklist.contains(finding.baselineId) }
+    }
 
     fun create(smells: List<Finding>) {
-        val blacklist = if (baselineExists()) {
-            BaselineFormat().read(baselineFile).blacklist
-        } else {
-            Blacklist(emptySet())
-        }
         val ids = smells.map { it.baselineId }.toSortedSet()
-        val smellBaseline = Baseline(blacklist, Whitelist(ids))
+        val newBaseline = Baseline(baseline.blacklist, ids)
         baselineFile.parent?.let { Files.createDirectories(it) }
-        BaselineFormat().write(smellBaseline, baselineFile)
+        BaselineFormat().write(newBaseline, baselineFile)
     }
 
     private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()

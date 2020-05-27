@@ -19,11 +19,11 @@ class BaselineFormatSpec : Spek({
                 val path = resourceAsPath("/smell-baseline.xml")
                 val (blacklist, whitelist) = BaselineFormat().read(path)
 
-                assertThat(blacklist.ids).hasSize(2)
-                assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
-                assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
-                assertThat(whitelist.ids).hasSize(1)
-                assertThat(whitelist.ids).anySatisfy { it.startsWith("FeatureEnvy") }
+                assertThat(blacklist).hasSize(2)
+                assertThat(blacklist).anySatisfy { it.startsWith("LongParameterList") }
+                assertThat(blacklist).anySatisfy { it.startsWith("LongMethod") }
+                assertThat(whitelist).hasSize(1)
+                assertThat(whitelist).anySatisfy { it.startsWith("FeatureEnvy") }
             }
 
             it("throws on an invalid baseline file extension") {
@@ -41,9 +41,7 @@ class BaselineFormatSpec : Spek({
 
         context("writes a baseline file") {
 
-            val savedBaseline = Baseline(
-                Blacklist(setOf("4", "2", "2")),
-                Whitelist(setOf("1", "2", "3")))
+            val savedBaseline = Baseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
 
             it("has a new line at the end of the written baseline file") {
                 val tempFile = createTempFileForTest("baseline1", ".xml")

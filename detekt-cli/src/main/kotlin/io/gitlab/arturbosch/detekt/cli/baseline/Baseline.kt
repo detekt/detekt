@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
 
-data class Baseline(val blacklist: Blacklist, val whitelist: Whitelist)
+typealias FindingsIdList = Set<String>
+
+data class Baseline(val blacklist: FindingsIdList, val whitelist: FindingsIdList)
 
 const val SMELL_BASELINE = "SmellBaseline"
 const val BLACKLIST = "Blacklist"

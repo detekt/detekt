@@ -41,10 +41,10 @@ class BaselineFormat {
         document {
             tag(SMELL_BASELINE) {
                 tag(BLACKLIST) {
-                    baseline.blacklist.ids.forEach { tag(ID, it) }
+                    baseline.blacklist.forEach { tag(ID, it) }
                 }
                 tag(WHITELIST) {
-                    baseline.whitelist.ids.forEach { tag(ID, it) }
+                    baseline.whitelist.forEach { tag(ID, it) }
                 }
             }
         }
