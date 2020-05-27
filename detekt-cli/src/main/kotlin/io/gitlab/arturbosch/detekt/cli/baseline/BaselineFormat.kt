@@ -7,7 +7,7 @@ import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
 
-class BaselineFormat {
+internal class BaselineFormat {
 
     class InvalidState(msg: String, error: Throwable) : IllegalStateException(msg, error)
 

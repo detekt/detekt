@@ -4,7 +4,7 @@ import java.util.Stack
 import javax.xml.stream.XMLStreamWriter
 
 @Suppress("TooManyFunctions")
-class IndentingXMLStreamWriter(
+internal class IndentingXMLStreamWriter(
     writer: XMLStreamWriter,
     private val indent: String = "  "
 ) : DelegatingXMLStreamWriter(writer) {

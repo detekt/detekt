@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Path
 
-typealias FindingsIdList = Set<String>
-typealias FindingId = String
+internal typealias FindingsIdList = Set<String>
+internal typealias FindingId = String
 
-data class Baseline(val blacklist: FindingsIdList, val whitelist: FindingsIdList) {
+internal data class Baseline(val blacklist: FindingsIdList, val whitelist: FindingsIdList) {
 
     fun contains(id: FindingId): Boolean = whitelist.contains(id) || blacklist.contains(id)
 
@@ -22,10 +22,10 @@ data class Baseline(val blacklist: FindingsIdList, val whitelist: FindingsIdList
     }
 }
 
-const val SMELL_BASELINE = "SmellBaseline"
-const val BLACKLIST = "Blacklist"
-const val WHITELIST = "Whitelist"
-const val ID = "ID"
+internal const val SMELL_BASELINE = "SmellBaseline"
+internal const val BLACKLIST = "Blacklist"
+internal const val WHITELIST = "Whitelist"
+internal const val ID = "ID"
 
-val Finding.baselineId: String
+internal val Finding.baselineId: String
     get() = this.id + ":" + this.signature
