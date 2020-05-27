@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
@@ -30,23 +28,19 @@ class DetektFacade(
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
-        val notifications = mutableListOf<Notification>()
-        val findings = HashMap<String, List<Finding>>()
-
         val filesToAnalyze = inputPaths.flatMap(compiler::compile)
         val bindingContext = generateBindingContext(filesToAnalyze)
 
         processors.forEach { it.onStart(filesToAnalyze) }
 
-        findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-
-        if (saveSupported) {
-            KtFileModifier().saveModifiedFiles(filesToAnalyze) {
-                notifications.add(it)
-            }
-        }
+        val findings = detektor.run(filesToAnalyze, bindingContext)
 
         val result = DetektResult(findings.toSortedMap())
+
+        if (saveSupported) {
+            KtFileModifier().saveModifiedFiles(filesToAnalyze) { result.add(it) }
+        }
+
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }
