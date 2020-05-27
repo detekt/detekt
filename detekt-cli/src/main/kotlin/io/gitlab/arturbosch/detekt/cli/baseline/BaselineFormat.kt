@@ -9,6 +9,8 @@ import javax.xml.stream.XMLStreamWriter
 
 class BaselineFormat {
 
+    class InvalidState(msg: String, error: Throwable) : IllegalStateException(msg, error)
+
     fun read(path: Path): Baseline {
         try {
             Files.newInputStream(path).use {
@@ -19,7 +21,7 @@ class BaselineFormat {
             }
         } catch (error: SAXParseException) {
             val (line, column) = error.lineNumber to error.columnNumber
-            throw InvalidBaselineState("Error on position $line:$column while reading the baseline xml file!", error)
+            throw InvalidState("Error on position $line:$column while reading the baseline xml file!", error)
         }
     }
 
@@ -30,7 +32,7 @@ class BaselineFormat {
             }
         } catch (error: XMLStreamException) {
             val (line, column) = error.positions
-            throw InvalidBaselineState("Error on position $line:$column while writing the baseline xml file!", error)
+            throw InvalidState("Error on position $line:$column while writing the baseline xml file!", error)
         }
     }
 

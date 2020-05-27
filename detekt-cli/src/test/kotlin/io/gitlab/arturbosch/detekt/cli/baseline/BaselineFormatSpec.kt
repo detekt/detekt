@@ -28,7 +28,7 @@ class BaselineFormatSpec : Spek({
 
             it("throws on an invalid baseline file extension") {
                 val path = resourceAsPath("/invalid-smell-baseline.txt")
-                assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(InvalidBaselineState::class.java)
+                assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(BaselineFormat.InvalidState::class.java)
             }
 
             it("throws on an invalid baseline ID declaration") {
