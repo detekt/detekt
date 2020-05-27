@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.FilteredDetectionResult
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFilteredResult
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
@@ -47,7 +47,7 @@ class Runner(
     private fun transformResult(result: Detektion): Detektion {
         val baselineFile = arguments.baseline
         return if (baselineFile != null) {
-            FilteredDetectionResult(result, BaselineFacade(baselineFile))
+            BaselineFilteredResult(result, BaselineFacade(baselineFile))
         } else {
             result
         }
