@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
+import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -34,6 +35,7 @@ fun main(args: Array<String>) {
     exitProcess(ExitCode.NORMAL_RUN.number)
 }
 
+@NotApiButProbablyUsedByUsers
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,

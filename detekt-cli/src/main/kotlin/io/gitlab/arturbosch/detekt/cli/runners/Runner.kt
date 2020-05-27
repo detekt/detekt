@@ -17,9 +17,11 @@ import io.gitlab.arturbosch.detekt.cli.isValidAndSmallerOrEqual
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
+import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.io.PrintStream
 
+@NotApiButProbablyUsedByUsers
 class Runner(
     private val arguments: CliArgs,
     private val outputPrinter: PrintStream,
