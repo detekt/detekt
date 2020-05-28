@@ -16,10 +16,8 @@ class BaselineFacade(private val baselineFile: Path) {
         }
     }
 
-    fun filter(findings: List<Finding>): List<Finding> {
-        val whiteFiltered = findings.filterNot { finding -> baseline.whitelist.contains(finding.baselineId) }
-        return whiteFiltered.filterNot { finding -> baseline.blacklist.contains(finding.baselineId) }
-    }
+    fun filter(findings: List<Finding>): List<Finding> =
+        findings.filterNot { baseline.contains(it.baselineId) }
 
     fun create(smells: List<Finding>) {
         val ids = smells.map { it.baselineId }.toSortedSet()
