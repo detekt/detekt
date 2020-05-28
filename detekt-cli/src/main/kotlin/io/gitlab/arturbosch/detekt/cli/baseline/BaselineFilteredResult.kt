@@ -6,16 +6,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 
 class BaselineFilteredResult(
     result: Detektion,
-    baselineFacade: BaselineFacade
+    private val baseline: Baseline
 ) : Detektion by result {
 
-    private val filteredFindings: Map<RuleSetId, List<Finding>>
-
-    init {
-        filteredFindings = result.findings
-                .map { (key, value) -> key to baselineFacade.filter(value) }
-                .toMap()
-    }
-
-    override val findings = filteredFindings
+    override val findings: Map<RuleSetId, List<Finding>> = result.findings
+        .mapValues { (_, findings) -> findings.filterNot { baseline.contains(it.baselineId) } }
 }

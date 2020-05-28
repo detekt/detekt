@@ -6,34 +6,18 @@ import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
 import java.nio.file.Path
 
-class BaselineFacade(private val baselineFile: Path) {
+class BaselineFacade {
 
-    private val listings: Pair<Whitelist, Blacklist>? =
-            if (baselineExists()) {
-                val format = BaselineFormat().read(baselineFile)
-                format.whitelist to format.blacklist
-            } else null
-
-    fun filter(smells: List<Finding>) =
-            if (listings != null) {
-                val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
-                val blackFiltered = whiteFiltered.filterNot { finding ->
-                    listings.second.ids.contains(finding.baselineId)
-                }
-                blackFiltered
-            } else smells
-
-    fun create(smells: List<Finding>) {
-        val blacklist = if (baselineExists()) {
-            BaselineFormat().read(baselineFile).blacklist
+    fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
+        val ids = findings.map { it.baselineId }.toSortedSet()
+        val baseline = if (baselineExists(baselineFile)) {
+            Baseline.load(baselineFile).copy(whitelist = ids)
         } else {
-            Blacklist(emptySet())
+            Baseline(emptySet(), ids)
         }
-        val ids = smells.map { it.baselineId }.toSortedSet()
-        val smellBaseline = Baseline(blacklist, Whitelist(ids))
         baselineFile.parent?.let { Files.createDirectories(it) }
-        BaselineFormat().write(smellBaseline, baselineFile)
+        BaselineFormat().write(baseline, baselineFile)
     }
 
-    private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
+    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
 }
