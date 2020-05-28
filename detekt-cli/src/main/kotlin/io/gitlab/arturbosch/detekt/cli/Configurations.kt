@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException
@@ -81,8 +82,10 @@ private fun parsePathConfig(configPath: String): Config {
     }
 }
 
+@NotApiButProbablyUsedByUsers
 const val DEFAULT_CONFIG = "default-detekt-config.yml"
 
+@NotApiButProbablyUsedByUsers
 fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
 private fun initFileSystem(uri: URI) {
