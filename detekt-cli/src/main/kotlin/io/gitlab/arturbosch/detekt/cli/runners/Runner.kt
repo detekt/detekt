@@ -3,9 +3,10 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFilteredResult
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.cli.baseline.Baseline
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFilteredResult
 import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
@@ -47,7 +48,7 @@ class Runner(
     private fun transformResult(result: Detektion): Detektion {
         val baselineFile = arguments.baseline
         return if (baselineFile != null) {
-            BaselineFilteredResult(result, BaselineFacade(baselineFile))
+            BaselineFilteredResult(result, Baseline.load(baselineFile))
         } else {
             result
         }
@@ -56,7 +57,8 @@ class Runner(
     private fun checkBaselineCreation(result: Detektion) {
         if (arguments.createBaseline) {
             val smells = result.findings.flatMap { it.value }
-            BaselineFacade(arguments.baseline!!).create(smells)
+            val baselineFile = checkNotNull(arguments.baseline)
+            BaselineFacade().createOrUpdate(baselineFile, smells)
         }
     }
 
