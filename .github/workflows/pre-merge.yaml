@@ -35,12 +35,12 @@ jobs:
 
 
     - name: Cache Gradle Caches
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/
         key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
     - name: Cache Gradle Wrapper
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/wrapper/
         key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
