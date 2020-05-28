@@ -4,11 +4,11 @@ import java.io.Writer
 import javax.xml.stream.XMLOutputFactory
 import javax.xml.stream.XMLStreamWriter
 
-fun Writer.streamXml(): XMLStreamWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(this)
+internal fun Writer.streamXml(): XMLStreamWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(this)
 
-fun XMLStreamWriter.prettyPrinter(): XMLStreamWriter = IndentingXMLStreamWriter(this)
+internal fun XMLStreamWriter.prettyPrinter(): XMLStreamWriter = IndentingXMLStreamWriter(this)
 
-inline fun XMLStreamWriter.document(
+internal inline fun XMLStreamWriter.document(
     version: String? = null,
     encoding: String? = null,
     init: XMLStreamWriter.() -> Unit
@@ -22,7 +22,7 @@ inline fun XMLStreamWriter.document(
     writeEndDocument()
 }
 
-inline fun XMLStreamWriter.tag(
+internal inline fun XMLStreamWriter.tag(
     name: String,
     init: XMLStreamWriter.() -> Unit
 ) = apply {
@@ -31,7 +31,7 @@ inline fun XMLStreamWriter.tag(
     writeEndElement()
 }
 
-fun XMLStreamWriter.tag(name: String, content: String) {
+internal fun XMLStreamWriter.tag(name: String, content: String) {
     tag(name) {
         writeCharacters(content)
     }
