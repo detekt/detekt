@@ -72,7 +72,7 @@ override fun equals(other: Any?): Boolean {
 
 ```kotlin
 override fun equals(other: Any?): Boolean {
-    return this == other
+    return this === other
 }
 ```
 

@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * <compliant>
  * override fun equals(other: Any?): Boolean {
- *     return this == other
+ *     return this === other
  * }
  * </compliant>
  *
