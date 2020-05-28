@@ -14,12 +14,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Cache Gradle Caches
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/
         key: cache-gradle-deploy-snapshot
     - name: Cache Gradle Wrapper
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/wrapper/
         key: cache-wrapper-deploy-snapshot
