@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -21,7 +21,7 @@ class XmlOutputReport : OutputReport() {
         lines += "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
-        smells.groupBy { it.location.file }.forEach { fileName, findings ->
+        smells.groupBy { it.location.file }.forEach { (fileName, findings) ->
             lines += "<file name=\"${fileName.toXmlString()}\">"
             findings.forEach {
                 lines += arrayOf(

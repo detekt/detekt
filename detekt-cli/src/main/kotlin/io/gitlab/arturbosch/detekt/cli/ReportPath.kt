@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import java.nio.file.Path
 import java.nio.file.Paths
 

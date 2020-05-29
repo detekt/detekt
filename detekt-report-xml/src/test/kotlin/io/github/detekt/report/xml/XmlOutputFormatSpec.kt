@@ -1,4 +1,6 @@
-package io.gitlab.arturbosch.detekt.cli.out
+@file:Suppress("MaxLineLength")
+
+package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt

@@ -19,7 +19,7 @@
  */
 @file:Suppress("ALL")
 
-package io.gitlab.arturbosch.detekt.cli.out
+package io.github.detekt.report.xml
 
 import java.util.ArrayList
 import java.util.Arrays

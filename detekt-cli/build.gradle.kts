@@ -5,6 +5,7 @@ application {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
+    implementation(project(":detekt-report-xml"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:${Versions.KOTLINX_HTML}") {

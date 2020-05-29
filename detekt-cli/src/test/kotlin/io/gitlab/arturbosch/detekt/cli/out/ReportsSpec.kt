@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
