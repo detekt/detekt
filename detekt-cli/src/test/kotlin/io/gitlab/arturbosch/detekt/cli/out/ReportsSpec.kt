@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.ReportLocator
+import io.gitlab.arturbosch.detekt.cli.ConsoleReportLocator
+import io.gitlab.arturbosch.detekt.cli.OutputReportLocator
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
@@ -66,7 +66,7 @@ internal class ReportsSpec : Spek({
                 listOf(),
                 outPrinter = NullPrintStream(),
                 errPrinter = NullPrintStream()
-            ).use { ReportLocator(it).load() }
+            ).use { OutputReportLocator(it).load() }
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             it("should be able to convert to output reports") {
@@ -93,7 +93,7 @@ internal class ReportsSpec : Spek({
                     config,
                     outPrinter = NullPrintStream(),
                     errPrinter = NullPrintStream()
-                ).use { ReportLocator(it).load() }
+                ).use { ConsoleReportLocator(it).load() }
                 assertThat(extensions).isEmpty()
             }
         }

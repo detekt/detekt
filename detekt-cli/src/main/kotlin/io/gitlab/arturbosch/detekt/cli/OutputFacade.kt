@@ -12,26 +12,18 @@ class OutputFacade(
     private val settings: ProcessingSettings
 ) {
 
-    private val config = settings.config
-    private val reportPaths = arguments.reportPaths.associateBy { it.kind }
+    private val reportPaths: Map<String, ReportPath> = arguments.reportPaths.associateBy { it.kind }
 
     fun run() {
-        val reports = ReportLocator(settings)
+        OutputReportLocator(settings)
             .load()
-            .sortedBy { it.priority }
-            .asReversed()
-
-        reports.forEach { report ->
-            report.init(config)
-            report.init(settings)
-            when (report) {
-                is ConsoleReport -> handleConsoleReport(report, result)
-                is OutputReport -> handleOutputReport(report, result)
-            }
-        }
+            .forEach(::handleOutputReport)
+        ConsoleReportLocator(settings)
+            .load()
+            .forEach(::handleConsoleReport)
     }
 
-    private fun handleOutputReport(report: OutputReport, result: Detektion) {
+    private fun handleOutputReport(report: OutputReport) {
         val filePath = reportPaths[report.id]?.path
         if (filePath != null) {
             report.write(filePath, result)
@@ -39,7 +31,7 @@ class OutputFacade(
         }
     }
 
-    private fun handleConsoleReport(report: ConsoleReport, result: Detektion) {
+    private fun handleConsoleReport(report: ConsoleReport) {
         report.print(settings.outPrinter, result)
     }
 }

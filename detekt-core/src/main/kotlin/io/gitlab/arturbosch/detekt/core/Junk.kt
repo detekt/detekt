@@ -30,3 +30,5 @@ fun createErrorMessage(file: KtFile, error: Throwable): String =
         "The original exception message was: ${error.localizedMessage}\n" +
         "Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
         "If the exception message does not help, please feel free to create an issue on our GitHub page."
+
+val NL: String = System.lineSeparator()

@@ -4,47 +4,32 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Extension
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import java.net.URLClassLoader
-import java.util.ServiceLoader
+import io.gitlab.arturbosch.detekt.core.extensions.loadExtensions
 
-class ReportLocator(private val settings: ProcessingSettings) {
+internal sealed class ReportLocator<T : Extension>(configKey: String, protected val settings: ProcessingSettings) {
 
-    private val consoleSubConfig = settings.config.subConfig("console-reports")
-    private val consoleActive = consoleSubConfig.valueOrDefault(ACTIVE, true)
-    private val consoleExcludes = consoleSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
+    private val config = settings.config.subConfig(configKey)
+    private val isActive = config.valueOrDefault("active", true)
+    protected val excludes = config.valueOrDefault("exclude", emptyList<String>()).toSet()
 
-    private val outputSubConfig = settings.config.subConfig("output-reports")
-    private val outputActive = outputSubConfig.valueOrDefault(ACTIVE, true)
-    private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
-
-    fun load(): List<Extension> {
-        val consoleReports = loadConsoleReports(settings.pluginLoader)
-        settings.debug { "Registered console reports: $consoleReports" }
-        val outputReports = loadOutputReports(settings.pluginLoader)
-        settings.debug { "Registered output reports: $outputReports" }
-        return consoleReports.plus(outputReports)
+    fun load(): List<T> {
+        if (!isActive) {
+            return emptyList()
+        }
+        return loadReports()
     }
 
-    private fun loadOutputReports(detektLoader: URLClassLoader) =
-        if (outputActive) {
-            ServiceLoader.load(OutputReport::class.java, detektLoader)
-                .filter { it.id !in outputExcludes }
-                .toList()
-        } else {
-            emptyList<OutputReport>()
-        }
+    protected abstract fun loadReports(): List<T>
+}
 
-    private fun loadConsoleReports(detektLoader: URLClassLoader) =
-        if (consoleActive) {
-            ServiceLoader.load(ConsoleReport::class.java, detektLoader)
-                .filter { it.id !in consoleExcludes }
-                .toList()
-        } else {
-            emptyList<ConsoleReport>()
-        }
+internal class ConsoleReportLocator(settings: ProcessingSettings) :
+    ReportLocator<ConsoleReport>("console-reports", settings) {
 
-    companion object {
-        private const val ACTIVE = "active"
-        private const val EXCLUDE = "exclude"
-    }
+    override fun loadReports(): List<ConsoleReport> = loadExtensions(settings) { it.id !in excludes }
+}
+
+internal class OutputReportLocator(settings: ProcessingSettings) :
+    ReportLocator<OutputReport>("output-reports", settings) {
+
+    override fun loadReports(): List<OutputReport> = loadExtensions(settings) { it.id !in excludes }
 }
