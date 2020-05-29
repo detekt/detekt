@@ -1,14 +1,15 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.github.detekt.metrics
 
-import io.github.detekt.metrics.CognitiveComplexity
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -20,7 +21,9 @@ internal class ComplexityReportGeneratorSpec : Spek({
         lateinit var detektion: TestDetektion
 
         beforeEachTest {
-            detektion = TestDetektion(createFinding())
+            val finding = mockk<Finding>()
+            every { finding.id }.returns("test")
+            detektion = TestDetektion(finding)
             addData(detektion)
         }
 

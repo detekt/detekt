@@ -1,12 +1,11 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.github.detekt.metrics
 
-import io.github.detekt.metrics.CognitiveComplexity
-import io.gitlab.arturbosch.detekt.api.Detektion
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.api.Detektion
 
 class ComplexityMetric(detektion: Detektion) {
 

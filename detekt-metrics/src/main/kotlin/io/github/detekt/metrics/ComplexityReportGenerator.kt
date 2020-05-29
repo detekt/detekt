@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import java.util.Locale

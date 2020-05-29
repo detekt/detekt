@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.github.detekt.metrics.ComplexityReportGenerator
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
-import io.gitlab.arturbosch.detekt.cli.console.ComplexityReportGenerator
 import io.gitlab.arturbosch.detekt.core.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
