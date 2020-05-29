@@ -13,13 +13,6 @@ dependencies {
     testImplementation(project(":detekt-test"))
 }
 
-// bundle detekt's version to use it on runtime
-tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes(mapOf("DetektVersion" to Versions.DETEKT))
-    }
-}
-
 tasks.withType<DokkaTask>().configureEach {
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"
