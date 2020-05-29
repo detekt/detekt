@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.github.detekt.report.html
 
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.core.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.FlowContent
 import kotlinx.html.a
 import kotlinx.html.code

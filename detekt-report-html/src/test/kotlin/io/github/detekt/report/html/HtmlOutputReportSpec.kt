@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.github.detekt.report.html
 
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
@@ -11,11 +11,11 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.cli.createEntity
-import io.gitlab.arturbosch.detekt.cli.createFinding
-import io.gitlab.arturbosch.detekt.cli.createIssue
-import io.gitlab.arturbosch.detekt.core.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createEntity
+import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -132,7 +132,7 @@ class HtmlOutputReportSpec : Spek({
         }
 
         it("asserts that the generated HTML is the same as expected") {
-            val expected = resourceAsPath("/reports/HtmlOutputFormatTest.html")
+            val expected = resourceAsPath("HtmlOutputFormatTest.html")
             var result = htmlReport.render(createTestDetektionWithMultipleSmells())
             result = generatedRegex.replace(result, replacement)
 

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.github.detekt.report.html
 
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.gitlab.arturbosch.detekt.api.Detektion
@@ -6,8 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
-import io.gitlab.arturbosch.detekt.core.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
@@ -46,7 +45,10 @@ class HtmlOutputReport : OutputReport() {
     override val name = "HTML report"
 
     override fun render(detektion: Detektion) =
-        ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
+        javaClass.getResource("/$DEFAULT_TEMPLATE")
+            .openStream()
+            .bufferedReader()
+            .use { it.readText() }
             .replace(PLACEHOLDER_VERSION, renderVersion())
             .replace(PLACEHOLDER_DATE, renderDate())
             .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))

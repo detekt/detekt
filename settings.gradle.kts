@@ -9,6 +9,7 @@ include(
     "detekt-metrics",
     "detekt-parser",
     "detekt-psi-utils",
+    "detekt-report-html",
     "detekt-report-xml",
     "detekt-rules",
     "detekt-sample-extensions",
