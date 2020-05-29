@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -110,7 +111,7 @@ class MainSpec : Spek({
             val out = StringPrintStream()
             val err = StringPrintStream()
 
-            val path = Paths.get(resource("smell-baseline.xml"))
+            val path = resourceAsPath("/configs/baseline-empty.xml")
 
             val args = arrayOf("--baseline", path.toString())
 

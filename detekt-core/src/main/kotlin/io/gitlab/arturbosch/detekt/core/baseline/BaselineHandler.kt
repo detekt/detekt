@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.baseline
+package io.gitlab.arturbosch.detekt.core.baseline
 
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler

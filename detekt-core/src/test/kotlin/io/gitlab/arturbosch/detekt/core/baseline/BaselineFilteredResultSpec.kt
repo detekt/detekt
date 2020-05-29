@@ -1,13 +1,10 @@
-package io.gitlab.arturbosch.detekt.cli.baseline
+package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.cli.createFinding
-import io.gitlab.arturbosch.detekt.cli.createLocation
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -16,14 +13,13 @@ class BaselineFilteredResultSpec : Spek({
 
     describe("baseline based result transformation") {
 
-        val baselineFile = resourceAsPath("/smell-baseline.xml")
+        val baselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
-        val result = TestDetektion(
-            createFinding(
-                Issue("LongParameterList", Severity.CodeSmell, "test", Debt.FIVE_MINS),
-                Entity("", "", "Signature", createLocation(baselineFile.toString()))
-            )
-        )
+        val finding = mockk<Finding>()
+        every { finding.id }.returns("LongParameterList")
+        every { finding.signature }.returns("Signature")
+
+        val result = TestDetektion(finding)
 
         it("does return the same finding on empty baseline") {
             val actual = BaselineFilteredResult(result, Baseline(emptySet(), emptySet()))

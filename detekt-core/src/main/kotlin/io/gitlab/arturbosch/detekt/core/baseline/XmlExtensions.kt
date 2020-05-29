@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.baseline
+package io.gitlab.arturbosch.detekt.core.baseline
 
 import java.io.Writer
 import javax.xml.stream.XMLOutputFactory

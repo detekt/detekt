@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.baseline
+package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
@@ -16,7 +16,7 @@ class BaselineFormatSpec : Spek({
         context("read a baseline file") {
 
             it("loads the baseline file") {
-                val path = resourceAsPath("/smell-baseline.xml")
+                val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
                 val (blacklist, whitelist) = BaselineFormat().read(path)
 
                 assertThat(blacklist).hasSize(2)
@@ -27,13 +27,13 @@ class BaselineFormatSpec : Spek({
             }
 
             it("throws on an invalid baseline file extension") {
-                val path = resourceAsPath("/invalid-smell-baseline.txt")
+                val path = resourceAsPath("/baseline_feature/invalid-txt-baseline.txt")
                 assertThatThrownBy { BaselineFormat().read(path) }
                     .isInstanceOf(BaselineFormat.InvalidState::class.java)
             }
 
             it("throws on an invalid baseline ID declaration") {
-                val path = resourceAsPath("/invalid-smell-baseline.xml")
+                val path = resourceAsPath("/baseline_feature/missing-whitelist-baseline.xml")
                 assertThatIllegalStateException()
                     .isThrownBy { BaselineFormat().read(path) }
                     .withMessage("The content of the ID element must not be empty")
