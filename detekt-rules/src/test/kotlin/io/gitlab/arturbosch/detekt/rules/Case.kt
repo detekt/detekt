@@ -16,8 +16,6 @@ enum class Case(val file: String) {
     EqualsAlwaysReturnsTrueOrFalseNegative("/cases/EqualsAlwaysReturnsTrueOrFalseNegative.kt"),
     ExceptionRaisedInMethodsNegative("/cases/ExceptionRaisedInMethodsNegative.kt"),
     ExceptionRaisedInMethodsPositive("/cases/ExceptionRaisedInMethodsPositive.kt"),
-    FinalClassNegative("/cases/ProtectedMemberInFinalClassNegative.kt"),
-    FinalClassPositive("/cases/ProtectedMemberInFinalClassPositive.kt"),
     FunctionReturningConstantPositive("/cases/FunctionReturningConstantPositive.kt"),
     FunctionReturningConstantNegative("/cases/FunctionReturningConstantNegative.kt"),
     IteratorImplNegative("/cases/IteratorImplNegative.kt"),
