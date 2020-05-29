@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.core.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.io.PrintStream
 
 class VersionPrinter(private val outputPrinter: PrintStream) : Executable {
