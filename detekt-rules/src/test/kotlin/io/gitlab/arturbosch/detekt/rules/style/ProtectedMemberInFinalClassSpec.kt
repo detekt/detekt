@@ -48,7 +48,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(2, 5)
         }
 
-        it("reports a inner class with a protected field in a final class") {
+        it("reports an inner class with a protected field in a final class") {
             val code = """
                 class Foo {
                     inner class InnerClass2 {
@@ -136,7 +136,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
 
     describe("check valid occurrences of protected that should not be reported") {
 
-        it("does not report non protected members in final class") {
+        it("does not report non-protected members in final class") {
             val code = """
                 abstract class BaseClass
                 class Foo : BaseClass() {
