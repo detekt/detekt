@@ -19,6 +19,13 @@ class CorrectEquals {
     }
 }
 
+class ReferentialEquality {
+
+    override fun equals(other: Any?): Boolean {
+        return this === other
+    }
+}
+
 fun equals(other: Any?): Boolean {
     return false
 }
