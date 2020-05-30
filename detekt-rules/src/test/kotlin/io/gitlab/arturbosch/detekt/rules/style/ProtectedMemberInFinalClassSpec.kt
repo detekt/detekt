@@ -15,7 +15,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
         it("reports a protected field in a final class") {
             val code = """
                 class Foo {
-                    protected var i1 = 0 // reports 1
+                    protected var i1 = 0
                 }
             """
             val findings = subject.compileAndLint(code)
@@ -27,7 +27,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
             val code = """
                 class Foo {
                     var i1: Int = 0
-                    protected constructor(i1: Int) : super() { // reports 1
+                    protected constructor(i1: Int) : super() {
                         this.i1 = i1
                     }
                 }
@@ -40,7 +40,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
         it("reports a protected function in a final class") {
             val code = """
                 class Foo {
-                    protected fun function() {} // reports 1
+                    protected fun function() {}
                 }
             """
             val findings = subject.compileAndLint(code)
@@ -52,7 +52,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
             val code = """
                 class Foo {
                     inner class InnerClass2 {
-                        protected val i = 0 // reports 1
+                        protected val i = 0
                     }
                 }
             """
@@ -64,8 +64,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
         it("reports a protected inner class with a protected field in a final class") {
             val code = """
                 class Fee {
-                    protected inner class YetAnotherInnerClass { // reports 1
-                        protected val i = 0 // reports 1
+                    protected inner class YetAnotherInnerClass {
+                        protected val i = 0
                     }
                 }
             """
@@ -80,9 +80,9 @@ class ProtectedMemberInFinalClassSpec : Spek({
         it("reports a protected companion object in a final class") {
             val code = """
                 class Foo {
-                    protected companion object { // reports 1
-                        protected class A { // reports 1
-                            protected var x = 0 // reports 1
+                    protected companion object {
+                        protected class A {
+                            protected var x = 0
                         }
                     }
                 }
@@ -101,7 +101,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
                 abstract class Foo {
                     protected companion object {
                         protected class A {
-                            protected var x = 0 // reports 1
+                            protected var x = 0
                         }
                     }
                 }
@@ -115,7 +115,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
             val code = """
                 open class OpenClass {
                     inner class InnerClass {
-                        protected val i = 0 // reports 1
+                        protected val i = 0
                     }
                 }
             """
@@ -126,7 +126,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
 
         it("reports a protected primary constructor in a final class") {
             val code = """
-                class FinalClassWithProtectedConstructor protected constructor() // reports 1
+                class FinalClassWithProtectedConstructor protected constructor()
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
