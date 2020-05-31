@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 
 class DetektFacade(
     private val detektor: Detektor,
@@ -30,6 +31,10 @@ class DetektFacade(
         }
 
         processors.forEach { it.onFinish(filesToAnalyze, result) }
+
+        val (outputResultsTime) = measure { OutputFacade(result, settings).run() }
+        settings.debug { "Writing results took $outputResultsTime ms" }
+
         return result
     }
 

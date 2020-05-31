@@ -4,6 +4,7 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.PrintStream
@@ -31,7 +32,8 @@ fun createProcessingSettings(
     errPrinter: PrintStream = NullPrintStream(),
     autoCorrect: Boolean = false,
     debug: Boolean = false,
-    configUris: Collection<URI> = emptyList()
+    configUris: Collection<URI> = emptyList(),
+    reportPaths: Collection<ReportPath> = emptyList()
 ) = ProcessingSettings(
     inputPaths = listOf(inputPath),
     config = config,
@@ -47,5 +49,6 @@ fun createProcessingSettings(
     errPrinter = errPrinter,
     autoCorrect = autoCorrect,
     debug = debug,
-    configUris = configUris
+    configUris = configUris,
+    reportPaths = reportPaths
 )

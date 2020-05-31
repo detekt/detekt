@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
-import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import java.io.PrintStream
 
@@ -38,7 +37,9 @@ class SingleRuleRunner(
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins(),
                 outPrinter = outPrinter,
-                errPrinter = errPrinter)
+                errPrinter = errPrinter,
+                reportPaths = reportPaths
+            )
         }.use { settings ->
             val realProvider = requireNotNull(
                 RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
@@ -48,13 +49,11 @@ class SingleRuleRunner(
 
             assertRuleExistsBeforeRunningItLater(provider, settings)
 
-            val result = DetektFacade.create(
+            DetektFacade.create(
                 settings,
                 listOf(provider),
                 listOf(DetektProgressListener().apply { init(settings) })
             ).run()
-
-            OutputFacade(arguments.reportPaths, result, settings).run()
         }
     }
 

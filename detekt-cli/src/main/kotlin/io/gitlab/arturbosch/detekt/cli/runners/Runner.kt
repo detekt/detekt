@@ -3,9 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
-import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
@@ -18,6 +16,8 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.core.measure
+import io.gitlab.arturbosch.detekt.core.reporting.red
 import java.io.PrintStream
 
 @NotApiButProbablyUsedByUsers
@@ -37,8 +37,6 @@ class Runner(
             settings.debug { "Running core engine took $engineRunTime ms" }
             checkBaselineCreation(result)
             result = arguments.baseline?.let { BaselineFacade().transformResult(it, result) } ?: result
-            val (outputResultsTime) = measure { OutputFacade(arguments.reportPaths, result, settings).run() }
-            settings.debug { "Writing results took $outputResultsTime ms" }
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)
             }
@@ -61,12 +59,6 @@ class Runner(
         }
     }
 
-    private inline fun <T> measure(block: () -> T): Pair<Long, T> {
-        val start = System.currentTimeMillis()
-        val result = block()
-        return System.currentTimeMillis() - start to result
-    }
-
     private fun createSettings(): ProcessingSettings = with(arguments) {
         val (configLoadTime, configuration) = measure { loadConfiguration() }
         val (settingsLoadTime, settings) = measure {
@@ -84,7 +76,8 @@ class Runner(
                 debug = arguments.debug,
                 outPrinter = outputPrinter,
                 errPrinter = errorPrinter,
-                configUris = extractUris()
+                configUris = extractUris(),
+                reportPaths = reportPaths
             )
         }
         settings.debug { "Loading config took $configLoadTime ms" }

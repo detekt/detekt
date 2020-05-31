@@ -7,12 +7,11 @@ import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 class OutputFacade(
-    reportPaths: List<ReportPath>,
     private val result: Detektion,
     private val settings: ProcessingSettings
 ) {
 
-    private val reports: Map<String, ReportPath> = reportPaths.associateBy { it.kind }
+    private val reports: Map<String, ReportPath> = settings.reportPaths.associateBy { it.kind }
 
     fun run() {
         OutputReportLocator(settings)

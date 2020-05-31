@@ -37,3 +37,9 @@ fun createErrorMessage(file: KtFile, error: Throwable): String =
 val NL: String = System.lineSeparator()
 
 val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
+
+inline fun <T> measure(block: () -> T): Pair<Long, T> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    return System.currentTimeMillis() - start to result
+}
