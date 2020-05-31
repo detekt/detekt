@@ -27,8 +27,8 @@ class ForbiddenMethodCallSpec : Spek({
             val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasSourceLocations(
-                SourceLocation(2, 1),
-                SourceLocation(3, 1)
+                SourceLocation(2, 5),
+                SourceLocation(3, 5)
             )
         }
 
@@ -70,7 +70,7 @@ class ForbiddenMethodCallSpec : Spek({
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(34 to 50)
+            assertThat(findings).hasTextLocations(38 to 54)
         }
 
         it("should report method call when not using the fully qualified name") {
@@ -84,7 +84,7 @@ class ForbiddenMethodCallSpec : Spek({
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(45 to 61)
+            assertThat(findings).hasTextLocations(49 to 65)
         }
 
         it("should report multiple different methods") {
