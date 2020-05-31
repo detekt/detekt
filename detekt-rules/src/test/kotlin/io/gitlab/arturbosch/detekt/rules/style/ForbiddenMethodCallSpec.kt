@@ -20,8 +20,8 @@ class ForbiddenMethodCallSpec : Spek({
         it("should report kotlin print usages by default") {
             val code = """
             fun main() {
-            print("3")
-            println("4")
+                print("3")
+                println("4")
             }
             """
             val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(wrapper.env, code)
@@ -36,7 +36,7 @@ class ForbiddenMethodCallSpec : Spek({
             val code = """
             import java.lang.System
             fun main() {
-            System.out.println("hello")
+                System.out.println("hello")
             }
             """
             val findings =
@@ -51,7 +51,7 @@ class ForbiddenMethodCallSpec : Spek({
             val code = """
             import java.lang.System
             fun main() {
-            System.out.println("hello")
+                System.out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
@@ -63,7 +63,7 @@ class ForbiddenMethodCallSpec : Spek({
         it("should report method call when using the fully qualified name") {
             val code = """
             fun main() {
-            java.lang.System.out.println("hello")
+                java.lang.System.out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
@@ -77,7 +77,7 @@ class ForbiddenMethodCallSpec : Spek({
             val code = """
             import java.lang.System.out
             fun main() {
-            out.println("hello")
+                out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
