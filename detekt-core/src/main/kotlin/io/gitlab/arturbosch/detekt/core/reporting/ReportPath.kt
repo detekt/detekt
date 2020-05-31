@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.txt.TxtOutputReport

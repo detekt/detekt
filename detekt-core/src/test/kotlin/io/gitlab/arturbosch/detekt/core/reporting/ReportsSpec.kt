@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
@@ -6,9 +6,6 @@ import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.cli.ConsoleReportLocator
-import io.gitlab.arturbosch.detekt.cli.OutputReportLocator
-import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -25,15 +22,12 @@ internal class ReportsSpec : Spek({
         context("arguments for jcommander") {
 
             val reportUnderTest = TestOutputReport::class.java.simpleName
-            val args = arrayOf(
-                "--report", "xml:/tmp/path1",
-                "--report", "txt:/tmp/path2",
-                "--report", "$reportUnderTest:/tmp/path3",
-                "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
-            )
-            val cli = parseArguments(args, NullPrintStream(), NullPrintStream())
-
-            val reports = cli.reportPaths
+            val reports = listOf(
+                "xml:/tmp/path1",
+                "txt:/tmp/path2",
+                "$reportUnderTest:/tmp/path3",
+                "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
+            ).map { ReportPath.from(it) }
 
             it("should parse multiple report entries") {
                 assertThat(reports).hasSize(4)
@@ -90,7 +84,7 @@ internal class ReportsSpec : Spek({
         context("empty reports") {
 
             it("yields empty extension list") {
-                val config = yamlConfig("configs/disabled-reports.yml")
+                val config = yamlConfig("/reporting/disabled-reports.yml")
                 val extensions = ProcessingSettings(
                     listOf(),
                     config,

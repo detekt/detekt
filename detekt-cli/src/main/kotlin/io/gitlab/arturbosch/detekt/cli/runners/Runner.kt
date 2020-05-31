@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
@@ -37,7 +37,7 @@ class Runner(
             settings.debug { "Running core engine took $engineRunTime ms" }
             checkBaselineCreation(result)
             result = arguments.baseline?.let { BaselineFacade().transformResult(it, result) } ?: result
-            val (outputResultsTime) = measure { OutputFacade(arguments, result, settings).run() }
+            val (outputResultsTime) = measure { OutputFacade(arguments.reportPaths, result, settings).run() }
             settings.debug { "Writing results took $outputResultsTime ms" }
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)

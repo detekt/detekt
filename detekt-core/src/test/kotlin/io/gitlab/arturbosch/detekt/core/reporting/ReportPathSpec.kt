@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.gitlab.arturbosch.detekt.core.IS_WINDOWS
 import org.assertj.core.api.Assertions.assertThat
