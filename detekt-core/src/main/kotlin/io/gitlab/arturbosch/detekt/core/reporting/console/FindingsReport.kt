@@ -1,9 +1,11 @@
-package io.gitlab.arturbosch.detekt.core.reporting
+package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.SingleAssign
+import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
+import io.gitlab.arturbosch.detekt.core.reporting.printFindings
 
 class FindingsReport : ConsoleReport() {
 

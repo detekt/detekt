@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.reporting
+package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.ModificationNotification

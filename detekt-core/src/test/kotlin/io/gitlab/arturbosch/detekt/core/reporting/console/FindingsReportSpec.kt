@@ -1,42 +1,43 @@
-package io.gitlab.arturbosch.detekt.core.reporting
+package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
+import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class FileBasedFindingsReportSpec : Spek({
+class FindingsReportSpec : Spek({
 
-    val subject by memoized { createFileBasedFindingsReport() }
+    val subject by memoized { createFindingsReport() }
 
     describe("findings report") {
 
-        context("reports the debt per file and rule set with the overall debt") {
-            val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
+        context("reports the debt per rule set and the overall debt") {
+            val expectedContent = readResourceContent("/reporting/findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair(
-                        "Ruleset1",
-                        listOf(
-                            createFinding(fileName = "File1.kt"),
-                            createFinding(fileName = "File2.kt")
-                        )
-                    ),
+                    Pair("Ruleset1", listOf(createFinding(), createFinding())),
                     Pair("EmptyRuleset", emptyList()),
-                    Pair(
-                        "Ruleset2",
-                        listOf(createFinding(fileName = "File1.kt"))
-                    )
+                    Pair("Ruleset2", listOf(createFinding()))
                 )
+            }
+            var output: String? = null
+
+            beforeEachTest {
+                output = subject.render(detektion)?.decolorized()
             }
 
             it("has the reference content") {
-                val output = subject.render(detektion)?.decolorized()
                 assertThat(output).isEqualTo(expectedContent)
+            }
+
+            it("does contain the rule set id of rule sets with findings") {
+                assertThat(output).contains("TestSmell")
             }
         }
 
@@ -45,24 +46,23 @@ class FileBasedFindingsReportSpec : Spek({
             assertThat(subject.render(detektion)).isNull()
         }
 
-        it("reports no findings when no rule set contains smells") {
+        it("reports no findings with rule set containing no smells") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("EmptySmells", emptyList())
-                )
+                    Pair("Ruleset", emptyList()))
             }
             assertThat(subject.render(detektion)).isNull()
         }
 
         it("should not add auto corrected issues to report") {
-            val report = FileBasedFindingsReport()
+            val report = FindingsReport()
             AutoCorrectableIssueAssert.isReportNull(report)
         }
     }
 })
 
-private fun createFileBasedFindingsReport(): FileBasedFindingsReport {
-    val report = FileBasedFindingsReport()
+private fun createFindingsReport(): FindingsReport {
+    val report = FindingsReport()
     report.init(Config.empty)
     return report
 }

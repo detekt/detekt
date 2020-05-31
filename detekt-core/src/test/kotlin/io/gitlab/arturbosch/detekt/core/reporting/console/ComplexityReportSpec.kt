@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.reporting
+package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
