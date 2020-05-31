@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -16,22 +17,26 @@ class ForbiddenMethodCallSpec : Spek({
 
     describe("ForbiddenMethodCall rule") {
 
-        it("should report nothing by default") {
+        it("should report kotlin print usages by default") {
             val code = """
-            import java.lang.System
             fun main() {
-            System.out.println("hello")
+                print("3")
+                println("4")
             }
             """
             val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(wrapper.env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasSourceLocations(
+                SourceLocation(2, 5),
+                SourceLocation(3, 5)
+            )
         }
 
         it("should report nothing when methods are blank") {
             val code = """
             import java.lang.System
             fun main() {
-            System.out.println("hello")
+                System.out.println("hello")
             }
             """
             val findings =
@@ -46,7 +51,7 @@ class ForbiddenMethodCallSpec : Spek({
             val code = """
             import java.lang.System
             fun main() {
-            System.out.println("hello")
+                System.out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
@@ -58,28 +63,28 @@ class ForbiddenMethodCallSpec : Spek({
         it("should report method call when using the fully qualified name") {
             val code = """
             fun main() {
-            java.lang.System.out.println("hello")
+                java.lang.System.out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(13 to 50)
+            assertThat(findings).hasTextLocations(38 to 54)
         }
 
         it("should report method call when not using the fully qualified name") {
             val code = """
             import java.lang.System.out
             fun main() {
-            out.println("hello")
+                out.println("hello")
             }
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(41 to 61)
+            assertThat(findings).hasTextLocations(49 to 65)
         }
 
         it("should report multiple different methods") {
@@ -94,7 +99,7 @@ class ForbiddenMethodCallSpec : Spek({
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println", "java.lang.System.gc")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(37 to 64, 69 to 80)
+            assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
 
         it("should report multiple different methods config with sting") {
@@ -109,7 +114,7 @@ class ForbiddenMethodCallSpec : Spek({
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.io.PrintStream.println, java.lang.System.gc"))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(37 to 64, 69 to 80)
+            assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
     }
 })
