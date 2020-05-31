@@ -13,6 +13,8 @@ import kotlin.system.measureTimeMillis
 @OptIn(UnstableApi::class)
 class OutputFacade : ReportingExtension {
 
+    override val priority: Int = Int.MIN_VALUE
+
     private var reports: Map<String, ReportPath> by SingleAssign()
     private var settings: ProcessingSettings by SingleAssign()
 
