@@ -7,7 +7,7 @@ import java.net.URI
  * Context providing useful processing settings to initialize extensions.
  */
 @UnstableApi
-interface SetupContext {
+interface SetupContext : PropertiesAware {
     /**
      * All config locations which where used to create [config].
      */
