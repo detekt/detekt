@@ -26,8 +26,8 @@ class OutputFacade : ReportingExtension {
     }
 
     override fun onFinalResult(result: Detektion) {
-        // always run output reports as they produce notifications
-        // which may get printed on the console
+        // Always run output reports first.
+        // They produce notifications which may get printed on the console.
         handleOutputReports(result)
         handleConsoleReports(result)
     }
