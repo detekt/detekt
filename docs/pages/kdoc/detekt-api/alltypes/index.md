@@ -309,6 +309,21 @@ Anything that can be expressed as a number value for projects.
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.PropertiesAware](../io.gitlab.arturbosch.detekt.api/-properties-aware/index.html)
+
+Properties holder. Allows to store and retrieve any data.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.ReportingExtension](../io.gitlab.arturbosch.detekt.api/-reporting-extension/index.html)
+
+Allows to intercept detekt's result container by listening to the initial and final state
+and manipulate the reported findings.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Rule](../io.gitlab.arturbosch.detekt.api/-rule/index.html)
 
 A rule defines how one specific code structure should look like. If code is found

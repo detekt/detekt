@@ -22,6 +22,9 @@ internal data class Baseline(val blacklist: FindingsIdList, val whitelist: Findi
     }
 }
 
+const val DETEKT_BASELINE_PATH_KEY = "detekt.baseline.path.key"
+const val DETEKT_BASELINE_CREATION_KEY = "detekt.baseline.creation.key"
+
 internal const val SMELL_BASELINE = "SmellBaseline"
 internal const val BLACKLIST = "Blacklist"
 internal const val WHITELIST = "Whitelist"

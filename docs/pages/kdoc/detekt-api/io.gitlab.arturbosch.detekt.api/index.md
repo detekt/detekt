@@ -39,12 +39,14 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [Notification](-notification/index.html) | Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.`interface Notification` |
 | [OutputReport](-output-report/index.html) | Translates detekt's result container - [Detektion](-detektion/index.html) - into an output report which is written inside a file.`abstract class OutputReport : `[`Extension`](-extension/index.html) |
 | [ProjectMetric](-project-metric/index.html) | Anything that can be expressed as a number value for projects.`open class ProjectMetric` |
+| [PropertiesAware](-properties-aware/index.html) | Properties holder. Allows to store and retrieve any data.`interface PropertiesAware` |
+| [ReportingExtension](-reporting-extension/index.html) | Allows to intercept detekt's result container by listening to the initial and final state and manipulate the reported findings.`interface ReportingExtension : `[`Extension`](-extension/index.html) |
 | [Rule](-rule/index.html) | A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.`abstract class Rule : `[`BaseRule`](../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)`, `[`ConfigAware`](-config-aware/index.html) |
 | [RuleId](-rule-id.html) | The type to use when referring to rule ids giving it more context then a String would.`typealias RuleId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [RuleSet](-rule-set/index.html) | A rule set is a collection of rules and must be defined within a rule set provider implementation.`class RuleSet` |
 | [RuleSetId](-rule-set-id.html) | `typealias RuleSetId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [RuleSetProvider](-rule-set-provider/index.html) | A rule set provider, as the name states, is responsible for creating rule sets.`interface RuleSetProvider` |
-| [SetupContext](-setup-context/index.html) | Context providing useful processing settings to initialize extensions.`interface SetupContext` |
+| [SetupContext](-setup-context/index.html) | Context providing useful processing settings to initialize extensions.`interface SetupContext : `[`PropertiesAware`](-properties-aware/index.html) |
 | [Severity](-severity/index.html) | Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.`enum class Severity` |
 | [SingleAssign](-single-assign/index.html) | Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s.`class SingleAssign<T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>` |
 | [SourceLocation](-source-location/index.html) | Stores line and column information of a location.`data class SourceLocation` |
@@ -67,4 +69,8 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 ### Properties
 
 | [DEFAULT_FLOAT_CONVERSION_FACTOR](-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.html) | To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5)`const val DEFAULT_FLOAT_CONVERSION_FACTOR: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+
+### Functions
+
+| [getOrNull](get-or-null.html) | Allows to retrieve stored properties in a type safe way.`fun <T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`> `[`PropertiesAware`](-properties-aware/index.html)`.getOrNull(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): T?` |
 

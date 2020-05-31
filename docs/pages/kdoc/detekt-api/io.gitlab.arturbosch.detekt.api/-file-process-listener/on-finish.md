@@ -11,3 +11,5 @@ title: FileProcessListener.onFinish - detekt-api
 Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.
 Do not do heavy computations here as this method is called from the main thread.
 
+This method is called before any [ReportingExtension](../-reporting-extension/index.html).
+

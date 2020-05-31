@@ -15,7 +15,8 @@ import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
+import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
 import io.gitlab.arturbosch.detekt.core.measure
 import io.gitlab.arturbosch.detekt.core.reporting.red
 import java.io.PrintStream
@@ -33,21 +34,11 @@ class Runner(
             settings.debug { "Checking config took $checkConfigTime ms" }
             val (serviceLoadingTime, facade) = measure { DetektFacade.create(settings) }
             settings.debug { "Loading services took $serviceLoadingTime ms" }
-            var (engineRunTime, result) = measure { facade.run() }
+            val (engineRunTime, result) = measure { facade.run() }
             settings.debug { "Running core engine took $engineRunTime ms" }
-            checkBaselineCreation(result)
-            result = arguments.baseline?.let { BaselineFacade().transformResult(it, result) } ?: result
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)
             }
-        }
-    }
-
-    private fun checkBaselineCreation(result: Detektion) {
-        if (arguments.createBaseline) {
-            val smells = result.findings.flatMap { it.value }
-            val baselineFile = checkNotNull(arguments.baseline)
-            BaselineFacade().createOrUpdate(baselineFile, smells)
         }
     }
 
@@ -78,7 +69,10 @@ class Runner(
                 errPrinter = errorPrinter,
                 configUris = extractUris(),
                 reportPaths = reportPaths
-            )
+            ).apply {
+                register(DETEKT_BASELINE_PATH_KEY, baseline)
+                register(DETEKT_BASELINE_CREATION_KEY, createBaseline)
+            }
         }
         settings.debug { "Loading config took $configLoadTime ms" }
         settings.debug { "Creating settings took $settingsLoadTime ms" }
