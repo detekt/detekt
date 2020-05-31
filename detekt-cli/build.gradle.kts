@@ -6,6 +6,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
     implementation(project(":detekt-report-html"))
+    implementation(project(":detekt-report-txt"))
     implementation(project(":detekt-report-xml"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
