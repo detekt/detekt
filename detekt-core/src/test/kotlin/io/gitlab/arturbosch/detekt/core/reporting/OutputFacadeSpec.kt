@@ -46,9 +46,9 @@ internal class OutputFacadeSpec : Spek({
         }
 
         it("creates all output files") {
-            val subject = OutputFacade(defaultDetektion, defaultSettings)
+            val subject = OutputFacade().apply { init(defaultSettings) }
 
-            subject.run()
+            subject.onFinalResult(defaultDetektion)
 
             assertThat(printStream.toString()).contains(
                 "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",

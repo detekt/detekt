@@ -32,6 +32,8 @@ internal fun printFindings(findings: Map<String, List<Finding>>): String? {
 const val BUILD = "build"
 const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
+const val DETEKT_OUTPUT_REPORT_PATHS_KEY = "detekt.output.report.paths.key"
+
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
 fun Detektion.filterEmptyIssues(config: Config): Map<RuleSetId, List<Finding>> {

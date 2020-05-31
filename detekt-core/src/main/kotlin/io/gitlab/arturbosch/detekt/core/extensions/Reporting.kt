@@ -12,7 +12,7 @@ fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detek
     extensions.forEach { it.onRawResult(initialResult) }
     val finalResult = extensions.fold(initialResult) { acc, extension ->
         val intermediateValue = extension.transformFindings(acc.findings)
-        return DelegatingResult(acc, intermediateValue)
+        if (intermediateValue === acc.findings) acc else DelegatingResult(acc, intermediateValue)
     }
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult

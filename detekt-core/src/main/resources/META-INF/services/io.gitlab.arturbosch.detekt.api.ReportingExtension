@@ -1,1 +1,2 @@
+io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 io.gitlab.arturbosch.detekt.core.baseline.BaselineResultMapping

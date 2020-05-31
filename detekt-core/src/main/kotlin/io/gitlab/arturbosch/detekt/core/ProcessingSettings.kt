@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -44,8 +43,7 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     override val errPrinter: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
-    override val configUris: Collection<URI> = emptyList(),
-    val reportPaths: Collection<ReportPath> = emptyList()
+    override val configUris: Collection<URI> = emptyList()
 ) : AutoCloseable, Closeable, SetupContext {
 
     init {

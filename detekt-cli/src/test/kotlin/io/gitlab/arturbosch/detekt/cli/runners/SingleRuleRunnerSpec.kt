@@ -24,7 +24,7 @@ class SingleRuleRunnerSpec : Spek({
                 "--run-rule", "test:test"
             )
 
-            SingleRuleRunner(args, System.out, System.err).execute()
+            SingleRuleRunner(args, NullPrintStream(), NullPrintStream()).execute()
 
             assertThat(Files.readAllLines(tmp)).hasSize(1)
         }

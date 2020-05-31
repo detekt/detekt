@@ -4,6 +4,7 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -49,6 +50,7 @@ fun createProcessingSettings(
     errPrinter = errPrinter,
     autoCorrect = autoCorrect,
     debug = debug,
-    configUris = configUris,
-    reportPaths = reportPaths
-)
+    configUris = configUris
+).apply {
+    register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+}
