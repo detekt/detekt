@@ -3,6 +3,9 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichJava
+import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files

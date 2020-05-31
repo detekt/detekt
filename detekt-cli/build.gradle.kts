@@ -5,21 +5,14 @@ application {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
+    implementation(project(":detekt-report-html"))
+    implementation(project(":detekt-report-txt"))
+    implementation(project(":detekt-report-xml"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:${Versions.KOTLINX_HTML}") {
-        exclude(group = "org.jetbrains.kotlin")
-    }
 
     testImplementation(project(":detekt-test"))
     testImplementation(project(":detekt-rules"))
-}
-
-// bundle detekt's version for debug logging on rule exceptions
-tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes(mapOf("DetektVersion" to Versions.DETEKT))
-    }
 }
 
 // Implements https://github.com/brianm/really-executable-jars-maven-plugin maven plugin behaviour.

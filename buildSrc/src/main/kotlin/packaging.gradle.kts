@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.jfrog.bintray.gradle.BintrayExtension
 import groovy.lang.GroovyObject
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
@@ -15,6 +16,10 @@ project(":detekt-cli") {
     apply {
         plugin("application")
         plugin("com.github.johnrengelman.shadow")
+    }
+
+    tasks.withType<ShadowJar>() {
+        mergeServiceFiles()
     }
 }
 

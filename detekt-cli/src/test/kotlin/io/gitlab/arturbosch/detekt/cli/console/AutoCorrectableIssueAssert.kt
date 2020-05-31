@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.cli.createCorrectableFinding
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createCorrectableFinding
 import org.assertj.core.api.Assertions.assertThat
 
 internal object AutoCorrectableIssueAssert {

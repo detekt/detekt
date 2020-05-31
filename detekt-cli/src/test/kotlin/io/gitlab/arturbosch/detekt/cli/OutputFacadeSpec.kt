@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.txt.TxtOutputReport
+import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.resource
-import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
+import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.utils.closeQuietly

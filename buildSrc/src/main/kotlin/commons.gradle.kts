@@ -26,6 +26,13 @@ subprojects {
         plugin("jacoco")
     }
 
+    // bundle detekt's version for all jars to use it at runtime
+    tasks.withType<Jar>().configureEach {
+        manifest {
+            attributes(mapOf("DetektVersion" to Versions.DETEKT))
+        }
+    }
+
     jacoco.toolVersion = Versions.JACOCO
 
     tasks.withType<Test>().configureEach {
