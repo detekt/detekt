@@ -7,9 +7,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
-import io.gitlab.arturbosch.detekt.cli.createFilters
-import io.gitlab.arturbosch.detekt.cli.createPlugins
-import io.gitlab.arturbosch.detekt.cli.loadConfiguration
+import io.gitlab.arturbosch.detekt.cli.createSettings
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
@@ -18,8 +16,8 @@ import java.io.PrintStream
 
 class SingleRuleRunner(
     private val arguments: CliArgs,
-    private val outPrinter: PrintStream,
-    private val errPrinter: PrintStream
+    private val outputPrinter: PrintStream,
+    private val errorPrinter: PrintStream
 ) : Executable {
 
     override fun execute() {
@@ -27,34 +25,22 @@ class SingleRuleRunner(
             arguments.runRule?.split(":")
         ) { "Unexpected empty 'runRule' argument." }
 
-        with(arguments) {
-            ProcessingSettings(
-                inputPaths = inputPaths,
-                config = loadConfiguration(),
-                pathFilters = createFilters(),
-                parallelCompilation = parallel,
-                autoCorrect = autoCorrect,
-                excludeDefaultRuleSets = disableDefaultRuleSets,
-                pluginPaths = createPlugins(),
-                outPrinter = outPrinter,
-                errPrinter = errPrinter,
-                reportPaths = reportPaths
-            )
-        }.use { settings ->
-            val realProvider = requireNotNull(
-                RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
-            ) { "There was no rule set with id '$ruleSet'." }
+        arguments.createSettings(outputPrinter, errorPrinter)
+            .use { settings ->
+                val realProvider = requireNotNull(
+                    RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
+                ) { "There was no rule set with id '$ruleSet'." }
 
-            val provider = RuleProducingProvider(rule, realProvider)
+                val provider = RuleProducingProvider(rule, realProvider)
 
-            assertRuleExistsBeforeRunningItLater(provider, settings)
+                assertRuleExistsBeforeRunningItLater(provider, settings)
 
-            DetektFacade.create(
-                settings,
-                listOf(provider),
-                listOf(DetektProgressListener().apply { init(settings) })
-            ).run()
-        }
+                DetektFacade.create(
+                    settings,
+                    listOf(provider),
+                    listOf(DetektProgressListener().apply { init(settings) })
+                ).run()
+            }
     }
 
     private fun assertRuleExistsBeforeRunningItLater(

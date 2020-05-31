@@ -1,20 +1,18 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.lang.IllegalStateException
 import java.nio.file.Files
-import java.nio.file.Paths
 
 class SingleRuleRunnerSpec : Spek({
 
-    val case = Paths.get(resource("cases/Poko.kt"))
+    val case = resourceAsPath("cases/Poko.kt")
 
     describe("single rule runner") {
 
@@ -26,7 +24,7 @@ class SingleRuleRunnerSpec : Spek({
                 "--run-rule", "test:test"
             )
 
-            SingleRuleRunner(args, NullPrintStream(), NullPrintStream()).execute()
+            SingleRuleRunner(args, System.out, System.err).execute()
 
             assertThat(Files.readAllLines(tmp)).hasSize(1)
         }
