@@ -1,5 +1,6 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.gitlab.arturbosch.detekt.core.reporting
 
+import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -15,7 +16,7 @@ class FileBasedFindingsReportSpec : Spek({
     describe("findings report") {
 
         context("reports the debt per file and rule set with the overall debt") {
-            val expectedContent = readResource("grouped-findings-report.txt")
+            val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     Pair(

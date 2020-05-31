@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
@@ -12,7 +13,7 @@ import java.nio.file.Paths
 
 internal class CliArgsSpec : Spek({
 
-    val projectPath = Paths.get(resource("/empty.txt")).parent.parent.parent.parent.toAbsolutePath()
+    val projectPath = resourceAsPath("/").parent.parent.parent.parent.toAbsolutePath()
 
     describe("Parsing the input path") {
 

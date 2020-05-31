@@ -1,6 +1,6 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.gitlab.arturbosch.detekt.cli.IS_WINDOWS
+import io.gitlab.arturbosch.detekt.core.IS_WINDOWS
 
 private const val ESC = "\u001B"
 private val RESET = Color(0)

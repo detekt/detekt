@@ -1,5 +1,5 @@
-io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
-io.gitlab.arturbosch.detekt.cli.console.FindingsReport
-io.gitlab.arturbosch.detekt.cli.console.FileBasedFindingsReport
-io.gitlab.arturbosch.detekt.cli.console.NotificationReport
-io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
+io.gitlab.arturbosch.detekt.core.reporting.ComplexityReport
+io.gitlab.arturbosch.detekt.core.reporting.FindingsReport
+io.gitlab.arturbosch.detekt.core.reporting.FileBasedFindingsReport
+io.gitlab.arturbosch.detekt.core.reporting.NotificationReport
+io.gitlab.arturbosch.detekt.core.reporting.ProjectStatisticsReport

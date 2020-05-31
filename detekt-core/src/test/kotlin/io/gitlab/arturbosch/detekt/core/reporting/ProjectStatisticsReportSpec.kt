@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.test.TestDetektion

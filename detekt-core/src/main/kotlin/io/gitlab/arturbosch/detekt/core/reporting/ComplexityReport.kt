@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.gitlab.arturbosch.detekt.api.ConsoleReport

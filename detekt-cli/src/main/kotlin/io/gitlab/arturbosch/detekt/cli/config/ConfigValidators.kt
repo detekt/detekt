@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.config
 
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.cli.console.red
+import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.util.ServiceLoader
 
