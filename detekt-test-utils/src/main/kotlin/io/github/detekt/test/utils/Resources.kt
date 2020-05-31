@@ -1,6 +1,7 @@
 package io.github.detekt.test.utils
 
 import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -14,3 +15,8 @@ fun resource(name: String): URI {
 }
 
 fun resourceAsPath(name: String): Path = Paths.get(resource(name))
+
+fun readResourceContent(name: String): String {
+    val path = resourceAsPath(name)
+    return Files.readAllLines(path).joinToString("\n") + "\n"
+}

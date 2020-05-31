@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
@@ -12,21 +12,18 @@ import java.nio.file.Paths
 
 internal class CliArgsSpec : Spek({
 
-    val projectPath = Paths.get(resource("/empty.txt")).parent.parent.parent.parent.toAbsolutePath()
+    val projectPath = resourceAsPath("/").parent.parent.parent.parent.toAbsolutePath()
 
     describe("Parsing the input path") {
 
         it("the current working directory is used if parameter is not set") {
-            val cli = parseArguments(emptyArray(), NullPrintStream(), NullPrintStream())
+            val cli = createCliArgs()
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
         }
 
         it("a single value is converted to a path") {
-            val cli = parseArguments(
-                arrayOf("--input", "$projectPath"),
-                NullPrintStream(),
-                NullPrintStream())
+            val cli = createCliArgs("--input", "$projectPath")
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
         }
@@ -34,10 +31,7 @@ internal class CliArgsSpec : Spek({
         it("multiple input paths can be separated by comma") {
             val mainPath = projectPath.resolve("src/main").toAbsolutePath()
             val testPath = projectPath.resolve("src/test").toAbsolutePath()
-            val cli = parseArguments(
-                arrayOf("--input", "$mainPath,$testPath"),
-                NullPrintStream(),
-                NullPrintStream())
+            val cli = createCliArgs("--input", "$mainPath,$testPath")
             assertThat(cli.inputPaths).hasSize(2)
             assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
         }
@@ -54,36 +48,34 @@ internal class CliArgsSpec : Spek({
 
     describe("Valid combination of options") {
 
-        fun fixture(args: Array<String>) = parseArguments(args, NullPrintStream(), NullPrintStream())
-
         describe("Baseline feature") {
 
             it("reports an error when using --create-baseline without a --baseline file") {
                 assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                    .isThrownBy { fixture(arrayOf("--create-baseline")) }
+                    .isThrownBy { createCliArgs("--create-baseline") }
             }
 
             it("reports an error when using --baseline file does not exist") {
                 val pathToNonExistentDirectory = projectPath.resolve("nonExistent").toString()
                 assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                    .isThrownBy { fixture(arrayOf("--baseline", pathToNonExistentDirectory)) }
+                    .isThrownBy { createCliArgs("--baseline", pathToNonExistentDirectory) }
             }
 
             it("reports an error when using --baseline file which is not a file") {
-                val directory = Paths.get(resource("/cases")).toString()
+                val directory = resourceAsPath("/cases").toString()
                 assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                    .isThrownBy { fixture(arrayOf("--baseline", directory)) }
+                    .isThrownBy { createCliArgs("--baseline", directory) }
             }
         }
 
         it("throws HelpRequest on --help") {
             assertThatExceptionOfType(HelpRequest::class.java)
-                .isThrownBy { fixture(arrayOf("--help")) }
+                .isThrownBy { createCliArgs("--help") }
         }
 
         it("throws HandledArgumentViolation on wrong options") {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { fixture(arrayOf("--unknown-to-us-all")) }
+                .isThrownBy { createCliArgs("--unknown-to-us-all") }
         }
     }
 })

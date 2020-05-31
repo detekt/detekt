@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.console
+package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
@@ -6,6 +6,7 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
+import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.test.createFinding
@@ -21,7 +22,7 @@ internal class ComplexityReportSpec : Spek({
 
             it("successfully generates a complexity report") {
                 val report = ComplexityReport()
-                val expectedContent = readResource("complexity-report.txt")
+                val expectedContent = readResourceContent("/reporting/complexity-report.txt")
                 val detektion = createDetektion()
                 addData(detektion)
                 assertThat(report.render(detektion)).isEqualTo(expectedContent)

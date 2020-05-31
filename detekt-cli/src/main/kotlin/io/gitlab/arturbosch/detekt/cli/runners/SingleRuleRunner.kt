@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
-import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
+import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import java.io.PrintStream
 
@@ -54,7 +54,7 @@ class SingleRuleRunner(
                 listOf(DetektProgressListener().apply { init(settings) })
             ).run()
 
-            OutputFacade(arguments, result, settings).run()
+            OutputFacade(arguments.reportPaths, result, settings).run()
         }
     }
 
