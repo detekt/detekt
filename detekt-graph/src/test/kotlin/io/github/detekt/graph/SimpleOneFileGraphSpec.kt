@@ -2,7 +2,6 @@ package io.github.detekt.graph
 
 import io.github.detekt.graph.api.Edge
 import io.github.detekt.graph.api.Node
-import io.github.detekt.graph.api.isReachable
 import io.github.detekt.test.utils.KtTestCompiler
 import io.github.detekt.test.utils.compileContentForTest
 import org.spekframework.spek2.Spek
@@ -100,22 +99,19 @@ internal class SimpleOneFileGraphSpec : Spek({
 
         context("dead code analysis") {
 
-            context("call graph") {
+            describe("starting from the main function") {
 
-                describe("starting from the main function") {
+                val mainNode = requireNotNull(graph.nodeBySimpleName("main"))
 
-                    val mainNode = requireNotNull(graph.nodeBySimpleName("main"))
+                it("finds unreachable Class2 node") {
                     computeReachability(graph, setOf(mainNode.name))
 
-                    it("finds unreachable Class2 node") {
-                        val unreachableNodes = graph.nodesOfType(type = Node.Type.FUNCTION)
-                            .filter { !it.isReachable() }
-                            .toList()
+                    val unreachableNodes = graph.nodes { !graph.isReachable(it) }.toList()
 
-                        expectThat(unreachableNodes)
-                            .hasSize(1)
-                            .get { first() }
-                            .get { name }.isEqualTo("test.Class2.notCalled")
+                    expectThat(unreachableNodes) {
+                        hasSize(2)
+                        first { it is ClassNode }.get { name }.isEqualTo("test.Class2")
+                        first { it is FunctionNode }.get { name }.isEqualTo("test.Class2.notCalled")
                     }
                 }
             }

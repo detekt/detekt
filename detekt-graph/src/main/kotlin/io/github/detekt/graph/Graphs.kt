@@ -4,6 +4,7 @@ import io.github.detekt.graph.api.Attribute
 import io.github.detekt.graph.api.Edge
 import io.github.detekt.graph.api.Graph
 import io.github.detekt.graph.api.Node
+import io.github.detekt.graph.api.isReachable
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jgrapht.Graphs
@@ -41,6 +42,12 @@ class DefaultGraph : DefaultDirectedGraph<Node, Edge>(Edge::class.java), Graph {
 
     override fun outgoingEdges(node: Node): Set<Edge> = outgoingEdgesOf(node)
     override fun incomingEdges(node: Node): Set<Edge> = incomingEdgesOf(node)
+    override fun isReachable(node: Node): Boolean = when {
+        node.isReachable() -> true
+        node is ClassNode && outgoingEdges(node).any { it.target.isReachable() } -> true
+        node is PackageNode || node is FileNode -> true
+        else -> false
+    }
 }
 
 fun Graph.firstNode(condition: (Node) -> Boolean): Node? = nodes(condition).firstOrNull()
