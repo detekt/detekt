@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.net.MalformedURLException
+import java.text.ParseException
 
 class SwallowedExceptionSpec : Spek({
     val subject by memoized { SwallowedException() }
@@ -203,52 +205,26 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("ignores NumberFormatException by default") {
-            val code = """
-                fun f() {
-                    try {
-                    } catch (e: NumberFormatException) {
-                        throw Exception()
-                    }
-                }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+        listOf(
+            InterruptedException::class.java.simpleName,
+            MalformedURLException::class.java.simpleName,
+            NumberFormatException::class.java.simpleName,
+            ParseException::class.java.simpleName
+        ).forEach { exceptionName ->
+            it("ignores $exceptionName by default") {
+                val code = """
+                import java.net.MalformedURLException
+                import java.text.ParseException
 
-        it("ignores InterruptedException by default") {
-            val code = """
                 fun f() {
                     try {
-                    } catch (e: InterruptedException) {
+                    } catch (e: $exceptionName) {
                         throw Exception()
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
-        it("ignores ParseException by default") {
-            val code = """
-                fun f() {
-                    try {
-                    } catch (e: ParseException) {
-                        throw Exception()
-                    }
-                }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
-        it("ignores MalformedURLException by default") {
-            val code = """
-                fun f() {
-                    try {
-                    } catch (e: MalformedURLException) {
-                        throw Exception()
-                    }
-                }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
     }
 })
