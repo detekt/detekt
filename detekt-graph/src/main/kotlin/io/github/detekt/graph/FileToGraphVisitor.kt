@@ -2,11 +2,16 @@ package io.github.detekt.graph
 
 import io.github.detekt.graph.api.Edge
 import io.github.detekt.graph.api.Node
+import io.github.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import java.util.ArrayDeque
 import java.util.Deque
 
@@ -30,7 +35,7 @@ internal class FileToGraphVisitor(
     }
 
     override fun visitKtFile(file: KtFile) {
-        fileNode = FileNode(file.name)
+        fileNode = FileNode(file.name, file.absolutePath())
         graph.addVertex(fileNode)
         withNewScope(fileNode) { super.visitKtFile(file) }
     }
@@ -43,14 +48,33 @@ internal class FileToGraphVisitor(
     }
 
     override fun visitClass(klass: KtClass) {
-        val node = ClassNode(checkNotNull(klass.name))
+        val node = ClassNode(checkNotNull(klass.fqName?.asString()))
         addToScopeNode(node)
         withNewScope(node) { super.visitClass(klass) }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val node = FunctionNode(checkNotNull(function.name))
+        val node = FunctionNode(checkNotNull(function.fqName?.asString()))
         addToScopeNode(node)
         withNewScope(node) { super.visitNamedFunction(function) }
+    }
+
+    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+        val node = createConstructorNode(constructor) ?: return
+        withNewScope(node) { super.visitPrimaryConstructor(constructor) }
+    }
+
+    private fun createConstructorNode(constructor: KtConstructor<*>): ConstructorNode? {
+        val classFqName = constructor.getStrictParentOfType<KtClass>()
+            ?.fqName
+            ?.asString()
+            ?: return null
+
+        return ConstructorNode("$classFqName.$CONSTRUCTOR_DEFAULT_IDENTIFIER")
+    }
+
+    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+        val node = createConstructorNode(constructor) ?: return
+        withNewScope(node) { super.visitSecondaryConstructor(constructor) }
     }
 }

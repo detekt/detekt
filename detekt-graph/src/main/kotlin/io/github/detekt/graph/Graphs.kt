@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jgrapht.Graphs
 import org.jgrapht.graph.DefaultDirectedGraph
+import java.nio.file.Path
 
 fun generateGraph(files: List<KtFile>, context: BindingContext): Graph {
     val graph = files.fold(DefaultGraph()) { uberGraph, file ->
@@ -44,6 +45,10 @@ fun Graph.firstNode(condition: (Node) -> Boolean): Node? = nodes(condition).firs
 
 fun Graph.nodesOfType(type: Node.Type): Sequence<Node> = nodes { it.type == type }
 
+fun Graph.nodeByFqName(name: String): Node? = firstNode { it.name == name }
+
+fun Graph.nodeBySimpleName(name: String): Node? = firstNode { it.name.substringAfterLast(".") == name }
+
 sealed class DefaultNode(
     override val type: Node.Type
 ) : Node {
@@ -60,7 +65,10 @@ class DefaultEdge(
     override fun toString(): String = "Edge{${source.name} -> ${target.name}}"
 }
 
-class FileNode(override val name: String) : DefaultNode(Node.Type.FILE)
+class FileNode(override val name: String, val path: Path) : DefaultNode(Node.Type.FILE)
 class PackageNode(override val name: String) : DefaultNode(Node.Type.PACKAGE)
 class ClassNode(override val name: String) : DefaultNode(Node.Type.CLASS)
 class FunctionNode(override val name: String) : DefaultNode(Node.Type.FUNCTION)
+class ConstructorNode(override val name: String) : DefaultNode(Node.Type.CONSTRUCTOR)
+
+const val CONSTRUCTOR_DEFAULT_IDENTIFIER = "<init>"

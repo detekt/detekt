@@ -8,6 +8,7 @@ interface Edge {
 
     enum class Type {
         ENCLOSES,
-        DECLARES
+        DECLARES,
+        CALL
     }
 }

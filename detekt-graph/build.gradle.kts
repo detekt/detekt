@@ -4,6 +4,6 @@ dependencies {
     implementation("org.jgrapht:jgrapht-core:${Versions.JGRAPHT}")
     implementation("org.jgrapht:jgrapht-demo:${Versions.JGRAPHT}")
 
-    testImplementation(project(":detekt-test-utils"))
+    testImplementation(project(":detekt-test"))
     testImplementation("io.strikt:strikt-core:0.26.1")
 }

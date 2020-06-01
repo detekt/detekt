@@ -70,7 +70,7 @@ internal class FileToGraphVisitorSpec : Spek({
 
         describe("Class node") {
 
-            val class1Node = requireNotNull(graph.firstNode { it.name == "Class1" })
+            val class1Node = requireNotNull(graph.nodeBySimpleName("Class1"))
 
             it("has two outgoing edges to functions") {
                 expectThat(graph.outgoingEdges(class1Node))
@@ -83,11 +83,14 @@ internal class FileToGraphVisitorSpec : Spek({
 
             describe("main function") {
 
-                val mainNode = requireNotNull(graph.firstNode { it.name == "main" })
+                val mainNode = requireNotNull(graph.nodeBySimpleName("main"))
 
                 it("has edges to all class and function nodes of Class1") {
-                    expectThat(graph.outgoingEdges(mainNode))
-                        .hasSize(3)
+                    expectThat(graph.outgoingEdges(mainNode)) {
+                        hasSize(3)
+                        filter { it.target is ConstructorNode }.hasSize(1)
+                        filter { it.target is FunctionNode }.hasSize(2)
+                    }
                 }
             }
         }
