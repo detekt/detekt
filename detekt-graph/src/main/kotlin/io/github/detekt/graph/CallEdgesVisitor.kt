@@ -16,6 +16,7 @@ class CallEdgesVisitor(
     private val context: BindingContext
 ) : KtTreeVisitorVoid() {
 
+    @Suppress("detekt.ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         val callerFunction = expression.getTopmostParentOfType<KtNamedFunction>()
             ?.fqName

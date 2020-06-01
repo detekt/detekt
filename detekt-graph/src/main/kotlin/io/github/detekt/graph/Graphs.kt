@@ -1,5 +1,6 @@
 package io.github.detekt.graph
 
+import io.github.detekt.graph.api.Attribute
 import io.github.detekt.graph.api.Edge
 import io.github.detekt.graph.api.Graph
 import io.github.detekt.graph.api.Node
@@ -8,6 +9,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jgrapht.Graphs
 import org.jgrapht.graph.DefaultDirectedGraph
 import java.nio.file.Path
+import java.util.EnumMap
 
 fun generateGraph(files: List<KtFile>, context: BindingContext): Graph {
     val graph = files.fold(DefaultGraph()) { uberGraph, file ->
@@ -54,6 +56,8 @@ sealed class DefaultNode(
 ) : Node {
 
     override fun toString(): String = "Node{$name}"
+
+    override val data: MutableMap<Attribute, Any> = EnumMap(Attribute::class.java)
 }
 
 class DefaultEdge(

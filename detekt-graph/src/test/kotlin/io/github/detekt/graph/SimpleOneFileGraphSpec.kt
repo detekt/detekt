@@ -2,19 +2,19 @@ package io.github.detekt.graph
 
 import io.github.detekt.graph.api.Edge
 import io.github.detekt.graph.api.Node
+import io.github.detekt.graph.api.isReachable
 import io.github.detekt.test.utils.KtTestCompiler
 import io.github.detekt.test.utils.compileContentForTest
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import strikt.api.expectThat
-import strikt.assertions.all
 import strikt.assertions.filter
 import strikt.assertions.first
 import strikt.assertions.hasSize
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 
-internal class FileToGraphVisitorSpec : Spek({
+internal class SimpleOneFileGraphSpec : Spek({
 
     val wrapper = KtTestCompiler.createEnvironment()
 
@@ -30,7 +30,10 @@ internal class FileToGraphVisitorSpec : Spek({
                 fun funWithReturn(): Int = 5
             }
 
-            class Class2
+            class Class2 {
+
+                fun notCalled() = TODO()
+            }
 
             fun main(args: Array<String>) {
                 Class1().funWithUnit()
@@ -74,8 +77,8 @@ internal class FileToGraphVisitorSpec : Spek({
 
             it("has two outgoing edges to functions") {
                 expectThat(graph.outgoingEdges(class1Node))
+                    .filter { it.target is FunctionNode }
                     .hasSize(2)
-                    .all { get { target }.isA<FunctionNode>() }
             }
         }
 
@@ -90,6 +93,29 @@ internal class FileToGraphVisitorSpec : Spek({
                         hasSize(3)
                         filter { it.target is ConstructorNode }.hasSize(1)
                         filter { it.target is FunctionNode }.hasSize(2)
+                    }
+                }
+            }
+        }
+
+        context("dead code analysis") {
+
+            context("call graph") {
+
+                describe("starting from the main function") {
+
+                    val mainNode = requireNotNull(graph.nodeBySimpleName("main"))
+                    computeReachability(graph, setOf(mainNode.name))
+
+                    it("finds unreachable Class2 node") {
+                        val unreachableNodes = graph.nodesOfType(type = Node.Type.FUNCTION)
+                            .filter { !it.isReachable() }
+                            .toList()
+
+                        expectThat(unreachableNodes)
+                            .hasSize(1)
+                            .get { first() }
+                            .get { name }.isEqualTo("test.Class2.notCalled")
                     }
                 }
             }
