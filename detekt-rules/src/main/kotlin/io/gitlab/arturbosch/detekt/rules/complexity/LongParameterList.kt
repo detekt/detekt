@@ -32,9 +32,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  * @configuration ignoreDataClasses - ignore long constructor parameters list for data classes (default: `true`)
  * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these
- * annotation class names (default: `[]`); (value is a comma separated string with the annotation class names);
- * the most common case is for Dagger constructors that are annotated with @Inject which would be specified
- * with `Inject` (quotes are required)
+ * annotation class names (default: `[]`); (e.g. ['Inject', 'Module', 'Suppress']);
+ * the most common case is for dependency injection where constructors are annotated with @Inject.
  *
  * @active since v1.0.0
  */

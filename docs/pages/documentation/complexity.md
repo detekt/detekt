@@ -243,7 +243,8 @@ Reports functions and constructors which have more parameters than a certain thr
 * ``ignoreAnnotated`` (default: ``[]``)
 
    ignore long parameters list for constructors or functions in the context of these
-annotation class names
+annotation class names ; (e.g. ['Inject', 'Module', 'Suppress']);
+the most common case is for dependency injection where constructors are annotated with @Inject.
 
 ### MethodOverloading
 
