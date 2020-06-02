@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object DeprecationSpec : Spek({
-    val subject by memoized { Deprecation(Config.empty) }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { Deprecation(Config.empty) }
 
     describe("Deprecation detection") {
 
@@ -32,7 +31,7 @@ object DeprecationSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report when supertype is not deprecated") {
@@ -48,7 +47,7 @@ object DeprecationSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

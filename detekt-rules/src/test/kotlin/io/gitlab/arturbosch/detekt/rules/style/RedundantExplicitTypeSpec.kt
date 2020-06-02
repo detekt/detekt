@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object RedundantExplicitTypeSpec : Spek({
-    val subject by memoized { RedundantExplicitType(Config.empty) }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { RedundantExplicitType(Config.empty) }
 
     describe("RedundantExplicitType") {
 
@@ -23,7 +22,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Boolean = true
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for integer") {
@@ -32,7 +31,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Int = 3
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for long") {
@@ -41,7 +40,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Long = 3L
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for float") {
@@ -50,7 +49,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Float = 3.0f
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for double") {
@@ -59,7 +58,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Double = 3.0
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for char") {
@@ -68,7 +67,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val x: Char = 'f'
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for string template") {
@@ -79,7 +78,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val y: String = "$substitute"
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for name reference expression") {
@@ -90,7 +89,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val o: Test = Test
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports explicit type for call expression") {
@@ -105,7 +104,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val t: TallPerson = TallPerson("first", 3)
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report explicit type for call expression when type is an interface") {
@@ -120,7 +119,7 @@ object RedundantExplicitTypeSpec : Spek({
                     val t: Person = TallPerson("first", 3)
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

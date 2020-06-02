@@ -1,18 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class InstanceOfCheckForExceptionSpec : Spek({
-    val subject by memoized { InstanceOfCheckForException() }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { InstanceOfCheckForException() }
 
     describe("InstanceOfCheckForException rule") {
 
@@ -28,7 +27,7 @@ class InstanceOfCheckForExceptionSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("has nested is and as checks") {
@@ -42,7 +41,7 @@ class InstanceOfCheckForExceptionSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("has no instance of check") {
@@ -58,7 +57,7 @@ class InstanceOfCheckForExceptionSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("has no checks for the subtype of an exception") {
@@ -73,7 +72,7 @@ class InstanceOfCheckForExceptionSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

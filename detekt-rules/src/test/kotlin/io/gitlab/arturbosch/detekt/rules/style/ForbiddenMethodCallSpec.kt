@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KtTestCompiler
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ForbiddenMethodCallSpec : Spek({
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
 
     describe("ForbiddenMethodCall rule") {
 
@@ -24,7 +23,7 @@ class ForbiddenMethodCallSpec : Spek({
                 println("4")
             }
             """
-            val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(wrapper.env, code)
+            val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasSourceLocations(
                 SourceLocation(2, 5),
@@ -41,7 +40,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings =
                 ForbiddenMethodCall(TestConfig(mapOf(ForbiddenMethodCall.METHODS to "  "))).compileAndLintWithContext(
-                    wrapper.env,
+                    env,
                     code
                 )
             assertThat(findings).isEmpty()
@@ -56,7 +55,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.lang.System.gc")))
-            ).compileAndLintWithContext(wrapper.env, code)
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -68,7 +67,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
-            ).compileAndLintWithContext(wrapper.env, code)
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(38 to 54)
         }
@@ -82,7 +81,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
-            ).compileAndLintWithContext(wrapper.env, code)
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(49 to 65)
         }
@@ -97,7 +96,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println", "java.lang.System.gc")))
-            ).compileAndLintWithContext(wrapper.env, code)
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
@@ -112,7 +111,7 @@ class ForbiddenMethodCallSpec : Spek({
             """
             val findings = ForbiddenMethodCall(
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.io.PrintStream.println, java.lang.System.gc"))
-            ).compileAndLintWithContext(wrapper.env, code)
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }

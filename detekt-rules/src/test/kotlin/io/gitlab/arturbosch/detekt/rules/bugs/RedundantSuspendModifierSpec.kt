@@ -2,23 +2,22 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.coroutines.RedundantSuspendModifier
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object RedundantSuspendModifierSpec : Spek({
+    setupKotlinEnvironment()
+
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized {
         RedundantSuspendModifier(
             Config.empty
         )
     }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     describe("RedundantSuspendModifier") {
 
@@ -38,7 +37,7 @@ object RedundantSuspendModifierSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report when private") {
@@ -55,7 +54,7 @@ object RedundantSuspendModifierSpec : Spek({
                     suspendCoroutine()
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report when public function returns expression of platform type") {
@@ -66,7 +65,7 @@ object RedundantSuspendModifierSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("ignores when iterator is suspending") {
@@ -81,7 +80,7 @@ object RedundantSuspendModifierSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("ignores when suspending function used in property delegate") {
@@ -101,7 +100,7 @@ object RedundantSuspendModifierSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

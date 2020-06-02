@@ -1,25 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnnecessaryAbstractClassSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized {
         UnnecessaryAbstractClass(TestConfig(mapOf(
-                UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
+            UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
         )))
     }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     describe("UnnecessaryAbstractClass rule") {
 
@@ -32,7 +30,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         abstract fun f()
                     }
                 """
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(
                     findings,
                     "An abstract class without a concrete member can be refactored to an interface."
@@ -50,7 +48,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         abstract fun g()
                     } 
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -65,7 +63,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         fun f() {}
                     }
                 """
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
@@ -77,7 +75,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         }
                     }
                 """
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
@@ -89,19 +87,19 @@ class UnnecessaryAbstractClassSpec : Spek({
                         }
                     }
                 """
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
             it("reports no abstract members in an abstract class with just a constructor") {
                 val code = "abstract class A(val i: Int)"
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
             it("reports no abstract members in an abstract class with a body and a constructor") {
                 val code = "abstract class A(val i: Int) {}"
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
@@ -122,7 +120,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         fun g() {}
                     }
                 """
-                val findings = subject.compileAndLintWithContext(wrapper.env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
         }
@@ -140,7 +138,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         fun g() {}
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report an abstract class with a constructor and an abstract class derived from it") {
@@ -153,7 +151,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         fun g() {}
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report an abstract class with a function derived from an interface") {
@@ -166,7 +164,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         fun f()
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report empty abstract classes") {
@@ -174,7 +172,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                     abstract class A
                     abstract class B()
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report abstract classes with module annotation") {
@@ -191,7 +189,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         abstract fun f()
                     } 
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
     }

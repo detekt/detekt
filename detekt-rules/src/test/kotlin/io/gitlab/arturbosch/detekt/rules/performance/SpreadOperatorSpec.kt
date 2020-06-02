@@ -1,13 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class SpreadOperatorSpec : Spek({
+    setupKotlinEnvironment()
+
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { SpreadOperator() }
 
     describe("SpreadOperator rule") {
@@ -17,13 +21,8 @@ class SpreadOperatorSpec : Spek({
          */
         context("with type resolution") {
 
-            val wrapper by memoized(
-                factory = { KtTestCompiler.createEnvironment() },
-                destructor = { it.dispose() }
-            )
-
             val typeResolutionEnabledMessage = "Used in this way a spread operator causes a full copy of the array to" +
-                    " be created before calling a method which has a very high performance penalty."
+                " be created before calling a method which has a very high performance penalty."
 
             it("reports when array copy required using named parameters") {
                 val code = """
@@ -31,7 +30,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *xsArray)
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.env, code)
+                val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -41,7 +40,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(*xsArray)
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.env, code)
+                val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -50,7 +49,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *intArrayOf(1))
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("doesn't report when using array constructor with spread operator when varargs parameter comes first") {
@@ -58,7 +57,7 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("doesn't report when passing values directly") {
@@ -66,7 +65,7 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("doesn't report when function doesn't take a vararg parameter") {
@@ -79,7 +78,7 @@ class SpreadOperatorSpec : Spek({
                     strs.forEach { println(it) }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("doesn't report with expression inside params") {
@@ -92,14 +91,14 @@ class SpreadOperatorSpec : Spek({
                     println(test)
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
         context("without type resolution") {
 
             val typeResolutionDisabledMessage = "In most cases using a spread operator causes a full copy of the " +
-                    "array to be created before calling a method which has a very high performance penalty."
+                "array to be created before calling a method which has a very high performance penalty."
 
             it("reports when array copy required using named parameters") {
                 val code = """
