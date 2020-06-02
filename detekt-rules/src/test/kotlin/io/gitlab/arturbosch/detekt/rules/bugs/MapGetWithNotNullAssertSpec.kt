@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MapGetWithNotNullAssertSpec : Spek({
-    val subject by memoized { MapGetWithNotNullAssertionOperator(Config.empty) }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { MapGetWithNotNullAssertionOperator(Config.empty) }
 
     describe("check for MapGetWithNotNullAssert") {
 
@@ -23,7 +22,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<Any, Any>()
                     val value = map["key"]!!
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports map.get() with not null assertion") {
@@ -32,7 +31,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<Any, Any>()
                     val value = map.get("key")!!
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report map[] call without not-null assert") {
@@ -41,7 +40,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<String, String>()
                     map["key"]
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report map.getValue() call") {
@@ -50,7 +49,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<String, String>()
                     map.getValue("key")
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report map.getOrDefault() call") {
@@ -59,7 +58,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<String, String>()
                     map.getOrDefault("key", "")
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report map.getOrElse() call") {
@@ -68,7 +67,7 @@ class MapGetWithNotNullAssertSpec : Spek({
                     val map = emptyMap<String, String>()
                     map.getOrElse("key", { "" })
                 }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

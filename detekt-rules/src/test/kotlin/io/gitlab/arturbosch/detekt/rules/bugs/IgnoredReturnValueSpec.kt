@@ -1,20 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object IgnoredReturnValueSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { IgnoredReturnValue() }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     describe("default config with non-annotated return values") {
         it("does not report when a function which returns a value is called and the return is ignored") {
@@ -23,7 +21,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOf("hello")
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -34,7 +32,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -44,7 +42,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOf("hello").isEmpty().not()
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -54,7 +52,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOf("hello");println("foo")
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -64,7 +62,7 @@ object IgnoredReturnValueSpec : Spek({
                     println("foo");listOf("hello")
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -74,7 +72,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOf("hello")//foo
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -85,7 +83,7 @@ object IgnoredReturnValueSpec : Spek({
                     input.isTheAnswer()
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -104,7 +102,7 @@ object IgnoredReturnValueSpec : Spek({
                     x = listA()
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -116,7 +114,7 @@ object IgnoredReturnValueSpec : Spek({
                     noReturnValue()
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -128,7 +126,7 @@ object IgnoredReturnValueSpec : Spek({
                     // no-op
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -140,7 +138,7 @@ object IgnoredReturnValueSpec : Spek({
                     // no-op
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -150,7 +148,7 @@ object IgnoredReturnValueSpec : Spek({
                 
                 println(returnsInt())
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -160,7 +158,7 @@ object IgnoredReturnValueSpec : Spek({
                 
                 println(message = returnsInt())
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -179,7 +177,7 @@ object IgnoredReturnValueSpec : Spek({
                     println("foo")
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -197,7 +195,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -215,7 +213,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -232,7 +230,7 @@ object IgnoredReturnValueSpec : Spek({
                     listOfChecked("hello");println("foo")
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -250,7 +248,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 20)
         }
@@ -268,7 +266,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 14)
         }
@@ -285,7 +283,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(7, 11)
         }
@@ -303,7 +301,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -319,7 +317,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -334,7 +332,7 @@ object IgnoredReturnValueSpec : Spek({
                     // no-op
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -349,7 +347,7 @@ object IgnoredReturnValueSpec : Spek({
                     // no-op
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -362,7 +360,7 @@ object IgnoredReturnValueSpec : Spek({
                 
                 println(returnsInt())
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -375,7 +373,7 @@ object IgnoredReturnValueSpec : Spek({
                 
                 println(message = returnsInt())
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -400,7 +398,7 @@ object IgnoredReturnValueSpec : Spek({
                     returnsInt()
                 }
             """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -421,7 +419,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
+            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -439,7 +437,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
+            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -452,7 +450,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
+            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -473,7 +471,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
+            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
         }
@@ -487,7 +485,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(wrapper.env, code)
+            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(4, 5)
         }

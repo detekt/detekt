@@ -1,20 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ExplicitCollectionElementAccessMethodSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { ExplicitCollectionElementAccessMethod(Config.empty) }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     describe("Kotlin map") {
 
@@ -24,7 +22,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mapOf<String, String>() 
                         val value = map.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report safe map element access") {
@@ -33,7 +31,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mapOf<String, String>() 
                         val value = map?.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports map put method usage") {
@@ -42,7 +40,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports map element access with get method of non-abstract map") {
@@ -51,7 +49,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = hashMapOf<String, String>() 
                         val value = map.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports map element insert with put method of non-abstract map") {
@@ -60,7 +58,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = hashMapOf<String, String>() 
                         val value = map.put("key", "value") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report map access with []") {
@@ -69,7 +67,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mapOf<String, String>()
                         val value = map["key"] 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report map insert with []") {
@@ -78,7 +76,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mutableMapOf<String, String>()
                         map["key"] = "value" 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports map element access with get method from map in a chain") {
@@ -87,7 +85,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = mapOf<String, String>()
                         val value = listOf("1", "2").associateBy { it }.get("1")
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports map element access with get method from non-abstract map") {
@@ -96,7 +94,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = linkedMapOf<String, String>()
                         val value = map.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -107,7 +105,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = listOf<String>() 
                         val value = list.get(0) 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports mutable list element access with get method") {
@@ -116,7 +114,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = mutableListOf<String>()
                         val value = list.get(0) 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report element access with []") {
@@ -125,7 +123,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = listOf<String>() 
                         val value = list[0] 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports element access with get method of non-abstract list") {
@@ -134,7 +132,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = arrayListOf<String>() 
                         val value = list.get(0) 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -146,7 +144,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = java.util.HashMap<String, String>() 
                         val value = map.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports map put method usage") {
@@ -155,7 +153,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = java.util.HashMap<String, String>() 
                         map.put("key", "val") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report map access with []") {
@@ -164,7 +162,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = java.util.HashMap<String, String>() 
                         val value = map["key"] 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report map insert with []") {
@@ -173,7 +171,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = java.util.HashMap<String, String>() 
                         map["key"] = "value" 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports map element access with get method from map in a chain") {
@@ -182,7 +180,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val map = java.util.HashMap<String, String>() 
                         val value = listOf("1", "2").associateBy { it }.get("1") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -194,7 +192,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = java.util.ArrayList<String>() 
                         val value = list.get(0) 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("does not report element access with []") {
@@ -203,7 +201,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val list = java.util.ArrayList<String>() 
                         val value = list[0] 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -216,7 +214,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -227,7 +225,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                 val string = ""
                     .toString()
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

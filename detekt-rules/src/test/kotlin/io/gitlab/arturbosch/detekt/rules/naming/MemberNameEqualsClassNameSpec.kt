@@ -1,21 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MemberNameEqualsClassNameSpec : Spek({
-    val subject by memoized { MemberNameEqualsClassName(Config.empty) }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { MemberNameEqualsClassName(Config.empty) }
 
     describe("MemberNameEqualsClassName rule") {
 
@@ -35,7 +34,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report a function with same name in nested class") {
@@ -46,7 +45,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report a function with the same name as a companion object") {
@@ -57,7 +56,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -216,7 +215,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                         }
                     }
                 """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
             }
 
             it("doesn't report a factory function") {
@@ -233,7 +232,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                     
                     class C: A()
                 """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("doesn't report a body-less factory function") {
@@ -248,7 +247,7 @@ class MemberNameEqualsClassNameSpec : Spek({
 
                     class C: A()
                 """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
         }
     }

@@ -1,24 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
 class UnusedPrivateMemberSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { UnusedPrivateMember() }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     val regexTestingCode = """
                 class Test {
@@ -1051,7 +1049,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("report unused minus operator") {
@@ -1063,7 +1061,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -1083,7 +1081,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("report it when the class has same named functions") {
@@ -1104,7 +1102,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("report it when the class has same named extension functions") {
@@ -1125,7 +1123,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
     }
 })
