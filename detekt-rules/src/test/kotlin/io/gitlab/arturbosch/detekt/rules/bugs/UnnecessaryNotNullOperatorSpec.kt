@@ -1,18 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnnecessaryNotNullOperatorSpec : Spek({
-    val subject by memoized { UnnecessaryNotNullOperator() }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val env: KotlinCoreEnvironment by memoized()
+    val subject by memoized { UnnecessaryNotNullOperator() }
 
     describe("check unnecessary not null operators") {
 
@@ -21,7 +20,7 @@ class UnnecessaryNotNullOperatorSpec : Spek({
                 val a = 1
                 val b = a!!
                 """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 21)
         }
@@ -31,7 +30,7 @@ class UnnecessaryNotNullOperatorSpec : Spek({
                 val a = 1
                 val b = a!!.plus(42)
                 """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 21)
         }
@@ -41,7 +40,7 @@ class UnnecessaryNotNullOperatorSpec : Spek({
                 val a = 1
                 val b = a!!.plus(42)!!
                 """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(18 to 21, 18 to 32)
         }
@@ -54,7 +53,7 @@ class UnnecessaryNotNullOperatorSpec : Spek({
                 val a : Int? = 1
                 val b = a!!
                 """
-            val findings = subject.compileAndLintWithContext(wrapper.env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

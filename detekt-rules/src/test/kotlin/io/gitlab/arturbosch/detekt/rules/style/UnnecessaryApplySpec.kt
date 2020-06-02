@@ -1,21 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnnecessaryApplySpec : Spek({
 
-    val subject by memoized { UnnecessaryApply(Config.empty) }
+    setupKotlinEnvironment()
 
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
+    val subject by memoized { UnnecessaryApply(Config.empty) }
+    val env: KotlinCoreEnvironment by memoized()
 
     describe("UnnecessaryApply rule") {
 
@@ -217,7 +216,7 @@ class UnnecessaryApplySpec : Spek({
         context("false positive when it's used as an expression - #2435") {
 
             it("do not report when it's used as an assignment") {
-                assertThat(subject.compileAndLintWithContext(wrapper.env, """
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C {
                         fun f() {}
                     }
@@ -234,7 +233,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("do not report when it's used as the last statement of a block inside lambda") {
-                assertThat(subject.compileAndLintWithContext(wrapper.env, """
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C {
                         fun f() {}
                     }

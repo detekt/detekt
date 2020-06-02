@@ -1,22 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.github.detekt.test.utils.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UseCheckOrErrorSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { UseCheckOrError(Config.empty) }
-
-    val wrapper by memoized(
-        factory = { KtTestCompiler.createEnvironment() },
-        destructor = { it.dispose() }
-    )
 
     describe("UseCheckOrError rule") {
 
@@ -150,7 +148,7 @@ class UseCheckOrErrorSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report if the exception thrown has a String literal argument and a non-String argument") {
@@ -162,7 +160,7 @@ class UseCheckOrErrorSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("reports if the exception thrown has a non-String literal argument") {
@@ -174,7 +172,7 @@ class UseCheckOrErrorSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
         }
     }
