@@ -4,7 +4,8 @@ import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.merge
+import io.gitlab.arturbosch.detekt.formatting.KOTLIN_IMPORTS_LAYOUT_KEY
+import io.gitlab.arturbosch.detekt.formatting.copy
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -25,11 +26,10 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
     private fun chooseDefaultLayout() = if (isAndroid) ASCII else IDEA
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? =
-        { EditorConfig.merge(it, importLayout = layout) }
+        { it.copy(KOTLIN_IMPORTS_LAYOUT_KEY to layout) }
 
     companion object {
         const val LAYOUT_PATTERN = "layout"
-        const val EDITOR_CONFIG_KEY = "kotlin_imports_layout"
         const val ASCII = "ascii"
         const val IDEA = "idea"
     }

@@ -5,7 +5,8 @@ import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.merge
+import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
+import io.gitlab.arturbosch.detekt.formatting.copy
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -23,8 +24,7 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     private val indentSize = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        EditorConfig.merge(it,
-                indentSize = indentSize)
+        it.copy(INDENT_SIZE_KEY to indentSize)
     }
 
     companion object {
