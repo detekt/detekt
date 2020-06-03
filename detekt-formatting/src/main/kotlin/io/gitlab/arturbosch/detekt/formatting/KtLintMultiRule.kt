@@ -32,16 +32,19 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundCurly
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundDot
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundDoubleColon
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
-import java.util.LinkedList
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
+import java.util.LinkedList
 
 /**
  * Runs all KtLint rules.
@@ -77,11 +80,14 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingAroundColon(config),
         SpacingAroundComma(config),
         SpacingAroundCurly(config),
+        SpacingAroundDoubleColon(config),
         SpacingAroundDot(config),
         SpacingAroundKeyword(config),
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
+        SpacingBetweenDeclarationsWithAnnotations(config),
+        SpacingBetweenDeclarationsWithComments(config),
         StringTemplate(config)
     )
 

@@ -159,6 +159,10 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
+### SpacingAroundDoubleColon
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
 ### SpacingAroundKeyword
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
@@ -172,6 +176,14 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
+### SpacingBetweenDeclarationsWithAnnotations
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
+### SpacingBetweenDeclarationsWithComments
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
