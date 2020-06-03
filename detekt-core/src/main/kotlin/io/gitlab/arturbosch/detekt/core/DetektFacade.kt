@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
+import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 
 class DetektFacade(
     private val detektor: Detektor,
@@ -24,7 +25,7 @@ class DetektFacade(
         processors.forEach { it.onStart(filesToAnalyze) }
 
         val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
-        val result = DetektResult(findings.toSortedMap())
+        var result: Detektion = DetektResult(findings.toSortedMap())
 
         if (saveSupported) {
             KtFileModifier().saveModifiedFiles(filesToAnalyze) { result.add(it) }
@@ -32,7 +33,9 @@ class DetektFacade(
 
         processors.forEach { it.onFinish(filesToAnalyze, result) }
 
-        return handleReportingExtensions(settings, result)
+        result = handleReportingExtensions(settings, result)
+        OutputFacade(settings).run(result)
+        return result
     }
 
     companion object {
