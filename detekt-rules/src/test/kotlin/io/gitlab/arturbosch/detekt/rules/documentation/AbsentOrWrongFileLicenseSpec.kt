@@ -65,7 +65,7 @@ private fun checkLicence(content: String): List<Finding> {
             override val outPrinter: PrintStream = NullPrintStream()
             override val errPrinter: PrintStream = NullPrintStream()
             override val properties: MutableMap<String, Any?> = HashMap()
-            override fun register(key: String, value: Any?) {
+            override fun register(key: String, value: Any) {
                 properties[key] = value
             }
         })

@@ -28,7 +28,7 @@ class ExtensionsSpec : Spek({
                     override val outPrinter: PrintStream = NullPrintStream()
                     override val errPrinter: PrintStream = NullPrintStream()
                     override val properties: Map<String, Any?> = HashMap()
-                    override fun register(key: String, value: Any?) = TODO()
+                    override fun register(key: String, value: Any) = Unit
                 })
             }.doesNotThrowAnyException()
         }

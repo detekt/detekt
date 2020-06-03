@@ -42,7 +42,7 @@ fun CliArgs.createSettings(
             errPrinter = errorPrinter,
             configUris = extractUris()
         ).apply {
-            register(DETEKT_BASELINE_PATH_KEY, baseline)
+            baseline?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
             register(DETEKT_BASELINE_CREATION_KEY, createBaseline)
             register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
         }

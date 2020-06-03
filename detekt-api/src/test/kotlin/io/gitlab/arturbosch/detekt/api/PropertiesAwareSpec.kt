@@ -14,8 +14,8 @@ class PropertiesAwareSpec : Spek({
         context("Implementations can store and retrieve properties") {
 
             val store = object : PropertiesAware {
-                override val properties: MutableMap<String, Any?> = HashMap()
-                override fun register(key: String, value: Any?) {
+                override val properties: MutableMap<String, Any> = HashMap()
+                override fun register(key: String, value: Any) {
                     properties[key] = value
                 }
             }

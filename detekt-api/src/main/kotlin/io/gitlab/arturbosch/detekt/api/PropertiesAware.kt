@@ -16,7 +16,7 @@ interface PropertiesAware {
     /**
      * Binds a given value with given key and stores it for later use.
      */
-    fun register(key: String, value: Any?)
+    fun register(key: String, value: Any)
 }
 
 /**

@@ -25,22 +25,25 @@ class SingleRuleRunner(
             arguments.runRule?.split(":")
         ) { "Unexpected empty 'runRule' argument." }
 
-        arguments.createSettings(outputPrinter, errorPrinter)
-            .use { settings ->
-                val realProvider = requireNotNull(
-                    RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
-                ) { "There was no rule set with id '$ruleSet'." }
+        fun executeRule(settings: ProcessingSettings) {
+            val realProvider = requireNotNull(
+                RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
+            ) { "There was no rule set with id '$ruleSet'." }
 
-                val provider = RuleProducingProvider(rule, realProvider)
+            val provider = RuleProducingProvider(rule, realProvider)
 
-                assertRuleExistsBeforeRunningItLater(provider, settings)
+            assertRuleExistsBeforeRunningItLater(provider, settings)
 
-                DetektFacade.create(
-                    settings,
-                    listOf(provider),
-                    listOf(DetektProgressListener().apply { init(settings) })
-                ).run()
-            }
+            DetektFacade.create(
+                settings,
+                listOf(provider),
+                listOf(DetektProgressListener().apply { init(settings) })
+            ).run()
+        }
+
+        arguments
+            .createSettings(outputPrinter, errorPrinter)
+            .use(::executeRule)
     }
 
     private fun assertRuleExistsBeforeRunningItLater(
