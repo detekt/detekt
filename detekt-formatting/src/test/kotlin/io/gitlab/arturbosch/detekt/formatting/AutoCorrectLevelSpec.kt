@@ -1,20 +1,20 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.DetektFacade
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
-import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class AutoCorrectLevelSpec : Spek({
 
@@ -36,7 +36,7 @@ class AutoCorrectLevelSpec : Spek({
             val config = yamlConfig("/autocorrect/autocorrect-toplevel-false.yml")
 
             it("should format the test file but not print to disc") {
-                val project = Paths.get(resource("configTests/fixed.kt"))
+                val project = resourceAsPath("configTests/fixed.kt")
                 var expectedContentBeforeRun: String? = null
                 val contentChanged = object : FileProcessListener {
                     override fun onStart(files: List<KtFile>) {
@@ -49,9 +49,12 @@ class AutoCorrectLevelSpec : Spek({
                         assertThat(wasFormatted(files[0])).isTrue()
                     }
                 }
-                val result = createProcessingSettings(project, config).use {
-                    DetektFacade.create(it, listOf(FormattingProvider()), listOf(contentChanged)).run()
-                }
+                val result = ProcessingSettings(
+                    listOf(project),
+                    config,
+                    outPrinter = NullPrintStream(),
+                    errPrinter = NullPrintStream()
+                ).use { DetektFacade.create(it, listOf(FormattingProvider()), listOf(contentChanged)).run() }
                 val findings = result.findings.flatMap { it.value }
                 val actualContentAfterRun = loadFileContent("configTests/fixed.kt")
 
