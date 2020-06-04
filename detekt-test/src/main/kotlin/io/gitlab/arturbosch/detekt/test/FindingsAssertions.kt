@@ -35,7 +35,9 @@ class FindingsAssert(actual: List<Finding>) :
                 .sortedWith(compareBy({ it.line }, { it.column }))
 
         if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage("Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
+            failWithMessage(
+                "Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
+            )
         }
     }
 
@@ -55,7 +57,9 @@ class FindingsAssert(actual: List<Finding>) :
                 .sortedWith(compareBy({ it.start }, { it.end }))
 
         if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage("Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
+            failWithMessage(
+                "Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
+            )
         }
     }
 
