@@ -39,11 +39,9 @@ interface Config {
     /**
      * Is thrown when loading a configuration results in errors.
      */
-    @Deprecated("Default value of parameter 'msg' applies only to YamlConfig and will be removed in the future")
-    class InvalidConfigurationError(
-        msg: String = "Provided configuration file is invalid:" +
-            " Structure must be from type Map<String,Any>!"
-    ) : RuntimeException(msg)
+    class InvalidConfigurationError : RuntimeException(
+        "Provided configuration file is invalid: Structure must be from type Map<String,Any>!"
+    )
 
     companion object {
 
@@ -70,28 +68,6 @@ interface Config {
             Long::class
         )
     }
-}
-
-/**
- * A configuration which keeps track of the config it got sub-config'ed from by the [subConfig] function.
- * It's main usage is to recreate the property-path which was taken when using the [subConfig] function repeatedly.
- */
-@Deprecated("""
-A Config is a long lived object and is derived via subConfig a lot.
-Keeping track of the parent it was derived, creates long-lived object chains which takes the GC longer to release them.
-It can even lead to OOM if detekt get's embedded in an other application which reuses the top most Config object. 
-The property 'parentPath' of the Config interface can be used as a replacement for parent.key calls.
-""")
-interface HierarchicalConfig : Config {
-    /**
-     * Returns the parent config which encloses this config part.
-     */
-    val parent: Parent?
-
-    /**
-     * Keeps track of which key was taken to [subConfig] this configuration.
-     */
-    data class Parent(val config: Config, val key: String)
 }
 
 /**

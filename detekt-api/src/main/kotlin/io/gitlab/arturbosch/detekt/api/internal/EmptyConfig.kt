@@ -1,15 +1,11 @@
-@file:Suppress("DEPRECATION")
-
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
+import io.gitlab.arturbosch.detekt.api.Config
 
 /**
  * NOP-implementation of a config object.
  */
-internal object EmptyConfig : HierarchicalConfig {
-
-    override val parent: HierarchicalConfig.Parent? = null
+internal object EmptyConfig : Config {
 
     override fun subConfig(key: String): EmptyConfig = this
 

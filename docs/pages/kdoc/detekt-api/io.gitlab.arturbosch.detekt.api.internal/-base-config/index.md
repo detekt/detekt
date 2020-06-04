@@ -6,7 +6,7 @@ title: BaseConfig - detekt-api
 
 # BaseConfig
 
-`abstract class BaseConfig : `[`HierarchicalConfig`](../../io.gitlab.arturbosch.detekt.api/-hierarchical-config/index.html)
+`abstract class BaseConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)
 
 Convenient base configuration which parses/casts the configuration value based on the type of the default value.
 

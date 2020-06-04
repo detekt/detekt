@@ -8,7 +8,7 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 
 ### Types
 
-| [BaseConfig](-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](../io.gitlab.arturbosch.detekt.api/-hierarchical-config/index.html) |
+| [BaseConfig](-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html) |
 | [BaseRule](-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html)`, `[`Context`](../io.gitlab.arturbosch.detekt.api/-context/index.html) |
 | [CommaSeparatedPattern](-comma-separated-pattern/index.html) | `class CommaSeparatedPattern : `[`SplitPattern`](../io.gitlab.arturbosch.detekt.api/-split-pattern/index.html) |
 | [CompositeConfig](-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](-validatable-configuration/index.html) |

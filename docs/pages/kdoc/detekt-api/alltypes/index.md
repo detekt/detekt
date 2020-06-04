@@ -212,14 +212,6 @@ Adds metric container behaviour.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.HierarchicalConfig](../io.gitlab.arturbosch.detekt.api/-hierarchical-config/index.html)
-
-A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](../io.gitlab.arturbosch.detekt.api/-config/sub-config.html) function.
-It's main usage is to recreate the property-path which was taken when using the [subConfig](../io.gitlab.arturbosch.detekt.api/-config/sub-config.html) function repeatedly.
-
-
-|
-
 ##### [io.gitlab.arturbosch.detekt.api.Issue](../io.gitlab.arturbosch.detekt.api/-issue/index.html)
 
 An issue represents a problem in the codebase.
