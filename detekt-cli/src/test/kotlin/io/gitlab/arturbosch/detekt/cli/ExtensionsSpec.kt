@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.rules.documentation.LicenceHeaderLoaderExtension
-import io.github.detekt.test.utils.NullPrintStream
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -27,6 +27,8 @@ class ExtensionsSpec : Spek({
                     override val config: Config = Config.empty
                     override val outPrinter: PrintStream = NullPrintStream()
                     override val errPrinter: PrintStream = NullPrintStream()
+                    override val properties: Map<String, Any?> = HashMap()
+                    override fun register(key: String, value: Any) = Unit
                 })
             }.doesNotThrowAnyException()
         }

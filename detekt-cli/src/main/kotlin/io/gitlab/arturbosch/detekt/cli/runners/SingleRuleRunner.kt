@@ -7,20 +7,17 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
-import io.gitlab.arturbosch.detekt.cli.createFilters
-import io.gitlab.arturbosch.detekt.cli.createPlugins
-import io.gitlab.arturbosch.detekt.cli.loadConfiguration
+import io.gitlab.arturbosch.detekt.cli.createSettings
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
-import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import java.io.PrintStream
 
 class SingleRuleRunner(
     private val arguments: CliArgs,
-    private val outPrinter: PrintStream,
-    private val errPrinter: PrintStream
+    private val outputPrinter: PrintStream,
+    private val errorPrinter: PrintStream
 ) : Executable {
 
     override fun execute() {
@@ -28,18 +25,7 @@ class SingleRuleRunner(
             arguments.runRule?.split(":")
         ) { "Unexpected empty 'runRule' argument." }
 
-        with(arguments) {
-            ProcessingSettings(
-                inputPaths = inputPaths,
-                config = loadConfiguration(),
-                pathFilters = createFilters(),
-                parallelCompilation = parallel,
-                autoCorrect = autoCorrect,
-                excludeDefaultRuleSets = disableDefaultRuleSets,
-                pluginPaths = createPlugins(),
-                outPrinter = outPrinter,
-                errPrinter = errPrinter)
-        }.use { settings ->
+        fun executeRule(settings: ProcessingSettings) {
             val realProvider = requireNotNull(
                 RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
             ) { "There was no rule set with id '$ruleSet'." }
@@ -48,14 +34,16 @@ class SingleRuleRunner(
 
             assertRuleExistsBeforeRunningItLater(provider, settings)
 
-            val result = DetektFacade.create(
+            DetektFacade.create(
                 settings,
                 listOf(provider),
                 listOf(DetektProgressListener().apply { init(settings) })
             ).run()
-
-            OutputFacade(arguments.reportPaths, result, settings).run()
         }
+
+        arguments
+            .createSettings(outputPrinter, errorPrinter)
+            .use(::executeRule)
     }
 
     private fun assertRuleExistsBeforeRunningItLater(

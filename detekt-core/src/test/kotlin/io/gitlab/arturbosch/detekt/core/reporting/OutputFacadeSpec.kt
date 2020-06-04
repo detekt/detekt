@@ -7,6 +7,7 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
@@ -21,24 +22,23 @@ internal class OutputFacadeSpec : Spek({
 
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
+        val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+
+        lateinit var defaultSettings: ProcessingSettings
         lateinit var plainOutputPath: Path
         lateinit var htmlOutputPath: Path
         lateinit var xmlOutputPath: Path
-
-        val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-        val defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream)
-
-        lateinit var reportPaths: List<ReportPath>
 
         beforeEachTest {
             plainOutputPath = createTempFileForTest("detekt", ".txt")
             htmlOutputPath = createTempFileForTest("detekt", ".html")
             xmlOutputPath = createTempFileForTest("detekt", ".xml")
-            reportPaths = listOf(
+            val reportPaths = listOf(
                 "xml:$xmlOutputPath",
                 "txt:$plainOutputPath",
                 "html:$htmlOutputPath"
             ).map { ReportPath.from(it) }
+            defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream, reportPaths = reportPaths)
         }
 
         afterGroup {
@@ -46,9 +46,9 @@ internal class OutputFacadeSpec : Spek({
         }
 
         it("creates all output files") {
-            val subject = OutputFacade(reportPaths, defaultDetektion, defaultSettings)
+            val subject = OutputFacade(defaultSettings)
 
-            subject.run()
+            subject.run(defaultDetektion)
 
             assertThat(printStream.toString()).contains(
                 "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",

@@ -3,21 +3,16 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
-import io.gitlab.arturbosch.detekt.core.reporting.red
-import io.gitlab.arturbosch.detekt.cli.createClasspath
-import io.gitlab.arturbosch.detekt.cli.createFilters
-import io.gitlab.arturbosch.detekt.cli.createPlugins
-import io.gitlab.arturbosch.detekt.cli.extractUris
+import io.gitlab.arturbosch.detekt.cli.createSettings
 import io.gitlab.arturbosch.detekt.cli.getOrComputeWeightedAmountOfIssues
 import io.gitlab.arturbosch.detekt.cli.isValidAndSmallerOrEqual
-import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.core.measure
+import io.gitlab.arturbosch.detekt.core.reporting.red
 import java.io.PrintStream
 
 @NotApiButProbablyUsedByUsers
@@ -28,29 +23,18 @@ class Runner(
 ) : Executable {
 
     override fun execute() {
-        createSettings().use { settings ->
-            val (checkConfigTime) = measure { checkConfiguration(settings) }
-            settings.debug { "Checking config took $checkConfigTime ms" }
-            val (serviceLoadingTime, facade) = measure { DetektFacade.create(settings) }
-            settings.debug { "Loading services took $serviceLoadingTime ms" }
-            var (engineRunTime, result) = measure { facade.run() }
-            settings.debug { "Running core engine took $engineRunTime ms" }
-            checkBaselineCreation(result)
-            result = arguments.baseline?.let { BaselineFacade().transformResult(it, result) } ?: result
-            val (outputResultsTime) = measure { OutputFacade(arguments.reportPaths, result, settings).run() }
-            settings.debug { "Writing results took $outputResultsTime ms" }
-            if (!arguments.createBaseline) {
-                checkBuildFailureThreshold(result, settings)
+        arguments.createSettings(outputPrinter, errorPrinter)
+            .use { settings ->
+                val (checkConfigTime) = measure { checkConfiguration(settings) }
+                settings.debug { "Checking config took $checkConfigTime ms" }
+                val (serviceLoadingTime, facade) = measure { DetektFacade.create(settings) }
+                settings.debug { "Loading services took $serviceLoadingTime ms" }
+                val (engineRunTime, result) = measure { facade.run() }
+                settings.debug { "Running core engine took $engineRunTime ms" }
+                if (!arguments.createBaseline) {
+                    checkBuildFailureThreshold(result, settings)
+                }
             }
-        }
-    }
-
-    private fun checkBaselineCreation(result: Detektion) {
-        if (arguments.createBaseline) {
-            val smells = result.findings.flatMap { it.value }
-            val baselineFile = checkNotNull(arguments.baseline)
-            BaselineFacade().createOrUpdate(baselineFile, smells)
-        }
     }
 
     private fun checkBuildFailureThreshold(result: Detektion, settings: ProcessingSettings) {
@@ -59,36 +43,5 @@ class Runner(
         if (maxIssues.isValidAndSmallerOrEqual(amount)) {
             throw BuildFailure("Build failed with $amount weighted issues (threshold defined was $maxIssues).".red())
         }
-    }
-
-    private inline fun <T> measure(block: () -> T): Pair<Long, T> {
-        val start = System.currentTimeMillis()
-        val result = block()
-        return System.currentTimeMillis() - start to result
-    }
-
-    private fun createSettings(): ProcessingSettings = with(arguments) {
-        val (configLoadTime, configuration) = measure { loadConfiguration() }
-        val (settingsLoadTime, settings) = measure {
-            ProcessingSettings(
-                inputPaths = inputPaths,
-                config = configuration,
-                pathFilters = createFilters(),
-                parallelCompilation = parallel,
-                autoCorrect = autoCorrect,
-                excludeDefaultRuleSets = disableDefaultRuleSets,
-                pluginPaths = createPlugins(),
-                classpath = createClasspath(),
-                languageVersion = languageVersion,
-                jvmTarget = jvmTarget,
-                debug = arguments.debug,
-                outPrinter = outputPrinter,
-                errPrinter = errorPrinter,
-                configUris = extractUris()
-            )
-        }
-        settings.debug { "Loading config took $configLoadTime ms" }
-        settings.debug { "Creating settings took $settingsLoadTime ms" }
-        return settings
     }
 }

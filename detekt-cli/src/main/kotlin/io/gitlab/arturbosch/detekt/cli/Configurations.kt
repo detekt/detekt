@@ -8,11 +8,49 @@ import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
+import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
+import io.gitlab.arturbosch.detekt.core.measure
+import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
+import java.io.PrintStream
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException
 import java.nio.file.FileSystems
 import java.nio.file.Path
+
+fun CliArgs.createSettings(
+    outputPrinter: PrintStream,
+    errorPrinter: PrintStream
+): ProcessingSettings = with(this) {
+    val (configLoadTime, configuration) = measure { loadConfiguration() }
+    val (settingsLoadTime, settings) = measure {
+        ProcessingSettings(
+            inputPaths = inputPaths,
+            config = configuration,
+            pathFilters = createFilters(),
+            parallelCompilation = parallel,
+            autoCorrect = autoCorrect,
+            excludeDefaultRuleSets = disableDefaultRuleSets,
+            pluginPaths = createPlugins(),
+            classpath = createClasspath(),
+            languageVersion = languageVersion,
+            jvmTarget = jvmTarget,
+            debug = debug,
+            outPrinter = outputPrinter,
+            errPrinter = errorPrinter,
+            configUris = extractUris()
+        ).apply {
+            baseline?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
+            register(DETEKT_BASELINE_CREATION_KEY, createBaseline)
+            register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+        }
+    }
+    settings.debug { "Loading config took $configLoadTime ms" }
+    settings.debug { "Creating settings took $settingsLoadTime ms" }
+    return settings
+}
 
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(
     (includes ?: "")
@@ -88,17 +126,17 @@ const val DEFAULT_CONFIG = "default-detekt-config.yml"
 @NotApiButProbablyUsedByUsers
 fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
-private fun initFileSystem(uri: URI) {
-    runCatching {
-        try {
-            FileSystems.getFileSystem(uri)
-        } catch (e: FileSystemNotFoundException) {
-            FileSystems.newFileSystem(uri, mapOf("create" to "true"))
+fun CliArgs.extractUris(): Collection<URI> {
+    fun initFileSystem(uri: URI) {
+        runCatching {
+            try {
+                FileSystems.getFileSystem(uri)
+            } catch (e: FileSystemNotFoundException) {
+                FileSystems.newFileSystem(uri, mapOf("create" to "true"))
+            }
         }
     }
-}
 
-fun CliArgs.extractUris(): Collection<URI> {
     val pathUris = config?.let { MultipleExistingPathConverter().convert(it).map(Path::toUri) } ?: emptyList()
     val resourceUris = configResource?.let { MultipleClasspathResourceConverter().convert(it).map(URL::toURI) }
         ?: emptyList()

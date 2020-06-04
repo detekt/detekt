@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.BuildFailure
-import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
-import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.cli.BuildFailure
+import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
+import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -66,7 +67,7 @@ class RunnerSpec : Spek({
                     "--input", inputPath.toString(),
                     "--report", "txt:$tmpReport",
                     "--config-resource", "/configs/max-issues-0.yml",
-                    "--baseline", Paths.get(resource("configs/baseline-with-two-excludes.xml")).toString()
+                    "--baseline", resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
                 )
 
                 Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute()

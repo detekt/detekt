@@ -18,6 +18,7 @@ import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 
 /**
@@ -90,5 +91,12 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
         closeQuietly(taskPool)
         Disposer.dispose(environmentDisposable)
         closeQuietly(pluginLoader)
+    }
+
+    private val _properties: MutableMap<String, Any?> = ConcurrentHashMap()
+    override val properties: Map<String, Any?> = _properties
+
+    override fun register(key: String, value: Any) {
+        _properties[key] = value
     }
 }
