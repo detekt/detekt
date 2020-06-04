@@ -7,6 +7,7 @@ package io.gitlab.arturbosch.detekt.api
  * - [ConsoleReport]
  * - [OutputReport]
  * - [ConfigValidator]
+ * - [ReportingExtension]
  */
 interface Extension {
     /**
