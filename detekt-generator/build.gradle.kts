@@ -11,6 +11,7 @@ dependencies {
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
+val defaultConfigFile = "${rootProject.rootDir}/detekt-core/src/main/resources/default-detekt-config.yml"
 
 val generateDocumentation by tasks.registering {
     dependsOn(tasks.build, ":detekt-api:dokka")
@@ -23,7 +24,7 @@ val generateDocumentation by tasks.registering {
         file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"))
     outputs.files(
         fileTree(documentationDir),
-        file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
+        file(defaultConfigFile))
 
     doLast {
         javaexec {
@@ -53,8 +54,7 @@ val verifyGeneratorOutput by tasks.registering {
 fun assertDefaultConfigUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff",
-            "${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+        commandLine = listOf("git", "diff", defaultConfigFile)
         standardOutput = configDiff
     }
 

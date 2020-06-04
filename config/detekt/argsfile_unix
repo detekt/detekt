@@ -4,5 +4,6 @@
 ./config/detekt/baseline.xml
 -ex
 **/resources/**,**/detekt*/build/**,**/buildSrc/build/**
+--build-upon-default-config
 -c
-./detekt-cli/src/main/resources/default-detekt-config.yml,./config/detekt/detekt.yml
+./config/detekt/detekt.yml
