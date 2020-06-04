@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.yaml.snakeyaml.Yaml
-import java.io.BufferedReader
+import java.io.Reader
 import java.net.URL
 import java.nio.file.Path
 
@@ -54,24 +54,25 @@ class YamlConfig internal constructor(
                 require(exists()) { "Configuration does not exist: $path" }
                 require(isFile) { "Configuration must be a file: $path" }
                 require(canRead()) { "Configuration must be readable: $path" }
-            }.bufferedReader())
+            }.reader())
 
         /**
          * Factory method to load a yaml configuration from a URL.
          */
-        fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
+        fun loadResource(url: URL): Config = load(url.openStream().reader())
 
-        private fun load(reader: BufferedReader): Config = reader.use {
-            val yamlInput = it.lineSequence().joinToString("\n")
-            if (yamlInput.isEmpty()) {
+        /**
+         * Constructs a [YamlConfig] from any [Reader].
+         *
+         * Note the reader will be consumed and closed.
+         */
+        fun load(reader: Reader): Config = reader.buffered().use {
+            val map: Map<*, *>? = runCatching { Yaml().loadAs(it, Map::class.java) }
+                .getOrElse { throw Config.InvalidConfigurationError() }
+            if (map == null) {
                 Config.empty
             } else {
-                val map: Any = Yaml().load(yamlInput)
-                if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>)
-                } else {
-                    throw Config.InvalidConfigurationError()
-                }
+                YamlConfig(map as Map<String, Any>, parent = null)
             }
         }
     }

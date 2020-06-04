@@ -26,7 +26,7 @@ yaml specification.
 
 ### Companion Object Functions
 
-| [load](load.html) | Factory method to load a yaml configuration. Given path must exist and point to a readable file.`fun load(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
+| [load](load.html) | Factory method to load a yaml configuration. Given path must exist and point to a readable file.`fun load(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)<br>Constructs a [YamlConfig](./index.html) from any [Reader](https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html).`fun load(reader: `[`Reader`](https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
 | [loadResource](load-resource.html) | Factory method to load a yaml configuration from a URL.`fun loadResource(url: `[`URL`](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
 
 ### Extension Functions
