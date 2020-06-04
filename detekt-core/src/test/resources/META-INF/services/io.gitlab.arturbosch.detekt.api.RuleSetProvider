@@ -1,2 +1,3 @@
 io.gitlab.arturbosch.detekt.core.TestProvider
 io.gitlab.arturbosch.detekt.core.TestProvider2
+io.gitlab.arturbosch.detekt.core.config.SampleRuleProvider
