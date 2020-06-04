@@ -3,10 +3,12 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.formatting.CONTINUATION_INDENT_SIZE_KEY
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_CONTINUATION_INDENT
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.merge
+import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
+import io.gitlab.arturbosch.detekt.formatting.copy
 
 /**
  * See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
@@ -25,9 +27,9 @@ class Indentation(config: Config) : FormattingRule(config) {
     private val continuationIndentSize = valueOrDefault(CONTINUATION_INDENT_SIZE, DEFAULT_CONTINUATION_INDENT)
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        EditorConfig.merge(it,
-                indentSize = indentSize,
-                continuationIndentSize = continuationIndentSize)
+        it.copy(
+            INDENT_SIZE_KEY to indentSize,
+            CONTINUATION_INDENT_SIZE_KEY to continuationIndentSize)
     }
 
     companion object {

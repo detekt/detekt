@@ -3,23 +3,15 @@ package io.gitlab.arturbosch.detekt.formatting
 import com.pinterest.ktlint.core.EditorConfig
 
 /**
- * Creates new EditorConfig by merging existing EditorConfig with properties values passed by parameters.
+ * Creates new EditorConfig by copying the existing EditorConfig with properties values passed by parameters.
  * Values of properties passed by parameters are more important than properties in sourceEditorConfig.
  */
-fun EditorConfig.Companion.merge(
-    sourceEditorConfig: EditorConfig?,
-    indentSize: Int? = null,
-    continuationIndentSize: Int? = null,
-    maxLineLength: Int? = null,
-    insertFinalNewline: Boolean? = null
-): EditorConfig = fromMap(
-    HashMap<String, String>().also {
-        copyProperty(it, "indent_size", indentSize, sourceEditorConfig)
-        copyProperty(it, "continuation_indent_size", continuationIndentSize, sourceEditorConfig)
-        copyProperty(it, "max_line_length", maxLineLength, sourceEditorConfig)
-        copyProperty(it, "insert_final_newline", insertFinalNewline, sourceEditorConfig)
-    }
-)
+fun EditorConfig?.copy(vararg overrides: Pair<String, Any>): EditorConfig {
+    val valuesToOverride = overrides.toMap()
+    val newValues = HashMap<String, String>()
+    knownEditorConfigProps.forEach { copyProperty(newValues, it, valuesToOverride[it], this) }
+    return EditorConfig.fromMap(newValues)
+}
 
 private fun copyProperty(
     map: MutableMap<String, String>,
