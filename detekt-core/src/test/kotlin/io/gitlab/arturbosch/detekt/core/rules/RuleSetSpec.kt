@@ -25,7 +25,7 @@ class RuleSetSpec : Spek({
         context("should rule set be used") {
 
             it("is explicitly deactivated") {
-                val config = yamlConfig("deactivated_ruleset.yml")
+                val config = yamlConfig("configs/deactivated_ruleset.yml")
                 assertThat(TestProvider().isActive(config)).isFalse()
             }
 
