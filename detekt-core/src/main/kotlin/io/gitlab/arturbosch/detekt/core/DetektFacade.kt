@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.core.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 
@@ -19,6 +20,9 @@ class DetektFacade(
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
+        val (checkConfigTime) = measure { checkConfiguration(settings) }
+        settings.debug { "Checking config took $checkConfigTime ms" }
+
         val filesToAnalyze = inputPaths.flatMap(compiler::compile)
         val bindingContext = generateBindingContext(settings.environment, settings.classpath, filesToAnalyze)
 
