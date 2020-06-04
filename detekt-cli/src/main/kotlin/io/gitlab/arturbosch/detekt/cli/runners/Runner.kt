@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
+import io.gitlab.arturbosch.detekt.core.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.cli.createSettings
 import io.gitlab.arturbosch.detekt.cli.getOrComputeWeightedAmountOfIssues
 import io.gitlab.arturbosch.detekt.cli.isValidAndSmallerOrEqual

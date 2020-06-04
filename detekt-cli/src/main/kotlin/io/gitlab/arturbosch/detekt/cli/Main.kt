@@ -2,7 +2,7 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
+import io.gitlab.arturbosch.detekt.core.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable

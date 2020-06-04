@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
+import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.measure
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import java.io.PrintStream
@@ -121,10 +122,10 @@ private fun parsePathConfig(configPath: String): Config {
 }
 
 @NotApiButProbablyUsedByUsers
-const val DEFAULT_CONFIG = "default-detekt-config.yml"
+const val DEFAULT_CONFIG: String = DefaultConfig.RESOURCE_NAME
 
 @NotApiButProbablyUsedByUsers
-fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
+fun loadDefaultConfig(): Config = DefaultConfig.newInstance()
 
 fun CliArgs.extractUris(): Collection<URI> {
     fun initFileSystem(uri: URI) {

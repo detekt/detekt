@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.sample.extensions
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
+import io.gitlab.arturbosch.detekt.core.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek

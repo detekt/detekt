@@ -1,16 +1,14 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class DetektYmlConfigSpec : Spek({
 
     describe("detekt YAML config") {
 
-        val config = loadConfig()
+        val config = DefaultConfig.newInstance()
 
         it("complexitySection") {
             ConfigAssert(
@@ -69,15 +67,3 @@ class DetektYmlConfigSpec : Spek({
         }
     }
 })
-
-internal const val CONFIG_FILE = "default-detekt-config.yml"
-
-private fun loadConfig(): Config {
-    var workingDirectory = Paths.get(".").toAbsolutePath().normalize()
-    if (!workingDirectory.toString().endsWith("detekt-cli")) {
-        workingDirectory = workingDirectory.resolve("detekt-cli")
-    }
-    val defaultConfigPart = Paths.get("src/main/resources/$CONFIG_FILE")
-    val file = workingDirectory.resolve(defaultConfigPart)
-    return YamlConfig.loadResource(file.toUri().toURL())
-}
