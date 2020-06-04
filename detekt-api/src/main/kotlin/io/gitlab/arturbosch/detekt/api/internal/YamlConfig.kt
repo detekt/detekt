@@ -72,7 +72,7 @@ class YamlConfig internal constructor(
             if (map == null) {
                 Config.empty
             } else {
-                YamlConfig(map as Map<String, Any>, parent = null)
+                YamlConfig(map as Map<String, Any>)
             }
         }
     }

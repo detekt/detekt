@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.reporting.red
 import java.util.ServiceLoader
 
-fun checkConfiguration(settings: ProcessingSettings) {
+internal fun checkConfiguration(settings: ProcessingSettings) {
     val props = settings.config.subConfig("config")
     val shouldValidate = props.valueOrDefault("validation", true)
 
