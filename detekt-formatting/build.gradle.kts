@@ -14,12 +14,17 @@ dependencies {
     testImplementation(project(":detekt-core"))
 }
 
+val depsToPackage = setOf(
+    "org.ec4j.core",
+    "com.pinterest.ktlint"
+)
+
 tasks.withType<Jar>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     dependsOn(configurations.runtimeClasspath)
     from({
         configurations.runtimeClasspath.get()
-            .filter { "com.pinterest.ktlint" in it.toString() }
+            .filter { dependency -> depsToPackage.any { it in dependency.toString() } }
             .map { if (it.isDirectory) it else zipTree(it) }
     })
 }
