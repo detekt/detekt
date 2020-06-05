@@ -36,7 +36,7 @@ class CorrectableRulesFirstSpec : Spek({
             }
 
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("one-correctable-rule.yml"))
+            val settings = createProcessingSettings(testFile, yamlConfig("configs/one-correctable-rule.yml"))
             val detector = Detektor(
                 settings,
                 listOf(object : RuleSetProvider {
