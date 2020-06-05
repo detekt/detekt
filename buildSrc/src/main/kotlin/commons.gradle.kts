@@ -48,9 +48,9 @@ subprojects {
             // set options for log level LIFECYCLE
             events = setOf(
                 TestLogEvent.FAILED,
-                TestLogEvent.PASSED,
-                TestLogEvent.SKIPPED,
-                TestLogEvent.STANDARD_OUT
+                TestLogEvent.STANDARD_ERROR,
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.SKIPPED
             )
             exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
