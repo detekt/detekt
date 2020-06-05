@@ -5,6 +5,101 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.10.0
+
+##### Notable Changes
+
+- New rule: `IgnoredReturnValue`
+- The complexity report (console/html) now calculates the [cognitive complexity metric](https://www.sonarsource.com/docs/CognitiveComplexity.pdf) for your project.
+- Issues at functions and classes are now reported at the identifiers. This is especially helpful in the IntelliJ plugin.
+- Extension authors can now manipulate the findings with the new [ReportingExtension](https://github.com/detekt/detekt/blob/master/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/ReportingExtension.kt).
+- `detekt-formatting` was updated to use KtLint 0.37.1 which includes a lot of improvements and changes. Please see their [changelog](https://github.com/pinterest/ktlint/releases/tag/0.37.0).
+    - New wrapper rules: `SpacingAroundDoubleColon`, `SpacingBetweenDeclarationsWithCommentsRule`, `SpacingBetweenDeclarationsWithAnnotationsRule`
+    - You can configure the [layoutPattern](https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt#L18) for `ImportOrdering` in detekt's configuration file.
+    - `Indentation` rule was replaced with a new [implementation](https://github.com/pinterest/ktlint/pull/758).
+- The `default-detekt-config` moved to `detekt-core/src/main/resources/default-detekt-config.yml`.
+Please update your links if you used it for references.
+
+##### Migration
+
+- KtLint replaced their default `Indentation` rule. Expect new formatting issues here!
+- We removed `HierachicalConfig` interface. It was deprecated in 1.7.0 and could lead to OOM errors when reusing `Config`
+embedding detekt.
+  If you used `Config.parent.key` in your code, `Config.parentPath` is an alternative for this interface.
+- We are dropping the thin wrapper tasks over Intellij's `inspections.sh` and `format.sh`.
+They were broken for some time and in general sparingly used. 
+There are alternative ways to run these scripts: https://www.jetbrains.com/help/idea/command-line-formatter.html or https://github.com/bentolor/idea-cli-inspector. 
+
+##### Changelog
+
+- Remove deprecated HierarchicalConfig which could lead to OOM when reusing Config objects - [#2768](https://github.com/detekt/detekt/pull/2768)
+- Support layout property for ImportOrdering rule - [#2763](https://github.com/detekt/detekt/pull/2763)
+- Wrap three new experimental KtLint rules - [#2762](https://github.com/detekt/detekt/pull/2762)
+- Upgrade to ktlint 0.37.0 - [#2760](https://github.com/detekt/detekt/pull/2760)
+- Introduce reporting extensions - [#2755](https://github.com/detekt/detekt/pull/2755)
+- Add default print methods to ForbiddenMethodCall - [#2753](https://github.com/detekt/detekt/pull/2753)
+- Add the `ignoreAnnotated` array parameter to the FunctionNaming rule - [#2734](https://github.com/detekt/detekt/pull/2734)
+- FunctionNaming: Needs "ignoreAnnotated" - [#2733](https://github.com/detekt/detekt/issues/2733)
+- State that speeding the detekt task just applies to version < 1.7.0 - [#2730](https://github.com/detekt/detekt/pull/2730)
+- Add cognitive complexity in complexity report - [#2727](https://github.com/detekt/detekt/pull/2727)
+- add better documentation for the LongParameterList ignoreAnnotated - [#2714](https://github.com/detekt/detekt/pull/2714)
+- IgnoreReturnValue: config options - [#2712](https://github.com/detekt/detekt/pull/2712)
+- Use experimental indentation rule set instead of the unused from the standard rule set - [#2709](https://github.com/detekt/detekt/pull/2709)
+- Remove idea integration - [#2706](https://github.com/detekt/detekt/pull/2706)
+- Improve issue reporting/report at identifiers and package declarations - #2699 - [#2702](https://github.com/detekt/detekt/pull/2702)
+- Feature request - limit number of lines for an issue to 1 - [#2699](https://github.com/detekt/detekt/issues/2699)
+- New Rule: IgnoredReturnValue - [#2698](https://github.com/detekt/detekt/pull/2698)
+- New rule: NoPrintStatement - [#2678](https://github.com/detekt/detekt/issues/2678)
+- Add default values to SwallowedException rule - [#2661](https://github.com/detekt/detekt/pull/2661)
+- [V1.6.0 -> V1.7.4] Error reading configuration file, java.util.zip.ZipException: invalid code lengths set. - [#2582](https://github.com/detekt/detekt/issues/2582)
+- New rule: Warn on ignored return value - [#2239](https://github.com/detekt/detekt/issues/2239)
+- File 'C\...\.idea' specified for property 'ideaExtension.path' is not a file. - [#2172](https://github.com/detekt/detekt/issues/2172)
+- ktlint integration does not report most errors - [#2161](https://github.com/detekt/detekt/issues/2161)
+- Non deterministic output. False positives on Indentation rule - [#1633](https://github.com/detekt/detekt/issues/1633)
+
+##### Housekeeping & Refactorings
+
+- Fix memory leak with not closing processing settings - [#2775](https://github.com/detekt/detekt/pull/2775)
+- Do not print passing tests on the console - [#2774](https://github.com/detekt/detekt/pull/2774)
+- Run in parallel by default - [#2773](https://github.com/detekt/detekt/pull/2773)
+- Remove core module dependency for detekt-test - [#2771](https://github.com/detekt/detekt/pull/2771)
+- Unify extension debug printing - [#2770](https://github.com/detekt/detekt/pull/2770)
+- Package editorconfig dependency into the jar for formatting module - [#2769](https://github.com/detekt/detekt/pull/2769)
+- Update spek to 2.0.11 disabling timeouts - [#2767](https://github.com/detekt/detekt/pull/2767)
+- Introduce additional changelog section filtering developing/refactoring noise for the users - [#2766](https://github.com/detekt/detekt/pull/2766)
+- Move config validation from cli to core - [#2764](https://github.com/detekt/detekt/pull/2764)
+- Improve the performance of tests which use type resolution - [#2756](https://github.com/detekt/detekt/pull/2756)
+- Move reporting logic to core module - [#2754](https://github.com/detekt/detekt/pull/2754)
+- Cleanup tests in ProtectedMemberInFinalClass - [#2752](https://github.com/detekt/detekt/pull/2752)
+- Add referential equality test case in EqualsAlwaysReturnsTrueOrFalse - [#2751](https://github.com/detekt/detekt/pull/2751)
+- Extract xml and html reports to own modules - [#2750](https://github.com/detekt/detekt/pull/2750)
+- Separate console and output report loading - [#2749](https://github.com/detekt/detekt/pull/2749)
+- Bump actions/cache to v2 - [#2746](https://github.com/detekt/detekt/pull/2746)
+- Fix EqualsAlwaysReturnsTrueOrFalse doc - [#2744](https://github.com/detekt/detekt/pull/2744)
+- Simplify core facade class - [#2743](https://github.com/detekt/detekt/pull/2743)
+- Mark some well known cli functions as implicit unsupported api - [#2742](https://github.com/detekt/detekt/pull/2742)
+- Move baseline feature to core module - [#2741](https://github.com/detekt/detekt/pull/2741)
+- Make baseline entities internal - [#2740](https://github.com/detekt/detekt/pull/2740)
+- Simplify baseline data structures - [#2739](https://github.com/detekt/detekt/pull/2739)
+- Move baseline utils to the baseline package - [#2738](https://github.com/detekt/detekt/pull/2738)
+- Bump github-pages from 204 to 206 in /docs - [#2737](https://github.com/detekt/detekt/pull/2737)
+- Update gradle scan plugin - [#2736](https://github.com/detekt/detekt/pull/2736)
+- Update test dependencies - [#2735](https://github.com/detekt/detekt/pull/2735)
+- Move three core-related tests to core module - [#2731](https://github.com/detekt/detekt/pull/2731)
+- Update to Gradle 6.4.1 - [#2729](https://github.com/detekt/detekt/pull/2729)
+- Migrate to resource function of test-utils - [#2728](https://github.com/detekt/detekt/pull/2728)
+- Remove own collectByType function as Kotlin's does not crash anymore - [#2726](https://github.com/detekt/detekt/pull/2726)
+- Move processors to metrics module - [#2725](https://github.com/detekt/detekt/pull/2725)
+- Create publish tasks lazily - [#2723](https://github.com/detekt/detekt/pull/2723)
+- Faster documentation generation - [#2722](https://github.com/detekt/detekt/pull/2722)
+- Modularize test module - [#2720](https://github.com/detekt/detekt/pull/2720)
+- Introduce parser and psi module - [#2716](https://github.com/detekt/detekt/pull/2716)
+- Clean up code by using builtin associateBy function - [#2715](https://github.com/detekt/detekt/pull/2715)
+- [Security] Bump activesupport from 6.0.2.1 to 6.0.3.1 in /docs - [#2708](https://github.com/detekt/detekt/pull/2708)
+- Correct formatting issues - [#2707](https://github.com/detekt/detekt/pull/2707)
+- [Gradle plugin/rule authors]: Invalidate jars on modified date changes - [#2703](https://github.com/detekt/detekt/pull/2703)
+
+See all issues at: [1.10.0](https://github.com/detekt/detekt/milestone/67)
 
 #### 1.9.1
 
