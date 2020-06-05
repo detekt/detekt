@@ -15,6 +15,7 @@ Currently supported extensions are:
 * [ConsoleReport](../-console-report/index.html)
 * [OutputReport](../-output-report/index.html)
 * [ConfigValidator](../-config-validator/index.html)
+* [ReportingExtension](../-reporting-extension/index.html)
 
 ### Properties
 
