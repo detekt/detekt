@@ -37,15 +37,16 @@ class CorrectableRulesFirstSpec : Spek({
             }
 
             val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(testFile, yamlConfig("one-correctable-rule.yml"))
             val detector = Detektor(
-                createProcessingSettings(testFile, yamlConfig("one-correctable-rule.yml")),
+                settings,
                 listOf(object : RuleSetProvider {
                     override val ruleSetId: String = "Test"
                     override fun instance(config: Config) = RuleSet(ruleSetId, listOf(Last(config), First(config)))
                 })
             )
 
-            detector.run(listOf(compileForTest(testFile)))
+            settings.use { detector.run(listOf(compileForTest(testFile))) }
 
             assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
         }
