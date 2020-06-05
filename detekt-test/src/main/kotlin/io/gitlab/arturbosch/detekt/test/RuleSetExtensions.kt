@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
 /**
- * Creates a RuleSet instance of given RuleSetProvider.
+ * Loads a [RuleSet] instance of given RuleSetProvider.
  */
 inline fun <reified T : RuleSetProvider> loadRuleSet(config: Config = Config.empty): RuleSet {
     val provider = T::class.java.constructors[0].newInstance() as? T
