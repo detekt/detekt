@@ -1,10 +1,9 @@
-@file:Suppress("UNCHECKED_CAST", "DEPRECATION")
+@file:Suppress("UNCHECKED_CAST")
 
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
-import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.yaml.snakeyaml.Yaml
 import java.io.BufferedReader
@@ -17,7 +16,6 @@ import java.nio.file.Path
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parent: HierarchicalConfig.Parent?,
     override val parentPath: String? = null
 ) : BaseConfig(), ValidatableConfiguration {
 
@@ -25,7 +23,6 @@ class YamlConfig internal constructor(
         val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
         return YamlConfig(
             subProperties as Map<String, Any>,
-            HierarchicalConfig.Parent(this, key),
             if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
         )
     }
@@ -71,11 +68,9 @@ class YamlConfig internal constructor(
             } else {
                 val map: Any = Yaml().load(yamlInput)
                 if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>, parent = null)
+                    YamlConfig(map as Map<String, Any>)
                 } else {
-                    throw Config.InvalidConfigurationError(
-                        "Provided configuration file is invalid: Structure must be of type 'Map<String,Any>'."
-                    )
+                    throw Config.InvalidConfigurationError()
                 }
             }
         }

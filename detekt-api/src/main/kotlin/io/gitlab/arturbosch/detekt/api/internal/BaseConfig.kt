@@ -1,15 +1,12 @@
-@file:Suppress("DEPRECATION")
-
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
-import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
 
 /**
  * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
  */
-abstract class BaseConfig : HierarchicalConfig {
+abstract class BaseConfig : Config {
 
     protected open fun valueOrDefaultInternal(key: String, result: Any?, default: Any): Any {
         return try {
