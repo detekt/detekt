@@ -1,9 +1,0 @@
-# Properties of custom rule sets get excluded by default.
-sample:
-  TooManyFunctions:
-    active: true
-
-# This properties are unknown to detekt and must be excluded.
-my_additional_properties:
-  magic_number: 7
-  magic_string: 'Hello World'

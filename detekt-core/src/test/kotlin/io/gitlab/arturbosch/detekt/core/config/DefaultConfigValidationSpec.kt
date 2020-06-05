@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -17,7 +17,7 @@ class DefaultConfigValidationSpec : Spek({
         }
 
         it("does not flag common known config sub sections") {
-            assertThat(validateConfig(yamlConfig("configs/common_known_sections.yml"), baseline)).isEmpty()
+            assertThat(validateConfig(yamlConfig("common_known_sections.yml"), baseline)).isEmpty()
         }
     }
 })

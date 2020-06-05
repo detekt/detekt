@@ -1,9 +1,9 @@
-package io.gitlab.arturbosch.detekt.cli.config
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.reporting.red
 import java.util.ServiceLoader
 
 internal fun checkConfiguration(settings: ProcessingSettings) {

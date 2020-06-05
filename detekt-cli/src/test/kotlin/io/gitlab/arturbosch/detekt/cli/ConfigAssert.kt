@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
@@ -34,7 +35,7 @@ class ConfigAssert(
         for (ruleClass in ruleClasses) {
             val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
             if (ymlDeclaration.keys.size != 1) {
-                fail<String>("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
+                fail<String>("${ruleClass.simpleName} rule is not correctly defined in ${DefaultConfig.RESOURCE_NAME}")
             }
 
             @Suppress("UNCHECKED_CAST")

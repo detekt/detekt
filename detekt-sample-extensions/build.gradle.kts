@@ -5,6 +5,4 @@ dependencies {
     // When creating a sample extension, change this dependency to the detekt-test version you build against
     // e.g. io.gitlab.arturbosch.detekt:detekt-test:1.x.x
     testImplementation(project(":detekt-test"))
-    // Do you want to write integration or system tests? Add the cli dependency.
-    testImplementation(project(":detekt-cli"))
 }

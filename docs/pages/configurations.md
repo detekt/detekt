@@ -13,7 +13,7 @@ _detekt_ uses a yaml style configuration file for various things:
 - Kotlin file processors
 - console and output formats
 
-See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values. 
+See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values. 
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 

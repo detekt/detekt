@@ -1,5 +1,0 @@
-# Properties of custom rule sets get excluded by default.
-sample:
-  TooManyFunctions:
-    # This property is tested via the SampleConfigValidator
-    active: 1 # should be true
