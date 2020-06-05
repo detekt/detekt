@@ -53,7 +53,7 @@ jobs:
 
 
     - name: Build detekt (UNIX)
-      run: ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS
+      run: ./gradlew build shadowJar -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS
       if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
     - name: Run detekt-cli --help (UNIX)
       run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
@@ -64,7 +64,7 @@ jobs:
 
 
     - name: Build detekt (WIN)
-      run: ./gradlew build installShadowDist --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
+      run: ./gradlew build installShadowDist -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
       if: matrix.os == 'windows-latest'
     - name: Run detekt-cli --help (WIN)
       run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
