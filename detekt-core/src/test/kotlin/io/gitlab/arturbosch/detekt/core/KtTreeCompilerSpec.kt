@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek

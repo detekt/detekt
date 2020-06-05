@@ -8,8 +8,8 @@ import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.createFinding
-import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.utils.closeQuietly
 import org.spekframework.spek2.Spek

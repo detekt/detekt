@@ -1,4 +1,5 @@
 dependencies {
-    implementation(project(":detekt-core"))
+    implementation(project(":detekt-api"))
+    implementation(project(":detekt-parser"))
     api(project(":detekt-test-utils"))
 }
