@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SmellBaseline>
+    <Blacklist>
+        <ID>LongParameterList:Signature</ID>
+        <ID>LongMethod:Signature</ID>
+    </Blacklist>
+    <Whitelist>
+        <ID>FeatureEnvy:Signature</ID>
+    </Whitelist>
+</SmellBaseline>

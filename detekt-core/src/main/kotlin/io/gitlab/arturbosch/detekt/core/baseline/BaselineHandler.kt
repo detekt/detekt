@@ -14,10 +14,12 @@ internal class BaselineHandler : DefaultHandler() {
 
     override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
         when (qName) {
-            SUPPRESSED_FALSE_POSITIVES -> {
+            // Blacklist and Whitelist were previous XML tags. They have been replaced by more appropriate names
+            // To not break anything this will still parse those values
+            SUPPRESSED_FALSE_POSITIVES, "Blacklist" -> {
                 current = SUPPRESSED_FALSE_POSITIVES
             }
-            TEMPORARY_SUPPRESSED_ISSUES -> {
+            TEMPORARY_SUPPRESSED_ISSUES, "Whitelist" -> {
                 current = TEMPORARY_SUPPRESSED_ISSUES
             }
             ID -> content = ""

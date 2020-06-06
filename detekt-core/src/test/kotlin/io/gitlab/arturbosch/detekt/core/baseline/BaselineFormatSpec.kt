@@ -38,6 +38,17 @@ class BaselineFormatSpec : Spek({
                     .isThrownBy { BaselineFormat().read(path) }
                     .withMessage("The content of the ID element must not be empty")
             }
+
+            it("supports deprecated baseline values") {
+                val path = resourceAsPath("/baseline_feature/deprecated-baseline.xml")
+                val (ignoredFalsePositives, temporarySuppressedIssues) = BaselineFormat().read(path)
+
+                assertThat(ignoredFalsePositives).hasSize(2)
+                assertThat(ignoredFalsePositives).anySatisfy { it.startsWith("LongParameterList") }
+                assertThat(ignoredFalsePositives).anySatisfy { it.startsWith("LongMethod") }
+                assertThat(temporarySuppressedIssues).hasSize(1)
+                assertThat(temporarySuppressedIssues).anySatisfy { it.startsWith("FeatureEnvy") }
+            }
         }
 
         context("writes a baseline file") {
