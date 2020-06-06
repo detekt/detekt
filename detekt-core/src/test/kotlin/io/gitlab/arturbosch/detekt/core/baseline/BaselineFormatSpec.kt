@@ -17,13 +17,13 @@ class BaselineFormatSpec : Spek({
 
             it("loads the baseline file") {
                 val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
-                val (blacklist, whitelist) = BaselineFormat().read(path)
+                val (ignoredFalsePositives, temporarySuppressedIssues) = BaselineFormat().read(path)
 
-                assertThat(blacklist).hasSize(2)
-                assertThat(blacklist).anySatisfy { it.startsWith("LongParameterList") }
-                assertThat(blacklist).anySatisfy { it.startsWith("LongMethod") }
-                assertThat(whitelist).hasSize(1)
-                assertThat(whitelist).anySatisfy { it.startsWith("FeatureEnvy") }
+                assertThat(ignoredFalsePositives).hasSize(2)
+                assertThat(ignoredFalsePositives).anySatisfy { it.startsWith("LongParameterList") }
+                assertThat(ignoredFalsePositives).anySatisfy { it.startsWith("LongMethod") }
+                assertThat(temporarySuppressedIssues).hasSize(1)
+                assertThat(temporarySuppressedIssues).anySatisfy { it.startsWith("FeatureEnvy") }
             }
 
             it("throws on an invalid baseline file extension") {
@@ -33,7 +33,7 @@ class BaselineFormatSpec : Spek({
             }
 
             it("throws on an invalid baseline ID declaration") {
-                val path = resourceAsPath("/baseline_feature/missing-whitelist-baseline.xml")
+                val path = resourceAsPath("/baseline_feature/missing-temporary-suppressed-baseline.xml")
                 assertThatIllegalStateException()
                     .isThrownBy { BaselineFormat().read(path) }
                     .withMessage("The content of the ID element must not be empty")

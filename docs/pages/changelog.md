@@ -1704,8 +1704,8 @@ See all issues at: [M7](https://gitlab.com/arturbosch/detekt/milestones/7)
 ##### New features
 
 - allow to fail builds on code smell thresholds (configurable), see 'Configure build failure thresholds' in README
-- blacklist code smells which are false positives
-- generate a baseline whitelist of code smells if your project is already old and has many smells, so only new
+- suppress code smells which are false positives
+- generate a baseline of code smells if your project is already old and has many smells, so only new
 smells are shown in analysis (see 'Code Smell baseline and ignore list' in README)
 
 ##### Improvements

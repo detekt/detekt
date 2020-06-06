@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-    <Blacklist />
-    <Whitelist>
+    <SuppressedFalsePositives />
+    <TemporarySuppressedIssues>
         <ID>test:Poko.kt$Poko</ID>
-    </Whitelist>
+    </TemporarySuppressedIssues>
 </SmellBaseline>

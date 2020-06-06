@@ -17,8 +17,8 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * Library updates can introduce naming clashes with your own classes which might result in compilation errors.
  *
  * **NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped ktlint rule).
- * That rule will fail the check regardless of the whitelist configured here.
- * Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
+ * That rule will fail the check regardless of the baseline configured here.
+ * Therefore if baseline is needed `NoWildcardImports` rule should be disabled.
  *
  * <noncompliant>
  * import io.gitlab.arturbosch.detekt.*
@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * }
  * </compliant>
  *
- * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
+ * @configuration excludeImports - Define a list of package names that should be allowed to be imported
  * with wildcard imports. (default: `['java.util.*', 'kotlinx.android.synthetic.*']`)
  *
  * @active since v1.0.0

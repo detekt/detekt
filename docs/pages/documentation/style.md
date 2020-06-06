@@ -43,7 +43,7 @@ if (i > 0 && i < 5) {
 
 ### DataClassContainsFunctions
 
-This rule reports functions inside data classes which have not been whitelisted as a conversion function.
+This rule reports functions inside data classes which have not been marked as a conversion function.
 
 Data classes should mainly be used to store data. This rule assumes that they should not contain any extra functions
 aside functions that help with converting objects from/to one another.
@@ -1652,8 +1652,8 @@ which classes are imported and helps prevent naming conflicts.
 Library updates can introduce naming clashes with your own classes which might result in compilation errors.
 
 **NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped ktlint rule).
-That rule will fail the check regardless of the whitelist configured here.
-Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
+That rule will fail the check regardless of the baseline configured here.
+Therefore if baseline is needed `NoWildcardImports` rule should be disabled.
 
 **Severity**: Style
 
@@ -1663,7 +1663,7 @@ Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
 
 * ``excludeImports`` (default: ``['java.util.*', 'kotlinx.android.synthetic.*']``)
 
-   Define a whitelist of package names that should be allowed to be imported
+   Define a list of package names that should be allowed to be imported
 with wildcard imports.
 
 #### Noncompliant Code:

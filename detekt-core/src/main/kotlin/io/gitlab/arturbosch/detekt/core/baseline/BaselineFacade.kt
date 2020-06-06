@@ -15,7 +15,7 @@ class BaselineFacade {
     fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
         val ids = findings.map { it.baselineId }.toSortedSet()
         val baseline = if (baselineExists(baselineFile)) {
-            Baseline.load(baselineFile).copy(whitelist = ids)
+            Baseline.load(baselineFile).copy(temporarySuppressedIssues = ids)
         } else {
             Baseline(emptySet(), ids)
         }

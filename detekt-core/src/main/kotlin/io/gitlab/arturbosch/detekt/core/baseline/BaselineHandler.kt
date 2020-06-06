@@ -7,18 +7,18 @@ internal class BaselineHandler : DefaultHandler() {
 
     private var current: String? = null
     private var content: String = ""
-    private val whiteIds = mutableSetOf<String>()
-    private val blackIds = mutableSetOf<String>()
+    private val temporarySuppressedIds = mutableSetOf<String>()
+    private val falsePositiveIds = mutableSetOf<String>()
 
-    internal fun createBaseline() = Baseline(blackIds, whiteIds)
+    internal fun createBaseline() = Baseline(falsePositiveIds, temporarySuppressedIds)
 
     override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
         when (qName) {
-            BLACKLIST -> {
-                current = BLACKLIST
+            SUPPRESSED_FALSE_POSITIVES -> {
+                current = SUPPRESSED_FALSE_POSITIVES
             }
-            WHITELIST -> {
-                current = WHITELIST
+            TEMPORARY_SUPPRESSED_ISSUES -> {
+                current = TEMPORARY_SUPPRESSED_ISSUES
             }
             ID -> content = ""
         }
@@ -29,12 +29,12 @@ internal class BaselineHandler : DefaultHandler() {
             ID -> {
                 check(content.isNotBlank()) { "The content of the ID element must not be empty" }
                 when (current) {
-                    BLACKLIST -> blackIds.add(content)
-                    WHITELIST -> whiteIds.add(content)
+                    SUPPRESSED_FALSE_POSITIVES -> falsePositiveIds.add(content)
+                    TEMPORARY_SUPPRESSED_ISSUES -> temporarySuppressedIds.add(content)
                 }
                 content = ""
             }
-            BLACKLIST, WHITELIST -> current == null
+            SUPPRESSED_FALSE_POSITIVES, TEMPORARY_SUPPRESSED_ISSUES -> current == null
         }
     }
 

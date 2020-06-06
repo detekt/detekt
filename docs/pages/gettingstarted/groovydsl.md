@@ -14,7 +14,7 @@ detekt requires Gradle 5.0 or higher.
 The detekt Gradle plugin will generate multiple tasks
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
-`detekt` closure. By default the standard rule set without any white- or blacklist is executed on sources files located
+`detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
  in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html and txt format and can be 
  found in `build/reports/detekt/detekt.[xml|html|txt]` respectively. Please note that the `detekt` task is automatically 
  run when executing `gradle check`.

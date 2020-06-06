@@ -61,7 +61,7 @@ class RunnerSpec : Spek({
 
         context("with additional baseline file") {
 
-            it("should not throw on maxIssues=0 due to baseline blacklist") {
+            it("should not throw on maxIssues=0 due to baseline") {
                 val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
                 val cliArgs = createCliArgs(
                     "--input", inputPath.toString(),
