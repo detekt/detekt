@@ -9,12 +9,12 @@ internal typealias FindingsIdList = Set<String>
 internal typealias FindingId = String
 
 internal data class Baseline(
-    val suppressedFalsePositives: FindingsIdList,
-    val temporarySuppressedIssues: FindingsIdList
+    val manuallySuppressedIssues: FindingsIdList,
+    val currentIssues: FindingsIdList
 ) {
 
     fun contains(id: FindingId): Boolean =
-        temporarySuppressedIssues.contains(id) || suppressedFalsePositives.contains(id)
+        currentIssues.contains(id) || manuallySuppressedIssues.contains(id)
 
     companion object {
 
@@ -30,8 +30,8 @@ const val DETEKT_BASELINE_PATH_KEY = "detekt.baseline.path.key"
 const val DETEKT_BASELINE_CREATION_KEY = "detekt.baseline.creation.key"
 
 internal const val SMELL_BASELINE = "SmellBaseline"
-internal const val SUPPRESSED_FALSE_POSITIVES = "SuppressedFalsePositives"
-internal const val TEMPORARY_SUPPRESSED_ISSUES = "TemporarySuppressedIssues"
+internal const val MANUALLY_SUPPRESSED_ISSUES = "ManuallySuppressedIssues"
+internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Finding.baselineId: String

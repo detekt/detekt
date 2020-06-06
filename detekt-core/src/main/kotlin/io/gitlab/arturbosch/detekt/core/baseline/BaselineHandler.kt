@@ -7,20 +7,20 @@ internal class BaselineHandler : DefaultHandler() {
 
     private var current: String? = null
     private var content: String = ""
-    private val temporarySuppressedIds = mutableSetOf<String>()
-    private val falsePositiveIds = mutableSetOf<String>()
+    private val currentIssues = mutableSetOf<String>()
+    private val manuallySuppressedIssues = mutableSetOf<String>()
 
-    internal fun createBaseline() = Baseline(falsePositiveIds, temporarySuppressedIds)
+    internal fun createBaseline() = Baseline(manuallySuppressedIssues, currentIssues)
 
     override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
         when (qName) {
             // Blacklist and Whitelist were previous XML tags. They have been replaced by more appropriate names
             // To not break anything this will still parse those values
-            SUPPRESSED_FALSE_POSITIVES, "Blacklist" -> {
-                current = SUPPRESSED_FALSE_POSITIVES
+            MANUALLY_SUPPRESSED_ISSUES, "Blacklist" -> {
+                current = MANUALLY_SUPPRESSED_ISSUES
             }
-            TEMPORARY_SUPPRESSED_ISSUES, "Whitelist" -> {
-                current = TEMPORARY_SUPPRESSED_ISSUES
+            CURRENT_ISSUES, "Whitelist" -> {
+                current = CURRENT_ISSUES
             }
             ID -> content = ""
         }
@@ -31,12 +31,12 @@ internal class BaselineHandler : DefaultHandler() {
             ID -> {
                 check(content.isNotBlank()) { "The content of the ID element must not be empty" }
                 when (current) {
-                    SUPPRESSED_FALSE_POSITIVES -> falsePositiveIds.add(content)
-                    TEMPORARY_SUPPRESSED_ISSUES -> temporarySuppressedIds.add(content)
+                    MANUALLY_SUPPRESSED_ISSUES -> manuallySuppressedIssues.add(content)
+                    CURRENT_ISSUES -> currentIssues.add(content)
                 }
                 content = ""
             }
-            SUPPRESSED_FALSE_POSITIVES, TEMPORARY_SUPPRESSED_ISSUES -> current == null
+            MANUALLY_SUPPRESSED_ISSUES, CURRENT_ISSUES -> current == null
         }
     }
 
