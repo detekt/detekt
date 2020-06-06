@@ -10,17 +10,35 @@
 @file:DependsOn("org.kohsuke:github-api:1.112")
 @file:DependsOn("org.jetbrains.kotlinx:kotlinx-cli-jvm:0.2.1")
 
-import org.kohsuke.github.*
-import kotlinx.cli.*
+import org.kohsuke.github.GitHub
+import org.kohsuke.github.GHIssue
+import org.kohsuke.github.GHIssueState
+import org.kohsuke.github.GHMilestone
+import org.kohsuke.github.GHRepository
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
+import kotlinx.cli.default
 import java.io.File
 import java.net.URL
 
 // arguments parsing
 val parser = ArgParser("github-milestone-report")
 
-val user by parser.option(ArgType.String, shortName = "u", description = "Github user or organization.").default("detekt")
-val project by parser.option(ArgType.String, shortName = "p", description = "Github project.").default("detekt")
-val milestone by parser.option(ArgType.Int, shortName = "m", description = "Milestone number. Default: latest milestone.")
+val user by parser.option(
+    type = ArgType.String,
+    shortName = "u",
+    description = "Github user or organization."
+).default("detekt")
+val project by parser.option(
+    type = ArgType.String,
+    shortName = "p",
+    description = "Github project."
+).default("detekt")
+val milestone by parser.option(
+    type = ArgType.Int,
+    shortName = "m",
+    description = "Milestone number. Default: latest milestone."
+)
 
 parser.parse(args)
 
