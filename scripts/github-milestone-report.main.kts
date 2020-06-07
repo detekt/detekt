@@ -1,4 +1,5 @@
-#!/usr/bin/env kotlinc -script --
+#!/bin/sh
+//bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
  * Script to prepare release notes for the upcoming Detekt release
@@ -6,101 +7,92 @@
  * You need kotlin 1.3.70+ installed on your machine
  */
 
-@file:Repository("https://kotlin.bintray.com/kotlinx")
 @file:DependsOn("org.kohsuke:github-api:1.112")
-@file:DependsOn("org.jetbrains.kotlinx:kotlinx-cli-jvm:0.2.1")
+@file:DependsOn("com.github.ajalt:clikt:2.7.1")
 
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.int
 import org.kohsuke.github.GitHub
 import org.kohsuke.github.GHIssue
 import org.kohsuke.github.GHIssueState
 import org.kohsuke.github.GHMilestone
 import org.kohsuke.github.GHRepository
-import kotlinx.cli.ArgParser
-import kotlinx.cli.ArgType
-import kotlinx.cli.default
 import java.io.File
 import java.net.URL
 
-// arguments parsing
-val parser = ArgParser("github-milestone-report")
+class GithubMilestoneReport : CliktCommand() {
 
-val user by parser.option(
-    type = ArgType.String,
-    shortName = "u",
-    description = "Github user or organization."
-).default("detekt")
-val project by parser.option(
-    type = ArgType.String,
-    shortName = "p",
-    description = "Github project."
-).default("detekt")
-val milestone by parser.option(
-    type = ArgType.Int,
-    shortName = "m",
-    description = "Milestone number. Default: latest milestone."
-)
+    // arguments parsing
+    val user : String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
+    val project : String by option("-p", help = "Github project. Default: detekt").default("detekt")
+    val milestone : Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
 
-parser.parse(args)
+    override fun run() {
 
-// formatting helpers
+        // connect to GitHub
+        val github: GitHub = GitHub.connectAnonymously()
+        val ghRepository: GHRepository = github.getUser(user).getRepository(project)
+        val milestones = ghRepository.listMilestones(GHIssueState.OPEN).toMutableList()
+        milestones.sortBy { it.number }
+        val milestoneId = milestone ?: milestones.last().number
 
-fun formatIssues(issues: List<GHIssue>?) =
-    issues?.joinToString(separator = "\n", postfix = "\n") { entry(it) } ?: ""
+        // get milestone and issue data
 
-fun entry(issue: GHIssue) = entry(issue.title.trim(), issue.number, issue.htmlUrl)
+        val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
+        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.ALL, ghMilestone)
 
-fun entry(content: String, issueId: Int, issueUrl: URL) = "- $content - [#$issueId]($issueUrl)"
+        val milestoneTitle = ghMilestone.title.trim()
+        val groups = ghIssues.groupBy { issue ->
+            issue.labels.any { it.name == "housekeeping" }
+        }
+        val (issuesForUsers, issuesForDevs) = groups[false] to groups[true]
 
-fun footer(footer: String, url: URL) = "See all issues at: [$footer]($url)"
+        // print report
 
-fun header(name: String) = "#### $name\n"
+        val content = StringBuilder().apply {
+            append(header(milestoneTitle))
+            append("\n")
+            append(section("Notable Changes"))
+            append("\n")
+            append(section("Migration"))
+            append("\n")
+            append(section("Changelog"))
+            append("\n")
+            append(formatIssues(issuesForUsers))
+            append("\n")
+            append(section("Housekeeping & Refactorings"))
+            append("\n")
+            append(formatIssues(issuesForDevs))
+            append("\n")
+            append(footer(milestoneTitle, ghMilestone.htmlUrl))
+        }.toString()
 
-fun section(name: String) = "##### $name\n"
+        println(content)
 
-// connect to GitHub
+        // write report to disk
 
-val github: GitHub = GitHub.connectAnonymously()
-val ghRepository: GHRepository = github.getUser(user).getRepository(project)
-val milestones = ghRepository.listMilestones(GHIssueState.OPEN).toMutableList()
-milestones.sortBy { it.number }
-val milestoneId = milestone ?: milestones.last().number
+        val tempFile: File = File.createTempFile(project, "_$milestoneId.title")
+        tempFile.writeText(content)
 
-// get milestone and issue data
+        println("\nContent saved to ${tempFile.path}")
+    }
 
-val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
-val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.ALL, ghMilestone)
+    // formatting helpers
 
-val milestoneTitle = ghMilestone.title.trim()
-val groups = ghIssues.groupBy { issue ->
-    issue.labels.any { it.name == "housekeeping" }
+    private fun formatIssues(issues: List<GHIssue>?) =
+        issues?.joinToString(separator = "\n", postfix = "\n") { entry(it) } ?: ""
+
+    private fun entry(issue: GHIssue) = entry(issue.title.trim(), issue.number, issue.htmlUrl)
+
+    private fun entry(content: String, issueId: Int, issueUrl: URL) = "- $content - [#$issueId]($issueUrl)"
+
+    private fun footer(footer: String, url: URL) = "See all issues at: [$footer]($url)"
+
+    private fun header(name: String) = "#### $name\n"
+
+    private fun section(name: String) = "##### $name\n"
 }
-val (issuesForUsers, issuesForDevs) = groups[false] to groups[true]
 
-// print report
-
-val content = StringBuilder().apply {
-    append(header(milestoneTitle))
-    append("\n")
-    append(section("Notable Changes"))
-    append("\n")
-    append(section("Migration"))
-    append("\n")
-    append(section("Changelog"))
-    append("\n")
-    append(formatIssues(issuesForUsers))
-    append("\n")
-    append(section("Housekeeping & Refactorings"))
-    append("\n")
-    append(formatIssues(issuesForDevs))
-    append("\n")
-    append(footer(milestoneTitle, ghMilestone.htmlUrl))
-}.toString()
-
-println(content)
-
-// write report to disk
-
-val tempFile: File = File.createTempFile(project, "_$milestoneId.title")
-tempFile.writeText(content)
-
-println("\nContent saved to ${tempFile.path}")
+GithubMilestoneReport().main(args)
