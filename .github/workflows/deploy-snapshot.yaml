@@ -9,6 +9,8 @@ jobs:
   gradle:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -38,8 +40,3 @@ jobs:
         BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
       run: ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace
       if: ${{ github.repository == 'detekt/detekt'}}
-
-    # We stop gradle at the end to make sure the cache folders
-    # don't contain any lock files and are free to be cached.
-    - name: Stop Gradle
-      run: ./gradlew --stop
