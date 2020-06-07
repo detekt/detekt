@@ -2,12 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.identifierName
-import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
-import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
@@ -17,7 +15,8 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  */
 class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    private val booleanStandardType = Name.identifier("Boolean")
+    private val kotlinBooleanTypeName = "kotlin.Boolean"
+    private val javaBooleanTypeName = "java.lang.Boolean"
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -46,7 +45,7 @@ class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
         if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {
             val typeName = getTypeName(declaration)
 
-            if (typeName !== null && typeName != booleanStandardType) {
+            if (typeName !== null && typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName) {
                 report(
                     reportCodeSmell(declaration, name, typeName)
                 )
@@ -57,7 +56,7 @@ class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
     private fun reportCodeSmell(
         declaration: KtCallableDeclaration,
         name: String,
-        typeName: Name?
+        typeName: String
     ): CodeSmell {
         return CodeSmell(
             issue,
@@ -66,7 +65,9 @@ class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getTypeName(parameter: KtCallableDeclaration): Name? {
-        return parameter.createTypeBindingForReturnType(bindingContext)?.type?.nameIfStandardType
+    private fun getTypeName(parameter: KtCallableDeclaration): String? {
+        return parameter.createTypeBindingForReturnType(bindingContext)
+            ?.type
+            ?.getJetTypeFqName(false)
     }
 }

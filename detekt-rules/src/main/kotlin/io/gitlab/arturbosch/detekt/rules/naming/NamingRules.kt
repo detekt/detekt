@@ -60,7 +60,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         if (declaration.nameAsSafeName.isSpecial) {
             return
         }
-         declaration.nameIdentifier?.parent?.javaClass?.let {
+        declaration.nameIdentifier?.parent?.javaClass?.let {
             when (declaration) {
                 is KtProperty -> handleProperty(declaration)
                 is KtNamedFunction -> handleFunction(declaration)
