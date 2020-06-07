@@ -21,6 +21,7 @@ jobs:
       # We compile the test snippets only on Java 8.
       COMPILE_TEST_SNIPPETS: ${{ matrix.os == 'ubuntu-latest' && matrix.jdk == 8 }}
       JDK_VERSION:  ${{ matrix.jdk }}
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -76,8 +77,3 @@ jobs:
 
     - name: Verify Generator Output
       run: ./gradlew verifyGeneratorOutput
-
-    # We stop gradle at the end to make sure the cache folders
-    # don't contain any lock files and are free to be cached.
-    - name: Stop Gradle
-      run: ./gradlew --stop
