@@ -451,6 +451,9 @@ potential-bugs:
     returnValueAnnotations: ['*.CheckReturnValue', '*.CheckResult']
   ImplicitDefaultLocale:
     active: false
+  ImplicitUnitReturnType:
+    active: false
+    allowExplicitReturnType: true
   InvalidRange:
     active: true
   IteratorHasNextCallsNextMethod:
