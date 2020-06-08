@@ -11,7 +11,8 @@ dependencies {
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
-val defaultConfigFile = "${rootProject.rootDir}/detekt-core/src/main/resources/default-detekt-config.yml"
+val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
+val defaultConfigFile = "$configDir/default-detekt-config.yml"
 
 val generateDocumentation by tasks.registering {
     dependsOn(tasks.build, ":detekt-api:dokka")
@@ -37,7 +38,7 @@ val generateDocumentation by tasks.registering {
                 "--documentation",
                 documentationDir,
                 "--config",
-                "${rootProject.rootDir}/detekt-cli/src/main/resources")
+                configDir)
         }
     }
 }
