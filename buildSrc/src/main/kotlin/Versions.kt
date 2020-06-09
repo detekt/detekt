@@ -9,7 +9,7 @@ object Versions {
     const val JUNIT: String = "1.6.2"
     const val JCOMMANDER: String = "1.78"
     const val SNAKEYAML: String = "1.26"
-    const val KTLINT: String = "0.37.0"
+    const val KTLINT: String = "0.37.1"
     const val KOTLINX_HTML: String = "0.7.1"
     const val JACOCO: String = "0.8.5"
 
