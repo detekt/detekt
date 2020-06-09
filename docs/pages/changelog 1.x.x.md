@@ -29,9 +29,15 @@ embedding detekt.
 - We are dropping the thin wrapper tasks over Intellij's `inspections.sh` and `format.sh`.
 They were broken for some time and in general sparingly used. 
 There are alternative ways to run these scripts: https://www.jetbrains.com/help/idea/command-line-formatter.html or https://github.com/bentolor/idea-cli-inspector. 
+- XML-tags in the baseline file now have more meaningful names:
+    - `Whitelist` -> `ManuallySuppressedIssues` 
+    - `Blacklist` -> `CurrentIssues`
+    - Note: the old names will work until a new major release
 
 ##### Changelog
 
+- KtLint to 0.37.1 - [#2783](https://github.com/detekt/detekt/pull/2783)
+- Rename Blacklist and Whitelist to be self explanatory - [#2778](https://github.com/detekt/detekt/pull/2778)
 - Remove deprecated HierarchicalConfig which could lead to OOM when reusing Config objects - [#2768](https://github.com/detekt/detekt/pull/2768)
 - Support layout property for ImportOrdering rule - [#2763](https://github.com/detekt/detekt/pull/2763)
 - Wrap three new experimental KtLint rules - [#2762](https://github.com/detekt/detekt/pull/2762)
@@ -59,6 +65,10 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 ##### Housekeeping & Refactorings
 
+- Fix config generation directory - [#2782](https://github.com/detekt/detekt/pull/2782)
+- Disable Gradle daemon on CI - [#2780](https://github.com/detekt/detekt/pull/2780)
+- Convert github-milestone-report.groovy to main.kts - [#2777](https://github.com/detekt/detekt/pull/2777)
+- Prepare 1.10.0-RC1 release - [#2776](https://github.com/detekt/detekt/pull/2776)
 - Fix memory leak with not closing processing settings - [#2775](https://github.com/detekt/detekt/pull/2775)
 - Do not print passing tests on the console - [#2774](https://github.com/detekt/detekt/pull/2774)
 - Run in parallel by default - [#2773](https://github.com/detekt/detekt/pull/2773)
