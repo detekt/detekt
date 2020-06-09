@@ -37,24 +37,33 @@ data class Entity(
         /**
          * Create an entity at the location of the identifier of given named declaration.
          */
-        fun atName(element: KtNamedDeclaration): Entity = from(element.nameIdentifier ?: element)
+        fun atName(element: KtNamedDeclaration): Entity =
+            from(element.nameIdentifier ?: element, element)
 
         /**
          * Create an entity at the location of the package, first import or first declaration.
          */
-        fun atPackageOrFirstDecl(file: KtFile): Entity = from(
-            file.packageDirective ?: file.firstChild ?: file
-        )
+        fun atPackageOrFirstDecl(file: KtFile): Entity =
+            from(file.packageDirective ?: file.firstChild ?: file, file)
 
         /**
          * Use this factory method if the location can be calculated much more precisely than
          * using the given PsiElement.
          */
-        fun from(element: PsiElement, location: Location): Entity {
-            val name = element.searchName()
-            val signature = element.buildFullSignature()
-            val clazz = element.searchClass()
-            val ktElement = element.getNonStrictParentOfType<KtElement>() ?: error("KtElement expected")
+        fun from(element: PsiElement, location: Location): Entity = from(element, element, location)
+
+        private fun from(elementToReport: PsiElement, elementForSignature: PsiElement): Entity =
+            from(elementToReport, elementForSignature, Location.from(elementToReport))
+
+        private fun from(
+            elementToReport: PsiElement,
+            elementForSignature: PsiElement,
+            location: Location
+        ): Entity {
+            val name = elementToReport.searchName()
+            val signature = elementForSignature.buildFullSignature()
+            val clazz = elementToReport.searchClass()
+            val ktElement = elementToReport.getNonStrictParentOfType<KtElement>() ?: error("KtElement expected")
             return Entity(name, clazz, signature, location, ktElement)
         }
     }
