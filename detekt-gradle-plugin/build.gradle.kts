@@ -3,9 +3,14 @@ plugins {
     id("com.gradle.plugin-publish") version "0.11.0"
 }
 
+repositories {
+    google()
+}
+
 dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
+    implementation("com.android.tools.build:gradle:4.0.0")
 
     testImplementation(project(":detekt-test-utils"))
 }
