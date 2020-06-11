@@ -23,7 +23,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Highly configurable rule sets
 - Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
 - Specification of quality gates which will break your build 
-- Code Smell baseline and whitelisting for legacy projects
+- Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
@@ -208,6 +208,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Natig Babayev](https://github.com/natiginfo) - Readme improvements
 - [David Phillips](https://github.com/daphil19) - New rule: MandatoryBracesLoops
 - [Volkan Şahin](https://github.com/volsahin) - Documentation improvement
+- [Remco Mokveld](https://github.com/remcomokveld) - Rename Blacklist/Whitelist to more meaningful names
 
 ### Mentions
 

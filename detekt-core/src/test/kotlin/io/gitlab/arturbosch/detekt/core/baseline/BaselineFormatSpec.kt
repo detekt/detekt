@@ -17,13 +17,13 @@ class BaselineFormatSpec : Spek({
 
             it("loads the baseline file") {
                 val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
-                val (blacklist, whitelist) = BaselineFormat().read(path)
+                val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
 
-                assertThat(blacklist).hasSize(2)
-                assertThat(blacklist).anySatisfy { it.startsWith("LongParameterList") }
-                assertThat(blacklist).anySatisfy { it.startsWith("LongMethod") }
-                assertThat(whitelist).hasSize(1)
-                assertThat(whitelist).anySatisfy { it.startsWith("FeatureEnvy") }
+                assertThat(manuallySuppressedIssues).hasSize(2)
+                assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongParameterList") }
+                assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongMethod") }
+                assertThat(currentIssues).hasSize(1)
+                assertThat(currentIssues).anySatisfy { it.startsWith("FeatureEnvy") }
             }
 
             it("throws on an invalid baseline file extension") {
@@ -33,10 +33,21 @@ class BaselineFormatSpec : Spek({
             }
 
             it("throws on an invalid baseline ID declaration") {
-                val path = resourceAsPath("/baseline_feature/missing-whitelist-baseline.xml")
+                val path = resourceAsPath("/baseline_feature/missing-temporary-suppressed-baseline.xml")
                 assertThatIllegalStateException()
                     .isThrownBy { BaselineFormat().read(path) }
                     .withMessage("The content of the ID element must not be empty")
+            }
+
+            it("supports deprecated baseline values") {
+                val path = resourceAsPath("/baseline_feature/deprecated-baseline.xml")
+                val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
+
+                assertThat(manuallySuppressedIssues).hasSize(2)
+                assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongParameterList") }
+                assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongMethod") }
+                assertThat(currentIssues).hasSize(1)
+                assertThat(currentIssues).anySatisfy { it.startsWith("FeatureEnvy") }
             }
         }
 

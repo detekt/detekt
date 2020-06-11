@@ -19,7 +19,7 @@ programming flaws like unused or too complex constructs. Think of it as *pmd* or
 - Highly configurable rule sets
 - Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
 - Specification of quality gates which will break your build 
-- Code Smell baseline and whitelisting for legacy projects
+- Code Smell baseline for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)

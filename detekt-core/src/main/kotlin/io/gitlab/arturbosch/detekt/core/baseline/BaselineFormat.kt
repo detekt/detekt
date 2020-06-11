@@ -42,11 +42,11 @@ internal class BaselineFormat {
     private fun XMLStreamWriter.save(baseline: Baseline) {
         document {
             tag(SMELL_BASELINE) {
-                tag(BLACKLIST) {
-                    baseline.blacklist.forEach { tag(ID, it) }
+                tag(MANUALLY_SUPPRESSED_ISSUES) {
+                    baseline.manuallySuppressedIssues.forEach { tag(ID, it) }
                 }
-                tag(WHITELIST) {
-                    baseline.whitelist.forEach { tag(ID, it) }
+                tag(CURRENT_ISSUES) {
+                    baseline.currentIssues.forEach { tag(ID, it) }
                 }
             }
         }

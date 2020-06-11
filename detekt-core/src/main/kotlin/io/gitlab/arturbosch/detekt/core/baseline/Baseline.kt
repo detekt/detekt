@@ -8,9 +8,13 @@ import java.nio.file.Path
 internal typealias FindingsIdList = Set<String>
 internal typealias FindingId = String
 
-internal data class Baseline(val blacklist: FindingsIdList, val whitelist: FindingsIdList) {
+internal data class Baseline(
+    val manuallySuppressedIssues: FindingsIdList,
+    val currentIssues: FindingsIdList
+) {
 
-    fun contains(id: FindingId): Boolean = whitelist.contains(id) || blacklist.contains(id)
+    fun contains(id: FindingId): Boolean =
+        currentIssues.contains(id) || manuallySuppressedIssues.contains(id)
 
     companion object {
 
@@ -26,8 +30,8 @@ const val DETEKT_BASELINE_PATH_KEY = "detekt.baseline.path.key"
 const val DETEKT_BASELINE_CREATION_KEY = "detekt.baseline.creation.key"
 
 internal const val SMELL_BASELINE = "SmellBaseline"
-internal const val BLACKLIST = "Blacklist"
-internal const val WHITELIST = "Whitelist"
+internal const val MANUALLY_SUPPRESSED_ISSUES = "ManuallySuppressedIssues"
+internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Finding.baselineId: String
