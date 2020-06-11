@@ -5,7 +5,6 @@ import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.api.BaseVariant
-import com.android.build.gradle.api.SourceKind
 import com.android.build.gradle.internal.api.TestedVariant
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -64,12 +63,13 @@ class DetektPlugin : Plugin<Project> {
                     it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for test classes across " +
                             "all variants with type resolution"
                 }
+                val bootClasspath = files(androidExtension.bootClasspath)
                 androidExtension.variants?.all { variant ->
-                    project.registerAndroidDetektTask(extension, variant).also { provider ->
+                    project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
                         mainTaskProvider.dependsOn(provider)
                     }
                     variant.testVariants.forEach { testVariant ->
-                        project.registerAndroidDetektTask(extension, testVariant).also { provider ->
+                        project.registerAndroidDetektTask(bootClasspath, extension, testVariant).also { provider ->
                             testTaskProvider.dependsOn(provider)
                         }
                     }
@@ -123,37 +123,36 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerAndroidDetektTask(
+        bootClasspath: FileCollection,
         extension: DetektExtension,
-        baseVariant: BaseVariant
+        variant: BaseVariant
     ): TaskProvider<Detekt> =
-        registerDetektTask(DETEKT_TASK_NAME + baseVariant.name.capitalize(), extension) {
-            it.setSource(baseVariant.getSourceFolders(SourceKind.JAVA))
-            it.classpath.setFrom(baseVariant.getCompileClasspath(null))
-            it.reports.xml.destination = File(extension.reportsDir, baseVariant.name + ".xml")
-            it.reports.html.destination = File(extension.reportsDir, baseVariant.name + ".html")
-            it.reports.txt.destination = File(extension.reportsDir, baseVariant.name + ".txt")
-            it.description =
-                "EXPERIMENTAL & SLOW: Run detekt analysis for ${baseVariant.name} classes with type resolution"
+        registerDetektTask(DETEKT_TASK_NAME + variant.name.capitalize(), extension) {
+            setSource(variant.sourceSets.map { it.javaDirectories })
+            classpath.setFrom(variant.getCompileClasspath(null) + bootClasspath)
+            reports.xml.destination = File(extension.reportsDir, variant.name + ".xml")
+            reports.html.destination = File(extension.reportsDir, variant.name + ".html")
+            reports.txt.destination = File(extension.reportsDir, variant.name + ".txt")
+            description = "EXPERIMENTAL & SLOW: Run detekt analysis for ${variant.name} classes with type resolution"
         }
 
     private fun Project.registerJvmDetektTask(extension: DetektExtension, sourceSet: SourceSet) {
         val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         registerDetektTask(DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            it.setSource(kotlinSourceSet.kotlin.files)
-            it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
-            it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
-            it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
-            it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
-            it.description =
-                "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
+            setSource(kotlinSourceSet.kotlin.files)
+            classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
+            reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
+            reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
+            reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
+            description = "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }
 
     private fun Project.registerDetektTask(
         name: String,
         extension: DetektExtension,
-        configuration: (Detekt) -> Unit
+        configuration: Detekt.() -> Unit
     ): TaskProvider<Detekt> =
         tasks.register(name, Detekt::class.java) {
             it.debugProp.set(provider { extension.debug })
