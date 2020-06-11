@@ -55,7 +55,7 @@ class ComplexInterface(
             if (size >= threshold) {
                 report(
                     ThresholdedCodeSmell(issue,
-                        Entity.from(klass),
+                        Entity.atName(klass),
                         Metric("SIZE: ", size, threshold),
                         "The interface ${klass.name} is too complex. Consider splitting it up.")
                 )
