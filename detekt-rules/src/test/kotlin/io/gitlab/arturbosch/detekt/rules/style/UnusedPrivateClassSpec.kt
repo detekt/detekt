@@ -131,6 +131,28 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(lint).isEmpty()
         }
 
+        it("should not report them if used as inner type parameter") {
+            val code = """
+                private val elements = listOf(42).filterIsInstance<Set<Item>>()
+                private class Item
+                """
+
+            val lint = subject.compileAndLint(code)
+
+            assertThat(lint).isEmpty()
+        }
+
+        it("should not report them if used as outer type parameter") {
+            val code = """
+                private val elements = listOf(42).filterIsInstance<Something<Int>>()
+                private abstract class Something<E>: Collection<E>
+                """
+
+            val lint = subject.compileAndLint(code)
+
+            assertThat(lint).isEmpty()
+        }
+
         it("should not report them if used as generic type in functions") {
             val code = """
                 private class Foo

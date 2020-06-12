@@ -134,9 +134,8 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         override fun visitCallExpression(expression: KtCallExpression) {
             expression.calleeExpression?.text?.run { namedClasses.add(this) }
             expression.typeArguments
-                .forEach {
-                    namedClasses.add(it.text)
-                }
+                .mapNotNull { it.typeReference }
+                .forEach { registerAccess(it) }
             super.visitCallExpression(expression)
         }
 
