@@ -133,7 +133,7 @@ class UnusedPrivateClassSpec : Spek({
 
         it("should not report them if used as inner type parameter") {
             val code = """
-                val elements = listOf(42).filterIsInstance<Set<Item>>()
+                private val elements = listOf(42).filterIsInstance<Set<Item>>()
                 private class Item
                 """
 
@@ -144,7 +144,7 @@ class UnusedPrivateClassSpec : Spek({
 
         it("should not report them if used as outer type parameter") {
             val code = """
-                val elements = listOf(42).filterIsInstance<Something<Int>>()
+                private val elements = listOf(42).filterIsInstance<Something<Int>>()
                 private abstract class Something<E>: Collection<E>
                 """
 
