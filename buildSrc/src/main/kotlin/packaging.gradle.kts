@@ -26,6 +26,7 @@ project(":detekt-cli") {
 subprojects {
 
     apply {
+        plugin("java-library")
         plugin("maven-publish")
         plugin("com.jfrog.bintray")
         plugin("com.jfrog.artifactory")
