@@ -23,7 +23,7 @@ project(":detekt-cli") {
     }
 }
 
-subprojects {
+configure(subprojects.filter { it.name != "detekt-bom" }) {
 
     apply {
         plugin("java-library")

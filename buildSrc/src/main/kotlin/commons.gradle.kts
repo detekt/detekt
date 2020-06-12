@@ -16,7 +16,7 @@ allprojects {
     }
 }
 
-subprojects {
+configure(subprojects.filter { it.name != "detekt-bom" }) {
 
     val project = this
 

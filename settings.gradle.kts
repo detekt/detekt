@@ -2,6 +2,7 @@ rootProject.name = "detekt"
 include(
     "detekt-api",
     "detekt-cli",
+    "detekt-bom",
     "detekt-core",
     "detekt-formatting",
     "detekt-generator",
