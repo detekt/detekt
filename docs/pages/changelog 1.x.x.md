@@ -22,6 +22,7 @@ Please update your links if you used it for references.
 
 ##### Migration
 
+- We fixed a regression in baseline signatures. This breaks baseline ids for reported issues at functions for some rules. You may need to regenerate the baseline file or manually change the ids. We are very sorry for this inconvenience.
 - KtLint replaced their default `Indentation` rule. Expect new formatting issues here!
 - We removed `HierachicalConfig` interface. It was deprecated in 1.7.0 and could lead to OOM errors when reusing `Config`
 embedding detekt.
@@ -36,6 +37,9 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 ##### Changelog
 
+- Fix false positive for UnusedPrivateClass on generics - [#2793](https://github.com/detekt/detekt/pull/2793)
+- Report ComplexInterface issues at identifiers - [#2786](https://github.com/detekt/detekt/pull/2786)
+- Construct signatures based on named declaration instead of just the identifier - [#2785](https://github.com/detekt/detekt/pull/2785)
 - KtLint to 0.37.1 - [#2783](https://github.com/detekt/detekt/pull/2783)
 - Rename Blacklist and Whitelist to be self explanatory - [#2778](https://github.com/detekt/detekt/pull/2778)
 - Remove deprecated HierarchicalConfig which could lead to OOM when reusing Config objects - [#2768](https://github.com/detekt/detekt/pull/2768)
@@ -65,6 +69,8 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 ##### Housekeeping & Refactorings
 
+- Introduce BoM to manage our own dependencies - [#2792](https://github.com/detekt/detekt/pull/2792)
+- Smarter Caching on Github Actions - [#2788](https://github.com/detekt/detekt/pull/2788)
 - Fix config generation directory - [#2782](https://github.com/detekt/detekt/pull/2782)
 - Disable Gradle daemon on CI - [#2780](https://github.com/detekt/detekt/pull/2780)
 - Convert github-milestone-report.groovy to main.kts - [#2777](https://github.com/detekt/detekt/pull/2777)
