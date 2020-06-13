@@ -89,7 +89,12 @@ configure(listOf(project(":detekt-rules"), project(":detekt-formatting"))) {
 
 jacoco.toolVersion = Versions.JACOCO
 
-val examplesOrTestUtils = setOf("detekt-test", "detekt-test-utils", "detekt-sample-extensions")
+val examplesOrTestUtils = setOf(
+    "detekt-pom",
+    "detekt-test",
+    "detekt-test-utils",
+    "detekt-sample-extensions"
+)
 
 tasks {
     jacocoTestReport {
