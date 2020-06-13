@@ -21,7 +21,7 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-${{ hashFiles('buildSrc/src/main/kotlin/Versions.kt') }}
+        key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
         restore-keys: |
           cache-gradle-
 

@@ -41,7 +41,7 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-${{ hashFiles('buildSrc/src/main/kotlin/Versions.kt') }}
+        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-${{ hashFiles('detekt-bom/build.gradle.kts') }}
         restore-keys: |
           cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-
           cache-gradle-${{ matrix.os }}-
