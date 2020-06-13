@@ -15,16 +15,15 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v2
 
-    - name: Cache Gradle Caches
+    - name: Cache Gradle Folders
       uses: actions/cache@v2
       with:
-        path: ~/.gradle/caches/
-        key: cache-gradle-deploy-snapshot
-    - name: Cache Gradle Wrapper
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/wrapper/
-        key: cache-wrapper-deploy-snapshot
+        path: |
+          ~/.gradle/caches/
+          ~/.gradle/wrapper/
+        key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        restore-keys: |
+          cache-gradle-
 
     - name: Setup Java
       uses: actions/setup-java@v1
