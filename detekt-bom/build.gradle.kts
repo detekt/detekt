@@ -1,3 +1,5 @@
+@file:Suppress("detekt.MayBeConst")
+
 plugins {
     `java-platform`
 }
