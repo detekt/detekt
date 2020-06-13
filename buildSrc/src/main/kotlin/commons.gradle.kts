@@ -16,7 +16,7 @@ allprojects {
     }
 }
 
-subprojects {
+configure(subprojects.filter { it.name != "detekt-bom" }) {
 
     val project = this
 
@@ -70,15 +70,16 @@ subprojects {
     }
 
     dependencies {
+        implementation(platform(project(":detekt-bom")))
         compileOnly(kotlin("stdlib-jdk8"))
 
-        testImplementation("org.assertj:assertj-core:${Versions.ASSERTJ}")
-        testImplementation("org.spekframework.spek2:spek-dsl-jvm:${Versions.SPEK}")
-        testImplementation("org.reflections:reflections:${Versions.REFLECTIONS}")
-        testImplementation("io.mockk:mockk:${Versions.MOCKK}")
+        testImplementation("org.assertj:assertj-core")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm")
+        testImplementation("org.reflections:reflections")
+        testImplementation("io.mockk:mockk")
 
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher:${Versions.JUNIT}")
-        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.SPEK}")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5")
     }
 }
 

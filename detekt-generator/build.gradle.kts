@@ -5,7 +5,7 @@ dependencies {
     implementation(project(":detekt-api"))
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
-    implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
+    implementation("com.beust:jcommander")
 
     testImplementation(project(":detekt-test-utils"))
 }

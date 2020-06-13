@@ -23,9 +23,10 @@ project(":detekt-cli") {
     }
 }
 
-subprojects {
+configure(subprojects.filter { it.name != "detekt-bom" }) {
 
     apply {
+        plugin("java-library")
         plugin("maven-publish")
         plugin("com.jfrog.bintray")
         plugin("com.jfrog.artifactory")

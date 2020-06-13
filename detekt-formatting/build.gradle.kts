@@ -1,12 +1,12 @@
 dependencies {
     implementation(project(":detekt-api"))
-    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:${Versions.KTLINT}") {
+    implementation("com.pinterest.ktlint:ktlint-ruleset-standard") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-core:${Versions.KTLINT}") {
+    implementation("com.pinterest.ktlint:ktlint-core") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental:${Versions.KTLINT}") {
+    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental") {
         exclude(group = "org.jetbrains.kotlin")
     }
 
