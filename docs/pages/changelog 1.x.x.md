@@ -5,6 +5,7 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+
 #### 1.10.0
 
 ##### Notable Changes

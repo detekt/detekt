@@ -13,9 +13,10 @@ githubRelease {
     dryRun.set(false)
     body {
         var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
-        val sectionStart = "#### ${project.version}"
+        val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
+        val sectionStart = "#### $nextNonBetaVersion"
         changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
-        changelog = changelog.substring(0, changelog.indexOf("#### 1"))
+        changelog = changelog.substring(0, changelog.indexOf("#### 1."))
         changelog.trim()
     }
     val cliBuildDir = project(":detekt-cli").buildDir
