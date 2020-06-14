@@ -10,13 +10,13 @@ on:
 
 jobs:
   gradle:
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         jdk: [8, 11, 14]
     runs-on: ${{ matrix.os }}
-    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     env:
       # We compile the test snippets only on Java 8.
       COMPILE_TEST_SNIPPETS: ${{ matrix.os == 'ubuntu-latest' && matrix.jdk == 8 }}
@@ -76,5 +76,29 @@ jobs:
       if: matrix.os == 'windows-latest'
 
 
+  verify-documentation:
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+    - name: Cache Gradle Folders
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/
+          ~/.gradle/wrapper/
+        key: cache-gradle-ubuntu-latest-14-verifygenerator-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        restore-keys: |
+          cache-gradle-ubuntu-latest-14-verifygenerator-
+          cache-gradle-ubuntu-latest-14-
+          cache-gradle-ubuntu-latest-
+          cache-gradle-
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 14
     - name: Verify Generator Output
       run: ./gradlew verifyGeneratorOutput
