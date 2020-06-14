@@ -127,4 +127,4 @@ jobs:
         with:
           java-version: 8
       - name: Build and compile test snippets
-        run: ./gradlew build -PwarningsAsErrors=true -Pcompile-test-snippets=true
+        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true
