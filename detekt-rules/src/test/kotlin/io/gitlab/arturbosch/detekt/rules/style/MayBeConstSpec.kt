@@ -242,6 +242,18 @@ class MayBeConstSpec : Spek({
                 subject.lint(Case.MayBeConstNegative.path())
                 assertThat(subject.findings).isEmpty()
             }
+
+            it("does not report vals inside anonymous object declaration") {
+                subject.lint("""
+                    fun main() {
+                        val versions = object {
+                            val prop = ""
+                        }
+                    }
+                """)
+
+                assertThat(subject.findings).isEmpty()
+            }
         }
 
         context("some const val candidates in nested objects") {

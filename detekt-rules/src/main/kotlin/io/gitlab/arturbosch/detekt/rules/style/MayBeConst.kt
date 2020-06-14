@@ -60,6 +60,9 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+        if (declaration.isObjectLiteral()) { // local vals can't be const
+            return
+        }
         val constProperties = declaration.declarations
                 .filterIsInstance<KtProperty>()
                 .filter { it.isConstant() }
