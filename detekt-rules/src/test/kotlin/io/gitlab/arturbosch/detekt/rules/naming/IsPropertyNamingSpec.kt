@@ -163,6 +163,28 @@ class IsPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
+            it("should warn about inferred primitive types") {
+                val code = """
+                class O {
+                    var isDefault = 0
+                }
+            """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should warn about inferred non-primitive types") {
+                val code = """
+                class O {
+                    var isDefault = listOf(1, 2, 3)
+                }
+            """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
             it("should warn about inner classes") {
                 val code = """
                 class O {

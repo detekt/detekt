@@ -1,17 +1,33 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when property names inside objects which do not follow the specified naming convention are used.
+ * Reports when property with 'is' prefix doesn't boolean type.
+ * Please check the charter 8.3.2 at Java Language Specification
  *
- * @active since v1.9.0
+ * <noncompliant>
+ * val isEnabled : Int = 500
+ * </noncompliant>
+ *
+ * <compliant>
+ * val isEnabled : Boolean = false
+ * </compliant>
+ *
+ * @active since v1.10.0
  */
 class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
@@ -26,26 +42,30 @@ class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitParameter(parameter: KtParameter) {
+        super.visitParameter(parameter)
+
         if (parameter.hasValOrVar()) {
             validateDeclaration(parameter)
         }
-
-        super.visitParameter(parameter)
     }
 
     override fun visitProperty(property: KtProperty) {
-        validateDeclaration(property)
-
         super.visitProperty(property)
+
+        validateDeclaration(property)
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
+        if (bindingContext == BindingContext.EMPTY) {
+            return
+        }
+
         val name = declaration.identifierName()
 
         if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {
             val typeName = getTypeName(declaration)
 
-            if (typeName !== null && typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName) {
+            if (typeName != null && typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName) {
                 report(
                     reportCodeSmell(declaration, name, typeName)
                 )
