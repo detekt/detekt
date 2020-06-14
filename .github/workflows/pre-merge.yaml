@@ -64,7 +64,7 @@ jobs:
 
 
     - name: Build detekt (WIN)
-      run: ./gradlew build installShadowDist -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
+      run: ./gradlew build installShadowDist -PwarningsAsErrors=true
       if: matrix.os == 'windows-latest'
     - name: Run detekt-cli --help (WIN)
       run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
