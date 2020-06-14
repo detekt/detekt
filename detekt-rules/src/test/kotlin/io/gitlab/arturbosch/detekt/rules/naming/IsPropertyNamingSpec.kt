@@ -89,17 +89,6 @@ class IsPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect Java Boolean") {
-                val code = """
-                data class O {
-                    var isDefault: java.lang.Boolean = false
-                }
-            """
-                val findings = subject.compileAndLintWithContext(env, code)
-
-                assertThat(findings).isEmpty()
-            }
-
             it("should not detect Kotlin Boolean property uninitialized") {
                 val code = """
                 class O {
@@ -115,25 +104,10 @@ class IsPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect Java Boolean uninitialized") {
-                val code = """
-                data class O {
-                    var isDefault: java.lang.Boolean
-                    
-                    init {
-                        isDefault = true
-                    }
-                }
-            """
-                val findings = subject.compileAndLintWithContext(env, code)
-
-                assertThat(findings).isEmpty()
-            }
-
             it("should not detect Kotlin Boolean nullable") {
                 val code = """
                 class O {
-                    var isDefault: Boolean?
+                    var isDefault: Boolean? = null
                 }
             """
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -144,7 +118,7 @@ class IsPropertyNamingSpec : Spek({
             it("should not detect Java Boolean nullable") {
                 val code = """
                 class O {
-                    var isDefault: java.lang.Boolean?
+                    var isDefault: java.lang.Boolean? = null
                 }
             """
                 val findings = subject.compileAndLintWithContext(env, code)

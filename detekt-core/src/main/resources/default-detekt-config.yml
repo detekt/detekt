@@ -378,7 +378,7 @@ naming:
     active: false
     rootPackage: ''
   IsPropertyNaming:
-    active: true
+    active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   MatchingDeclarationName:
     active: true

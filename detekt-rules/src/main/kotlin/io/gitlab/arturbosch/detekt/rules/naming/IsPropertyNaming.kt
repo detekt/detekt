@@ -26,8 +26,6 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * <compliant>
  * val isEnabled : Boolean = false
  * </compliant>
- *
- * @active since v1.10.0
  */
 class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
