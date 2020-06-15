@@ -7,7 +7,6 @@ import java.nio.file.Path
    See https://github.com/detekt/detekt/issues/1089 */
 enum class Case(val file: String) {
     ComplexMethods("/cases/ComplexMethods.kt"),
-    ConstInObjects("/cases/ConstInObjects.kt"),
     Default("/cases/Default.kt"),
     Empty("/cases/Empty.kt"),
     EmptyDefaultConstructorNegative("/cases/EmptyDefaultConstructorNegative.kt"),
@@ -23,7 +22,6 @@ enum class Case(val file: String) {
     Library("/cases/library/Library.kt"),
     LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
     LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
-    MayBeConstNegative("cases/MayBeConstNegative.kt"),
     MaxLineLength("/cases/MaxLineLength.kt"),
     MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
     MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
