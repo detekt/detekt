@@ -74,17 +74,19 @@ class LongMethodSpec : Spek({
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
 
-        it("should find long method with method call with params") {
+        it("should find long method with method call with params on separate lines") {
             val code = """
                 fun longMethod( // 9 lines
-                    point1: Point,
-                    point2: Point
+                    x1: Int,
+                    x2: Int,
+                    y1: Int,
+                    y2: Int
                 ) {
-                    createLine(
-                        point1.x,
-                        point2.x,
-                        point1.y,
-                        point2.y
+                    println(
+                        x1,
+                        y1,
+                        x2,
+                        y2
                     )
                 }
             """
