@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtParameterList
 import java.util.ArrayDeque
 
 fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<ASTNode> = sequence {
@@ -40,7 +41,7 @@ fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<AST
 }
 
 fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
-    node.tokenSequence(comments)
+    node.tokenSequence(comments + KtParameterList::class.java)
         .map { it.line(inFile) }
         .distinct()
         .count()

@@ -49,12 +49,8 @@ class LongMethodSpec : Spek({
         it("should not find too long method with params on newlines") {
             val code = """
                 fun methodWithParams( // 4 lines
-                    param1: String,
-                    param2: String,
-                    @QueryValue startDate: String,
-                    @QueryValue endDate: String
+                    param1: String
                 ) {
-                    println()
                     println()
                 }
             """
@@ -65,12 +61,8 @@ class LongMethodSpec : Spek({
         it("should find too long method with params on newlines") {
             val code = """
                 fun longMethodWithParams( // 5 lines
-                    param1: String,
-                    param2: String,
-                    @QueryValue startDate: String,
-                    @QueryValue endDate: String
+                    param1: String
                 ) {
-                    println()
                     println()
                     println()
                 }
@@ -80,6 +72,51 @@ class LongMethodSpec : Spek({
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
+        }
+
+        it("should find long method with method call with params") {
+            val code = """
+                fun longMethod( // 9 lines
+                    point1: Point,
+                    point2: Point
+                ) {
+                    createLine(
+                        point1.x,
+                        point2.x,
+                        point1.y,
+                        point2.y
+                    )
+                }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(9)
+        }
+
+        it("should find two long methods with params on separate lines") {
+            val code = """
+                fun longMethod(
+                    param1: String
+                ) { // 5 lines
+                    println()
+                    println()
+            
+                    fun nestedLongMethod(
+                        param1: String
+                    ) { // 5 lines
+                        println()
+                        println()
+                    }
+                }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(2)
+            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
+            assertThat(findings[1] as ThresholdedCodeSmell).hasValue(5)
         }
     }
 })
