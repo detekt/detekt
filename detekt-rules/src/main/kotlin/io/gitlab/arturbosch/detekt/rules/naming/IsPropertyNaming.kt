@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
- * Please check the charter 8.3.2 at Java Language Specification
+ * Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
  * <noncompliant>
  * val isEnabled : Int = 500
