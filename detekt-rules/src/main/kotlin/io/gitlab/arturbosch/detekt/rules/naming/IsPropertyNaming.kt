@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when property with 'is' prefix doesn't boolean type.
+ * Reports when property with 'is' prefix doesn't have a boolean type.
  * Please check the charter 8.3.2 at Java Language Specification
  *
  * <noncompliant>
