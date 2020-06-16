@@ -44,5 +44,41 @@ class LongMethodSpec : Spek({
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("should not find too long method with params on newlines") {
+            val code = """
+                fun methodWithParams( // 4 lines
+                    param1: String,
+                    param2: String,
+                    @QueryValue startDate: String,
+                    @QueryValue endDate: String
+                ) {
+                    println()
+                    println()
+                }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("should find too long method with params on newlines") {
+            val code = """
+                fun methodWithParams( // 5 lines
+                    param1: String,
+                    param2: String,
+                    @QueryValue startDate: String,
+                    @QueryValue endDate: String
+                ) {
+                    println()
+                    println()
+                    println()
+                }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
+        }
     }
 })
