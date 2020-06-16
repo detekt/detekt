@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
@@ -63,7 +64,7 @@ class LongMethodSpec : Spek({
 
         it("should find too long method with params on newlines") {
             val code = """
-                fun methodWithParams( // 5 lines
+                fun longMethodWithParams( // 5 lines
                     param1: String,
                     param2: String,
                     @QueryValue startDate: String,
@@ -77,8 +78,8 @@ class LongMethodSpec : Spek({
 
             val findings = subject.compileAndLint(code)
 
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
     }
 })
