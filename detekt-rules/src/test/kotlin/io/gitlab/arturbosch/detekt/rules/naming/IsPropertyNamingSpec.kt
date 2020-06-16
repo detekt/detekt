@@ -115,6 +115,32 @@ class IsPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
+            it("should not detect Java Boolean") {
+                val code = """
+                           class O {
+                                var isDefault: java.lang.Boolean = java.lang.Boolean(false)
+                           }
+                           """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not detect Java Boolean uninitialized") {
+                val code = """
+                           class O {
+                                var isDefault: java.lang.Boolean
+                                
+                                init {
+                                    isDefault = java.lang.Boolean(false)
+                                }
+                           }
+                           """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
+            }
+
             it("should not detect Java Boolean nullable") {
                 val code = """
                 class O {
