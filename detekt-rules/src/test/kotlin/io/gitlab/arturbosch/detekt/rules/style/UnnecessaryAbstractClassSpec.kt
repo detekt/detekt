@@ -15,7 +15,7 @@ class UnnecessaryAbstractClassSpec : Spek({
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized {
         UnnecessaryAbstractClass(TestConfig(mapOf(
-            UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
+            UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
         )))
     }
 
@@ -177,14 +177,12 @@ class UnnecessaryAbstractClassSpec : Spek({
 
             it("does not report abstract classes with module annotation") {
                 val code = """
-                    import jdk.nashorn.internal.ir.annotations.Ignore
-                    
-                    @Ignore
+                    @Deprecated("test")
                     abstract class A {
                         abstract fun f()
                     }
                     
-                    @jdk.nashorn.internal.ir.annotations.Ignore
+                    @kotlin.Deprecated("test")
                     abstract class B {
                         abstract fun f()
                     } 

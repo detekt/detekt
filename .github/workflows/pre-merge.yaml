@@ -116,15 +116,15 @@ jobs:
           path: |
             ~/.gradle/caches/
             ~/.gradle/wrapper/
-          key: cache-gradle-ubuntu-latest-8-compiletestsnippets-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+          key: cache-gradle-ubuntu-latest-14-compiletestsnippets-${{ hashFiles('detekt-bom/build.gradle.kts') }}
           restore-keys: |
-            cache-gradle-ubuntu-latest-8-compiletestsnippets-
-            cache-gradle-ubuntu-latest-8-
+            cache-gradle-ubuntu-latest-14-compiletestsnippets-
+            cache-gradle-ubuntu-latest-14-
             cache-gradle-ubuntu-latest-
             cache-gradle-
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 14
       - name: Build and compile test snippets
         run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true

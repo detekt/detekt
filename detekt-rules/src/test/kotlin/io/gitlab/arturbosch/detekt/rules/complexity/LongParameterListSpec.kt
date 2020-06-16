@@ -91,21 +91,24 @@ class LongParameterListSpec : Spek({
         describe("constructors and functions with ignored annotations") {
 
             val config = TestConfig(mapOf(
-                LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated", "kotlin.Deprecated"),
+                LongParameterList.IGNORE_ANNOTATED to listOf("Generated", "kotlin.Deprecated", "kotlin.jvm.JvmName"),
                 LongParameterList.FUNCTION_THRESHOLD to 1,
                 LongParameterList.CONSTRUCTOR_THRESHOLD to 1
             ))
             val rule = LongParameterList(config)
 
             it("does not report long parameter list for constructors if file is annotated with ignored annotation") {
-                val code = "@file:javax.annotation.Generated class Data(val a: Int)"
+                val code = """
+                    @file:kotlin.jvm.JvmName("test")
+                    class Data(val a: Int)
+                """
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
             it("does not report long parameter list for functions if file is annotated with ignored annotation") {
                 val code = """
-                    @file:javax.annotation.Generated 
-                    class Data { 
+                    @file:kotlin.jvm.JvmName("test")
+                    class Data {
                         fun foo(a: Int) {} 
                     }
                 """
@@ -113,13 +116,17 @@ class LongParameterListSpec : Spek({
             }
 
             it("does not report long parameter list for constructors if class is annotated with ignored annotation") {
-                val code = "@javax.annotation.Generated class Data(val a: Int)"
+                val code = """
+                    annotation class Generated
+                    @Generated class Data(val a: Int)
+                """
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
             it("does not report long parameter list for functions if class is annotated with ignored annotation") {
                 val code = """
-                    @javax.annotation.Generated class Data { 
+                    annotation class Generated
+                    @Generated class Data { 
                         fun foo(a: Int) {} 
                     }
                 """
