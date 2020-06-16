@@ -24,10 +24,9 @@ import java.net.URL
 
 class GithubMilestoneReport : CliktCommand() {
 
-    // arguments parsing
-    val user : String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
-    val project : String by option("-p", help = "Github project. Default: detekt").default("detekt")
-    val milestone : Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
+    private val user: String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
+    private val project: String by option("-p", help = "Github project. Default: detekt").default("detekt")
+    private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
 
     override fun run() {
 
