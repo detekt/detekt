@@ -181,8 +181,8 @@ Reports when the package declaration is missing or the file location does not ma
 
 ### IsPropertyNaming
 
-Reports when property with 'is' prefix doesn't boolean type.
-Please check the charter 8.3.2 at Java Language Specification
+Reports when property with 'is' prefix doesn't have a boolean type.
+Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
 
 **Severity**: Warning
 
