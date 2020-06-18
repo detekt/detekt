@@ -48,9 +48,10 @@ class LongMethodSpec : Spek({
 
         it("should not find too long method with params on newlines") {
             val code = """
-                fun methodWithParams( // 4 lines
+                fun methodWithParams(
                     param1: String
-                ) {
+                ) { // 4 lines
+                    println()
                     println()
                 }
             """
@@ -60,9 +61,10 @@ class LongMethodSpec : Spek({
 
         it("should find too long method with params on newlines") {
             val code = """
-                fun longMethodWithParams( // 5 lines
+                fun longMethodWithParams(
                     param1: String
-                ) {
+                ) { // 5 lines
+                    println()
                     println()
                     println()
                 }
@@ -76,13 +78,13 @@ class LongMethodSpec : Spek({
 
         it("should find long method with method call with params on separate lines") {
             val code = """
-                fun longMethod( // 9 lines
+                fun longMethod( 
                     x1: Int,
                     x2: Int,
                     y1: Int,
                     y2: Int
-                ) {
-                    println(
+                ) { // 8 lines
+                    listOf(
                         x1,
                         y1,
                         x2,
@@ -94,7 +96,7 @@ class LongMethodSpec : Spek({
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(9)
+            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(8)
         }
 
         it("should find two long methods with params on separate lines") {
@@ -104,10 +106,12 @@ class LongMethodSpec : Spek({
                 ) { // 5 lines
                     println()
                     println()
+                    println()
             
                     fun nestedLongMethod(
                         param1: String
                     ) { // 5 lines
+                        println()
                         println()
                         println()
                     }
@@ -117,8 +121,34 @@ class LongMethodSpec : Spek({
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
             assertThat(findings[1] as ThresholdedCodeSmell).hasValue(5)
+        }
+
+        it("should find nested long methods with params on separate lines") {
+            val code = """
+                fun longMethod(
+                    param1: String
+                ) { // 4 lines
+                    println()
+                    println()
+            
+                    fun nestedLongMethod(
+                        param1: String
+                    ) { // 5 lines
+                        println()
+                        println()
+                        println()
+                    }
+                }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1  )
+            assertThat(findings).hasTextLocations( "nestedLongMethod")
+            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
     }
 })

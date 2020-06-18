@@ -41,7 +41,7 @@ fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<AST
 }
 
 fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
-    node.tokenSequence(comments + KtParameterList::class.java)
+    node.tokenSequence(comments)
         .map { it.line(inFile) }
         .distinct()
         .count()

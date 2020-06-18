@@ -61,7 +61,7 @@ class LongMethod(
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val lines = function.linesOfCode()
+        val lines = if (function.isTopLevel) function.bodyExpression?.linesOfCode() ?: 0 else function.linesOfCode()
         functionToLinesCache[function] = lines
         function.getStrictParentOfType<KtNamedFunction>()
                 ?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
