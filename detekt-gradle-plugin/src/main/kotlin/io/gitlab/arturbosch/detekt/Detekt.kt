@@ -183,6 +183,8 @@ open class Detekt @Inject constructor(
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
+    private val invoker: DetektInvoker = DetektInvoker.create(project)
+
     @Suppress("DEPRECATION")
     @TaskAction
     fun check() {
@@ -216,7 +218,7 @@ open class Detekt @Inject constructor(
             CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
         })
 
-        DetektInvoker.create(project).invokeCli(
+        invoker.invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),

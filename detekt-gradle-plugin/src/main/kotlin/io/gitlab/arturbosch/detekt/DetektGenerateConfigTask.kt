@@ -23,12 +23,12 @@ open class DetektGenerateConfigTask : DefaultTask() {
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
+    private val invoker: DetektInvoker = DetektInvoker.create(project)
+    private val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
+    private val config = project.files("${configDir.canonicalPath}/$CONFIG_FILE")
+
     @TaskAction
     fun generateConfig() {
-
-        val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
-        val config = project.files("${configDir.canonicalPath}/$CONFIG_FILE")
-
         val arguments = mutableListOf(
             GenerateConfigArgument,
             ConfigArgument(config)
@@ -36,12 +36,12 @@ open class DetektGenerateConfigTask : DefaultTask() {
 
         try {
             if (config.singleFile.exists()) {
-                project.logger.warn("Skipping config file generation; file already exists at ${config.singleFile}")
+                logger.warn("Skipping config file generation; file already exists at ${config.singleFile}")
             } else {
-                DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
+                invoker.invokeCli(arguments.toList(), detektClasspath, name)
             }
         } catch (e: IllegalStateException) {
-            project.logger.error("Unexpected error. Please raise an issue on detekt's issue tracker.", e)
+            logger.error("Unexpected error. Please raise an issue on detekt's issue tracker.", e)
         }
     }
 }
