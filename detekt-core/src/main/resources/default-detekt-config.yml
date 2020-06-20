@@ -377,6 +377,9 @@ naming:
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
+  IsPropertyNaming:
+    active: false
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
