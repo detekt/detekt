@@ -26,3 +26,9 @@ dependencies {
         api("org.assertj:assertj-core:3.16.1")
     }
 }
+
+publishing {
+    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
+        from(components["javaPlatform"])
+    }
+}
