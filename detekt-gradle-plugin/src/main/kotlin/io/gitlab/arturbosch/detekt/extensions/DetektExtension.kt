@@ -20,7 +20,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     val customReportsDir: File?
         get() = reportsDir
 
-    val reports = DetektReports(project)
+    val reports = DetektReports()
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     var input: ConfigurableFileCollection =

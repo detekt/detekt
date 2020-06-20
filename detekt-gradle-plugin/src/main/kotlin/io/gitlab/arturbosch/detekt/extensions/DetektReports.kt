@@ -4,16 +4,15 @@ import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
-import org.gradle.api.Project
 import org.gradle.util.ConfigureUtil
 
-class DetektReports(private val project: Project) {
+class DetektReports {
 
-    val xml = DetektReport(XML, project)
+    val xml = DetektReport(XML)
 
-    val html = DetektReport(HTML, project)
+    val html = DetektReport(HTML)
 
-    val txt = DetektReport(TXT, project)
+    val txt = DetektReport(TXT)
 
     val custom = mutableListOf<CustomDetektReport>()
 
@@ -29,5 +28,5 @@ class DetektReports(private val project: Project) {
     fun custom(configure: CustomDetektReport.() -> Unit) = createAndAddCustomReport().configure()
     fun custom(closure: Closure<*>): CustomDetektReport = ConfigureUtil.configure(closure, createAndAddCustomReport())
 
-    private fun createAndAddCustomReport() = CustomDetektReport(project).apply { custom.add(this) }
+    private fun createAndAddCustomReport() = CustomDetektReport().apply { custom.add(this) }
 }
