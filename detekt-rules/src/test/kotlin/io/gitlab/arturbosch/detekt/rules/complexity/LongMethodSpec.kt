@@ -144,8 +144,8 @@ class LongMethodSpec : Spek({
 
             val findings = subject.compileAndLint(code)
 
-            assertThat(findings).hasSize(1  )
-            assertThat(findings).hasTextLocations( "nestedLongMethod")
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations("nestedLongMethod")
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
     }
