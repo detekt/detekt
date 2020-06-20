@@ -155,16 +155,28 @@ open class Detekt @Inject constructor(
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.xml.destination")
+    )
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.xml)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.html.destination")
+    )
     val htmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.html)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.txt.destination")
+    )
     val txtReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
