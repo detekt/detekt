@@ -122,8 +122,6 @@ class LongMethodSpec : Spek({
 
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
-            assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
-            assertThat(findings[1] as ThresholdedCodeSmell).hasValue(5)
         }
 
         it("should find nested long methods with params on separate lines") {

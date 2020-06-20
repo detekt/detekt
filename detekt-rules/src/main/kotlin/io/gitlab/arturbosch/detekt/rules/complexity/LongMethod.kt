@@ -37,15 +37,23 @@ class LongMethod(
             Debt.TWENTY_MINS)
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
+    private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
     private val nestedFunctionTracking = IdentityHashMap<KtNamedFunction, HashSet<KtNamedFunction>>()
 
     override fun preVisit(root: KtFile) {
         functionToLinesCache.clear()
+        functionToBodyLinesCache.clear()
         nestedFunctionTracking.clear()
     }
 
     override fun postVisit(root: KtFile) {
-        for ((function, lines) in functionToLinesCache) {
+        val functionToLines = HashMap<KtNamedFunction, Int>()
+        functionToLinesCache.map { (function, lines) ->
+            val isNested = function.getStrictParentOfType<KtNamedFunction>() != null
+            if (isNested) functionToLines[function] = functionToBodyLinesCache[function] ?: 0
+            else functionToLines[function] = lines
+        }
+        for ((function, lines) in functionToLines) {
             if (lines >= threshold) {
                 report(
                     ThresholdedCodeSmell(
@@ -61,10 +69,12 @@ class LongMethod(
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val lines = if (function.isTopLevel) function.bodyExpression?.linesOfCode() ?: 0 else function.linesOfCode()
+        val parentMethods = function.getStrictParentOfType<KtNamedFunction>()
+        val bodyEntity = function.bodyBlockExpression ?: function.bodyExpression
+        val lines = (if (parentMethods != null) function else bodyEntity)?.linesOfCode() ?: 0
         functionToLinesCache[function] = lines
-        function.getStrictParentOfType<KtNamedFunction>()
-                ?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
+        functionToBodyLinesCache[function] = bodyEntity?.linesOfCode() ?: 0
+        parentMethods?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
         super.visitNamedFunction(function)
         findAllNestedFunctions(function)
                 .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
