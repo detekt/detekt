@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -84,7 +83,9 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     }
 
     private fun KtNamedFunction.hasImplicitUnitReturnType(): Boolean {
-        val returnType = bodyExpression.getResolvedCall(bindingContext)?.getReturnType()
+        val returnType = bodyExpression.getResolvedCall(bindingContext)
+            ?.resultingDescriptor
+            ?.returnType
         return returnType?.toString() == "Unit"
     }
 

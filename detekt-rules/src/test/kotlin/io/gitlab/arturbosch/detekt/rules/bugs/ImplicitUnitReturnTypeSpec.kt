@@ -27,7 +27,7 @@ class ImplicitUnitReturnTypeSpec : Spek({
 
             val findings = rule.compileAndLintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(3)
         }
 
         it("does not report explicit Unit return type by default") {
