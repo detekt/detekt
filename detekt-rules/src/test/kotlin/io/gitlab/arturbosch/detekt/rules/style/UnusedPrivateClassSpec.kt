@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -359,6 +360,28 @@ class UnusedPrivateClassSpec : Spek({
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report imported enum class - #2809") {
+            val code = """
+                package com.example
+
+                import com.example.C.E.E1
+
+                class C {
+                    fun test() {
+                        println(E1)
+                    }
+
+                    private enum class E {
+                        E1,
+                        E2,
+                        E3
+                    }
+                }
+            """
+            val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).isEmpty()
         }
     }

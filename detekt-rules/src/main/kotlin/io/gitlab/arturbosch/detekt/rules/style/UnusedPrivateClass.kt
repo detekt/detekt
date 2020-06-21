@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtDoubleColonExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionType
+import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -63,9 +64,16 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
         private val privateClasses = mutableSetOf<KtNamedDeclaration>()
         private val namedClasses = mutableSetOf<String>()
+        private val importDirectives = mutableSetOf<String>()
 
         fun getUnusedClasses(): List<KtNamedDeclaration> {
-            return privateClasses.filter { it.nameAsSafeName.identifier !in namedClasses }
+            return privateClasses.filter { !it.isUsed() }
+        }
+
+        private fun KtNamedDeclaration.isUsed(): Boolean {
+            if (nameAsSafeName.identifier in namedClasses) return true
+            val fqName = fqName?.asString()
+            return fqName != null && importDirectives.any { it.startsWith(fqName) }
         }
 
         override fun visitClass(klass: KtClass) {
@@ -76,6 +84,11 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                     ?.mapNotNull { it.typeReference }
                     ?.forEach { registerAccess(it) }
             super.visitClass(klass)
+        }
+
+        override fun visitImportDirective(importDirective: KtImportDirective) {
+            importDirectives.addIfNotNull(importDirective.importedFqName?.asString())
+            super.visitImportDirective(importDirective)
         }
 
         override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
