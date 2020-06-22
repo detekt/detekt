@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * One exception are factory functions used to create instances of classes.
  * These factory functions can have the same name as the class being created.
  *
- * @configuration functionPattern - naming pattern (default: `'([a-z][a-zA-Z0-9]*)|(`.*`)'`)
+ * @configuration functionPattern - naming pattern (default: `'([a-zA-Z][a-zA-Z0-9]*)|(`.*`)'`)
  * @configuration excludeClassPattern - ignores functions in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverridden - ignores functions that have the override modifier (default: `true`)
  * @configuration ignoreAnnotated - ignore naming for functions in the context of these
@@ -37,7 +37,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
             "Function names should follow the naming convention set in the configuration.",
             debt = Debt.FIVE_MINS)
 
-    private val functionPattern by LazyRegex(FUNCTION_PATTERN, "([a-z][a-zA-Z0-9]*)|(`.*`)")
+    private val functionPattern by LazyRegex(FUNCTION_PATTERN, "([a-zA-Z][a-zA-Z0-9]*)|(`.*`)")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
     private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
     private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, listOf("Composable"))

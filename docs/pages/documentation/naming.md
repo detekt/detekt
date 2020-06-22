@@ -120,7 +120,7 @@ These factory functions can have the same name as the class being created.
 
 #### Configuration options:
 
-* ``functionPattern`` (default: ``'([a-z][a-zA-Z0-9]*)|(`.*`)'``)
+* ``functionPattern`` (default: ``'([a-zA-Z][a-zA-Z0-9]*)|(`.*`)'``)
 
    naming pattern
 
