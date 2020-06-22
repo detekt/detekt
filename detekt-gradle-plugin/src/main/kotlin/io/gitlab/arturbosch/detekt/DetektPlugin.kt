@@ -48,29 +48,31 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektTasks(extension: DetektExtension) {
-        // There is not a single Android plugin, but each registers an extension based on BaseExtension,
-        // so we catch them all by looking for this one
-        project.afterEvaluate {
-            val androidExtension = project.extensions.findByType(BaseExtension::class.java)
-            androidExtension?.let {
-                val mainTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Main") {
-                    it.group = "verification"
-                    it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for production classes across " +
-                            "all variants with type resolution"
-                }
-                val testTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Test") {
-                    it.group = "verification"
-                    it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for test classes across " +
-                            "all variants with type resolution"
-                }
-                val bootClasspath = files(androidExtension.bootClasspath)
-                androidExtension.variants?.all { variant ->
-                    project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
-                        mainTaskProvider.dependsOn(provider)
+        project.plugins.withId("kotlin-android") {
+            // There is not a single Android plugin, but each registers an extension based on BaseExtension,
+            // so we catch them all by looking for this one
+            project.afterEvaluate {
+                val androidExtension = project.extensions.findByType(BaseExtension::class.java)
+                androidExtension?.let {
+                    val mainTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Main") {
+                        it.group = "verification"
+                        it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for production classes across " +
+                                "all variants with type resolution"
                     }
-                    variant.testVariants.forEach { testVariant ->
-                        project.registerAndroidDetektTask(bootClasspath, extension, testVariant).also { provider ->
-                            testTaskProvider.dependsOn(provider)
+                    val testTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Test") {
+                        it.group = "verification"
+                        it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for test classes across " +
+                                "all variants with type resolution"
+                    }
+                    val bootClasspath = files(androidExtension.bootClasspath)
+                    androidExtension.variants?.all { variant ->
+                        project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
+                            mainTaskProvider.dependsOn(provider)
+                        }
+                        variant.testVariants.forEach { testVariant ->
+                            project.registerAndroidDetektTask(bootClasspath, extension, testVariant).also { provider ->
+                                testTaskProvider.dependsOn(provider)
+                            }
                         }
                     }
                 }
