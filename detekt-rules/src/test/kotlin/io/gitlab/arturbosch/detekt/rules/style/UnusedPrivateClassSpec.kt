@@ -407,6 +407,7 @@ class UnusedPrivateClassSpec : Spek({
             """
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings).hasSourceLocation(10, 5)
         }
     }
 })
