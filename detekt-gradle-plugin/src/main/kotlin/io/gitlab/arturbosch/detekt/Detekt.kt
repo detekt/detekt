@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
@@ -25,6 +27,7 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
@@ -46,9 +49,12 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
+import javax.inject.Inject
 
 @CacheableTask
-open class Detekt : SourceTask(), VerificationTask {
+open class Detekt @Inject constructor(
+    private val objects: ObjectFactory
+) : SourceTask(), VerificationTask {
 
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -142,33 +148,43 @@ open class Detekt : SourceTask(), VerificationTask {
         set(value) = autoCorrectProp.set(value)
 
     @get:Internal
-    var reports = DetektReports(project)
+    var reports = DetektReports()
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.xml.destination")
+    )
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
-        get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
+        get() = getTargetFileProvider(reports.xml)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.html.destination")
+    )
     val htmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
-        get() = reports.html.getTargetFileProvider(effectiveReportsDir)
+        get() = getTargetFileProvider(reports.html)
 
+    @Deprecated(
+        "Will be made internal in the future.",
+        replaceWith = ReplaceWith("reports.txt.destination")
+    )
     val txtReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
-        get() = reports.txt.getTargetFileProvider(effectiveReportsDir)
+        get() = getTargetFileProvider(reports.txt)
 
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
         .dir("detekt")
-
-    private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
     @Deprecated("Use reports {} to configure custom reports")
     val customReports: Provider<Collection<CustomDetektReport>>
@@ -178,6 +194,8 @@ open class Detekt : SourceTask(), VerificationTask {
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
+
+    private val invoker: DetektInvoker = DetektInvoker.create(project)
 
     @Suppress("DEPRECATION")
     @TaskAction
@@ -200,8 +218,8 @@ open class Detekt : SourceTask(), VerificationTask {
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(customReports.get().map {
-            val reportId = it.reportIdProp.orNull
-            val destination = it.destinationProperty.orNull
+            val reportId = it.reportId
+            val destination = it.destination
 
             checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
             check(!DetektReportType.isWellKnownReportId(reportId)) {
@@ -209,14 +227,25 @@ open class Detekt : SourceTask(), VerificationTask {
             }
             checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
 
-            CustomReportArgument(reportId, destination)
+            CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
         })
 
-        DetektInvoker.create(project).invokeCli(
+        invoker.invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
+    }
+
+    private fun getTargetFileProvider(report: DetektReport): RegularFileProperty {
+        val isEnabled = report.enabled ?: DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+        val provider = objects.fileProperty()
+        if (isEnabled) {
+            val destination = report.destination ?: reportsDir.getOrElse(defaultReportsDir.asFile)
+                .resolve("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
+            provider.set(destination)
+        }
+        return provider
     }
 }

@@ -77,6 +77,8 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
+    private val invoker: DetektInvoker = DetektInvoker.create(project)
+
     @TaskAction
     fun baseline() {
         val arguments = mutableListOf(
@@ -92,7 +94,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.create(project).invokeCli(
+        invoker.invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
