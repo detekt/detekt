@@ -384,5 +384,30 @@ class UnusedPrivateClassSpec : Spek({
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).isEmpty()
         }
+
+        it("should report not imported enum class - #2809, #2816") {
+            val code = """
+                package com.example
+
+                import com.example.C.EFG.EFG1
+
+                class C {
+                    fun test() {
+                        println(EFG1)
+                    }
+
+                    private enum class E {
+                        E1
+                    }
+
+                    private enum class EFG {
+                        EFG1
+                    }
+                }
+            """
+            val findings = UnusedPrivateClass().lint(code)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings).hasSourceLocation(10, 5)
+        }
     }
 })

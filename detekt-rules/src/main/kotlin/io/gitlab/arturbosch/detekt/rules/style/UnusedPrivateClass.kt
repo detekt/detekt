@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -64,7 +65,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
         private val privateClasses = mutableSetOf<KtNamedDeclaration>()
         private val namedClasses = mutableSetOf<String>()
-        private val importDirectives = mutableSetOf<String>()
+        private val importedFqNames = mutableSetOf<FqName>()
 
         fun getUnusedClasses(): List<KtNamedDeclaration> {
             return privateClasses.filter { !it.isUsed() }
@@ -72,8 +73,10 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
         private fun KtNamedDeclaration.isUsed(): Boolean {
             if (nameAsSafeName.identifier in namedClasses) return true
-            val fqName = fqName?.asString()
-            return fqName != null && importDirectives.any { it.startsWith(fqName) }
+            val pathSegments = fqName?.pathSegments().orEmpty()
+            return pathSegments.isNotEmpty() && importedFqNames.any { importedFqName ->
+                importedFqName.pathSegments().zip(pathSegments).all { it.first == it.second }
+            }
         }
 
         override fun visitClass(klass: KtClass) {
@@ -87,7 +90,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitImportDirective(importDirective: KtImportDirective) {
-            importDirectives.addIfNotNull(importDirective.importedFqName?.asString())
+            importedFqNames.addIfNotNull(importDirective.importedFqName)
             super.visitImportDirective(importDirective)
         }
 
