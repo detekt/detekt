@@ -22,7 +22,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val variableMaxNameLengthRule = VariableMaxLength(config)
     private val topLevelPropertyRule = TopLevelPropertyNaming(config)
     private val objectConstantNamingRule = ObjectPropertyNaming(config)
-//    private val isPropertyNamingRule = IsPropertyNaming(config)
+    private val nonBooleanPropertyPrefixedWithIsRule = NonBooleanPropertyPrefixedWithIs(config)
     private val packageNamingRule = PackageNaming(config)
     private val classOrObjectNamingRule = ClassNaming(config)
     private val enumEntryNamingRule = EnumNaming(config)
@@ -39,7 +39,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
             variableMaxNameLengthRule,
             topLevelPropertyRule,
             objectConstantNamingRule,
-//            isPropertyNamingRule,
+            nonBooleanPropertyPrefixedWithIsRule,
             packageNamingRule,
             classOrObjectNamingRule,
             enumEntryNamingRule,
@@ -86,7 +86,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private fun handleProperty(declaration: KtProperty) {
         variableMaxNameLengthRule.runIfActive { visitProperty(declaration) }
         variableMinNameLengthRule.runIfActive { visitProperty(declaration) }
-//        isPropertyNamingRule.runIfActive { visitProperty(declaration) }
+        nonBooleanPropertyPrefixedWithIsRule.runIfActive { visitProperty(declaration) }
 
         when {
             declaration.isTopLevel -> topLevelPropertyRule.runIfActive { visitProperty(declaration) }

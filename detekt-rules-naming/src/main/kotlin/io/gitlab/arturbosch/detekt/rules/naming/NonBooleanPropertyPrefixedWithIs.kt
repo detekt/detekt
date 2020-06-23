@@ -29,8 +29,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  *
  * @requiresTypeResolution
  */
-abstract class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
-// is abstract to not break providers test - #2819
+class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
 
     private val kotlinBooleanTypeName = "kotlin.Boolean"
     private val javaBooleanTypeName = "java.lang.Boolean"
