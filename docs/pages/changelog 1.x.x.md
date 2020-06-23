@@ -10,7 +10,7 @@ toc: true
 
 ##### Notable Changes
 
-- New rule: `IgnoredReturnValue`
+- New rules: `IgnoredReturnValue`, `ImplictUnitReturnType`, `IsPropertyNaming`
 - The complexity report (console/html) now calculates the [cognitive complexity metric](https://www.sonarsource.com/docs/CognitiveComplexity.pdf) for your project.
 - Issues at functions and classes are now reported at the identifiers. This is especially helpful in the IntelliJ plugin.
 - Extension authors can now manipulate the findings with the new [ReportingExtension](https://github.com/detekt/detekt/blob/master/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/ReportingExtension.kt).
@@ -38,10 +38,23 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 ##### Changelog
 
+- UnusedPrivateClass: fix false negative with import directives - [#2817](https://github.com/detekt/detekt/pull/2817)
+- UnusedPrivateClass: false negative with import directives - [#2816](https://github.com/detekt/detekt/issues/2816)
+- Publish detekt-bom module - [#2814](https://github.com/detekt/detekt/pull/2814)
+- [Gradle] Configuration cache support - [#2813](https://github.com/detekt/detekt/pull/2813)
+- UnusedPrivateClass: don't report imported classes - [#2812](https://github.com/detekt/detekt/pull/2812)
+- False positive UnusedPrivateClass when importing private enum constants directly. - [#2809](https://github.com/detekt/detekt/issues/2809)
+- Upgrade ktlint to version 0.37.2 - [#2807](https://github.com/detekt/detekt/pull/2807)
+- LongMethod: disregard params in method definition - [#2806](https://github.com/detekt/detekt/pull/2806)
+- LongMethod should not consider parameters while calculating the number of lines - [#2804](https://github.com/detekt/detekt/issues/2804)
+- Local vars inside object literals can't be const - Closes #2794 - [#2799](https://github.com/detekt/detekt/pull/2799)
+- MayBeConst should not report properties in local anonymous object declarations - [#2794](https://github.com/detekt/detekt/issues/2794)
 - Fix false positive for UnusedPrivateClass on generics - [#2793](https://github.com/detekt/detekt/pull/2793)
 - Report ComplexInterface issues at identifiers - [#2786](https://github.com/detekt/detekt/pull/2786)
 - Construct signatures based on named declaration instead of just the identifier - [#2785](https://github.com/detekt/detekt/pull/2785)
 - KtLint to 0.37.1 - [#2783](https://github.com/detekt/detekt/pull/2783)
+- Implement new rule ImplictUnitReturnTypet - [#2781](https://github.com/detekt/detekt/pull/2781)
+- Feature/restrict is properties - [#2779](https://github.com/detekt/detekt/pull/2779)
 - Rename Blacklist and Whitelist to be self explanatory - [#2778](https://github.com/detekt/detekt/pull/2778)
 - Remove deprecated HierarchicalConfig which could lead to OOM when reusing Config objects - [#2768](https://github.com/detekt/detekt/pull/2768)
 - Support layout property for ImportOrdering rule - [#2763](https://github.com/detekt/detekt/pull/2763)
@@ -70,6 +83,13 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 ##### Housekeeping & Refactorings
 
+- use parallel build options - [#2808](https://github.com/detekt/detekt/pull/2808)
+- Compile Test Snippets on Java 14 - [#2803](https://github.com/detekt/detekt/pull/2803)
+- Cleanup MayBeConst tests - [#2802](https://github.com/detekt/detekt/pull/2802)
+- Refactor compare_releases script to use clikt - [#2801](https://github.com/detekt/detekt/pull/2801)
+- Simplify the Code Coverage workflow - [#2798](https://github.com/detekt/detekt/pull/2798)
+- Run compile-test-snippets in a isolated job - [#2797](https://github.com/detekt/detekt/pull/2797)
+- Run verifyGeneratorOutput in a isolated job - [#2796](https://github.com/detekt/detekt/pull/2796)
 - Introduce BoM to manage our own dependencies - [#2792](https://github.com/detekt/detekt/pull/2792)
 - Smarter Caching on Github Actions - [#2788](https://github.com/detekt/detekt/pull/2788)
 - Fix config generation directory - [#2782](https://github.com/detekt/detekt/pull/2782)
