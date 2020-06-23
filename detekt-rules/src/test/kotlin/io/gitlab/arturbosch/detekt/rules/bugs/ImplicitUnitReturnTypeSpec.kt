@@ -52,7 +52,7 @@ class ImplicitUnitReturnTypeSpec : Spek({
                 fun blockUnitReturn() { 
                     println("Hello Unit")
                 }
-            """.trimIndent()
+            """
 
             val findings = rule.compileAndLintWithContext(env, code)
 
