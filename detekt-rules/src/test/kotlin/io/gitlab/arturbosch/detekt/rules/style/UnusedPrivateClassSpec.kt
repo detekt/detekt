@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -17,12 +17,10 @@ class UnusedPrivateClassSpec : Spek({
                 class Bar
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).hasSize(1)
-            with(lint[0].entity) {
-                assertThat(ktElement?.text).isEqualTo("private interface Foo")
-            }
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(1,1)
         }
 
         describe("top level private classes") {
@@ -33,12 +31,10 @@ class UnusedPrivateClassSpec : Spek({
                 class Bar
                 """
 
-                val lint = subject.compileAndLint(code)
+                val findings = subject.compileAndLint(code)
 
-                assertThat(lint).hasSize(1)
-                with(lint[0].entity) {
-                    assertThat(ktElement?.text).isEqualTo("private class Foo")
-                }
+                assertThat(findings).hasSize(1)
+                assertThat(findings).hasSourceLocation(1,1)
             }
 
             it("should not report them if used as parent") {
@@ -47,12 +43,10 @@ class UnusedPrivateClassSpec : Spek({
                 private class Bar : Foo()
                 """
 
-                val lint = subject.compileAndLint(code)
+                val findings = subject.compileAndLint(code)
 
-                assertThat(lint).hasSize(1)
-                with(lint[0].entity) {
-                    assertThat(ktElement?.text).isEqualTo("private class Bar : Foo()")
-                }
+                assertThat(findings).hasSize(1)
+                assertThat(findings).hasSourceLocation(2,1)
             }
 
             it("should not report them used as generic parent type") {
@@ -67,9 +61,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-                val lint = subject.compileAndLint(code)
+                val findings = subject.compileAndLint(code)
 
-                assertThat(lint).isEmpty()
+                assertThat(findings).isEmpty()
             }
         }
 
@@ -81,9 +75,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as function parameter") {
@@ -94,9 +88,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as nullable variable type") {
@@ -105,9 +99,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val a: Foo? = null
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as variable type") {
@@ -116,9 +110,9 @@ class UnusedPrivateClassSpec : Spek({
                 private lateinit var a: Foo
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as generic type") {
@@ -127,9 +121,9 @@ class UnusedPrivateClassSpec : Spek({
                 private lateinit var foos: List<Foo>
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as inner type parameter") {
@@ -138,9 +132,9 @@ class UnusedPrivateClassSpec : Spek({
                 private class Item
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as outer type parameter") {
@@ -149,9 +143,9 @@ class UnusedPrivateClassSpec : Spek({
                 private abstract class Something<E>: Collection<E>
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as generic type in functions") {
@@ -164,9 +158,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as nested generic type") {
@@ -175,9 +169,9 @@ class UnusedPrivateClassSpec : Spek({
                 private lateinit var foos: List<List<Foo>>
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as type with generics") {
@@ -186,9 +180,9 @@ class UnusedPrivateClassSpec : Spek({
                 private lateinit var foos: Foo<String>
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as nullable type with generics") {
@@ -197,9 +191,9 @@ class UnusedPrivateClassSpec : Spek({
                 private var foos: Foo<String>? = Foo()
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as non-argument constructor") {
@@ -208,9 +202,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val a = Foo()
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as constructor with arguments") {
@@ -219,9 +213,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val a = Foo("test")
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as function return type") {
@@ -232,9 +226,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as lambda declaration parameter") {
@@ -243,9 +237,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val lambda: ((Foo) -> Unit)? = null
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as lambda declaration return type") {
@@ -254,9 +248,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val lambda: (() -> Foo)? = null
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as lambda declaration generic type") {
@@ -265,9 +259,9 @@ class UnusedPrivateClassSpec : Spek({
                 private val lambda: (() -> List<Foo>)? = null
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
 
         it("should not report them if used as inline object type") {
@@ -283,9 +277,9 @@ class UnusedPrivateClassSpec : Spek({
                 }
                 """
 
-            val lint = subject.compileAndLint(code)
+            val findings = subject.compileAndLint(code)
 
-            assertThat(lint).isEmpty()
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -407,7 +401,7 @@ class UnusedPrivateClassSpec : Spek({
             """
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings).hasSourceLocation(10, 5)
+            assertThat(findings).hasSourceLocation(10, 5)
         }
     }
 })
