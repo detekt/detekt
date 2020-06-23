@@ -23,7 +23,7 @@ class ImplicitUnitReturnTypeSpec : Spek({
                 fun errorProneUnit() = println("Hello Unit")
                 fun errorProneUnitWithParam(param: String) = param.run { println(this) }
                 fun String.errorProneUnitWithReceiver() = run { println(this) }
-            """.trimIndent()
+            """
 
             val findings = rule.compileAndLintWithContext(env, code)
 
