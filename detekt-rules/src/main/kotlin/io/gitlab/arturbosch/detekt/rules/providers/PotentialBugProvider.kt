@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
+import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitUnitReturnType
 import io.gitlab.arturbosch.detekt.rules.bugs.HasPlatformType
 import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
 import io.gitlab.arturbosch.detekt.rules.bugs.IgnoredReturnValue
@@ -60,7 +61,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 UnsafeCast(config),
                 UselessPostfixExpression(config),
                 WrongEqualsTypeParameter(config),
-                IgnoredReturnValue(config)
+                IgnoredReturnValue(config),
+                ImplicitUnitReturnType(config)
         ))
     }
 }
