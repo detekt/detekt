@@ -1,9 +1,0 @@
---input
-.
---baseline
-config\detekt\baseline.xml
---excludes
-**/resources/**,**/detekt*/build/**,**/buildSrc/build/**
---build-upon-default-config
---config
-config\detekt\detekt.yml
