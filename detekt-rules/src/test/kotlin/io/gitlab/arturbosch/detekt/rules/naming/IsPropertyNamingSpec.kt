@@ -53,10 +53,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should warn about inner classes") {
                 val code = """
-                data class O (var isDefault: Inner) {
-                    class Inner
-                }
-            """
+                    data class O (var isDefault: Inner) {
+                        class Inner
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -79,11 +79,11 @@ class IsPropertyNamingSpec : Spek({
 
         context("property declarations") {
             it("should not detect Kotlin Boolean") {
-                val code = """
-                class O {
-                    var isDefault = false
-                }
-            """
+                    val code = """
+                    class O {
+                        var isDefault = false
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -91,14 +91,14 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect Kotlin Boolean property uninitialized") {
                 val code = """
-                class O {
-                    var isDefault: Boolean
-                    
-                    init {
-                        isDefault = true
+                    class O {
+                        var isDefault: Boolean
+                        
+                        init {
+                            isDefault = true
+                        }
                     }
-                }
-            """
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -106,10 +106,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect Kotlin Boolean nullable") {
                 val code = """
-                class O {
-                    var isDefault: Boolean? = null
-                }
-            """
+                    class O {
+                        var isDefault: Boolean? = null
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -117,10 +117,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect Java Boolean") {
                 val code = """
-                           class O {
-                                var isDefault: java.lang.Boolean = java.lang.Boolean(false)
-                           }
-                           """
+                    class O {
+                        var isDefault: java.lang.Boolean = java.lang.Boolean(false)
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -128,14 +128,14 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect Java Boolean uninitialized") {
                 val code = """
-                           class O {
-                                var isDefault: java.lang.Boolean
-                                
-                                init {
-                                    isDefault = java.lang.Boolean(false)
-                                }
-                           }
-                           """
+                   class O {
+                        var isDefault: java.lang.Boolean
+                        
+                        init {
+                            isDefault = java.lang.Boolean(false)
+                        }
+                   }
+                   """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -143,10 +143,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect Java Boolean nullable") {
                 val code = """
-                class O {
-                    var isDefault: java.lang.Boolean? = null
-                }
-            """
+                    class O {
+                        var isDefault: java.lang.Boolean? = null
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -154,10 +154,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should warn about primitive types") {
                 val code = """
-                class O {
-                    var isDefault: Int = 0
-                }
-            """
+                    class O {
+                        var isDefault: Int = 0
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -165,10 +165,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should warn about inferred primitive types") {
                 val code = """
-                class O {
-                    var isDefault = 0
-                }
-            """
+                    class O {
+                        var isDefault = 0
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -176,10 +176,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should warn about inferred non-primitive types") {
                 val code = """
-                class O {
-                    var isDefault = listOf(1, 2, 3)
-                }
-            """
+                    class O {
+                        var isDefault = listOf(1, 2, 3)
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -187,12 +187,12 @@ class IsPropertyNamingSpec : Spek({
 
             it("should warn about inner classes") {
                 val code = """
-                class O {
-                    var isDefault: Inner = Inner()
-                    
-                    class Inner
-                }
-            """
+                    class O {
+                        var isDefault: Inner = Inner()
+                        
+                        class Inner
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -200,10 +200,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect short names") {
                 val code = """
-                class O {
-                    var `is`: Int = 0
-                }
-            """
+                    class O {
+                        var `is`: Int = 0
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -211,10 +211,10 @@ class IsPropertyNamingSpec : Spek({
 
             it("should not detect titles, starting with 'is'") {
                 val code = """
-                class O {
-                    var isengardTowerHeightInFeet: Int = 500
-                }
-            """
+                    class O {
+                        var isengardTowerHeightInFeet: Int = 500
+                    }
+                    """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
