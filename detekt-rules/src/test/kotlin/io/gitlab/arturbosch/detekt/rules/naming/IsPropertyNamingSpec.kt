@@ -219,6 +219,17 @@ class IsPropertyNamingSpec : Spek({
 
                 assertThat(findings).isEmpty()
             }
+
+            it("should warn about primitive types") {
+                val code = """
+                    fun f() {
+                        var isDefault: Int = 0
+                    }
+                    """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
         }
     }
 })
