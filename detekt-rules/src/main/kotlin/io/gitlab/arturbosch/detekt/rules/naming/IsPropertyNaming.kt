@@ -20,11 +20,11 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
  * <noncompliant>
- * val isEnabled : Int = 500
+ * val isEnabled: Int = 500
  * </noncompliant>
  *
  * <compliant>
- * val isEnabled : Boolean = false
+ * val isEnabled: Boolean = false
  * </compliant>
  */
 class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {

@@ -191,13 +191,13 @@ Please check the [chapter 8.3.2 at Java Language Specification](https://docs.ora
 #### Noncompliant Code:
 
 ```kotlin
-val isEnabled : Int = 500
+val isEnabled: Int = 500
 ```
 
 #### Compliant Code:
 
 ```kotlin
-val isEnabled : Boolean = false
+val isEnabled: Boolean = false
 ```
 
 ### MatchingDeclarationName
