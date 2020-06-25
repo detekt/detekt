@@ -10,7 +10,6 @@ class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
     override var shouldValidateBeforeAnalysis: Boolean = true
     override var knownPatterns: Collection<String> = emptyList()
     override var useDefaultConfig: Boolean = true
-    override var activateExperimentalRules: Boolean = false
     override var resources: Collection<URL> = emptyList()
     override var configPaths: Collection<Path> = emptyList()
 
@@ -18,7 +17,6 @@ class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
         shouldValidateBeforeAnalysis,
         knownPatterns,
         useDefaultConfig,
-        activateExperimentalRules,
         resources,
         configPaths
     )
@@ -28,7 +26,6 @@ internal data class ConfigModel(
     override val shouldValidateBeforeAnalysis: Boolean,
     override val knownPatterns: Collection<String>,
     override val useDefaultConfig: Boolean,
-    override val activateExperimentalRules: Boolean,
     override val resources: Collection<URL>,
     override val configPaths: Collection<Path>,
 ) : ConfigSpec

@@ -27,13 +27,6 @@ interface ConfigSpec {
     val useDefaultConfig: Boolean
 
     /**
-     * Activates all rules which do not have the active property set to 'true' by default.
-     *
-     * Also known as 'failFast' flag.
-     */
-    val activateExperimentalRules: Boolean
-
-    /**
      * Configuration resources on detekt's classpath.
      */
     val resources: Collection<URL>

@@ -5,10 +5,11 @@ import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ExecutionSpec
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
+import io.github.detekt.tooling.api.spec.IssuesSpec
+import io.github.detekt.tooling.api.spec.LoggingSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 
 internal fun processingSpec(init: ProcessingSpecBuilder.() -> Unit): ProcessingSpec =
     ProcessingSpecBuilder().apply(init).build()
@@ -16,16 +17,13 @@ internal fun processingSpec(init: ProcessingSpecBuilder.() -> Unit): ProcessingS
 @ProcessingModelDsl
 class ProcessingSpecBuilder : Builder<ProcessingSpec> {
 
-    var debug: Boolean = false
-
-    @OptIn(UnstableApi::class)
-    var autoCorrect: Boolean = false
-
     private val baseline = BaselineSpecBuilder()
     private val compiler = CompilerSpecBuilder()
     private val config = ConfigSpecBuilder()
     private val execution = ExecutionSpecBuilder()
     private val extensions = ExtensionsSpecBuilder()
+    private val issues = IssuesSpecBuilder()
+    private val logging = LoggingSpecBuilder()
     private val project = ProjectSpecBuilder()
     private val reports = ReportsSpecBuilder()
 
@@ -34,31 +32,32 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
     fun config(init: ConfigSpecBuilder.() -> Unit): Unit = init(config)
     fun execution(init: ExecutionSpecBuilder.() -> Unit): Unit = init(execution)
     fun extensions(init: ExtensionsSpecBuilder.() -> Unit): Unit = init(extensions)
+    fun issues(init: IssuesSpecBuilder.() -> Unit): Unit = init(issues)
+    fun logging(init: LoggingSpecBuilder.() -> Unit): Unit = init(logging)
     fun project(init: ProjectSpecBuilder.() -> Unit): Unit = init(project)
     fun reports(init: ReportsSpecBuilder.() -> Unit): Unit = init(reports)
 
     override fun build(): ProcessingSpec = ProcessingModel(
-        debug,
-        autoCorrect,
         baseline.build(),
         compiler.build(),
         config.build(),
         execution.build(),
         extensions.build(),
+        issues.build(),
+        logging.build(),
         project.build(),
         reports.build(),
     )
 }
 
-@OptIn(UnstableApi::class)
 internal data class ProcessingModel(
-    override val debug: Boolean,
-    override val autoCorrect: Boolean,
     override val baselineSpec: BaselineSpec,
     override val compilerSpec: CompilerSpec,
     override val configSpec: ConfigSpec,
     override val executionSpec: ExecutionSpec,
     override val extensionsSpec: ExtensionsSpec,
+    override val issuesSpec: IssuesSpec,
+    override val loggingSpec: LoggingSpec,
     override val projectSpec: ProjectSpec,
     override val reportsSpec: ReportsSpec,
 ) : ProcessingSpec
