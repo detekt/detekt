@@ -4,7 +4,7 @@ import io.github.detekt.tooling.api.spec.ExtensionsSpec
 import java.nio.file.Files
 import java.nio.file.Path
 
-data class PluginsHolder(
+internal data class PluginsHolder(
     override val paths: Collection<Path>?,
     override val loader: ClassLoader?
 ) : ExtensionsSpec.Plugins {

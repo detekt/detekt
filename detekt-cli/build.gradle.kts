@@ -5,6 +5,7 @@ application {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
+    implementation(project(":detekt-tooling"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander")
 
