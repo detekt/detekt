@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.ValueArgument
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -51,8 +52,11 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
         val lambdaExpr = expression.firstLambdaArg
 
+        val count = lambdaExpr?.countReferences() ?: 0
         if ((!expression.receiverIsUsed(bindingContext) || expression.parent is KtDotQualifiedExpression) &&
-            lambdaExpr?.countReferences() == 0) {
+            count == 0) {
+            report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+        } else if (expression.parent is KtDotQualifiedExpression && count <= 1) {
             report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
         } else {
             val lambdaParameter = lambdaExpr?.firstParameter
@@ -67,9 +71,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                     val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
                     val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
 
-                    val hasOneRef = lambdaExpr.countReferences() == 1
-
-                    if ((isLetWithExplicitParam || isLetWithImplicitParam) && hasOneRef) {
+                    if ((isLetWithExplicitParam || isLetWithImplicitParam) && count == 1) {
                         report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
                     }
                 }
@@ -87,7 +89,7 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 private fun KtBlockExpression?.hasOnlyOneStatement() = this?.children?.size == 1
 
 private fun PsiElement.countVarRefs(varName: String): Int =
-    children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }
+    children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName) && it !is ValueArgument) 1 else 0 }
 
 private fun KtLambdaExpression.countReferences(): Int? {
     return bodyExpression?.countVarRefs(firstParameter?.text ?: IT_LITERAL)
