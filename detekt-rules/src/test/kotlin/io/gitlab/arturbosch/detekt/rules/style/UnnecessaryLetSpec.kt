@@ -58,8 +58,11 @@ class UnnecessaryLetSpec : Spek({
             val findings = subject.compileAndLint("""
                 fun f() {
                     val a: Int? = null
+                    val b: Int = 1
                     a?.let { it.plus(it) }
+                    b.let { it.plus(it) }
                     a?.let { foo -> foo.plus(foo) }
+                    b.let { foo -> foo.plus(foo) }
                 }""")
             assertThat(findings).isEmpty()
         }
