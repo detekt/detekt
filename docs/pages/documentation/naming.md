@@ -179,27 +179,6 @@ Reports when the package declaration is missing or the file location does not ma
 
    if specified this part of the package structure is ignored
 
-### IsPropertyNaming
-
-Reports when property with 'is' prefix doesn't have a boolean type.
-Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
-
-**Severity**: Warning
-
-**Debt**: 5min
-
-#### Noncompliant Code:
-
-```kotlin
-val isEnabled: Int = 500
-```
-
-#### Compliant Code:
-
-```kotlin
-val isEnabled: Boolean = false
-```
-
 ### MatchingDeclarationName
 
 "If a Kotlin file contains a single non-private class (potentially with related top-level declarations),

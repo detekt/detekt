@@ -27,13 +27,14 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val isEnabled: Boolean = false
  * </compliant>
  */
-class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
+abstract class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
+// is abstract to not break providers test - #2819
 
     private val kotlinBooleanTypeName = "kotlin.Boolean"
     private val javaBooleanTypeName = "java.lang.Boolean"
 
     override val issue = Issue(
-        javaClass.simpleName,
+        "IsPropertyNaming", // javaClass.simpleName,
         Severity.Warning,
         "Only boolean property names can start with 'is' prefix.",
         debt = Debt.FIVE_MINS
