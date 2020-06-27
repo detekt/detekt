@@ -7,19 +7,16 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -48,7 +45,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 
         if (expression.isApplyExpr() &&
                 expression.hasOnlyOneMemberAccessStatement() &&
-                expression.receiverIsUnused(bindingContext)) {
+                !expression.receiverIsUsed(bindingContext)) {
             val message = if (expression.parent is KtSafeQualifiedExpression) {
                 "apply can be replaced with let or an if"
             } else {
@@ -58,13 +55,6 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         }
     }
 }
-
-private fun KtCallExpression.receiverIsUnused(context: BindingContext): Boolean =
-    (parent as? KtQualifiedExpression)?.let {
-        val scopeOfApplyCall = parent.parent
-        (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
-            (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
-    } ?: false
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
 
