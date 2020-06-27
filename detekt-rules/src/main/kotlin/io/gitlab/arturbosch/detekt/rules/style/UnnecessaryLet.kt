@@ -21,21 +21,18 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * to reduce visual complexity
  *
  * <noncompliant>
+ * a.let { print(it) } // can be replaced with `print(a)`
  * a.let { it.plus(1) } // can be replaced with `a.plus(1)`
  * a?.let { it.plus(1) } // can be replaced with `a?.plus(1)`
- * a.let { that -> that.plus(1) } // can be replaced with `a.plus(1)`
- * a?.let { that -> that.plus(1) } // can be replaced with `a?.plus(1)`
  * a?.let { that -> that.plus(1) }?.let { it.plus(1) } // can be replaced with `a?.plus(1)?.plus(1)`
+ * a.let { 1.plus(1) } // can be replaced with `1.plus(1)`
  * </noncompliant>
  *
  * <compliant>
  * a?.let { print(it) }
- * a.let { print(it) }
- * a?.let { msg -> print(msg) }
- * a.let { msg -> print(msg) }
  * a?.let { 1.plus(it) } ?.let { msg -> print(msg) }
  * a?.let { it.plus(it) }
- * a?.let { param -> param.plus(param) }
+ * a?.let { 1.plus(1) }
  * </compliant>
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
