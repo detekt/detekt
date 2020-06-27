@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -48,10 +49,12 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         if (expression.isApplyExpr() &&
                 expression.hasOnlyOneMemberAccessStatement() &&
                 expression.receiverIsUnused(bindingContext)) {
-            report(CodeSmell(
-                    issue, Entity.from(expression),
-                    "apply expression can be omitted"
-            ))
+            val message = if (expression.parent is KtSafeQualifiedExpression) {
+                "apply can be replaced with let or an if"
+            } else {
+                "apply expression can be omitted"
+            }
+            report(CodeSmell(issue, Entity.from(expression), message))
         }
     }
 }

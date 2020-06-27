@@ -21,18 +21,20 @@ class UnnecessaryApplySpec : Spek({
         context("unnecessary apply expressions that can be changed to ordinary method call") {
 
             it("reports an apply on non-nullable type") {
-                assertThat(subject.compileAndLint("""
+                val findings = subject.compileAndLint("""
                     fun f() {
                         val a: Int = 0
                         a.apply {
                             plus(1)
                         }
                     }
-                """)).hasSize(1)
+                """)
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
             }
 
             it("reports an apply on nullable type") {
-                assertThat(subject.compileAndLint("""
+                val findings = subject.compileAndLint("""
                     fun f() {
                         val a: Int? = null
                         // Resolution: we can't say here if plus is on 'this' or just a side effect when a is not null
@@ -41,7 +43,9 @@ class UnnecessaryApplySpec : Spek({
                             plus(1)
                         }
                     }
-                """)).hasSize(1)
+                """)
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
             }
 
             it("reports a false negative apply on nullable type - #1485") {
