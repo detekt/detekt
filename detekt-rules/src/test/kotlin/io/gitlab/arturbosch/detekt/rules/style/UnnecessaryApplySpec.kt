@@ -21,27 +21,31 @@ class UnnecessaryApplySpec : Spek({
         context("unnecessary apply expressions that can be changed to ordinary method call") {
 
             it("reports an apply on non-nullable type") {
-                assertThat(subject.compileAndLint("""
+                val findings = subject.compileAndLint("""
                     fun f() {
-                        val a : Int = 0
+                        val a: Int = 0
                         a.apply {
                             plus(1)
                         }
                     }
-                """)).hasSize(1)
+                """)
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
             }
 
             it("reports an apply on nullable type") {
-                assertThat(subject.compileAndLint("""
+                val findings = subject.compileAndLint("""
                     fun f() {
-                        val a : Int? = null
+                        val a: Int? = null
                         // Resolution: we can't say here if plus is on 'this' or just a side effect when a is not null
                         // However such cases should be better handled with an if-null check instead of misusing apply
                         a?.apply {
                             plus(1)
                         }
                     }
-                """)).hasSize(1)
+                """)
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
             }
 
             it("reports a false negative apply on nullable type - #1485") {
@@ -70,7 +74,7 @@ class UnnecessaryApplySpec : Spek({
 
             it("does report single statement in apply used as function argument") {
                 assertThat(subject.compileAndLint("""
-                    fun b(i : Int?) {}
+                    fun b(i: Int?) {}
 
                     fun main() {
                         val a: Int? = null
@@ -105,10 +109,10 @@ class UnnecessaryApplySpec : Spek({
 
             it("does not report applies with lambda body containing more than one statement") {
                 assertThat(subject.compileAndLint("""
-                    fun b(i : Int?) {}
+                    fun b(i: Int?) {}
 
                     fun main() {
-                        val a : Int? = null
+                        val a: Int? = null
                         a?.apply {
                             plus(1)
                             plus(2)

@@ -1242,6 +1242,7 @@ an ordinary method/extension function call to reduce visual complexity
 ```kotlin
 config.apply { version = "1.2" } // can be replaced with `config.version = "1.2"`
 config?.apply { environment = "test" } // can be replaced with `config?.environment = "test"`
+config?.apply { println(version) } // `apply` can be replaced by `let`
 ```
 
 #### Compliant Code:
