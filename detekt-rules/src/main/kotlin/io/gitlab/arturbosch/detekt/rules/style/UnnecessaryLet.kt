@@ -59,8 +59,12 @@ class UnnecessaryLet(config: Config) : Rule(config) {
         if (!isNullSafeOperator && count <= 1) {
             report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
         } else if ((!expression.receiverIsUsed(bindingContext) || !isNullSafeOperator) && count == 0) {
-            report(CodeSmell(issue, Entity.from(expression),
-                "let expression can be replaces with a simple if"))
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    "let expression can be replaces with a simple if"
+                )
+            )
         } else if (count == 1 && canBeReplacedWithCall(lambdaExpr)) {
             report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
         }
@@ -73,9 +77,11 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
 
     if (lambdaBody?.hasOnlyOneStatement() != true) return false
 
-    // only dot qualified expressions can be unnecessary
-    val firstExpr = lambdaBody.firstChild as? KtDotQualifiedExpression
-    val exprReceiver = firstExpr?.receiverExpression
+    val exprReceiver = when (val firstExpr = lambdaBody.firstChild) {
+        is KtDotQualifiedExpression -> firstExpr.receiverExpression
+        is KtSafeQualifiedExpression -> firstExpr.receiverExpression
+        else -> null
+    }
 
     return if (exprReceiver != null) {
         val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)

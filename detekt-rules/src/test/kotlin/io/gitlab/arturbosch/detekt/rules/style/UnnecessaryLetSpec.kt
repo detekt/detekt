@@ -79,6 +79,16 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).hasSize(2)
         }
 
+        it("reports unnecessary lets that can be changed to ordinary method call 8") {
+            val findings = subject.compileAndLint("""
+                fun f() {
+                    val a: Int? = null
+                    a?.let { it?.plus(1) }
+                    a?.let { that -> that?.plus(1) }
+                }""")
+            assertThat(findings).hasSize(2)
+        }
+
         it("does not report lets used for function calls 1") {
             val findings = subject.compileAndLint("""
                 fun f() {
