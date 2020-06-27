@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
+import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -26,13 +27,14 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * a?.let { it.plus(1) } // can be replaced with `a?.plus(1)`
  * a?.let { that -> that.plus(1) }?.let { it.plus(1) } // can be replaced with `a?.plus(1)?.plus(1)`
  * a.let { 1.plus(1) } // can be replaced with `1.plus(1)`
+ * a?.let { 1.plus(1) } // can be replaced with `if (a == null) 1.plus(1)`
  * </noncompliant>
  *
  * <compliant>
  * a?.let { print(it) }
  * a?.let { 1.plus(it) } ?.let { msg -> print(msg) }
  * a?.let { it.plus(it) }
- * a?.let { 1.plus(1) }
+ * val b = a?.let { 1.plus(1) }
  * </compliant>
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
@@ -49,7 +51,8 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
         val lambdaExpr = expression.firstLambdaArg
 
-        if (expression.parent is KtDotQualifiedExpression && lambdaExpr?.countReferences() == 0) {
+        if ((!expression.receiverIsUsed(bindingContext) || expression.parent is KtDotQualifiedExpression) &&
+            lambdaExpr?.countReferences() == 0) {
             report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
         } else {
             val lambdaParameter = lambdaExpr?.firstParameter
