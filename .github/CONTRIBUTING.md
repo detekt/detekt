@@ -89,7 +89,7 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 
 ### Release process
 
-- `groovy scripts/github-milestone-report.groovy` - creates changelog
+- `./scripts/github-milestone-report.main.kts` - creates changelog
 - `gradle increment<Patch|Minor|Major>`
 - `gradle build publishToMavenLocal -x detekt -x test` - publish to local first
 - `gradle build` - now fully build with tests and self-analysis.

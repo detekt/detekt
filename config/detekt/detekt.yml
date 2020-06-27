@@ -64,8 +64,6 @@ formatting:
 naming:
   MemberNameEqualsClassName:
     active: true
-  IsPropertyNaming:
-    active: false
   VariableNaming:
     active: true
     variablePattern: '[a-z][A-Za-z0-9]*'

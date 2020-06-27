@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 class IsPropertyNamingSpec : Spek({
     setupKotlinEnvironment()
 
-    val subject by memoized { IsPropertyNaming() }
+    val subject by memoized { object : IsPropertyNaming() {} }
     val env: KotlinCoreEnvironment by memoized()
 
     describe("IsPropertyNaming rule") {
@@ -79,7 +79,7 @@ class IsPropertyNamingSpec : Spek({
 
         context("property declarations") {
             it("should not detect Kotlin Boolean") {
-                    val code = """
+                val code = """
                     class O {
                         var isDefault = false
                     }

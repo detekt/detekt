@@ -14,11 +14,11 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
-import org.kohsuke.github.GitHub
 import org.kohsuke.github.GHIssue
 import org.kohsuke.github.GHIssueState
 import org.kohsuke.github.GHMilestone
 import org.kohsuke.github.GHRepository
+import org.kohsuke.github.GitHub
 import java.io.File
 import java.net.URL
 
@@ -72,7 +72,7 @@ class GithubMilestoneReport : CliktCommand() {
 
         // write report to disk
 
-        val tempFile: File = File.createTempFile(project, "_$milestoneId.title")
+        val tempFile: File = File.createTempFile(project, "_$milestoneId.$milestoneTitle")
         tempFile.writeText(content)
 
         println("\nContent saved to ${tempFile.path}")
