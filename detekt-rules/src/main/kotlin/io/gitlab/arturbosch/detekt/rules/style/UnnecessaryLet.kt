@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.ValueArgument
 
 /**
@@ -53,11 +54,13 @@ class UnnecessaryLet(config: Config) : Rule(config) {
         val lambdaExpr = expression.firstLambdaArg
 
         val count = lambdaExpr?.countReferences() ?: 0
-        if ((!expression.receiverIsUsed(bindingContext) || expression.parent is KtDotQualifiedExpression) &&
-            count == 0) {
+
+        val isNullSafeOperator = expression.parent is KtSafeQualifiedExpression
+        if (!isNullSafeOperator && count <= 1) {
             report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
-        } else if (expression.parent is KtDotQualifiedExpression && count <= 1) {
-            report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+        } else if ((!expression.receiverIsUsed(bindingContext) || !isNullSafeOperator) && count == 0) {
+            report(CodeSmell(issue, Entity.from(expression),
+                "let expression can be replaces with a simple if"))
         } else {
             val lambdaParameter = lambdaExpr?.firstParameter
             val lambdaBody = lambdaExpr?.bodyExpression
