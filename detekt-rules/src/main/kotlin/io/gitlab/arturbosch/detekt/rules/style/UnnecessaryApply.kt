@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
  * <noncompliant>
  * config.apply { version = "1.2" } // can be replaced with `config.version = "1.2"`
  * config?.apply { environment = "test" } // can be replaced with `config?.environment = "test"`
+ * config?.apply { println(version) } // `apply` can be replaced by `let`
  * </noncompliant>
  *
  * <compliant>
