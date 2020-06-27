@@ -23,7 +23,7 @@ class UnnecessaryApplySpec : Spek({
             it("reports an apply on non-nullable type") {
                 assertThat(subject.compileAndLint("""
                     fun f() {
-                        val a : Int = 0
+                        val a: Int = 0
                         a.apply {
                             plus(1)
                         }
@@ -34,7 +34,7 @@ class UnnecessaryApplySpec : Spek({
             it("reports an apply on nullable type") {
                 assertThat(subject.compileAndLint("""
                     fun f() {
-                        val a : Int? = null
+                        val a: Int? = null
                         // Resolution: we can't say here if plus is on 'this' or just a side effect when a is not null
                         // However such cases should be better handled with an if-null check instead of misusing apply
                         a?.apply {
@@ -70,7 +70,7 @@ class UnnecessaryApplySpec : Spek({
 
             it("does report single statement in apply used as function argument") {
                 assertThat(subject.compileAndLint("""
-                    fun b(i : Int?) {}
+                    fun b(i: Int?) {}
 
                     fun main() {
                         val a: Int? = null
@@ -105,10 +105,10 @@ class UnnecessaryApplySpec : Spek({
 
             it("does not report applies with lambda body containing more than one statement") {
                 assertThat(subject.compileAndLint("""
-                    fun b(i : Int?) {}
+                    fun b(i: Int?) {}
 
                     fun main() {
-                        val a : Int? = null
+                        val a: Int? = null
                         a?.apply {
                             plus(1)
                             plus(2)
