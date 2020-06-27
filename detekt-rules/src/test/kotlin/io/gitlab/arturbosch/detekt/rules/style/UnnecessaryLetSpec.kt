@@ -20,8 +20,10 @@ class UnnecessaryLetSpec : Spek({
                     b.let { that -> that.plus(1) }
                     a?.let { that -> that.plus(1) }
                     a?.let { that -> that.plus(1) }?.let { it.plus(1) }
+                    b.let { 1.plus(1) }
+                    b.let { that -> 1.plus(1) }
                 }""")
-            assertThat(findings).hasSize(6)
+            assertThat(findings).hasSize(8)
         }
         it("does not report lets used for function calls") {
             val findings = subject.compileAndLint("""
@@ -32,6 +34,8 @@ class UnnecessaryLetSpec : Spek({
                     a.let { that -> print(that) }
                     a?.let { that -> 1.plus(that) }
                     a?.let { that -> 1.plus(that) }?.let { print(it) }
+                    a?.let { 1.plus(1) }
+                    a?.let { that -> 1.plus(1) }
                 }""")
             assertThat(findings).isEmpty()
         }

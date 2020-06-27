@@ -37,8 +37,10 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "The `let` usage is unnecessary", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "The `let` usage is unnecessary", Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -46,25 +48,27 @@ class UnnecessaryLet(config: Config) : Rule(config) {
         if (!expression.isLetExpr()) return
 
         val lambdaExpr = expression.firstLambdaArg
-        val lambdaParameter = lambdaExpr?.firstParameter
-        val lambdaBody = lambdaExpr?.bodyExpression
 
-        if (lambdaBody.hasOnlyOneStatement()) {
-            // only dot qualified expressions can be unnecessary
-            val firstExpr = lambdaBody?.firstChild as? KtDotQualifiedExpression
-            val exprReceiver = firstExpr?.receiverExpression
+        if (expression.parent is KtDotQualifiedExpression && lambdaExpr?.countReferences() == 0) {
+            report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+        } else {
+            val lambdaParameter = lambdaExpr?.firstParameter
+            val lambdaBody = lambdaExpr?.bodyExpression
 
-            if (exprReceiver != null) {
-                val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
-                val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
+            if (lambdaBody.hasOnlyOneStatement()) {
+                // only dot qualified expressions can be unnecessary
+                val firstExpr = lambdaBody?.firstChild as? KtDotQualifiedExpression
+                val exprReceiver = firstExpr?.receiverExpression
 
-                val hasOneRef = lambdaBody.countVarRefs(lambdaParameter?.text ?: IT_LITERAL) == 1
+                if (exprReceiver != null) {
+                    val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
+                    val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
 
-                if ((isLetWithExplicitParam || isLetWithImplicitParam) && hasOneRef) {
-                    report(CodeSmell(
-                            issue, Entity.from(expression),
-                            "let expression can be omitted"
-                    ))
+                    val hasOneRef = lambdaExpr.countReferences() == 1
+
+                    if ((isLetWithExplicitParam || isLetWithImplicitParam) && hasOneRef) {
+                        report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+                    }
                 }
             }
         }
@@ -80,4 +84,8 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 private fun KtBlockExpression?.hasOnlyOneStatement() = this?.children?.size == 1
 
 private fun PsiElement.countVarRefs(varName: String): Int =
-        children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }
+    children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }
+
+private fun KtLambdaExpression.countReferences(): Int? {
+    return bodyExpression?.countVarRefs(firstParameter?.text ?: IT_LITERAL)
+}
