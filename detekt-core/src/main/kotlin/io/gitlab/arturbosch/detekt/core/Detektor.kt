@@ -15,10 +15,10 @@ import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
-class Detektor(
+internal class Detektor(
     private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
-    private val processors: List<FileProcessListener> = emptyList()
+    private val processors: List<FileProcessListener>
 ) {
 
     private val config: Config = settings.config

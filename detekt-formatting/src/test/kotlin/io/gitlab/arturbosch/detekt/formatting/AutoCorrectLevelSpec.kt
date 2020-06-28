@@ -54,7 +54,7 @@ class AutoCorrectLevelSpec : Spek({
                     config,
                     outPrinter = NullPrintStream(),
                     errPrinter = NullPrintStream()
-                ).use { DetektFacade.create(it, listOf(FormattingProvider()), listOf(contentChanged)).run() }
+                ).use { DetektFacade(it, listOf(FormattingProvider()), listOf(contentChanged)).run() }
                 val findings = result.findings.flatMap { it.value }
                 val actualContentAfterRun = loadFileContent("configTests/fixed.kt")
 

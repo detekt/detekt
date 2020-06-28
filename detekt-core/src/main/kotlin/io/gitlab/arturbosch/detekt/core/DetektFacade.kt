@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 
 class DetektFacade(
-    private val detektor: Detektor,
     private val settings: ProcessingSettings,
-    private val processors: List<FileProcessListener>
+    private val providers: List<RuleSetProvider>,
+    private val processors: List<FileProcessListener>,
 ) {
 
     private val inputPaths = settings.inputPaths
@@ -29,6 +29,7 @@ class DetektFacade(
 
             processors.forEach { it.onStart(filesToAnalyze) }
 
+            val detektor = Detektor(settings, providers, processors)
             val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
             var result: Detektion = DetektResult(findings.toSortedMap())
 
@@ -48,26 +49,10 @@ class DetektFacade(
             val (serviceLoadingTime, facade) = measure {
                 val providers = RuleSetLocator(settings).load()
                 val processors = FileProcessorLocator(settings).load()
-                create(settings, providers, processors)
+                DetektFacade(settings, providers, processors)
             }
             settings.debug { "Loading services took $serviceLoadingTime ms" }
             return facade
-        }
-
-        fun create(settings: ProcessingSettings, vararg providers: RuleSetProvider): DetektFacade {
-            return create(settings, providers.toList(), emptyList())
-        }
-
-        fun create(settings: ProcessingSettings, vararg processors: FileProcessListener): DetektFacade {
-            return create(settings, emptyList(), processors.toList())
-        }
-
-        fun create(
-            settings: ProcessingSettings,
-            providers: List<RuleSetProvider>,
-            processors: List<FileProcessListener>
-        ): DetektFacade {
-            return DetektFacade(Detektor(settings, providers, processors), settings, processors)
         }
     }
 }

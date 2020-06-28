@@ -42,7 +42,8 @@ class CorrectableRulesFirstSpec : Spek({
                 listOf(object : RuleSetProvider {
                     override val ruleSetId: String = "Test"
                     override fun instance(config: Config) = RuleSet(ruleSetId, listOf(Last(config), First(config)))
-                })
+                }),
+                emptyList()
             )
 
             settings.use { detector.run(listOf(compileForTest(testFile))) }

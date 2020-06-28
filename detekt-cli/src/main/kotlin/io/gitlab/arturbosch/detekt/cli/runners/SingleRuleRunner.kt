@@ -33,7 +33,7 @@ class SingleRuleRunner(
 
             assertRuleExistsBeforeRunningItLater(provider, settings)
 
-            DetektFacade.create(
+            DetektFacade(
                 settings,
                 listOf(provider),
                 listOf(DetektProgressListener().apply { init(settings) })
