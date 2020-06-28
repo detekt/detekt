@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resource
@@ -8,6 +7,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
+import io.gitlab.arturbosch.detekt.cli.createRunner
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -19,7 +19,7 @@ import java.nio.file.Paths
 
 class RunnerSpec : Spek({
 
-    val inputPath: Path = Paths.get(resource("cases/Poko.kt"))
+    val inputPath: Path = resourceAsPath("cases/Poko.kt")
 
     describe("executes the runner with different maxIssues configurations") {
 
@@ -31,7 +31,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/max-issues-2.yml"
             )
 
-            Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute()
+            createRunner(cliArgs).execute()
 
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
@@ -42,7 +42,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/max-issues-0.yml"
             )
 
-            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+            assertThatThrownBy { createRunner(cliArgs).execute() }
                 .isExactlyInstanceOf(MaxIssuesReached::class.java)
         }
 
@@ -54,7 +54,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/max-issues--1.yml"
             )
 
-            Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute()
+            createRunner(cliArgs).execute()
 
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
@@ -70,7 +70,7 @@ class RunnerSpec : Spek({
                     "--baseline", resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
                 )
 
-                Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute()
+                createRunner(cliArgs).execute()
 
                 assertThat(Files.readAllLines(tmpReport)).isEmpty()
             }
@@ -89,7 +89,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/max-issues-0.yml"
             )
 
-            Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute()
+            createRunner(cliArgs).execute()
 
             assertThat(tmpReport).hasContent("")
         }
@@ -102,7 +102,7 @@ class RunnerSpec : Spek({
 
         context("execute with default config which allows no issues") {
 
-            val path: Path = Paths.get(resource("/cases/CleanPoko.kt"))
+            val path: Path = resourceAsPath("/cases/CleanPoko.kt")
 
             beforeEachTest {
                 val args = createCliArgs("--input", path.toString())
@@ -144,7 +144,7 @@ class RunnerSpec : Spek({
 
     describe("with config validation") {
 
-        val path: Path = Paths.get(resource("/cases/CleanPoko.kt"))
+        val path: Path = resourceAsPath("/cases/CleanPoko.kt")
 
         it("should throw on invalid config property when validation=true") {
             val cliArgs = createCliArgs(
@@ -152,7 +152,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/invalid-config.yml"
             )
 
-            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+            assertThatThrownBy { createRunner(cliArgs).execute() }
                 .isExactlyInstanceOf(InvalidConfig::class.java)
                 .hasMessageContaining("property")
         }
@@ -163,7 +163,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/invalid-configs.yml"
             )
 
-            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+            assertThatThrownBy { createRunner(cliArgs).execute() }
                 .isExactlyInstanceOf(InvalidConfig::class.java)
                 .hasMessageContaining("properties")
         }
@@ -174,8 +174,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/invalid-config_no-validation.yml"
             )
 
-            assertThatCode { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .doesNotThrowAnyException()
+            assertThatCode { createRunner(cliArgs).execute() }.doesNotThrowAnyException()
         }
 
         it("should not throw on deprecation warnings") {
@@ -184,8 +183,7 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/deprecated-property.yml"
             )
 
-            assertThatCode { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .doesNotThrowAnyException()
+            assertThatCode { createRunner(cliArgs).execute() }.doesNotThrowAnyException()
         }
     }
 })
