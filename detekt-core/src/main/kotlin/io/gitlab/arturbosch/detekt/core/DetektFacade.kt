@@ -15,7 +15,6 @@ class DetektFacade(
     private val processors: List<FileProcessListener>
 ) {
 
-    private val saveSupported = settings.autoCorrect
     private val inputPaths = settings.inputPaths
     private val compiler = KtTreeCompiler.instance(settings)
 
@@ -32,10 +31,6 @@ class DetektFacade(
 
             val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
             var result: Detektion = DetektResult(findings.toSortedMap())
-
-            if (saveSupported) {
-                KtFileModifier().saveModifiedFiles(filesToAnalyze) { result.add(it) }
-            }
 
             processors.forEach { it.onFinish(filesToAnalyze, result) }
 
