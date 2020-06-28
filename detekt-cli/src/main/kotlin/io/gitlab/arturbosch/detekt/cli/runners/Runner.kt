@@ -21,24 +21,6 @@ class Runner(private val spec: ProcessingSpec) : Executable {
         val provider = DetektProvider.load()
         val detekt: Detekt = provider.get(spec)
         val result = detekt.run()
-
         result.error?.let { throw it }
-//            .use { settings ->
-//                val (serviceLoadingTime, facade) = measure { DetektFacade.create(settings) }
-//                settings.debug { "Loading services took $serviceLoadingTime ms" }
-//                val (engineRunTime, result) = measure { facade.run() }
-//                settings.debug { "Running core engine took $engineRunTime ms" }
-//                if (!arguments.createBaseline) {
-//                    checkBuildFailureThreshold(result, settings)
-//                }
-//            }
     }
-
-//    private fun checkBuildFailureThreshold(result: Detektion, settings: ProcessingSettings) {
-//        val amount = result.getOrComputeWeightedAmountOfIssues(settings.config)
-//        val maxIssues = settings.config.maxIssues()
-//        if (maxIssues.isValidAndSmallerOrEqual(amount)) {
-//            throw BuildFailure("Build failed with $amount weighted issues (threshold defined was $maxIssues).".red())
-//        }
-//    }
 }

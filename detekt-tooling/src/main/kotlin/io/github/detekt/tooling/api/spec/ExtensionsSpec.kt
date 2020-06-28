@@ -7,7 +7,7 @@ interface ExtensionsSpec {
     /**
      * Exclude all default rule sets from current analysis.
      */
-    val disableDefaultRuleSets: Boolean
+    val disableDefaultRuleSets: Boolean // TODO move to RulesSpec
 
     /**
      * Source where to look for [io.gitlab.arturbosch.detekt.api.Extension]s.

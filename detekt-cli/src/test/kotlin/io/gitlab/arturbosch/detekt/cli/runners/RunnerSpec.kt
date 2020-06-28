@@ -5,8 +5,8 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resource
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.cli.BuildFailure
-import io.gitlab.arturbosch.detekt.core.config.InvalidConfig
+import io.github.detekt.tooling.api.InvalidConfig
+import io.github.detekt.tooling.api.MaxIssuesReached
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -43,7 +43,7 @@ class RunnerSpec : Spek({
             )
 
             assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .isExactlyInstanceOf(BuildFailure::class.java)
+                .isExactlyInstanceOf(MaxIssuesReached::class.java)
         }
 
         it("should never throw on maxIssues=-1") {
@@ -128,7 +128,7 @@ class RunnerSpec : Spek({
 
                 try {
                     Runner(args, outPrintStream, errPrintStream).execute()
-                } catch (ignored: BuildFailure) {
+                } catch (ignored: MaxIssuesReached) {
                 }
             }
 

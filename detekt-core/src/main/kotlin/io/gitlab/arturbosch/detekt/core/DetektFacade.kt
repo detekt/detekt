@@ -20,34 +20,43 @@ class DetektFacade(
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
-        val (checkConfigTime) = measure { checkConfiguration(settings) }
-        settings.debug { "Checking config took $checkConfigTime ms" }
+        // TODO use a monitor class to measure time
+        val (engineRunTime, result) = measure {
+            val (checkConfigTime) = measure { checkConfiguration(settings) }
+            settings.debug { "Checking config took $checkConfigTime ms" }
 
-        val filesToAnalyze = inputPaths.flatMap(compiler::compile)
-        val bindingContext = generateBindingContext(settings.environment, settings.classpath, filesToAnalyze)
+            val filesToAnalyze = inputPaths.flatMap(compiler::compile)
+            val bindingContext = generateBindingContext(settings.environment, settings.classpath, filesToAnalyze)
 
-        processors.forEach { it.onStart(filesToAnalyze) }
+            processors.forEach { it.onStart(filesToAnalyze) }
 
-        val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
-        var result: Detektion = DetektResult(findings.toSortedMap())
+            val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
+            var result: Detektion = DetektResult(findings.toSortedMap())
 
-        if (saveSupported) {
-            KtFileModifier().saveModifiedFiles(filesToAnalyze) { result.add(it) }
+            if (saveSupported) {
+                KtFileModifier().saveModifiedFiles(filesToAnalyze) { result.add(it) }
+            }
+
+            processors.forEach { it.onFinish(filesToAnalyze, result) }
+
+            result = handleReportingExtensions(settings, result)
+            OutputFacade(settings).run(result)
+            result
         }
-
-        processors.forEach { it.onFinish(filesToAnalyze, result) }
-
-        result = handleReportingExtensions(settings, result)
-        OutputFacade(settings).run(result)
+        settings.debug { "Running core engine took $engineRunTime ms" }
         return result
     }
 
     companion object {
 
         fun create(settings: ProcessingSettings): DetektFacade {
-            val providers = RuleSetLocator(settings).load()
-            val processors = FileProcessorLocator(settings).load()
-            return create(settings, providers, processors)
+            val (serviceLoadingTime, facade) = measure {
+                val providers = RuleSetLocator(settings).load()
+                val processors = FileProcessorLocator(settings).load()
+                create(settings, providers, processors)
+            }
+            settings.debug { "Loading services took $serviceLoadingTime ms" }
+            return facade
         }
 
         fun create(settings: ProcessingSettings, vararg providers: RuleSetProvider): DetektFacade {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
+import io.github.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -22,6 +23,7 @@ internal fun checkConfiguration(settings: ProcessingSettings) {
     }
 }
 
+// TODO use loadExtensions
 private fun loadValidators(settings: ProcessingSettings): List<ConfigValidator> =
     ServiceLoader.load(ConfigValidator::class.java, settings.pluginLoader)
         .onEach { it.init(settings.config); it.init(settings) }

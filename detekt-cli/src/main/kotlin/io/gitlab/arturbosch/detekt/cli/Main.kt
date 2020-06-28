@@ -2,7 +2,8 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.config.InvalidConfig
+import io.github.detekt.tooling.api.InvalidConfig
+import io.github.detekt.tooling.api.MaxIssuesReached
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
@@ -22,7 +23,7 @@ fun main(args: Array<String>) {
     } catch (e: InvalidConfig) {
         println(e.message)
         exitProcess(ExitCode.INVALID_CONFIG.number)
-    } catch (e: BuildFailure) {
+    } catch (e: MaxIssuesReached) {
         println(e.message)
         exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
     } catch (e: HandledArgumentViolation) {

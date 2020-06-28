@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
@@ -13,12 +13,13 @@ private val WEIGHTED_ISSUES_COUNT_KEY = Key.create<Int>("WEIGHTED_ISSUES_COUNT")
 private const val WEIGHTS = "weights"
 private const val MAX_ISSUES = "maxIssues"
 
-fun Config.maxIssues(): Int = subConfig(BUILD).valueOrDefault(MAX_ISSUES, -1)
+internal fun Config.maxIssues(): Int = subConfig(BUILD).valueOrDefault(MAX_ISSUES, -1)
 
-fun Int.isValidAndSmallerOrEqual(amount: Int): Boolean =
+// TODO simplify with new RulesSpec.MaxIssuePolicy
+internal fun Int.isValidAndSmallerOrEqual(amount: Int): Boolean =
     !(this == 0 && amount == 0) && this != -1 && this <= amount
 
-fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
+internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     val maybeAmount = this.getData(WEIGHTED_ISSUES_COUNT_KEY)
     if (maybeAmount != null) {
         return maybeAmount

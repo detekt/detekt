@@ -1,11 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
 /**
- * Thrown when more issues are found than specified by maxIssues config property.
- */
-class BuildFailure(override val message: String) : RuntimeException(message, null, true, false)
-
-/**
  * Thrown when --help is requested.
  */
 class HelpRequest : RuntimeException()
