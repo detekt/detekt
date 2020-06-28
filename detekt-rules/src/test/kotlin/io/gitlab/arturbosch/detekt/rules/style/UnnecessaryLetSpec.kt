@@ -18,6 +18,7 @@ class UnnecessaryLetSpec : Spek({
                     a.let { that -> that.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 2") {
@@ -28,6 +29,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { that -> that.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 3") {
@@ -37,6 +39,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { that -> that.plus(1) }?.let { it.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 4") {
@@ -47,6 +50,7 @@ class UnnecessaryLetSpec : Spek({
                     a.let { that -> 1.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 5" ) {
@@ -57,6 +61,7 @@ class UnnecessaryLetSpec : Spek({
                     val y = a.let { that -> 1.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be replaced with an if") {
@@ -67,6 +72,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { that -> 1.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 7") {
@@ -77,6 +83,7 @@ class UnnecessaryLetSpec : Spek({
                     a.let { that -> print(that) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 8") {
@@ -87,6 +94,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { that -> that?.plus(1) }
                 }""")
             assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("does not report lets used for function calls 1") {
@@ -164,3 +172,6 @@ class UnnecessaryLetSpec : Spek({
         }
     }
 })
+
+private const val MESSAGE_OMIT_LET = "let expression can be omitted"
+private const val MESSAGE_USE_IF = "let expression can be replaces with a simple if"
