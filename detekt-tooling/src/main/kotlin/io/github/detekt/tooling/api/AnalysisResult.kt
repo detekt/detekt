@@ -7,7 +7,7 @@ interface AnalysisResult {
 
     val error: DetektError?
 
-    @UnstableApi // result type and name might change in the future
+    @UnstableApi(reason = "Name and result type might change in the future.")
     val container: Detektion?
 
     /**

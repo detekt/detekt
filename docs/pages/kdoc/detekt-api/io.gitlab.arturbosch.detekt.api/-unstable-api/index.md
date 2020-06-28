@@ -12,5 +12,9 @@ Experimental detekt api which may change on minor or patch versions.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | Experimental detekt api which may change on minor or patch versions.`UnstableApi()` |
+| [&lt;init&gt;](-init-.html) | Experimental detekt api which may change on minor or patch versions.`UnstableApi(reason: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "")` |
+
+### Properties
+
+| [reason](reason.html) | `val reason: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
