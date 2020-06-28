@@ -26,13 +26,13 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
         declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
 
-    if (issuesSpec.activateExperimentalRules) {
+    if (rulesSpec.activateExperimentalRules) {
         val initializedDefaultConfig = defaultConfig ?: DefaultConfig.newInstance()
         declaredConfig = FailFastConfig(declaredConfig
             ?: initializedDefaultConfig, initializedDefaultConfig)
     }
 
-    if (!issuesSpec.autoCorrect) {
+    if (!rulesSpec.autoCorrect) {
         declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: DefaultConfig.newInstance())
     }
 

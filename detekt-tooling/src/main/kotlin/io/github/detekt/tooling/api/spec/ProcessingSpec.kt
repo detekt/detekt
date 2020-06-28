@@ -13,7 +13,7 @@ interface ProcessingSpec {
     val configSpec: ConfigSpec
     val executionSpec: ExecutionSpec
     val extensionsSpec: ExtensionsSpec
-    val issuesSpec: IssuesSpec
+    val rulesSpec: RulesSpec
     val loggingSpec: LoggingSpec
     val projectSpec: ProjectSpec
     val reportsSpec: ReportsSpec

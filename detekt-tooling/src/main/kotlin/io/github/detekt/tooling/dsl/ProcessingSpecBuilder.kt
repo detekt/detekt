@@ -5,7 +5,7 @@ import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ExecutionSpec
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import io.github.detekt.tooling.api.spec.IssuesSpec
+import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.LoggingSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
@@ -22,7 +22,7 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
     private val config = ConfigSpecBuilder()
     private val execution = ExecutionSpecBuilder()
     private val extensions = ExtensionsSpecBuilder()
-    private val issues = IssuesSpecBuilder()
+    private val issues = RulesSpecBuilder()
     private val logging = LoggingSpecBuilder()
     private val project = ProjectSpecBuilder()
     private val reports = ReportsSpecBuilder()
@@ -32,7 +32,7 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
     fun config(init: ConfigSpecBuilder.() -> Unit): Unit = init(config)
     fun execution(init: ExecutionSpecBuilder.() -> Unit): Unit = init(execution)
     fun extensions(init: ExtensionsSpecBuilder.() -> Unit): Unit = init(extensions)
-    fun issues(init: IssuesSpecBuilder.() -> Unit): Unit = init(issues)
+    fun rules(init: RulesSpecBuilder.() -> Unit): Unit = init(issues)
     fun logging(init: LoggingSpecBuilder.() -> Unit): Unit = init(logging)
     fun project(init: ProjectSpecBuilder.() -> Unit): Unit = init(project)
     fun reports(init: ReportsSpecBuilder.() -> Unit): Unit = init(reports)
@@ -56,7 +56,7 @@ internal data class ProcessingModel(
     override val configSpec: ConfigSpec,
     override val executionSpec: ExecutionSpec,
     override val extensionsSpec: ExtensionsSpec,
-    override val issuesSpec: IssuesSpec,
+    override val rulesSpec: RulesSpec,
     override val loggingSpec: LoggingSpec,
     override val projectSpec: ProjectSpec,
     override val reportsSpec: ReportsSpec,

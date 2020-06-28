@@ -20,7 +20,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             includes = asPatterns(args.includes)
         }
 
-        issues {
+        rules {
             autoCorrect = args.autoCorrect
             activateExperimentalRules = args.failFast
             policy = MaxIssuePolicy.NoneAllowed() // cli does not yet support this; specified in config

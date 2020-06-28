@@ -1,6 +1,6 @@
 package io.github.detekt.tooling.api.spec
 
-interface IssuesSpec {
+interface RulesSpec {
 
     /**
      * Activates all rules which do not have the active property set to 'true' by default.

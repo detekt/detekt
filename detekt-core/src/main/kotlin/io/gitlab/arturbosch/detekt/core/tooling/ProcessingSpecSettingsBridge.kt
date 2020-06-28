@@ -28,7 +28,7 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         executionSpec.executorService,
         loggingSpec.outputChannel as? PrintStream ?: error("PrintStream required for now."),
         loggingSpec.errorChannel as? PrintStream ?: error("PrintStream required for now."),
-        issuesSpec.autoCorrect,
+        rulesSpec.autoCorrect,
         loggingSpec.debug,
         configSpec.extractUris()
     ).use { execute(it) }

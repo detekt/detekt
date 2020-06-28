@@ -1,19 +1,19 @@
 package io.github.detekt.tooling.dsl
 
-import io.github.detekt.tooling.api.spec.IssuesSpec
+import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.MaxIssuePolicy
 
-class IssuesSpecBuilder : Builder<IssuesSpec> {
+class RulesSpecBuilder : Builder<RulesSpec> {
 
     var activateExperimentalRules: Boolean = false
     var policy: MaxIssuePolicy = MaxIssuePolicy.NoneAllowed()
     var autoCorrect: Boolean = false
 
-    override fun build(): IssuesSpec = IssuesModel(activateExperimentalRules, policy, autoCorrect)
+    override fun build(): RulesSpec = RulesModel(activateExperimentalRules, policy, autoCorrect)
 }
 
-internal data class IssuesModel(
+internal data class RulesModel(
     override val activateExperimentalRules: Boolean,
     override val policy: MaxIssuePolicy,
     override val autoCorrect: Boolean,
-) : IssuesSpec
+) : RulesSpec
