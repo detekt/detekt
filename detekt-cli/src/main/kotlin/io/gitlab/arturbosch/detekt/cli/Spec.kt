@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.github.detekt.tooling.api.spec.MaxIssuePolicy
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
@@ -23,7 +23,8 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         rules {
             autoCorrect = args.autoCorrect
             activateExperimentalRules = args.failFast
-            policy = MaxIssuePolicy.NoneAllowed() // cli does not yet support this; specified in config
+            maxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed // cli does not yet support this; specified in config
+            runPolicy = args.toRunPolicy()
         }
 
         baseline {
@@ -68,3 +69,9 @@ private fun asPatterns(rawValue: String?): List<String> =
         ?.commaSeparatedPattern(",", ";")
         ?.toList()
         ?: emptyList()
+
+private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
+    val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
+    require(parts.size != 2) { "Pattern 'RuleSetId:RuleId' expected." }
+    return RulesSpec.RunPolicy.RestrictToSingleRule(parts[0] to parts[1])
+}
