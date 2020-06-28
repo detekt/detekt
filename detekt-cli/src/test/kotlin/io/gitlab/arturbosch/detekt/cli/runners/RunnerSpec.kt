@@ -144,9 +144,11 @@ class RunnerSpec : Spek({
 
     describe("with config validation") {
 
+        val path: Path = Paths.get(resource("/cases/CleanPoko.kt"))
+
         it("should throw on invalid config property when validation=true") {
             val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
+                "--input", path.toString(),
                 "--config-resource", "/configs/invalid-config.yml"
             )
 
@@ -157,7 +159,7 @@ class RunnerSpec : Spek({
 
         it("should throw on invalid config properties when validation=true") {
             val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
+                "--input", path.toString(),
                 "--config-resource", "/configs/invalid-configs.yml"
             )
 
@@ -168,7 +170,7 @@ class RunnerSpec : Spek({
 
         it("should not throw on invalid config property when validation=false") {
             val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
+                "--input", path.toString(),
                 "--config-resource", "/configs/invalid-config_no-validation.yml"
             )
 
@@ -178,7 +180,7 @@ class RunnerSpec : Spek({
 
         it("should not throw on deprecation warnings") {
             val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
+                "--input", path.toString(),
                 "--config-resource", "/configs/deprecated-property.yml"
             )
 
