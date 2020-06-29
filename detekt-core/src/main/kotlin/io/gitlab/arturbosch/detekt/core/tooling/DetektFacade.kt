@@ -32,7 +32,14 @@ class DetektFacade(
         runAnalysis { DefaultLifecycle(spec, it, contentToKtFile(sourceCode, Paths.get(filename))) }
 
     override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
-        runAnalysis { DefaultLifecycle(spec, it, parsingStrategy = { _, _ -> files.toList() }) }
+        runAnalysis {
+            DefaultLifecycle(
+                spec,
+                it,
+                parsingStrategy = { _, _ -> files.toList() },
+                bindingProvider = { bindingContext }
+            )
+        }
 
     override fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult =
         run(files, bindingTrace.bindingContext)
