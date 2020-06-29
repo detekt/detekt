@@ -23,6 +23,29 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(32 to 41)
         }
 
+        it("reports a simple if with a simgle statment in mutlple lines") {
+            val findings = subject.compileAndLint("""
+                fun f() {
+                	if (true) 50
+                        .toString()
+                }
+            """)
+
+            assertThat(findings).hasSize(1)
+        }
+
+        it("reports if-else with a single statment in mutlple lines") {
+            val findings = subject.compileAndLint("""
+                fun f() {
+                	if (true) 50
+                        .toString() else 50
+                        .toString()
+                }
+            """)
+
+            assertThat(findings).hasSize(2)
+        }
+
         it("reports if-else") {
             val findings = subject.compileAndLint("""
             fun f() {
