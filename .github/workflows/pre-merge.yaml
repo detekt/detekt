@@ -52,26 +52,12 @@ jobs:
         java-version: ${{ matrix.jdk }}
 
 
-    - name: Build detekt (UNIX)
-      run: ./gradlew build shadowJar -PwarningsAsErrors=true --parallel
-      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
-    - name: Run detekt-cli --help (UNIX)
-      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
-      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
-    - name: Run detekt-cli with argsfile (UNIX)
-      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar @./config/detekt/argsfile_unix
-      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
-
-
-    - name: Build detekt (WIN)
-      run: ./gradlew build installShadowDist -PwarningsAsErrors=true --parallel
-      if: matrix.os == 'windows-latest'
-    - name: Run detekt-cli --help (WIN)
-      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
-      if: matrix.os == 'windows-latest'
-    - name: Run detekt-cli with argsfile (WIN)
-      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli @config\detekt\argsfile_windows
-      if: matrix.os == 'windows-latest'
+    - name: Build detekt
+      run: ./gradlew build :detekt-cli:shadowJarExecutable -PwarningsAsErrors=true --parallel
+    - name: Run detekt-cli --help
+      run: java -jar ./detekt-cli/build/run/detekt --help
+    - name: Run detekt-cli with argsfile
+      run: java -jar ./detekt-cli/build/run/detekt "@./config/detekt/argsfile"
 
 
   verify-documentation:
