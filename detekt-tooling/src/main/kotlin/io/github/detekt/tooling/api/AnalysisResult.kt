@@ -11,7 +11,7 @@ interface AnalysisResult {
     val container: Detektion?
 
     /**
-     * May be used to exit the jvm via [kotlin.system.exitProcess].
+     * May be used to exit the JVM via [kotlin.system.exitProcess].
      */
     @Suppress("detekt.MagicNumber")
     fun exitCode(): Int = when (error) {

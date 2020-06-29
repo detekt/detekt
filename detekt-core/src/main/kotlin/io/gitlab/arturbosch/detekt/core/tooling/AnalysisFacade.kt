@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.resolve.BindingTrace
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class DetektFacade(
+class AnalysisFacade(
     private val spec: ProcessingSpec,
 ) : Detekt {
 

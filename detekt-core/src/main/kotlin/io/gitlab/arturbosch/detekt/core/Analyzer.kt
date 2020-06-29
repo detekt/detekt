@@ -15,7 +15,7 @@ import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
-internal class Detektor(
+internal class Analyzer(
     private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
     private val processors: List<FileProcessListener>

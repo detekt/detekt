@@ -29,7 +29,7 @@ class DetektFacade(
 
             processors.forEach { it.onStart(filesToAnalyze) }
 
-            val detektor = Detektor(settings, providers, processors)
+            val detektor = Analyzer(settings, providers, processors)
             val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
             var result: Detektion = DetektResult(findings.toSortedMap())
 

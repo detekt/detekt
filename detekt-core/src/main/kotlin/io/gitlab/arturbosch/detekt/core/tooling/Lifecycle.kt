@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.core.Detektor
+import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
@@ -34,7 +34,7 @@ internal interface Lifecycle {
         val processors = processorsProvider.invoke()
         val ruleSets = ruleSetsProvider.invoke()
 
-        val detektor = Detektor(settings, ruleSets, processors)
+        val detektor = Analyzer(settings, ruleSets, processors)
 
         processors.forEach { it.onStart(filesToAnalyze) }
         val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)

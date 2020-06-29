@@ -7,6 +7,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 class DefaultDetektProvider : DetektProvider {
 
     override fun get(processingSpec: ProcessingSpec): Detekt {
-        return DetektFacade(processingSpec)
+        return AnalysisFacade(processingSpec)
     }
 }
