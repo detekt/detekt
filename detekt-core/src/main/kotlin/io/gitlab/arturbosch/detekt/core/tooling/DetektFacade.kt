@@ -8,8 +8,8 @@ import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.DetektResult
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
 import io.gitlab.arturbosch.detekt.core.config.isValidAndSmallerOrEqual
 import io.gitlab.arturbosch.detekt.core.config.maxIssues
@@ -17,14 +17,28 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
 import java.nio.file.Path
+import java.nio.file.Paths
 
-@Suppress("detekt.NotImplementedDeclaration")
 class DetektFacade(
     private val spec: ProcessingSpec,
 ) : Detekt {
 
-    override fun run(): AnalysisResult = spec.withSettings {
-        val result = runCatching { DetektFacade.create(this).run() }
+    override fun run(): AnalysisResult = runAnalysis { DefaultLifecycle(spec, it) }
+
+    override fun run(path: Path): AnalysisResult =
+        runAnalysis { DefaultLifecycle(spec, it, pathToKtFile(path)) }
+
+    override fun run(sourceCode: String, filename: String): AnalysisResult =
+        runAnalysis { DefaultLifecycle(spec, it, contentToKtFile(sourceCode, Paths.get(filename))) }
+
+    override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
+        runAnalysis { DefaultLifecycle(spec, it, parsingStrategy = { _, _ -> files.toList() }) }
+
+    override fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult =
+        run(files, bindingTrace.bindingContext)
+
+    private fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
+        val result = runCatching { createLifecycle(this).analyze() }
         when (val error = result.exceptionOrNull()) {
             is InvalidConfig -> DefaultAnalysisResult(null, error)
             is Throwable -> DefaultAnalysisResult(null, UnexpectedError(error))
@@ -46,21 +60,5 @@ class DetektFacade(
             return MaxIssuesReached("Build failed with $amount weighted issues (threshold defined was $maxIssues).")
         }
         return null
-    }
-
-    override fun run(path: Path): AnalysisResult {
-        TODO()
-    }
-
-    override fun run(sourceCode: String, filename: String): AnalysisResult {
-        TODO()
-    }
-
-    override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult {
-        TODO()
-    }
-
-    override fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult {
-        TODO()
     }
 }
