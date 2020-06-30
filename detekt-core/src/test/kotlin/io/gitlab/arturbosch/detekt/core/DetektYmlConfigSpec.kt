@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import org.spekframework.spek2.Spek

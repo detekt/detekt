@@ -5,6 +5,7 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Path
@@ -43,6 +44,18 @@ internal class CliArgsSpec : Spek({
             assertThatExceptionOfType(ParameterException::class.java)
                 .isThrownBy { parseArguments(params, NullPrintStream(), NullPrintStream()).inputPaths }
                 .withMessageContaining("does not exist")
+        }
+    }
+
+    describe("parsing config parameters") {
+
+        it("should fail on invalid config value") {
+            assertThatIllegalArgumentException()
+                .isThrownBy { createCliArgs("--config", ",").toSpec() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { createCliArgs("--config", "sfsjfsdkfsd").toSpec() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { createCliArgs("--config", "./i.do.not.exist.yml").toSpec() }
         }
     }
 
