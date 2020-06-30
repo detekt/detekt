@@ -186,4 +186,39 @@ class RunnerSpec : Spek({
             assertThatCode { createRunner(cliArgs).execute() }.doesNotThrowAnyException()
         }
     }
+
+    describe("executes the runner for a single rule") {
+
+        it("should load and run custom rule") {
+            val tmp = createTempFileForTest("SingleRuleRunnerSpec", ".txt")
+            val args = createCliArgs(
+                "--input", inputPath.toString(),
+                "--report", "txt:$tmp",
+                "--run-rule", "test:test"
+            )
+
+            runCatching { createRunner(args).execute() }
+
+            assertThat(Files.readAllLines(tmp)).hasSize(1)
+        }
+
+        it("should throw on non existing rule") {
+            val args = createCliArgs("--run-rule", "test:non_existing")
+            assertThatThrownBy { createRunner(args).execute() }
+                .isExactlyInstanceOf(IllegalArgumentException::class.java)
+        }
+
+        it("should throw on non existing rule set") {
+            val args = createCliArgs("--run-rule", "non_existing:test")
+            assertThatThrownBy { createRunner(args).execute() }
+                .isExactlyInstanceOf(IllegalArgumentException::class.java)
+        }
+
+        it("should throw on non existing run-rule") {
+            val args = createCliArgs("--run-rule", "")
+            assertThatThrownBy { createRunner(args).execute() }
+                .isExactlyInstanceOf(IllegalArgumentException::class.java)
+                .withFailMessage("Unexpected empty 'runRule' argument.")
+        }
+    }
 })
