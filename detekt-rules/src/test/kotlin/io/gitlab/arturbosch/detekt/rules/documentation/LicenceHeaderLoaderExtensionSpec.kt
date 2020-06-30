@@ -12,7 +12,7 @@ import java.io.PrintStream
 import java.net.URI
 
 @UnstableApi
-class ExtensionsSpec : Spek({
+class LicenceHeaderLoaderExtensionSpec : Spek({
 
     describe("Licence header extension - #2503") {
 
