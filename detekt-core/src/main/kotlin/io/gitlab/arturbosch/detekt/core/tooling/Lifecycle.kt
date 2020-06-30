@@ -6,15 +6,15 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.Analyzer
+import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.generateBindingContext
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
+import io.gitlab.arturbosch.detekt.core.rules.createRuleProviders
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -53,6 +53,8 @@ internal class DefaultLifecycle(
     override val parsingStrategy: ParsingStrategy = inputPathsToKtFiles,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
         { generateBindingContext(settings.environment, settings.classpath, it) },
-    override val processorsProvider: () -> List<FileProcessListener> = { FileProcessorLocator(settings).load() },
-    override val ruleSetsProvider: () -> List<RuleSetProvider> = { RuleSetLocator(settings).load() },
+    override val processorsProvider: () -> List<FileProcessListener> =
+        { FileProcessorLocator(settings).load() },
+    override val ruleSetsProvider: () -> List<RuleSetProvider> =
+        { spec.rulesSpec.runPolicy.createRuleProviders(settings) },
 ) : Lifecycle

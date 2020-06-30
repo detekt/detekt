@@ -72,6 +72,6 @@ private fun asPatterns(rawValue: String?): List<String> =
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
-    require(parts.size != 2) { "Pattern 'RuleSetId:RuleId' expected." }
+    require(parts.size == 2) { "Pattern 'RuleSetId:RuleId' expected." }
     return RulesSpec.RunPolicy.RestrictToSingleRule(parts[0] to parts[1])
 }

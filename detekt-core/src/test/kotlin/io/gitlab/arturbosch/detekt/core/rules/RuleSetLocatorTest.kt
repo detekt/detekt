@@ -1,6 +1,8 @@
-package io.gitlab.arturbosch.detekt.core
+package io.gitlab.arturbosch.detekt.core.rules
 
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.core.createProcessingSettings
+import io.gitlab.arturbosch.detekt.core.path
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections

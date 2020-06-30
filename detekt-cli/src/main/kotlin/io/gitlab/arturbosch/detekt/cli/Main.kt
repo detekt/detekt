@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
-import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.io.PrintStream
@@ -40,13 +39,12 @@ fun main(args: Array<String>) {
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,
-    errorPrinter: PrintStream
+    errorPrinter: PrintStream,
 ): Executable {
     val arguments = parseArguments(args, outputPrinter, errorPrinter)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments)
-        arguments.runRule != null -> SingleRuleRunner(arguments, outputPrinter, errorPrinter)
         arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }

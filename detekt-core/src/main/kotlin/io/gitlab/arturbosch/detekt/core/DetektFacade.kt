@@ -42,17 +42,4 @@ class DetektFacade(
         settings.debug { "Running core engine took $engineRunTime ms" }
         return result
     }
-
-    companion object {
-
-        fun create(settings: ProcessingSettings): DetektFacade {
-            val (serviceLoadingTime, facade) = measure {
-                val providers = RuleSetLocator(settings).load()
-                val processors = FileProcessorLocator(settings).load()
-                DetektFacade(settings, providers, processors)
-            }
-            settings.debug { "Loading services took $serviceLoadingTime ms" }
-            return facade
-        }
-    }
 }

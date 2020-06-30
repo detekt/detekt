@@ -28,8 +28,10 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
 
     if (rulesSpec.activateExperimentalRules) {
         val initializedDefaultConfig = defaultConfig ?: DefaultConfig.newInstance()
-        declaredConfig = FailFastConfig(declaredConfig
-            ?: initializedDefaultConfig, initializedDefaultConfig)
+        declaredConfig = FailFastConfig(
+            declaredConfig ?: initializedDefaultConfig,
+            initializedDefaultConfig
+        )
     }
 
     if (!rulesSpec.autoCorrect) {

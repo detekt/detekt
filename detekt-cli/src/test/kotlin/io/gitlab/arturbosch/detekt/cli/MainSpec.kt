@@ -1,14 +1,13 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
-import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
-import io.gitlab.arturbosch.detekt.cli.runners.Runner
-import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
-import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.resource
 import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
+import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
+import io.gitlab.arturbosch.detekt.cli.runners.Runner
+import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -21,7 +20,7 @@ class MainSpec : Spek({
 
         listOf(
             arrayOf("--generate-config"),
-            arrayOf("--run-rule", "Rule"),
+            arrayOf("--run-rule", "RuleSet:Rule"),
             arrayOf("--print-ast"),
             arrayOf("--version"),
             emptyArray()
@@ -30,7 +29,7 @@ class MainSpec : Spek({
             val expectedRunnerClass = when {
                 args.contains("--version") -> VersionPrinter::class
                 args.contains("--generate-config") -> ConfigExporter::class
-                args.contains("--run-rule") -> SingleRuleRunner::class
+                args.contains("--run-rule") -> Runner::class
                 args.contains("--print-ast") -> AstPrinter::class
                 else -> Runner::class
             }

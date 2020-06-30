@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
 import io.github.detekt.psi.absolutePath
+import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.MultiRule
@@ -8,8 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -23,7 +26,7 @@ fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
 
 fun RuleSet.visitFile(
     file: KtFile,
-    bindingContext: BindingContext = BindingContext.EMPTY
+    bindingContext: BindingContext = BindingContext.EMPTY,
 ): List<Finding> =
     rules.flatMap {
         it.visitFile(file, bindingContext)
@@ -49,4 +52,15 @@ fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMappi
                 .map { ruleId -> ruleId to ruleSetId }
         }
         .toMap()
+}
+
+fun RulesSpec.RunPolicy.createRuleProviders(settings: ProcessingSettings): List<RuleSetProvider> = when (this) {
+    RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(settings).load()
+    is RulesSpec.RunPolicy.RestrictToSingleRule -> {
+        val (ruleSetId, ruleId) = id
+        val realProvider = requireNotNull(
+            RuleSetLocator(settings).load().find { it.ruleSetId == ruleSetId }
+        ) { "There was no rule set with id '$ruleSetId'." }
+        listOf(SingleRuleProvider(ruleId, realProvider))
+    }
 }
