@@ -53,20 +53,26 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
         val lambdaExpr = expression.firstLambdaArg
 
-        val count = lambdaExpr?.countReferences() ?: 0
         val isNullSafeOperator = expression.parent is KtSafeQualifiedExpression
 
-        if (count == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(expression),
-                    "let expression can be replaces with a simple if"
+        if (lambdaExpr == null) {
+            if (!isNullSafeOperator) {
+                report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+            }
+        } else {
+            val count = lambdaExpr.countReferences() ?: 0
+            if (count == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
+                report(
+                    CodeSmell(
+                        issue, Entity.from(expression),
+                        "let expression can be replaces with a simple if"
+                    )
                 )
-            )
-        } else if (count <= 1 && !isNullSafeOperator) {
-            report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
-        } else if (count == 1 && canBeReplacedWithCall(lambdaExpr)) {
-            report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+            } else if (count <= 1 && !isNullSafeOperator) {
+                report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+            } else if (count == 1 && canBeReplacedWithCall(lambdaExpr)) {
+                report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
+            }
         }
     }
 }

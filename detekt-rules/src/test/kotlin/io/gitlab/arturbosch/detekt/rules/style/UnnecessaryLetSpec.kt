@@ -97,6 +97,17 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
+        it("reports use of let without the safe call operator when we use an argument") {
+            val findings = subject.compileAndLint("""
+                fun f() {
+                    val f: (Int?) -> Boolean = { true }
+                    val a: Int? = null
+                    a.let(f)
+                }""")
+            assertThat(findings).hasSize(1)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+        }
+
         it("does not report lets used for function calls 1") {
             val findings = subject.compileAndLint("""
                 fun f() {
@@ -124,6 +135,16 @@ class UnnecessaryLetSpec : Spek({
                     val y = a?.let { that -> 1.plus(1) }
                 }""")
             assertThat(findings).isEmpty()
+        }
+
+        it("does not report use of let with the safe call operator when we use an argument") {
+            val findings = subject.compileAndLint("""
+                fun f() {
+                    val f: (Int?) -> Boolean = { true }
+                    val a: Int? = null
+                    a?.let(f)
+                }""")
+            assertThat(findings).hasSize(0)
         }
 
         it("does not report lets with lambda body containing more than one statement") {
