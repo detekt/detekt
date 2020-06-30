@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
@@ -47,9 +46,9 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     }
 
     private fun hasNewLine(element: PsiElement?): Boolean =
-            element?.siblings(forward = true, withItself = false)
+            element
+                    ?.siblings(forward = true, withItself = false)
                     ?.takeWhile { it.text != "else" }
-                    ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
     private fun KtIfExpression.isNotBlockExpression(): Boolean = this.then !is KtBlockExpression
