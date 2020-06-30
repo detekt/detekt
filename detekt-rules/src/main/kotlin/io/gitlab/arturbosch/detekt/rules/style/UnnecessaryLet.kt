@@ -60,17 +60,17 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
             }
         } else {
-            val count = lambdaExpr.countReferences() ?: 0
-            if (count == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
+            val lambdaReferenceCount = lambdaExpr.countReferences() ?: 0
+            if (lambdaReferenceCount == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
                 report(
                     CodeSmell(
                         issue, Entity.from(expression),
                         "let expression can be replaces with a simple if"
                     )
                 )
-            } else if (count <= 1 && !isNullSafeOperator) {
+            } else if (lambdaReferenceCount <= 1 && !isNullSafeOperator) {
                 report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
-            } else if (count == 1 && canBeReplacedWithCall(lambdaExpr)) {
+            } else if (lambdaReferenceCount == 1 && canBeReplacedWithCall(lambdaExpr)) {
                 report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
             }
         }
