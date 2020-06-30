@@ -1,10 +1,3 @@
-build:
-  maxIssues: 1
-
-# can be removed after 1.7.0 is published
-config:
-  excludes: 'complexity>ComplexInterface>includePrivateDeclarations'
-
 comments:
   CommentOverPrivateProperty:
     active: true
