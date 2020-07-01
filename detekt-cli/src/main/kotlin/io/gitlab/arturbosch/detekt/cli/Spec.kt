@@ -24,6 +24,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             autoCorrect = args.autoCorrect
             activateExperimentalRules = args.failFast
             maxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed // cli does not yet support this; specified in config
+            excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }
 

@@ -18,6 +18,11 @@ interface RulesSpec {
     val maxIssuePolicy: MaxIssuePolicy
 
     /**
+     * Issues which were corrected should not be taken into account for calculating the max issue threshold.
+     */
+    val excludeCorrectable: Boolean
+
+    /**
      * Policy on how many issues are allowed before detekt throws an error.
      */
     sealed class MaxIssuePolicy {
@@ -64,10 +69,5 @@ interface RulesSpec {
          * Run a single rule.
          */
         class RestrictToSingleRule(val id: Pair<RuleSetId, RuleId>) : RunPolicy()
-
-        /**
-         * Run specified rules only.
-         */
-        class RestrictToMultipleRules(val ids: Map<RuleSetId, Set<RuleId>>) : RunPolicy()
     }
 }
