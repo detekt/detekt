@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.core.config.extractUris
 import io.gitlab.arturbosch.detekt.core.config.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.measure
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
-import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.PrintStream
@@ -41,8 +40,7 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         ).apply {
             baselineSpec.path?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
             register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)
-            // TODO change to use Report objects
-            register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportsSpec.reports.map { ReportPath(it.type, it.path) })
+            register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportsSpec.reports)
         }
     }
     settings.debug { "Loading config took $configLoadTime ms" }

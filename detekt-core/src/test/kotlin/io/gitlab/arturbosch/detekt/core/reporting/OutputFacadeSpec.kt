@@ -6,6 +6,7 @@ import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.dsl.ReportsSpecBuilder
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
@@ -33,12 +34,16 @@ internal class OutputFacadeSpec : Spek({
             plainOutputPath = createTempFileForTest("detekt", ".txt")
             htmlOutputPath = createTempFileForTest("detekt", ".html")
             xmlOutputPath = createTempFileForTest("detekt", ".xml")
-            val reportPaths = listOf(
-                "xml:$xmlOutputPath",
-                "txt:$plainOutputPath",
-                "html:$htmlOutputPath"
-            ).map { ReportPath.from(it) }
-            defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream, reportPaths = reportPaths)
+            val reportsSpec = ReportsSpecBuilder().apply {
+                report { "html" to htmlOutputPath }
+                report { "txt" to plainOutputPath }
+                report { "xml" to xmlOutputPath }
+            }.build()
+            defaultSettings = createProcessingSettings(
+                inputPath,
+                outPrinter = printStream,
+                reportPaths = reportsSpec.reports
+            )
         }
 
         afterGroup {

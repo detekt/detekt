@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.reporting
+package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.core.IS_WINDOWS
 import org.assertj.core.api.Assertions.assertThat
@@ -66,25 +66,25 @@ class ReportPathSpec : Spek({
         it("parses and maps the txt kind correctly") {
             val reportPath = ReportPath.from("txt:/tmp/valid/report")
 
-            assertThat(reportPath.kind).isEqualTo("TxtOutputReport")
+            assertThat(reportPath.kind).isEqualTo("txt")
         }
 
         it("parses and maps the xml kind correctly") {
             val reportPath = ReportPath.from("xml:/tmp/valid/report")
 
-            assertThat(reportPath.kind).isEqualTo("XmlOutputReport")
+            assertThat(reportPath.kind).isEqualTo("xml")
         }
 
         it("parses and maps the html kind correctly") {
             val reportPath = ReportPath.from("html:/tmp/valid/report")
 
-            assertThat(reportPath.kind).isEqualTo("HtmlOutputReport")
+            assertThat(reportPath.kind).isEqualTo("html")
         }
 
         it("parses and maps the txt kind correctly") {
             val reportPath = ReportPath.from("txt:/tmp/valid/report")
 
-            assertThat(reportPath.kind).isEqualTo("TxtOutputReport")
+            assertThat(reportPath.kind).isEqualTo("txt")
         }
 
         it("parses a non-default kind correctly") {

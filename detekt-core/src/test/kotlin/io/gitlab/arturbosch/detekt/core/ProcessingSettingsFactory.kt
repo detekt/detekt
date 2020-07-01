@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
-import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.PrintStream
@@ -33,7 +33,7 @@ fun createProcessingSettings(
     autoCorrect: Boolean = false,
     debug: Boolean = false,
     configUris: Collection<URI> = emptyList(),
-    reportPaths: Collection<ReportPath> = emptyList()
+    reportPaths: Collection<ReportsSpec.Report> = emptyList(),
 ) = ProcessingSettings(
     inputPaths = listOf(inputPath),
     config = config,

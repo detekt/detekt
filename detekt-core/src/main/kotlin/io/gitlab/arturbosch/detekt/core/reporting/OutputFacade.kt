@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
+import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
@@ -12,13 +13,10 @@ class OutputFacade(
     private val settings: ProcessingSettings
 ) {
 
-    private var reports: Map<String, ReportPath>
-
-    init {
-        val reportPaths: Collection<ReportPath> =
-            settings.getOrNull(DETEKT_OUTPUT_REPORT_PATHS_KEY) ?: emptyList()
-        reports = reportPaths.associateBy { it.kind }
-    }
+    private var reports: Map<String, ReportsSpec.Report> =
+        settings.getOrNull<Collection<ReportsSpec.Report>>(DETEKT_OUTPUT_REPORT_PATHS_KEY)
+            ?.associateBy { it.type }
+            ?: emptyMap()
 
     fun run(result: Detektion) {
         // Always run output reports first.
@@ -39,7 +37,7 @@ class OutputFacade(
         val durationOutputReports = measureTimeMillis {
             val extensions = OutputReportLocator(settings).load()
             for (report in extensions) {
-                val filePath = reports[report.id]?.path
+                val filePath = reports[defaultReportMapping(report.id)]?.path
                 if (filePath != null) {
                     report.write(filePath, result)
                     result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
