@@ -1,6 +1,7 @@
 package io.github.detekt.tooling.api
 
 import io.github.detekt.test.utils.createTempFileForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -20,6 +21,8 @@ class DefaultConfigurationProviderSpec : Spek({
 })
 
 internal class TestConfigurationProvider : DefaultConfigurationProvider {
+
+    override fun get(): Config = Config.empty
 
     override fun copy(targetLocation: Path) {
         // nothing

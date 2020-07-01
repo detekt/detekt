@@ -1,7 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.createCliArgs
+import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
+import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -17,7 +18,7 @@ class ConfigExporterSpec : Spek({
                 "--config", tmpConfig.toString()
             )
 
-            ConfigExporter(cliArgs).execute()
+            ConfigExporter(cliArgs, NullPrintStream()).execute()
 
             assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
         }
