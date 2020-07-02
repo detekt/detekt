@@ -186,6 +186,7 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
      - IllegalArgumentException
      - IllegalStateException
