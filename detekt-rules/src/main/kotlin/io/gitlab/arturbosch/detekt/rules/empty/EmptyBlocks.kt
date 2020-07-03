@@ -42,6 +42,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
     private val emptyIfBlock = EmptyIfBlock(config)
     private val emptyInitBlock = EmptyInitBlock(config)
     private val emptyKtFile = EmptyKtFile(config)
+    private val emptyLine = EmptyLine(config)
     private val emptySecondaryConstructorBlock = EmptySecondaryConstructor(config)
     private val emptyTryBlock = EmptyTryBlock(config)
     private val emptyWhenBlock = EmptyWhenBlock(config)
@@ -59,6 +60,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
             emptyIfBlock,
             emptyInitBlock,
             emptyKtFile,
+            emptyLine,
             emptySecondaryConstructorBlock,
             emptyTryBlock,
             emptyWhenBlock,
@@ -67,6 +69,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
     override fun visitKtFile(file: KtFile) {
         emptyKtFile.runIfActive { visitFile(file) }
+        emptyLine.runIfActive { visitKtFile(file) }
         emptyClassBlock.runIfActive {
             file.declarations.filterIsInstance<KtClassOrObject>().forEach {
                 visitClassOrObject(it)

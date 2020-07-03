@@ -22,6 +22,8 @@ empty-blocks:
     active: false
   EmptyKtFile:
     active: false
+  EmptyLine:
+    active: false
   EmptySecondaryConstructor:
     active: false
   EmptyWhenBlock:

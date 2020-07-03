@@ -122,6 +122,14 @@ Reports empty Kotlin (.kt) files. Empty blocks of code serve no purpose and shou
 
 **Debt**: 5min
 
+### EmptyLine
+
+Reports empty line in Kotlin (.kt) files. Empty line of code serve no purpose and should be removed.
+
+**Severity**: Minor
+
+**Debt**: 5min
+
 ### EmptySecondaryConstructor
 
 Reports empty secondary constructors. Empty blocks of code serve no purpose and should be removed.
