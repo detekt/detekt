@@ -22,7 +22,8 @@ object TestExclusions {
         "ForEachOnRange",
         "FunctionMaxLength",
         "TooGenericExceptionCaught",
-        "InstanceOfCheckForException"
+        "InstanceOfCheckForException",
+        "ThrowingExceptionsWithoutMessageOrCause"
     )
 
     fun Rule.isExcludedInTests() = name in rules || inMultiRule in rules
