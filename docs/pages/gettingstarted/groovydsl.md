@@ -29,23 +29,12 @@ using the detekt closure as described [here](#closure).
 ##### <a name="gradlegroovy">Configuration when using Groovy DSL</a>
 
 ```groovy
-repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
-}
-
 plugins {
     id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+}
+
+repositories {
+    jcenter()
 }
 ```
 
@@ -61,15 +50,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:{{ site.detekt_version }}'
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
     }
 
 }
-plugins {
-    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
-}
-
 apply plugin: 'io.gitlab.arturbosch.detekt'
 ```
 
