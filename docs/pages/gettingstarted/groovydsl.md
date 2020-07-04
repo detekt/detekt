@@ -28,7 +28,13 @@ using the detekt closure as described [here](#closure).
 
 ##### <a name="gradlegroovy">Configuration when using Groovy DSL</a>
 
+Using the plugins DSL:
+
 ```groovy
+plugins {
+  id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+}
+
 repositories {
     jcenter()
 
@@ -43,9 +49,35 @@ repositories {
         }
     }
 }
+```
 
-plugins {
-    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+Using legacy plugin application (`buildscript{}`):
+
+```groovy
+buildscript {
+  repositories {
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
+  }
+}
+
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+repositories {
+    jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 ```
 
@@ -54,25 +86,37 @@ plugins {
 When using Android make sure to have detekt configured in the project level build.gradle file.
 
 You can configure the plugin in the same way as indicated above.
+
 ```groovy
 buildscript {
-    repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:{{ site.detekt_version }}'
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
-    }
-
-}
-plugins {
-    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+  repositories {
+    google()
+    jcenter()
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath "com.android.tools.build:gradle:4.0.0"
+    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
+  }
 }
 
-apply plugin: 'io.gitlab.arturbosch.detekt'
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+repositories {
+    jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
+}
 ```
-
 
 ##### <a name="closure">Options for detekt configuration closure</a>
 
