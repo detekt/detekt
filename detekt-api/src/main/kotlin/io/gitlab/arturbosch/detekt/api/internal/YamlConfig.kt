@@ -101,10 +101,15 @@ private fun flatExclusion(
     ruleSetName: String
 ): Map<String, Any> {
     var editedRuleSetProperties = ruleSetProperties
-    exclusionPatterns.forEach {
-        val patterns = it["patterns"]
-        val rules = it["rules"]
+    exclusionPatterns.forEach { exclusionPattern ->
+        val patterns = exclusionPattern["patterns"]
+        val rules = exclusionPattern["rules"]
         if (!patterns.isNullOrEmpty() && !rules.isNullOrEmpty()) {
+            if (rules.contains(ruleSetName)) {
+                editedRuleSetProperties = editedRuleSetProperties.toMutableMap().apply {
+                    set("excludes", patterns + (get("excludes") as? List<String> ?: emptyList()))
+                }
+            }
             editedRuleSetProperties = editedRuleSetProperties.mapValues { (ruleName, ruleConfigAny) ->
                 val ruleConfig = (ruleConfigAny as? Map<String, Any>)?.toMutableMap()
                 if (rules.contains("$ruleSetName>$ruleName") && ruleConfig != null) {
