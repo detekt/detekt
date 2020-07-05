@@ -266,7 +266,7 @@ internal class SuppressionSpec : Spek({
     }
 })
 
-class TestRule(config: Config = Config.empty) : Rule(config) {
+private class TestRule(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("Test", Severity.CodeSmell, "", Debt.TWENTY_MINS)
     var expected: String? = "Test"
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
@@ -274,7 +274,7 @@ class TestRule(config: Config = Config.empty) : Rule(config) {
     }
 }
 
-class TestLM : Rule() {
+private class TestLM : Rule() {
     override val issue = Issue("LongMethod", Severity.CodeSmell, "", Debt.TWENTY_MINS)
     override fun visitNamedFunction(function: KtNamedFunction) {
         @Suppress("UnsafeCallOnNullableType")
@@ -285,7 +285,7 @@ class TestLM : Rule() {
     }
 }
 
-class TestLPL(config: Config = Config.empty) : Rule(config) {
+private class TestLPL(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("LongParameterList", Severity.CodeSmell, "", Debt.TWENTY_MINS)
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
