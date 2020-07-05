@@ -1,13 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.github.detekt.parser.KtCompiler
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.core.isFile
-import java.io.PrintStream
 
 class AstPrinter(
     private val arguments: CliArgs,
-    private val outPrinter: PrintStream
+    private val outPrinter: Appendable,
 ) : Executable {
 
     override fun execute() {
@@ -21,6 +20,6 @@ class AstPrinter(
         }
 
         val ktFile = KtCompiler().compile(input, input)
-        outPrinter.println(ElementPrinter.dump(ktFile))
+        outPrinter.appendln(ElementPrinter.dump(ktFile))
     }
 }

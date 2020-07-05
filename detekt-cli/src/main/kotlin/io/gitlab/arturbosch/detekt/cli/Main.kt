@@ -4,6 +4,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
+import io.github.detekt.tooling.api.UnexpectedError
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
@@ -13,27 +14,25 @@ import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
-@Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
-    try {
-        buildRunner(args, System.out, System.err).execute()
-    } catch (e: HelpRequest) {
-        println(e.usageText)
-    } catch (e: InvalidConfig) {
-        println(e.message)
-        exitProcess(ExitCode.INVALID_CONFIG.number)
-    } catch (e: MaxIssuesReached) {
-        println(e.message)
-        exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
-    } catch (e: HandledArgumentViolation) {
-        println(e.message)
-        println(e.usageText)
-        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
+    val result = CliRunner().run(args)
+    when (val error = result.error) {
+        is InvalidConfig, is MaxIssuesReached -> println(error.message)
+        is UnexpectedError -> {
+            when (val cause = error.cause) {
+                is HelpRequest -> {
+                    println(cause.usageText)
+                    exitProcess(0)
+                }
+                is HandledArgumentViolation -> {
+                    println(cause.message)
+                    println(cause.usageText)
+                }
+                else -> cause.printStackTrace()
+            }
+        }
     }
-    exitProcess(ExitCode.NORMAL_RUN.number)
+    exitProcess(result.exitCode())
 }
 
 @NotApiButProbablyUsedByUsers
