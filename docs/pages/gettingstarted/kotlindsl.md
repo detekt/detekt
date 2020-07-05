@@ -39,12 +39,12 @@ Using legacy plugin application (`buildscript{}`):
 
 ```kotlin
 buildscript {
-  repositories {
-    gradlePluginPortal()
-  }
-  dependencies {
-    classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}")
-  }
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}")
+    }
 }
 
 apply(plugin = "io.gitlab.arturbosch.detekt")

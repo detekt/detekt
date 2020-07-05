@@ -32,7 +32,7 @@ Using the plugins DSL:
 
 ```groovy
 plugins {
-  id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
 }
 
 repositories {
@@ -55,12 +55,12 @@ Using legacy plugin application (`buildscript{}`):
 
 ```groovy
 buildscript {
-  repositories {
-    gradlePluginPortal()
-  }
-  dependencies {
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
-  }
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
+    }
 }
 
 apply plugin: "io.gitlab.arturbosch.detekt"
@@ -89,15 +89,15 @@ You can configure the plugin in the same way as indicated above.
 
 ```groovy
 buildscript {
-  repositories {
-    google()
-    jcenter()
-    gradlePluginPortal()
-  }
-  dependencies {
-    classpath "com.android.tools.build:gradle:4.0.0"
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
-  }
+    repositories {
+        google()
+        jcenter()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.0"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
+    }
 }
 
 apply plugin: "io.gitlab.arturbosch.detekt"
