@@ -10,10 +10,10 @@ interface LoggingSpec {
     /**
      * Channel where detekt should write it's normal output to.
      */
-    val outputChannel: Appendable?
+    val outputChannel: Appendable
 
     /**
      * Channel where errors should be logged.
      */
-    val errorChannel: Appendable?
+    val errorChannel: Appendable
 }

@@ -6,11 +6,10 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import kotlin.system.measureTimeMillis
 
 @OptIn(UnstableApi::class)
 class OutputFacade(
-    private val settings: ProcessingSettings
+    private val settings: ProcessingSettings,
 ) {
 
     private var reports: Map<String, ReportsSpec.Report> =
@@ -26,24 +25,18 @@ class OutputFacade(
     }
 
     private fun handleConsoleReports(result: Detektion) {
-        val durationConsoleReports = measureTimeMillis {
-            val extensions = ConsoleReportLocator(settings).load()
-            extensions.forEach { it.print(settings.outPrinter, result) }
-        }
-        settings.debug { "Writing console results took $durationConsoleReports ms" }
+        val extensions = ConsoleReportLocator(settings).load()
+        extensions.forEach { it.print(settings.outPrinter, result) }
     }
 
     private fun handleOutputReports(result: Detektion) {
-        val durationOutputReports = measureTimeMillis {
-            val extensions = OutputReportLocator(settings).load()
-            for (report in extensions) {
-                val filePath = reports[defaultReportMapping(report.id)]?.path
-                if (filePath != null) {
-                    report.write(filePath, result)
-                    result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
-                }
+        val extensions = OutputReportLocator(settings).load()
+        for (report in extensions) {
+            val filePath = reports[defaultReportMapping(report.id)]?.path
+            if (filePath != null) {
+                report.write(filePath, result)
+                result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
             }
         }
-        settings.debug { "Writing output results took $durationOutputReports ms" }
     }
 }

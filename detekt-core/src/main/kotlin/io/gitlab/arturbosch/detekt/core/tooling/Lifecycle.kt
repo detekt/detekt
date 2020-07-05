@@ -15,6 +15,8 @@ import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.generateBindingContext
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.core.rules.createRuleProviders
+import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
+import io.gitlab.arturbosch.detekt.core.util.getOrCreateMonitor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -27,23 +29,30 @@ internal interface Lifecycle {
     val processorsProvider: () -> List<FileProcessListener>
     val ruleSetsProvider: () -> List<RuleSetProvider>
 
+    private fun <R> measure(phase: Phase, block: () -> R): R = settings.getOrCreateMonitor().measure(phase, block)
+
     fun analyze(): Detektion {
-        checkConfiguration(settings)
-        val filesToAnalyze = parsingStrategy.invoke(spec, settings)
-        val bindingContext = bindingProvider.invoke(filesToAnalyze)
-        val processors = processorsProvider.invoke()
-        val ruleSets = ruleSetsProvider.invoke()
+        measure(Phase.ValidateConfig) { checkConfiguration(settings) }
+        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(spec, settings) }
+        val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        val (processors, ruleSets) = measure(Phase.LoadingExtensions) {
+            processorsProvider.invoke() to ruleSetsProvider.invoke()
+        }
 
-        val detektor = Analyzer(settings, ruleSets, processors)
+        val result = measure(Phase.Analyzer) {
+            val detektor = Analyzer(settings, ruleSets, processors)
+            processors.forEach { it.onStart(filesToAnalyze) }
+            val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
+            val result: Detektion = DetektResult(findings.toSortedMap())
+            processors.forEach { it.onFinish(filesToAnalyze, result) }
+            result
+        }
 
-        processors.forEach { it.onStart(filesToAnalyze) }
-        val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
-        var result: Detektion = DetektResult(findings.toSortedMap())
-        processors.forEach { it.onFinish(filesToAnalyze, result) }
-
-        result = handleReportingExtensions(settings, result)
-        OutputFacade(settings).run(result)
-        return result
+        return measure(Phase.Reporting) {
+            val finalResult = handleReportingExtensions(settings, result)
+            OutputFacade(settings).run(finalResult)
+            finalResult
+        }
     }
 }
 
