@@ -61,7 +61,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:{{ site.detekt_version }}'
+        classpath 'com.android.tools.build:gradle:x.y.z'
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
     }
 
