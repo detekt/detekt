@@ -74,12 +74,16 @@ class YamlConfig private constructor(
             } else {
                 val exclusionPatterns = map["exclusion-patterns"] as? List<Map<String, List<String>>>
                 val flattedMap = if (!exclusionPatterns.isNullOrEmpty()) {
-                    map.mapValues { (ruleSetName, value) ->
-                        val subMap = value as? Map<String, Any>
-                        if (subMap != null) {
-                            flatExclusion(exclusionPatterns, subMap, ruleSetName)
-                        } else {
+                    map.mapValues { (key, value) ->
+                        if (key in listOf("build", "config", "processors", "console-reports", "exclusion-patterns")) {
                             value
+                        } else {
+                            val subMap = value as? Map<String, Any>
+                            if (subMap != null) {
+                                flatExclusion(exclusionPatterns, subMap, key)
+                            } else {
+                                value
+                            }
                         }
                     }.minus("exclusion-patterns")
                 } else {
