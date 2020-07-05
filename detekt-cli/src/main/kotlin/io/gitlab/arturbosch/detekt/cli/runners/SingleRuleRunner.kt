@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.cli.createSettings
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
-import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import java.io.PrintStream
 
 class SingleRuleRunner(
@@ -68,7 +67,7 @@ private class RuleProducingProvider(
 
     private fun produceRule(): BaseRule =
         requireNotNull(
-            provider.createRuleSet(Config.empty)
+            provider.instance(Config.empty)
                 .rules
                 .find { it.ruleId == ruleId }
         ) { "There was no rule '$ruleId' in rule set '${provider.ruleSetId}'." }
