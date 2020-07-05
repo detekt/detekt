@@ -14,7 +14,7 @@ import java.nio.file.Path
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
  * yaml specification.
  */
-class YamlConfig internal constructor(
+class YamlConfig private constructor(
     val properties: Map<String, Any>,
     override val parentPath: String? = null
 ) : BaseConfig(), ValidatableConfiguration {
@@ -72,8 +72,45 @@ class YamlConfig internal constructor(
             if (map == null) {
                 Config.empty
             } else {
-                YamlConfig(map)
+                val exclusionPatterns = map["exclusion-patterns"] as? List<Map<String, List<String>>>
+                val flattedMap = if (!exclusionPatterns.isNullOrEmpty()) {
+                    map.mapValues { (ruleSetName, value) ->
+                        val subMap = value as? Map<String, Any>
+                        if (subMap != null) {
+                            flatExclusion(exclusionPatterns, subMap, ruleSetName)
+                        } else {
+                            value
+                        }
+                    }.minus("exclusion-patterns")
+                } else {
+                    map
+                }
+                YamlConfig(flattedMap)
             }
         }
     }
+}
+
+private fun flatExclusion(
+    exclusionPatterns: List<Map<String, List<String>>>,
+    ruleSetProperties: Map<String, Any>,
+    ruleSetName: String
+): Map<String, Any> {
+    var editedRuleSetProperties = ruleSetProperties
+    exclusionPatterns.forEach {
+        val patterns = it["patterns"]
+        val rules = it["rules"]
+        if (!patterns.isNullOrEmpty() && !rules.isNullOrEmpty()) {
+            editedRuleSetProperties = editedRuleSetProperties.mapValues { (ruleName, ruleConfigAny) ->
+                val ruleConfig = (ruleConfigAny as? Map<String, Any>)?.toMutableMap()
+                if (rules.contains("$ruleSetName>$ruleName") && ruleConfig != null) {
+                    ruleConfig["excludes"] = patterns + (ruleConfig["excludes"] as? List<String> ?: emptyList())
+                    ruleConfig
+                } else {
+                    ruleConfigAny
+                }
+            }
+        }
+    }
+    return editedRuleSetProperties
 }
