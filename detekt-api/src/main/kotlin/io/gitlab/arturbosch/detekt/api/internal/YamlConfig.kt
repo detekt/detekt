@@ -105,21 +105,31 @@ private fun flatExclusion(
         val patterns = exclusionPattern["patterns"]
         val rules = exclusionPattern["rules"]
         if (!patterns.isNullOrEmpty() && !rules.isNullOrEmpty()) {
-            if (rules.contains(ruleSetName)) {
-                editedRuleSetProperties = editedRuleSetProperties.toMutableMap().apply {
-                    set("excludes", patterns + (get("excludes") as? List<String> ?: emptyList()))
-                }
-            }
-            editedRuleSetProperties = editedRuleSetProperties.mapValues { (ruleName, ruleConfigAny) ->
-                val ruleConfig = (ruleConfigAny as? Map<String, Any>)?.toMutableMap()
-                if (rules.contains("$ruleSetName>$ruleName") && ruleConfig != null) {
-                    ruleConfig["excludes"] = patterns + (ruleConfig["excludes"] as? List<String> ?: emptyList())
-                    ruleConfig
-                } else {
-                    ruleConfigAny
-                }
-            }
+            editedRuleSetProperties = fillExcludes(patterns, rules, ruleSetName, editedRuleSetProperties)
         }
     }
     return editedRuleSetProperties
+}
+
+private fun fillExcludes(
+    patterns: List<String>,
+    rules: List<String>,
+    ruleSetName: String,
+    ruleSetProperties: Map<String, Any>
+): Map<String, Any> {
+    var editedRuleSetProperties = ruleSetProperties
+    if (rules.contains(ruleSetName)) {
+        editedRuleSetProperties = ruleSetProperties.toMutableMap().apply {
+            set("excludes", patterns + (get("excludes") as? List<String> ?: emptyList()))
+        }
+    }
+    return editedRuleSetProperties.mapValues { (ruleName, ruleConfigAny) ->
+        val ruleConfig = (ruleConfigAny as? Map<String, Any>)?.toMutableMap()
+        if (rules.contains("$ruleSetName>$ruleName") && ruleConfig != null) {
+            ruleConfig["excludes"] = patterns + (ruleConfig["excludes"] as? List<String> ?: emptyList())
+            ruleConfig
+        } else {
+            ruleConfigAny
+        }
+    }
 }
