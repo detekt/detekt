@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
-import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +15,7 @@ class TooGenericExceptionSpec : Spek({
 
         it("should not report any as all catch exception rules are deactivated") {
             val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
-            val ruleSet = ExceptionsProvider().createRuleSet(config)
+            val ruleSet = ExceptionsProvider().instance(config)
             val file = compileContentForTest(tooGenericExceptionCode)
 
             val findings = ruleSet.visitFile(file)

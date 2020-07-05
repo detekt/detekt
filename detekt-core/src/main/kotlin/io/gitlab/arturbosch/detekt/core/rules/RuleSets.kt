@@ -8,21 +8,16 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
-fun RuleSetProvider.isActive(config: Config): Boolean =
-    config.subConfig(ruleSetId)
-        .valueOrDefault("active", true)
+fun Config.isActive(): Boolean =
+    valueOrDefault("active", true)
 
-fun RuleSetProvider.createRuleSet(config: Config): RuleSet =
-    instance(config.subConfig(ruleSetId))
-
-fun RuleSet.shouldAnalyzeFile(file: KtFile, config: Config): Boolean {
-    val filters = config.subConfig(id).createPathFilters()
+fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
+    val filters = createPathFilters()
     return filters == null || !filters.isIgnored(file.absolutePath())
 }
 
