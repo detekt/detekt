@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.Detekt
+import io.github.detekt.tooling.api.DetektError
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.UnexpectedError
@@ -10,9 +11,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.config.MaxIssueCheck
 import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
-import io.gitlab.arturbosch.detekt.core.config.isValidAndSmallerOrEqual
-import io.gitlab.arturbosch.detekt.core.config.maxIssues
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
@@ -51,21 +51,25 @@ class AnalysisFacade(
             is Throwable -> DefaultAnalysisResult(null, UnexpectedError(error))
             else -> {
                 val container = result.getOrElse { DetektResult(emptyMap()) }
-                if (spec.baselineSpec.shouldCreateDuringAnalysis) {
-                    DefaultAnalysisResult(container, null)
-                } else {
-                    DefaultAnalysisResult(container, checkMaxIssuesReached(container, config))
-                }
+                DefaultAnalysisResult(container, checkMaxIssuesReachedReturningErrors(container, config))
             }
         }
     }
 
-    private fun checkMaxIssuesReached(result: Detektion, config: Config): MaxIssuesReached? {
-        val amount = result.getOrComputeWeightedAmountOfIssues(config)
-        val maxIssues = config.maxIssues()
-        if (maxIssues.isValidAndSmallerOrEqual(amount)) {
-            return MaxIssuesReached("Build failed with $amount weighted issues (threshold defined was $maxIssues).")
+    private fun checkMaxIssuesReachedReturningErrors(result: Detektion, config: Config): DetektError? {
+        if (spec.baselineSpec.shouldCreateDuringAnalysis) {
+            return null // never fail the build as on next run all current issues are suppressed via the baseline
         }
-        return null
+
+        val error = runCatching {
+            val amount = result.getOrComputeWeightedAmountOfIssues(config)
+            MaxIssueCheck(spec.rulesSpec, config).check(amount)
+        }.exceptionOrNull()
+
+        return when {
+            error is MaxIssuesReached -> error
+            error != null -> UnexpectedError(error)
+            else -> null
+        }
     }
 }

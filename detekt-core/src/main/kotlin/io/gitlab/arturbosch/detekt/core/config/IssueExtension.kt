@@ -11,13 +11,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 private val WEIGHTED_ISSUES_COUNT_KEY = Key.create<Int>("WEIGHTED_ISSUES_COUNT")
 private const val WEIGHTS = "weights"
-private const val MAX_ISSUES = "maxIssues"
-
-internal fun Config.maxIssues(): Int = subConfig(BUILD).valueOrDefault(MAX_ISSUES, -1)
-
-// TODO simplify with new RulesSpec.MaxIssuePolicy
-internal fun Int.isValidAndSmallerOrEqual(amount: Int): Boolean =
-    !(this == 0 && amount == 0) && this != -1 && this <= amount
+internal const val MAX_ISSUES = "maxIssues"
 
 internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     val maybeAmount = this.getData(WEIGHTED_ISSUES_COUNT_KEY)
@@ -27,7 +21,7 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
 
     val smells = filterAutoCorrectedIssues(config).flatMap { it.value }
     val ruleToRuleSetId = extractRuleToRuleSetIdMap(this)
-    val weightsConfig = config.weightsConfig()
+    val weightsConfig = config.subConfig(BUILD).subConfig(WEIGHTS)
 
     fun Finding.weighted(): Int {
         val key = ruleToRuleSetId[id] // entry of ID > entry of RuleSet ID > default weight 1
@@ -41,8 +35,6 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
     return amount
 }
-
-private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)
 
 private fun extractRuleToRuleSetIdMap(result: Detektion): Map<RuleId, RuleSetId> =
     result.findings
