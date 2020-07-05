@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.isFile
 
 class AstPrinter(
     private val arguments: CliArgs,
-    private val outPrinter: Appendable,
+    private val outPrinter: Appendable
 ) : Executable {
 
     override fun execute() {

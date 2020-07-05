@@ -13,7 +13,7 @@ interface DefaultConfigurationProvider {
     companion object {
 
         fun load(
-            classLoader: ClassLoader = DefaultConfigurationProvider::class.java.classLoader,
+            classLoader: ClassLoader = DefaultConfigurationProvider::class.java.classLoader
         ): DefaultConfigurationProvider =
             ServiceLoader.load(DefaultConfigurationProvider::class.java, classLoader).first()
     }

@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 
 class DefaultPropertiesConfigValidator(
-    private val settings: ProcessingSettings,
+    private val settings: ProcessingSettings
 ) : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {

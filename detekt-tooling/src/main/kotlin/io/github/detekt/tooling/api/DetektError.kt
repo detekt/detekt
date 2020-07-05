@@ -2,7 +2,7 @@ package io.github.detekt.tooling.api
 
 sealed class DetektError(
     message: String?,
-    cause: Throwable? = null,
+    cause: Throwable? = null
 ) : RuntimeException(message, cause)
 
 class MaxIssuesReached(message: String) : DetektError(message)

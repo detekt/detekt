@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 
 internal class SingleRuleProvider(
     private val ruleId: RuleId,
-    private val wrapped: RuleSetProvider,
+    private val wrapped: RuleSetProvider
 ) : RuleSetProvider {
 
     init {

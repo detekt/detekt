@@ -26,7 +26,7 @@ fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
 
 fun RuleSet.visitFile(
     file: KtFile,
-    bindingContext: BindingContext = BindingContext.EMPTY,
+    bindingContext: BindingContext = BindingContext.EMPTY
 ): List<Finding> =
     rules.flatMap {
         it.visitFile(file, bindingContext)

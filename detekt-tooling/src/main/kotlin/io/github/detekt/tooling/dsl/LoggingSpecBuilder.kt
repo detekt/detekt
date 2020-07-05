@@ -14,5 +14,5 @@ class LoggingSpecBuilder : Builder<LoggingSpec> {
 internal data class LoggingModel(
     override val debug: Boolean,
     override val outputChannel: Appendable,
-    override val errorChannel: Appendable,
+    override val errorChannel: Appendable
 ) : LoggingSpec

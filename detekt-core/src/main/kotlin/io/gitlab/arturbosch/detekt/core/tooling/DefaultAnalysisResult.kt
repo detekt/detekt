@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 @OptIn(UnstableApi::class)
 class DefaultAnalysisResult(
     @UnstableApi override val container: Detektion?,
-    override val error: DetektError? = null,
+    override val error: DetektError? = null
 ) : AnalysisResult {
 
     init {

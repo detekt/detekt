@@ -18,5 +18,5 @@ internal data class ProjectModel(
     override val basePath: Path?,
     override val inputPaths: Collection<Path>,
     override val excludes: Collection<String>,
-    override val includes: Collection<String>,
+    override val includes: Collection<String>
 ) : ProjectSpec

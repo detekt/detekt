@@ -33,7 +33,7 @@ fun createProcessingSettings(
     autoCorrect: Boolean = false,
     debug: Boolean = false,
     configUris: Collection<URI> = emptyList(),
-    reportPaths: Collection<ReportsSpec.Report> = emptyList(),
+    reportPaths: Collection<ReportsSpec.Report> = emptyList()
 ) = ProcessingSettings(
     inputPaths = listOf(inputPath),
     config = config,

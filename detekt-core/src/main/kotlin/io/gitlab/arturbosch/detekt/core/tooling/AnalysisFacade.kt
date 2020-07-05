@@ -20,7 +20,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class AnalysisFacade(
-    private val spec: ProcessingSpec,
+    private val spec: ProcessingSpec
 ) : Detekt {
 
     override fun run(): AnalysisResult = runAnalysis { DefaultLifecycle(spec, it) }

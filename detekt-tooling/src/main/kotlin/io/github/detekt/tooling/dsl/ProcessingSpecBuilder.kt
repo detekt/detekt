@@ -46,7 +46,7 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
         issues.build(),
         logging.build(),
         project.build(),
-        reports.build(),
+        reports.build()
     )
 }
 
@@ -59,5 +59,5 @@ internal data class ProcessingModel(
     override val rulesSpec: RulesSpec,
     override val loggingSpec: LoggingSpec,
     override val projectSpec: ProjectSpec,
-    override val reportsSpec: ReportsSpec,
+    override val reportsSpec: ReportsSpec
 ) : ProcessingSpec

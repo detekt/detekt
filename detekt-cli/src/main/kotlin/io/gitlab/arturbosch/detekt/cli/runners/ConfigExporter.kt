@@ -6,7 +6,7 @@ import java.nio.file.Paths
 
 class ConfigExporter(
     private val arguments: CliArgs,
-    private val outputPrinter: Appendable,
+    private val outputPrinter: Appendable
 ) : Executable {
 
     override fun execute() {

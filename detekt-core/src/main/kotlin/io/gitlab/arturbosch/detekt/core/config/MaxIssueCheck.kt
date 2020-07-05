@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.BUILD
 
 internal class MaxIssueCheck(
     private val rulesSpec: RulesSpec,
-    private val config: Config,
+    private val config: Config
 ) {
     private val policy: RulesSpec.MaxIssuePolicy = run {
         val configuredMaxIssues = config.subConfig(BUILD)

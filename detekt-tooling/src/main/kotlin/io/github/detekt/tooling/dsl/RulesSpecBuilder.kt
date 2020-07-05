@@ -24,5 +24,5 @@ internal data class RulesModel(
     override val maxIssuePolicy: RulesSpec.MaxIssuePolicy,
     override val excludeCorrectable: Boolean,
     override val autoCorrect: Boolean,
-    override val runPolicy: RulesSpec.RunPolicy,
+    override val runPolicy: RulesSpec.RunPolicy
 ) : RulesSpec

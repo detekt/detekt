@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 @OptIn(UnstableApi::class)
 class OutputFacade(
-    private val settings: ProcessingSettings,
+    private val settings: ProcessingSettings
 ) {
 
     private var reports: Map<String, ReportsSpec.Report> =
