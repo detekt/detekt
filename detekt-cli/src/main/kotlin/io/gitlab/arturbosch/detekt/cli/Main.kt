@@ -17,8 +17,8 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) {
     try {
         buildRunner(args, System.out, System.err).execute()
-    } catch (_: HelpRequest) {
-        // handled by JCommander, exit normally
+    } catch (e: HelpRequest) {
+        println(e.usageText)
     } catch (e: InvalidConfig) {
         println(e.message)
         exitProcess(ExitCode.INVALID_CONFIG.number)
@@ -26,7 +26,8 @@ fun main(args: Array<String>) {
         println(e.message)
         exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
     } catch (e: HandledArgumentViolation) {
-        // messages are handled when parsing arguments
+        println(e.message)
+        println(e.usageText)
         exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
     } catch (e: Exception) {
         e.printStackTrace()
@@ -41,7 +42,7 @@ fun buildRunner(
     outputPrinter: PrintStream,
     errorPrinter: PrintStream,
 ): Executable {
-    val arguments = parseArguments(args, outputPrinter, errorPrinter)
+    val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
