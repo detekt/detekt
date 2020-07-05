@@ -11,7 +11,6 @@ dependencies {
     }
 
     testImplementation(project(":detekt-test"))
-    testImplementation(project(":detekt-core"))
 }
 
 val depsToPackage = setOf(

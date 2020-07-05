@@ -44,7 +44,7 @@ class AnalysisFacade(
     override fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult =
         run(files, bindingTrace.bindingContext)
 
-    private fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
+    internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
         val result = runCatching { createLifecycle(this).analyze() }
         when (val error = result.exceptionOrNull()) {
             is InvalidConfig -> DefaultAnalysisResult(null, error)
