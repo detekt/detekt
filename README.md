@@ -231,6 +231,7 @@ As mentioned in...
 - [Kotlin Static Analysis Tools](http://smyachenkov.com/posts/kotlin-static-analysis-tools/)
 - [Speeding up the detekt task in a multi-project Gradle build](https://madhead.me/posts/detekt-faster/) (for detekt < 1.7.0)
 - [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
+- [Preventing software antipatterns with Detekt](https://galler.dev/preventing-software-antipatterns-with-detekt/)
 
 Integrations:
 
@@ -242,6 +243,7 @@ Integrations:
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
 - [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
+- [Bazel plugin that wraps the Detekt CLI](https://github.com/buildfoundation/bazel_rules_detekt)
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
