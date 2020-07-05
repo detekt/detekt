@@ -77,22 +77,18 @@ class Detektor(
     }
 
     private fun analyze(file: KtFile, bindingContext: BindingContext): Map<RuleSetId, List<Finding>> {
-        val ruleSets = providers.asSequence()
-            .filter { it.isActive(config) }
-            .map { it.createRuleSet(config) }
-            .filter { it.shouldAnalyzeFile(file, config) }
-            .associate { it.id to it.rules }
-
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             is MultiRule -> rule.rules.any { it.autoCorrect }
             else -> error("No other rule type expected.")
         }
 
-        val (correctableRules, otherRules) =
-            ruleSets.asSequence()
-                .flatMap { (_, value) -> value.asSequence() }
-                .partition { isCorrectable(it) }
+        val (correctableRules, otherRules) = providers.asSequence()
+            .filter { it.isActive(config) }
+            .map { it.createRuleSet(config) }
+            .filter { it.shouldAnalyzeFile(file, config) }
+            .flatMap { it.rules.asSequence() }
+            .partition { isCorrectable(it) }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
