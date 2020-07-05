@@ -12,8 +12,12 @@ DSL to apply the plugin changes slightly.
 
 ##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a> 
 
+Using the plugins DSL:
+
 ```kotlin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("{{ site.detekt_version }}")
+}
 
 repositories {
     jcenter()
@@ -25,15 +29,45 @@ repositories {
         content {
             // just allow to include kotlinx projects
             // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
+            includeGroup("org.jetbrains.kotlinx")
         }
     }
 }
+```
 
-plugins {
-    id("io.gitlab.arturbosch.detekt").version("{{ site.detekt_version }}")
+Using legacy plugin application (`buildscript{}`):
+
+```kotlin
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}")
+    }
 }
 
+apply(plugin = "io.gitlab.arturbosch.detekt")
+
+repositories {
+    jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup("org.jetbrains.kotlinx")
+        }
+    }
+}
+```
+
+##### <a name="closure">Options for detekt configuration closure</a>
+
+```kotlin
 detekt {
     toolVersion = "{{ site.detekt_version }}"                                 // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
     input = files("src/main/java", "src/main/kotlin")     // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
