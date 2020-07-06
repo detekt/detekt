@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     val version = object {
-        val spek = "2.0.11"
+        val spek = "2.0.12"
         val ktlint = "0.37.2"
     }
 
