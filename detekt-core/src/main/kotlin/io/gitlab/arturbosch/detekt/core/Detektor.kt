@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import org.jetbrains.kotlin.psi.KtFile
@@ -77,22 +76,19 @@ class Detektor(
     }
 
     private fun analyze(file: KtFile, bindingContext: BindingContext): Map<RuleSetId, List<Finding>> {
-        val ruleSets = providers.asSequence()
-            .filter { it.isActive(config) }
-            .map { it.createRuleSet(config) }
-            .filter { it.shouldAnalyzeFile(file, config) }
-            .associate { it.id to it.rules }
-
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             is MultiRule -> rule.rules.any { it.autoCorrect }
             else -> error("No other rule type expected.")
         }
 
-        val (correctableRules, otherRules) =
-            ruleSets.asSequence()
-                .flatMap { (_, value) -> value.asSequence() }
-                .partition { isCorrectable(it) }
+        val (correctableRules, otherRules) = providers.asSequence()
+            .map { it to config.subConfig(it.ruleSetId) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .mapLeft { provider, ruleSetConfig -> provider.instance(ruleSetConfig) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
+            .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+            .partition { isCorrectable(it) }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
@@ -100,9 +96,8 @@ class Detektor(
             for (rule in rules) {
                 rule.visitFile(file, bindingContext)
                 for (finding in rule.findings) {
-                    val mappedRuleSet = idMapping[finding.id]
-                        ?: error("Mapping for '${finding.id}' expected.")
-                    result.putIfAbsent(mappedRuleSet, ArrayList())
+                    val mappedRuleSet = idMapping[finding.id] ?: error("Mapping for '${finding.id}' expected.")
+                    result.putIfAbsent(mappedRuleSet, mutableListOf())
                     result[mappedRuleSet]!!.add(finding)
                 }
             }
@@ -113,4 +108,8 @@ class Detektor(
 
         return result
     }
+}
+
+private fun <T, U, R> Sequence<Pair<T, U>>.mapLeft(transform: (T, U) -> R): Sequence<Pair<R, U>> {
+    return this.map { (first, second) -> transform(first, second) to second }
 }

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
@@ -29,7 +28,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
 
         it("should not report any as all empty block rules are deactivated") {
             val config = yamlConfig("deactivated-empty-blocks.yml")
-            val ruleSet = EmptyCodeProvider().createRuleSet(config)
+            val ruleSet = EmptyCodeProvider().instance(config)
 
             val findings = ruleSet.visitFile(file)
 

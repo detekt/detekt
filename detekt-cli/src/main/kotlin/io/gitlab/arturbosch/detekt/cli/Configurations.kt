@@ -88,8 +88,10 @@ fun CliArgs.loadConfiguration(): Config {
 
     if (failFast) {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
-        declaredConfig = FailFastConfig(declaredConfig
-            ?: initializedDefaultConfig, initializedDefaultConfig)
+        declaredConfig = FailFastConfig(
+            declaredConfig ?: initializedDefaultConfig,
+            initializedDefaultConfig
+        )
     }
 
     if (!autoCorrect) {

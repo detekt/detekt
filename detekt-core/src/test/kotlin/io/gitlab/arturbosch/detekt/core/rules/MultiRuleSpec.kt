@@ -29,12 +29,12 @@ internal class MultiRuleSpec : Spek({
 
             it("should not run any rules if rule set defines the filter") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).shouldAnalyzeFile(file, config)).isFalse()
+                assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
             }
 
             it("should not run any rules if rule set defines the filter with string") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset-string.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).shouldAnalyzeFile(file, config)).isFalse()
+                assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
             }
 
             it("should only run one rule as the other is filtered") {
