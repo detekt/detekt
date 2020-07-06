@@ -24,9 +24,9 @@ abstract class BaseRule(
      * BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.
      */
     fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY) {
+        clearFindings()
         this.bindingContext = bindingContext
         if (visitCondition(root)) {
-            clearFindings()
             preVisit(root)
             visit(root)
             postVisit(root)
