@@ -28,6 +28,12 @@ interface RulesSpec {
     sealed class MaxIssuePolicy {
 
         /**
+         * Marker that MaxIssuePolicy should be read from the config file when available.
+         * Else it defaults to [NoneAllowed].
+         */
+        object NonSpecified : MaxIssuePolicy()
+
+        /**
          * Always return exit code 0 on found issues.
          */
         object AllowAny : MaxIssuePolicy()

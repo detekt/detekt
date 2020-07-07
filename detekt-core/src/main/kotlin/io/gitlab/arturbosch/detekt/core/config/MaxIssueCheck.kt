@@ -10,20 +10,24 @@ internal class MaxIssueCheck(
     private val config: Config
 ) {
     private val policy: RulesSpec.MaxIssuePolicy = run {
-        val configuredMaxIssues = config.subConfig(BUILD)
-            .valueOrNull<Int>(MAX_ISSUES)
+        if (rulesSpec.maxIssuePolicy == RulesSpec.MaxIssuePolicy.NonSpecified) {
+            val configuredMaxIssues = config.subConfig(BUILD)
+                .valueOrNull<Int>(MAX_ISSUES)
 
-        when (configuredMaxIssues) {
-            null -> rulesSpec.maxIssuePolicy
-            0 -> RulesSpec.MaxIssuePolicy.NoneAllowed
-            in 1..Int.MAX_VALUE -> RulesSpec.MaxIssuePolicy.AllowAmount(configuredMaxIssues)
-            else -> RulesSpec.MaxIssuePolicy.AllowAny
+            when (configuredMaxIssues) {
+                null -> rulesSpec.maxIssuePolicy
+                0 -> RulesSpec.MaxIssuePolicy.NoneAllowed
+                in 1..Int.MAX_VALUE -> RulesSpec.MaxIssuePolicy.AllowAmount(configuredMaxIssues)
+                else -> RulesSpec.MaxIssuePolicy.AllowAny
+            }
+        } else {
+            rulesSpec.maxIssuePolicy
         }
     }
 
     private fun meetsPolicy(numberOfIssues: Int): Boolean = when (policy) {
         RulesSpec.MaxIssuePolicy.AllowAny -> true
-        RulesSpec.MaxIssuePolicy.NoneAllowed -> numberOfIssues == 0
+        RulesSpec.MaxIssuePolicy.NoneAllowed, RulesSpec.MaxIssuePolicy.NonSpecified -> numberOfIssues == 0
         is RulesSpec.MaxIssuePolicy.AllowAmount -> numberOfIssues <= policy.amount
     }
 

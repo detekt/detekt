@@ -58,16 +58,28 @@ internal class MaxIssueCheckTest : Spek({
     }
 
     describe("based on config") {
-        it("ignores RulesSpec when Config declares build section due to historical reasons") {
-            val fixture = MaxIssueCheck(
-                ProcessingSpec { rules { maxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed } }.rulesSpec,
-                yamlConfigFromContent("""
+
+        val config = yamlConfigFromContent("""
              build:
                maxIssues: 1
          """.trimIndent())
+
+        it("uses the config for max issues when MaxIssuePolicy == NonSpecified") {
+            val fixture = MaxIssueCheck(
+                ProcessingSpec { rules { maxIssuePolicy = RulesSpec.MaxIssuePolicy.NonSpecified } }.rulesSpec,
+                config
             )
 
             assertThatCode { fixture.check(1) }.doesNotThrowAnyException()
+        }
+
+        it("skips the config on any other Policy specied") {
+            val fixture = MaxIssueCheck(
+                ProcessingSpec { rules { maxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed } }.rulesSpec,
+                config
+            )
+
+            assertThatCode { fixture.check(1) }.isInstanceOf(MaxIssuesReached::class.java)
         }
     }
 })
