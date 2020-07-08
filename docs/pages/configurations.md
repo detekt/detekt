@@ -72,16 +72,23 @@ output-reports:
 
 #### Processors
 
-Processors are usually used to raise project metrics.
-Uncomment the ones you do not care about.
+Count processors are used to calculate project metrics.
+For example, when all count processors are enabled, a detekt html report might look like this:
+
+![Metrics in html report](https://user-images.githubusercontent.com/3001957/86500830-3af27880-bd94-11ea-90e0-2b751a4d8531.png)
+
+The `'DetektProgressListener'` processor shows a progress indicator in stdout while a detekt process is running.
+
+Uncomment the processors you don't care about.
 
 ```yaml
 processors:
-  active: true
-  exclude:
-  # - 'FunctionCountProcessor'
-  # - 'PropertyCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'KtFileCountProcessor'
+    active: true
+    exclude:
+        - 'DetektProgressListener'
+        # - 'FunctionCountProcessor'
+        # - 'PropertyCountProcessor'
+        # - 'ClassCountProcessor'
+        # - 'PackageCountProcessor'
+        # - 'KtFileCountProcessor'
 ```
