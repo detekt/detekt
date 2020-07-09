@@ -30,7 +30,6 @@ fun createProcessingSettings(
     outPrinter: PrintStream = NullPrintStream(),
     errPrinter: PrintStream = NullPrintStream(),
     autoCorrect: Boolean = false,
-    debug: Boolean = false,
     configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     spec: ProcessingSpec = ProcessingSpec { }
@@ -47,7 +46,6 @@ fun createProcessingSettings(
     outputChannel = outPrinter,
     errorChannel = errPrinter,
     autoCorrect = autoCorrect,
-    debug = debug,
     configUris = configUris,
     spec = spec
 ).apply {

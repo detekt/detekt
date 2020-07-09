@@ -6,6 +6,8 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
+import io.gitlab.arturbosch.detekt.core.settings.LoggingAware
+import io.gitlab.arturbosch.detekt.core.settings.LoggingFacade
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -41,10 +43,11 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     override val outputChannel: PrintStream,
     override val errorChannel: PrintStream,
     val autoCorrect: Boolean = false,
-    val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList(),
     val spec: ProcessingSpec
-) : AutoCloseable, Closeable, SetupContext {
+) : AutoCloseable, Closeable,
+    LoggingAware by LoggingFacade(spec.loggingSpec),
+    SetupContext {
 
     init {
         pluginPaths.forEach {
@@ -73,19 +76,6 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     }
 
     val taskPool: TaskPool by lazy { TaskPool(executorService) }
-
-    fun info(msg: String) = outputChannel.println(msg)
-
-    fun error(msg: String, error: Throwable) {
-        errorChannel.println(msg)
-        error.printStacktraceRecursively(errorChannel)
-    }
-
-    fun debug(msg: () -> String) {
-        if (debug) {
-            outputChannel.println(msg())
-        }
-    }
 
     override fun close() {
         closeQuietly(taskPool)
