@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
@@ -18,7 +19,7 @@ import java.util.concurrent.ForkJoinPool
  */
 @Suppress("LongParameterList")
 fun createProcessingSettings(
-    inputPath: Path,
+    inputPath: Path? = null,
     config: Config = Config.empty,
     pathFilters: PathFilters? = null,
     parallelCompilation: Boolean = false,
@@ -35,7 +36,7 @@ fun createProcessingSettings(
     configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList()
 ) = ProcessingSettings(
-    inputPaths = listOf(inputPath),
+    inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
     pathFilters = pathFilters,
     parallelCompilation = parallelCompilation,
@@ -49,7 +50,8 @@ fun createProcessingSettings(
     errorChannel = errPrinter,
     autoCorrect = autoCorrect,
     debug = debug,
-    configUris = configUris
+    configUris = configUris,
+    spec = ProcessingSpec { }
 ).apply {
     register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
 }

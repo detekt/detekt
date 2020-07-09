@@ -39,7 +39,8 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
             loggingSpec.errorChannel as? PrintStream ?: error("PrintStream required for now."),
             rulesSpec.autoCorrect,
             loggingSpec.debug,
-            configSpec.extractUris()
+            configSpec.extractUris(),
+            this
         ).apply {
             baselineSpec.path?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
             register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)

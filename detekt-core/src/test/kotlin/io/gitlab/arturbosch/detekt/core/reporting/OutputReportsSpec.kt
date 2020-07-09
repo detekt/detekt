@@ -3,11 +3,10 @@ package io.gitlab.arturbosch.detekt.core.reporting
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
-import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
@@ -61,11 +60,7 @@ internal class OutputReportsSpec : Spek({
                 )
             }
 
-            val extensions = ProcessingSettings(
-                listOf(),
-                outPrinter = NullPrintStream(),
-                errPrinter = NullPrintStream()
-            ).use { OutputReportLocator(it).load() }
+            val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
             val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it.id) }
 
             it("should be able to convert to output reports") {
@@ -87,12 +82,8 @@ internal class OutputReportsSpec : Spek({
 
             it("yields empty extension list") {
                 val config = yamlConfig("/reporting/disabled-reports.yml")
-                val extensions = ProcessingSettings(
-                    listOf(),
-                    config,
-                    outPrinter = NullPrintStream(),
-                    errPrinter = NullPrintStream()
-                ).use { ConsoleReportLocator(it).load() }
+                val extensions = createProcessingSettings(config = config)
+                    .use { ConsoleReportLocator(it).load() }
                 assertThat(extensions).isEmpty()
             }
         }

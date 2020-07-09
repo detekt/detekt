@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.parser.createCompilerConfiguration
 import io.github.detekt.parser.createKotlinCoreEnvironment
+import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
@@ -43,7 +44,8 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     override val errorChannel: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
-    override val configUris: Collection<URI> = emptyList()
+    override val configUris: Collection<URI> = emptyList(),
+    val spec: ProcessingSpec
 ) : AutoCloseable, Closeable, SetupContext {
 
     init {
