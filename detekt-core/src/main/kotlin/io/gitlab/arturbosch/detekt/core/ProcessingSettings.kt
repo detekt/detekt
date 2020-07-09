@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
-import java.io.PrintStream
 import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -41,8 +40,6 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService? = null,
-    override val outputChannel: PrintStream,
-    override val errorChannel: PrintStream,
     val autoCorrect: Boolean = false,
     override val configUris: Collection<URI> = emptyList(),
     val spec: ProcessingSpec

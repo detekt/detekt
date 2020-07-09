@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
-import java.io.PrintStream
 
 internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R): R {
     val monitor = PerformanceMonitor()
@@ -33,8 +32,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
             compilerSpec.parseLanguageVersion(),
             compilerSpec.parseJvmTarget() ?: JvmTarget.JVM_1_8,
             executionSpec.executorService,
-            loggingSpec.outputChannel as? PrintStream ?: error("PrintStream required for now."),
-            loggingSpec.errorChannel as? PrintStream ?: error("PrintStream required for now."),
             rulesSpec.autoCorrect,
             configSpec.extractUris(),
             this
