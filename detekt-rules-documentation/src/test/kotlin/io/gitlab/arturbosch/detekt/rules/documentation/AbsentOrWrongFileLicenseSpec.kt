@@ -62,8 +62,8 @@ private fun checkLicence(content: String): List<Finding> {
         init(object : SetupContext {
             override val configUris: Collection<URI> = listOf(resource.toUri())
             override val config: Config = config
-            override val outPrinter: PrintStream = NullPrintStream()
-            override val errPrinter: PrintStream = NullPrintStream()
+            override val outputChannel: PrintStream = NullPrintStream()
+            override val errorChannel: PrintStream = NullPrintStream()
             override val properties: MutableMap<String, Any?> = HashMap()
             override fun register(key: String, value: Any) {
                 properties[key] = value

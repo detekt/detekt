@@ -39,8 +39,8 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService? = null,
-    override val outPrinter: PrintStream,
-    override val errPrinter: PrintStream,
+    override val outputChannel: PrintStream,
+    override val errorChannel: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList()
@@ -74,16 +74,16 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
 
     val taskPool: TaskPool by lazy { TaskPool(executorService) }
 
-    fun info(msg: String) = outPrinter.println(msg)
+    fun info(msg: String) = outputChannel.println(msg)
 
     fun error(msg: String, error: Throwable) {
-        errPrinter.println(msg)
-        error.printStacktraceRecursively(errPrinter)
+        errorChannel.println(msg)
+        error.printStacktraceRecursively(errorChannel)
     }
 
     fun debug(msg: () -> String) {
         if (debug) {
-            outPrinter.println(msg())
+            outputChannel.println(msg())
         }
     }
 

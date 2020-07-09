@@ -26,7 +26,7 @@ class OutputFacade(
 
     private fun handleConsoleReports(result: Detektion) {
         val extensions = ConsoleReportLocator(settings).load()
-        extensions.forEach { it.print(settings.outPrinter, result) }
+        extensions.forEach { it.print(settings.outputChannel, result) }
     }
 
     private fun handleOutputReports(result: Detektion) {

@@ -21,8 +21,8 @@ class LicenceHeaderLoaderExtensionSpec : Spek({
                 LicenceHeaderLoaderExtension().init(object : SetupContext {
                     override val configUris: Collection<URI> = listOf(resource("extensions/config.yml"))
                     override val config: Config = Config.empty
-                    override val outPrinter: PrintStream = NullPrintStream()
-                    override val errPrinter: PrintStream = NullPrintStream()
+                    override val outputChannel: PrintStream = NullPrintStream()
+                    override val errorChannel: PrintStream = NullPrintStream()
                     override val properties: Map<String, Any?> = HashMap()
                     override fun register(key: String, value: Any) = Unit
                 })

@@ -45,8 +45,8 @@ fun createProcessingSettings(
     languageVersion = languageVersion,
     jvmTarget = jvmTarget,
     executorService = executorService,
-    outPrinter = outPrinter,
-    errPrinter = errPrinter,
+    outputChannel = outPrinter,
+    errorChannel = errPrinter,
     autoCorrect = autoCorrect,
     debug = debug,
     configUris = configUris
