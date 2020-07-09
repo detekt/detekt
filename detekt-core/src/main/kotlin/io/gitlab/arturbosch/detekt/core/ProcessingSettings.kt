@@ -28,7 +28,7 @@ import java.net.URLClassLoader
  */
 @OptIn(UnstableApi::class)
 class ProcessingSettings(
-    internal val spec: ProcessingSpec,
+    val spec: ProcessingSpec,
     override val config: Config
 ) : AutoCloseable, Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),

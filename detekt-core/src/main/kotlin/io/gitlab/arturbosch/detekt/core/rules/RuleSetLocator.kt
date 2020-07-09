@@ -12,6 +12,7 @@ class RuleSetLocator(private val settings: ProcessingSettings) {
 
     fun load(): List<RuleSetProvider> =
         ServiceLoader.load(RuleSetProvider::class.java, settings.pluginLoader)
+            .filterNot { it.ruleSetId in settings.spec.extensionsSpec.disabledExtensions }
             .filter(::shouldIncludeProvider)
             .also { settings.debug { "Registered rule sets: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }
 
