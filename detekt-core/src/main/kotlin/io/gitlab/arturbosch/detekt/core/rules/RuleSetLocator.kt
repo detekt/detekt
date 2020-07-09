@@ -8,7 +8,7 @@ import java.util.ServiceLoader
 
 class RuleSetLocator(private val settings: ProcessingSettings) {
 
-    private val excludeDefaultRuleSets: Boolean = settings.excludeDefaultRuleSets
+    private val excludeDefaultRuleSets: Boolean = settings.spec.extensionsSpec.disableDefaultRuleSets
 
     fun load(): List<RuleSetProvider> =
         ServiceLoader.load(RuleSetProvider::class.java, settings.pluginLoader)

@@ -26,9 +26,6 @@ class CustomRuleSetProviderSpec : Spek({
 
         it("should load the sample provider") {
             val spec = createNullLoggingSpec {
-                project {
-                    inputPaths = listOf(path)
-                }
                 extensions {
                     disableDefaultRuleSets = true
                     fromPaths { listOf(sampleRuleSet) }
