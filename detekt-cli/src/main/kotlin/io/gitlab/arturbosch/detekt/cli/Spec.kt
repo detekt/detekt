@@ -34,6 +34,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
 
         config {
+            useDefaultConfig = args.buildUponDefaultConfig
             shouldValidateBeforeAnalysis = false
             knownPatterns = emptyList()
             // ^^ cli does not have these properties yet; specified in yaml config for now

@@ -9,7 +9,7 @@ class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
 
     override var shouldValidateBeforeAnalysis: Boolean = true
     override var knownPatterns: Collection<String> = emptyList()
-    override var useDefaultConfig: Boolean = true
+    override var useDefaultConfig: Boolean = false // false to be backwards compatible in 1.X
     override var resources: Collection<URL> = emptyList()
     override var configPaths: Collection<Path> = emptyList()
 
