@@ -7,7 +7,6 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
-import java.net.URI
 import java.nio.file.Path
 import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.TimeUnit
@@ -15,22 +14,16 @@ import java.util.concurrent.TimeUnit
 /**
  * Single project input path constructor.
  */
-@Suppress("LongParameterList")
 fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
-    configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     spec: ProcessingSpec = createNullLoggingSpec {
         project {
             inputPaths = inputPath?.let(::listOf) ?: emptyList()
         }
     }
-) = ProcessingSettings(
-    config = config,
-    configUris = configUris,
-    spec = spec
-).apply {
+) = ProcessingSettings(spec, config).apply {
     register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
 }
 

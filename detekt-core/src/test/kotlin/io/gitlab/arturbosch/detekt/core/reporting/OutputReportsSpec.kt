@@ -3,11 +3,13 @@ package io.gitlab.arturbosch.detekt.core.reporting
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
+import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
+import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.spekframework.spek2.Spek
@@ -81,9 +83,14 @@ internal class OutputReportsSpec : Spek({
         context("empty reports") {
 
             it("yields empty extension list") {
-                val config = yamlConfig("/reporting/disabled-reports.yml")
-                val extensions = createProcessingSettings(config = config)
-                    .use { ConsoleReportLocator(it).load() }
+                val spec = createNullLoggingSpec {
+                    config {
+                        configPaths = listOf(resourceAsPath("/reporting/disabled-reports.yml"))
+                    }
+                }
+
+                val extensions = spec.withSettings { ConsoleReportLocator(this).load() }
+
                 assertThat(extensions).isEmpty()
             }
         }

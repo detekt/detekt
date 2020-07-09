@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
+import io.gitlab.arturbosch.detekt.core.config.extractUris
 import io.gitlab.arturbosch.detekt.core.settings.ClassloaderAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentFacade
@@ -26,16 +27,17 @@ import java.net.URLClassLoader
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
 @OptIn(UnstableApi::class)
-class ProcessingSettings @Suppress("LongParameterList") constructor(
-    override val config: Config = Config.empty,
-    override val configUris: Collection<URI> = emptyList(),
-    val spec: ProcessingSpec
+class ProcessingSettings(
+    internal val spec: ProcessingSpec,
+    override val config: Config
 ) : AutoCloseable, Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
     EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec),
     ClassloaderAware by ExtensionFacade(spec.extensionsSpec),
     SetupContext {
+
+    override val configUris: Collection<URI> = spec.configSpec.extractUris()
 
     /**
      * Sharable thread pool between parsing and analysis phase.

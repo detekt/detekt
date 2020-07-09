@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
-import io.gitlab.arturbosch.detekt.core.config.extractUris
 import io.gitlab.arturbosch.detekt.core.config.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import io.gitlab.arturbosch.detekt.core.util.MONITOR_PROPERTY_KEY
@@ -15,11 +14,7 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
     val monitor = PerformanceMonitor()
     val configuration = monitor.measure(Phase.LoadConfig) { loadConfiguration() }
     val settings = monitor.measure(Phase.CreateSettings) {
-        ProcessingSettings(
-            configuration,
-            configSpec.extractUris(),
-            this
-        ).apply {
+        ProcessingSettings(this, configuration).apply {
             baselineSpec.path?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
             register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)
             register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportsSpec.reports)
