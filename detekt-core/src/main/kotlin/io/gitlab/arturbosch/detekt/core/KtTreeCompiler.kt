@@ -20,7 +20,7 @@ class KtTreeCompiler(
 
     companion object {
         val KT_ENDINGS = setOf("kt", "kts")
-        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(settings, settings.spec.projectSpec)
+        fun instance(settings: ProcessingSettings) = KtTreeCompiler(settings, settings.spec.projectSpec)
     }
 
     fun compile(path: Path): List<KtFile> {

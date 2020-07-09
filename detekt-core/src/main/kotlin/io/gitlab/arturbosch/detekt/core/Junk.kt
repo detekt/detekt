@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.PrintStream
-import java.io.PrintWriter
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -19,17 +17,6 @@ fun Path.isDirectory(): Boolean = Files.isDirectory(this)
 fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
     for ((key, findings) in other.entries) {
         merge(key, findings) { f1, f2 -> f1.plus(f2) }
-    }
-}
-
-internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
-    when (logger) {
-        is PrintStream -> this.printStackTrace(logger)
-        is PrintWriter -> this.printStackTrace(logger)
-        else -> {
-            stackTrace.forEach { logger.appendln(it.toString()) }
-            cause?.printStacktraceRecursively(logger)
-        }
     }
 }
 

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.resource
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
@@ -60,14 +60,15 @@ class KtTreeCompilerSpec : Spek({
     }
 })
 
-internal inline fun <reified T> fixture(vararg filters: String, block: KtTreeCompiler.() -> T): T {
-    val settings = createProcessingSettings(
-        path,
-        spec = ProcessingSpec {
-            project {
-                excludes = filters.toList()
-            }
+internal inline fun <reified T> fixture(
+    vararg filters: String,
+    crossinline block: KtTreeCompiler.() -> T
+): T {
+    val spec = createNullLoggingSpec {
+        project {
+            inputPaths = listOf(path)
+            excludes = filters.toList()
         }
-    )
-    return settings.use { block(KtTreeCompiler.instance(settings)) }
+    }
+    return spec.withSettings { block(KtTreeCompiler.instance(this)) }
 }
