@@ -4,10 +4,12 @@ import io.github.detekt.parser.createCompilerConfiguration
 import io.github.detekt.parser.createKotlinCoreEnvironment
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.PropertiesAware
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.core.settings.LoggingAware
 import io.gitlab.arturbosch.detekt.core.settings.LoggingFacade
+import io.gitlab.arturbosch.detekt.core.settings.PropertiesFacade
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -20,7 +22,6 @@ import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 
 /**
@@ -47,6 +48,7 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     val spec: ProcessingSpec
 ) : AutoCloseable, Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
+    PropertiesAware by PropertiesFacade(),
     SetupContext {
 
     init {
@@ -81,12 +83,5 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
         closeQuietly(taskPool)
         Disposer.dispose(environmentDisposable)
         closeQuietly(pluginLoader)
-    }
-
-    private val _properties: MutableMap<String, Any?> = ConcurrentHashMap()
-    override val properties: Map<String, Any?> = _properties
-
-    override fun register(key: String, value: Any) {
-        _properties[key] = value
     }
 }
