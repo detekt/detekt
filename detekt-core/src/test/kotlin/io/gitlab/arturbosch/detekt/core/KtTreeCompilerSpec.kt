@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.resource
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.github.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
@@ -61,7 +61,13 @@ class KtTreeCompilerSpec : Spek({
 })
 
 internal inline fun <reified T> fixture(vararg filters: String, block: KtTreeCompiler.() -> T): T {
-    val pathFilters = PathFilters.of(emptyList(), filters.toList())
-    val settings = createProcessingSettings(path, pathFilters = pathFilters)
-    return settings.use { block(KtTreeCompiler(settings = settings)) }
+    val settings = createProcessingSettings(
+        path,
+        spec = ProcessingSpec {
+            project {
+                excludes = filters.toList()
+            }
+        }
+    )
+    return settings.use { block(KtTreeCompiler.instance(settings)) }
 }

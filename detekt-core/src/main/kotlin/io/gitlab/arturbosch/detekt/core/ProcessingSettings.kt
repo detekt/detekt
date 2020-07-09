@@ -6,7 +6,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -32,7 +31,6 @@ import java.util.concurrent.ExecutorService
 class ProcessingSettings @Suppress("LongParameterList") constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
-    val pathFilters: PathFilters? = null,
     val parallelCompilation: Boolean = false,
     val excludeDefaultRuleSets: Boolean = false,
     val pluginPaths: List<Path> = emptyList(),

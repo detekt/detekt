@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.parser.KtCompiler
+import io.github.detekt.tooling.api.spec.ProjectSpec
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
@@ -8,18 +10,23 @@ import java.util.stream.Collectors
 
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
+    spec: ProjectSpec,
     private val compiler: KtCompiler = KtCompiler(settings.environment)
 ) {
 
+    private val basePath: Path? = spec.basePath
+    private val pathFilters: PathFilters? =
+        PathFilters.of(spec.includes.toList(), spec.excludes.toList())
+
     companion object {
         val KT_ENDINGS = setOf("kt", "kts")
-        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(settings)
+        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(settings, settings.spec.projectSpec)
     }
 
     fun compile(path: Path): List<KtFile> {
         require(Files.exists(path)) { "Given path $path does not exist!" }
         return when {
-            path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(path, path))
+            path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(basePath ?: path, path))
             path.isDirectory() -> compileProject(path)
             else -> {
                 settings.info("Ignoring a file detekt cannot handle: $path")
@@ -36,12 +43,12 @@ class KtTreeCompiler(
         return if (settings.parallelCompilation) {
             val service = settings.taskPool
             val tasks = kotlinFiles.map { path ->
-                service.task { compiler.compile(project, path) }
+                service.task { compiler.compile(basePath ?: project, path) }
                     .recover { settings.error("Could not compile '$path'.", it); null }
             }.collect(Collectors.toList())
             return awaitAll(tasks).filterNotNull()
         } else {
-            kotlinFiles.map { compiler.compile(project, it) }.collect(Collectors.toList())
+            kotlinFiles.map { compiler.compile(basePath ?: project, it) }.collect(Collectors.toList())
         }
     }
 
@@ -51,5 +58,5 @@ class KtTreeCompiler(
         return kotlinEnding in KT_ENDINGS
     }
 
-    private fun isIgnored(path: Path): Boolean = settings.pathFilters?.isIgnored(path) ?: false
+    private fun isIgnored(path: Path): Boolean = pathFilters?.isIgnored(path) ?: false
 }

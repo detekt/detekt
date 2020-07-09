@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
@@ -27,7 +26,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         ProcessingSettings(
             projectSpec.inputPaths.toList(),
             configuration,
-            PathFilters.of(projectSpec.includes.toList(), projectSpec.excludes.toList()),
             executionSpec.parallelAnalysis,
             extensionsSpec.disableDefaultRuleSets,
             plugins,

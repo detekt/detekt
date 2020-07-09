@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -21,7 +20,6 @@ import java.util.concurrent.ForkJoinPool
 fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
-    pathFilters: PathFilters? = null,
     parallelCompilation: Boolean = false,
     excludeDefaultRuleSets: Boolean = false,
     pluginPaths: List<Path> = emptyList(),
@@ -34,11 +32,11 @@ fun createProcessingSettings(
     autoCorrect: Boolean = false,
     debug: Boolean = false,
     configUris: Collection<URI> = emptyList(),
-    reportPaths: Collection<ReportsSpec.Report> = emptyList()
+    reportPaths: Collection<ReportsSpec.Report> = emptyList(),
+    spec: ProcessingSpec = ProcessingSpec { }
 ) = ProcessingSettings(
     inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
-    pathFilters = pathFilters,
     parallelCompilation = parallelCompilation,
     excludeDefaultRuleSets = excludeDefaultRuleSets,
     pluginPaths = pluginPaths,
@@ -51,7 +49,7 @@ fun createProcessingSettings(
     autoCorrect = autoCorrect,
     debug = debug,
     configUris = configUris,
-    spec = ProcessingSpec { }
+    spec = spec
 ).apply {
     register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
 }
