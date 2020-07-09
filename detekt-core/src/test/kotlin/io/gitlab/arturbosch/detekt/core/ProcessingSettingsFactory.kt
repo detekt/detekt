@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import java.net.URI
 import java.nio.file.Path
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.ForkJoinPool
+import java.util.concurrent.AbstractExecutorService
+import java.util.concurrent.TimeUnit
 
 /**
  * Single project input path constructor.
@@ -19,14 +19,12 @@ import java.util.concurrent.ForkJoinPool
 fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
-    executorService: ExecutorService = ForkJoinPool.commonPool(),
     configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     spec: ProcessingSpec = createNullLoggingSpec()
 ) = ProcessingSettings(
     inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
-    executorService = executorService,
     configUris = configUris,
     spec = spec
 ).apply {
@@ -45,5 +43,18 @@ fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): Pro
             // These outputs are used to assert test conditions.
             configPaths = listOf(resourceAsPath("configs/empty.yml"))
         }
+        execution {
+            executorService = DirectExecutor() // run in the same thread
+        }
         init?.invoke(this)
     }
+
+class DirectExecutor : AbstractExecutorService() {
+
+    override fun execute(command: Runnable): Unit = command.run()
+    override fun shutdown() = Unit
+    override fun shutdownNow(): MutableList<Runnable> = mutableListOf()
+    override fun isShutdown(): Boolean = true
+    override fun isTerminated(): Boolean = true
+    override fun awaitTermination(timeout: Long, unit: TimeUnit): Boolean = true
+}

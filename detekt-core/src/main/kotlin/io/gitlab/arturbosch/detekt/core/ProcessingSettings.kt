@@ -19,7 +19,6 @@ import java.io.Closeable
 import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Path
-import java.util.concurrent.ExecutorService
 
 /**
  * Settings to be used by the detekt engine.
@@ -31,7 +30,6 @@ import java.util.concurrent.ExecutorService
 class ProcessingSettings @Suppress("LongParameterList") constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
-    val executorService: ExecutorService? = null,
     override val configUris: Collection<URI> = emptyList(),
     val spec: ProcessingSpec
 ) : AutoCloseable, Closeable,
@@ -41,7 +39,10 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     ClassloaderAware by ExtensionFacade(spec.extensionsSpec),
     SetupContext {
 
-    val taskPool: TaskPool by lazy { TaskPool(executorService) }
+    /**
+     * Sharable thread pool between parsing and analysis phase.
+     */
+    val taskPool: TaskPool by lazy { TaskPool(spec.executionSpec.executorService) }
 
     override fun close() {
         closeQuietly(taskPool)
