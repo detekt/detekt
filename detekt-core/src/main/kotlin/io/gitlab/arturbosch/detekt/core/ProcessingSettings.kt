@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URI
 import java.net.URLClassLoader
-import java.nio.file.Path
 
 /**
  * Settings to be used by the detekt engine.
@@ -28,7 +27,6 @@ import java.nio.file.Path
  */
 @OptIn(UnstableApi::class)
 class ProcessingSettings @Suppress("LongParameterList") constructor(
-    val inputPaths: List<Path>,
     override val config: Config = Config.empty,
     override val configUris: Collection<URI> = emptyList(),
     val spec: ProcessingSpec

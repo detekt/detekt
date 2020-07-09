@@ -16,7 +16,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
     val configuration = monitor.measure(Phase.LoadConfig) { loadConfiguration() }
     val settings = monitor.measure(Phase.CreateSettings) {
         ProcessingSettings(
-            projectSpec.inputPaths.toList(),
             configuration,
             configSpec.extractUris(),
             this

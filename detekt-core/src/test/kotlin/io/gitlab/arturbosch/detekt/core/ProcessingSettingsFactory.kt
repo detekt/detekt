@@ -21,9 +21,12 @@ fun createProcessingSettings(
     config: Config = Config.empty,
     configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
-    spec: ProcessingSpec = createNullLoggingSpec()
+    spec: ProcessingSpec = createNullLoggingSpec {
+        project {
+            inputPaths = inputPath?.let(::listOf) ?: emptyList()
+        }
+    }
 ) = ProcessingSettings(
-    inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
     configUris = configUris,
     spec = spec
