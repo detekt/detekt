@@ -7,8 +7,6 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URI
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
@@ -24,9 +22,6 @@ fun createProcessingSettings(
     parallelCompilation: Boolean = false,
     excludeDefaultRuleSets: Boolean = false,
     pluginPaths: List<Path> = emptyList(),
-    classpath: List<String> = emptyList(),
-    languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
-    jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     executorService: ExecutorService = ForkJoinPool.commonPool(),
     autoCorrect: Boolean = false,
     configUris: Collection<URI> = emptyList(),
@@ -38,9 +33,6 @@ fun createProcessingSettings(
     parallelCompilation = parallelCompilation,
     excludeDefaultRuleSets = excludeDefaultRuleSets,
     pluginPaths = pluginPaths,
-    classpath = classpath,
-    languageVersion = languageVersion,
-    jvmTarget = jvmTarget,
     executorService = executorService,
     autoCorrect = autoCorrect,
     configUris = configUris,

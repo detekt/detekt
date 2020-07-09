@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
-import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
@@ -11,8 +10,6 @@ import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import io.gitlab.arturbosch.detekt.core.util.MONITOR_PROPERTY_KEY
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersion
 
 internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R): R {
     val monitor = PerformanceMonitor()
@@ -28,9 +25,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
             executionSpec.parallelAnalysis,
             extensionsSpec.disableDefaultRuleSets,
             plugins,
-            compilerSpec.classpathEntries(),
-            compilerSpec.parseLanguageVersion(),
-            compilerSpec.parseJvmTarget() ?: JvmTarget.JVM_1_8,
             executionSpec.executorService,
             rulesSpec.autoCorrect,
             configSpec.extractUris(),
@@ -49,21 +43,4 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         }
     }
     return result
-}
-
-private fun CompilerSpec.parseJvmTarget(): JvmTarget? {
-    fun parse(value: String) =
-        checkNotNull(JvmTarget.fromString(value)) { "Invalid value passed to --jvm-target" }
-    return jvmTarget?.let(::parse)
-}
-
-private fun CompilerSpec.classpathEntries(): List<String> =
-    classpath?.split(":;") ?: emptyList() // support both windows : and unix ;
-
-private fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
-    fun parse(value: String): LanguageVersion {
-        val version = LanguageVersion.fromFullVersionString(value)
-        return checkNotNull(version) { "Invalid value passed as language version." }
-    }
-    return languageVersion?.let(::parse)
 }
