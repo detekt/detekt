@@ -17,7 +17,7 @@ class FileProcessorLocator(private val settings: ProcessingSettings) {
         } else {
             emptyList()
         }
-        if (settings.autoCorrect) {
+        if (settings.spec.rulesSpec.autoCorrect) {
             val modifier = KtFileModifier()
             if (modifier.id !in excludes) {
                 processors = processors + modifier

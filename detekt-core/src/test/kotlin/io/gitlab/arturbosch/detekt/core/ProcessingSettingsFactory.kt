@@ -20,7 +20,6 @@ fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
     executorService: ExecutorService = ForkJoinPool.commonPool(),
-    autoCorrect: Boolean = false,
     configUris: Collection<URI> = emptyList(),
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     spec: ProcessingSpec = createNullLoggingSpec()
@@ -28,7 +27,6 @@ fun createProcessingSettings(
     inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
     executorService = executorService,
-    autoCorrect = autoCorrect,
     configUris = configUris,
     spec = spec
 ).apply {
