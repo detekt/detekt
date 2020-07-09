@@ -18,7 +18,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         ProcessingSettings(
             projectSpec.inputPaths.toList(),
             configuration,
-            executionSpec.parallelAnalysis,
             executionSpec.executorService,
             rulesSpec.autoCorrect,
             configSpec.extractUris(),

@@ -40,7 +40,7 @@ class KtTreeCompiler(
             .filter(Path::isFile)
             .filter { it.isKotlinFile() }
             .filter { !isIgnored(it) }
-        return if (settings.parallelCompilation) {
+        return if (settings.spec.executionSpec.parallelParsing) {
             val service = settings.taskPool
             val tasks = kotlinFiles.map { path ->
                 service.task { compiler.compile(basePath ?: project, path) }

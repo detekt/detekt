@@ -30,7 +30,7 @@ internal class Analyzer(
         bindingContext: BindingContext = BindingContext.EMPTY
     ): Map<RuleSetId, List<Finding>> {
         val findingsPerFile: FindingsResult =
-            if (settings.parallelCompilation) {
+            if (settings.spec.executionSpec.parallelAnalysis) {
                 runAsync(ktFiles, bindingContext)
             } else {
                 runSync(ktFiles, bindingContext)

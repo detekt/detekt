@@ -31,7 +31,6 @@ import java.util.concurrent.ExecutorService
 class ProcessingSettings @Suppress("LongParameterList") constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
-    val parallelCompilation: Boolean = false,
     val executorService: ExecutorService? = null,
     val autoCorrect: Boolean = false,
     override val configUris: Collection<URI> = emptyList(),

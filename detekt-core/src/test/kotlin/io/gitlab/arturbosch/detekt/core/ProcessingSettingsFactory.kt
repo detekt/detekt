@@ -19,7 +19,6 @@ import java.util.concurrent.ForkJoinPool
 fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
-    parallelCompilation: Boolean = false,
     executorService: ExecutorService = ForkJoinPool.commonPool(),
     autoCorrect: Boolean = false,
     configUris: Collection<URI> = emptyList(),
@@ -28,7 +27,6 @@ fun createProcessingSettings(
 ) = ProcessingSettings(
     inputPaths = inputPath?.let(::listOf) ?: emptyList(),
     config = config,
-    parallelCompilation = parallelCompilation,
     executorService = executorService,
     autoCorrect = autoCorrect,
     configUris = configUris,
