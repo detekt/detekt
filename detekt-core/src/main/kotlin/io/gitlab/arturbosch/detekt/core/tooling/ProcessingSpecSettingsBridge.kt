@@ -13,10 +13,6 @@ import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
 
 internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R): R {
     val monitor = PerformanceMonitor()
-    val plugins = extensionsSpec.plugins.run {
-        check(this?.loader == null) { "Using a custom classloader not yet supported." }
-        this?.paths?.toList() ?: emptyList()
-    }
     val configuration = monitor.measure(Phase.LoadConfig) { loadConfiguration() }
     val settings = monitor.measure(Phase.CreateSettings) {
         ProcessingSettings(
@@ -24,7 +20,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
             configuration,
             executionSpec.parallelAnalysis,
             extensionsSpec.disableDefaultRuleSets,
-            plugins,
             executionSpec.executorService,
             rulesSpec.autoCorrect,
             configSpec.extractUris(),
