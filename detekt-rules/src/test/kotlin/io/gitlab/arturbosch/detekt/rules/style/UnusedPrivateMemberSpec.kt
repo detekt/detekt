@@ -1,11 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -697,7 +699,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            assertThat(lint.first().message).startsWith("Function parameter")
+            Assertions.assertThat(lint.first().message).startsWith("Function parameter")
         }
 
         it("are specific for local variables") {
@@ -707,7 +709,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            assertThat(lint.first().message).startsWith("Private property")
+            Assertions.assertThat(lint.first().message).startsWith("Private property")
         }
 
         it("are specific for private functions") {
@@ -721,7 +723,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            assertThat(lint.first().message).startsWith("Private function")
+            Assertions.assertThat(lint.first().message).startsWith("Private function")
         }
     }
 
@@ -742,7 +744,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
+            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
         }
 
         it("does not report parameters in annotated function") {
@@ -829,7 +831,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
         }
 
         it("does not report private constructor properties in annotated class") {
@@ -898,7 +900,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
         }
 
         it("does not report private properties in annotated class") {
@@ -965,7 +967,7 @@ class UnusedPrivateMemberSpec : Spek({
             val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
+            Assertions.assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
         }
 
         it("does not report private functions in annotated class") {
@@ -1126,4 +1128,68 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
     }
+
+    describe("operator functions - #2579") {
+
+        it("Does not report unused operators") {
+            val code = """
+                class Test {
+                    private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
+                
+                    inner class Foo(val value: Int) {
+                        fun double(): Foo = this + this
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+
+        it("Report unused operators") {
+            val code = """
+                class Test {
+                    private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
+                    private operator fun Foo.minus(other: Foo): Foo = Foo(value - other.value)
+                
+                    inner class Foo(val value: Int) {
+                        fun double(): Foo = this + this
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1).hasSourceLocations(
+                    SourceLocation(3,5)
+            )
+        }
+    }
+
+    describe("overloaded extension functions - #2579") {
+
+        it("Does not report used private extension functions") {
+            val code = """
+                class A
+                class B
+                class C(val elements: Set<B>, val flag: Boolean)
+                
+                class Test {
+                    private fun A.someMethod(
+                          param1: B,
+                          param2: Boolean = true
+                      ) = someMethod(setOf(param1), param2)
+                    
+                    private fun A.someMethod(
+                          param1: Set<B>,
+                          param2: Boolean = true
+                      ) = C(param1, param2)
+                    
+                    fun main() {
+                        val aInstance = A()
+                        aInstance.someMethod(B(), true)
+                        aInstance.someMethod(setOf(B(), B()), false)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+    }
+
 })
