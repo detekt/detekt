@@ -1,6 +1,14 @@
 package io.gitlab.arturbosch.detekt
 
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.TestedExtension
+import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.internal.api.TestedVariant
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.api.DomainObjectSet
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,10 +19,12 @@ import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
 
+@Suppress("TooManyFunctions")
 class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
@@ -31,25 +41,68 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
-        registerOldDetektTask(project, extension)
-        registerDetektTasks(project, extension)
-        registerCreateBaselineTask(project, extension)
-        registerGenerateConfigTask(project)
+        project.registerOldDetektTask(extension)
+        project.registerDetektTasks(extension)
+        project.registerCreateBaselineTask(extension)
+        project.registerGenerateConfigTask()
     }
 
-    private fun registerDetektTasks(project: Project, extension: DetektExtension) {
+    private fun Project.registerDetektTasks(extension: DetektExtension) {
+        project.plugins.withId("kotlin-android") {
+            // There is not a single Android plugin, but each registers an extension based on BaseExtension,
+            // so we catch them all by looking for this one
+            project.afterEvaluate {
+                val androidExtension = project.extensions.findByType(BaseExtension::class.java)
+                androidExtension?.let {
+                    val mainTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Main") {
+                        it.group = "verification"
+                        it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for production classes across " +
+                                "all variants with type resolution"
+                    }
+                    val testTaskProvider = project.tasks.register("${DETEKT_TASK_NAME}Test") {
+                        it.group = "verification"
+                        it.description = "EXPERIMENTAL & SLOW: Run detekt analysis for test classes across " +
+                                "all variants with type resolution"
+                    }
+                    val bootClasspath = files(androidExtension.bootClasspath)
+                    androidExtension.variants?.all { variant ->
+                        project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
+                            mainTaskProvider.dependsOn(provider)
+                        }
+                        variant.testVariants.forEach { testVariant ->
+                            project.registerAndroidDetektTask(bootClasspath, extension, testVariant).also { provider ->
+                                testTaskProvider.dependsOn(provider)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // Kotlin JVM plugin
         project.plugins.withId("org.jetbrains.kotlin.jvm") {
             project.afterEvaluate {
                 project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
-                    registerDetektTask(project, extension, sourceSet)
+                    project.registerJvmDetektTask(extension, sourceSet)
                 }
             }
         }
     }
 
-    private fun registerOldDetektTask(project: Project, extension: DetektExtension) {
-        val detektTaskProvider = project.tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
+    private val BaseExtension.variants: DomainObjectSet<out BaseVariant>?
+        get() = when (this) {
+            is AppExtension -> applicationVariants
+            is LibraryExtension -> libraryVariants
+            is TestedExtension -> testVariants
+            else -> null
+        }
+
+    private val BaseVariant.testVariants: List<BaseVariant>
+        get() = if (this is TestedVariant) listOfNotNull(testVariant, unitTestVariant)
+        else emptyList()
+
+    private fun Project.registerOldDetektTask(extension: DetektExtension) {
+        val detektTaskProvider = tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
             it.parallelProp.set(project.provider { extension.parallel })
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -66,36 +119,58 @@ class DetektPlugin : Plugin<Project> {
             it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         }
 
-        project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
+        tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
             it.dependsOn(detektTaskProvider)
         }
     }
 
-    private fun registerDetektTask(project: Project, extension: DetektExtension, sourceSet: SourceSet) {
+    private fun Project.registerAndroidDetektTask(
+        bootClasspath: FileCollection,
+        extension: DetektExtension,
+        variant: BaseVariant
+    ): TaskProvider<Detekt> =
+        registerDetektTask(DETEKT_TASK_NAME + variant.name.capitalize(), extension) {
+            setSource(variant.sourceSets.map { it.javaDirectories })
+            classpath.setFrom(variant.getCompileClasspath(null) + bootClasspath)
+            reports.xml.destination = File(extension.reportsDir, variant.name + ".xml")
+            reports.html.destination = File(extension.reportsDir, variant.name + ".html")
+            reports.txt.destination = File(extension.reportsDir, variant.name + ".txt")
+            description = "EXPERIMENTAL & SLOW: Run detekt analysis for ${variant.name} classes with type resolution"
+        }
+
+    private fun Project.registerJvmDetektTask(extension: DetektExtension, sourceSet: SourceSet) {
         val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
-        project.tasks.register(DETEKT_TASK_NAME + sourceSet.name.capitalize(), Detekt::class.java) {
-            it.debugProp.set(project.provider { extension.debug })
-            it.parallelProp.set(project.provider { extension.parallel })
-            it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-            it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
-            it.failFastProp.set(project.provider { extension.failFast })
-            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
-            it.config.setFrom(project.provider { extension.config })
-            it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.setSource(kotlinSourceSet.kotlin.files)
-            it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
-            it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
-            it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
-            it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
-            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-            it.description =
-                "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
+        registerDetektTask(DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
+            setSource(kotlinSourceSet.kotlin.files)
+            classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
+            reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
+            reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
+            reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
+            description = "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }
 
-    private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
-        project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
+    private fun Project.registerDetektTask(
+        name: String,
+        extension: DetektExtension,
+        configuration: Detekt.() -> Unit
+    ): TaskProvider<Detekt> =
+        tasks.register(name, Detekt::class.java) {
+            it.debugProp.set(provider { extension.debug })
+            it.parallelProp.set(provider { extension.parallel })
+            it.disableDefaultRuleSetsProp.set(provider { extension.disableDefaultRuleSets })
+            it.buildUponDefaultConfigProp.set(provider { extension.buildUponDefaultConfig })
+            it.failFastProp.set(provider { extension.failFast })
+            it.autoCorrectProp.set(provider { extension.autoCorrect })
+            it.config.setFrom(provider { extension.config })
+            it.baseline.set(layout.file(project.provider { extension.baseline }))
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
+            configuration(it)
+        }
+
+    private fun Project.registerCreateBaselineTask(extension: DetektExtension) =
+        tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.config.setFrom(project.provider { extension.config })
             it.debug.set(project.provider { extension.debug })
@@ -109,8 +184,8 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
         }
 
-    private fun registerGenerateConfigTask(project: Project) =
-        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
+    private fun Project.registerGenerateConfigTask() =
+        tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 
     private fun existingInputDirectoriesProvider(
         project: Project,
@@ -130,6 +205,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
+                @Suppress("USELESS_ELVIS")
                 val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
