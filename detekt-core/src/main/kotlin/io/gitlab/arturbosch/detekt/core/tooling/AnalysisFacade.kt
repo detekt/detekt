@@ -23,7 +23,7 @@ class AnalysisFacade(
     private val spec: ProcessingSpec
 ) : Detekt {
 
-    override fun run(): AnalysisResult = runAnalysis { DefaultLifecycle(spec, it) }
+    override fun run(): AnalysisResult = runAnalysis { DefaultLifecycle(spec, it, inputPathsToKtFiles) }
 
     override fun run(path: Path): AnalysisResult =
         runAnalysis { DefaultLifecycle(spec, it, pathToKtFile(path)) }

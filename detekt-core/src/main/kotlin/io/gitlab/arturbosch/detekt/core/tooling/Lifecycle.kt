@@ -59,7 +59,7 @@ internal interface Lifecycle {
 internal class DefaultLifecycle(
     override val spec: ProcessingSpec,
     override val settings: ProcessingSettings,
-    override val parsingStrategy: ParsingStrategy = inputPathsToKtFiles,
+    override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
         { generateBindingContext(settings.environment, settings.classpath, it) },
     override val processorsProvider: () -> List<FileProcessListener> =
