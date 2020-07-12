@@ -70,5 +70,5 @@ internal inline fun <reified T> fixture(
             excludes = filters.toList()
         }
     }
-    return spec.withSettings { block(KtTreeCompiler.instance(this)) }
+    return spec.withSettings { block(KtTreeCompiler(this, spec.projectSpec)) }
 }

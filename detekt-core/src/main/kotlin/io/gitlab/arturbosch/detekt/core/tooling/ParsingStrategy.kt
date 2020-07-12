@@ -28,6 +28,6 @@ val pathToKtFile: (path: Path) -> ParsingStrategy = { path ->
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { spec, settings ->
-    val compiler = KtTreeCompiler.instance(settings)
+    val compiler = KtTreeCompiler(settings, spec.projectSpec)
     spec.projectSpec.inputPaths.flatMap(compiler::compile)
 }
