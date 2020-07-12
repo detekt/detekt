@@ -30,7 +30,7 @@ fun KtExpression.isGuardClause(): Boolean {
             ?: return false
 
         return ifExpr.`else` == null &&
-                returnExpr == ifExpr.then?.lastBlockStatementOrThis()
+                returnExpr === ifExpr.then?.lastBlockStatementOrThis()
     }
 
     fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {

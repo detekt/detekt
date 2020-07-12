@@ -58,7 +58,7 @@ class ReturnCountSpec : Spek({
             }
         }
 
-        context("if statement with multiple returns doesn't qualify as a guard clause") {
+        context("reports a too-complicated if statement for being a guard clause") {
             val code = """
             fun test(x: Int): Int {
                 if (x < 4) {
@@ -77,7 +77,7 @@ class ReturnCountSpec : Spek({
             }
         """
 
-            it("should get flagged for if statement with multiple returns, with EXCLUDE_GUARD_CLAUSES on") {
+            it("should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
