@@ -10,7 +10,7 @@ class ConfigExporter(
 ) : Executable {
 
     override fun execute() {
-        val configPath = Paths.get(arguments.config ?: "detekt.yaml")
+        val configPath = Paths.get(arguments.config ?: "detekt.yml")
         DefaultConfigurationProvider.load().copy(configPath)
         outputPrinter.appendln("Successfully copied default config to ${configPath.toAbsolutePath()}")
     }
