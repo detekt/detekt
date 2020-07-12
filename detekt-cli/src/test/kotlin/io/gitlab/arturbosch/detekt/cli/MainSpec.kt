@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.test.utils.NullPrintStream

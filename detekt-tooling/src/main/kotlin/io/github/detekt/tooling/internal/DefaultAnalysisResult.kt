@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.tooling
+package io.github.detekt.tooling.internal
 
 import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.DetektError

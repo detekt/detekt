@@ -5,12 +5,12 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.UnexpectedError
+import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
-import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -36,6 +36,13 @@ fun main(args: Array<String>) {
 }
 
 @NotApiButProbablyUsedByUsers
+@Deprecated(
+    "Don't build a runner yourself.",
+    ReplaceWith(
+        "DetektCli.load().run(args, outputPrinter, errorPrinter)",
+        "io.github.detekt.tooling.api.DetektCli"
+    )
+)
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,

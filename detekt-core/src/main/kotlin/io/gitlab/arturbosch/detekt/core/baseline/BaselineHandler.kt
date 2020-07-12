@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
+import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 

@@ -1,5 +1,4 @@
 dependencies {
-    compileOnly(project(":detekt-api"))
-    testImplementation(project(":detekt-api"))
+    api(project(":detekt-api"))
     testImplementation(project(":detekt-test-utils"))
 }

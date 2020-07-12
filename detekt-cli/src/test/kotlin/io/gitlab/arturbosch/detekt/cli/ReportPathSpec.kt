@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.IS_WINDOWS
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.jetbrains.kotlin.com.intellij.openapi.util.SystemInfo
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -11,7 +11,7 @@ import java.nio.file.Paths
 class ReportPathSpec : Spek({
 
     describe("report paths") {
-        if (IS_WINDOWS) {
+        if (SystemInfo.isWindows) {
             context("a Windows path") {
                 it("parses a valid absolute path correctly") {
                     val reportPath = ReportPath.from("test:C:\\tmp\\valid\\report")

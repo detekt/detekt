@@ -29,5 +29,3 @@ fun createErrorMessage(file: KtFile, error: Throwable): String =
         "If the exception message does not help, please feel free to create an issue on our GitHub page."
 
 val NL: String = System.lineSeparator()
-
-val IS_WINDOWS = System.getProperty("os.name").contains("Windows")

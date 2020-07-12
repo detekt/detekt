@@ -3,12 +3,12 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.DetektCli
 import io.github.detekt.tooling.api.UnexpectedError
+import io.github.detekt.tooling.internal.DefaultAnalysisResult
+import io.github.detekt.tooling.internal.EmptyContainer
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
-import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.core.tooling.DefaultAnalysisResult
 
 class CliRunner : DetektCli {
 
@@ -27,7 +27,7 @@ class CliRunner : DetektCli {
 
         return if (specialRunner != null) {
             runCatching { specialRunner.execute() }
-                .map { DefaultAnalysisResult(DetektResult(emptyMap())) }
+                .map { DefaultAnalysisResult(EmptyContainer) }
                 .getOrElse { DefaultAnalysisResult(null, UnexpectedError(it)) }
         } else {
             Runner(arguments, outputChannel, errorChannel).call()

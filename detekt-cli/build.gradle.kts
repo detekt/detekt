@@ -4,10 +4,11 @@ application {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(project(":detekt-core"))
-    implementation(project(":detekt-tooling"))
-    runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander")
+    implementation(project(":detekt-tooling"))
+    implementation(project(":detekt-parser"))
+    runtimeOnly(project(":detekt-core"))
+    runtimeOnly(project(":detekt-rules"))
 
     testImplementation(project(":detekt-test"))
     testImplementation(project(":detekt-rules"))

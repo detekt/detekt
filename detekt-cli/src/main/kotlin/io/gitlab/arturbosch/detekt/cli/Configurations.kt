@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.tooling.api.DefaultConfigurationProvider
+import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
-import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 
 @NotApiButProbablyUsedByUsers
 @Deprecated("""
@@ -10,14 +10,14 @@ import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
     Please use the DefaultConfigurationProvider to get a default config instance.
 """
 )
-const val DEFAULT_CONFIG: String = DefaultConfig.RESOURCE_NAME
+const val DEFAULT_CONFIG: String = "default-detekt-config.yml"
 
 @NotApiButProbablyUsedByUsers
 @Deprecated(
     "Use official api for the default config.",
     ReplaceWith(
-        "DefaultConfigurationProvider().load().get()",
+        "DefaultConfigurationProvider.load().get()",
         "io.github.detekt.tooling.api.DefaultConfigurationProvider"
     )
 )
-fun loadDefaultConfig(): Config = DefaultConfig.newInstance()
+fun loadDefaultConfig(): Config = DefaultConfigurationProvider.load().get()
