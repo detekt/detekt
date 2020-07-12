@@ -10,7 +10,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.internal.DefaultAnalysisResult
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.MaxIssueCheck
 import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
@@ -44,12 +43,12 @@ class AnalysisFacade(
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
         val result = runCatching { createLifecycle(this).analyze() }
         when (val error = result.exceptionOrNull()) {
-            is InvalidConfig -> DefaultAnalysisResult(null, error)
-            is Throwable -> DefaultAnalysisResult(null, UnexpectedError(error))
-            else -> {
-                val container = result.getOrElse { DetektResult(emptyMap()) }
+            null -> {
+                val container = checkNotNull(result.getOrNull()) { "Result should not be null at this point." }
                 DefaultAnalysisResult(container, checkMaxIssuesReachedReturningErrors(container, config))
             }
+            is InvalidConfig -> DefaultAnalysisResult(null, error)
+            else -> DefaultAnalysisResult(null, UnexpectedError(error))
         }
     }
 
