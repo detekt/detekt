@@ -2,7 +2,6 @@ package io.github.detekt.tooling.api
 
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingTrace
 import java.nio.file.Path
 
 /**
@@ -19,6 +18,4 @@ interface Detekt {
     fun run(sourceCode: String, filename: String): AnalysisResult
 
     fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult
-
-    fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult
 }

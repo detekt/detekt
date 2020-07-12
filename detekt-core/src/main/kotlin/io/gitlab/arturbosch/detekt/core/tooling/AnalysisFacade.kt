@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.core.config.MaxIssueCheck
 import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingTrace
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -41,9 +40,6 @@ class AnalysisFacade(
                 bindingProvider = { bindingContext }
             )
         }
-
-    override fun run(files: Collection<KtFile>, bindingTrace: BindingTrace): AnalysisResult =
-        run(files, bindingTrace.bindingContext)
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
         val result = runCatching { createLifecycle(this).analyze() }
