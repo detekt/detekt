@@ -11,5 +11,6 @@ dependencies {
     implementation(project(":detekt-rules-style"))
 
     testImplementation(project(":detekt-core"))
+    testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
 }
