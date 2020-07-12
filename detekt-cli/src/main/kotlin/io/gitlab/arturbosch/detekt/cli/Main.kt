@@ -5,6 +5,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.UnexpectedError
+import io.github.detekt.tooling.api.exitCode
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
