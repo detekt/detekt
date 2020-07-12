@@ -1,15 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.rules.isElvisOperatorGuardClause
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -54,7 +47,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
         if (!function.isOverride()) {
             val count = function
                 .collectDescendantsOfType<KtThrowExpression>()
-                .filterNot { excludeGuardClauses && it.isGuardClause() }
+                .filterNot { excludeGuardClauses && it.isElvisOperatorGuardClause() }
                 .count()
 
             if (count > max) {
@@ -68,10 +61,6 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
                 )
             }
         }
-    }
-
-    private fun KtThrowExpression.isGuardClause(): Boolean {
-        return (this.parent as? KtBinaryExpression)?.operationToken == KtTokens.ELVIS
     }
 
     companion object {

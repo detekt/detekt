@@ -59,12 +59,22 @@ class ThrowsCountSpec : Spek({
             }
         }
 
-        context("should not get flagged for ELVIS operator guard clauses") {
+        context("should not get flagged for ELVIS operator guard clause") {
             val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
             val subject = ThrowsCount(config)
+            val codeWithGuardClause = """
+                fun test(x: Int): Int {
+                    val y = x ?: throw Exception()
+                    when (x) {
+                        5 -> println("x=5")
+                        4 -> throw Exception()
+                    }
+                    throw Exception()
+                }
+            """
 
-            it("reports violation by default") {
-                assertThat(subject.lint(code)).hasSize(1)
+            it("should not report violation for code with ELVIS operator guard clause") {
+                assertThat(subject.lint(codeWithGuardClause)).hasSize(0)
             }
         }
     }
