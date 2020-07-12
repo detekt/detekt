@@ -20,6 +20,6 @@ in the 'console-reports' property of a detekt yaml config.
 
 ### Functions
 
-| [print](print.html) | Prints the rendered report to the given printer if anything was rendered at all.`fun print(printer: `[`PrintStream`](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html)`, detektion: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [print](print.html) | Prints the rendered report to the given printer if anything was rendered at all.`fun ~~print~~(printer: `[`PrintStream`](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html)`, detektion: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [render](render.html) | Converts the given [detektion](render.html#io.gitlab.arturbosch.detekt.api.ConsoleReport$render(io.gitlab.arturbosch.detekt.api.Detektion)/detektion) into a string representation to present it to the client. The implementation specifies which parts of the report are important to the user.`abstract fun render(detektion: `[`Detektion`](../-detektion/index.html)`): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?` |
 

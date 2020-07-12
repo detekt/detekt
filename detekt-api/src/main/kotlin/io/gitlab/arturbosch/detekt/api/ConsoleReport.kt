@@ -15,6 +15,7 @@ abstract class ConsoleReport : Extension {
      * Prints the rendered report to the given printer
      * if anything was rendered at all.
      */
+    @Deprecated("Use render to print the result to any Appendable.")
     fun print(printer: PrintStream, detektion: Detektion) {
         val output = render(detektion)
         if (!output.isNullOrBlank()) {

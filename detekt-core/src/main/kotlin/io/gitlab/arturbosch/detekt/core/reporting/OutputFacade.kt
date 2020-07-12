@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import java.io.PrintStream
 
 @OptIn(UnstableApi::class)
 class OutputFacade(
@@ -27,8 +26,12 @@ class OutputFacade(
 
     private fun handleConsoleReports(result: Detektion) {
         val extensions = ConsoleReportLocator(settings).load()
-        // TODO change PrintStream to Appendable
-        extensions.forEach { it.print(settings.outputChannel as PrintStream, result) }
+        for (extension in extensions) {
+            val output = extension.render(result)
+            if (!output.isNullOrBlank()) {
+                settings.outputChannel.appendln(output)
+            }
+        }
     }
 
     private fun handleOutputReports(result: Detektion) {
