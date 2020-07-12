@@ -30,12 +30,12 @@ fun KtExpression.isGuardClause(): Boolean {
             ?: return false
 
         return ifExpr.`else` == null &&
-                returnExpr === ifExpr.then?.lastBlockStatementOrThis()
+                returnExpr == ifExpr.then?.lastBlockStatementOrThis()
     }
 
     fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
         val elvisExpr = this.parent as? KtBinaryExpression
-        return elvisExpr != null && elvisExpr.operationToken == KtTokens.ELVIS
+        return elvisExpr?.operationToken == KtTokens.ELVIS
     }
 
     val returnExpr = this.findDescendantOfType<KtReturnExpression>() ?: return false
