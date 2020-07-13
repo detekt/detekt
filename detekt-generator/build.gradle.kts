@@ -4,6 +4,7 @@ dependencies {
     implementation(project(":detekt-parser"))
     implementation(project(":detekt-api"))
     implementation(project(":detekt-rules"))
+    implementation(project(":detekt-rules-empty"))
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander")
 
@@ -14,15 +15,23 @@ val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 
+val ruleModules = rootProject.subprojects
+    .filter { "rules" in it.name }
+    .map { it.name }
+    .filterNot { it == "detekt-rules" }
+    .map { "${rootProject.rootDir}/$it/src/main/kotlin" }
+
 val generateDocumentation by tasks.registering {
     dependsOn(tasks.build, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
     inputs.files(
-        fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
+        ruleModules.map { fileTree(it) },
         fileTree("${rootProject.rootDir}/detekt-formatting/src/main/kotlin"),
-        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"))
+        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar")
+    )
+
     outputs.files(
         fileTree(documentationDir),
         file(defaultConfigFile))
@@ -33,8 +42,7 @@ val generateDocumentation by tasks.registering {
             main = "io.gitlab.arturbosch.detekt.generator.Main"
             args = listOf(
                 "--input",
-                "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
-                    "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
+                ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
                 "--documentation",
                 documentationDir,
                 "--config",
