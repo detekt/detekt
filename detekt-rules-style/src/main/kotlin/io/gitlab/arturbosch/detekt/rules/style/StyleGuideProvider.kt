@@ -78,7 +78,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIfInsteadOfWhen(config),
             RedundantExplicitType(config),
             LibraryCodeMustSpecifyReturnType(config),
-            UseArrayLiteralsInAnnotations(config)
+            UseArrayLiteralsInAnnotations(config),
+            UseEmptyCounterpart(config)
         )
     )
 }

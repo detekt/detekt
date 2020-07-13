@@ -632,6 +632,8 @@ style:
     active: false
     excludeAnnotatedClasses: []
     allowVars: false
+  UseEmptyCounterpart:
+    active: false
   UseIfInsteadOfWhen:
     active: false
   UseRequire:
