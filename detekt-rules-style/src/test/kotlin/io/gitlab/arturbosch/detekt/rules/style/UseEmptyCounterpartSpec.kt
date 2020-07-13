@@ -46,5 +46,22 @@ class UseEmptyCounterpartSpec : Spek({
             """
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
+
+        it("does not report no-arg custom function with same name as function with empty counterpart") {
+            val code = """
+                fun <T> arrayOf(): Array<T> = TODO()
+                fun <T> listOf(): List<T> = TODO()
+                fun <K, V> mapOf(): Map<K, V> = TODO()
+                fun <T> sequenceOf(): Sequence<T> = TODO()
+                fun <T> setOf(): Set<T> = TODO() 
+
+                val array = arrayOf<Any>()
+                val list = listOf<Any>()
+                val map = mapOf<Any, Any>()
+                val sequence = sequenceOf<Any>()
+                val set = setOf<Any>()
+            """
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
     }
 })
