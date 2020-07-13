@@ -23,7 +23,7 @@ fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression
     }
 }
 
-fun KtExpression.isGuardClause(): Boolean {
+internal fun KtExpression.isGuardClause(): Boolean {
 
     fun isIfConditionGuardClause(returnExpr: KtReturnExpression): Boolean {
         val ifExpr = this as? KtIfExpression
@@ -33,11 +33,11 @@ fun KtExpression.isGuardClause(): Boolean {
                 returnExpr === ifExpr.then?.lastBlockStatementOrThis()
     }
 
-    fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
-        val elvisExpr = this.parent as? KtBinaryExpression
-        return elvisExpr != null && elvisExpr.operationToken == KtTokens.ELVIS
-    }
-
     val returnExpr = this.findDescendantOfType<KtReturnExpression>() ?: return false
     return isIfConditionGuardClause(returnExpr) || returnExpr.isElvisOperatorGuardClause()
+}
+
+internal fun KtExpression.isElvisOperatorGuardClause(): Boolean {
+    val elvisExpr = this.parent as? KtBinaryExpression
+    return elvisExpr?.operationToken == KtTokens.ELVIS
 }
