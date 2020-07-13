@@ -25,11 +25,10 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Specification of quality gates which will break your build 
 - Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
-- Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
+- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and [GitHub actions](https://github.com/marketplace/actions/detekt-all)
 
 ### Project Website
 
