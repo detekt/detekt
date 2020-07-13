@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":detekt-api"))
-    implementation(project(":detekt-parser"))
+    api(project(":detekt-api"))
     api(project(":detekt-test-utils"))
+    implementation(project(":detekt-parser"))
 }

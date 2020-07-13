@@ -43,7 +43,7 @@ fun Config.createPathFilters(): PathFilters? {
     return PathFilters.of(includes, excludes)
 }
 
-private fun Config.valueOrDefaultCommaSeparated(
+fun Config.valueOrDefaultCommaSeparated(
     key: String,
     default: List<String>
 ): List<String> {
