@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.test.utils.KtTestCompiler
 import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.createPsiFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class AnnotationExcluderSpec : Spek({
 
-    val psiFactory = KtTestCompiler.createPsiFactory()
+    val psiFactory = createPsiFactory()
 
     describe("a kt file with some imports") {
         val jvmFieldAnnotation = psiFactory.createAnnotationEntry("@JvmField")

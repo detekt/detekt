@@ -1,34 +1,29 @@
 package io.github.detekt.test.utils
 
-import io.github.detekt.psi.ABSOLUTE_PATH
 import io.github.detekt.parser.KtCompiler
+import io.github.detekt.psi.ABSOLUTE_PATH
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
-import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtPsiFactory
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
-object KtTestCompiler : KtCompiler() {
+internal object KtTestCompiler : KtCompiler() {
 
-    private val root = Paths.get(resource("/"))
+    private val root = resourceAsPath("/")
 
     fun compile(path: Path) = compile(root, path)
 
@@ -41,12 +36,10 @@ object KtTestCompiler : KtCompiler() {
         return file ?: error("kotlin file expected")
     }
 
-    fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
-        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            environment.project, paths, NoScopeRecordCliBindingTrace(),
-            environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
-        ).bindingContext
-
+    /**
+     * Not sure why but this function only works from this context.
+     * Somehow the Kotlin language was not yet initialized.
+     */
     fun createEnvironment(): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
@@ -67,21 +60,7 @@ object KtTestCompiler : KtCompiler() {
         return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
     }
 
-    fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
-}
-
-class KotlinCoreEnvironmentWrapper(
-    private var environment: KotlinCoreEnvironment?,
-    private val disposable: Disposable
-) {
-
-    @Suppress("UnsafeCallOnNullableType")
-    val env get() = environment!!
-
-    fun dispose() {
-        Disposer.dispose(disposable)
-        environment = null
-    }
+    fun project(): Project = environment.project
 }
 
 internal const val TEST_FILENAME = "Test.kt"
