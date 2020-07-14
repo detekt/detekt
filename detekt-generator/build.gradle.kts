@@ -22,7 +22,7 @@ val ruleModules = rootProject.subprojects
     .map { "${rootProject.rootDir}/$it/src/main/kotlin" }
 
 val generateDocumentation by tasks.registering {
-    dependsOn(tasks.build, ":detekt-api:dokka")
+    dependsOn(tasks.assemble, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
@@ -38,7 +38,11 @@ val generateDocumentation by tasks.registering {
 
     doLast {
         javaexec {
-            classpath(configurations.runtimeClasspath.get(), sourceSets.main.get().output)
+            classpath(
+                configurations.runtimeClasspath.get(),
+                configurations.compileClasspath.get(),
+                sourceSets.main.get().output
+            )
             main = "io.gitlab.arturbosch.detekt.generator.Main"
             args = listOf(
                 "--input",
