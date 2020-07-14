@@ -14,11 +14,9 @@ import io.gitlab.arturbosch.detekt.core.settings.LoggingAware
 import io.gitlab.arturbosch.detekt.core.settings.LoggingFacade
 import io.gitlab.arturbosch.detekt.core.settings.PropertiesFacade
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URI
-import java.net.URLClassLoader
 
 /**
  * Settings to be used by the detekt engine.
@@ -47,7 +45,6 @@ class ProcessingSettings(
     override fun close() {
         closeQuietly(taskPool)
         Disposer.dispose(disposable)
-        pluginLoader.safeAs<URLClassLoader>()
-            ?.let { closeQuietly(it) }
+        closeLoaderIfNeeded()
     }
 }

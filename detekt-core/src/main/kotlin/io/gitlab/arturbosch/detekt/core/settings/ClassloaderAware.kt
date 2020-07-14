@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URLClassLoader
@@ -10,6 +9,8 @@ import java.nio.file.Files
 interface ClassloaderAware {
 
     val pluginLoader: ClassLoader
+
+    fun closeLoaderIfNeeded()
 }
 
 class ExtensionFacade(
@@ -41,7 +42,13 @@ class ExtensionFacade(
     }
 
     override fun close() {
-        pluginLoader.safeAs<URLClassLoader>()
-            ?.let { closeQuietly(it) }
+        closeLoaderIfNeeded()
+    }
+
+    override fun closeLoaderIfNeeded() {
+        if (extensionsSpec.plugins?.paths != null) {
+            // we created a classloader and need to close it
+            closeQuietly(pluginLoader as? URLClassLoader)
+        }
     }
 }
