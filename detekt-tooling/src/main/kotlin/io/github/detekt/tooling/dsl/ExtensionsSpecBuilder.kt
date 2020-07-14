@@ -23,10 +23,12 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec>, ExtensionsSpec {
     }
 
     fun fromPaths(paths: () -> Collection<Path>) {
+        require(plugins == null) { "Plugin source already specified." }
         plugins = PluginsHolder(paths(), null)
     }
 
     fun fromClassloader(classLoader: () -> ClassLoader) {
+        require(plugins == null) { "Plugin source already specified." }
         plugins = PluginsHolder(null, classLoader())
     }
 }
