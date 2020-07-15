@@ -24,7 +24,7 @@ internal inline fun <reified T:KtExpression> KtNamedFunction.yieldStatementsSkip
 
 internal inline fun <reified T:KtExpression> KtExpression.isGuardClause(): Boolean {
     val descendantExpr = this.findDescendantOfType<T>() ?: return false
-    return this.isIfConditionGuardClause(descendantExpr) || descendantExpr.isElvisOperatorGuardClause()
+    return this.isIfConditionGuardClause(descendantExpr) || this.isElvisOperatorGuardClause()
 }
 
 internal fun <T:KtExpression> KtExpression.isIfConditionGuardClause(descendantExpr: T): Boolean {
@@ -34,6 +34,6 @@ internal fun <T:KtExpression> KtExpression.isIfConditionGuardClause(descendantEx
 }
 
 internal fun KtExpression.isElvisOperatorGuardClause(): Boolean {
-    val elvisExpr = this.parent as? KtBinaryExpression
-    return elvisExpr?.operationToken == KtTokens.ELVIS
+    val elvisExpr = this.findDescendantOfType<KtBinaryExpression>() ?: return false
+    return elvisExpr.operationToken == KtTokens.ELVIS
 }
