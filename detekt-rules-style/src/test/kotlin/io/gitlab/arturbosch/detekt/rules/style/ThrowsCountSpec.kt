@@ -59,9 +59,7 @@ class ThrowsCountSpec : Spek({
             }
         }
 
-        context("should not get flagged for ELVIS operator guard clause") {
-            val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
-            val subject = ThrowsCount(config)
+        context("code with ELVIS operator guard clause") {
             val codeWithGuardClause = """
                 fun test(x: Int): Int {
                     val y = x ?: throw Exception()
@@ -73,8 +71,41 @@ class ThrowsCountSpec : Spek({
                 }
             """
 
-            it("should not report violation for code with ELVIS operator guard clause") {
-                assertThat(subject.lint(codeWithGuardClause)).hasSize(0)
+            it("should not report violation with EXCLUDE_GUARD_CLAUSES as true") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithGuardClause)).isEmpty()
+            }
+
+            it("should report violation with EXCLUDE_GUARD_CLAUSES as false") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "false"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
+            }
+        }
+
+        context("code with if condition guard clause") {
+            val codeWithGuardClause = """
+                fun test(x: Int): Int {
+                    if(x == null) throw Exception()
+                    when (x) {
+                        5 -> println("x=5")
+                        4 -> throw Exception()
+                    }
+                    throw Exception()
+                }
+            """
+
+            it("should not report violation with EXCLUDE_GUARD_CLAUSES as true") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithGuardClause)).isEmpty()
+            }
+
+            it("should report violation with EXCLUDE_GUARD_CLAUSES as false") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "false"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
             }
         }
 
@@ -97,7 +128,7 @@ class ThrowsCountSpec : Spek({
             }
         """
 
-            it("should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on") {
+            it("should report violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
                 val subject = ThrowsCount(config)
                 assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
@@ -116,7 +147,7 @@ class ThrowsCountSpec : Spek({
             }
         """
 
-            it("should get flagged for an if condition guard clause which is not the first statement") {
+            it("should report the violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
                 val subject = ThrowsCount(config)
                 assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
@@ -134,7 +165,7 @@ class ThrowsCountSpec : Spek({
             }
         """
 
-            it("should get flagged for an if condition guard clause which is not the first statement") {
+            it("should report the violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
                 val subject = ThrowsCount(config)
                 assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
@@ -154,15 +185,15 @@ class ThrowsCountSpec : Spek({
 
                     throw Exception()
                 }
-            """.trimIndent()
+            """
 
-            it("should not count all four guard clauses") {
+            it("should not report violation with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
                 val subject = ThrowsCount(config)
                 assertThat(subject.lint(codeWithMultipleGuardClauses)).isEmpty()
             }
 
-            it("should count all four guard clauses") {
+            it("should report violation with EXCLUDE_GUARD_CLAUSES as false") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "false"))
                 val subject = ThrowsCount(config)
                 assertThat(subject.lint(codeWithMultipleGuardClauses)).hasSize(1)
