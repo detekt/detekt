@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.gitlab.arturbosch.detekt.core.IS_WINDOWS
+import org.jetbrains.kotlin.com.intellij.openapi.util.SystemInfo
 
 private const val ESC = "\u001B"
 private val RESET = Color(0)
@@ -14,7 +14,7 @@ private data class Color(private val value: Byte) {
         get() = "$ESC[${value}m"
 }
 
-private val isColoredOutputSupported: Boolean = !IS_WINDOWS
+private val isColoredOutputSupported: Boolean = !SystemInfo.isWindows
 private fun String.colorized(color: Color) = if (isColoredOutputSupported) {
     "${color.escapeSequence}$this${RESET.escapeSequence}"
 } else {

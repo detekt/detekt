@@ -6,23 +6,22 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.PrintStream
 
 class DetektProgressListener : FileProcessListener {
 
-    private var outPrinter: PrintStream by SingleAssign()
+    private var outPrinter: Appendable by SingleAssign()
 
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
-        this.outPrinter = context.outPrinter
+        this.outPrinter = context.outputChannel
     }
 
     override fun onProcess(file: KtFile) {
-        outPrinter.print(".")
+        outPrinter.append('.')
     }
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
         val middlePart = if (files.size == 1) "file was" else "files were"
-        outPrinter.println("\n\n${files.size} kotlin $middlePart analyzed.")
+        outPrinter.appendln("\n\n${files.size} kotlin $middlePart analyzed.")
     }
 }

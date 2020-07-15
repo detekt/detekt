@@ -1,0 +1,49 @@
+package io.gitlab.arturbosch.detekt.core.settings
+
+import io.github.detekt.tooling.api.spec.LoggingSpec
+import java.io.PrintStream
+import java.io.PrintWriter
+
+interface LoggingAware {
+
+    val outputChannel: Appendable
+    val errorChannel: Appendable
+
+    fun info(msg: String)
+    fun error(msg: String, error: Throwable)
+    fun debug(msg: () -> String)
+}
+
+internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
+    when (logger) {
+        is PrintStream -> this.printStackTrace(logger)
+        is PrintWriter -> this.printStackTrace(logger)
+        else -> {
+            stackTrace.forEach { logger.appendln(it.toString()) }
+            cause?.printStacktraceRecursively(logger)
+        }
+    }
+}
+
+internal class LoggingFacade(
+    val spec: LoggingSpec
+) : LoggingAware {
+
+    override val outputChannel: Appendable = spec.outputChannel
+    override val errorChannel: Appendable = spec.errorChannel
+
+    override fun info(msg: String) {
+        outputChannel.appendln(msg)
+    }
+
+    override fun error(msg: String, error: Throwable) {
+        errorChannel.appendln(msg)
+        error.printStacktraceRecursively(errorChannel)
+    }
+
+    override fun debug(msg: () -> String) {
+        if (spec.debug) {
+            outputChannel.appendln(msg())
+        }
+    }
+}

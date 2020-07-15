@@ -7,55 +7,44 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.createProcessingSettings
+import io.gitlab.arturbosch.detekt.core.NL
+import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
+import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.utils.closeQuietly
 import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Path
 
 internal class OutputFacadeSpec : Spek({
 
-    describe("Running the output facade with multiple reports") {
-
+    test("Running the output facade with multiple reports") {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
-        val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+        val defaultResult = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+        val plainOutputPath = createTempFileForTest("detekt", ".txt")
+        val htmlOutputPath = createTempFileForTest("detekt", ".html")
+        val xmlOutputPath = createTempFileForTest("detekt", ".xml")
 
-        lateinit var defaultSettings: ProcessingSettings
-        lateinit var plainOutputPath: Path
-        lateinit var htmlOutputPath: Path
-        lateinit var xmlOutputPath: Path
-
-        beforeEachTest {
-            plainOutputPath = createTempFileForTest("detekt", ".txt")
-            htmlOutputPath = createTempFileForTest("detekt", ".html")
-            xmlOutputPath = createTempFileForTest("detekt", ".xml")
-            val reportPaths = listOf(
-                "xml:$xmlOutputPath",
-                "txt:$plainOutputPath",
-                "html:$htmlOutputPath"
-            ).map { ReportPath.from(it) }
-            defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream, reportPaths = reportPaths)
+        val spec = createNullLoggingSpec {
+            project {
+                inputPaths = listOf(inputPath)
+            }
+            reports {
+                report { "html" to htmlOutputPath }
+                report { "txt" to plainOutputPath }
+                report { "xml" to xmlOutputPath }
+            }
+            logging {
+                outputChannel = printStream
+            }
         }
 
-        afterGroup {
-            closeQuietly(defaultSettings)
-        }
+        spec.withSettings { OutputFacade(this).run(defaultResult) }
 
-        it("creates all output files") {
-            val subject = OutputFacade(defaultSettings)
-
-            subject.run(defaultDetektion)
-
-            assertThat(printStream.toString()).contains(
-                "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",
-                "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$LN",
-                "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN")
-        }
+        assertThat(printStream.toString()).contains(
+            "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$NL",
+            "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$NL",
+            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$NL"
+        )
     }
 })
-
-private val LN = System.lineSeparator()

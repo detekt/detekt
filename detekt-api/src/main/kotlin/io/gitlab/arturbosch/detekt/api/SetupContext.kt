@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import java.io.PrintStream
 import java.net.URI
 
 /**
@@ -21,10 +20,10 @@ interface SetupContext : PropertiesAware {
     /**
      * The channel to log all the output.
      */
-    val outPrinter: PrintStream
+    val outputChannel: Appendable
 
     /**
      * The channel to log all the errors.
      */
-    val errPrinter: PrintStream
+    val errorChannel: Appendable
 }

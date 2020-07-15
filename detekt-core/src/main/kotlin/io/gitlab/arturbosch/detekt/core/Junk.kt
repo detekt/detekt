@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -21,11 +20,6 @@ fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Findin
     }
 }
 
-fun Throwable.printStacktraceRecursively(logger: PrintStream) {
-    stackTrace.forEach { logger.println(it) }
-    cause?.printStacktraceRecursively(logger)
-}
-
 typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
 
 fun createErrorMessage(file: KtFile, error: Throwable): String =
@@ -35,11 +29,3 @@ fun createErrorMessage(file: KtFile, error: Throwable): String =
         "If the exception message does not help, please feel free to create an issue on our GitHub page."
 
 val NL: String = System.lineSeparator()
-
-val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
-
-inline fun <T> measure(block: () -> T): Pair<Long, T> {
-    val start = System.currentTimeMillis()
-    val result = block()
-    return System.currentTimeMillis() - start to result
-}

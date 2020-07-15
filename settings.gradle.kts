@@ -25,7 +25,8 @@ include(
     "detekt-rules-style",
     "detekt-sample-extensions",
     "detekt-test",
-    "detekt-test-utils"
+    "detekt-test-utils",
+    "detekt-tooling"
 )
 
 pluginManagement {

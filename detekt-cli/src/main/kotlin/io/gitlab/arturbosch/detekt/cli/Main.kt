@@ -2,50 +2,57 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.config.InvalidConfig
+import io.github.detekt.tooling.api.InvalidConfig
+import io.github.detekt.tooling.api.MaxIssuesReached
+import io.github.detekt.tooling.api.UnexpectedError
+import io.github.detekt.tooling.api.exitCode
+import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
-import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
-import io.gitlab.arturbosch.detekt.core.NotApiButProbablyUsedByUsers
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
-@Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
-    try {
-        buildRunner(args, System.out, System.err).execute()
-    } catch (_: HelpRequest) {
-        // handled by JCommander, exit normally
-    } catch (e: InvalidConfig) {
-        println(e.message)
-        exitProcess(ExitCode.INVALID_CONFIG.number)
-    } catch (e: BuildFailure) {
-        println(e.message)
-        exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
-    } catch (e: HandledArgumentViolation) {
-        // messages are handled when parsing arguments
-        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
+    val result = CliRunner().run(args)
+    when (val error = result.error) {
+        is InvalidConfig, is MaxIssuesReached -> println(error.message)
+        is UnexpectedError -> {
+            when (val cause = error.cause) {
+                is HelpRequest -> {
+                    println(cause.usageText)
+                    exitProcess(0)
+                }
+                is HandledArgumentViolation -> {
+                    println(cause.message)
+                    println(cause.usageText)
+                }
+                else -> cause.printStackTrace()
+            }
+        }
     }
-    exitProcess(ExitCode.NORMAL_RUN.number)
+    exitProcess(result.exitCode())
 }
 
 @NotApiButProbablyUsedByUsers
+@Deprecated(
+    "Don't build a runner yourself.",
+    ReplaceWith(
+        "DetektCli.load().run(args, outputPrinter, errorPrinter)",
+        "io.github.detekt.tooling.api.DetektCli"
+    )
+)
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,
     errorPrinter: PrintStream
 ): Executable {
-    val arguments = parseArguments(args, outputPrinter, errorPrinter)
+    val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
-        arguments.generateConfig -> ConfigExporter(arguments)
-        arguments.runRule != null -> SingleRuleRunner(arguments, outputPrinter, errorPrinter)
+        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
         arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
