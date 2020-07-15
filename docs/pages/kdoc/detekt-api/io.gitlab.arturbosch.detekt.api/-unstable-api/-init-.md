@@ -6,7 +6,7 @@ title: UnstableApi.<init> - detekt-api
 
 # &lt;init&gt;
 
-`UnstableApi()`
+`UnstableApi(reason: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "")`
 
 Experimental detekt api which may change on minor or patch versions.
 

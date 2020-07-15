@@ -11,10 +11,18 @@ class FileProcessorLocator(private val settings: ProcessingSettings) {
     private val processorsActive = subConfig.valueOrDefault("active", true)
     private val excludes = subConfig.valueOrDefault("exclude", emptyList<String>())
 
-    fun load(): List<FileProcessListener> =
-        if (processorsActive) {
+    fun load(): List<FileProcessListener> {
+        var processors: List<FileProcessListener> = if (processorsActive) {
             loadExtensions(settings) { it.id !in excludes }
         } else {
             emptyList()
         }
+        if (settings.spec.rulesSpec.autoCorrect) {
+            val modifier = KtFileModifier()
+            if (modifier.id !in excludes) {
+                processors = processors + modifier
+            }
+        }
+        return processors
+    }
 }

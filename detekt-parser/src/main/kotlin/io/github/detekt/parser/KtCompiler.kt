@@ -18,24 +18,21 @@ open class KtCompiler(
 
     protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
 
-    fun compile(root: Path, subPath: Path): KtFile {
-        require(Files.isRegularFile(subPath)) { "Given sub path ($subPath) should be a regular file!" }
-        val relativePath =
-            (if (root == subPath) subPath.fileName
-            else root.fileName.resolve(root.relativize(subPath))).normalize()
-        val absolutePath = subPath.toAbsolutePath().normalize()
-        val content = subPath.toFile().readText()
-        val lineSeparator = content.determineLineSeparator()
-        val ktFile = createKtFile(content, absolutePath)
-
-        return ktFile.apply {
-            putUserData(LINE_SEPARATOR, lineSeparator)
-            putUserData(RELATIVE_PATH, relativePath.toString())
-            putUserData(ABSOLUTE_PATH, absolutePath.toString())
-        }
+    fun compile(basePath: Path, path: Path): KtFile {
+        require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
+        val content = path.toFile().readText()
+        return createKtFile(content, basePath, path)
     }
 
-    private fun createKtFile(content: String, path: Path): KtFile {
+    fun createKtFile(content: String, basePath: Path, path: Path): KtFile {
+        require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
+
+        val relativePath =
+            (if (basePath == path) path.fileName
+            else basePath.fileName.resolve(basePath.relativize(path))).normalize()
+        val absolutePath = path.toAbsolutePath().normalize()
+        val lineSeparator = content.determineLineSeparator()
+
         val psiFile = psiFileFactory.createFileFromText(
             path.fileName.toString(),
             KotlinLanguage.INSTANCE,
@@ -43,7 +40,11 @@ open class KtCompiler(
             true, true, false,
             LightVirtualFile(path.toString())
         )
-        return psiFile as? KtFile ?: error("kotlin file expected")
+        return (psiFile as? KtFile ?: error("kotlin file expected")).apply {
+            putUserData(LINE_SEPARATOR, lineSeparator)
+            putUserData(RELATIVE_PATH, relativePath.toString())
+            putUserData(ABSOLUTE_PATH, absolutePath.toString())
+        }
     }
 }
 

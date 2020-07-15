@@ -67,8 +67,10 @@ class YamlConfig internal constructor(
          * Note the reader will be consumed and closed.
          */
         fun load(reader: Reader): Config = reader.buffered().use {
-            val map: Map<*, *>? = runCatching { Yaml().loadAs(it, Map::class.java) }
-                .getOrElse { throw Config.InvalidConfigurationError() }
+            val map: Map<*, *>? = runCatching {
+                @Suppress("USELESS_CAST") // runtime inference bug
+                Yaml().loadAs(it, Map::class.java) as Map<*, *>?
+            }.getOrElse { throw Config.InvalidConfigurationError() }
             if (map == null) {
                 Config.empty
             } else {

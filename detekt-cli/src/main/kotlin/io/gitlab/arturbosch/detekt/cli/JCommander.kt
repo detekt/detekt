@@ -2,61 +2,50 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
-import io.gitlab.arturbosch.detekt.core.exists
-import io.gitlab.arturbosch.detekt.core.isFile
-import java.io.PrintStream
+import java.nio.file.Files
 
-@Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
-fun parseArguments(
-    args: Array<out String>,
-    outPrinter: PrintStream,
-    errorPrinter: PrintStream
-): CliArgs {
+fun parseArguments(args: Array<out String>): CliArgs {
     val cli = CliArgs()
 
     val jCommander = JCommander(cli)
     jCommander.programName = "detekt"
 
     try {
+        @Suppress("detekt.SpreadOperator")
         jCommander.parse(*args)
     } catch (ex: ParameterException) {
-        errorPrinter.println("${ex.message}\n")
-        jCommander.usage(outPrinter)
-        throw HandledArgumentViolation()
+        throw HandledArgumentViolation(ex.message, jCommander.usageAsString())
     }
 
     if (cli.help) {
-        jCommander.usage(outPrinter)
-        throw HelpRequest()
+        throw HelpRequest(jCommander.usageAsString())
     }
 
-    val violations = mutableListOf<String>()
-    val baseline = cli.baseline
+    return cli.apply { validate(jCommander) }
+}
 
-    if (cli.createBaseline && baseline == null) {
-        violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
+private fun JCommander.usageAsString(): String {
+    val usage = StringBuilder()
+    this.usageFormatter.usage(usage)
+    return usage.toString()
+}
+
+private fun CliArgs.validate(jCommander: JCommander) {
+    val violations = StringBuilder()
+
+    if (createBaseline && baseline == null) {
+        violations.appendln("Creating a baseline.xml requires the --baseline parameter to specify a path.")
     }
 
-    if (!cli.createBaseline && baseline != null) {
-        if (!baseline.exists()) {
-            violations += "The file specified by --baseline should exist '$baseline'."
-        } else if (!baseline.isFile()) {
-            violations += "The path specified by --baseline should be a file '$baseline'."
+    if (!createBaseline && baseline != null) {
+        if (Files.notExists(checkNotNull(baseline))) {
+            violations.appendln("The file specified by --baseline should exist '$baseline'.")
+        } else if (!Files.isRegularFile(checkNotNull(baseline))) {
+            violations.appendln("The path specified by --baseline should be a file '$baseline'.")
         }
     }
 
     if (violations.isNotEmpty()) {
-        violations.forEach(errorPrinter::println)
-        errorPrinter.println()
-        jCommander.usage(outPrinter)
-        throw HandledArgumentViolation()
+        throw HandledArgumentViolation(violations.toString(), jCommander.usageAsString())
     }
-
-    return cli
-}
-
-fun JCommander.usage(outPrinter: PrintStream) {
-    val usage = StringBuilder()
-    this.usageFormatter.usage(usage)
-    outPrinter.println(usage.toString())
 }

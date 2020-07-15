@@ -1,16 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import java.io.PrintStream
+import io.github.detekt.tooling.api.VersionProvider
 
-class VersionPrinter(private val outputPrinter: PrintStream) : Executable {
+class VersionPrinter(private val outputPrinter: Appendable) : Executable {
 
     override fun execute() {
-        val version = whichDetekt()
-        if (version != null) {
-            outputPrinter.println(version)
-        } else {
-            error("Can't find the detekt version")
-        }
+        outputPrinter.appendln(VersionProvider.load().current())
     }
 }

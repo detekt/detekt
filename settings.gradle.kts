@@ -14,9 +14,19 @@ include(
     "detekt-report-txt",
     "detekt-report-xml",
     "detekt-rules",
+    "detekt-rules-complexity",
+    "detekt-rules-coroutines",
+    "detekt-rules-documentation",
+    "detekt-rules-empty",
+    "detekt-rules-errorprone",
+    "detekt-rules-exceptions",
+    "detekt-rules-naming",
+    "detekt-rules-performance",
+    "detekt-rules-style",
     "detekt-sample-extensions",
     "detekt-test",
-    "detekt-test-utils"
+    "detekt-test-utils",
+    "detekt-tooling"
 )
 
 pluginManagement {

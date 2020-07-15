@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.createTempDirectoryForTest
+import io.github.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification

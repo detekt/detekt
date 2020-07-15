@@ -6,15 +6,15 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
-import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
-import io.gitlab.arturbosch.detekt.rules.providers.CoroutinesProvider
-import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
-import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
-import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
-import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
-import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
-import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
+import io.gitlab.arturbosch.detekt.rules.bugs.PotentialBugProvider
+import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
+import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutinesProvider
+import io.gitlab.arturbosch.detekt.rules.documentation.CommentSmellProvider
+import io.gitlab.arturbosch.detekt.rules.empty.EmptyCodeProvider
+import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionsProvider
+import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
+import io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
+import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.reflections.Reflections
 import org.spekframework.spek2.Spek
@@ -26,7 +26,7 @@ class RuleProviderTest : Spek({
     describe("Rule Provider") {
 
         it("checks whether all rules are called in the corresponding RuleSetProvider") {
-            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules.providers")
+            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
             val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
             providers.forEach { providerType ->
                 val packageName = getRulesPackageNameForProvider(providerType)

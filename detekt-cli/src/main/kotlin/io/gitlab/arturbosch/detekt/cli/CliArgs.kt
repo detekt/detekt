@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
-import io.gitlab.arturbosch.detekt.core.reporting.ReportPath
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path

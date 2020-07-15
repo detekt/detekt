@@ -12,6 +12,7 @@ import java.nio.file.Paths
 
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
+        require(value.isNotBlank()) { "Provided path '$value' is empty." }
         val config = File(value).toPath()
         if (Files.notExists(config)) {
             throw ParameterException("Provided path '$value' does not exist!")

@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
+import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.txt.TxtOutputReport
+import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -7,6 +10,13 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import java.util.HashMap
+
+internal fun defaultReportMapping(reportId: String) = when (reportId) {
+    TxtOutputReport::class.java.simpleName -> "txt"
+    XmlOutputReport::class.java.simpleName -> "xml"
+    HtmlOutputReport::class.java.simpleName -> "html"
+    else -> reportId
+}
 
 internal fun printFindings(findings: Map<String, List<Finding>>): String? {
     return with(StringBuilder()) {

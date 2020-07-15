@@ -14,7 +14,7 @@ class RuleProviderConfigTest : Spek({
 
         it("should test if the config has been passed to all rules") {
             val config = TestConfig()
-            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules.providers")
+            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
             val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
 
             providers.forEach {

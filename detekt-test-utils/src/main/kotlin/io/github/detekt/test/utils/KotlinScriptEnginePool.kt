@@ -2,13 +2,13 @@ package io.github.detekt.test.utils
 
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
-import javax.script.ScriptEngineManager
+import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory
 
 /**
  * The object to manage a pool of Kotlin script engines to distribute the load for compiling code.
  * The load for compiling code is distributed over a number of engines.
  */
-object KotlinScriptEnginePool {
+internal object KotlinScriptEnginePool {
 
     private const val NUMBER_OF_ENGINES = 8
 
@@ -31,10 +31,7 @@ object KotlinScriptEnginePool {
 
     private fun createEngine(): KotlinJsr223JvmLocalScriptEngine {
         setIdeaIoUseFallback() // To avoid error on Windows
-
-        val scriptEngineManager = ScriptEngineManager()
-        val engine = scriptEngineManager.getEngineByExtension("kts") as? KotlinJsr223JvmLocalScriptEngine
-        requireNotNull(engine) { "Kotlin script engine not supported" }
-        return engine
+        val engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine as? KotlinJsr223JvmLocalScriptEngine
+        return requireNotNull(engine) { "Kotlin script engine not supported" }
     }
 }
