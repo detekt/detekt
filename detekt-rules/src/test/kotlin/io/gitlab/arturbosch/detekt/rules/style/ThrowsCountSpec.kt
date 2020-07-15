@@ -77,5 +77,96 @@ class ThrowsCountSpec : Spek({
                 assertThat(subject.lint(codeWithGuardClause)).hasSize(0)
             }
         }
+
+        context("reports a too-complicated if statement for being a guard clause") {
+            val codeWithIfCondition = """
+            fun test(x: Int): Int {
+                if (x < 4) {
+                    println("x x is less than 4")
+                    if (x < 2) {
+                      println("x is also less than 2")
+                      throw Exception()
+                    }
+                    throw Exception()
+                }
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> throw Exception()
+                }
+                throw Exception()
+            }
+        """
+
+            it("should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
+            }
+        }
+
+        context("a file with 2 returns and an if condition guard clause which is not the first statement") {
+            val codeWithIfCondition = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> throw Exception()
+                }
+                if (x < 4) throw Exception()
+                throw Exception()
+            }
+        """
+
+            it("should get flagged for an if condition guard clause which is not the first statement") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
+            }
+        }
+        context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
+            val codeWithIfCondition = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> throw Exception()
+                }
+                val y = x ?: throw Exception()
+                throw Exception()
+            }
+        """
+
+            it("should get flagged for an if condition guard clause which is not the first statement") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
+            }
+        }
+
+        context("a file with multiple guard clauses") {
+            val codeWithMultipleGuardClauses = """
+                fun multipleGuards(a: Int?, b: Any?, c: Int?) {
+                    if(a == null) throw Exception()
+                    val models = b as? Int ?: throw Exception()
+                    val position = c?.takeIf { it != -1 } ?: throw Exception()
+                    if(b !is String) {
+                        println("b is not a String")
+                        throw Exception()
+                    }
+
+                    throw Exception()
+                }
+            """.trimIndent()
+
+            it("should not count all four guard clauses") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithMultipleGuardClauses)).isEmpty()
+            }
+
+            it("should count all four guard clauses") {
+                val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "false"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(codeWithMultipleGuardClauses)).hasSize(1)
+            }
+        }
     }
 })

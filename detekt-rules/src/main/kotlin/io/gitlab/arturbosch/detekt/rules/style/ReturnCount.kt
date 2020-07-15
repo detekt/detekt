@@ -99,7 +99,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         }
 
         val statements = if (excludeGuardClauses) {
-            function.yieldStatementsSkippingGuardClauses()
+            function.yieldStatementsSkippingGuardClauses<KtReturnExpression>()
         } else {
             function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
         }

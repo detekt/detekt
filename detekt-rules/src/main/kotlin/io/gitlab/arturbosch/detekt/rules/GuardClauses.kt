@@ -5,17 +5,16 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 
-fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression> = sequence {
+internal inline fun <reified T:KtExpression> KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression> = sequence {
     var firstNonGuardFound = false
     this@yieldStatementsSkippingGuardClauses.bodyBlockExpression?.statements?.forEach {
         if (firstNonGuardFound) {
             yield(it)
         } else {
-            if (!it.isGuardClause()) {
+            if (!it.isGuardClause<T>()) {
                 firstNonGuardFound = true
                 yield(it)
             }
@@ -23,18 +22,15 @@ fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression
     }
 }
 
-internal fun KtExpression.isGuardClause(): Boolean {
+internal inline fun <reified T:KtExpression> KtExpression.isGuardClause(): Boolean {
+    val descendantExpr = this.findDescendantOfType<T>() ?: return false
+    return this.isIfConditionGuardClause(descendantExpr) || descendantExpr.isElvisOperatorGuardClause()
+}
 
-    fun isIfConditionGuardClause(returnExpr: KtReturnExpression): Boolean {
-        val ifExpr = this as? KtIfExpression
-            ?: return false
-
-        return ifExpr.`else` == null &&
-                returnExpr === ifExpr.then?.lastBlockStatementOrThis()
-    }
-
-    val returnExpr = this.findDescendantOfType<KtReturnExpression>() ?: return false
-    return isIfConditionGuardClause(returnExpr) || returnExpr.isElvisOperatorGuardClause()
+internal fun <T:KtExpression> KtExpression.isIfConditionGuardClause(descendantExpr: T): Boolean {
+    val ifExpr = this as? KtIfExpression ?: return false
+    return ifExpr.`else` == null &&
+            descendantExpr === ifExpr.then?.lastBlockStatementOrThis()
 }
 
 internal fun KtExpression.isElvisOperatorGuardClause(): Boolean {
