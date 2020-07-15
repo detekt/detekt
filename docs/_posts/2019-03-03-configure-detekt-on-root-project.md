@@ -2,7 +2,7 @@
 title:  "Howto: configure detekt for gradle root project"
 published: true
 permalink: howto-buildupondefaultconfig.html
-summary: "To save some time for highly modular projects with many sub-modules, configure a new task based on _detekt_ to analyze the whole project on one run."
+summary: "Configure a new task based on _detekt_ to analyze the whole project on one run."
 tags: [guides]
 ---
 
@@ -37,8 +37,7 @@ subprojecs {
 }
 ```
 
-There is a slight starting overhead for starting the _Kotlin_ compiler for each gradle module.
-So sometimes it makes sense to add an additional _detekt_ task which runs over the whole project and produces one big report. 
+Sometimes it makes sense to add an additional _detekt_ task which runs over the whole project and produces one big report. 
 Such a setup could look like the following in its simplest form:
 ```gradle
 plugins {
@@ -55,8 +54,6 @@ detekt {
 }
 ```
 Make sure to specify the `input` parameter or no sources are found and _detekt_ won't run!
-
-Having such a task can save up to 500ms per module in CI runs.
 
 If you need more fine grained _detekt_ tasks, you could register more tasks using the _Detekt_ task as the base task.
 Using the _Kotlin-Dsl_ it could look like this:
