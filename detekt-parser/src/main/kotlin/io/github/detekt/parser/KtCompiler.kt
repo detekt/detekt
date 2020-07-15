@@ -14,7 +14,7 @@ open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
 ) {
 
-    protected val psiFileFactory = KtPsiFactory(environment.project)
+    protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
     fun compile(basePath: Path, path: Path): KtFile {
         require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
