@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -10,6 +11,26 @@ import org.spekframework.spek2.style.specification.describe
 class ReturnCountSpec : Spek({
 
     describe("ReturnCount rule") {
+
+        context("a function without a body") {
+            val code = """
+                fun func() = Unit
+            """
+
+            it("does not report violation by default") {
+                assertThat(ReturnCount(Config.empty).compileAndLint(code)).isEmpty()
+            }
+        }
+
+        context("a function with an empty body") {
+            val code = """
+                fun func() {}
+            """
+
+            it("does not report violation by default") {
+                assertThat(ReturnCount(Config.empty).compileAndLint(code)).isEmpty()
+            }
+        }
 
         context("a file with an if condition guard clause and 2 returns") {
             val code = """

@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isElvisOperatorGuardClause
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -41,9 +41,11 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  */
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Restrict the number of throw statements in methods.",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "Restrict the number of throw statements in methods.",
+        Debt.TEN_MINS
+    )
 
     private val max = valueOrDefault(MAX, 2)
     private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
@@ -51,18 +53,23 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (!function.isOverride()) {
-            val count = function
-                .collectDescendantsOfType<KtThrowExpression>()
-                .filterNot { excludeGuardClauses && it.isElvisOperatorGuardClause() }
+            val statements = if (excludeGuardClauses) {
+                function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
+            } else {
+                function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
+            }
+
+            val countOfThrows = statements
+                .flatMap { it.collectDescendantsOfType<KtThrowExpression>().asSequence() }
                 .count()
 
-            if (count > max) {
+            if (countOfThrows > max) {
                 report(
                     CodeSmell(
                         issue,
                         Entity.atName(function),
                         "Too many throw statements in the function" +
-                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
+                                " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
                     )
                 )
             }
