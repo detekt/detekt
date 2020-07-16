@@ -11,51 +11,75 @@ class ThrowsCountSpec : Spek({
 
     describe("ThrowsCount rule") {
 
-        val code = """
-            fun f1(x: Int) {
-                when (x) {
-                    1 -> throw IOException()
-                    2 -> throw IOException()
-                    3 -> throw IOException()
+        context("code with 2 throw expressions") {
+            val code = """
+                fun f2(x: Int) {
+                    when (x) {
+                        1 -> throw IOException()
+                        2 -> throw IOException()
+                    }
                 }
-            }
+            """
+            val subject = ThrowsCount(Config.empty)
 
-            fun f2(x: Int) {
-                when (x) {
-                    1 -> throw IOException()
-                    2 -> throw IOException()
+            it("does not report violation") {
+                assertThat(subject.lint(code)).isEmpty()
+            }
+        }
+
+        context("code with 3 throw expressions") {
+            val code = """
+                fun f1(x: Int) {
+                    when (x) {
+                        1 -> throw IOException()
+                        2 -> throw IOException()
+                        3 -> throw IOException()
+                    }
                 }
-            }
-
-            override fun f3(x: Int) { // does not report overridden function
-                when (x) {
-                    1 -> throw IOException()
-                    2 -> throw IOException()
-                    3 -> throw IOException()
-                }
-            }
-
-            fun f4(x: String?) {
-                val denulled = x ?: throw IOException()
-                val int = x?.toInt() ?: throw IOException()
-                val double = x?.toDouble() ?: throw IOException()
-            }
-        """
-
-        context("default config") {
+            """
             val subject = ThrowsCount(Config.empty)
 
             it("reports violation by default") {
-                assertThat(subject.lint(code)).hasSize(2)
+                assertThat(subject.lint(code)).hasSize(1)
+            }
+        }
+
+        context("code with an override function with 3 throw expressions") {
+            val code = """
+                override fun f3(x: Int) { // does not report overridden function
+                    when (x) {
+                        1 -> throw IOException()
+                        2 -> throw IOException()
+                        3 -> throw IOException()
+                    }
+                }
+            """
+            val subject = ThrowsCount(Config.empty)
+
+            it("reports violation by default") {
+                assertThat(subject.lint(code)).isEmpty()
             }
         }
 
         context("max count == 3") {
-            val config = TestConfig(mapOf(ThrowsCount.MAX to "3"))
-            val subject = ThrowsCount(config)
+            val code = """
+                fun f4(x: String?) {
+                    val denulled = x ?: throw IOException()
+                    val int = x?.toInt() ?: throw IOException()
+                    val double = x?.toDouble() ?: throw IOException()
+                }
+            """
 
-            it("does not report for configuration max parameter") {
+            it("does not report when max parameter is 3") {
+                val config = TestConfig(mapOf(ThrowsCount.MAX to "3"))
+                val subject = ThrowsCount(config)
                 assertThat(subject.lint(code)).isEmpty()
+            }
+
+            it("reports violation when max parameter is 2") {
+                val config = TestConfig(mapOf(ThrowsCount.MAX to "2"))
+                val subject = ThrowsCount(config)
+                assertThat(subject.lint(code)).hasSize(1)
             }
         }
 
@@ -111,22 +135,22 @@ class ThrowsCountSpec : Spek({
 
         context("reports a too-complicated if statement for being a guard clause") {
             val codeWithIfCondition = """
-            fun test(x: Int): Int {
-                if (x < 4) {
-                    println("x x is less than 4")
-                    if (x < 2) {
-                      println("x is also less than 2")
-                      throw Exception()
+                fun test(x: Int): Int {
+                    if (x < 4) {
+                        println("x x is less than 4")
+                        if (x < 2) {
+                          println("x is also less than 2")
+                          throw Exception()
+                        }
+                        throw Exception()
+                    }
+                    when (x) {
+                        5 -> println("x=5")
+                        4 -> throw Exception()
                     }
                     throw Exception()
                 }
-                when (x) {
-                    5 -> println("x=5")
-                    4 -> throw Exception()
-                }
-                throw Exception()
-            }
-        """
+            """
 
             it("should report violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
@@ -137,15 +161,15 @@ class ThrowsCountSpec : Spek({
 
         context("a file with 2 returns and an if condition guard clause which is not the first statement") {
             val codeWithIfCondition = """
-            fun test(x: Int): Int {
-                when (x) {
-                    5 -> println("x=5")
-                    4 -> throw Exception()
+                fun test(x: Int): Int {
+                    when (x) {
+                        5 -> println("x=5")
+                        4 -> throw Exception()
+                    }
+                    if (x < 4) throw Exception()
+                    throw Exception()
                 }
-                if (x < 4) throw Exception()
-                throw Exception()
-            }
-        """
+            """
 
             it("should report the violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
@@ -155,15 +179,15 @@ class ThrowsCountSpec : Spek({
         }
         context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
             val codeWithIfCondition = """
-            fun test(x: Int): Int {
-                when (x) {
-                    5 -> println("x=5")
-                    4 -> throw Exception()
+                fun test(x: Int): Int {
+                    when (x) {
+                        5 -> println("x=5")
+                        4 -> throw Exception()
+                    }
+                    val y = x ?: throw Exception()
+                    throw Exception()
                 }
-                val y = x ?: throw Exception()
-                throw Exception()
-            }
-        """
+            """
 
             it("should report the violation even with EXCLUDE_GUARD_CLAUSES as true") {
                 val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
