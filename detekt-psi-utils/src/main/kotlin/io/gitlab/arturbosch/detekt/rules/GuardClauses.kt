@@ -14,11 +14,9 @@ inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGua
         this@yieldStatementsSkippingGuardClauses.bodyBlockExpression?.statements?.forEach {
             if (firstNonGuardFound) {
                 yield(it)
-            } else {
-                if (!it.isGuardClause<T>()) {
-                    firstNonGuardFound = true
-                    yield(it)
-                }
+            } else if (!it.isGuardClause<T>()) {
+                firstNonGuardFound = true
+                yield(it)
             }
         }
     }
