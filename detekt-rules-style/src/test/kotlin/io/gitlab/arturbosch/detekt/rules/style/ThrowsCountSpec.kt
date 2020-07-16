@@ -21,6 +21,16 @@ class ThrowsCountSpec : Spek({
             }
         }
 
+        context("a function without a body") {
+            val code = """
+                fun func() = Unit
+            """
+
+            it("does not report violation by default") {
+                assertThat(ThrowsCount(Config.empty).lint(code)).isEmpty()
+            }
+        }
+
         context("code with 2 throw expressions") {
             val code = """
                 fun f2(x: Int) {

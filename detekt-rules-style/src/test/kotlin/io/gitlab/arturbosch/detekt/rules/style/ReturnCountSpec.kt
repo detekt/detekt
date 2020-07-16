@@ -12,6 +12,16 @@ class ReturnCountSpec : Spek({
 
     describe("ReturnCount rule") {
 
+        context("a function without a body") {
+            val code = """
+                fun func() = Unit
+            """
+
+            it("does not report violation by default") {
+                assertThat(ReturnCount(Config.empty).compileAndLint(code)).isEmpty()
+            }
+        }
+
         context("a function with an empty body") {
             val code = """
                 fun func() {}
