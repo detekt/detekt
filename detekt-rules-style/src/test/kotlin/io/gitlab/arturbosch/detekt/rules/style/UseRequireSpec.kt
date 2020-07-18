@@ -146,6 +146,14 @@ class UseRequireSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
+            it("reports if the exception thrown has a String literal argument") {
+                val code = """
+                    fun test(throwable: Throwable) {
+                        if (throwable !is NumberFormatException) throw IllegalArgumentException("a")
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
         }
 
         context("throw is not after a precondition") {
