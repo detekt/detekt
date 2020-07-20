@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.jfrog.bintray.gradle.BintrayExtension
 import groovy.lang.GroovyObject
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
@@ -9,7 +8,6 @@ plugins {
     `java-library` apply false // is applied in commons; make configurations available in this script
     `maven-publish` apply false
     id("com.jfrog.artifactory") apply false
-    id("com.jfrog.bintray") apply false
 }
 
 project(":detekt-cli") {
@@ -27,7 +25,6 @@ subprojects {
 
     apply {
         plugin("maven-publish")
-        plugin("com.jfrog.bintray")
         plugin("com.jfrog.artifactory")
     }
 
@@ -35,41 +32,19 @@ subprojects {
         ?: System.getenv("BINTRAY_USER")
     val bintrayKey = findProperty("bintrayKey")?.toString()
         ?: System.getenv("BINTRAY_API_KEY")
-
-    bintray {
-        user = bintrayUser
-        key = bintrayKey
-        val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
-        val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
-
-        setPublications(DETEKT_PUBLICATION)
-
-        pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-            repo = "code-analysis"
-            name = "detekt"
-            userOrg = "arturbosch"
-            setLicenses("Apache-2.0")
-            vcsUrl = "https://github.com/detekt/detekt"
-
-            version(delegateClosureOf<BintrayExtension.VersionConfig> {
-                name = project.version as? String
-                released = Date().toString()
-
-                gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
-                    sign = true
-                })
-
-                mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
-                    sync = true
-                    user = mavenCentralUser
-                    password = mavenCentralPassword
-                    close = "1"
-                })
-            })
-        })
-    }
+    val versionName = project.version as? String
 
     publishing {
+        repositories {
+            maven {
+                name = "bintray"
+                url = uri("https://api.bintray.com/maven/arturbosch/code-analysis/detekt/;publish=1;override=1")
+                credentials {
+                    username = bintrayUser
+                    password = bintrayKey
+                }
+            }
+        }
         publications.register<MavenPublication>(DETEKT_PUBLICATION) {
             groupId = project.group as? String
             artifactId = project.name
