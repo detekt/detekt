@@ -6,7 +6,7 @@ title: Config.InvalidConfigurationError.<init> - detekt-api
 
 # &lt;init&gt;
 
-`InvalidConfigurationError()`
+`InvalidConfigurationError(throwable: `[`Throwable`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)`? = null)`
 
 Is thrown when loading a configuration results in errors.
 

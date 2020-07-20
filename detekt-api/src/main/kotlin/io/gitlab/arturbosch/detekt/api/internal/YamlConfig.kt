@@ -70,7 +70,7 @@ class YamlConfig internal constructor(
             val map: Map<*, *>? = runCatching {
                 @Suppress("USELESS_CAST") // runtime inference bug
                 Yaml().loadAs(it, Map::class.java) as Map<*, *>?
-            }.getOrElse { throw Config.InvalidConfigurationError() }
+            }.getOrElse { throw Config.InvalidConfigurationError(it) }
             if (map == null) {
                 Config.empty
             } else {
