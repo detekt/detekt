@@ -10,7 +10,7 @@ fun KtValueArgument.isString(bindingContext: BindingContext): Boolean {
     val argumentExpression = getArgumentExpression()
     return if (bindingContext != BindingContext.EMPTY) {
         val type = argumentExpression?.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-        type != null && KotlinBuiltIns.isString(type)
+        argumentExpression is KtStringTemplateExpression || type != null && KotlinBuiltIns.isString(type)
     } else {
         argumentExpression is KtStringTemplateExpression
     }

@@ -174,6 +174,18 @@ class UseCheckOrErrorSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
+
+            it("reports if the exception thrown has a string literal argument") {
+                val code = """
+                    fun test(throwable: Throwable) {
+                        when(throwable) {
+                            is NumberFormatException -> println("a")
+                            else -> throw IllegalStateException("b")
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
         }
     }
 })
