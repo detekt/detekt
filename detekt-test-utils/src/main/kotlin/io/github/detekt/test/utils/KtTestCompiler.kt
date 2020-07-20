@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
@@ -28,12 +27,11 @@ internal object KtTestCompiler : KtCompiler() {
     fun compile(path: Path) = compile(root, path)
 
     fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
-        val file = psiFileFactory.createFileFromText(
+        val file = psiFileFactory.createPhysicalFile(
             filename,
-            KotlinLanguage.INSTANCE,
-            StringUtilRt.convertLineSeparators(content)) as? KtFile
-        file?.putUserData(ABSOLUTE_PATH, filename)
-        return file ?: error("kotlin file expected")
+            StringUtilRt.convertLineSeparators(content))
+        file.putUserData(ABSOLUTE_PATH, filename)
+        return file
     }
 
     /**

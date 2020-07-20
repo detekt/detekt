@@ -3,9 +3,11 @@ package io.github.detekt.parser
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
 import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -32,10 +34,18 @@ class KtCompilerTest : Spek({
                 .withMessageEndingWith(") should be a regular file!")
         }
 
-        it("throws an exception for a css file") {
-            val cssPath = Paths.get(resource("css"))
-            assertThatIllegalStateException()
-                .isThrownBy { ktCompiler.compile(cssPath, cssPath.resolve("test.css")) }
+        it("parses with errors for non kotlin files") {
+            val cssPath = resourceAsPath("css")
+            val ktFile = ktCompiler.compile(cssPath, cssPath.resolve("test.css"))
+
+            val errors = mutableListOf<PsiErrorElement>()
+            ktFile.accept(object : KtTreeVisitorVoid() {
+                override fun visitErrorElement(element: PsiErrorElement) {
+                    errors.add(element)
+                }
+            })
+
+            assertThat(errors).isNotEmpty()
         }
     }
 
