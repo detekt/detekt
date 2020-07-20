@@ -1,12 +1,16 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.yamlConfig
-import org.assertj.core.api.Assertions
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import org.yaml.snakeyaml.parser.ParserException
 import java.nio.file.Paths
 
 @Suppress("DEPRECATION")
@@ -95,16 +99,27 @@ class YamlConfigSpec : Spek({
 
         it("throws an exception on an non-existing file") {
             val path = Paths.get("doesNotExist.yml")
-            Assertions.assertThatIllegalArgumentException()
+            assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration does not exist")
         }
 
         it("throws an exception on a directory") {
             val path = resourceAsPath("/config_validation")
-            Assertions.assertThatIllegalArgumentException()
+            assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration must be a file")
+        }
+
+        it("throws InvalidConfigurationError on invalid structured yaml files") {
+            assertThatCode {
+                yamlConfigFromContent("""
+                    map:
+                          {}map
+                """.trimIndent())
+            }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                .hasMessageContaining("Provided configuration file is invalid")
+                .hasCauseInstanceOf(ParserException::class.java)
         }
     }
 })

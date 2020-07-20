@@ -12,5 +12,5 @@ Is thrown when loading a configuration results in errors.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | Is thrown when loading a configuration results in errors.`InvalidConfigurationError()` |
+| [&lt;init&gt;](-init-.html) | Is thrown when loading a configuration results in errors.`InvalidConfigurationError(throwable: `[`Throwable`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)`? = null)` |
 
