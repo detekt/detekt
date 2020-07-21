@@ -93,7 +93,7 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 - `gradle increment<Patch|Minor|Major>`
 - `gradle build publishToMavenLocal -x detekt -x test` - publish to local first
 - `gradle build` - now fully build with tests and self-analysis.
-- `gradle bintrayUpload` - uploads artifacts to Bintray
+- `gradle publishDetektPublicationPublicationToBintrayRepository` - uploads artifacts to Bintray
 - `gradle publishPlugins` - uploads the Gradle Plugin to the Plugin Repositories
 - `gradle githubRelease` - creates a tag for the current version with changelog and cli jar
 - `gradle applyDocVersion applySelfAnalysisVersion`
