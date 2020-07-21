@@ -32,7 +32,6 @@ subprojects {
         ?: System.getenv("BINTRAY_USER")
     val bintrayKey = findProperty("bintrayKey")?.toString()
         ?: System.getenv("BINTRAY_API_KEY")
-    val versionName = project.version as? String
 
     publishing {
         repositories {
