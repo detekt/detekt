@@ -71,11 +71,16 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         val lastStatement = statements.lastOrNull() ?: return
         statements
                 .filter {
-                    if (it !is KtNameReferenceExpression || it.text != UNIT) return@filter false
-                    if (it != lastStatement || bindingContext == BindingContext.EMPTY) return@filter true
-                    if (!it.isUsedAsExpression(bindingContext)) return@filter true
-                    val prev = it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
-                    prev?.getType(bindingContext)?.isUnit() == true && prev.canBeUsedAsValue()
+                    when {
+                        it !is KtNameReferenceExpression || it.text != UNIT -> false
+                        it != lastStatement || bindingContext == BindingContext.EMPTY -> true
+                        !it.isUsedAsExpression(bindingContext) -> true
+                        else -> {
+                            val prev =
+                                it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
+                            prev?.getType(bindingContext)?.isUnit() == true && prev.canBeUsedAsValue()
+                        }
+                    }
                 }
                 .onEach {
                     report(CodeSmell(issue, Entity.from(expression),
