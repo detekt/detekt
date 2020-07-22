@@ -91,10 +91,12 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     private fun KtExpression.canBeUsedAsValue(): Boolean {
         return when (this) {
-            is KtIfExpression ->
-                elseKeyword != null
+            is KtIfExpression -> {
+                val elseExpression = `else`
+                if (elseExpression is KtIfExpression) elseExpression.canBeUsedAsValue() else elseExpression != null
+            }
             is KtWhenExpression ->
-                entries.any { it.elseKeyword != null } || WhenChecker.getMissingCases(this, bindingContext).isEmpty()
+                entries.lastOrNull()?.elseKeyword != null || WhenChecker.getMissingCases(this, bindingContext).isEmpty()
             else ->
                 true
         }
