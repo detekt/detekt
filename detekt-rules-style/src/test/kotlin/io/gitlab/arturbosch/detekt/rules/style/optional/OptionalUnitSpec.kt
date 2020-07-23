@@ -172,12 +172,16 @@ class OptionalUnitSpec : Spek({
                         println(this)
                     }
                     
-                    fun test(i: Int, b: Boolean) {
+                    fun test(i: Int, j: Int) {
                         when (i) {
                             0 -> println(1)
                             else -> {
-                                if (b) {
+                                if (j == 1) {
                                     println(2)
+                                } else if (j == 2) {
+                                    println(3)
+                                } else if (j == 3) {
+                                    println(4)
                                 }
                                 Unit
                             }
@@ -194,12 +198,14 @@ class OptionalUnitSpec : Spek({
                         println(this)
                     }
                     
-                    fun test(i: Int, b: Boolean) {
+                    fun test(i: Int, j: Int) {
                         when (i) {
                             0 -> println(1)
                             else -> {
-                                when {
-                                    b -> println(2)
+                                when (j) {
+                                    1 -> println(2)
+                                    2 -> println(3)
+                                    3 -> println(4)
                                 }
                                 Unit
                             }
@@ -216,14 +222,18 @@ class OptionalUnitSpec : Spek({
                         println(this)
                     }
                     
-                    fun test(i: Int, b: Boolean) {
+                    fun test(i: Int, j: Int) {
                         when (i) {
                             0 -> println(1)
                             else -> {
-                                if (b) {
+                                if (j == 1) {
                                     println(2)
-                                } else {
+                                } else if (j == 2) {
                                     println(3)
+                                } else if (j == 3) {
+                                    println(4)
+                                } else {
+                                    println(5)
                                 }
                                 Unit
                             }
@@ -240,13 +250,15 @@ class OptionalUnitSpec : Spek({
                         println(this)
                     }
                     
-                    fun test(i: Int, b: Boolean) {
+                    fun test(i: Int, j: Int) {
                         when (i) {
                             0 -> println(1)
                             else -> {
-                                when {
-                                    b -> println(2)
-                                    else -> println(3)
+                                when (j) {
+                                    1 -> println(2)
+                                    2 -> println(3)
+                                    3 -> println(4)
+                                    else -> println(5)
                                 }
                                 Unit
                             }
