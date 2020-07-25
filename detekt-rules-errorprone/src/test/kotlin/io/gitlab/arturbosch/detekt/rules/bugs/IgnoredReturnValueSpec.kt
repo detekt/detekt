@@ -200,7 +200,7 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSourceLocation(8, 5)
         }
 
-        it("reports when a function which returns a value is called in chain and the return is ignored") {
+        it("reports when a function which returns a value is called in chain as first statement and the return is ignored") {
             val code = """
                 package test
                 annotation class CheckReturnValue
@@ -216,6 +216,29 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+        }
+
+        it("reports when a function which returns a value is called in the middle of a chain and the return is ignored") {
+            val code = """
+                package com.test.chain.returns.unit
+                annotation class CheckReturnValue
+                
+                @CheckReturnValue
+                fun String.listOfChecked() = listOf(this)
+                
+                fun foo() : Int {
+                    val hello = "world "
+                    hello.toUpperCase()
+                        .trim()
+                        .listOfChecked()
+                        .isEmpty()
+                        .not()
+                    return 42
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(11,10)
         }
 
         it("reports when a function which returns a value is called before a semicolon") {
@@ -401,6 +424,28 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("does not report when a function return value is consumed in a chain that returns a Unit") {
+            val code = """
+                package com.test.chain.returns.unit
+                annotation class CheckReturnValue
+                
+                @CheckReturnValue
+                fun String.listOfChecked() = listOf(this)
+                fun List<String>.print() { println(this) }
+                
+                fun foo() : Int {
+                    val hello = "world "
+                    hello.toUpperCase()
+                        .trim()
+                        .listOfChecked() 
+                        .print()         
+                    return 42
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     describe("custom annotation config") {
@@ -426,7 +471,7 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function is annotated with the not included annotation") {
             val code = """
-                package test
+                package com.test.not.included.annotation
                 annotation class CheckReturnValue
                 
                 @CheckReturnValue
