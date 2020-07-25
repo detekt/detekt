@@ -225,27 +225,8 @@ tasks.getByName("check") {
 
 Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the [configuration file](../configurations.md).
 
-##### <a name="idea">Configure a local IDEA for detekt</a>
+##### <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 
-- Download the community edition of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
-- Extract the file to your preferred location eg. `~/.idea`
-- Let detekt know about idea inside the `detekt-closure`
-- Extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
-- Run `detektIdeaFormat` or `detektIdeaInspect`
-- All parameters in the following detekt-closure are mandatory for both tasks
+detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
 
-```groovy
-String userHome = System.getProperty("user.home")
-
-detekt {
-    idea {
-        path = "$userHome/.idea"
-        codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-        inspectionsProfile = "$userHome/.idea/inspect.xml"
-        report = "$project.projectDir/reports"
-        mask = "*.kt,"
-    }
-}
-```
-
-For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
+The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)

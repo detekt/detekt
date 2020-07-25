@@ -155,28 +155,8 @@ task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 }
 ```
 
+##### <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 
-##### <a name="idea">Configure a local IDEA for detekt</a>
+detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
 
-- Download the community edition of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
-- Extract the file to your preferred location eg. `~/.idea`
-- Let detekt know about idea inside the `detekt-closure`
-- Extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
-- Run `detektIdeaFormat` or `detektIdeaInspect`
-- All parameters in the following detekt-closure are mandatory for both tasks
-
-```kotlin
-val userHome = System.getProperty("user.home")
-
-detekt {
-    idea {
-        path = "$userHome/.idea"
-        codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-        inspectionsProfile = "$userHome/.idea/inspect.xml"
-        report = "$project.projectDir/reports"
-        mask = "*.kt,"
-    }
-}
-```
-
-For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
+The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)
