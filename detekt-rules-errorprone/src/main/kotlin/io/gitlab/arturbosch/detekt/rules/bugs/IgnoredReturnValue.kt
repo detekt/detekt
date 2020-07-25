@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -85,7 +85,12 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val parent = expression.parent
 
         if (parent is KtDotQualifiedExpression) {
-            elementsToInspect += parent.getParentOfType<KtDotQualifiedExpression>(true) ?: parent
+            val parentToInspect = parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent
+            val parentResolvedCall = parentToInspect.getResolvedCall(bindingContext)
+            val parentReturnType = parentResolvedCall?.resultingDescriptor?.returnType
+            if (false == parentReturnType?.isUnit()) {
+                elementsToInspect += parentToInspect
+            }
         }
         if (parent is KtBlockExpression && parent.lastBlockStatementOrThis() == expression) {
             elementsToInspect -= expression
