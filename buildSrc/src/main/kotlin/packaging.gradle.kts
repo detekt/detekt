@@ -7,6 +7,7 @@ import java.util.Date
 plugins {
     `java-library` apply false // is applied in commons; make configurations available in this script
     `maven-publish` apply false
+    `signing` apply false
     id("com.jfrog.artifactory") apply false
 }
 
@@ -25,6 +26,7 @@ subprojects {
 
     apply {
         plugin("maven-publish")
+        plugin("signing")
         plugin("com.jfrog.artifactory")
     }
 
@@ -88,6 +90,19 @@ subprojects {
                 setProperty("publishPom", true)
             })
         })
+    }
+
+    val signingKey = findProperty("signingKey")?.toString()
+        ?: System.getenv("SIGNING_KEY")
+    val signingPwd = findProperty("signingPwd")?.toString()
+        ?: System.getenv("SIGNING_PWD")
+    if (signingKey != null && signingPwd != null) {
+        signing {
+            useInMemoryPgpKeys(signingKey, signingPwd)
+            sign(publishing.publications[DETEKT_PUBLICATION])
+        }
+    } else {
+        logger.info("Signing Disabled as the PGP key was not found")
     }
 }
 
