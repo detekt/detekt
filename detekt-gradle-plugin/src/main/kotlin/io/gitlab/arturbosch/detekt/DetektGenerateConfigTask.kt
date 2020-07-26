@@ -11,9 +11,11 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.workers.WorkerExecutor
+import javax.inject.Inject
 
 @CacheableTask
-open class DetektGenerateConfigTask : DefaultTask() {
+open class DetektGenerateConfigTask @Inject constructor(executor: WorkerExecutor) : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
@@ -23,7 +25,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
+    private val invoker: DetektInvoker = DetektInvoker.create(project, executor)
     private val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
     private val config = project.files("${configDir.canonicalPath}/$CONFIG_FILE")
 

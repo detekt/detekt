@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
+    compileOnly(project(":detekt-tooling"))
 
     testImplementation(project(":detekt-test-utils"))
 }

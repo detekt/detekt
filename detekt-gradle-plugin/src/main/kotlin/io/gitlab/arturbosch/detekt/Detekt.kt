@@ -48,11 +48,13 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
 
 @CacheableTask
 open class Detekt @Inject constructor(
+    executor: WorkerExecutor,
     private val objects: ObjectFactory
 ) : SourceTask(), VerificationTask {
 
@@ -195,7 +197,7 @@ open class Detekt @Inject constructor(
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
+    private val invoker: DetektInvoker = DetektInvoker.create(project, executor)
 
     @Suppress("DEPRECATION")
     @TaskAction

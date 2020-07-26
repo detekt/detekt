@@ -28,9 +28,11 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.workers.WorkerExecutor
+import javax.inject.Inject
 
 @CacheableTask
-open class DetektCreateBaselineTask : SourceTask() {
+open class DetektCreateBaselineTask @Inject constructor(executor: WorkerExecutor) : SourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."
@@ -77,7 +79,7 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
+    private val invoker: DetektInvoker = DetektInvoker.create(project, executor)
 
     @TaskAction
     fun baseline() {
