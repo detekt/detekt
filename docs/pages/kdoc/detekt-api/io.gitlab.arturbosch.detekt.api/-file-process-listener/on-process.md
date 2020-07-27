@@ -6,7 +6,11 @@ title: FileProcessListener.onProcess - detekt-api
 
 # onProcess
 
-`open fun onProcess(file: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`open fun ~~onProcess~~(file: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+**Deprecated:** Use alternative with a binding context.
+
+
+`open fun onProcess(file: KtFile, bindingContext: BindingContext): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Called when processing of a file begins.
 This method is called from a thread pool thread. Heavy computations allowed.

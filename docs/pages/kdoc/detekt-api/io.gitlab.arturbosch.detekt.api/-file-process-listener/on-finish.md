@@ -6,7 +6,11 @@ title: FileProcessListener.onFinish - detekt-api
 
 # onFinish
 
-`open fun onFinish(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`open fun ~~onFinish~~(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+**Deprecated:** Use alternative with a binding context.
+
+
+`open fun onFinish(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`, bindingContext: BindingContext): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.
 Do not do heavy computations here as this method is called from the main thread.
