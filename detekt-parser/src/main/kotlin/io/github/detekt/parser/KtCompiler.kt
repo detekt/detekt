@@ -32,7 +32,7 @@ open class KtCompiler(
         val lineSeparator = content.determineLineSeparator()
 
         val psiFile = psiFileFactory.createPhysicalFile(
-            path.fileName.toString(),
+            path.toString(),
             StringUtilRt.convertLineSeparators(content)
         )
 

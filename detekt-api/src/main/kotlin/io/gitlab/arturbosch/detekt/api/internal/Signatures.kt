@@ -1,7 +1,10 @@
+@file:Suppress("detekt.TooManyFunctions")
+
 package io.gitlab.arturbosch.detekt.api.internal
 
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -9,6 +12,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import java.io.File
 
 private val signatureRegex = Regex("\\s(\\s|\t)+")
 
@@ -24,15 +28,27 @@ internal fun PsiElement.searchClass(): String {
             className = "$it.$className"
         }
     }
-    return className ?: this.containingFile.name
+    return className ?: this.containingFile.fileName()
 }
+
+/*
+ * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.
+ * This resulted into the question "How do we get the absolute path from a KtFile?".
+ * Fixing this problem, we do not need KtFile.absolutePath anymore.
+ *
+ * Fixing the filename will change all baseline signatures.
+ * Therefore we patch the signature here to restore the old behavior.
+ *
+ * Fixing the baseline will need a new major release - #2680.
+ */
+private fun PsiFile.fileName() = name.substringAfterLast(File.separatorChar)
 
 internal fun PsiElement.buildFullSignature(): String {
     val signature = this.searchSignature()
     val fullClassSignature = this.parents.filter { it is KtClassOrObject }
             .map { it.extractClassName() }
             .fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
-    val filename = this.containingFile.name
+    val filename = this.containingFile.fileName()
     return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
             if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature
 }
@@ -49,7 +65,7 @@ private fun PsiElement.searchSignature(): String {
     }.replace('\n', ' ').replace(signatureRegex, " ")
 }
 
-private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.name}"
+private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.fileName()}"
 
 private fun dotOrNot(sig: String, sig2: String) = if (sig.isNotEmpty() && sig2.isNotEmpty()) "." else ""
 

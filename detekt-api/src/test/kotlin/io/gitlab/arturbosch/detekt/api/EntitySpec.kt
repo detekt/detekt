@@ -22,7 +22,7 @@ class EntitySpec : Spek({
             }
 
             fun topLevelFun(number: Int) = Unit
-        """.trimIndent())
+        """.trimIndent(), "/full/path/to/Test.kt")
 
         describe("functions") {
 
@@ -55,6 +55,7 @@ class EntitySpec : Spek({
         describe("files") {
 
             it("includes package and file name") {
+                assertThat(Entity.from(code).signature).isEqualTo("Test.kt\$test.Test.kt")
                 assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo("Test.kt\$test.Test.kt")
             }
         }

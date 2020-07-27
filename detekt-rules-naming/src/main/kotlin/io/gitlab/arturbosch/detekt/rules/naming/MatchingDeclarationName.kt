@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.psi.fileNameWithoutSuffix
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -75,10 +76,10 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         if (declarations.size == 1 && matchesFirstClassOrObjectCondition()) {
             val declaration = declarations.first()
             val declarationName = declaration.name
-            val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
+            val filename = file.fileNameWithoutSuffix()
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
                 val entity = Entity.from(declaration).copy(ktElement = file)
-                report(CodeSmell(issue, entity, "The file name '${file.name}' " +
+                report(CodeSmell(issue, entity, "The file name '$filename' " +
                     "does not match the name of the single top-level declaration '$declarationName'."))
             }
         }
@@ -86,4 +87,3 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 }
 
 const val MUST_BE_FIRST = "mustBeFirst"
-private const val KOTLIN_SUFFIX = ".kt"
