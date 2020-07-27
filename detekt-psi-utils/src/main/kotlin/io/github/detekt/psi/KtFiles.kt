@@ -19,11 +19,7 @@ fun KtFile.fileNameWithoutSuffix(): String {
     return fileName.removeSuffix(KOTLIN_SUFFIX)
 }
 
-fun KtFile.absolutePath(): Path {
-    val value = getUserData(ABSOLUTE_PATH)
-    checkNotNull(value) { "KtFile '$name' expected to have an absolute path." }
-    return Paths.get(value)
-}
+fun KtFile.absolutePath(): Path = Paths.get(name)
 
 fun KtFile.relativePath(): Path {
     val value = getUserData(RELATIVE_PATH)

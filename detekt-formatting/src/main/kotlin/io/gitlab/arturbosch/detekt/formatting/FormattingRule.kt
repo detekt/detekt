@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.core.KtLint
-import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -49,7 +48,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
         }
-        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.absolutePath().toString())
+        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
     }
 
     open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null
