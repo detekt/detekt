@@ -1,10 +1,8 @@
-@file:Suppress("detekt.TooManyFunctions")
-
 package io.gitlab.arturbosch.detekt.api.internal
 
+import io.github.detekt.psi.fileName
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -13,7 +11,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import java.io.File
 
 private val multipleWhitespaces = Regex("\\s(\\s|\t)+")
 
@@ -25,12 +22,12 @@ internal fun PsiElement.searchClass(): String {
     val classElement = this.getNonStrictParentOfType<KtClassOrObject>()
     var className = classElement?.name
     if (className != null && className == "Companion") {
-        val parentCassName = classElement?.getStrictParentOfType<KtClassOrObject>()?.name
-        if (parentCassName != null) {
-            className = "$parentCassName.$className"
+        val parentClassName = classElement?.getStrictParentOfType<KtClassOrObject>()?.name
+        if (parentClassName != null) {
+            className = "$parentClassName.$className"
         }
     }
-    return className ?: this.containingFile.fileName()
+    return className ?: this.containingFile.fileName
 }
 
 /*
@@ -43,8 +40,6 @@ internal fun PsiElement.searchClass(): String {
  *
  * Fixing the baseline will need a new major release - #2680.
  */
-private fun PsiFile.fileName() = name.substringAfterLast(File.separatorChar)
-
 internal fun PsiElement.buildFullSignature(): String {
     var fullSignature = this.searchSignature()
     val parentSignatures = this.parents
@@ -58,7 +53,7 @@ internal fun PsiElement.buildFullSignature(): String {
         fullSignature = "$parentSignatures\$$fullSignature"
     }
 
-    val filename = this.containingFile.fileName()
+    val filename = this.containingFile.fileName
     if (!fullSignature.startsWith(filename)) {
         fullSignature = "$filename\$$fullSignature"
     }
@@ -78,7 +73,7 @@ private fun PsiElement.searchSignature(): String {
     }.replace('\n', ' ').replace(multipleWhitespaces, " ")
 }
 
-private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.fileName()}"
+private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.fileName}"
 
 private fun buildClassSignature(classOrObject: KtClassOrObject): String {
     var baseName = classOrObject.nameAsSafeName.asString()
