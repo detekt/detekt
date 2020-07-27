@@ -6,8 +6,6 @@ plugins {
 dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
-
-    testImplementation(project(":detekt-test-utils"))
 }
 
 gradlePlugin {
@@ -24,7 +22,7 @@ tasks.validatePlugins {
 }
 
 pluginBundle {
-    website = "https://arturbosch.github.io/detekt"
+    website = "https://detekt.github.io/detekt"
     vcsUrl = "https://github.com/detekt/detekt"
     description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells")
