@@ -10,11 +10,12 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import java.io.File
 
-private val signatureRegex = Regex("\\s(\\s|\t)+")
+private val multipleWhitespaces = Regex("\\s(\\s|\t)+")
 
 internal fun PsiElement.searchName(): String {
     return this.namedUnwrappedElement?.name ?: "<UnknownName>"
@@ -24,8 +25,9 @@ internal fun PsiElement.searchClass(): String {
     val classElement = this.getNonStrictParentOfType<KtClassOrObject>()
     var className = classElement?.name
     if (className != null && className == "Companion") {
-        classElement?.parent?.getNonStrictParentOfType<KtClassOrObject>()?.name?.let {
-            className = "$it.$className"
+        val parentCassName = classElement?.getStrictParentOfType<KtClassOrObject>()?.name
+        if (parentCassName != null) {
+            className = "$parentCassName.$className"
         }
     }
     return className ?: this.containingFile.fileName()
@@ -44,13 +46,24 @@ internal fun PsiElement.searchClass(): String {
 private fun PsiFile.fileName() = name.substringAfterLast(File.separatorChar)
 
 internal fun PsiElement.buildFullSignature(): String {
-    val signature = this.searchSignature()
-    val fullClassSignature = this.parents.filter { it is KtClassOrObject }
-            .map { it.extractClassName() }
-            .fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
+    var fullSignature = this.searchSignature()
+    val parentSignatures = this.parents
+        .filter { it is KtClassOrObject }
+        .map { it.extractClassName() }
+        .toList()
+        .reversed()
+        .joinToString(".")
+
+    if (parentSignatures.isNotEmpty()) {
+        fullSignature = "$parentSignatures\$$fullSignature"
+    }
+
     val filename = this.containingFile.fileName()
-    return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
-            if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature
+    if (!fullSignature.startsWith(filename)) {
+        fullSignature = "$filename\$$fullSignature"
+    }
+
+    return fullSignature
 }
 
 private fun PsiElement.extractClassName() =
@@ -62,12 +75,10 @@ private fun PsiElement.searchSignature(): String {
         is KtClassOrObject -> buildClassSignature(this)
         is KtFile -> fileSignature()
         else -> this.text
-    }.replace('\n', ' ').replace(signatureRegex, " ")
+    }.replace('\n', ' ').replace(multipleWhitespaces, " ")
 }
 
 private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.fileName()}"
-
-private fun dotOrNot(sig: String, sig2: String) = if (sig.isNotEmpty() && sig2.isNotEmpty()) "." else ""
 
 private fun buildClassSignature(classOrObject: KtClassOrObject): String {
     var baseName = classOrObject.nameAsSafeName.asString()
