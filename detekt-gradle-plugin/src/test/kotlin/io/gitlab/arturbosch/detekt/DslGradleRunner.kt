@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
-import io.github.detekt.test.utils.createTempDirectoryForTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
+import java.nio.file.Files
 import java.util.UUID
 
 class DslGradleRunner @Suppress("LongParameterList") constructor(
@@ -16,12 +16,12 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val dryRun: Boolean = false
 ) {
 
-    private val rootDir: File = createTempDirectoryForTest(prefix = "applyPlugin").toFile()
+    private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
     private val randomString = UUID.randomUUID().toString()
 
     private val settingsContent = """
         |rootProject.name = "rootDir-project"
-        |include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
+        |include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
         |
         """.trimMargin()
 
@@ -59,7 +59,8 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
             repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) {
                 val withCodeSmell =
-                    srcDirIdx * projectLayout.numberOfSourceFilesInRootPerSourceDir + it < projectLayout.numberOfCodeSmellsInRootPerSourceDir
+                    srcDirIdx * projectLayout.numberOfSourceFilesInRootPerSourceDir +
+                        it < projectLayout.numberOfCodeSmellsInRootPerSourceDir
                 writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class", withCodeSmell)
             }
         }
