@@ -8,6 +8,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 /**
  * Gather additional metrics about the analyzed kotlin file.
  * Pay attention to the thread policy of each function!
+ *
+ * A bindingContext != BindingContext.EMPTY is only available if Kotlin compiler settings are used.
  */
 @Suppress("EmptyFunctionBlock")
 interface FileProcessListener : Extension {

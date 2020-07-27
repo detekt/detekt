@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.PrintStream
@@ -69,7 +70,7 @@ private fun checkLicence(content: String): List<Finding> {
                 properties[key] = value
             }
         })
-        onStart(listOf(file))
+        onStart(listOf(file), BindingContext.EMPTY)
     }
 
     return AbsentOrWrongFileLicense().lint(file)

@@ -48,11 +48,11 @@ internal class Analyzer(
         bindingContext: BindingContext
     ): FindingsResult =
         ktFiles.map { file ->
-            processors.forEach { it.onProcess(file) }
+            processors.forEach { it.onProcess(file, bindingContext) }
             val findings = runCatching { analyze(file, bindingContext) }
                 .onFailure { settings.error(createErrorMessage(file, it), it) }
                 .getOrDefault(emptyMap())
-            processors.forEach { it.onProcessComplete(file, findings) }
+            processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
             findings
         }
 
@@ -63,9 +63,9 @@ internal class Analyzer(
         val service = settings.taskPool
         val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
             service.task {
-                processors.forEach { it.onProcess(file) }
+                processors.forEach { it.onProcess(file, bindingContext) }
                 val findings = analyze(file, bindingContext)
-                processors.forEach { it.onProcessComplete(file, findings) }
+                processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
                 findings
             }.recover {
                 settings.error(createErrorMessage(file, it), it)

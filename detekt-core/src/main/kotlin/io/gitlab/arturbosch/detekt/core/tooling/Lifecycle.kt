@@ -41,10 +41,10 @@ internal interface Lifecycle {
 
         val result = measure(Phase.Analyzer) {
             val detektor = Analyzer(settings, ruleSets, processors)
-            processors.forEach { it.onStart(filesToAnalyze) }
+            processors.forEach { it.onStart(filesToAnalyze, bindingContext) }
             val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
             val result: Detektion = DetektResult(findings.toSortedMap())
-            processors.forEach { it.onFinish(filesToAnalyze, result) }
+            processors.forEach { it.onFinish(filesToAnalyze, result, bindingContext) }
             result
         }
 

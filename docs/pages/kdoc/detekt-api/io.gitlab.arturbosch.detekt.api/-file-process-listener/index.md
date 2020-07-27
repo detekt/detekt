@@ -11,6 +11,8 @@ title: FileProcessListener - detekt-api
 Gather additional metrics about the analyzed kotlin file.
 Pay attention to the thread policy of each function!
 
+A bindingContext != BindingContext.EMPTY is only available if Kotlin compiler settings are used.
+
 ### Functions
 
 | [onFinish](on-finish.html) | Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container. Do not do heavy computations here as this method is called from the main thread.`open fun ~~onFinish~~(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>`open fun onFinish(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`, bindingContext: BindingContext): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
