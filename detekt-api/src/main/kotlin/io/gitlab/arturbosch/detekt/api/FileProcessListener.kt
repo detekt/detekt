@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.psi.KtFile
@@ -29,6 +27,7 @@ interface FileProcessListener : Extension {
      * Use this to gather some additional information for the real onProcess function.
      * This calculation should be lightweight as this method is called from the main thread.
      */
+    @Suppress("DEPRECATION")
     fun onStart(files: List<KtFile>, bindingContext: BindingContext) {
         onStart(files)
     }
@@ -48,6 +47,7 @@ interface FileProcessListener : Extension {
      * Called when processing of a file begins.
      * This method is called from a thread pool thread. Heavy computations allowed.
      */
+    @Suppress("DEPRECATION")
     fun onProcess(file: KtFile, bindingContext: BindingContext) {
         onProcess(file)
     }
@@ -67,6 +67,7 @@ interface FileProcessListener : Extension {
      * Called when processing of a file completes.
      * This method is called from a thread pool thread. Heavy computations allowed.
      */
+    @Suppress("DEPRECATION")
     fun onProcessComplete(file: KtFile, findings: Map<String, List<Finding>>, bindingContext: BindingContext) {
         onProcessComplete(file, findings)
     }
@@ -90,6 +91,7 @@ interface FileProcessListener : Extension {
      *
      * This method is called before any [ReportingExtension].
      */
+    @Suppress("DEPRECATION")
     fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         onFinish(files, result)
     }
