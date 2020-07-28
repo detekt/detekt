@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
-private val multipleWhitespaces = Regex("\\s(\\s|\t)+")
+private val multipleWhitespaces = Regex("\\s{2,}")
 
 internal fun PsiElement.searchName(): String {
     return this.namedUnwrappedElement?.name ?: "<UnknownName>"
