@@ -16,6 +16,7 @@ title: BaseRule - detekt-api
 
 | [bindingContext](binding-context.html) | `var bindingContext: BindingContext` |
 | [context](context.html) | `val context: `[`Context`](../../io.gitlab.arturbosch.detekt.api/-context/index.html) |
+| [languageVersionSettings](language-version-settings.html) | `var languageVersionSettings: LanguageVersionSettings?` |
 | [ruleId](rule-id.html) | `open val ruleId: `[`RuleId`](../../io.gitlab.arturbosch.detekt.api/-rule-id.html) |
 
 ### Functions
@@ -24,7 +25,7 @@ title: BaseRule - detekt-api
 | [preVisit](pre-visit.html) | Could be overridden by subclasses to specify a behaviour which should be done before visiting kotlin elements.`open fun preVisit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [visit](visit.html) | Init function to start visiting the [KtFile](#). Can be overridden to start a different visiting process.`open fun visit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [visitCondition](visit-condition.html) | Basic mechanism to decide if a rule should run or not.`abstract fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-| [visitFile](visit-file.html) | Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.`fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [visitFile](visit-file.html) | Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.`fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY, languageVersionSettings: LanguageVersionSettings? = null): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 
 ### Inheritors
 
