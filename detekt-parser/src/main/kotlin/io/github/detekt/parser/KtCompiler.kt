@@ -1,6 +1,5 @@
 package io.github.detekt.parser
 
-import io.github.detekt.psi.ABSOLUTE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -32,14 +31,13 @@ open class KtCompiler(
         val lineSeparator = content.determineLineSeparator()
 
         val psiFile = psiFileFactory.createPhysicalFile(
-            path.fileName.toString(),
+            absolutePath.toString(),
             StringUtilRt.convertLineSeparators(content)
         )
 
         return psiFile.apply {
             putUserData(LINE_SEPARATOR, lineSeparator)
             putUserData(RELATIVE_PATH, relativePath.toString())
-            putUserData(ABSOLUTE_PATH, absolutePath.toString())
         }
     }
 }

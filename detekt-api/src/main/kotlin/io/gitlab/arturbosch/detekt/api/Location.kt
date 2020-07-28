@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.internal.getTextSafe
 import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
@@ -34,7 +33,7 @@ data class Location(
             val start = startLineAndColumn(element, offset)
             val sourceLocation = SourceLocation(start.line, start.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            val fileName = element.originalFilePath()
+            val fileName = element.containingFile.name
             val locationText = element.getTextAtLocationSafe()
             return Location(sourceLocation, textLocation, locationText, fileName)
         }
@@ -53,10 +52,6 @@ data class Location(
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
             }
         }
-
-        private fun PsiElement.originalFilePath() =
-            (containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
-                ?: containingFile.name
 
         private fun PsiElement.getTextAtLocationSafe() =
             getTextSafe({ searchName() }, { getTextWithLocation() })

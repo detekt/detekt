@@ -1,7 +1,6 @@
 package io.github.detekt.test.utils
 
 import io.github.detekt.parser.KtCompiler
-import io.github.detekt.psi.ABSOLUTE_PATH
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -26,13 +25,10 @@ internal object KtTestCompiler : KtCompiler() {
 
     fun compile(path: Path) = compile(root, path)
 
-    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
-        val file = psiFileFactory.createPhysicalFile(
+    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile =
+        psiFileFactory.createPhysicalFile(
             filename,
             StringUtilRt.convertLineSeparators(content))
-        file.putUserData(ABSOLUTE_PATH, filename)
-        return file
-    }
 
     /**
      * Not sure why but this function only works from this context.

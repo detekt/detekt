@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class EntitySpec : Spek({
 
@@ -22,7 +23,7 @@ class EntitySpec : Spek({
             }
 
             fun topLevelFun(number: Int) = Unit
-        """.trimIndent())
+        """.trimIndent(), Paths.get("/full/path/to/Test.kt").toString())
 
         describe("functions") {
 
@@ -55,6 +56,7 @@ class EntitySpec : Spek({
         describe("files") {
 
             it("includes package and file name") {
+                assertThat(Entity.from(code).signature).isEqualTo("Test.kt\$test.Test.kt")
                 assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo("Test.kt\$test.Test.kt")
             }
         }
