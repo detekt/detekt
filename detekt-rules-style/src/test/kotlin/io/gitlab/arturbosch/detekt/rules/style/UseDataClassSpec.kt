@@ -86,6 +86,20 @@ class UseDataClassSpec : Spek({
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report a candidate with an interface that has methods") {
+                val code = """
+                    interface SomeInterface {
+                        fun foo()
+                    }
+                    
+                    class NotDataClassBecauseItsImplementingInterfaceWithMethods(val i : Int): SomeInterface {
+                        override fun foo() = i
+                    }
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
 
         describe("does report data class candidates") {
@@ -138,6 +152,15 @@ class UseDataClassSpec : Spek({
                         }
                     }
                 """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does report a candidate class with a simple interface extension") {
+                val code = """
+                    interface SimpleInterface
+                    class DataClass(val i: Int): SimpleInterface
+                """.trimIndent()
+
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
