@@ -208,6 +208,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [David Phillips](https://github.com/daphil19) - New rule: MandatoryBracesLoops
 - [Volkan Şahin](https://github.com/volsahin) - Documentation improvement
 - [Remco Mokveld](https://github.com/remcomokveld) - Rename Blacklist/Whitelist to more meaningful names
+- [Zachary Moore](https://github.com/zsmoore) - Rule, cli, gradle plugin, and config improvements
 
 ### Mentions
 
