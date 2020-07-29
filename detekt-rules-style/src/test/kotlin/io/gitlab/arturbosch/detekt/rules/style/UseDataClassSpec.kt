@@ -100,6 +100,32 @@ class UseDataClassSpec : Spek({
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report an existing data class candidate with an interface") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    data class DataClass(override val i: Int): SimpleInterface
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report a class extending a class and implementing an interface") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    open class BaseClass(open val j: Int)
+                    
+                    class DataClass(override val i: Int, override val j: Int): SimpleInterface, BaseClass(j)
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
 
         describe("does report data class candidates") {
