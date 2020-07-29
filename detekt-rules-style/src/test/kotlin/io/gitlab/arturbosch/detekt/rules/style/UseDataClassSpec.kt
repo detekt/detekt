@@ -163,6 +163,18 @@ class UseDataClassSpec : Spek({
 
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
+
+            it("does report a candidate class with an interface extension that overrides vals") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    class DataClass(override val i: Int): SimpleInterface
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
         }
 
         describe("copy method") {
