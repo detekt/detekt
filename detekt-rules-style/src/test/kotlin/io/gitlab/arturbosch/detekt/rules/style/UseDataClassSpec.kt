@@ -90,7 +90,7 @@ class UseDataClassSpec : Spek({
             it("does not report a candidate with an interface that has methods") {
                 val code = """
                     interface SomeInterface {
-                        fun foo()
+                        fun foo(): Int
                     }
                     
                     class NotDataClassBecauseItsImplementingInterfaceWithMethods(val i : Int): SomeInterface {
