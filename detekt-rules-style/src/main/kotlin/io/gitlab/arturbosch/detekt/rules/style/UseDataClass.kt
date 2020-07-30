@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.onlyExtendsInterfaces
 import io.gitlab.arturbosch.detekt.rules.isInline
 import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
@@ -20,6 +19,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtSuperTypeListEntry
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
@@ -70,7 +70,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
-        if (klass.isClosedForExtension() && klass.onlyExtendsInterfaces() &&
+        if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
                 !annotationExcluder.shouldExclude(klass.annotationEntries)) {
             val declarations = klass.extractDeclarations()
             val properties = declarations.filterIsInstance<KtProperty>()
@@ -99,6 +99,15 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                 )
             }
         }
+    }
+
+    private fun KtClass.onlyExtendsSimpleInterfaces(): Boolean =
+        superTypeListEntries.all { it.isInterfaceInSameFile() && " by " !in it.text }
+
+    private fun KtSuperTypeListEntry.isInterfaceInSameFile(): Boolean {
+        val matchingDeclaration = containingKtFile.declarations
+            .firstOrNull { it.name == typeAsUserType?.referencedName }
+        return matchingDeclaration is KtClass && matchingDeclaration.isInterface()
     }
 
     private fun isIncorrectClassType(klass: KtClass) =
