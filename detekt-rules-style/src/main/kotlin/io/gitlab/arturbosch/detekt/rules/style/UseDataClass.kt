@@ -9,10 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.doesNotExtendAnything
+import io.gitlab.arturbosch.detekt.rules.onlyExtendsInterfaces
+import io.gitlab.arturbosch.detekt.rules.isInline
 import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
-import io.gitlab.arturbosch.detekt.rules.isInline
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtClass
@@ -70,7 +70,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
-        if (klass.isClosedForExtension() && klass.doesNotExtendAnything() &&
+        if (klass.isClosedForExtension() && klass.onlyExtendsInterfaces() &&
                 !annotationExcluder.shouldExclude(klass.annotationEntries)) {
             val declarations = klass.extractDeclarations()
             val properties = declarations.filterIsInstance<KtProperty>()

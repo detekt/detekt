@@ -86,6 +86,46 @@ class UseDataClassSpec : Spek({
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report a candidate with an interface that has methods") {
+                val code = """
+                    interface SomeInterface {
+                        fun foo(): Int
+                    }
+                    
+                    class NotDataClassBecauseItsImplementingInterfaceWithMethods(val i : Int): SomeInterface {
+                        override fun foo() = i
+                    }
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report an existing data class candidate with an interface") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    data class DataClass(override val i: Int): SimpleInterface
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report a class extending a class and implementing an interface") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    open class BaseClass(open val j: Int)
+                    
+                    class DataClass(override val i: Int, override val j: Int): SimpleInterface, BaseClass(j)
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
 
         describe("does report data class candidates") {
@@ -138,6 +178,27 @@ class UseDataClassSpec : Spek({
                         }
                     }
                 """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does report a candidate class with a simple interface extension") {
+                val code = """
+                    interface SimpleInterface
+                    class DataClass(val i: Int): SimpleInterface
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does report a candidate class with an interface extension that overrides vals") {
+                val code = """
+                    interface SimpleInterface {
+                        val i: Int
+                    }
+                    
+                    class DataClass(override val i: Int): SimpleInterface
+                """.trimIndent()
+
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
