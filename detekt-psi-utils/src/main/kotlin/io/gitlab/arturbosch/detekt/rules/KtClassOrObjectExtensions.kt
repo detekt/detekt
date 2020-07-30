@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
 fun KtClass.onlyExtendsInterfaces(): Boolean {
-    return superTypeListEntries.all { it.isInterface() }
+    return superTypeListEntries.all { it.isInterface() && " by " !in it.text }
 }
 
 private fun KtSuperTypeListEntry.isInterface(): Boolean {
