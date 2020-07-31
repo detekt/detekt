@@ -296,7 +296,7 @@ which is written inside a file.
 
 ##### [io.gitlab.arturbosch.detekt.api.ProjectMetric](../io.gitlab.arturbosch.detekt.api/-project-metric/index.html)
 
-Anything that can be expressed as a number value for projects.
+Anything that can be expressed as a numeric value for projects.
 
 
 |
