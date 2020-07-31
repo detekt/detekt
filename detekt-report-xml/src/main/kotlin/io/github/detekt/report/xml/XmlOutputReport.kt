@@ -6,7 +6,8 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
- * Generates an XML report following the structure of a Checkstyle report.
+ * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
+ * See: https://detekt.github.io/detekt/configurations.html#output-reports
  */
 class XmlOutputReport : OutputReport() {
 
