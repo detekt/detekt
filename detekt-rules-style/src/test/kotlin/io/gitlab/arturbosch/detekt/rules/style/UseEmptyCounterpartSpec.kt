@@ -3,13 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UseEmptyCounterpartSpec : Spek({
     setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val rule by memoized { UseEmptyCounterpart(Config.empty) }
 
     describe("UseEmptyCounterpart rule") {
@@ -22,7 +24,7 @@ class UseEmptyCounterpartSpec : Spek({
                 val sequence = sequenceOf<Any>()
                 val set = setOf<Any>()
             """
-            assertThat(rule.compileAndLint(code)).hasSize(5)
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(5)
         }
 
         it("does not report empty instantiation") {
@@ -33,7 +35,7 @@ class UseEmptyCounterpartSpec : Spek({
                 val sequence = emptySequence<Any>()
                 val set = emptySet<Any>()
             """
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report instantiation with arguments") {
@@ -44,7 +46,7 @@ class UseEmptyCounterpartSpec : Spek({
                 val sequence = sequenceOf(0)
                 val set = setOf(0)
             """
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report no-arg custom function with same name as function with empty counterpart") {
@@ -61,7 +63,7 @@ class UseEmptyCounterpartSpec : Spek({
                 val sequence = sequenceOf<Any>()
                 val set = setOf<Any>()
             """
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })
