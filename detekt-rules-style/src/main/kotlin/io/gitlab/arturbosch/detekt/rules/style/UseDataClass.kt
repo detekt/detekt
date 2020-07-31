@@ -34,13 +34,17 @@ import org.jetbrains.kotlin.types.KotlinType
  *
  * <noncompliant>
  * class DataClassCandidate(val i: Int) {
- *
  *     val i2: Int = 0
  * }
  * </noncompliant>
  *
  * <compliant>
  * data class DataClass(val i: Int, val i2: Int)
+ *
+ * // classes with delegating interfaces are compliant
+ * interface I
+ * class B() : I
+ * class A(val b: B) : I by b
  * </compliant>
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
