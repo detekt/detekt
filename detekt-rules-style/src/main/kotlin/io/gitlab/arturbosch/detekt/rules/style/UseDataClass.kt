@@ -10,8 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isInline
-import io.gitlab.arturbosch.detekt.rules.extractDeclarations
-import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtClass
@@ -21,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperTypeListEntry
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -71,8 +71,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             return
         }
         if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
-                !annotationExcluder.shouldExclude(klass.annotationEntries)) {
-            val declarations = klass.extractDeclarations()
+            !annotationExcluder.shouldExclude(klass.annotationEntries)) {
+            val declarations = klass.body?.declarations.orEmpty()
             val properties = declarations.filterIsInstance<KtProperty>()
             val functions = declarations.filterIsInstance<KtNamedFunction>()
 
@@ -100,6 +100,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             }
         }
     }
+
+    private fun KtClass.isClosedForExtension(): Boolean = !isAbstract() && !isOpen()
 
     private fun KtClass.onlyExtendsSimpleInterfaces(): Boolean =
         superTypeListEntries.all { it.isInterfaceInSameFile() && " by " !in it.text }
