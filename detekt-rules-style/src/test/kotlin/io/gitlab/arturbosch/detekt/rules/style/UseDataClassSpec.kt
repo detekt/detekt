@@ -126,6 +126,16 @@ class UseDataClassSpec : Spek({
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report a class with delegating interface") {
+                val code = """
+                    interface I
+                    class B() : I
+                    class A(val b: B) : I by b
+                """.trimIndent()
+
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
 
         describe("does report data class candidates") {
