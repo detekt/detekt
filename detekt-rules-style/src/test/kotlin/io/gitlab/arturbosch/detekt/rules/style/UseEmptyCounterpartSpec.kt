@@ -27,6 +27,17 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).hasSize(5)
         }
 
+        it("reports no-arg instantiation with inferred type parameters") {
+            val code = """
+                val array: Array<Any> = arrayOf()
+                val list: List<Any> = listOf()
+                val map: Map<Any, Any> = mapOf()
+                val sequence: Sequence<Any> = sequenceOf()
+                val set: Set<Any> = setOf()
+            """
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(5)
+        }
+
         it("does not report empty instantiation") {
             val code = """
                 val array = emptyArray<Any>()
