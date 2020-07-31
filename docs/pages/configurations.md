@@ -47,9 +47,9 @@ This is the replacement for the `test-pattern` feature.
 
 Be aware that detekt now expects globing patterns instead of regular expressions!
 
-#### Console and Output Reports
+#### Console Reports
 
-Uncomment the reporters you don't care about.
+Uncomment the reports you don't care about.
 
 ```yaml
 console-reports:
@@ -61,7 +61,13 @@ console-reports:
   #  - 'FindingsReport'
   #  - 'FileBasedFindingsReport'
   #  - 'BuildFailureReport'
+```
 
+#### Output Reports
+
+Uncomment the reports you don't care about.
+
+```yaml
 output-reports:
   active: true
   exclude:
@@ -69,6 +75,12 @@ output-reports:
   #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
 ```
+
+**HtmlOutputReport** contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
+
+**TxtOutputReport** contains rule violations in a plain text report similar to a log file.
+
+**XmlOutputReport** contains rule violations in an XML format. The report follows the structure of a [Checkstyle report](https://checkstyle.sourceforge.io).
 
 #### Processors
 
