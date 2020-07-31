@@ -36,7 +36,8 @@ private const val PLACEHOLDER_VERSION = "@@@version@@@"
 private const val PLACEHOLDER_DATE = "@@@date@@@"
 
 /**
- * Generates a HTML report containing rule violations and metrics.
+ * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
+ * See: https://detekt.github.io/detekt/configurations.html#output-reports
  */
 class HtmlOutputReport : OutputReport() {
 
