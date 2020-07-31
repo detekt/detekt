@@ -7,6 +7,10 @@ import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 import io.gitlab.arturbosch.detekt.core.reporting.printFindings
 
+/**
+ * Contains all rule violations grouped by file location.
+ * See: https://detekt.github.io/detekt/configurations.html#console-reports
+ */
 class FileBasedFindingsReport : ConsoleReport() {
 
     private var config: Config by SingleAssign()

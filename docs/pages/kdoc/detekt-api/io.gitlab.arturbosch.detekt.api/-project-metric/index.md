@@ -8,11 +8,11 @@ title: ProjectMetric - detekt-api
 
 `open class ProjectMetric`
 
-Anything that can be expressed as a number value for projects.
+Anything that can be expressed as a numeric value for projects.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | Anything that can be expressed as a number value for projects.`ProjectMetric(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, value: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, priority: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = -1, isDouble: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = false, conversionFactor: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = DEFAULT_FLOAT_CONVERSION_FACTOR)` |
+| [&lt;init&gt;](-init-.html) | Anything that can be expressed as a numeric value for projects.`ProjectMetric(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, value: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, priority: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = -1, isDouble: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = false, conversionFactor: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = DEFAULT_FLOAT_CONVERSION_FACTOR)` |
 
 ### Properties
 
