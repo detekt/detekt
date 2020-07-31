@@ -1499,7 +1499,7 @@ Instantiation of an object's "empty" state should use the object's "empty" initi
 
 ```kotlin
 arrayOf()
-listOf()
+listOf() // or listOfNotNull()
 mapOf()
 sequenceOf()
 setOf()

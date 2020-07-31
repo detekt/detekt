@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * <noncompliant>
  * arrayOf()
- * listOf()
+ * listOf() // or listOfNotNull()
  * mapOf()
  * sequenceOf()
  * setOf()
@@ -58,6 +58,7 @@ class UseEmptyCounterpart(config: Config) : Rule(config) {
 private val exprsWithEmptyCounterparts = mapOf(
     FqName("kotlin.arrayOf") to "emptyArray",
     FqName("kotlin.collections.listOf") to "emptyList",
+    FqName("kotlin.collections.listOfNotNull") to "emptyList",
     FqName("kotlin.collections.mapOf") to "emptyMap",
     FqName("kotlin.sequences.sequenceOf") to "emptySequence",
     FqName("kotlin.collections.setOf") to "emptySet"

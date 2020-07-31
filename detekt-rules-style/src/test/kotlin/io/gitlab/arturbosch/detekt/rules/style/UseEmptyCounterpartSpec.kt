@@ -20,22 +20,24 @@ class UseEmptyCounterpartSpec : Spek({
             val code = """
                 val array = arrayOf<Any>()
                 val list = listOf<Any>()
+                val nonNullList = listOfNotNull<Any>()
                 val map = mapOf<Any, Any>()
                 val sequence = sequenceOf<Any>()
                 val set = setOf<Any>()
             """
-            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(5)
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
         }
 
         it("reports no-arg instantiation with inferred type parameters") {
             val code = """
                 val array: Array<Any> = arrayOf()
                 val list: List<Any> = listOf()
+                val list: List<Any> = listOfNotNull()
                 val map: Map<Any, Any> = mapOf()
                 val sequence: Sequence<Any> = sequenceOf()
                 val set: Set<Any> = setOf()
             """
-            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(5)
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
         }
 
         it("does not report empty instantiation") {
@@ -53,6 +55,7 @@ class UseEmptyCounterpartSpec : Spek({
             val code = """
                 val array = arrayOf(0)
                 val list = listOf(0)
+                val nonNullList = listOfNotNull(0)
                 val map = mapOf(0 to 0)
                 val sequence = sequenceOf(0)
                 val set = setOf(0)
@@ -64,12 +67,14 @@ class UseEmptyCounterpartSpec : Spek({
             val code = """
                 fun <T> arrayOf(): Array<T> = TODO()
                 fun <T> listOf(): List<T> = TODO()
+                fun <T> listOfNotNull(): List<T> = TODO()
                 fun <K, V> mapOf(): Map<K, V> = TODO()
                 fun <T> sequenceOf(): Sequence<T> = TODO()
                 fun <T> setOf(): Set<T> = TODO() 
 
                 val array = arrayOf<Any>()
                 val list = listOf<Any>()
+                val nonNullList = listOfNotNull<Any>()
                 val map = mapOf<Any, Any>()
                 val sequence = sequenceOf<Any>()
                 val set = setOf<Any>()
