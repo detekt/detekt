@@ -1476,7 +1476,6 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 ```kotlin
 class DataClassCandidate(val i: Int) {
-
     val i2: Int = 0
 }
 ```
@@ -1485,6 +1484,11 @@ class DataClassCandidate(val i: Int) {
 
 ```kotlin
 data class DataClass(val i: Int, val i2: Int)
+
+// classes with delegating interfaces are compliant
+interface I
+class B() : I
+class A(val b: B) : I by b
 ```
 
 ### UseIfInsteadOfWhen
