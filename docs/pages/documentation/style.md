@@ -1487,6 +1487,34 @@ class DataClassCandidate(val i: Int) {
 data class DataClass(val i: Int, val i2: Int)
 ```
 
+### UseEmptyCounterpart
+
+Instantiation of an object's "empty" state should use the object's "empty" initializer for clarity purposes.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+arrayOf()
+listOf() // or listOfNotNull()
+mapOf()
+sequenceOf()
+setOf()
+```
+
+#### Compliant Code:
+
+```kotlin
+emptyArray()
+emptyList()
+emptyMap()
+emptySequence()
+emptySet()
+```
+
 ### UseIfInsteadOfWhen
 
 Binary expressions are better expressed using an `if` expression than a `when` expression.
