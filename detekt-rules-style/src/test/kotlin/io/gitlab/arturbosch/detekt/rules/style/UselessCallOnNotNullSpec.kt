@@ -19,38 +19,13 @@ object UselessCallOnNotNullSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports when calling orEmpty on a nullable list") {
+        it("reports when calling orEmpty on a list with a safe call") {
             val code = """val testList = listOf("string")?.orEmpty()"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports when calling orEmpty in a chain") {
+        it("reports when calling orEmpty on a list in a chain") {
             val code = """val testList = listOf("string").orEmpty().map { }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("reports when calling isNullOrBlank on a nullable type") {
-            val code = """val testString = ""?.isNullOrBlank()"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("reports when calling isNullOrEmpty on a nullable type") {
-            val code = """val testString = ""?.isNullOrEmpty()"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("reports when calling isNullOrEmpty on a string") {
-            val code = """val testString = "".isNullOrEmpty()"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("reports when calling orEmpty on a string") {
-            val code = """val testString = "".orEmpty()"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("reports when calling orEmpty on a sequence") {
-            val code = """val testSequence = listOf(1).asSequence().orEmpty()"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -58,6 +33,71 @@ object UselessCallOnNotNullSpec : Spek({
             // System.getenv().keys.toList() will be of type List<String!>.
             val code = """val testSequence = System.getenv().keys.toList().orEmpty()"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report when calling orEmpty on a nullable list") {
+            val code = """
+                val testList: List<String>? = listOf("string")
+                val nonNullableTestList = testList.orEmpty()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports when calling isNullOrBlank on a string with a safe call") {
+            val code = """val testString = ""?.isNullOrBlank()"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report when calling isNullOrBlank on a nullable string") {
+            val code = """
+                val testString: String? = ""
+                val nonNullableTestString = testString.isNullOrBlank()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports when calling isNullOrEmpty on a string") {
+            val code = """val testString = "".isNullOrEmpty()"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("reports when calling isNullOrEmpty on a string with a safe call") {
+            val code = """val testString = ""?.isNullOrEmpty()"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report when calling isNullOrEmpty on a nullable string") {
+            val code = """
+                val testString: String? = ""
+                val nonNullableTestString = testString.isNullOrEmpty()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports when calling orEmpty on a string") {
+            val code = """val testString = "".orEmpty()"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report when calling orEmpty on a nullable string") {
+            val code = """
+                val testString: String? = ""
+                val nonNullableTestString = testString.orEmpty()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports when calling orEmpty on a sequence") {
+            val code = """val testSequence = listOf(1).asSequence().orEmpty()"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report when calling orEmpty on a nullable sequence") {
+            val code = """
+                val testSequence: Sequence<Int>? = listOf(1).asSequence()                
+                val nonNullableTestSequence = testSequence.orEmpty()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("only reports on a Kotlin list") {
