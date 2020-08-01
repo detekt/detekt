@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -57,15 +56,9 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank")
     )
 
-    private val uselessNames = uselessFqNames.keys.map { it.shortName().toString() }
-
-    @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
-        val selector = expression.selectorExpression as? KtCallExpression ?: return
-        val calleeExpression = selector.calleeExpression ?: return
-        if (calleeExpression.text !in uselessNames) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         if (uselessFqNames.contains(resolvedCall.resultingDescriptor.fqNameOrNull())) {
