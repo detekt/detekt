@@ -248,6 +248,7 @@ Integrations:
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
+- [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 
 #### Credits
 
