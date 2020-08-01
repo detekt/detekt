@@ -23,6 +23,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             emptyLine()
             yaml { defaultConsoleReportsConfiguration() }
             emptyLine()
+            yaml { defaultOutputReportsConfiguration() }
+            emptyLine()
 
             item.sortedBy { it.ruleSet.name }
                 .forEach { printRuleSet(it.ruleSet, it.rules) }
@@ -106,6 +108,15 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
            - 'NotificationReport'
         #  - 'FindingsReport'
            - 'FileBasedFindingsReport'
+    """.trimIndent()
+
+    private fun defaultOutputReportsConfiguration(): String = """
+      output-reports:
+        active: true
+        exclude:
+        # - 'TxtOutputReport'
+        # - 'XmlOutputReport'
+        # - 'HtmlOutputReport'
     """.trimIndent()
 
     private fun String.isYamlList() = trim().startsWith("-")
