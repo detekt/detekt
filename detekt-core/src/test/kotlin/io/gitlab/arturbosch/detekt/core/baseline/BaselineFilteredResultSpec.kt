@@ -15,11 +15,14 @@ class BaselineFilteredResultSpec : Spek({
 
         val baselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
-        val finding = mockk<Finding>()
-        every { finding.id }.returns("LongParameterList")
-        every { finding.signature }.returns("Signature")
+        val finding by memoized {
+            val issue = mockk<Finding>()
+            every { issue.id }.returns("LongParameterList")
+            every { issue.signature }.returns("Signature")
+            issue
+        }
 
-        val result = TestDetektion(finding)
+        val result by memoized { TestDetektion(finding) }
 
         it("does return the same finding on empty baseline") {
             val actual = BaselineFilteredResult(result, Baseline(emptySet(), emptySet()))

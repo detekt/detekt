@@ -12,19 +12,17 @@ import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.lifecycle.CachingMode
 import org.spekframework.spek2.style.specification.describe
 
 internal class ComplexityReportGeneratorSpec : Spek({
 
     describe("complexity report generator") {
 
-        lateinit var detektion: TestDetektion
-
-        beforeEachTest {
+        val detektion by memoized(CachingMode.TEST) {
             val finding = mockk<Finding>()
             every { finding.id }.returns("test")
-            detektion = TestDetektion(finding)
-            addData(detektion)
+            TestDetektion(finding).withTestData()
         }
 
         context("several complexity metrics") {
@@ -78,13 +76,14 @@ internal class ComplexityReportGeneratorSpec : Spek({
     }
 })
 
-private fun addData(detektion: Detektion) {
-    detektion.addData(complexityKey, 2)
-    detektion.addData(CognitiveComplexity.KEY, 2)
-    detektion.addData(linesKey, 1000)
-    detektion.addData(sourceLinesKey, 6)
-    detektion.addData(logicalLinesKey, 5)
-    detektion.addData(commentLinesKey, 4)
+private fun TestDetektion.withTestData(): TestDetektion {
+    addData(complexityKey, 2)
+    addData(CognitiveComplexity.KEY, 2)
+    addData(linesKey, 1000)
+    addData(sourceLinesKey, 6)
+    addData(logicalLinesKey, 5)
+    addData(commentLinesKey, 4)
+    return this
 }
 
 private fun generateComplexityReport(detektion: Detektion): List<String>? {

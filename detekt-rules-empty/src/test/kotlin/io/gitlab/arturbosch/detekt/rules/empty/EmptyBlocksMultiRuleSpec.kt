@@ -13,7 +13,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
 
     val subject by memoized { EmptyBlocks() }
 
-    val file = compileForTest(resourceAsPath("Empty.kt"))
+    val file by memoized { compileForTest(resourceAsPath("Empty.kt")) }
 
     describe("multi rule with all empty block rules") {
 

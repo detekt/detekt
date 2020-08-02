@@ -2,6 +2,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
     id("org.jetbrains.dokka")
+    `java-test-fixtures`
 }
 
 dependencies {
@@ -11,6 +12,8 @@ dependencies {
 
     testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
+
+    testFixturesApi(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<DokkaTask>().configureEach {

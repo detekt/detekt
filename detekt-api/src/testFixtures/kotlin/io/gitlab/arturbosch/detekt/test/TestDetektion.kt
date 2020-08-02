@@ -9,10 +9,13 @@ import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 
 open class TestDetektion(vararg findings: Finding) : Detektion {
 
-    override val metrics: Collection<ProjectMetric> = listOf()
     override val findings: Map<String, List<Finding>> = findings.groupBy { it.id }
-    override val notifications: List<Notification> = listOf()
+    override val metrics: Collection<ProjectMetric> get() = _metrics
+    override val notifications: List<Notification> get() = _notifications
+
     private var userData = KeyFMap.EMPTY_MAP
+    private val _metrics = mutableListOf<ProjectMetric>()
+    private val _notifications = mutableListOf<Notification>()
 
     override fun <V> getData(key: Key<V>): V? = userData.get(key)
 
@@ -24,6 +27,11 @@ open class TestDetektion(vararg findings: Finding) : Detektion {
         userData = userData.minus(key)
     }
 
-    override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
-    override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
+    override fun add(notification: Notification) {
+        _notifications.add(notification)
+    }
+
+    override fun add(projectMetric: ProjectMetric) {
+        _metrics.add(projectMetric)
+    }
 }

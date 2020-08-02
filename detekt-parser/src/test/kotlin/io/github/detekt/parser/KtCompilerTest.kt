@@ -2,22 +2,21 @@ package io.github.detekt.parser
 
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
-import io.github.detekt.test.utils.resource
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.lifecycle.CachingMode
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class KtCompilerTest : Spek({
 
     describe("Kotlin Compiler") {
 
-        val path = Paths.get(resource("/cases"))
-        val ktCompiler = KtCompiler()
+        val path = resourceAsPath("/cases")
+        val ktCompiler by memoized(CachingMode.SCOPE) { KtCompiler() }
 
         it("Kotlin file has extra user data") {
             val ktFile = ktCompiler.compile(path, path.resolve("Default.kt"))

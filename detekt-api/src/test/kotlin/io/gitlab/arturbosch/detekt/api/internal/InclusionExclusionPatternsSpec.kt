@@ -20,7 +20,7 @@ class InclusionExclusionPatternsSpec : Spek({
 
     describe("rule should only run on library file specified by 'includes' pattern") {
 
-        val config = TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt"))
+        val config by memoized { TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt")) }
 
         it("should run") {
             resourceAsPath("library/Library.kt")
@@ -37,7 +37,7 @@ class InclusionExclusionPatternsSpec : Spek({
 
     describe("rule should only run on library file not matching the specified 'excludes' pattern") {
 
-        val config = TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt"))
+        val config by memoized { TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt")) }
 
         it("should run") {
             resourceAsPath("library/Library.kt")

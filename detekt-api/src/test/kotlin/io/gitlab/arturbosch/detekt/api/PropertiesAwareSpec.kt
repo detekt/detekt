@@ -13,23 +13,24 @@ class PropertiesAwareSpec : Spek({
 
         context("Implementations can store and retrieve properties") {
 
-            val store = object : PropertiesAware {
-                override val properties: MutableMap<String, Any> = HashMap()
-                override fun register(key: String, value: Any) {
-                    properties[key] = value
+            val hash by memoized { Random(1).nextInt() }
+            val store by memoized {
+                object : PropertiesAware {
+                    override val properties: MutableMap<String, Any> = HashMap()
+                    override fun register(key: String, value: Any) {
+                        properties[key] = value
+                    }
+                }.apply {
+                    register("bool", true)
+                    register("string", "test")
+                    register("number", 5)
+                    register("set", setOf(1, 2, 3))
+                    register("any", object : Any() {
+                        override fun equals(other: Any?): Boolean = hashCode() == other.hashCode()
+                        override fun hashCode(): Int = hash
+                    })
                 }
             }
-
-            val hash = Random(1).nextInt()
-
-            store.register("bool", true)
-            store.register("string", "test")
-            store.register("number", 5)
-            store.register("set", setOf(1, 2, 3))
-            store.register("any", object : Any() {
-                override fun equals(other: Any?): Boolean = hashCode() == other.hashCode()
-                override fun hashCode(): Int = hash
-            })
 
             it("can retrieve the actual typed values") {
                 assertThat(store.getOrNull<Boolean>("bool")).isEqualTo(true)

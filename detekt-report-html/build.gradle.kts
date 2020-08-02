@@ -5,5 +5,6 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
     testImplementation(project(":detekt-metrics"))
-    testImplementation(project(":detekt-test"))
+    testImplementation(project(":detekt-test-utils"))
+    testImplementation(testFixtures(project(":detekt-api")))
 }
