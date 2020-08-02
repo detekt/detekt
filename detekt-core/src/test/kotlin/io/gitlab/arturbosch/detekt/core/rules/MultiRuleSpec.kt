@@ -17,13 +17,14 @@ import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.lifecycle.CachingMode
 import org.spekframework.spek2.style.specification.describe
 
 internal class MultiRuleSpec : Spek({
 
     describe("a multi rule") {
 
-        val file = compileForTest(resourceAsPath("/cases/Default.kt"))
+        val file by memoized(CachingMode.SCOPE) { compileForTest(resourceAsPath("/cases/Default.kt"))}
 
         context("runs once on a KtFile for every rules and respects configured path filters") {
 
