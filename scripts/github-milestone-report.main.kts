@@ -21,6 +21,9 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GitHub
 import java.io.File
 import java.net.URL
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GithubMilestoneReport : CliktCommand() {
 
@@ -89,7 +92,7 @@ class GithubMilestoneReport : CliktCommand() {
 
     private fun footer(footer: String, url: URL) = "See all issues at: [$footer]($url)"
 
-    private fun header(name: String) = "#### $name\n"
+    private fun header(name: String) = "#### $name - ${DateTimeFormatter.ISO_DATE.format(LocalDate.now())} \n"
 
     private fun section(name: String) = "##### $name\n"
 }
