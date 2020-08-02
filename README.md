@@ -239,7 +239,6 @@ Integrations:
 - [SonarKotlin](https://docs.sonarqube.org/display/PLUG/SonarKotlin)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
-- [GitHub Action: detekt](https://github.com/marketplace/actions/detekt-all)
 - [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
