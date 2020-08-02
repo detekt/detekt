@@ -1,6 +1,6 @@
 object Versions {
 
-    const val DETEKT: String = "1.10.0"
+    const val DETEKT: String = "1.11.0-RC1"
     const val JVM_TARGET: String = "1.8"
     const val JACOCO: String = "0.8.5"
 

@@ -6,6 +6,69 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.11.0
+
+##### Changelog
+
+- Add non-affirming test cases for UselessCallOnNotNull - [#2918](https://github.com/detekt/detekt/pull/2918)
+- Add Github Action: Detekt All to readme - [#2915](https://github.com/detekt/detekt/pull/2915)
+- Remove deprecated BuildFailureReport from doc - [#2914](https://github.com/detekt/detekt/pull/2914)
+- Document Console Reports code - [#2913](https://github.com/detekt/detekt/pull/2913)
+- Update docs in ProjectMetric class - [#2912](https://github.com/detekt/detekt/pull/2912)
+- Document Output Reports code - [#2911](https://github.com/detekt/detekt/pull/2911)
+- Document Output Reports on the home page - [#2910](https://github.com/detekt/detekt/pull/2910)
+- Add doc to UseDataClass - [#2909](https://github.com/detekt/detekt/pull/2909)
+- Generate output report config parts for config validation to know the properties - [#2907](https://github.com/detekt/detekt/pull/2907)
+- Fix UseDataClass to accept classes that implement interfaces - [#2905](https://github.com/detekt/detekt/pull/2905)
+- UseDataClass does not report for classes that implement interfaces - [#2904](https://github.com/detekt/detekt/issues/2904)
+- Add bindingContext function to FileProcessListener - #2872 - [#2900](https://github.com/detekt/detekt/pull/2900)
+- IgnoredReturnValue: Fix false positive on chained statements - [#2895](https://github.com/detekt/detekt/pull/2895)
+- Setup local PGP signing of published artifacts - [#2893](https://github.com/detekt/detekt/pull/2893)
+- error in output-reports config - [#2891](https://github.com/detekt/detekt/issues/2891)
+- OptionalUnit: fix false positive with 'else if' - [#2888](https://github.com/detekt/detekt/pull/2888)
+- OptionalUnit: don't report it if Unit is used as an expression - [#2886](https://github.com/detekt/detekt/pull/2886)
+- Preserve original exception when loading an invalid config - [#2884](https://github.com/detekt/detekt/pull/2884)
+- Sign artifacts and publish checksums - [#2883](https://github.com/detekt/detekt/issues/2883)
+- Check string arguments with TR enabled - [#2879](https://github.com/detekt/detekt/pull/2879)
+- Detekt Deployment is missing Gradle Module files - [#2878](https://github.com/detekt/detekt/issues/2878)
+- Better Support for Guard Clauses in ThrowsCount Rule - [#2876](https://github.com/detekt/detekt/pull/2876)
+- Make KtTestCompiler internal - [#2874](https://github.com/detekt/detekt/pull/2874)
+- Don't mention the old performance impact - [#2873](https://github.com/detekt/detekt/pull/2873)
+- Support for BindingContext in FileProcessListener - [#2872](https://github.com/detekt/detekt/issues/2872)
+- Hide KtTestCompiler as internal - [#2871](https://github.com/detekt/detekt/issues/2871)
+- Document Console and Output Reports - [#2869](https://github.com/detekt/detekt/issues/2869)
+- Split rules module into a module per rule set - [#2865](https://github.com/detekt/detekt/pull/2865)
+- Add new rule UseEmptyCounterpart - [#2864](https://github.com/detekt/detekt/pull/2864)
+- Introduce tooling api module - [#2861](https://github.com/detekt/detekt/pull/2861)
+- Extend docs on Processors - [#2854](https://github.com/detekt/detekt/pull/2854)
+- Add a rule to flag places where `emptyList` (and similar)  can be used - [#2850](https://github.com/detekt/detekt/issues/2850)
+- Clarify / document processors and console reports in config - [#2833](https://github.com/detekt/detekt/issues/2833)
+- Fix UnnecessaryLet false negatives - [#2828](https://github.com/detekt/detekt/pull/2828)
+- UnnecessaryLet false negatives - [#2826](https://github.com/detekt/detekt/issues/2826)
+- False positive in OptionalUnit rule - [#2452](https://github.com/detekt/detekt/issues/2452)
+
+##### Housekeeping & Refactorings
+
+- Test performance improvements - [#2921](https://github.com/detekt/detekt/pull/2921)
+- Remove redundant guard clauses - [#2919](https://github.com/detekt/detekt/pull/2919)
+- The tests are slow - [#2902](https://github.com/detekt/detekt/issues/2902)
+- Drop dependency on detekt test utils for Gradle plugin - [#2899](https://github.com/detekt/detekt/pull/2899)
+- Use KtFile.name instead of storing an absolute path key - [#2898](https://github.com/detekt/detekt/pull/2898)
+- Fix testcase with early access jdk's - [#2897](https://github.com/detekt/detekt/pull/2897)
+- Publish to Bintray using maven-publish - [#2885](https://github.com/detekt/detekt/pull/2885)
+- Simplify internal parsing to KtFile's - [#2875](https://github.com/detekt/detekt/pull/2875)
+- Mention bazel integration and a new blog article - [#2867](https://github.com/detekt/detekt/pull/2867)
+- Mention bazel and github actions integration - [#2866](https://github.com/detekt/detekt/pull/2866)
+- Cleanup code - [#2862](https://github.com/detekt/detekt/pull/2862)
+- Make sure to always target JVM 8 bytecode - [#2853](https://github.com/detekt/detekt/pull/2853)
+- Refactor - [#2849](https://github.com/detekt/detekt/pull/2849)
+- Clear findings even if we are not going to visit the file - [#2848](https://github.com/detekt/detekt/pull/2848)
+- Update Spek to 2.0.12 - [#2847](https://github.com/detekt/detekt/pull/2847)
+- Speed up generateDocumentation - [#2832](https://github.com/detekt/detekt/pull/2832)
+- Simplify pre-merge.yaml - [#2823](https://github.com/detekt/detekt/pull/2823)
+
+See all issues at: [1.11.0-RC1](https://github.com/detekt/detekt/milestone/69)
+
 #### 1.10.0
 
 ##### Notable Changes
