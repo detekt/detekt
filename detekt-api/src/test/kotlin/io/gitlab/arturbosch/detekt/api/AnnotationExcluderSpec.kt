@@ -4,22 +4,26 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.createPsiFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.lifecycle.CachingMode
 import org.spekframework.spek2.style.specification.describe
 
 class AnnotationExcluderSpec : Spek({
 
-    val psiFactory = createPsiFactory()
+    val psiFactory by memoized(CachingMode.SCOPE) { createPsiFactory() }
 
     describe("a kt file with some imports") {
-        val jvmFieldAnnotation = psiFactory.createAnnotationEntry("@JvmField")
-        val fullyQualifiedJvmFieldAnnotation = psiFactory.createAnnotationEntry("@kotlin.jvm.JvmField")
-        val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
 
-        val file = compileContentForTest("""
-            package foo
+        val jvmFieldAnnotation by memoized { psiFactory.createAnnotationEntry("@JvmField") }
+        val fullyQualifiedJvmFieldAnnotation by memoized { psiFactory.createAnnotationEntry("@kotlin.jvm.JvmField") }
+        val sinceKotlinAnnotation by memoized { psiFactory.createAnnotationEntry("@SinceKotlin") }
 
-            import kotlin.jvm.JvmField
-        """.trimIndent())
+        val file by memoized {
+            compileContentForTest("""
+                package foo
+
+                import kotlin.jvm.JvmField
+            """.trimIndent())
+        }
 
         it("should exclude when the annotation was found") {
             val excluder = AnnotationExcluder(file, listOf("JvmField"))

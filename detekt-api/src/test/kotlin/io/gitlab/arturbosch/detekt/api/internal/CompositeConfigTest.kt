@@ -8,9 +8,10 @@ import org.spekframework.spek2.style.specification.describe
 class CompositeConfigTest : Spek({
 
     describe("both configs should be considered") {
-        val second = yamlConfig("composite-test.yml")
-        val first = yamlConfig("detekt.yml")
-        val compositeConfig = CompositeConfig(second, first)
+
+        val second by memoized { yamlConfig("composite-test.yml") }
+        val first by memoized { yamlConfig("detekt.yml") }
+        val compositeConfig by memoized { CompositeConfig(second, first) }
 
         it("""
             should have style sub config with active false which is overridden
