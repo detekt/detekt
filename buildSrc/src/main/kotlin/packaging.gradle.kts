@@ -2,7 +2,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import groovy.lang.GroovyObject
 import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
-import java.util.Date
 
 plugins {
     `java-library` apply false // is applied in commons; make configurations available in this script
@@ -92,13 +91,8 @@ subprojects {
         })
     }
 
-    val signingKey = findProperty("signingKey")?.toString()
-        ?: System.getenv("SIGNING_KEY")
-    val signingPwd = findProperty("signingPwd")?.toString()
-        ?: System.getenv("SIGNING_PWD")
-    if (signingKey != null && signingPwd != null) {
+    if (findProperty("signing.keyId") != null) {
         signing {
-            useInMemoryPgpKeys(signingKey, signingPwd)
             sign(publishing.publications[DETEKT_PUBLICATION])
         }
     } else {
