@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.types.isNullable
  *
  * <compliant>
  * fun foo(a: Any?): String {
- *     return a?.toString ?: "-"
+ *     return a?.toString() ?: "-"
  * }
  *
  * fun bar(a: Any?): String {

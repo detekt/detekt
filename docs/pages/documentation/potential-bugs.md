@@ -496,7 +496,7 @@ fun bar(a: Any?): String {
 
 ```kotlin
 fun foo(a: Any?): String {
-    return a?.toString ?: "-"
+    return a?.toString() ?: "-"
 }
 
 fun bar(a: Any?): String {
