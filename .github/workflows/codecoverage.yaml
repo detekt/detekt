@@ -31,3 +31,6 @@ jobs:
         if: success()
         run: bash <(curl -s https://codecov.io/bash)
         shell: bash
+
+env:
+   GRADLE_OPTS: -Dorg.gradle.parallel=true

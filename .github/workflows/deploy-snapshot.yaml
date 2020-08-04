@@ -31,7 +31,7 @@ jobs:
         java-version: 8
 
     - name: Build detekt
-      run: ./gradlew build --build-cache --parallel -PwarningsAsErrors=true
+      run: ./gradlew build --build-cache -PwarningsAsErrors=true
 
     - name: Deploy Snapshot
       env:
@@ -39,3 +39,6 @@ jobs:
         BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
       run: ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace
       if: ${{ github.repository == 'detekt/detekt'}}
+
+env:
+   GRADLE_OPTS: -Dorg.gradle.parallel=true
