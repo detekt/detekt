@@ -56,17 +56,25 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank")
     )
 
+    @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        if (uselessFqNames.contains(resolvedCall.resultingDescriptor.fqNameOrNull())) {
-            val safeExpression = expression as? KtSafeQualifiedExpression
-            val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
-            if (notNullType || safeExpression != null) {
-                report(CodeSmell(issue, Entity.from(expression), ""))
+        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
+        val conversion = uselessFqNames[fqName] ?: return
+
+        val safeExpression = expression as? KtSafeQualifiedExpression
+        val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
+        if (notNullType || safeExpression != null) {
+            val shortName = fqName.shortName().asString()
+            val message = if (conversion.replacementName == null) {
+                "Remove redundant call to $shortName"
+            } else {
+                "Replace $shortName with ${conversion.replacementName}"
             }
+            report(CodeSmell(issue, Entity.from(expression), message))
         }
     }
 
