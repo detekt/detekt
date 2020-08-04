@@ -22,7 +22,6 @@ object NullableToStringCallSpec: Spek({
             """
             val actual = subject.compileAndLintWithContext(env, code)
             Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().issue.id).isEqualTo("NullableToStringCall")
             Assertions.assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
         }
 
@@ -34,7 +33,6 @@ object NullableToStringCallSpec: Spek({
             """
             val actual = subject.compileAndLintWithContext(env, code)
             Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().issue.id).isEqualTo("NullableToStringCall")
             Assertions.assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
@@ -46,19 +44,17 @@ object NullableToStringCallSpec: Spek({
             """
             val actual = subject.compileAndLintWithContext(env, code)
             Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().issue.id).isEqualTo("NullableToStringCall")
             Assertions.assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
         }
 
         it("reports when a nullable toString is implicitly called in a raw string template") {
             val code = """
                 fun test(a: Any?) {
-                    println(${'"'}${'"'}${'"'}${'$'}a${'"'}${'"'}${'"'})
+                    println(${'"'}""${'$'}a""${'"'})
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
             Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().issue.id).isEqualTo("NullableToStringCall")
             Assertions.assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
@@ -72,14 +68,14 @@ object NullableToStringCallSpec: Spek({
                     println(a.toString())
                     println("${'$'}a")
                     println("${'$'}{a}")
-                    println(${'"'}${'"'}${'"'}${'$'}a${'"'}${'"'}${'"'})
+                    println(${'"'}""${'$'}a""${'"'})
                 }
                 fun test3(a: Any?) {
                     if (a != null) {
                         println(a.toString())
                         println("${'$'}a")
                         println("${'$'}{a}")
-                        println(${'"'}${'"'}${'"'}${'$'}a${'"'}${'"'}${'"'})
+                        println(${'"'}""${'$'}a""${'"'})
                     }
                 }
                 fun test4(a: Any?) {
@@ -87,7 +83,7 @@ object NullableToStringCallSpec: Spek({
                     println(a.toString())
                     println("${'$'}a")
                     println("${'$'}{a}")
-                    println(${'"'}${'"'}${'"'}${'$'}a${'"'}${'"'}${'"'})
+                    println(${'"'}""${'$'}a""${'"'})
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
