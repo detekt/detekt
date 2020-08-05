@@ -1,12 +1,20 @@
 ---
-title: OutputReport.render - detekt-api
+title: render -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[OutputReport](index.md)/[render](render.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [OutputReport](index.html) / [render](./render.html)
 
-# render
 
-`abstract fun render(detektion: `[`Detektion`](../-detektion/index.html)`): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
+# render  
+[jvm]  
+Brief description  
+
 
 Defines the translation process of detekt's result into a string.
+
+  
+Content  
+abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
+
+
 

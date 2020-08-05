@@ -1,9 +1,14 @@
 ---
-title: PathFilters.isIgnored - detekt-api
+title: isIgnored -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api.internal](../index.md)/[PathFilters](index.md)/[isIgnored](is-ignored.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api.internal](../index.html) / [PathFilters](index.html) / [isIgnored](./is-ignored.html)
 
-# isIgnored
 
-`fun isIgnored(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+# isIgnored  
+[jvm]  
+Content  
+fun [isIgnored](is-ignored.md)(path: [Path](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
+
+
+

@@ -1,9 +1,14 @@
 ---
-title: CommaSeparatedPattern.mapToRegex - detekt-api
+title: mapToRegex -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api.internal](../index.md)/[CommaSeparatedPattern](index.md)/[mapToRegex](map-to-regex.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api.internal](../index.html) / [CommaSeparatedPattern](index.html) / [mapToRegex](./map-to-regex.html)
 
-# mapToRegex
 
-`fun mapToRegex(): `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)`>`
+# mapToRegex  
+[jvm]  
+Content  
+fun [mapToRegex](map-to-regex.md)(): [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[Regex](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)>  
+
+
+

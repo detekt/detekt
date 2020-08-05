@@ -1,12 +1,20 @@
 ---
-title: ReportingExtension.onFinalResult - detekt-api
+title: onFinalResult -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[ReportingExtension](index.md)/[onFinalResult](on-final-result.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [ReportingExtension](index.html) / [onFinalResult](./on-final-result.html)
 
-# onFinalResult
 
-`open fun onFinalResult(result: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# onFinalResult  
+[jvm]  
+Brief description  
 
-Is called after all extensions's [transformFindings](transform-findings.html) were called.
+
+Is called after all extensions's [transformFindings](transform-findings.md) were called.
+
+  
+Content  
+open fun [onFinalResult](on-final-result.md)(result: [Detektion](../-detektion/index.md))  
+
+
 

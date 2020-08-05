@@ -1,23 +1,31 @@
 ---
-title: SimpleNotification - detekt-api
+title: SimpleNotification -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api.internal](../index.md)/[SimpleNotification](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api.internal](../index.html) / [SimpleNotification](./index.html)
 
-# SimpleNotification
 
-`data class SimpleNotification : `[`Notification`](../../io.gitlab.arturbosch.detekt.api/-notification/index.html)
+# SimpleNotification  
+ [jvm] data class [SimpleNotification](index.md)(**message**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **level**: [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md)) : [Notification](../../io.gitlab.arturbosch.detekt.api/-notification/index.md)   
 
-### Constructors
 
-| [&lt;init&gt;](-init-.html) | `SimpleNotification(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, level: Level = Notification.Level.Error)` |
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)| [jvm]  <br>Content  <br>operator fun [component1](component1.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [component2](component2.md)| [jvm]  <br>Content  <br>operator fun [component2](component2.md)(): [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md)  <br><br><br>
+| [copy](copy.md)| [jvm]  <br>Content  <br>fun [copy](copy.md)(message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), level: [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md)): [SimpleNotification](index.md)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](to-string.md)| [jvm]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-### Properties
 
-| [level](level.html) | `val level: Level` |
-| [message](message.html) | `val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-
-### Functions
-
-| [toString](to-string.html) | `fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [isError](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/isError/#/PointingToDeclaration/)|  [jvm] open override val [isError](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/isError/#/PointingToDeclaration/): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)   <br>
+| [level](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/level/#/PointingToDeclaration/)|  [jvm] open override val [level](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/level/#/PointingToDeclaration/): [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md)   <br>
+| [message](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/message/#/PointingToDeclaration/)|  [jvm] open override val [message](index.md#io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/message/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
 

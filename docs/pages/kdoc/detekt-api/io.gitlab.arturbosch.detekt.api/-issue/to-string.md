@@ -1,9 +1,14 @@
 ---
-title: Issue.toString - detekt-api
+title: toString -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Issue](index.md)/[toString](to-string.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Issue](index.html) / [toString](./to-string.html)
 
-# toString
 
-`fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+# toString  
+[jvm]  
+Content  
+open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+
+
+

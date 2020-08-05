@@ -1,12 +1,20 @@
 ---
-title: Location.compact - detekt-api
+title: compact -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Location](index.md)/[compact](compact.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Location](index.html) / [compact](./compact.html)
 
-# compact
 
-`fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+# compact  
+[jvm]  
+Brief description  
+
 
 Contract to format implementing object to a string representation.
+
+  
+Content  
+open override fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+
+
 

@@ -1,12 +1,20 @@
 ---
-title: SplitPattern.mapAll - detekt-api
+title: mapAll -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SplitPattern](index.md)/[mapAll](map-all.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SplitPattern](index.html) / [mapAll](./map-all.html)
 
-# mapAll
 
-`fun <T> mapAll(transform: (`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`) -> T): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<T>`
+# mapAll  
+[jvm]  
+Brief description  
 
-Transforms all parts by given [transform](map-all.html#io.gitlab.arturbosch.detekt.api.SplitPattern$mapAll(kotlin.Function1((kotlin.String, io.gitlab.arturbosch.detekt.api.SplitPattern.mapAll.T)))/transform) function.
+
+Transforms all parts by given transform function.
+
+  
+Content  
+fun <[T](map-all.md)> [mapAll](map-all.md)(transform: ([String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) -> [T](map-all.md)): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[T](map-all.md)>  
+
+
 

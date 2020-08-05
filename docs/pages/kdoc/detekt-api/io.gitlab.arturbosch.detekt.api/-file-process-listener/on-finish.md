@@ -1,19 +1,29 @@
 ---
-title: FileProcessListener.onFinish - detekt-api
+title: onFinish -
 ---
-
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [FileProcessListener](index.html) / [onFinish](./on-finish.html)
-
-# onFinish
-
-`open fun ~~onFinish~~(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
-**Deprecated:** Use alternative with a binding context.
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[FileProcessListener](index.md)/[onFinish](on-finish.md)
 
 
-`open fun onFinish(files: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<KtFile>, result: `[`Detektion`](../-detektion/index.html)`, bindingContext: BindingContext): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
-Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.
-Do not do heavy computations here as this method is called from the main thread.
+# onFinish  
+[jvm]  
+Brief description  
 
-This method is called before any [ReportingExtension](../-reporting-extension/index.html).
+
+
+
+Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container. Do not do heavy computations here as this method is called from the main thread.
+
+
+
+This method is called before any [ReportingExtension](../-reporting-extension/index.md).
+
+
+
+  
+Content  
+~~open~~ ~~fun~~ [~~onFinish~~](on-finish.md)~~(~~~~files~~~~:~~ [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<KtFile>~~,~~ ~~result~~~~:~~ [Detektion](../-detektion/index.md)~~)~~  
+open fun [onFinish](on-finish.md)(files: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<KtFile>, result: [Detektion](../-detektion/index.md), bindingContext: BindingContext)  
+
+
 

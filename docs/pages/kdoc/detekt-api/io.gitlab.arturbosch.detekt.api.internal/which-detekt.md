@@ -1,12 +1,20 @@
 ---
-title: whichDetekt - detekt-api
+title: whichDetekt -
 ---
+//[detekt-api](../index.md)/[io.gitlab.arturbosch.detekt.api.internal](index.md)/[whichDetekt](which-detekt.md)
 
-[detekt-api](../index.html) / [io.gitlab.arturbosch.detekt.api.internal](index.html) / [whichDetekt](./which-detekt.html)
 
-# whichDetekt
 
-`fun whichDetekt(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
+# whichDetekt  
+[jvm]  
+Brief description  
+
 
 Returns the bundled detekt version.
+
+  
+Content  
+fun [whichDetekt](which-detekt.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
+
+
 

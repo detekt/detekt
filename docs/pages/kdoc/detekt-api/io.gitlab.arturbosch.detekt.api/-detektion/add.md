@@ -1,16 +1,31 @@
 ---
-title: Detektion.add - detekt-api
+title: add -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Detektion](index.md)/[add](add.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Detektion](index.html) / [add](./add.html)
 
-# add
 
-`abstract fun add(notification: `[`Notification`](../-notification/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# add  
+[jvm]  
+Brief description  
+
 
 Stores a notification in the result.
 
-`abstract fun add(projectMetric: `[`ProjectMetric`](../-project-metric/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+  
+Content  
+abstract fun [add](add.md)(notification: [Notification](../-notification/index.md))  
+
+
+[jvm]  
+Brief description  
+
 
 Stores a metric calculated for the whole project in the result.
+
+  
+Content  
+abstract fun [add](add.md)(projectMetric: [ProjectMetric](../-project-metric/index.md))  
+
+
 

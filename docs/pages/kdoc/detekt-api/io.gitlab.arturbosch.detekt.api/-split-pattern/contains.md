@@ -1,12 +1,20 @@
 ---
-title: SplitPattern.contains - detekt-api
+title: contains -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SplitPattern](index.md)/[contains](contains.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SplitPattern](index.html) / [contains](./contains.html)
 
-# contains
 
-`fun contains(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+# contains  
+[jvm]  
+Brief description  
 
-Does any part contain given [value](contains.html#io.gitlab.arturbosch.detekt.api.SplitPattern$contains(kotlin.String)/value)?
+
+Does any part contain given value?
+
+  
+Content  
+fun [contains](contains.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
+
+
 

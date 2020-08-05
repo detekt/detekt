@@ -1,14 +1,20 @@
 ---
-title: RuleSetProvider.instance - detekt-api
+title: instance -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[RuleSetProvider](index.md)/[instance](instance.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [RuleSetProvider](index.html) / [instance](./instance.html)
 
-# instance
 
-`abstract fun instance(config: `[`Config`](../-config/index.html)`): `[`RuleSet`](../-rule-set/index.html)
+# instance  
+[jvm]  
+Brief description  
 
-This function must be implemented to provide custom rule sets.
-Make sure to pass the configuration to each rule to allow rules
-to be self configurable.
+
+This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.
+
+  
+Content  
+abstract fun [instance](instance.md)(config: [Config](../-config/index.md)): [RuleSet](../-rule-set/index.md)  
+
+
 

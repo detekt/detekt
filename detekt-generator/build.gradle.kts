@@ -22,7 +22,7 @@ val ruleModules = rootProject.subprojects
     .map { "${rootProject.rootDir}/$it/src/main/kotlin" }
 
 val generateDocumentation by tasks.registering {
-    dependsOn(tasks.assemble, ":detekt-api:dokka")
+    dependsOn(tasks.assemble, ":detekt-api:dokkaJekyll")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 

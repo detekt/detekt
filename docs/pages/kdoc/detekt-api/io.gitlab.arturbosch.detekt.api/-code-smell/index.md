@@ -1,44 +1,71 @@
 ---
-title: CodeSmell - detekt-api
+title: CodeSmell -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[CodeSmell](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [CodeSmell](./index.html)
 
-# CodeSmell
 
-`open class CodeSmell : `[`Finding`](../-finding/index.html)
+# CodeSmell  
+ [jvm] 
 
-A code smell indicates any possible design problem inside a program's source code.
-The type of a code smell is described by an [Issue](../-issue/index.html).
 
-If the design problem results from metric violations, a list of [Metric](../-metric/index.html)'s
-can describe further the kind of metrics.
 
-If the design problem manifests by different source locations, references to these
-locations can be stored in additional [Entity](../-entity/index.html)'s.
+A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](../-issue/index.md).
 
-### Constructors
 
-| [&lt;init&gt;](-init-.html) | A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](../-issue/index.html).`CodeSmell(issue: `[`Issue`](../-issue/index.html)`, entity: `[`Entity`](../-entity/index.html)`, message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, metrics: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Metric`](../-metric/index.html)`> = listOf(), references: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Entity`](../-entity/index.html)`> = listOf())` |
 
-### Properties
+If the design problem results from metric violations, a list of [Metric](../-metric/index.md)'s can describe further the kind of metrics.
 
-| [entity](entity.html) | `open val entity: `[`Entity`](../-entity/index.html) |
-| [id](id.html) | `open val id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [issue](issue.html) | `val issue: `[`Issue`](../-issue/index.html) |
-| [message](message.html) | `open val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [metrics](metrics.html) | `open val metrics: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Metric`](../-metric/index.html)`>` |
-| [references](references.html) | `open val references: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Entity`](../-entity/index.html)`>` |
 
-### Functions
 
-| [compact](compact.html) | Contract to format implementing object to a string representation.`open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [compactWithSignature](compact-with-signature.html) | Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier.`open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [messageOrDescription](message-or-description.html) | Explanation why this finding was raised.`open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [toString](to-string.html) | `open fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+If the design problem manifests by different source locations, references to these locations can be stored in additional [Entity](../-entity/index.md)'s.
 
-### Inheritors
 
-| [CorrectableCodeSmell](../-correctable-code-smell/index.html) | Represents a code smell for that can be auto corrected.`open class CorrectableCodeSmell : `[`CodeSmell`](./index.html) |
-| [ThresholdedCodeSmell](../-thresholded-code-smell/index.html) | Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.`open class ThresholdedCodeSmell : `[`CodeSmell`](./index.html) |
+
+open class [CodeSmell](index.md)(**issue**: [Issue](../-issue/index.md), **entity**: [Entity](../-entity/index.md), **message**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **metrics**: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Metric](../-metric/index.md)>, **references**: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Entity](../-entity/index.md)>) : [Finding](../-finding/index.md)   
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [CodeSmell](-code-smell.md)|  [jvm] fun [CodeSmell](-code-smell.md)(issue: [Issue](../-issue/index.md), entity: [Entity](../-entity/index.md), message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), metrics: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Metric](../-metric/index.md)>, references: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Entity](../-entity/index.md)>)   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [compact](compact.md)| [jvm]  <br>Brief description  <br><br><br>Contract to format implementing object to a string representation.<br><br>  <br>Content  <br>open override fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [compactWithSignature](compact-with-signature.md)| [jvm]  <br>Brief description  <br><br><br>Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.<br><br>  <br>Content  <br>open override fun [compactWithSignature](compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [messageOrDescription](message-or-description.md)| [jvm]  <br>Brief description  <br><br><br>Explanation why this finding was raised.<br><br>  <br>Content  <br>open override fun [messageOrDescription](message-or-description.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [metricByType](../-has-metrics/metric-by-type.md)| [jvm]  <br>Brief description  <br><br><br>Finds the first metric matching given type.<br><br>  <br>Content  <br>open override fun [metricByType](../-has-metrics/metric-by-type.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Metric](../-metric/index.md)?  <br><br><br>
+| [toString](to-string.md)| [jvm]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [charPosition](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/charPosition/#/PointingToDeclaration/)|  [jvm] open override val [charPosition](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/charPosition/#/PointingToDeclaration/): [TextLocation](../-text-location/index.md)   <br>
+| [entity](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/entity/#/PointingToDeclaration/)|  [jvm] open override val [entity](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/entity/#/PointingToDeclaration/): [Entity](../-entity/index.md)   <br>
+| [file](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/file/#/PointingToDeclaration/)|  [jvm] open override val [file](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/file/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [id](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/id/#/PointingToDeclaration/)|  [jvm] open override val [id](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/id/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [issue](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/issue/#/PointingToDeclaration/)|  [jvm] override val [issue](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/issue/#/PointingToDeclaration/): [Issue](../-issue/index.md)   <br>
+| [location](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/location/#/PointingToDeclaration/)|  [jvm] open override val [location](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/location/#/PointingToDeclaration/): [Location](../-location/index.md)   <br>
+| [message](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/message/#/PointingToDeclaration/)|  [jvm] open override val [message](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/message/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [metrics](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/metrics/#/PointingToDeclaration/)|  [jvm] open override val [metrics](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/metrics/#/PointingToDeclaration/): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Metric](../-metric/index.md)>   <br>
+| [references](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/references/#/PointingToDeclaration/)|  [jvm] open override val [references](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/references/#/PointingToDeclaration/): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Entity](../-entity/index.md)>   <br>
+| [signature](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/signature/#/PointingToDeclaration/)|  [jvm] open override val [signature](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/signature/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [startPosition](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/startPosition/#/PointingToDeclaration/)|  [jvm] open override val [startPosition](index.md#io.gitlab.arturbosch.detekt.api/CodeSmell/startPosition/#/PointingToDeclaration/): [SourceLocation](../-source-location/index.md)   <br>
+
+
+## Inheritors  
+  
+|  Name| 
+|---|
+| [CorrectableCodeSmell](../-correctable-code-smell/index.md)
+| [ThresholdedCodeSmell](../-thresholded-code-smell/index.md)
 

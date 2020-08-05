@@ -1,31 +1,53 @@
 ---
-title: Location - detekt-api
+title: Location -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Location](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Location](./index.html)
 
-# Location
 
-`data class Location : `[`Compactable`](../-compactable/index.html)
+# Location  
+ [jvm] 
 
 Specifies a position within a source code fragment.
 
-### Constructors
+data class [Location](index.md)(**source**: [SourceLocation](../-source-location/index.md), **text**: [TextLocation](../-text-location/index.md), **file**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) : [Compactable](../-compactable/index.md)   
 
-| [&lt;init&gt;](-init-.html) | `Location(source: `[`SourceLocation`](../-source-location/index.html)`, text: `[`TextLocation`](../-text-location/index.html)`, locationString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)`<br>Specifies a position within a source code fragment.`Location(source: `[`SourceLocation`](../-source-location/index.html)`, text: `[`TextLocation`](../-text-location/index.html)`, file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)` |
 
-### Properties
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [Location](-location.md)|  [jvm] ~~fun~~ [~~Location~~](-location.md)~~(~~~~source~~~~:~~ [SourceLocation](../-source-location/index.md)~~,~~ ~~text~~~~:~~ [TextLocation](../-text-location/index.md)~~,~~ ~~locationString~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~file~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~)~~   <br>
+| [Location](-location.md)|  [jvm] fun [Location](-location.md)(source: [SourceLocation](../-source-location/index.md), text: [TextLocation](../-text-location/index.md), file: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))   <br>
 
-| [file](file.html) | `val file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [source](source.html) | `val source: `[`SourceLocation`](../-source-location/index.html) |
-| [text](text.html) | `val text: `[`TextLocation`](../-text-location/index.html) |
 
-### Functions
+## Types  
+  
+|  Name|  Summary| 
+|---|---|
+| [Companion](-companion/index.md)| [jvm]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>
 
-| [compact](compact.html) | Contract to format implementing object to a string representation.`fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Companion Object Functions
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [compact](compact.md)| [jvm]  <br>Brief description  <br><br><br>Contract to format implementing object to a string representation.<br><br>  <br>Content  <br>open override fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [compactWithSignature](../-compactable/compact-with-signature.md)| [jvm]  <br>Brief description  <br><br><br>Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.<br><br>  <br>Content  <br>open override fun [compactWithSignature](../-compactable/compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [component1](component1.md)| [jvm]  <br>Content  <br>operator fun [component1](component1.md)(): [SourceLocation](../-source-location/index.md)  <br><br><br>
+| [component2](component2.md)| [jvm]  <br>Content  <br>operator fun [component2](component2.md)(): [TextLocation](../-text-location/index.md)  <br><br><br>
+| [component3](component3.md)| [jvm]  <br>Content  <br>operator fun [component3](component3.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [copy](copy.md)| [jvm]  <br>Content  <br>fun [copy](copy.md)(source: [SourceLocation](../-source-location/index.md), text: [TextLocation](../-text-location/index.md), file: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Location](index.md)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [from](from.html) | Creates a [Location](./index.html) from a [PsiElement](#). If the element can't be determined, the [KtFile](#) with a character offset can be used.`fun from(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): `[`Location`](./index.html) |
-| [startLineAndColumn](start-line-and-column.html) | Determines the line and column of a [PsiElement](#) in the source file.`fun startLineAndColumn(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): LineAndColumn` |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [file](index.md#io.gitlab.arturbosch.detekt.api/Location/file/#/PointingToDeclaration/)|  [jvm] val [file](index.md#io.gitlab.arturbosch.detekt.api/Location/file/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| [source](index.md#io.gitlab.arturbosch.detekt.api/Location/source/#/PointingToDeclaration/)|  [jvm] val [source](index.md#io.gitlab.arturbosch.detekt.api/Location/source/#/PointingToDeclaration/): [SourceLocation](../-source-location/index.md)   <br>
+| [text](index.md#io.gitlab.arturbosch.detekt.api/Location/text/#/PointingToDeclaration/)|  [jvm] val [text](index.md#io.gitlab.arturbosch.detekt.api/Location/text/#/PointingToDeclaration/): [TextLocation](../-text-location/index.md)   <br>
 

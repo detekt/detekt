@@ -1,23 +1,34 @@
 ---
-title: Compactable - detekt-api
+title: Compactable -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Compactable](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Compactable](./index.html)
 
-# Compactable
 
-`interface Compactable`
+# Compactable  
+ [jvm] 
 
 Provides a compact string representation.
 
-### Functions
+interface [Compactable](index.md)   
 
-| [compact](compact.html) | Contract to format implementing object to a string representation.`abstract fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [compactWithSignature](compact-with-signature.html) | Same as [compact](compact.html) except the content should contain a substring which represents this exact findings via a custom identifier.`open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Inheritors
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [compact](compact.md)| [jvm]  <br>Brief description  <br><br><br>Contract to format implementing object to a string representation.<br><br>  <br>Content  <br>abstract fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [compactWithSignature](compact-with-signature.md)| [jvm]  <br>Brief description  <br><br><br>Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.<br><br>  <br>Content  <br>open fun [compactWithSignature](compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [Entity](../-entity/index.html) | Stores information about a specific code fragment.`data class Entity : `[`Compactable`](./index.html) |
-| [Finding](../-finding/index.html) | Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.`interface Finding : `[`Compactable`](./index.html)`, `[`HasEntity`](../-has-entity/index.html)`, `[`HasMetrics`](../-has-metrics/index.html) |
-| [Location](../-location/index.html) | Specifies a position within a source code fragment.`data class Location : `[`Compactable`](./index.html) |
+
+## Inheritors  
+  
+|  Name| 
+|---|
+| [Entity](../-entity/index.md)
+| [Finding](../-finding/index.md)
+| [Location](../-location/index.md)
 

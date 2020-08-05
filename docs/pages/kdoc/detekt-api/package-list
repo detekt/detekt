@@ -1,8 +1,6 @@
-$dokka.format:jekyll
-$dokka.linkExtension:html
-$dokka.location:io.gitlab.arturbosch.detekt.api$commaSeparatedPattern(kotlin.String, kotlin.Array((kotlin.String)))io.gitlab.arturbosch.detekt.api/kotlin.-string/comma-separated-pattern.html
-$dokka.location:io.gitlab.arturbosch.detekt.api$simplePatternToRegex(kotlin.String)io.gitlab.arturbosch.detekt.api/kotlin.-string/simple-pattern-to-regex.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal$isSuppressedBy(org.jetbrains.kotlin.psi.KtAnnotated, kotlin.String, kotlin.collections.Set((kotlin.String)), kotlin.String)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-annotated/is-suppressed-by.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal$isSuppressedBy(org.jetbrains.kotlin.psi.KtElement, kotlin.String, kotlin.collections.Set((kotlin.String)), kotlin.String)io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-element/is-suppressed-by.html
+$dokka.format:jekyll-v1
+$dokka.linkExtension:md
+
 io.gitlab.arturbosch.detekt.api
 io.gitlab.arturbosch.detekt.api.internal
+

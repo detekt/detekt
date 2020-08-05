@@ -1,9 +1,14 @@
 ---
-title: LazyRegex.getValue - detekt-api
+title: getValue -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[LazyRegex](index.md)/[getValue](get-value.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [LazyRegex](index.html) / [getValue](./get-value.html)
 
-# getValue
 
-`fun getValue(thisRef: `[`Rule`](../-rule/index.html)`, property: `[`KProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)`<*>): `[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)
+# getValue  
+[jvm]  
+Content  
+open operator override fun [getValue](get-value.md)(thisRef: [Rule](../-rule/index.md), property: [KProperty](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)<*>): [Regex](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)  
+
+
+

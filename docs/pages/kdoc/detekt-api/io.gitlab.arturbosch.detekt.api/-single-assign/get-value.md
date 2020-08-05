@@ -1,12 +1,20 @@
 ---
-title: SingleAssign.getValue - detekt-api
+title: getValue -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SingleAssign](index.md)/[getValue](get-value.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SingleAssign](index.html) / [getValue](./get-value.html)
 
-# getValue
 
-`operator fun getValue(thisRef: `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`?, property: `[`KProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)`<*>): T`
+# getValue  
+[jvm]  
+Brief description  
 
-Returns the [_value](#) if it was set before. Else an error is thrown.
+
+Returns the _value if it was set before. Else an error is thrown.
+
+  
+Content  
+operator fun [getValue](get-value.md)(thisRef: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?, property: [KProperty](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)<*>): [T](index.md)  
+
+
 

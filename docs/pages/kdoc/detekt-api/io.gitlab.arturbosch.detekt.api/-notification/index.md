@@ -1,28 +1,46 @@
 ---
-title: Notification - detekt-api
+title: Notification -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Notification](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Notification](./index.html)
 
-# Notification
 
-`interface Notification`
+# Notification  
+ [jvm] 
 
-Any kind of notification which should be printed to the console.
-For example when using the formatting rule set, any change to
-your kotlin file is a notification.
+Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.
 
-### Types
+interface [Notification](index.md)   
 
-| [Level](-level/index.html) | Level of severity of the notification`enum class Level` |
 
-### Properties
+## Types  
+  
+|  Name|  Summary| 
+|---|---|
+| [Level](-level/index.md)| [jvm]  <br>Brief description  <br><br><br>Level of severity of the notification<br><br>  <br>Content  <br>enum [Level](-level/index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[Notification.Level](-level/index.md)>   <br><br><br>
 
-| [isError](is-error.html) | `open val isError: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-| [level](level.html) | `abstract val level: Level` |
-| [message](message.html) | `abstract val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Inheritors
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [SimpleNotification](../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html) | `data class SimpleNotification : `[`Notification`](./index.html) |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [isError](index.md#io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/)|  [jvm] open val [isError](index.md#io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)   <br>
+| [level](index.md#io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/)|  [jvm] abstract val [level](index.md#io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/): [Notification.Level](-level/index.md)   <br>
+| [message](index.md#io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/)|  [jvm] abstract val [message](index.md#io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+
+
+## Inheritors  
+  
+|  Name| 
+|---|
+| [SimpleNotification](../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.md)
 

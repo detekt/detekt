@@ -1,12 +1,20 @@
 ---
-title: Metric.doubleThreshold - detekt-api
+title: doubleThreshold -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Metric](index.md)/[doubleThreshold](double-threshold.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Metric](index.html) / [doubleThreshold](./double-threshold.html)
 
-# doubleThreshold
 
-`fun doubleThreshold(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)
+# doubleThreshold  
+[jvm]  
+Brief description  
+
 
 Specified threshold for this metric as a double value.
+
+  
+Content  
+fun [doubleThreshold](double-threshold.md)(): [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)  
+
+
 

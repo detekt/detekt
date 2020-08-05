@@ -1,13 +1,20 @@
 ---
-title: CodeSmell.compactWithSignature - detekt-api
+title: compactWithSignature -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[CodeSmell](index.md)/[compactWithSignature](compact-with-signature.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [CodeSmell](index.html) / [compactWithSignature](./compact-with-signature.html)
 
-# compactWithSignature
 
-`open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+# compactWithSignature  
+[jvm]  
+Brief description  
 
-Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents
-this exact findings via a custom identifier.
+
+Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.
+
+  
+Content  
+open override fun [compactWithSignature](compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+
+
 
