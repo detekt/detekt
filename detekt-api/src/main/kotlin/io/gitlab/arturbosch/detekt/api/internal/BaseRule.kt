@@ -5,8 +5,10 @@ import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.DefaultContext
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.RuleId
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 
 abstract class BaseRule(
     protected val context: Context = DefaultContext()
@@ -14,6 +16,8 @@ abstract class BaseRule(
 
     open val ruleId: RuleId = javaClass.simpleName
     var bindingContext: BindingContext = BindingContext.EMPTY
+    var languageVersionSettings: LanguageVersionSettings? = null
+    var dataFlowValueFactory: DataFlowValueFactory? = null
 
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -23,9 +27,16 @@ abstract class BaseRule(
      * receive the correct compile classpath for the code being analyzed otherwise the default value
      * BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.
      */
-    fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY) {
+    fun visitFile(
+        root: KtFile,
+        bindingContext: BindingContext = BindingContext.EMPTY,
+        languageVersionSettings: LanguageVersionSettings? = null,
+        dataFlowValueFactory: DataFlowValueFactory? = null
+    ) {
         clearFindings()
         this.bindingContext = bindingContext
+        this.languageVersionSettings = languageVersionSettings
+        this.dataFlowValueFactory = dataFlowValueFactory
         if (visitCondition(root)) {
             preVisit(root)
             visit(root)
