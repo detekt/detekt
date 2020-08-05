@@ -19,7 +19,7 @@ internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
         is PrintStream -> this.printStackTrace(logger)
         is PrintWriter -> this.printStackTrace(logger)
         else -> {
-            stackTrace.forEach { logger.appendln(it.toString()) }
+            stackTrace.forEach { logger.appendLine(it.toString()) }
             cause?.printStacktraceRecursively(logger)
         }
     }
@@ -33,17 +33,17 @@ internal class LoggingFacade(
     override val errorChannel: Appendable = spec.errorChannel
 
     override fun info(msg: String) {
-        outputChannel.appendln(msg)
+        outputChannel.appendLine(msg)
     }
 
     override fun error(msg: String, error: Throwable) {
-        errorChannel.appendln(msg)
+        errorChannel.appendLine(msg)
         error.printStacktraceRecursively(errorChannel)
     }
 
     override fun debug(msg: () -> String) {
         if (spec.debug) {
-            outputChannel.appendln(msg())
+            outputChannel.appendLine(msg())
         }
     }
 }

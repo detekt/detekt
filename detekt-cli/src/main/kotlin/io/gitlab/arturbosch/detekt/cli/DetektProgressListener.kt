@@ -22,6 +22,6 @@ class DetektProgressListener : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
         val middlePart = if (files.size == 1) "file was" else "files were"
-        outPrinter.appendln("\n\n${files.size} kotlin $middlePart analyzed.")
+        outPrinter.appendLine("\n\n${files.size} kotlin $middlePart analyzed.")
     }
 }

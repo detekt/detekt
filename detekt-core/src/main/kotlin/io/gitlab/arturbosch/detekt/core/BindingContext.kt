@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.PlainTextMessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProvid
 internal fun generateBindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,
-    files: List<KtFile>
+    files: List<KtFile>,
 ): BindingContext {
     if (classpath.isEmpty()) {
         return BindingContext.EMPTY
@@ -38,11 +38,11 @@ internal fun generateBindingContext(
 
 private object DetektMessageRenderer : PlainTextMessageRenderer() {
     override fun getName() = "detekt message renderer"
-    override fun getPath(location: CompilerMessageLocation) = location.path
+    override fun getPath(location: CompilerMessageSourceLocation) = location.path
     override fun render(
         severity: CompilerMessageSeverity,
         message: String,
-        location: CompilerMessageLocation?
+        location: CompilerMessageSourceLocation?,
     ): String {
         if (!severity.isError) return ""
         return super.render(severity, message, location)

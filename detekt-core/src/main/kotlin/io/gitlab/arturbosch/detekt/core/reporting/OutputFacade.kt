@@ -29,7 +29,7 @@ class OutputFacade(
         for (extension in extensions) {
             val output = extension.render(result)
             if (!output.isNullOrBlank()) {
-                settings.outputChannel.appendln(output)
+                settings.outputChannel.appendLine(output)
             }
         }
     }
