@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.types.isNullable
 
@@ -63,10 +62,9 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
             }
             expression.parent is KtStringTemplateEntry -> {
                 val languageVersionSettings = languageVersionSettings ?: return
+                val dataFlowValueFactory = dataFlowValueFactory ?: return
                 val descriptor = expression.descriptor() ?: return
                 val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return
-                @Suppress("DEPRECATION")
-                val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
                 val dataFlowValue =
                     dataFlowValueFactory.createDataFlowValue(expression, originalType, bindingContext, descriptor)
                 val dataFlowInfo =

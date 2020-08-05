@@ -16,6 +16,8 @@ import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -32,11 +34,13 @@ internal class Analyzer(
         bindingContext: BindingContext = BindingContext.EMPTY
     ): Map<RuleSetId, List<Finding>> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
+        @Suppress("DEPRECATION")
+        val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val findingsPerFile: FindingsResult =
             if (settings.spec.executionSpec.parallelAnalysis) {
-                runAsync(ktFiles, bindingContext, languageVersionSettings)
+                runAsync(ktFiles, bindingContext, languageVersionSettings, dataFlowValueFactory)
             } else {
-                runSync(ktFiles, bindingContext, languageVersionSettings)
+                runSync(ktFiles, bindingContext, languageVersionSettings, dataFlowValueFactory)
             }
 
         val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
@@ -49,11 +53,12 @@ internal class Analyzer(
     private fun runSync(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext,
-        languageVersionSettings: LanguageVersionSettings
+        languageVersionSettings: LanguageVersionSettings,
+        dataFlowValueFactory: DataFlowValueFactory
     ): FindingsResult =
         ktFiles.map { file ->
             processors.forEach { it.onProcess(file, bindingContext) }
-            val findings = runCatching { analyze(file, bindingContext, languageVersionSettings) }
+            val findings = runCatching { analyze(file, bindingContext, languageVersionSettings, dataFlowValueFactory) }
                 .onFailure { settings.error(createErrorMessage(file, it), it) }
                 .getOrDefault(emptyMap())
             processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
@@ -63,13 +68,14 @@ internal class Analyzer(
     private fun runAsync(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext,
-        languageVersionSettings: LanguageVersionSettings
+        languageVersionSettings: LanguageVersionSettings,
+        dataFlowValueFactory: DataFlowValueFactory
     ): FindingsResult {
         val service = settings.taskPool
         val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file, bindingContext) }
-                val findings = analyze(file, bindingContext, languageVersionSettings)
+                val findings = analyze(file, bindingContext, languageVersionSettings, dataFlowValueFactory)
                 processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
                 findings
             }.recover {
@@ -83,7 +89,8 @@ internal class Analyzer(
     private fun analyze(
         file: KtFile,
         bindingContext: BindingContext,
-        languageVersionSettings: LanguageVersionSettings
+        languageVersionSettings: LanguageVersionSettings,
+        dataFlowValueFactory: DataFlowValueFactory
     ): Map<RuleSetId, List<Finding>> {
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
@@ -103,7 +110,7 @@ internal class Analyzer(
 
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
-                rule.visitFile(file, bindingContext, languageVersionSettings)
+                rule.visitFile(file, bindingContext, languageVersionSettings, dataFlowValueFactory)
                 for (finding in rule.findings) {
                     val mappedRuleSet = idMapping[finding.id] ?: error("Mapping for '${finding.id}' expected.")
                     result.putIfAbsent(mappedRuleSet, mutableListOf())
