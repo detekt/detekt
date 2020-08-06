@@ -21,7 +21,8 @@ _Note:_ When using a custom config file, the default values are ignored unless y
 
 _detekt_ allows easily to just pick the rules you want and configure them the way you like.
 For example if you want to allow up to 20 functions inside a Kotlin file instead of the default threshold of 10, write:
-```
+
+```yaml
 complexity:
   TooManyFunctions:
     threshold: 20
@@ -33,7 +34,7 @@ To read about all supported rule sets and rules, use the side navigation `Rule S
 
 Starting with version **RC15** fine grained path filters can be defined for each rule or rule set:
 
-```
+```yaml
 complexity:
   TooManyFunctions:
     ...

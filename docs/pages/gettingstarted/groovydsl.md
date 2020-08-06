@@ -215,7 +215,7 @@ This aligns with the behavior of other code analysis plugins for Gradle.
 If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
 exclude detekt from the check task.
 
-```gradle
+```groovy
 tasks.getByName("check") {
     this.setDependsOn(this.dependsOn.filterNot {
         it is TaskProvider<*> && it.name == "detekt"
