@@ -4,6 +4,9 @@ keywords: detekt static analysis code kotlin
 sidebar: 
 permalink: gradle.html
 folder: gettingstarted
+redirect_from:
+ - /groovydsl.html
+ - /kotlindsl.html
 summary:
 ---
 
