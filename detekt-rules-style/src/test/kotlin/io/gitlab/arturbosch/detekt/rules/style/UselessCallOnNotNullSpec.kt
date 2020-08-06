@@ -137,6 +137,15 @@ object UselessCallOnNotNullSpec : Spek({
             assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
         }
 
+        it("reports when calling listOfNotNull with no arguments") {
+            val code = """
+                val strings = listOfNotNull<String>()                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        }
+
         it("does not report when calling listOfNotNull on at least one nullable argument") {
             val code = """
                 val strings = listOfNotNull("string", null)                
