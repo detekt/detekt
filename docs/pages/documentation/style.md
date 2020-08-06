@@ -1585,6 +1585,7 @@ Rule adapted from Kotlin's IntelliJ plugin: https://github.com/JetBrains/kotlin/
 ```kotlin
 val testList = listOf("string").orEmpty()
 val testList2 = listOf("string").orEmpty().map { _ }
+val testList3 = listOfNotNull("string")
 val testString = ""?.isNullOrBlank()
 ```
 
@@ -1593,6 +1594,7 @@ val testString = ""?.isNullOrBlank()
 ```kotlin
 val testList = listOf("string")
 val testList2 = listOf("string").map { }
+val testList3 = listOf("string")
 val testString = ""?.isBlank()
 ```
 

@@ -127,5 +127,41 @@ object UselessCallOnNotNullSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
         }
+
+        it("reports when calling listOfNotNull on all non-nullable arguments") {
+            val code = """
+                val strings = listOfNotNull("string")                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        }
+
+        it("reports when calling listOfNotNull with no arguments") {
+            val code = """
+                val strings = listOfNotNull<String>()                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        }
+
+        it("does not report when calling listOfNotNull on at least one nullable argument") {
+            val code = """
+                val strings = listOfNotNull("string", null)                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report when calling custom function named listOfNotNull on all non-nullable arguments") {
+            val code = """
+                fun <T : Any> listOfNotNull(vararg elements: T?): List<T> = TODO()
+
+                val strings = listOfNotNull("string", null)                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })
