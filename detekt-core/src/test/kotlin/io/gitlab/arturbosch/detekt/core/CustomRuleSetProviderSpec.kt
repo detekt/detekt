@@ -22,9 +22,8 @@ class CustomRuleSetProviderSpec : Spek({
 
     describe("custom rule sets should be loadable through jars") {
 
-        val sampleRuleSet = resourceAsPath("sample-rule-set.jar")
-
         it("should load the sample provider") {
+            val sampleRuleSet = resourceAsPath("sample-rule-set.jar")
             val spec = createNullLoggingSpec {
                 extensions {
                     disableDefaultRuleSets = true

@@ -18,7 +18,7 @@ class SupportConfigValidationSpec : Spek({
 
     describe("support config validation") {
 
-        val testDir = createTempDirectoryForTest("detekt-sample")
+        val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
 
         it("fails when unknown properties are found") {
             val config = yamlConfigFromContent("""

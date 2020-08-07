@@ -10,7 +10,7 @@ class DefaultConfigValidationSpec : Spek({
 
     describe("default configuration is valid") {
 
-        val baseline = yamlConfig("default-detekt-config.yml")
+        val baseline by memoized { yamlConfig("default-detekt-config.yml") }
 
         it("is valid comparing itself") {
             assertThat(validateConfig(baseline, baseline)).isEmpty()

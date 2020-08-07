@@ -38,9 +38,6 @@ internal class SingleRuleProviderSpec : Spek({
 
         context("the right sub config is passed to the rule") {
 
-            fun produceRule(config: Config): Rule =
-                provider.instance(config.subConfig("style")).rules.first() as Rule
-
             arrayOf("true", "false").forEach { value ->
                 it("configures rule with active=$value") {
                     val config = yamlConfigFromContent("""
@@ -49,9 +46,12 @@ internal class SingleRuleProviderSpec : Spek({
                         active: $value
                 """.trimIndent())
 
-                    assertThat(produceRule(config).active).isEqualTo(value.toBoolean())
+                    assertThat(produceRule(provider, config).active).isEqualTo(value.toBoolean())
                 }
             }
         }
     }
 })
+
+private fun produceRule(provider: RuleSetProvider, config: Config): Rule =
+    provider.instance(config.subConfig("style")).rules.first() as Rule

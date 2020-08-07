@@ -24,7 +24,7 @@ internal class MultiRuleSpec : Spek({
 
     describe("a multi rule") {
 
-        val file by memoized(CachingMode.SCOPE) { compileForTest(resourceAsPath("/cases/Default.kt"))}
+        val file by memoized(CachingMode.SCOPE) { compileForTest(resourceAsPath("/cases/Default.kt")) }
 
         context("runs once on a KtFile for every rules and respects configured path filters") {
 

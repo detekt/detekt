@@ -20,6 +20,7 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("parse different path based configuration settings") {
+
         val pathOne = resourceAsPath("/configs/one.yml")
         val pathTwo = resourceAsPath("/configs/two.yml")
         val pathThree = resourceAsPath("/configs/three.yml")
@@ -69,10 +70,12 @@ internal class ConfigurationsSpec : Spek({
 
     describe("with all rules activated by default") {
 
-        val config = ProcessingSpec {
-            config { resources = listOf(resourceUrl("/configs/empty.yml")) }
-            rules { activateExperimentalRules = true }
-        }.loadConfiguration()
+        val config by memoized {
+            ProcessingSpec {
+                config { resources = listOf(resourceUrl("/configs/empty.yml")) }
+                rules { activateExperimentalRules = true }
+            }.loadConfiguration()
+        }
 
         it("should override active to true by default") {
             val actual = config.subConfig("comments")
@@ -95,10 +98,12 @@ internal class ConfigurationsSpec : Spek({
 
     describe("fail fast override") {
 
-        val config = ProcessingSpec {
-            config { resources = listOf(resourceUrl("/configs/fail-fast-will-override-here.yml")) }
-            rules { activateExperimentalRules = true }
-        }.loadConfiguration()
+        val config by memoized {
+            ProcessingSpec {
+                config { resources = listOf(resourceUrl("/configs/fail-fast-will-override-here.yml")) }
+                rules { activateExperimentalRules = true }
+            }.loadConfiguration()
+        }
 
         it("should override config when specified") {
             val actual = config.subConfig("style")
@@ -121,13 +126,15 @@ internal class ConfigurationsSpec : Spek({
 
     describe("build upon default config") {
 
-        val config = ProcessingSpec {
-            config {
-                resources = listOf(resourceUrl("/configs/fail-fast-wont-override-here.yml"))
-                useDefaultConfig = true
-            }
-            rules { activateExperimentalRules = true }
-        }.loadConfiguration()
+        val config by memoized {
+            ProcessingSpec {
+                config {
+                    resources = listOf(resourceUrl("/configs/fail-fast-wont-override-here.yml"))
+                    useDefaultConfig = true
+                }
+                rules { activateExperimentalRules = true }
+            }.loadConfiguration()
+        }
 
         it("should override config when specified") {
             val ruleConfig = config.subConfig("style").subConfig("MaxLineLength")
@@ -155,13 +162,15 @@ internal class ConfigurationsSpec : Spek({
 
         context("when specified it respects all autoCorrect values of rules and rule sets") {
 
-            val config = ProcessingSpec {
-                config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
-                rules { autoCorrect = true }
-            }.loadConfiguration()
+            val config by memoized {
+                ProcessingSpec {
+                    config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
+                    rules { autoCorrect = true }
+                }.loadConfiguration()
+            }
 
-            val style = config.subConfig("style")
-            val comments = config.subConfig("comments")
+            val style by memoized { config.subConfig("style") }
+            val comments by memoized { config.subConfig("comments") }
 
             it("is disabled for rule sets") {
                 assertThat(style.valueOrNull<Boolean>("autoCorrect")).isTrue()
