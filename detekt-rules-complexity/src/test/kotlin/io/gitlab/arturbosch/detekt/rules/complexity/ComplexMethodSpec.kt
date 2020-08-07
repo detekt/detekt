@@ -72,40 +72,29 @@ class ComplexMethodSpec : Spek({
                     }
                 """.trimIndent()
 
-            fun execute(config: TestConfig, expectedValue: Int) {
-                val findings = ComplexMethod(config, threshold = 1).lint(code)
-
-                assertThat(findings).hasSourceLocations(SourceLocation(1, 5))
-
-                assertThat(findings.first())
-                    .isThresholded()
-                    .withValue(expectedValue)
-                    .withThreshold(1)
-            }
-
             it("counts three with nesting function 'forEach'") {
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "false"))
-                execute(config, expectedValue = 3)
+                assertExpectedComplexityValue(code, config, expectedValue = 3)
             }
 
             it("can ignore nesting functions like 'forEach'") {
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "true"))
-                execute(config, expectedValue = 2)
+                assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips all if if the nested functions is empty") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to ""))
-                execute(config, expectedValue = 2)
+                assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips 'forEach' as it is not specified") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
-                execute(config, expectedValue = 2)
+                assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips 'forEach' as it is not specified list") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to listOf("let", "apply", "also")))
-                execute(config, expectedValue = 2)
+                assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
         }
 
@@ -216,3 +205,14 @@ class ComplexMethodSpec : Spek({
         }
     }
 })
+
+private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
+    val findings = ComplexMethod(config, threshold = 1).lint(code)
+
+    assertThat(findings).hasSourceLocations(SourceLocation(1, 5))
+
+    assertThat(findings.first())
+        .isThresholded()
+        .withValue(expectedValue)
+        .withThreshold(1)
+}
