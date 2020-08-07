@@ -7,7 +7,7 @@ import org.spekframework.spek2.style.specification.describe
 
 class UseArrayLiteralsInAnnotationsSpec : Spek({
 
-    val subject = UseArrayLiteralsInAnnotations()
+    val subject by memoized { UseArrayLiteralsInAnnotations() }
 
     describe("suggests replacing arrayOf with [] syntax") {
 

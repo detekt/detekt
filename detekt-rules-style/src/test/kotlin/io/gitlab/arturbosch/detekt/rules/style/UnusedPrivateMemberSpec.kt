@@ -1191,5 +1191,4 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
     }
-
 })

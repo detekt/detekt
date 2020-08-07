@@ -9,7 +9,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
 
     describe("UnnecessaryAnnotationUseSiteTarget rule") {
 
-        context("Unnecessary @param: in a property constructor") {
+        it("Unnecessary @param: in a property constructor") {
             val code = """
                 class C(@param:Asdf private val foo: String)
 
@@ -18,7 +18,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
         }
 
-        context("Unnecessary @param: in a constructor") {
+        it("Unnecessary @param: in a constructor") {
             val code = """
                 class C(@param:Asdf foo: String)
 
@@ -27,7 +27,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
         }
 
-        context("Necessary @get:") {
+        it("Necessary @get:") {
             val code = """
                 class C(@get:Asdf private val foo: String)
 
@@ -36,7 +36,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
         }
 
-        context("Necessary @property:") {
+        it("Necessary @property:") {
             val code = """
                 class C(@property:Asdf private val foo: String)
 
@@ -45,7 +45,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
         }
 
-        context("Unnecessary @property:") {
+        it("Unnecessary @property:") {
             val code = """
                 class C {
                     @property:Asdf private val foo: String = "bar"
@@ -56,7 +56,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
         }
 
-        context("Unnecessary @property: at a top level property") {
+        it("Unnecessary @property: at a top level property") {
             val code = """
                 @property:Asdf private val foo: String = "bar"
 

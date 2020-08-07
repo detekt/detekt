@@ -58,7 +58,8 @@ class ForbiddenVoidSpec : Spek({
         }
 
         describe("ignoreOverridden is enabled") {
-            val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))
+
+            val config by memoized { TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true")) }
 
             it("should not report Void in overriding function declarations") {
                 val code = """
@@ -126,8 +127,10 @@ class ForbiddenVoidSpec : Spek({
                 assertThat(findings).hasSize(2)
             }
         }
+
         describe("ignoreUsageInGenerics is enabled") {
-            val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true"))
+
+            val config by memoized { TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true")) }
 
             it("should not report Void in generic type declaration") {
                 val code = """

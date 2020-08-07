@@ -710,7 +710,7 @@ class MagicNumberSpec : Spek({
 
         context("a number as part of a range") {
 
-            val magicNumberInRangeExpressions = listOf(
+            listOf(
                     "val range = 1..27",
                     "val range = (1..27)",
                     "val range = 27 downTo 1",
@@ -718,9 +718,7 @@ class MagicNumberSpec : Spek({
                     "val inRange = 1 in 1..27",
                     "val inRange = (1 in 27 downTo 0 step 1)",
                     "val inRange = (1..27 step 1).last"
-            )
-
-            magicNumberInRangeExpressions.forEach { codeWithMagicNumberInRange ->
+            ).forEach { codeWithMagicNumberInRange ->
                 it("'$codeWithMagicNumberInRange' reports a code smell by default") {
                     val code = codeWithMagicNumberInRange
                     assertThat(MagicNumber().lint(code)).hasSize(1)
@@ -764,9 +762,11 @@ class MagicNumberSpec : Spek({
 
         context("meaningful variables - #1536") {
 
-            val rule = MagicNumber(TestConfig(mapOf(
-                MagicNumber.IGNORE_LOCAL_VARIABLES to "true",
-                MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
+            val rule by memoized {
+                MagicNumber(TestConfig(mapOf(
+                    MagicNumber.IGNORE_LOCAL_VARIABLES to "true",
+                    MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
+            }
 
             it("should report 3") {
                 assertThat(rule.compileAndLint("""fun bar() { foo(3) }; fun foo(n: Int) {}""")).hasSize(1)
