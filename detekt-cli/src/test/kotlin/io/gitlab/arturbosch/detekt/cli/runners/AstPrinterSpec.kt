@@ -1,29 +1,27 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
-import java.nio.file.Paths
 
 class AstPrinterSpec : Spek({
 
     describe("element printer") {
 
-        val path = Paths.get(resource("cases")).toString()
+        val path = resourceAsPath("cases").toString()
 
         describe("successful AST printing") {
 
-            val output = ByteArrayOutputStream()
-
             it("should print the AST as string") {
+                val output = ByteArrayOutputStream()
                 val args = CliArgs()
-                args.input = Paths.get(resource("cases/Poko.kt")).toString()
+                args.input = resourceAsPath("cases/Poko.kt").toString()
                 val printer = AstPrinter(args, PrintStream(output))
 
                 printer.execute()

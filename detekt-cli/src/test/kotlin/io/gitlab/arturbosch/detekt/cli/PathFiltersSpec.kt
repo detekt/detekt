@@ -9,11 +9,6 @@ import java.nio.file.Paths
 
 class PathFiltersSpec : Spek({
 
-    fun CliArgs.toSpecFilters(): PathFilters? {
-        val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec
-        return PathFilters.of(spec.includes.toList(), spec.excludes.toList())
-    }
-
     describe("parse different filter settings") {
 
         it("should load single filter") {
@@ -24,43 +19,34 @@ class PathFiltersSpec : Spek({
 
         describe("parsing with different separators") {
 
-            // can parse pattern **/one/**,**/two/**,**/three
-            fun assertFilters(filters: PathFilters?) {
-                assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/two/path"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
-            }
-
             it("should load multiple comma-separated filters with no spaces around commas") {
                 val filters = CliArgs { excludes = "**/one/**,**/two/**,**/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
             it("should load multiple semicolon-separated filters with no spaces around semicolons") {
                 val filters = CliArgs { excludes = "**/one/**;**/two/**;**/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
             it("should load multiple comma-separated filters with spaces around commas") {
                 val filters = CliArgs { excludes = "**/one/** ,**/two/**, **/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
             it("should load multiple semicolon-separated filters with spaces around semicolons") {
                 val filters = CliArgs { excludes = "**/one/** ;**/two/**; **/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
             it("should load multiple mixed-separated filters with no spaces around separators") {
                 val filters = CliArgs { excludes = "**/one/**,**/two/**;**/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
             it("should load multiple mixed-separated filters with spaces around separators") {
                 val filters = CliArgs { excludes = "**/one/** ,**/two/**; **/three" }.toSpecFilters()
-                assertFilters(filters)
+                assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
         }
 
@@ -74,3 +60,17 @@ class PathFiltersSpec : Spek({
         }
     }
 })
+
+private fun CliArgs.toSpecFilters(): PathFilters? {
+    val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec
+    return PathFilters.of(spec.includes.toList(), spec.excludes.toList())
+}
+
+// can parse pattern **/one/**,**/two/**,**/three
+private fun assertSameFiltersIndependentOfSpacingAndSeparater(filters: PathFilters?) {
+    assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
+    assertThat(filters?.isIgnored(Paths.get("/two/path"))).isTrue()
+    assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
+    assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
+    assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+}
