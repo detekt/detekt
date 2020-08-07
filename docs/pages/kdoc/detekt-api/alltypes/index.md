@@ -61,6 +61,13 @@ Provides a compact string representation.
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.CompilerResources](../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html)
+
+Provides compiler resources.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.CompositeConfig](../io.gitlab.arturbosch.detekt.api/-composite-config.html)
 
 Wraps two different configuration which should be considered when retrieving properties.
