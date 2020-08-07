@@ -72,7 +72,7 @@ class UnnecessaryApplySpec : Spek({
                 """)).isEmpty()
             }
 
-            it("does report single statement in apply used as function argument") {
+            it("does not report single statement in apply used as function argument") {
                 assertThat(subject.compileAndLint("""
                     fun b(i: Int?) {}
 
@@ -85,7 +85,7 @@ class UnnecessaryApplySpec : Spek({
                """)).isEmpty()
             }
 
-            it("does report single assignment statement in apply used as function argument - #1517") {
+            it("does not report single assignment statement in apply used as function argument - #1517") {
                 assertThat(subject.compileAndLint("""
                     class C {
                         var prop = 0
