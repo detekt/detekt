@@ -18,11 +18,13 @@ class MemberNameEqualsClassNameSpec : Spek({
 
     describe("MemberNameEqualsClassName rule") {
 
-        val noIgnoreOverridden = TestConfig(
-            mapOf(
-                MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+        val noIgnoreOverridden by memoized {
+            TestConfig(
+                mapOf(
+                    MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+                )
             )
-        )
+        }
 
         context("some classes with methods which don't have the same name") {
 

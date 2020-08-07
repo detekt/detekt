@@ -52,7 +52,7 @@ class FunctionParameterNamingSpec : Spek({
 
     describe("parameters in a function of an excluded class") {
 
-        val config = TestConfig(mapOf(FunctionParameterNaming.EXCLUDE_CLASS_PATTERN to "Excluded"))
+        val config by memoized { TestConfig(mapOf(FunctionParameterNaming.EXCLUDE_CLASS_PATTERN to "Excluded")) }
 
         it("should not detect function parameter") {
             val code = """
