@@ -107,7 +107,7 @@ description: "Meet detekt, a static code analysis tool for Kotlin."
 # the description is used in the feed.xml file
 
 # needed for sitemap.xml file only
-url: http://github.com/detekt/detekt
+url: https://detekt.github.io/detekt/
 baseurl: /
 
 detekt_version: 1.11.0-RC1
