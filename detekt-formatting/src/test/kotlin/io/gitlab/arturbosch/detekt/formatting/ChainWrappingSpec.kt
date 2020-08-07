@@ -8,6 +8,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ChainWrappingSpec : Spek({
+
     describe("tests integration of formatting") {
 
         it("should work like KtLint") {

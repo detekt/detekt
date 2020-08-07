@@ -15,10 +15,11 @@ class AutoCorrectLevelSpec : Spek({
 
         describe("autoCorrect: true on all levels") {
 
-            val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
-
             it("should reformat the test file") {
+                val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
+
                 val (file, findings) = runRule(config)
+
                 assertThat(wasLinted(findings)).isTrue()
                 assertThat(wasFormatted(file)).isTrue()
             }
@@ -26,10 +27,11 @@ class AutoCorrectLevelSpec : Spek({
 
         describe("autoCorrect: false on ruleSet level") {
 
-            val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
-
             it("should not reformat the test file") {
+                val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
+
                 val (file, findings) = runRule(config)
+
                 assertThat(wasLinted(findings)).isTrue()
                 assertThat(wasFormatted(file)).isFalse()
             }
@@ -37,10 +39,11 @@ class AutoCorrectLevelSpec : Spek({
 
         describe("autoCorrect: false on rule level") {
 
-            val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
-
             it("should not reformat the test file") {
+                val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
+
                 val (file, findings) = runRule(config)
+
                 assertThat(wasLinted(findings)).isTrue()
                 assertThat(wasFormatted(file)).isFalse()
             }
@@ -48,10 +51,11 @@ class AutoCorrectLevelSpec : Spek({
 
         describe("autoCorrect: true but rule active false") {
 
-            val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
-
             it("should not reformat the test file") {
+                val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
+
                 val (file, findings) = runRule(config)
+
                 assertThat(wasLinted(findings)).isFalse()
                 assertThat(wasFormatted(file)).isFalse()
             }
