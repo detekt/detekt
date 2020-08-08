@@ -17,14 +17,18 @@ import org.spekframework.spek2.style.specification.describe
 
 class XmlOutputFormatSpec : Spek({
 
-    val entity1 = Entity("Sample1", "com.sample.Sample1", "",
+    val entity1 by memoized {
+        Entity("Sample1", "com.sample.Sample1", "",
             Location(SourceLocation(11, 1), TextLocation(0, 10),
-                    "abcd", "src/main/com/sample/Sample1.kt"))
-    val entity2 = Entity("Sample2", "com.sample.Sample2", "",
+                "abcd", "src/main/com/sample/Sample1.kt"))
+    }
+    val entity2 by memoized {
+        Entity("Sample2", "com.sample.Sample2", "",
             Location(SourceLocation(22, 2), TextLocation(0, 20),
-                    "efgh", "src/main/com/sample/Sample2.kt"))
+                "efgh", "src/main/com/sample/Sample2.kt"))
+    }
 
-    val outputFormat = XmlOutputReport()
+    val outputFormat by memoized { XmlOutputReport() }
 
     describe("XML output format") {
 

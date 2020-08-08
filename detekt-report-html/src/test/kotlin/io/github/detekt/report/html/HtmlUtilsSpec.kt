@@ -10,7 +10,8 @@ import org.spekframework.spek2.style.specification.describe
 class HtmlUtilsSpec : Spek({
 
     describe("HTML snippet code") {
-        val code = """
+        val code by memoized {
+            """
             package cases
             // reports 1 - line with just one space
 
@@ -27,7 +28,8 @@ class HtmlUtilsSpec : Spek({
                 // reports 1
                 }
             }
-        """.trimIndent().splitToSequence('\n')
+            """.trimIndent().splitToSequence('\n')
+        }
 
         it("all line") {
             val snippet = createHTML().div() {
