@@ -63,6 +63,19 @@ console-reports:
   #  - 'FileBasedFindingsReport'
 ```
 
+**ProjectStatisticsReport** contains metrics and statistics concerning the analyzed project sorted by priority.
+
+**ComplexityReport** contains metrics concerning the analyzed code. 
+For instance the source lines of code and the McCabe complexity are calculated.
+
+**NotificationReport** contains notifications reported by the detekt analyzer similar to push notifications. 
+It's simply a way of alerting users to information that they have opted-in to.
+
+**FindingsReport** contains all rule violations in a list format grouped by ruleset.
+
+**FileBasedFindingsReport** is similar to the FindingsReport shown above. 
+The rule violations are grouped by file location.
+
 #### Output Reports
 
 Uncomment the reports you don't care about.
@@ -81,6 +94,10 @@ output-reports:
 **TxtOutputReport** contains rule violations in a plain text report similar to a log file.
 
 **XmlOutputReport** contains rule violations in an XML format. The report follows the structure of a [Checkstyle report](https://checkstyle.sourceforge.io).
+
+Rule violations show the name of the violated rule and in which file the issue happened.
+The mentioned metrics show detailed statistics concerning the analyzed code.
+For instance the source lines of code and the McCabe complexity are calculated.
 
 #### Processors
 
