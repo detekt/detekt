@@ -6,7 +6,7 @@ title: BaseRule.visitFile - detekt-api
 
 # visitFile
 
-`fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY, compilerResources: `[`CompilerResources`](../-compiler-resources/index.html)`? = null): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
 Pre- and post-visit-hooks are executed before/after the visiting process.

@@ -6,12 +6,15 @@ import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
+import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.nio.file.Path
 
@@ -44,7 +47,11 @@ fun BaseRule.compileAndLintWithContext(
     }
     val ktFile = compileContentForTest(content.trimIndent())
     val bindingContext = getContextForPaths(environment, listOf(ktFile))
-    return findingsAfterVisit(ktFile, bindingContext)
+    val languageVersionSettings = environment.configuration.languageVersionSettings
+    @Suppress("DEPRECATION")
+    val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
+    val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
+    return findingsAfterVisit(ktFile, bindingContext, compilerResources)
 }
 
 private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
@@ -57,9 +64,10 @@ fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
 
 private fun BaseRule.findingsAfterVisit(
     ktFile: KtFile,
-    bindingContext: BindingContext = BindingContext.EMPTY
+    bindingContext: BindingContext = BindingContext.EMPTY,
+    compilerResources: CompilerResources? = null
 ): List<Finding> {
-    this.visitFile(ktFile, bindingContext)
+    this.visitFile(ktFile, bindingContext, compilerResources)
     return this.findings
 }
 

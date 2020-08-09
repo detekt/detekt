@@ -14,6 +14,7 @@ abstract class BaseRule(
 
     open val ruleId: RuleId = javaClass.simpleName
     var bindingContext: BindingContext = BindingContext.EMPTY
+    var compilerResources: CompilerResources? = null
 
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -23,9 +24,14 @@ abstract class BaseRule(
      * receive the correct compile classpath for the code being analyzed otherwise the default value
      * BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.
      */
-    fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY) {
+    fun visitFile(
+        root: KtFile,
+        bindingContext: BindingContext = BindingContext.EMPTY,
+        compilerResources: CompilerResources? = null
+    ) {
         clearFindings()
         this.bindingContext = bindingContext
+        this.compilerResources = compilerResources
         if (visitCondition(root)) {
             preVisit(root)
             visit(root)

@@ -8,12 +8,15 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
+import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -29,11 +32,15 @@ internal class Analyzer(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext = BindingContext.EMPTY
     ): Map<RuleSetId, List<Finding>> {
+        val languageVersionSettings = settings.environment.configuration.languageVersionSettings
+        @Suppress("DEPRECATION")
+        val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
+        val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         val findingsPerFile: FindingsResult =
             if (settings.spec.executionSpec.parallelAnalysis) {
-                runAsync(ktFiles, bindingContext)
+                runAsync(ktFiles, bindingContext, compilerResources)
             } else {
-                runSync(ktFiles, bindingContext)
+                runSync(ktFiles, bindingContext, compilerResources)
             }
 
         val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
@@ -45,11 +52,12 @@ internal class Analyzer(
 
     private fun runSync(
         ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
     ): FindingsResult =
         ktFiles.map { file ->
             processors.forEach { it.onProcess(file, bindingContext) }
-            val findings = runCatching { analyze(file, bindingContext) }
+            val findings = runCatching { analyze(file, bindingContext, compilerResources) }
                 .onFailure { settings.error(createErrorMessage(file, it), it) }
                 .getOrDefault(emptyMap())
             processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
@@ -58,13 +66,14 @@ internal class Analyzer(
 
     private fun runAsync(
         ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
     ): FindingsResult {
         val service = settings.taskPool
         val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file, bindingContext) }
-                val findings = analyze(file, bindingContext)
+                val findings = analyze(file, bindingContext, compilerResources)
                 processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
                 findings
             }.recover {
@@ -75,7 +84,11 @@ internal class Analyzer(
         return awaitAll(tasks).filterNotNull()
     }
 
-    private fun analyze(file: KtFile, bindingContext: BindingContext): Map<RuleSetId, List<Finding>> {
+    private fun analyze(
+        file: KtFile,
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
+    ): Map<RuleSetId, List<Finding>> {
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             is MultiRule -> rule.rules.any { it.autoCorrect }
@@ -94,7 +107,7 @@ internal class Analyzer(
 
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
-                rule.visitFile(file, bindingContext)
+                rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in rule.findings) {
                     val mappedRuleSet = idMapping[finding.id] ?: error("Mapping for '${finding.id}' expected.")
                     result.putIfAbsent(mappedRuleSet, mutableListOf())
