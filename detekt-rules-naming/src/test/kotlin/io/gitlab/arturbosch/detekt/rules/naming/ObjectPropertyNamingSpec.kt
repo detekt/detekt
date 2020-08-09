@@ -161,11 +161,13 @@ class ObjectPropertyNamingSpec : Spek({
 
     describe("variables and constants in objects with custom config") {
 
-        val config = TestConfig(mapOf(
+        val config by memoized {
+            TestConfig(mapOf(
                 ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
                 ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
-        ))
-        val subject = ObjectPropertyNaming(config)
+            ))
+        }
+        val subject by memoized { ObjectPropertyNaming(config) }
 
         it("should not detect constants in object with underscores") {
             val code = """
