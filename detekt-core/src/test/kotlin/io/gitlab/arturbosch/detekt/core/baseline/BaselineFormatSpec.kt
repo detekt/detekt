@@ -53,7 +53,7 @@ class BaselineFormatSpec : Spek({
 
         context("writes a baseline file") {
 
-            val savedBaseline = Baseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
+            val savedBaseline by memoized { Baseline(setOf("4", "2", "2"), setOf("1", "2", "3")) }
 
             it("has a new line at the end of the written baseline file") {
                 val tempFile = createTempFileForTest("baseline1", ".xml")

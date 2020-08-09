@@ -27,7 +27,7 @@ class RuleSetSpec : Spek({
 
         context("should rule analyze a file") {
 
-            val file = compileForTest(resourceAsPath("/cases/Default.kt"))
+            val file by memoized { compileForTest(resourceAsPath("/cases/Default.kt")) }
 
             it("analyzes file with an empty config") {
                 val config = Config.empty

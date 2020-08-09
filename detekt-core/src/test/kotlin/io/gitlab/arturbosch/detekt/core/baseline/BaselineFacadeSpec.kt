@@ -13,14 +13,8 @@ class BaselineFacadeSpec : Spek({
 
     describe("a baseline facade") {
 
-        val dir = createTempDirectoryForTest("baseline_format")
+        val dir by memoized { createTempDirectoryForTest("baseline_format") }
         val validBaseline = resourceAsPath("/baseline_feature/valid-baseline.xml")
-
-        fun assertNonEmptyBaseline(fullPath: Path) {
-            BaselineFacade().createOrUpdate(fullPath, emptyList())
-            val lines = Files.readAllLines(fullPath)
-            assertThat(lines).isNotEmpty
-        }
 
         it("creates a baseline file") {
             val fullPath = dir.resolve("baseline.xml")
@@ -36,3 +30,9 @@ class BaselineFacadeSpec : Spek({
         }
     }
 })
+
+fun assertNonEmptyBaseline(fullPath: Path) {
+    BaselineFacade().createOrUpdate(fullPath, emptyList())
+    val lines = Files.readAllLines(fullPath)
+    assertThat(lines).isNotEmpty
+}

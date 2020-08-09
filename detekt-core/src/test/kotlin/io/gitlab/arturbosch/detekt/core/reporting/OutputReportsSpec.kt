@@ -23,13 +23,15 @@ internal class OutputReportsSpec : Spek({
 
         context("arguments for spec") {
 
-            val reportUnderTest = TestOutputReport::class.java.simpleName
-            val reports = ReportsSpecBuilder().apply {
-                report { "xml" to Paths.get("/tmp/path1") }
-                report { "txt" to Paths.get("/tmp/path2") }
-                report { reportUnderTest to Paths.get("/tmp/path3") }
-                report { "html" to Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
-            }.build().reports.toList()
+            val reportUnderTest by memoized { TestOutputReport::class.java.simpleName }
+            val reports by memoized {
+                ReportsSpecBuilder().apply {
+                    report { "xml" to Paths.get("/tmp/path1") }
+                    report { "txt" to Paths.get("/tmp/path2") }
+                    report { reportUnderTest to Paths.get("/tmp/path3") }
+                    report { "html" to Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
+                }.build().reports.toList()
+            }
 
             it("should parse multiple report entries") {
                 assertThat(reports).hasSize(4)
@@ -62,21 +64,24 @@ internal class OutputReportsSpec : Spek({
                 )
             }
 
-            val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
-            val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it.id) }
+            context("default report ids") {
 
-            it("should be able to convert to output reports") {
-                assertThat(reports).allMatch { it.type in extensionsIds }
-            }
+                val extensions by memoized { createProcessingSettings().use { OutputReportLocator(it).load() } }
+                val extensionsIds by memoized { extensions.mapTo(HashSet()) { defaultReportMapping(it.id) } }
 
-            it("should recognize custom output format") {
-                assertThat(reports).haveExactly(1,
-                    Condition(Predicate { it.type == reportUnderTest },
-                        "Corresponds exactly to the test output report."))
+                it("should be able to convert to output reports") {
+                    assertThat(reports).allMatch { it.type in extensionsIds }
+                }
 
-                assertThat(extensions).haveExactly(1,
-                    Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
-                        "Is exactly the test output report."))
+                it("should recognize custom output format") {
+                    assertThat(reports).haveExactly(1,
+                        Condition(Predicate { it.type == reportUnderTest },
+                            "Corresponds exactly to the test output report."))
+
+                    assertThat(extensions).haveExactly(1,
+                        Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
+                            "Is exactly the test output report."))
+                }
             }
         }
 

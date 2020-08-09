@@ -12,11 +12,6 @@ import java.lang.reflect.Modifier
 
 class RuleSetLocatorTest : Spek({
 
-    fun getProviderClasses(): List<Class<out RuleSetProvider>> =
-        Reflections("io.gitlab.arturbosch.detekt.rules")
-            .getSubTypesOf(RuleSetProvider::class.java)
-            .filter { !Modifier.isAbstract(it.modifiers) }
-
     describe("locating RuleSetProvider's") {
 
         it("contains all RuleSetProviders") {
@@ -39,3 +34,8 @@ class RuleSetLocatorTest : Spek({
         }
     }
 })
+
+private fun getProviderClasses(): List<Class<out RuleSetProvider>> =
+    Reflections("io.gitlab.arturbosch.detekt.rules")
+        .getSubTypesOf(RuleSetProvider::class.java)
+        .filter { !Modifier.isAbstract(it.modifiers) }

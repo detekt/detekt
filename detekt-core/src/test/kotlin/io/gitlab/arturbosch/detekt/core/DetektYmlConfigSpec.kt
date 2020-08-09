@@ -8,7 +8,7 @@ class DetektYmlConfigSpec : Spek({
 
     describe("detekt YAML config") {
 
-        val config = DefaultConfig.newInstance()
+        val config by memoized { DefaultConfig.newInstance() }
 
         it("complexitySection") {
             ConfigAssert(

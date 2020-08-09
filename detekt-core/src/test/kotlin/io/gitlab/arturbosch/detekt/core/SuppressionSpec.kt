@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
@@ -16,6 +13,9 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -32,90 +32,80 @@ internal class SuppressionSpec : Spek({
 
     describe("detekt findings can be suppressed with @Suppress or @SuppressWarnings") {
 
-        fun checkSuppression(annotation: String, argument: String): Boolean {
-            val annotated = """
-            @$annotation("$argument")
-            class Test
-             """
-            val file = compileContentForTest(annotated)
-            val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
-            return annotatedClass.isSuppressedBy("Test", setOf("alias"))
-        }
-
         it("should not be suppressed by a @Deprecated annotation") {
-            assertThat(checkSuppression("Deprecated", "This should no longer be used")).isFalse()
+            assertThat(isSuppressedBy("Deprecated", "This should no longer be used")).isFalse()
         }
 
         it("should not be suppressed by a @Suppress annotation for another rule") {
-            assertThat(checkSuppression("Suppress", "NotATest")).isFalse()
+            assertThat(isSuppressedBy("Suppress", "NotATest")).isFalse()
         }
 
         it("should not be suppressed by a @SuppressWarnings annotation for another rule") {
-            assertThat(checkSuppression("SuppressWarnings", "NotATest")).isFalse()
+            assertThat(isSuppressedBy("SuppressWarnings", "NotATest")).isFalse()
         }
 
         it("should be suppressed by a @Suppress annotation for the rule") {
-            assertThat(checkSuppression("Suppress", "Test")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "Test")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation for the rule") {
-            assertThat(checkSuppression("SuppressWarnings", "Test")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "Test")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation for 'all' rules") {
-            assertThat(checkSuppression("Suppress", "all")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "all")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation for 'ALL' rules") {
-            assertThat(checkSuppression("SuppressWarnings", "ALL")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "ALL")).isTrue()
         }
 
         it("should not be suppressed by a @Suppress annotation with a Checkstyle prefix") {
-            assertThat(checkSuppression("Suppress", "Checkstyle:Test")).isFalse()
+            assertThat(isSuppressedBy("Suppress", "Checkstyle:Test")).isFalse()
         }
 
         it("should not be suppressed by a @SuppressWarnings annotation with a Checkstyle prefix") {
-            assertThat(checkSuppression("SuppressWarnings", "Checkstyle:Test")).isFalse()
+            assertThat(isSuppressedBy("SuppressWarnings", "Checkstyle:Test")).isFalse()
         }
 
         it("should be suppressed by a @Suppress annotation with a 'Detekt' prefix") {
-            assertThat(checkSuppression("Suppress", "Detekt:Test")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "Detekt:Test")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation with a 'Detekt' prefix") {
-            assertThat(checkSuppression("SuppressWarnings", "Detekt:Test")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "Detekt:Test")).isTrue()
         }
 
         it("should be suppressed by a @Suppress annotation with a 'detekt' prefix") {
-            assertThat(checkSuppression("Suppress", "detekt:Test")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "detekt:Test")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix") {
-            assertThat(checkSuppression("SuppressWarnings", "detekt:Test")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "detekt:Test")).isTrue()
         }
 
         it("should be suppressed by a @Suppress annotation with a 'detekt' prefix with a dot") {
-            assertThat(checkSuppression("Suppress", "detekt.Test")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "detekt.Test")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix with a dot") {
-            assertThat(checkSuppression("SuppressWarnings", "detekt.Test")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "detekt.Test")).isTrue()
         }
 
         it("should not be suppressed by a @Suppress annotation with a 'detekt' prefix with a wrong separator") {
-            assertThat(checkSuppression("Suppress", "detekt/Test")).isFalse()
+            assertThat(isSuppressedBy("Suppress", "detekt/Test")).isFalse()
         }
 
         it("should not be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix with a wrong separator") {
-            assertThat(checkSuppression("SuppressWarnings", "detekt/Test")).isFalse()
+            assertThat(isSuppressedBy("SuppressWarnings", "detekt/Test")).isFalse()
         }
 
         it("should be suppressed by a @Suppress annotation with an alias") {
-            assertThat(checkSuppression("Suppress", "alias")).isTrue()
+            assertThat(isSuppressedBy("Suppress", "alias")).isTrue()
         }
 
         it("should be suppressed by a @SuppressWarnings annotation with an alias") {
-            assertThat(checkSuppression("SuppressWarnings", "alias")).isTrue()
+            assertThat(isSuppressedBy("SuppressWarnings", "alias")).isTrue()
         }
     }
 
@@ -211,7 +201,11 @@ internal class SuppressionSpec : Spek({
         val code = """
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
         """.trimIndent()
-        val config = yamlConfig("/suppression/ruleset-suppression.yml").subConfig("complexity")
+
+        val config by memoized {
+            yamlConfig("/suppression/ruleset-suppression.yml")
+                .subConfig("complexity")
+        }
 
         it("reports without a suppression") {
             assertThat(TestLPL(config).lint(code)).isNotEmpty()
@@ -221,50 +215,63 @@ internal class SuppressionSpec : Spek({
             assertThat(TestLPL(config).lint("""@Suppress("wrong_name_used")$code""")).isNotEmpty()
         }
 
-        fun assertCodeIsSuppressed(code: String) {
-            val findings = TestLPL(config).lint(code)
-            assertThat(findings).isEmpty()
-        }
-
         it("suppresses by rule set id") {
-            assertCodeIsSuppressed("""@Suppress("complexity")$code""")
+            assertCodeIsSuppressed("""@Suppress("complexity")$code""", config)
         }
 
         it("suppresses by rule set id and detekt prefix") {
-            assertCodeIsSuppressed("""@Suppress("detekt.complexity")$code""")
+            assertCodeIsSuppressed("""@Suppress("detekt.complexity")$code""", config)
         }
 
         it("suppresses by rule id") {
-            assertCodeIsSuppressed("""@Suppress("LongParameterList")$code""")
+            assertCodeIsSuppressed("""@Suppress("LongParameterList")$code""", config)
         }
 
         it("suppresses by combination of rule set and rule id") {
-            assertCodeIsSuppressed("""@Suppress("complexity.LongParameterList")$code""")
+            assertCodeIsSuppressed("""@Suppress("complexity.LongParameterList")$code""", config)
         }
 
         it("suppresses by combination of detekt prefix, rule set and rule id") {
-            assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""")
+            assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""", config)
         }
 
         context("MultiRule") {
-            class ThisMultiRule : MultiRule() {
-                override val rules: List<Rule> = listOf(TestLPL(config))
+
+            val subject by memoized { AMultiRule(config) }
+
+            it("is suppressed by rule id") {
+                assertThat(subject.lint("""@Suppress("complexity")$code""")).isEmpty()
             }
 
             it("is suppressed by rule id") {
-                assertThat(ThisMultiRule().lint("""@Suppress("complexity")$code""")).isEmpty()
-            }
-
-            it("is suppressed by rule id") {
-                assertThat(ThisMultiRule().lint("""@Suppress("LongParameterList")$code""")).isEmpty()
+                assertThat(subject.lint("""@Suppress("LongParameterList")$code""")).isEmpty()
             }
 
             it("is suppressed by combination of detekt.ruleSetId.ruleId") {
-                assertThat(ThisMultiRule().lint("""@Suppress("detekt.complexity.LongParameterList")$code""")).isEmpty()
+                assertThat(subject.lint("""@Suppress("detekt.complexity.LongParameterList")$code""")).isEmpty()
             }
         }
     }
 })
+
+private fun assertCodeIsSuppressed(code: String, config: Config) {
+    val findings = TestLPL(config).lint(code)
+    assertThat(findings).isEmpty()
+}
+
+private fun isSuppressedBy(annotation: String, argument: String): Boolean {
+    val annotated = """
+            @$annotation("$argument")
+            class Test
+        """
+    val file = compileContentForTest(annotated)
+    val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
+    return annotatedClass.isSuppressedBy("Test", setOf("alias"))
+}
+
+private class AMultiRule(config: Config) : MultiRule() {
+    override val rules: List<Rule> = listOf(TestLPL(config))
+}
 
 private class TestRule(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("Test", Severity.CodeSmell, "", Debt.TWENTY_MINS)
