@@ -7,7 +7,8 @@ import org.spekframework.spek2.style.specification.describe
 class SplitPatternSpec : Spek({
 
     describe("an excludes rule with a single exclude") {
-        val excludes = SplitPattern("test")
+
+        val excludes by memoized { SplitPattern("test") }
 
         it("contains the `test` parameter") {
             val parameter = "test"
@@ -41,7 +42,8 @@ class SplitPatternSpec : Spek({
     }
 
     describe("an excludes rule with multiple excludes") {
-        val excludes = SplitPattern("here.there.io, test.com")
+
+        val excludes by memoized { SplitPattern("here.there.io, test.com") }
 
         it("contains the `test` parameter") {
             val parameter = "test.com"
@@ -99,7 +101,8 @@ class SplitPatternSpec : Spek({
     }
 
     describe("an excludes rule with lots of whitespace and an empty parameter") {
-        val excludes = SplitPattern("    test,  ,       here.there       ")
+
+        val excludes by memoized { SplitPattern("    test,  ,       here.there       ") }
 
         it("contains the `test` parameter") {
             val parameter = "test"

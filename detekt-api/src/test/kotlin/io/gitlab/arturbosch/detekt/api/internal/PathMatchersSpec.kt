@@ -12,8 +12,9 @@ class PathMatchersSpec : Spek({
     val nonMatchingPath = Paths.get("/detekt/cli/Issue.kt")
 
     describe("supports globing") {
+
         val libraryPattern = "**/detekt/api/**"
-        val matcher = pathMatcher("glob:$libraryPattern")
+        val matcher by memoized { pathMatcher("glob:$libraryPattern") }
 
         it("should match") {
             assertThat(matcher.matches(expectedMatch)).isTrue()
@@ -29,6 +30,7 @@ class PathMatchersSpec : Spek({
     }
 
     describe("does not support regex") {
+
         it("should work as a regex path matcher when syntax not specified") {
             assertThatThrownBy { pathMatcher("regex:.*/detekt/api/.*") }
                 .isInstanceOf(IllegalArgumentException::class.java)
