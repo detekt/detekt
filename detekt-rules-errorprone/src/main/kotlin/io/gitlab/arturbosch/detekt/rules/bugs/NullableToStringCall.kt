@@ -61,15 +61,16 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
                 if (qualified.descriptor()?.fqNameOrNull() != FqName("kotlin.toString")) return
             }
             expression.parent is KtStringTemplateEntry -> {
-                val languageVersionSettings = languageVersionSettings ?: return
-                val dataFlowValueFactory = dataFlowValueFactory ?: return
+                val compilerResources = compilerResources ?: return
                 val descriptor = expression.descriptor() ?: return
                 val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return
-                val dataFlowValue =
-                    dataFlowValueFactory.createDataFlowValue(expression, originalType, bindingContext, descriptor)
                 val dataFlowInfo =
                     bindingContext[BindingContext.EXPRESSION_TYPE_INFO, expression]?.dataFlowInfo ?: return
-                val dataFlowTypes = dataFlowInfo.getStableTypes(dataFlowValue, languageVersionSettings)
+                val dataFlowValue = compilerResources.dataFlowValueFactory.createDataFlowValue(
+                    expression, originalType, bindingContext, descriptor
+                )
+                val dataFlowTypes =
+                    dataFlowInfo.getStableTypes(dataFlowValue, compilerResources.languageVersionSettings)
                 if (dataFlowTypes.any { !it.isNullable() }) return
             }
             else -> return

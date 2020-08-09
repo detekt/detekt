@@ -39,7 +39,7 @@ a custom meta baseline task:
 
 Gradle-DSL
 
-```gradle
+```groovy
 subprojects {
     detekt {
         // ...

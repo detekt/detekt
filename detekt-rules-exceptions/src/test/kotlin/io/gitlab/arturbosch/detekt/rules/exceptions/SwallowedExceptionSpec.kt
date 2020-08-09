@@ -122,8 +122,10 @@ class SwallowedExceptionSpec : Spek({
         listOf(listOf("IllegalArgumentException"), "IllegalArgumentException").forEach { ignoredExceptionValue ->
             context("ignores given exception types config") {
 
-                val config = TestConfig(SwallowedException.IGNORED_EXCEPTION_TYPES to ignoredExceptionValue)
-                val rule = SwallowedException(config)
+                val config by memoized {
+                    TestConfig(SwallowedException.IGNORED_EXCEPTION_TYPES to ignoredExceptionValue)
+                }
+                val rule by memoized { SwallowedException(config) }
 
                 it("ignores given exception type in configuration") {
                     val code = """
@@ -151,8 +153,8 @@ class SwallowedExceptionSpec : Spek({
 
         context("ignores given exception name config") {
 
-            val config = TestConfig(mapOf(SwallowedException.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
-            val rule = SwallowedException(config)
+            val config by memoized { TestConfig(mapOf(SwallowedException.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore")) }
+            val rule by memoized { SwallowedException(config) }
 
             it("ignores given exception name") {
                 val code = """

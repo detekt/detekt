@@ -19,7 +19,7 @@ import java.nio.file.Paths
 
 class RunnerSpec : Spek({
 
-    val inputPath: Path = resourceAsPath("cases/Poko.kt")
+    val inputPath = resourceAsPath("cases/Poko.kt")
 
     describe("executes the runner with different maxIssues configurations") {
 

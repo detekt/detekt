@@ -13,11 +13,9 @@ internal class MaxIssueCheckTest : Spek({
 
     describe("based only on MaxIssuePolicy") {
 
-        fun createFixture(policy: RulesSpec.MaxIssuePolicy) =
-            MaxIssueCheck(ProcessingSpec { rules { maxIssuePolicy = policy } }.rulesSpec, Config.empty)
-
         context("policy of any") {
-            val fixture = createFixture(RulesSpec.MaxIssuePolicy.AllowAny)
+
+            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.AllowAny) }
 
             listOf(-1, 0, 1, 100).forEach {
                 it("passes on $it issues") {
@@ -27,7 +25,8 @@ internal class MaxIssueCheckTest : Spek({
         }
 
         context("policy of none") {
-            val fixture = createFixture(RulesSpec.MaxIssuePolicy.NoneAllowed)
+
+            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.NoneAllowed) }
 
             it("passes on zero issues") {
                 assertThatCode { fixture.check(0) }.doesNotThrowAnyException()
@@ -41,7 +40,8 @@ internal class MaxIssueCheckTest : Spek({
         }
 
         context("policy of specified amount of 2 issues") {
-            val fixture = createFixture(RulesSpec.MaxIssuePolicy.AllowAmount(2))
+
+            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.AllowAmount(2)) }
 
             listOf(-1, 0, 1, 2).forEach {
                 it("passes on $it issues") {
@@ -59,10 +59,12 @@ internal class MaxIssueCheckTest : Spek({
 
     describe("based on config") {
 
-        val config = yamlConfigFromContent("""
-             build:
-               maxIssues: 1
-         """.trimIndent())
+        val config by memoized {
+            yamlConfigFromContent("""
+                build:
+                    maxIssues: 1
+            """.trimIndent())
+        }
 
         it("uses the config for max issues when MaxIssuePolicy == NonSpecified") {
             val fixture = MaxIssueCheck(
@@ -83,3 +85,6 @@ internal class MaxIssueCheckTest : Spek({
         }
     }
 })
+
+private fun createFixture(policy: RulesSpec.MaxIssuePolicy) =
+    MaxIssueCheck(ProcessingSpec { rules { maxIssuePolicy = policy } }.rulesSpec, Config.empty)

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -12,9 +12,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.nio.file.Path
-import java.nio.file.Paths
 
-val path: Path = Paths.get(resource("/cases"))
+val path: Path = resourceAsPath("/cases")
 
 class TestProvider(override val ruleSetId: String = "Test") : RuleSetProvider {
     override fun instance(config: Config): RuleSet {

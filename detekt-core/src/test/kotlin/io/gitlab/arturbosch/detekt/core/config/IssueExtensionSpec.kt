@@ -13,12 +13,14 @@ import org.spekframework.spek2.style.specification.describe
 
 class IssueExtensionSpec : Spek({
 
-    val issues = mapOf(
-        Pair("Ruleset1", listOf(createFinding(), createCorrectableFinding())),
-        Pair("Ruleset2", listOf(createFinding()))
-    )
+    val issues by memoized {
+        mapOf(
+            Pair("Ruleset1", listOf(createFinding(), createCorrectableFinding())),
+            Pair("Ruleset2", listOf(createFinding()))
+        )
+    }
 
-    describe("compute weighted amount of issues") {
+    test("compute weighted amount of issues") {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = issues
         }

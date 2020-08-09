@@ -50,7 +50,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
         }
 
         describe("with root package specified") {
-            val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example"))
+
+            val config by memoized { TestConfig(mapOf(ROOT_PACKAGE to "com.example")) }
 
             it("should pass if file is located within the root package") {
                 val source = """

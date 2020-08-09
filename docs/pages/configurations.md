@@ -21,7 +21,8 @@ _Note:_ When using a custom config file, the default values are ignored unless y
 
 _detekt_ allows easily to just pick the rules you want and configure them the way you like.
 For example if you want to allow up to 20 functions inside a Kotlin file instead of the default threshold of 10, write:
-```
+
+```yaml
 complexity:
   TooManyFunctions:
     threshold: 20
@@ -33,7 +34,7 @@ To read about all supported rule sets and rules, use the side navigation `Rule S
 
 Starting with version **RC15** fine grained path filters can be defined for each rule or rule set:
 
-```
+```yaml
 complexity:
   TooManyFunctions:
     ...
@@ -62,6 +63,19 @@ console-reports:
   #  - 'FileBasedFindingsReport'
 ```
 
+**ProjectStatisticsReport** contains metrics and statistics concerning the analyzed project sorted by priority.
+
+**ComplexityReport** contains metrics concerning the analyzed code. 
+For instance the source lines of code and the McCabe complexity are calculated.
+
+**NotificationReport** contains notifications reported by the detekt analyzer similar to push notifications. 
+It's simply a way of alerting users to information that they have opted-in to.
+
+**FindingsReport** contains all rule violations in a list format grouped by ruleset.
+
+**FileBasedFindingsReport** is similar to the FindingsReport shown above. 
+The rule violations are grouped by file location.
+
 #### Output Reports
 
 Uncomment the reports you don't care about.
@@ -80,6 +94,10 @@ output-reports:
 **TxtOutputReport** contains rule violations in a plain text report similar to a log file.
 
 **XmlOutputReport** contains rule violations in an XML format. The report follows the structure of a [Checkstyle report](https://checkstyle.sourceforge.io).
+
+Rule violations show the name of the violated rule and in which file the issue happened.
+The mentioned metrics show detailed statistics concerning the analyzed code.
+For instance the source lines of code and the McCabe complexity are calculated.
 
 #### Processors
 

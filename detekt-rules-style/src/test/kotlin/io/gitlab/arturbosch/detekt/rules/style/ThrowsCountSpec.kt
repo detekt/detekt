@@ -40,7 +40,7 @@ class ThrowsCountSpec : Spek({
                     }
                 }
             """
-            val subject = ThrowsCount(Config.empty)
+            val subject by memoized { ThrowsCount(Config.empty) }
 
             it("does not report violation") {
                 assertThat(subject.lint(code)).isEmpty()
@@ -57,7 +57,7 @@ class ThrowsCountSpec : Spek({
                     }
                 }
             """
-            val subject = ThrowsCount(Config.empty)
+            val subject by memoized { ThrowsCount(Config.empty) }
 
             it("reports violation by default") {
                 assertThat(subject.lint(code)).hasSize(1)
@@ -74,7 +74,7 @@ class ThrowsCountSpec : Spek({
                     }
                 }
             """
-            val subject = ThrowsCount(Config.empty)
+            val subject by memoized { ThrowsCount(Config.empty) }
 
             it("reports violation by default") {
                 assertThat(subject.lint(code)).isEmpty()

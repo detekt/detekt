@@ -1,18 +1,17 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class ElementPrinterSpec : Spek({
 
     describe("element printer") {
 
         it("should print the ast as string") {
-            val case = Paths.get(resource("cases/Poko.kt"))
+            val case = resourceAsPath("cases/Poko.kt")
             val ktFile = compileForTest(case)
 
             val dump = ElementPrinter.dump(ktFile)

@@ -18,14 +18,17 @@ class FindingsReportSpec : Spek({
     describe("findings report") {
 
         context("reports the debt per rule set and the overall debt") {
-            val expectedContent = readResourceContent("/reporting/findings-report.txt")
-            val detektion = object : TestDetektion() {
-                override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("Ruleset1", listOf(createFinding(), createFinding())),
-                    Pair("EmptyRuleset", emptyList()),
-                    Pair("Ruleset2", listOf(createFinding()))
-                )
+            val expectedContent by memoized { readResourceContent("/reporting/findings-report.txt") }
+            val detektion by memoized {
+                object : TestDetektion() {
+                    override val findings: Map<String, List<Finding>> = mapOf(
+                        Pair("Ruleset1", listOf(createFinding(), createFinding())),
+                        Pair("EmptyRuleset", emptyList()),
+                        Pair("Ruleset2", listOf(createFinding()))
+                    )
+                }
             }
+
             var output: String? = null
 
             beforeEachTest {

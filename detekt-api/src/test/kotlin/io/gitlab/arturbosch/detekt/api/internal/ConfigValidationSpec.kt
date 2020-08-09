@@ -13,7 +13,7 @@ internal class ConfigValidationSpec : Spek({
 
     describe("validate configuration file") {
 
-        val baseline = yamlConfig("config_validation/baseline.yml")
+        val baseline by memoized { yamlConfig("config_validation/baseline.yml") }
 
         it("passes for same config test") {
             val result = validateConfig(baseline, baseline)

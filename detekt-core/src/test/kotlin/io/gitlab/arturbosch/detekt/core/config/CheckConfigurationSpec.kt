@@ -18,7 +18,7 @@ class SupportConfigValidationSpec : Spek({
 
     describe("support config validation") {
 
-        val testDir = createTempDirectoryForTest("detekt-sample")
+        val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
 
         it("fails when unknown properties are found") {
             val config = yamlConfigFromContent("""
@@ -36,6 +36,7 @@ class SupportConfigValidationSpec : Spek({
                 assertThatCode { checkConfiguration(it) }
                     .isInstanceOf(InvalidConfig::class.java)
                     .hasMessageContaining("Run failed with 1 invalid config property.")
+                    .hasMessageContaining("my_additional_properties")
             }
         }
 

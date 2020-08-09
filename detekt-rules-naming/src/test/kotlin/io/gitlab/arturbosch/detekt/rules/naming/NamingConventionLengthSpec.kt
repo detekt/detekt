@@ -31,7 +31,9 @@ class NamingConventionLengthSpec : Spek({
 
         context("VariableMinLength rule with a custom minimum length") {
 
-            val variableMinLength = VariableMinLength(TestConfig(mapOf(VariableMinLength.MINIMUM_VARIABLE_NAME_LENGTH to "2")))
+            val variableMinLength by memoized {
+                VariableMinLength(TestConfig(mapOf(VariableMinLength.MINIMUM_VARIABLE_NAME_LENGTH to "2")))
+            }
 
             it("reports a very short variable name") {
                 val code = "private val a = 3"
@@ -40,9 +42,9 @@ class NamingConventionLengthSpec : Spek({
 
             it("does not report a variable with only a single underscore") {
                 val code = """
-            class C {
-                val prop: (Int) -> Unit = { _ -> Unit }
-            }"""
+                    class C {
+                        val prop: (Int) -> Unit = { _ -> Unit }
+                }"""
                 assertThat(variableMinLength.compileAndLint(code)).isEmpty()
             }
         }

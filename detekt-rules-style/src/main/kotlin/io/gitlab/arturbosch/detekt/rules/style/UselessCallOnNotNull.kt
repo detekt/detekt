@@ -8,8 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
@@ -27,12 +29,14 @@ import org.jetbrains.kotlin.types.isNullable
  * <noncompliant>
  * val testList = listOf("string").orEmpty()
  * val testList2 = listOf("string").orEmpty().map { _ }
+ * val testList3 = listOfNotNull("string")
  * val testString = ""?.isNullOrBlank()
  * </noncompliant>
  *
  * <compliant>
  * val testList = listOf("string")
  * val testList2 = listOf("string").map { }
+ * val testList3 = listOf("string")
  * val testString = ""?.isBlank()
  * </compliant>
  *
@@ -56,19 +60,44 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank")
     )
 
+    @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        if (uselessFqNames.contains(resolvedCall.resultingDescriptor.fqNameOrNull())) {
-            val safeExpression = expression as? KtSafeQualifiedExpression
-            val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
-            if (notNullType || safeExpression != null) {
-                report(CodeSmell(issue, Entity.from(expression), ""))
+        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
+        val conversion = uselessFqNames[fqName] ?: return
+
+        val safeExpression = expression as? KtSafeQualifiedExpression
+        val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
+        if (notNullType || safeExpression != null) {
+            val shortName = fqName.shortName().asString()
+            val message = if (conversion.replacementName == null) {
+                "Remove redundant call to $shortName"
+            } else {
+                "Replace $shortName with ${conversion.replacementName}"
             }
+            report(CodeSmell(issue, Entity.from(expression), message))
         }
     }
+
+    @Suppress("ReturnCount")
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+
+        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
+        if (fqName != FqName("kotlin.collections.listOfNotNull")) return
+
+        val varargs = resolvedCall.valueArguments.entries.single().value.arguments
+        if (varargs.none { it.isNullable() }) {
+            report(CodeSmell(issue, Entity.from(expression), "Replace listOfNotNull with listOf"))
+        }
+    }
+
+    private fun ValueArgument.isNullable(): Boolean =
+        getArgumentExpression()?.getType(bindingContext)?.isNullable() == true
 
     private data class Conversion(val replacementName: String? = null)
 }
