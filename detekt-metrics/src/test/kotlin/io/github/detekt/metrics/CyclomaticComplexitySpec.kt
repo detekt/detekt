@@ -56,12 +56,15 @@ class CyclomaticComplexitySpec : Spek({
     }
 
     describe("counts function calls used for nesting") {
-        val code = compileContentForTest("""
+
+        val code by memoized {
+            compileContentForTest("""
                     fun test(i: Int) {
                         (1..10).forEach { println(it) }
                     }
                 """.trimIndent()
-        )
+            )
+        }
 
         it("counts them by default") {
             assertThat(
