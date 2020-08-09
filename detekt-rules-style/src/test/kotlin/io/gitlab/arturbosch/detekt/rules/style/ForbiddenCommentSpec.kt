@@ -110,18 +110,22 @@ class ForbiddenCommentSpec : Spek({
         }
 
         context("custom default values with allowed patterns are configured") {
-            val patternsConfig = TestConfig(
-                mapOf(
-                    ForbiddenComment.VALUES to "Comment",
-                    ForbiddenComment.ALLOWED_PATTERNS to "Ticket|Task"
+
+            val patternsConfig by memoized {
+                TestConfig(
+                    mapOf(
+                        ForbiddenComment.VALUES to "Comment",
+                        ForbiddenComment.ALLOWED_PATTERNS to "Ticket|Task"
+                    )
                 )
-            )
+            }
 
             it("should report Comment usages when regex does not match") {
                 val comment = "// Comment is added here."
                 val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
                 assertThat(findings).hasSize(1)
             }
+
             it("should not report Comment usages when any one pattern is present") {
                 val comment = "// Comment Ticket:234."
                 val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
