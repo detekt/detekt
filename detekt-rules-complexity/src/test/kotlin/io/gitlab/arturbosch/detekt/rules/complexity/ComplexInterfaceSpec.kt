@@ -9,8 +9,8 @@ import org.spekframework.spek2.style.specification.describe
 class ComplexInterfaceSpec : Spek({
 
     val subject by memoized { ComplexInterface(threshold = THRESHOLD) }
-    val staticDeclarationsConfig = TestConfig(mapOf(ComplexInterface.INCLUDE_STATIC_DECLARATIONS to "true"))
-    val privateDeclarationsConfig = TestConfig(mapOf(ComplexInterface.INCLUDE_PRIVATE_DECLARATIONS to "true"))
+    val staticDeclarationsConfig by memoized { TestConfig(mapOf(ComplexInterface.INCLUDE_STATIC_DECLARATIONS to "true")) }
+    val privateDeclarationsConfig by memoized { TestConfig(mapOf(ComplexInterface.INCLUDE_PRIVATE_DECLARATIONS to "true")) }
 
     describe("ComplexInterface rule positives") {
 

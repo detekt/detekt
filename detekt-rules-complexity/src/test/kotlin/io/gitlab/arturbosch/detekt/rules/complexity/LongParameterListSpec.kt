@@ -9,19 +9,21 @@ import org.spekframework.spek2.style.specification.describe
 class LongParameterListSpec : Spek({
 
     val defaultThreshold = 2
-    val defaultConfig = TestConfig(mapOf(
-        LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
-        LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
-    ))
+    val defaultConfig by memoized {
+        TestConfig(mapOf(
+            LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
+            LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
+        ))
+    }
 
     val subject by memoized { LongParameterList(defaultConfig) }
 
     describe("LongParameterList rule") {
 
         val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
-                "The current threshold is set to $defaultThreshold."
+            "The current threshold is set to $defaultThreshold."
         val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
-                "The current threshold is set to $defaultThreshold."
+            "The current threshold is set to $defaultThreshold."
 
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int) {}"
@@ -90,12 +92,15 @@ class LongParameterListSpec : Spek({
 
         describe("constructors and functions with ignored annotations") {
 
-            val config = TestConfig(mapOf(
-                LongParameterList.IGNORE_ANNOTATED to listOf("Generated", "kotlin.Deprecated", "kotlin.jvm.JvmName"),
-                LongParameterList.FUNCTION_THRESHOLD to 1,
-                LongParameterList.CONSTRUCTOR_THRESHOLD to 1
-            ))
-            val rule = LongParameterList(config)
+            val config by memoized {
+                TestConfig(mapOf(
+                    LongParameterList.IGNORE_ANNOTATED to listOf("Generated", "kotlin.Deprecated", "kotlin.jvm.JvmName"),
+                    LongParameterList.FUNCTION_THRESHOLD to 1,
+                    LongParameterList.CONSTRUCTOR_THRESHOLD to 1
+                ))
+            }
+
+            val rule by memoized { LongParameterList(config) }
 
             it("does not report long parameter list for constructors if file is annotated with ignored annotation") {
                 val code = """
