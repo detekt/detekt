@@ -36,6 +36,7 @@ class SupportConfigValidationSpec : Spek({
                 assertThatCode { checkConfiguration(it) }
                     .isInstanceOf(InvalidConfig::class.java)
                     .hasMessageContaining("Run failed with 1 invalid config property.")
+                    .hasMessageContaining("my_additional_properties")
             }
         }
 
