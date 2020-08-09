@@ -6,7 +6,37 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.11.0
+#### 1.11.0-RC2 - 2020-08-09
+
+##### Changelog
+
+- Actually print the invalid properties - [#2955](https://github.com/detekt/detekt/pull/2955)
+- Update FindingsReport doc - [#2942](https://github.com/detekt/detekt/pull/2942)
+- Document reports on homepage - [#2941](https://github.com/detekt/detekt/pull/2941)
+- Set missing code languages in doc - [#2935](https://github.com/detekt/detekt/pull/2935)
+- Fix sitemap.xml - [#2933](https://github.com/detekt/detekt/pull/2933)
+- Flag listOfNotNull if all arguments are non-nullable - [#2932](https://github.com/detekt/detekt/pull/2932)
+- Add LanguageVersionSettings and DataFlowValueFactory to BaseRule - [#2929](https://github.com/detekt/detekt/pull/2929)
+- Generate release date to the changelog entries - [#2924](https://github.com/detekt/detekt/pull/2924)
+- Add informative message to UselessCallOnNotNull report - [#2920](https://github.com/detekt/detekt/pull/2920)
+- Flag listOfNotNull if all arguments are non-nullable - [#2916](https://github.com/detekt/detekt/issues/2916)
+
+##### Housekeeping & Refactorings
+
+- Reduce test discovery for metrics module - [#2953](https://github.com/detekt/detekt/pull/2953)
+- Reduce test discovery for rules-style module - [#2952](https://github.com/detekt/detekt/pull/2952)
+- Reduce test discovery for rules-naming module - [#2951](https://github.com/detekt/detekt/pull/2951)
+- Reduce test discovery for rules-exceptions module - [#2950](https://github.com/detekt/detekt/pull/2950)
+- Reduce test discovery for rules-complexity module - [#2949](https://github.com/detekt/detekt/pull/2949)
+- Reduce test discovery for formatting module - [#2948](https://github.com/detekt/detekt/pull/2948)
+- Reduce test discovery for core module - [#2947](https://github.com/detekt/detekt/pull/2947)
+- Reduce test discovery for cli module - [#2946](https://github.com/detekt/detekt/pull/2946)
+- Reduce test discovery for api module - [#2945](https://github.com/detekt/detekt/pull/2945)
+- Update kramdown to remedy CVE vulnerability - [#2940](https://github.com/detekt/detekt/pull/2940)
+
+See all issues at: [1.11.0-RC2](https://github.com/detekt/detekt/milestone/68)
+
+#### 1.11.0-RC1 - 2020-08-02
 
 ##### Changelog
 
