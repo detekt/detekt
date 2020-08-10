@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -21,8 +21,8 @@ object NullableToStringCallSpec: Spek({
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
+            assertThat(actual).hasSize(1)
+            assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
         }
 
         it("reports when a nullable toString is implicitly called in a string template") {
@@ -32,8 +32,8 @@ object NullableToStringCallSpec: Spek({
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
+            assertThat(actual).hasSize(1)
+            assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
         it("reports when a nullable toString is implicitly called in curly braces in a string template") {
@@ -43,8 +43,8 @@ object NullableToStringCallSpec: Spek({
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
+            assertThat(actual).hasSize(1)
+            assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
         }
 
         it("reports when a nullable toString is implicitly called in a raw string template") {
@@ -54,8 +54,8 @@ object NullableToStringCallSpec: Spek({
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).hasSize(1)
-            Assertions.assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
+            assertThat(actual).hasSize(1)
+            assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
         it("does not report when a nullable toString is not called") {
@@ -87,7 +87,7 @@ object NullableToStringCallSpec: Spek({
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).isEmpty()
+            assertThat(actual).isEmpty()
         }
     }
 })
