@@ -40,6 +40,8 @@ import org.jetbrains.kotlin.types.isNullable
  *     return "${a ?: "-"}"
  * }
  * </compliant>
+ *
+ * @since 1.11.0
  */
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
