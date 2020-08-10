@@ -214,11 +214,22 @@ For example `detekt` itself provides a wrapper over [ktlint](https://github.com/
 custom `formatting` rule set.
 To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 
+{% codetabs %}
+{% codetab Groovy %}
 ```groovy
 dependencies {
     detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}"
 }
 ```
+{% endcodetab %}
+{% codetab Kotlin %}
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+}
+```
+{% endcodetab %}
+{% endcodetabs %}
 
 ##### Pitfalls
 
