@@ -37,8 +37,8 @@ This will create one baseline file per Gradle module.
 As this might not be the desired behavior for a multi module project, think about implementing
 a custom meta baseline task:
 
-{% codetabs %}
-{% codetab Groovy %}
+Gradle-DSL
+
 ```groovy
 subprojects {
     detekt {
@@ -61,9 +61,11 @@ task detektProjectBaseline(type: io.gitlab.arturbosch.detekt.DetektCreateBaselin
     exclude("**/resources/**")
     exclude("**/build/**")
 }
+
 ```
-{% endcodetab %}
-{% codetab Kotlin %}
+
+Kotlin-DSL
+
 ```kotlin
 subprojects {
     detekt {
@@ -86,9 +88,8 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     exclude("**/resources/**")
     exclude("**/build/**")
 }
+
 ```
-{% endcodetab %}
-{% endcodetabs %}
 
 #### FAQ
 
