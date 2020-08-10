@@ -6,6 +6,19 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
+/**
+ * Library typealias and classes should be internal or private.
+ *
+ * <noncompliant>
+ * // code from a library
+ * class A
+ * </noncompliant>
+ *
+ * <compliant>
+ * // code from a library
+ * internal class A
+ * </compliant>
+ */
 class LibraryEntitiesCannotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override fun visitCondition(root: KtFile): Boolean = super.visitCondition(root) && filters != null
