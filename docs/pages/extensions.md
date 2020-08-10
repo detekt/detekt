@@ -224,7 +224,9 @@ dependencies {
 {% endcodetab %}
 {% codetab Kotlin %}
 ```kotlin
-// TODO
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+}
 ```
 {% endcodetab %}
 {% endcodetabs %}
