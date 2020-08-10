@@ -18,13 +18,15 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * // code from a library
  * internal class A
  * </compliant>
+ *
+ * @since 1.11.0
  */
-class LibraryEntitiesCannotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
+class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override fun visitCondition(root: KtFile): Boolean = super.visitCondition(root) && filters != null
 
     override val issue: Issue = Issue(
-        "ClassCannotBePublic",
+        javaClass.simpleName,
         Severity.Style,
         "Library class cannot be public",
         Debt.FIVE_MINS

@@ -77,7 +77,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseCheckOrError(config),
             UseIfInsteadOfWhen(config),
             RedundantExplicitType(config),
-            LibraryEntitiesCannotBePublic(config),
+            LibraryEntitiesShouldNotBePublic(config),
             LibraryCodeMustSpecifyReturnType(config),
             UseArrayLiteralsInAnnotations(config),
             UseEmptyCounterpart(config)
