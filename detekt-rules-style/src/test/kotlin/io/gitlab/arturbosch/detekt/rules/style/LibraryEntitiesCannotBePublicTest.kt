@@ -39,15 +39,14 @@ internal class LibraryEntitiesCannotBePublicTest : Spek({
             it("should not report a class") {
                 assertThat(subject.compileAndLint("""
                     internal class A
-                """)).hasSize(0)
+                """)).isEmpty()
             }
 
             it("should not report a typealias") {
                 assertThat(subject.compileAndLint("""
                     internal typealias A = List<String>
-                """)).hasSize(0)
+                """)).isEmpty()
             }
         }
     }
-
 })
