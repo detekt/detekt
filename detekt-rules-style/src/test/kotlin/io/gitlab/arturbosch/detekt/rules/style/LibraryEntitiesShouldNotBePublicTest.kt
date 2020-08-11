@@ -80,12 +80,6 @@ internal class LibraryEntitiesShouldNotBePublicTest : Spek({
                     internal typealias A = List<String>
                 """)).isEmpty()
             }
-
-            it("should not report a function") {
-                assertThat(subject.compileAndLint("""
-                    internal fun foo() = Unit
-                """)).isEmpty()
-            }
         }
     }
 })
