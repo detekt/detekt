@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -42,6 +43,8 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
+
+        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isApplyExpr() &&
                 expression.hasOnlyOneMemberAccessStatement() &&
