@@ -538,6 +538,8 @@ style:
     excludeAnnotatedFunction: ['dagger.Provides']
   LibraryCodeMustSpecifyReturnType:
     active: true
+  LibraryEntitiesShouldNotBePublic:
+    active: false
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
