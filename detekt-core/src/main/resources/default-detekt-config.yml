@@ -539,7 +539,7 @@ style:
   LibraryCodeMustSpecifyReturnType:
     active: true
   LibraryEntitiesShouldNotBePublic:
-    active: true
+    active: false
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1

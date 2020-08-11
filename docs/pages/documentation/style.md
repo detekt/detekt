@@ -462,6 +462,28 @@ class Parser {
 }
 ```
 
+### LibraryEntitiesShouldNotBePublic
+
+Library typealias and classes should be internal or private.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+// code from a library
+class A
+```
+
+#### Compliant Code:
+
+```kotlin
+// code from a library
+internal class A
+```
+
 ### LoopWithTooManyJumpStatements
 
 Loops which contain multiple `break` or `continue` statements are hard to read and understand.
