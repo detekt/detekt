@@ -474,6 +474,8 @@ potential-bugs:
     active: false
   MissingWhenCase:
     active: true
+  NullableToStringCall:
+    active: false
   RedundantElseInWhen:
     active: true
   UnconditionalJumpStatementInLoop:

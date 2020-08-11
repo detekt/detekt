@@ -39,7 +39,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             UselessPostfixExpression(config),
             WrongEqualsTypeParameter(config),
             IgnoredReturnValue(config),
-            ImplicitUnitReturnType(config)
+            ImplicitUnitReturnType(config),
+            NullableToStringCall(config)
         )
     )
 }

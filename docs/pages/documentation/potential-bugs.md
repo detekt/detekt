@@ -472,6 +472,38 @@ fun whenOnEnumCompliant2(c: Color) {
 }
 ```
 
+### NullableToStringCall
+
+Turn on this rule to flag 'toString' calls with a nullable receiver that may return the string "null".
+
+**Severity**: Defect
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(a: Any?): String {
+    return a.toString()
+}
+
+fun bar(a: Any?): String {
+    return "$a"
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(a: Any?): String {
+    return a?.toString() ?: "-"
+}
+
+fun bar(a: Any?): String {
+    return "${a ?: "-"}"
+}
+```
+
 ### RedundantElseInWhen
 
 Turn on this rule to flag `when` expressions that contain a redundant `else` case. This occurs when it can be
