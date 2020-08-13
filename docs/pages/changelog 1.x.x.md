@@ -6,6 +6,23 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.11.0 - 2020-08-13
+
+##### Changelog
+
+- Fix false positive for UnnecessaryApply with disabled type resolution - [#2963](https://github.com/detekt/detekt/pull/2963)
+- Add new rule: LibraryEntitiesCannotBePublic - [#2959](https://github.com/detekt/detekt/pull/2959)
+- Suggest rule: Class cannot be public. - [#2943](https://github.com/detekt/detekt/issues/2943)
+- False positive in UnnecessaryApply - [#2938](https://github.com/detekt/detekt/issues/2938)
+- Add NullableToStringCall rule - [#2903](https://github.com/detekt/detekt/pull/2903)
+- New rule: toString over a nullable value - [#2901](https://github.com/detekt/detekt/issues/2901)
+- Introduce tooling-api - [#2860](https://github.com/detekt/detekt/issues/2860)
+
+See all issues at: [1.11.0](https://github.com/detekt/detekt/milestone/70)  
+See all issues at: [1.11.0-RC2](https://github.com/detekt/detekt/milestone/68)  
+See all issues at: [1.11.0-RC1](https://github.com/detekt/detekt/milestone/69)
+
+
 #### 1.11.0-RC2 - 2020-08-09
 
 ##### Changelog
