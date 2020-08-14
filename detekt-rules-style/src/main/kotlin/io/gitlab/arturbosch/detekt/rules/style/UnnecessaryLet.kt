@@ -60,7 +60,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
             }
         } else {
-            val lambdaReferenceCount = lambdaExpr.countReferences() ?: 0
+            val lambdaReferenceCount = lambdaExpr.countReferences()
             if (lambdaReferenceCount == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
                 report(
                     CodeSmell(
@@ -90,10 +90,13 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
     }
 
     return if (exprReceiver != null) {
-        val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
-        val isLetWithExplicitParam = lambdaParameter != null && exprReceiver.textMatches(lambdaParameter)
-
-        isLetWithExplicitParam || isLetWithImplicitParam
+        if (lambdaParameter != null) {
+            val destructuringDeclaration = lambdaParameter.destructuringDeclaration
+            destructuringDeclaration?.entries?.any { exprReceiver.textMatches(it.nameAsSafeName.asString()) }
+                ?: exprReceiver.textMatches(lambdaParameter.nameAsSafeName.asString())
+        } else {
+            exprReceiver.textMatches(IT_LITERAL)
+        }
     } else {
         false
     }
@@ -110,6 +113,10 @@ private fun KtBlockExpression.hasOnlyOneStatement() = this.children.size == 1
 private fun PsiElement.countVarRefs(varName: String): Int =
     children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName) && it !is ValueArgument) 1 else 0 }
 
-private fun KtLambdaExpression.countReferences(): Int? {
-    return bodyExpression?.countVarRefs(firstParameter?.text ?: IT_LITERAL)
+private fun KtLambdaExpression.countReferences(): Int {
+    val bodyExpression = bodyExpression ?: return 0
+    val firstParameter = firstParameter
+    val destructuringDeclaration = firstParameter?.destructuringDeclaration
+    return destructuringDeclaration?.entries?.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString()) }
+        ?: bodyExpression.countVarRefs(firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL)
 }

@@ -191,6 +191,96 @@ class UnnecessaryLetSpec : Spek({
                 }""")
             assertThat(findings).isEmpty()
         }
+
+        context("destructuring declarations") {
+            it("does not report when destructuring declarations are used more than once 1") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, b) -> a + b }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report when destructuring declarations are used more than once 2") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, _) -> a + a }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report when destructuring declarations are used more than once 3") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a: Int, b: Int) -> a + b }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("reports unnecessary lets when destructuring declarations are used only once 1") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, _) -> a }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports unnecessary lets when destructuring declarations are used only once 2") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo?) {
+                    foo?.let { (_, b) -> b.plus(1) }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports unnecessary lets when destructuring declarations are not used 1") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (_, _) -> 0 }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports unnecessary lets when destructuring declarations are not used 2") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo?) {
+                    foo?.let { (_, _) -> 0 }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
+            }
+        }
     }
 })
 
