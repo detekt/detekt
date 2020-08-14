@@ -1310,7 +1310,7 @@ a.let { it.plus(1) } // can be replaced with `a.plus(1)`
 a?.let { it.plus(1) } // can be replaced with `a?.plus(1)`
 a?.let { that -> that.plus(1) }?.let { it.plus(1) } // can be replaced with `a?.plus(1)?.plus(1)`
 a.let { 1.plus(1) } // can be replaced with `1.plus(1)`
-a?.let { 1.plus(1) } // can be replaced with `if (a == null) 1.plus(1)`
+a?.let { 1.plus(1) } // can be replaced with `if (a != null) 1.plus(1)`
 ```
 
 #### Compliant Code:
