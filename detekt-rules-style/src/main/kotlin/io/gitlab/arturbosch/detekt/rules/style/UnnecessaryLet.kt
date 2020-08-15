@@ -115,7 +115,6 @@ private fun PsiElement.countVarRefs(varName: String): Int =
 
 private fun KtLambdaExpression.countReferences(): Int {
     val bodyExpression = bodyExpression ?: return 0
-    val firstParameter = firstParameter
     val destructuringDeclaration = firstParameter?.destructuringDeclaration
     return destructuringDeclaration?.entries?.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString()) }
         ?: bodyExpression.countVarRefs(firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL)
