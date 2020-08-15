@@ -38,11 +38,8 @@ entries:
     - title: with the Command Line Interface
       url: /cli.html
       output: web
-    - title: with Gradle Groovy DSL
-      url: /groovydsl.html
-      output: web
-    - title: with Gradle Kotlin DSL
-      url: /kotlindsl.html
+    - title: with Gradle
+      url: /gradle.html
       output: web
     - title: with Gradle Plain Task
       url: /gradletask.html
