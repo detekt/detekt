@@ -89,16 +89,14 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
         else -> null
     }
 
-    return if (exprReceiver != null) {
-        if (lambdaParameter != null) {
+    return when {
+        exprReceiver == null -> false
+        lambdaParameter == null -> exprReceiver.textMatches(IT_LITERAL)
+        else -> {
             val destructuringDeclaration = lambdaParameter.destructuringDeclaration
             destructuringDeclaration?.entries?.any { exprReceiver.textMatches(it.nameAsSafeName.asString()) }
                 ?: exprReceiver.textMatches(lambdaParameter.nameAsSafeName.asString())
-        } else {
-            exprReceiver.textMatches(IT_LITERAL)
         }
-    } else {
-        false
     }
 }
 
@@ -116,6 +114,10 @@ private fun PsiElement.countVarRefs(varName: String): Int =
 private fun KtLambdaExpression.countReferences(): Int {
     val bodyExpression = bodyExpression ?: return 0
     val destructuringDeclaration = firstParameter?.destructuringDeclaration
-    return destructuringDeclaration?.entries?.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString()) }
-        ?: bodyExpression.countVarRefs(firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL)
+    return if (destructuringDeclaration != null) {
+        destructuringDeclaration.entries.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString()) }
+    } else {
+        val parameterName = firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL
+        bodyExpression.countVarRefs(parameterName)
+    }
 }
