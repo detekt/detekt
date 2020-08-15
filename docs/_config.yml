@@ -103,6 +103,9 @@ defaults:
 sidebars:
 - mydoc_sidebar
 
+plugins:
+  - jekyll-redirect-from
+
 description: "Meet detekt, a static code analysis tool for Kotlin."
 # the description is used in the feed.xml file
 

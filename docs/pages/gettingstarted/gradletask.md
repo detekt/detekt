@@ -11,6 +11,7 @@ summary:
 2. Run `gradle detekt`
 3. Add `check.dependsOn detekt` if you want to run _detekt_ on every `build`
 
+###### Groovy DSL
 ```groovy
 repositories {
     jcenter()
@@ -44,4 +45,9 @@ task detekt(type: JavaExec) {
 dependencies {
 	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:{{ site.detekt_version }}'
 }
+```
+
+###### Kotlin DSL
+```kotlin
+// TODO
 ```
