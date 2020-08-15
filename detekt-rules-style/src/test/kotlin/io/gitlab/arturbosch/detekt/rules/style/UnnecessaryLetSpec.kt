@@ -193,7 +193,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         context("destructuring declarations") {
-            it("does not report when destructuring declarations are used more than once 1") {
+            it("does not report `let` when parameters are used more than once") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -205,7 +205,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("does not report when destructuring declarations are used more than once 2") {
+            it("does not report `let` with a safe call when a parameter is used more than once") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -217,7 +217,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("does not report when destructuring declarations are used more than once 3") {
+            it("does not report `let` when parameters with types are used more than once") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -229,7 +229,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("reports unnecessary lets when destructuring declarations are used only once 1") {
+            it("reports `let` when parameters are used only once") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -242,7 +242,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports unnecessary lets when destructuring declarations are used only once 2") {
+            it("reports `let` with a safe call when parameters are used only once") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -255,7 +255,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports unnecessary lets when destructuring declarations are not used 1") {
+            it("reports `let` when parameters are not used") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -268,7 +268,7 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports unnecessary lets when destructuring declarations are not used 2") {
+            it("reports `let` with a safe call when parameters are not used") {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
