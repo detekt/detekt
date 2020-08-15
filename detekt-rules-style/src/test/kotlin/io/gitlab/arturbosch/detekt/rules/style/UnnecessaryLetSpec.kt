@@ -191,6 +191,96 @@ class UnnecessaryLetSpec : Spek({
                 }""")
             assertThat(findings).isEmpty()
         }
+
+        context("destructuring declarations") {
+            it("does not report `let` when parameters are used more than once") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, b) -> a + b }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report `let` with a safe call when a parameter is used more than once") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, _) -> a + a }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report `let` when parameters with types are used more than once") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a: Int, b: Int) -> a + b }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).isEmpty()
+            }
+
+            it("reports `let` when parameters are used only once") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (a, _) -> a }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports `let` with a safe call when parameters are used only once") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo?) {
+                    foo?.let { (_, b) -> b.plus(1) }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports `let` when parameters are not used") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo) {
+                    foo.let { (_, _) -> 0 }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+            }
+
+            it("reports `let` with a safe call when parameters are not used") {
+                val content = """
+                data class Foo(val a: Int, val b: Int)
+                
+                fun test(foo: Foo?) {
+                    foo?.let { (_, _) -> 0 }
+                }
+            """
+                val findings = subject.compileAndLint(content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
+            }
+        }
     }
 })
 
