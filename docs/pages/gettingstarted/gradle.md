@@ -185,7 +185,7 @@ repositories {
 ###### Groovy DSL
 ```groovy
 detekt {
-    toolVersion = "{{ site.detekt_version }}"                                 // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
+    toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
     input = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
         "src/main/kotlin",
         "gensrc/main/kotlin"
@@ -221,7 +221,7 @@ detekt {
 ###### Kotlin DSL
 ```kotlin
 detekt {
-    toolVersion = "{{ site.detekt_version }}"                                 // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
+    toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
     input = files("src/main/java", "src/main/kotlin")     // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
     parallel = false                                      // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
