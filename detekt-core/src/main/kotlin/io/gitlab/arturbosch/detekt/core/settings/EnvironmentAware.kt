@@ -43,7 +43,7 @@ internal class EnvironmentFacade(
 }
 
 internal fun CompilerSpec.classpathEntries(): List<String> =
-    classpath?.split(":", ";") ?: emptyList() // support both windows : and unix ;
+    classpath?.split(":", ";") ?: emptyList() // support both windows ; and unix :
 
 internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
     fun parse(value: String): LanguageVersion {
