@@ -63,7 +63,7 @@ You can find [other ways to install detekt here](https://detekt.github.io/detekt
 
 #### with Gradle
 
-Gradle 5.0+ is required:
+Gradle 5.3+ is required:
 
 ```kotlin
 buildscript {
