@@ -53,7 +53,7 @@ jobs:
 
 
     - name: Build detekt
-      run: ./gradlew build :detekt-cli:shadowJarExecutable -PwarningsAsErrors=true --parallel
+      run: ./gradlew build :detekt-cli:shadowJarExecutable --parallel
     - name: Run detekt-cli --help
       run: java -jar ./detekt-cli/build/run/detekt --help
     - name: Run detekt-cli with argsfile
