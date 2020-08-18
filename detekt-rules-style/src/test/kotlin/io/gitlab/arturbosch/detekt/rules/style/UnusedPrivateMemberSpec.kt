@@ -1157,7 +1157,7 @@ class UnusedPrivateMemberSpec : Spek({
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1).hasSourceLocations(
-                    SourceLocation(3,5)
+                SourceLocation(3, 5)
             )
         }
     }
