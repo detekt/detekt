@@ -280,6 +280,26 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
    the nested depth required to trigger rule
 
+### RedundantMap
+
+map { it } does not make sense. You can remove the operator without any impact.
+
+**Severity**: CodeSmell
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+listOf(1, 2).map { it }
+```
+
+#### Compliant Code:
+
+```kotlin
+listOf(1, 2).map { it * 2 }
+```
+
 ### StringLiteralDuplication
 
 This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the

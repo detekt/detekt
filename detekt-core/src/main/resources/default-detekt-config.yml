@@ -101,6 +101,8 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 4
+  RedundantMap:
+    active: false
   StringLiteralDuplication:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
