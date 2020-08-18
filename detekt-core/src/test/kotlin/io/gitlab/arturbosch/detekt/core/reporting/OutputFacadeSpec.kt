@@ -7,7 +7,6 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import io.gitlab.arturbosch.detekt.test.createFinding
@@ -42,9 +41,9 @@ internal class OutputFacadeSpec : Spek({
         spec.withSettings { OutputFacade(this).run(defaultResult) }
 
         assertThat(printStream.toString()).contains(
-            "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$NL",
-            "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$NL",
-            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$NL"
+            "Successfully generated ${TxtOutputReport().name} at $plainOutputPath",
+            "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath",
+            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath"
         )
     }
 })
