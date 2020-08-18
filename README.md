@@ -250,6 +250,11 @@ Integrations:
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 
+Custom rules from 3rd parties:
+
+- [cph-cachet/detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation)
+- [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
+
 #### Credits
 
 - [JetBrains](https://github.com/jetbrains/) - Creating IntelliJ + Kotlin
