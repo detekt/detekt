@@ -6,6 +6,20 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.11.1 - 2020-08-18
+
+##### Changelog
+
+- Fix regression separating classpath entries - #2961 - [#2977](https://github.com/detekt/detekt/pull/2977)
+- Show groovy and kotlin dsl in the same page - [#2971](https://github.com/detekt/detekt/pull/2971)
+- Fix typo - [#2969](https://github.com/detekt/detekt/pull/2969)
+- UnnecessaryLet: fix false positive when let is used for destructuring - [#2968](https://github.com/detekt/detekt/pull/2968)
+- UnnecessaryLet false positive when let is used for destructuring - [#2966](https://github.com/detekt/detekt/issues/2966)
+- Merge gradle groovy dsl and kotlin dsl documentation in the same page - [#2846](https://github.com/detekt/detekt/issues/2846)
+- Run Detekt as Kotlin Compiler Plugin - [#2119](https://github.com/detekt/detekt/issues/2119)
+
+See all issues at: [1.11.1](https://github.com/detekt/detekt/milestone/72)
+
 #### 1.11.0 - 2020-08-13
 
 ##### Changelog
