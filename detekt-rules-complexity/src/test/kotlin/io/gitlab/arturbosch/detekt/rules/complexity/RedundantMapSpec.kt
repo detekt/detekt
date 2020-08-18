@@ -57,7 +57,7 @@ class RedundantMapSpec : Spek({
         it("should not report filter function") {
             assertThat(RedundantMap().compileAndLint("""
                     fun test(list: List<Boolean>) : List<Boolean> {
-                         
+                         return list.filter { it }
                     }
                 """)).isEmpty()
         }
