@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
-import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -57,10 +56,10 @@ open class Detekt @Inject constructor(
 ) : SourceTask(), VerificationTask {
 
     @get:Classpath
-    val detektClasspath = project.configurableFileCollection()
+    val detektClasspath: ConfigurableFileCollection = objects.fileCollection()
 
     @get:Classpath
-    val pluginClasspath = project.configurableFileCollection()
+    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
 
     @InputFiles
     @SkipWhenEmpty
@@ -75,11 +74,11 @@ open class Detekt @Inject constructor(
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.configurableFileCollection()
+    val config: ConfigurableFileCollection = objects.fileCollection()
 
     @get:Classpath
     @get:Optional
-    val classpath = project.configurableFileCollection()
+    val classpath: ConfigurableFileCollection = objects.fileCollection()
 
     @get:Input
     @get:Optional

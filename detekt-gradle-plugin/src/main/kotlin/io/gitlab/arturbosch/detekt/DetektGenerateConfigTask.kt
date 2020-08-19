@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_DIR_NAME
 import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
-import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.TaskAction
@@ -21,7 +21,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
     }
 
     @get:Classpath
-    val detektClasspath = project.configurableFileCollection()
+    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
 
     private val invoker: DetektInvoker = DetektInvoker.create(project)
     private val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
