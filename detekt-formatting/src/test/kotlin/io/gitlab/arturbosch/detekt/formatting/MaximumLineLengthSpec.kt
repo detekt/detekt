@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class MaximumLineLengthSpec : Spek({
 
@@ -17,10 +18,22 @@ class MaximumLineLengthSpec : Spek({
 
         describe("a single function") {
 
-            val code = "fun f() { /* 123456789012345678901234567890 */ }"
+            val code = """
+                package home.test
+                fun f() { /* 123456789012345678901234567890 */ }
+            """.trimIndent()
 
             it("reports line which exceeds the threshold") {
                 assertThat(subject.lint(code)).hasSize(1)
+            }
+
+            it("reports issues with the filename and package as signature") {
+                val finding = subject.lint(
+                    code,
+                    Paths.get("home", "test", "Test.kt").toString()
+                ).first()
+
+                assertThat(finding.entity.signature).isEqualTo("home.test.Test.kt:2")
             }
 
             it("does not report line which does not exceed the threshold") {
