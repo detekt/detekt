@@ -99,14 +99,14 @@ abstract class DslTestBuilder {
 
         private const val GROOVY_PLUGINS_SECTION = """
             |plugins {
-            |   id "org.jetbrains.kotlin.jvm"
+            |   id 'java-library'
             |   id "io.gitlab.arturbosch.detekt"
             |}
             |"""
 
         private const val KOTLIN_PLUGINS_SECTION = """
             |plugins {
-            |   kotlin("jvm")
+            |   `java-library`
             |   id("io.gitlab.arturbosch.detekt")
             |}
             |"""
@@ -120,12 +120,10 @@ abstract class DslTestBuilder {
             |"""
 
         private const val GROOVY_APPLY_PLUGINS = """
-            |apply plugin: "kotlin"
             |apply plugin: "io.gitlab.arturbosch.detekt"
             |"""
 
         private const val KOTLIN_APPLY_PLUGINS = """
-            |plugins.apply("kotlin")
             |plugins.apply("io.gitlab.arturbosch.detekt")
             |"""
     }
