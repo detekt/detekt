@@ -6,6 +6,15 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.11.2 - 2020-08-19
+
+##### Changelog
+
+- Fix formatting regression where issues printed the whole filename - [#2988](https://github.com/detekt/detekt/pull/2988)
+- Baseline adds file path instead package - [#2985](https://github.com/detekt/detekt/issues/2985)
+
+See all issues at: [1.11.2](https://github.com/detekt/detekt/milestone/74)
+
 #### 1.11.1 - 2020-08-18
 
 ##### Changelog
