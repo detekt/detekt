@@ -9,8 +9,8 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths
 
-fun FormattingRule.lint(content: String): List<Finding> {
-    val root = compileContentForTest(content)
+fun FormattingRule.lint(content: String, fileName: String = "Test.kt"): List<Finding> {
+    val root = compileContentForTest(content, fileName)
     this.visit(root)
     root.node.visit { node -> this.apply(node) }
     return this.findings
