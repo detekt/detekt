@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
 }
 
