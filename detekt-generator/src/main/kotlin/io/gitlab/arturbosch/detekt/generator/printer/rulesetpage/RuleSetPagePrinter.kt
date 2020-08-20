@@ -40,6 +40,12 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 paragraph { "TODO: Specify description" }
             }
 
+            if (rule.requiresTypeResolution) {
+                paragraph {
+                    bold { "Requires Type and Symbol solving" }
+                }
+            }
+
             if (rule.severity.isNotEmpty()) {
                 paragraph {
                     "${bold { "Severity" }}: ${rule.severity}"

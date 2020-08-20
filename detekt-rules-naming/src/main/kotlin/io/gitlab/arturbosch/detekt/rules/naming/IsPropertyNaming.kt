@@ -26,6 +26,8 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * <compliant>
  * val isEnabled: Boolean = false
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 abstract class IsPropertyNaming(config: Config = Config.empty) : Rule(config) {
 // is abstract to not break providers test - #2819

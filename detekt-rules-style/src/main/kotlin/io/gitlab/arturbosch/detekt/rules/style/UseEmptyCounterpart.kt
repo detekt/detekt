@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * emptySequence()
  * emptySet()
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UseEmptyCounterpart(config: Config) : Rule(config) {
 

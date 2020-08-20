@@ -28,6 +28,7 @@ internal class RuleVisitor : DetektVisitor() {
     private var name = ""
     private var active = false
     private var autoCorrect = false
+    private var requiresTypeResolution = false
     private var severity = ""
     private var debt = ""
     private var aliases: String? = null
@@ -40,8 +41,20 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
         }
 
-        return Rule(name, description, nonCompliant, compliant,
-                active, severity, debt, aliases, parent, configuration, autoCorrect)
+        return Rule(
+            name = name,
+            description = description,
+            nonCompliantCodeExample = nonCompliant,
+            compliantCodeExample = compliant,
+            active = active,
+            severity = severity,
+            debt = debt,
+            aliases = aliases,
+            parent = parent,
+            configuration = configuration,
+            autoCorrect = autoCorrect,
+            requiresTypeResolution = requiresTypeResolution
+        )
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -77,6 +90,7 @@ internal class RuleVisitor : DetektVisitor() {
 
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
+        requiresTypeResolution = classOrObject.kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
 
         val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
@@ -171,6 +185,7 @@ internal class RuleVisitor : DetektVisitor() {
 
         private const val TAG_ACTIVE = "active"
         private const val TAG_AUTO_CORRECT = "autoCorrect"
+        private const val TAG_REQUIRES_TYPE_RESOLUTION = "requiresTypeResolution"
         private const val TAG_NONCOMPLIANT = "<noncompliant>"
         private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
         private const val TAG_COMPLIANT = "<compliant>"

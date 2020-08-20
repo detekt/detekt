@@ -38,6 +38,8 @@ import org.jetbrains.kotlin.psi.ValueArgument
  * a?.let { it.plus(it) }
  * val b = a?.let { 1.plus(1) }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
 

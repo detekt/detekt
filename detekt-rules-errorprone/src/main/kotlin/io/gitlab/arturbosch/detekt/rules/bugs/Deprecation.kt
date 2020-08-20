@@ -14,6 +14,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
+ *
+ * @requiresTypeResolution
  */
 class Deprecation(config: Config) : Rule(config) {
 

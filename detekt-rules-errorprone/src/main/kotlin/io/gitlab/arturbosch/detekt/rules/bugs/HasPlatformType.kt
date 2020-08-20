@@ -33,8 +33,9 @@ import org.jetbrains.kotlin.types.isFlexible
  *   fun apiCall(): String = System.getProperty("propertyName")
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
-
 class HasPlatformType(config: Config) : Rule(config) {
 
     override val issue = Issue(

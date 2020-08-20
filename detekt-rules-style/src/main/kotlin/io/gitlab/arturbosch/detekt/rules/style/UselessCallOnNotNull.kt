@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  *
  * @active since v1.2.0
+ * @requiresTypeResolution
  */
 class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(

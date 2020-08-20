@@ -67,6 +67,7 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  * </compliant>
  *
  * @active since v1.2.0
+ * @requiresTypeResolution
  */
 class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
 
