@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.ValueArgument
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -48,6 +49,8 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
+
+        if (bindingContext == BindingContext.EMPTY) return
 
         if (!expression.isLetExpr()) return
 

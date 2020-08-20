@@ -1,17 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnnecessaryLetSpec : Spek({
+
+    setupKotlinEnvironment()
+
     val subject by memoized { UnnecessaryLet(Config.empty) }
+    val env: KotlinCoreEnvironment by memoized()
 
     describe("UnnecessaryLet rule") {
         it("reports unnecessary lets that can be changed to ordinary method call 1") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int = 1
                     a.let { it.plus(1) }
@@ -22,7 +28,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 2") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { it.plus(1) }
@@ -33,7 +39,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 3") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> that.plus(1) }?.let { it.plus(1) }
@@ -43,7 +49,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 4") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int = 1
                     a.let { 1.plus(1) }
@@ -54,7 +60,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 5" ) {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int = 1
                     val x = a.let { 1.plus(1) }
@@ -65,7 +71,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be replaced with an if") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { 1.plus(1) }
@@ -76,7 +82,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 7") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a.let { print(it) }
@@ -87,7 +93,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 8") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { it?.plus(1) }
@@ -98,7 +104,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports use of let without the safe call operator when we use an argument") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
@@ -109,7 +115,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("does not report lets used for function calls 1") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { print(it) }
@@ -119,7 +125,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("does not report lets used for function calls 2") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> 1.plus(that) }?.let { print(it) }
@@ -128,7 +134,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("does not report \"can be replaced by if\" because you will need an else too") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     val x = a?.let { 1.plus(1) }
@@ -137,8 +143,18 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("does not report a let where returned value is used - #2987") {
+            val findings = subject.compileAndLintWithContext(env, """
+                fun f() {
+                    val a = listOf<List<String>?>(listOf(""))
+                        .map { list -> list?.let { it + it } }
+                }
+                """)
+            assertThat(findings).isEmpty()
+        }
+
         it("does not report use of let with the safe call operator when we use an argument") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
@@ -148,7 +164,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("does not report lets with lambda body containing more than one statement") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     val b: Int = 1
@@ -180,7 +196,7 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("does not report lets where it is used multiple times") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
                     val a: Int? = null
                     val b: Int = 1
@@ -201,7 +217,7 @@ class UnnecessaryLetSpec : Spek({
                     foo.let { (a, b) -> a + b }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
 
@@ -213,7 +229,7 @@ class UnnecessaryLetSpec : Spek({
                     foo.let { (a, _) -> a + a }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
 
@@ -225,7 +241,7 @@ class UnnecessaryLetSpec : Spek({
                     foo.let { (a: Int, b: Int) -> a + b }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
 
@@ -237,7 +253,7 @@ class UnnecessaryLetSpec : Spek({
                     foo.let { (a, _) -> a }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
@@ -250,7 +266,7 @@ class UnnecessaryLetSpec : Spek({
                     foo?.let { (_, b) -> b.plus(1) }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
@@ -263,7 +279,7 @@ class UnnecessaryLetSpec : Spek({
                     foo.let { (_, _) -> 0 }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
@@ -276,7 +292,7 @@ class UnnecessaryLetSpec : Spek({
                     foo?.let { (_, _) -> 0 }
                 }
             """
-                val findings = subject.compileAndLint(content)
+                val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
             }
