@@ -53,6 +53,8 @@ formatting:
   autoCorrect: true
   MaximumLineLength:
     active: false
+  ParameterListWrapping:
+    active: false
 
 naming:
   MemberNameEqualsClassName:

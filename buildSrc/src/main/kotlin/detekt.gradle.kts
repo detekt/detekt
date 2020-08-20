@@ -8,7 +8,6 @@ plugins {
 val analysisDir = file(projectDir)
 val baselineFile = file("$rootDir/config/detekt/baseline.xml")
 val configFile = file("$rootDir/config/detekt/detekt.yml")
-val formatConfigFile = file("$rootDir/config/detekt/format.yml")
 val statisticsConfigFile = file("$rootDir/config/detekt/statistics.yml")
 
 val kotlinFiles = "**/*.kt"
@@ -53,7 +52,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(analysisDir)
-    config.setFrom(listOf(statisticsConfigFile, formatConfigFile))
+    config.setFrom(listOf(statisticsConfigFile, configFile))
     include(kotlinFiles)
     include(kotlinScriptFiles)
     exclude(resourceFiles)

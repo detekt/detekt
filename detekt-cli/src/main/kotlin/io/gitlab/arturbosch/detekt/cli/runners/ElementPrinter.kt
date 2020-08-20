@@ -12,7 +12,7 @@ class ElementPrinter : DetektVisitor() {
 
     companion object {
         fun dump(file: KtFile): String = ElementPrinter().run {
-            sb.appendln("0: " + file.javaClass.simpleName)
+            sb.appendLine("0: " + file.javaClass.simpleName)
             visitKtFile(file)
             sb.toString()
         }
@@ -39,14 +39,14 @@ class ElementPrinter : DetektVisitor() {
         val currentLine = element.line
         if (element.isContainer()) {
             indent++
-            sb.appendln(element.dump)
+            sb.appendLine(element.dump)
         } else {
             if (lastLine == currentLine) {
                 indent++
-                sb.appendln(element.dump)
+                sb.appendLine(element.dump)
                 indent--
             } else {
-                sb.appendln(element.dump)
+                sb.appendLine(element.dump)
             }
         }
         lastLine = currentLine

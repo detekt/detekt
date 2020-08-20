@@ -54,9 +54,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
     override val issue: Issue = Issue("UnusedPrivateMember",
-            Severity.Maintainability,
-            "Private member is unused.",
-            Debt.FIVE_MINS)
+        Severity.Maintainability,
+        "Private member is unused.",
+        Debt.FIVE_MINS)
 
     private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
 
@@ -99,11 +99,11 @@ private class UnusedFunctionVisitor(
                     } else {
                         emptyList()
                     }
-                    val referenceDescriptors = (references + referencesViaOperator).mapNotNull {
-                        it.getResolvedCall(bindingContext)?.resultingDescriptor
-                    }
-                    functions.filter {
-                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] !in referenceDescriptors
+                    val referenceDescriptors = (references + referencesViaOperator)
+                        .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
+                        .map { it.original }
+                    functions.filterNot {
+                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                     }
                 }
                 references.isEmpty() -> functions
@@ -204,7 +204,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-            isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() || isExpect()
+        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() || isExpect()
 }
 
 private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
@@ -214,9 +214,11 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return properties
-                .filter { it.nameAsSafeName.identifier !in nameAccesses }
-                .map { CodeSmell(issue, Entity.from(it),
-                    "Private property ${it.nameAsSafeName.identifier} is unused.") }
+            .filter { it.nameAsSafeName.identifier !in nameAccesses }
+            .map {
+                CodeSmell(issue, Entity.from(it),
+                    "Private property ${it.nameAsSafeName.identifier} is unused.")
+            }
     }
 
     override fun visitParameter(parameter: KtParameter) {
@@ -236,8 +238,8 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         super.visitPrimaryConstructor(constructor)
         constructor.valueParameters
-                .filter { (it.isPrivate() || !it.hasValOrVar()) && it.containingClassOrObject?.isExpect() == false }
-                .forEach { maybeAddUnusedProperty(it) }
+            .filter { (it.isPrivate() || !it.hasValOrVar()) && it.containingClassOrObject?.isExpect() == false }
+            .forEach { maybeAddUnusedProperty(it) }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {

@@ -20,6 +20,6 @@ class AstPrinter(
         }
 
         val ktFile = KtCompiler().compile(input, input)
-        outPrinter.appendln(ElementPrinter.dump(ktFile))
+        outPrinter.appendLine(ElementPrinter.dump(ktFile))
     }
 }

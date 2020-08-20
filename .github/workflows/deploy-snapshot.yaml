@@ -31,7 +31,7 @@ jobs:
         java-version: 8
 
     - name: Build detekt
-      run: ./gradlew build --build-cache --parallel -PwarningsAsErrors=true
+      run: ./gradlew build --build-cache --parallel
 
     - name: Deploy Snapshot
       env:
