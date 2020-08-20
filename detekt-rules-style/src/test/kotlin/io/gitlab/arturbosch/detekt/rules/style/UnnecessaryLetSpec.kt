@@ -143,6 +143,16 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("does not report a let where returned value is used - #2987") {
+            val findings = subject.compileAndLintWithContext(env, """
+                fun f() {
+                    val a = listOf<List<String>?>(listOf(""))
+                        .map { list -> list?.let { it + it } }
+                }
+                """)
+            assertThat(findings).isEmpty()
+        }
+
         it("does not report use of let with the safe call operator when we use an argument") {
             val findings = subject.compileAndLintWithContext(env, """
                 fun f() {
