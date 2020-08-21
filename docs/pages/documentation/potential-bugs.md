@@ -12,7 +12,7 @@ The potential-bugs rule set provides rules that detect potential bugs.
 
 Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -141,7 +141,7 @@ Platform types must be declared explicitly in public APIs to prevent unexpected 
 Based on code from Kotlin project:
 https://github.com/JetBrains/kotlin/blob/1.3.50/idea/src/org/jetbrains/kotlin/idea/intentions/SpecifyTypeExplicitlyIntention.kt#L86-L107
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Maintainability
 
@@ -172,7 +172,7 @@ normally so that's the rationale behind this rule.
 fun returnsValue() = 42
 fun returnsNoValue() {}
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -242,7 +242,7 @@ Changing the type of the expression accidentally, changes the functions return t
 This may lead to backward incompatibility.
 Use a block statement to make clear this function will never return a value.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -434,7 +434,7 @@ or sealed class and the `when` expression is used as a statement.
 When this happens it's unclear what was intended when an unhandled case is reached. It is better to be explicit and
 either handle all cases or use a default `else` statement to cover the unhandled cases.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -486,7 +486,7 @@ fun whenOnEnumCompliant2(c: Color) {
 
 Turn on this rule to flag 'toString' calls with a nullable receiver that may return the string "null".
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -524,7 +524,7 @@ verified that all cases are already covered when checking cases on an enum or se
 Based on code from Kotlin compiler:
 https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Warning
 
@@ -603,7 +603,7 @@ for (i in 1..2) {
 
 Reports unnecessary not-null operator usage (!!) that can be removed by the user.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -627,7 +627,7 @@ val b = a
 
 Reports unnecessary safe call operators (`.?`) that can be removed by the user.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -680,7 +680,7 @@ Reports unsafe calls on nullable types. These calls will throw a NullPointerExce
 the nullable value is null. Kotlin provides many ways to work with nullable types to increase
 null safety. Guard the code appropriately to prevent NullPointerExceptions.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
@@ -706,7 +706,7 @@ fun foo(str: String?) {
 
 Reports casts that will never succeed.
 
-**Requires Type and Symbol solving**
+**Requires Type and Symbol Solving**
 
 **Severity**: Defect
 
