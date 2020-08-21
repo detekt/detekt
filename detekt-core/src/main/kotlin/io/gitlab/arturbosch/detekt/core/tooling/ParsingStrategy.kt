@@ -9,22 +9,18 @@ import java.nio.file.Path
 
 typealias ParsingStrategy = (spec: ProcessingSpec, settings: ProcessingSettings) -> List<KtFile>
 
-val contentToKtFile: (content: String, path: Path) -> ParsingStrategy = { content, path ->
-    { spec, settings ->
-        listOf(
-            KtCompiler(settings.environment)
-                .createKtFile(content, spec.projectSpec.basePath ?: path, path)
-        )
-    }
+fun contentToKtFile(content: String, path: Path): ParsingStrategy = { spec, settings ->
+    listOf(
+        KtCompiler(settings.environment)
+            .createKtFile(content, spec.projectSpec.basePath ?: path, path)
+    )
 }
 
-val pathToKtFile: (path: Path) -> ParsingStrategy = { path ->
-    { spec, settings ->
-        listOf(
-            KtCompiler(settings.environment)
-                .compile(spec.projectSpec.basePath ?: path, path)
-        )
-    }
+fun pathToKtFile(path: Path): ParsingStrategy = { spec, settings ->
+    listOf(
+        KtCompiler(settings.environment)
+            .compile(spec.projectSpec.basePath ?: path, path)
+    )
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { spec, settings ->
