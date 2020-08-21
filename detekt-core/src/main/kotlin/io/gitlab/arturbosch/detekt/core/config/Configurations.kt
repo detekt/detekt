@@ -5,7 +5,7 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
-import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
+import io.gitlab.arturbosch.detekt.api.internal.AllActiveConfig
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import java.net.URI
 import java.net.URL
@@ -30,7 +30,7 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
     }
 
     if (rulesSpec.activateExperimentalRules) {
-        declaredConfig = FailFastConfig(declaredConfig ?: DefaultConfig.newInstance())
+        declaredConfig = AllActiveConfig(declaredConfig ?: DefaultConfig.newInstance())
     }
 
     if (!rulesSpec.autoCorrect) {
