@@ -19,7 +19,7 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
-        val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java, project)
+        val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
