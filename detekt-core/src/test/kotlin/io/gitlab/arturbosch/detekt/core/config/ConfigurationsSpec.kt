@@ -87,13 +87,6 @@ internal class ConfigurationsSpec : Spek({
         it("should override maxIssues to 0 by default") {
             assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
         }
-
-        it("should keep config from default") {
-            val actual = config.subConfig("style")
-                .subConfig("MaxLineLength")
-                .valueOrDefault("maxLineLength", -1)
-            assertThat(actual).isEqualTo(120)
-        }
     }
 
     describe("fail fast override") {

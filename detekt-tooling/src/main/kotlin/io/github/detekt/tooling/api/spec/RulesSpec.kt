@@ -7,8 +7,6 @@ interface RulesSpec {
 
     /**
      * Activates all rules which do not have the active property set to 'true' by default.
-     *
-     * Also known as 'failFast' flag.
      */
     val activateExperimentalRules: Boolean
 
