@@ -19,23 +19,18 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
         resources.isNotEmpty() -> parseResourceConfig(resources)
         else -> null
     }
-    var defaultConfig: Config? = null
 
-    if (useDefaultConfig) {
-        defaultConfig = DefaultConfig.newInstance()
+    if (useDefaultConfig || rulesSpec.activateExperimentalRules) {
+        val defaultConfig = DefaultConfig.newInstance()
         declaredConfig = if (declaredConfig == null) {
             defaultConfig
         } else {
             CompositeConfig(declaredConfig, defaultConfig)
         }
-    }
 
-    if (rulesSpec.activateExperimentalRules) {
-        val initializedDefaultConfig = defaultConfig ?: DefaultConfig.newInstance()
-        declaredConfig = FailFastConfig(
-            declaredConfig ?: initializedDefaultConfig,
-            initializedDefaultConfig
-        )
+        if (rulesSpec.activateExperimentalRules) {
+            declaredConfig = FailFastConfig(declaredConfig)
+        }
     }
 
     if (!rulesSpec.autoCorrect) {
