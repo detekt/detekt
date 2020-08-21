@@ -23,7 +23,11 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
 
     if (useDefaultConfig) {
         defaultConfig = DefaultConfig.newInstance()
-        declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
+        declaredConfig = if (declaredConfig == null) {
+            defaultConfig
+        } else {
+            CompositeConfig(declaredConfig, defaultConfig)
+        }
     }
 
     if (rulesSpec.activateExperimentalRules) {
