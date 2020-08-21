@@ -7,23 +7,23 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
-typealias ParsingStrategy = (spec: ProcessingSpec, settings: ProcessingSettings) -> List<KtFile>
+typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
-fun contentToKtFile(content: String, path: Path): ParsingStrategy = { spec, settings ->
+fun contentToKtFile(content: String, path: Path): ParsingStrategy = { settings ->
     listOf(
         KtCompiler(settings.environment)
-            .createKtFile(content, spec.projectSpec.basePath ?: path, path)
+            .createKtFile(content, settings.spec.projectSpec.basePath ?: path, path)
     )
 }
 
-fun pathToKtFile(path: Path): ParsingStrategy = { spec, settings ->
+fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
     listOf(
         KtCompiler(settings.environment)
-            .compile(spec.projectSpec.basePath ?: path, path)
+            .compile(settings.spec.projectSpec.basePath ?: path, path)
     )
 }
 
-val inputPathsToKtFiles: ParsingStrategy = { spec, settings ->
-    val compiler = KtTreeCompiler(settings, spec.projectSpec)
-    spec.projectSpec.inputPaths.flatMap(compiler::compile)
+val inputPathsToKtFiles: ParsingStrategy = { settings ->
+    val compiler = KtTreeCompiler(settings, settings.spec.projectSpec)
+    settings.spec.projectSpec.inputPaths.flatMap(compiler::compile)
 }

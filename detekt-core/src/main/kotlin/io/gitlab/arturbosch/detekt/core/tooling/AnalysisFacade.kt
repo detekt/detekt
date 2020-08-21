@@ -35,7 +35,7 @@ class AnalysisFacade(
             DefaultLifecycle(
                 spec,
                 it,
-                parsingStrategy = { _, _ -> files.toList() },
+                parsingStrategy = { files.toList() },
                 bindingProvider = { bindingContext }
             )
         }

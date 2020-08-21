@@ -33,7 +33,7 @@ internal interface Lifecycle {
 
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings) }
-        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(spec, settings) }
+        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(settings) }
         val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
         val (processors, ruleSets) = measure(Phase.LoadingExtensions) {
             processorsProvider.invoke() to ruleSetsProvider.invoke()
