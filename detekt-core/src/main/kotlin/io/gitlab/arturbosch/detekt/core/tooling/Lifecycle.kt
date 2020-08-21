@@ -1,14 +1,19 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
+import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
+import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.generateBindingContext
@@ -38,7 +43,7 @@ internal interface Lifecycle {
         }
 
         val result = measure(Phase.Analyzer) {
-            val detektor = Analyzer(settings, ruleSets, processors)
+            val detektor = Analyzer(workaroundConfiguration(settings), ruleSets, processors)
             processors.forEach { it.onStart(filesToAnalyze, bindingContext) }
             val findings: Map<RuleSetId, List<Finding>> = detektor.run(filesToAnalyze, bindingContext)
             val result: Detektion = DetektResult(findings.toSortedMap())
@@ -64,3 +69,27 @@ internal class DefaultLifecycle(
     override val ruleSetsProvider: () -> List<RuleSetProvider> =
         { settings.createRuleProviders() }
 ) : Lifecycle
+
+private fun workaroundConfiguration(settings: ProcessingSettings): ProcessingSettings {
+    return ProcessingSettings(settings.spec, settings.spec.workaroundConfiguration(settings.config))
+}
+
+private fun ProcessingSpec.workaroundConfiguration(config: Config): Config = with(configSpec) {
+    var declaredConfig: Config? = when {
+        configPaths.isNotEmpty() -> config
+        resources.isNotEmpty() -> config
+        useDefaultConfig -> config
+        else -> null
+    }
+
+    if (rulesSpec.activateExperimentalRules) {
+        val defaultConfig = DefaultConfig.newInstance()
+        declaredConfig = FailFastConfig(declaredConfig ?: defaultConfig, defaultConfig)
+    }
+
+    if (!rulesSpec.autoCorrect) {
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: DefaultConfig.newInstance())
+    }
+
+    return declaredConfig ?: DefaultConfig.newInstance()
+}
