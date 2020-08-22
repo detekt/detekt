@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import org.gradle.api.Action
-import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
+import javax.inject.Inject
 
-open class DetektExtension(project: Project) : CodeQualityExtension() {
+open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQualityExtension() {
 
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
@@ -24,11 +24,11 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     var input: ConfigurableFileCollection =
-        project.configurableFileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
+        objects.fileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
     var baseline: File? = null
 
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
+    var config: ConfigurableFileCollection = objects.fileCollection()
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
 

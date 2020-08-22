@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -43,13 +42,13 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:InputFiles
     @get:Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.configurableFileCollection()
+    val config: ConfigurableFileCollection = project.objects.fileCollection()
 
     @get:Classpath
-    val detektClasspath = project.configurableFileCollection()
+    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
 
     @get:Classpath
-    val pluginClasspath = project.configurableFileCollection()
+    val pluginClasspath: ConfigurableFileCollection = project.objects.fileCollection()
 
     @get:Console
     val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
