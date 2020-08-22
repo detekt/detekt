@@ -6,6 +6,21 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.12.0-RC1 - 2020-08-20
+
+##### Notable Changes
+
+The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin's Gradle plugin.
+
+##### Changelog
+
+- Support Kotlin 1.4 - [#2981](https://github.com/detekt/detekt/pull/2981)
+- 1.10.0 to 1.11.0 | Could not find org.spekframework.spek2:spek-dsl-jvm - [#2976](https://github.com/detekt/detekt/issues/2976)
+- Make a release built against Kotlin 1.4 - [#2974](https://github.com/detekt/detekt/issues/2974)
+- Roll back to non snapshot spek version - [#2922](https://github.com/detekt/detekt/pull/2922)
+
+See all issues at: [1.12.0-RC1](https://github.com/detekt/detekt/milestone/73)
+
 #### 1.11.2 - 2020-08-19
 
 ##### Changelog

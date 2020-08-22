@@ -90,10 +90,5 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 ### Release process
 
 - `./scripts/github-milestone-report.main.kts` - creates changelog
-- `gradle increment<Patch|Minor|Major>`
-- `gradle build publishToMavenLocal -x detekt -x test` - publish to local first
-- `gradle build` - now fully build with tests and self-analysis.
-- `gradle publishDetektPublicationPublicationToBintrayRepository` - uploads artifacts to Bintray
-- `gradle publishPlugins` - uploads the Gradle Plugin to the Plugin Repositories
-- `gradle githubRelease` - creates a tag for the current version with changelog and cli jar
-- `gradle applyDocVersion applySelfAnalysisVersion`
+- `gradle increment<Patch|Minor|Major>` - update version
+- `./scripts/release.sh` - publish all artifacts
