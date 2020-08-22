@@ -29,6 +29,7 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
@@ -52,6 +53,7 @@ import javax.inject.Inject
 
 @CacheableTask
 open class Detekt @Inject constructor(
+    private val providers: ProviderFactory,
     private val objects: ObjectFactory
 ) : SourceTask(), VerificationTask {
 
@@ -188,7 +190,7 @@ open class Detekt @Inject constructor(
     @Deprecated("Use reports {} to configure custom reports")
     val customReports: Provider<Collection<CustomDetektReport>>
         @Nested
-        get() = project.provider { reports.custom }
+        get() = providers.provider { reports.custom }
 
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
