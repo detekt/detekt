@@ -80,7 +80,9 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             LibraryEntitiesShouldNotBePublic(config),
             LibraryCodeMustSpecifyReturnType(config),
             UseArrayLiteralsInAnnotations(config),
-            UseEmptyCounterpart(config)
+            UseEmptyCounterpart(config),
+            UseCheckNotNull(config),
+            UseRequireNotNull(config)
         )
     )
 }
