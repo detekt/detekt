@@ -20,7 +20,7 @@ dependencies {
         api("com.pinterest.ktlint:ktlint-ruleset-standard:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-core:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
-        api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.1")
+        api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
         api("org.assertj:assertj-core:3.16.1")
     }
 }
