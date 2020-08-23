@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.KtCompiler
-import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
