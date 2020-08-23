@@ -1442,6 +1442,26 @@ The latter should be preferred as it is more readable.
 @NegativeCase(["..."])
 ```
 
+### UseCheckNotNull
+
+Turn on this rule to flag `check` calls for not-null check that can be replaced with a `checkNotNull` call.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+check(x != null)
+```
+
+#### Compliant Code:
+
+```kotlin
+checkNotNull(x)
+```
+
 ### UseCheckOrError
 
 Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
@@ -1587,6 +1607,26 @@ if (value < 0) throw IllegalArgumentException("value is $value but should be at 
 ```kotlin
 requireNotNull(value) { "value should not be null" }
 require(value >= 0) { "value is $value but should be at least 0" }
+```
+
+### UseRequireNotNull
+
+Turn on this rule to flag `require` calls for not-null check that can be replaced with a `requireNotNull` call.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+require(x != null)
+```
+
+#### Compliant Code:
+
+```kotlin
+requireNotNull(x)
 ```
 
 ### UselessCallOnNotNull
