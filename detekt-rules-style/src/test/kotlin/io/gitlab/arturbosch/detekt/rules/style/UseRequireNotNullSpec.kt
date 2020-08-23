@@ -14,14 +14,15 @@ object UseRequireNotNullSpec : Spek({
     val subject by memoized { UseRequireNotNull() }
 
     describe("UseRequireNotNull rule") {
-        it("reports a `require` call with a non-null check") {
+        it("reports `require` calls with a non-null check") {
             val code = """
-                fun test(i: Int?) {
+                fun test(i: Int?, j: Int?) {
                     require(i != null)
+                    require(null != j)
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            assertThat(actual).hasSize(1)
+            assertThat(actual).hasSize(2)
         }
 
         it("does not report a `require` call without a non-null check") {

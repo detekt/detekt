@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Turn on this rule to flag `check` calls for not-null check that can be replaced with a `checkNotNull` call.
@@ -26,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
     companion object {
-        private val requireFunctionFqName = FqName("kotlin.check")
+        private val checkFunctionFqName = FqName("kotlin.check")
     }
 
     override val issue = Issue(
@@ -38,7 +39,8 @@ class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (expression.isCallingWithNonNullCheckArgument(requireFunctionFqName, bindingContext)) {
+        if (bindingContext == BindingContext.EMPTY) return
+        if (expression.isCallingWithNonNullCheckArgument(checkFunctionFqName, bindingContext)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

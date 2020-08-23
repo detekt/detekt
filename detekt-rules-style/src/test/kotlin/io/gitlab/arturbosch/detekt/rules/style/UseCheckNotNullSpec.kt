@@ -14,14 +14,15 @@ object UseCheckNotNullSpec : Spek({
     val subject by memoized { UseCheckNotNull() }
 
     describe("UseCheckNotNull rule") {
-        it("reports a `check` call with a non-null check") {
+        it("reports `check` calls with a non-null check") {
             val code = """
-                fun test(i: Int?) {
+                fun test(i: Int?, j: Int?) {
                     check(i != null)
+                    check(null != j)
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            assertThat(actual).hasSize(1)
+            assertThat(actual).hasSize(2)
         }
 
         it("does not report a `check` call without a non-null check") {
