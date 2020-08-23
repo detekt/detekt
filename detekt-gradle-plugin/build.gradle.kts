@@ -8,6 +8,7 @@ dependencies {
 }
 
 gradlePlugin {
+    isAutomatedPublishing = false
     plugins {
         register("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
