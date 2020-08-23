@@ -16,13 +16,22 @@ object UseRequireNotNullSpec : Spek({
     describe("UseRequireNotNull rule") {
         it("reports `require` calls with a non-null check") {
             val code = """
-                fun test(i: Int?, j: Int?) {
+                fun test(i: Int?) {
                     require(i != null)
-                    require(null != j)
                 }
             """
             val actual = subject.compileAndLintWithContext(env, code)
-            assertThat(actual).hasSize(2)
+            assertThat(actual).hasSize(1)
+        }
+
+        it("reports `require` calls with a non-null check that has `null` on the left side") {
+            val code = """
+                fun test(i: Int?) {
+                    require(null != i)
+                }
+            """
+            val actual = subject.compileAndLintWithContext(env, code)
+            assertThat(actual).hasSize(1)
         }
 
         it("does not report a `require` call without a non-null check") {
