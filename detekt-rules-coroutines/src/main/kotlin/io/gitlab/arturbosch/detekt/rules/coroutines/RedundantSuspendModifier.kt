@@ -49,8 +49,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  *   println("string")
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
-
 class RedundantSuspendModifier(config: Config) : Rule(config) {
 
     override val issue = Issue(

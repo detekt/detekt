@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  * </compliant>
  *
  * @active since v1.2.0
+ * @requiresTypeResolution
  */
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("UnsafeCallOnNullableType",

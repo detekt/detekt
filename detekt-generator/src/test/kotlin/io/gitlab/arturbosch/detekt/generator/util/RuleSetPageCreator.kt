@@ -12,13 +12,46 @@ internal fun createRuleSetPage(): RuleSetPage {
 }
 
 internal fun createRules(): List<Rule> {
-    val rule1 = Rule("WildcardImport", "a wildcard import", "import foo.*", "import foo.bar", true, "Defect",
-            "10min", "alias1, alias2", "", listOf(
-                    Configuration("conf1", "a config option", "foo", null),
-                    Configuration("conf2", "deprecated config", "false", "use conf1 instead")))
-    val rule2 = Rule("EqualsNull", "equals null", "", "", false, "",
-            "", null, "WildcardImport", emptyList())
-    val rule3 = Rule("NoUnitKeyword", "removes :Unit", "fun stuff(): Unit {}",
-            "fun stuff() {}", true, "", "5m", null, "", emptyList(), true)
+    val rule1 = Rule(
+        name = "WildcardImport",
+        description = "a wildcard import",
+        nonCompliantCodeExample = "import foo.*",
+        compliantCodeExample = "import foo.bar",
+        active = true,
+        severity = "Defect",
+        debt = "10min",
+        aliases = "alias1, alias2",
+        parent = "",
+        configuration = listOf(
+            Configuration("conf1", "a config option", "foo", null),
+            Configuration("conf2", "deprecated config", "false", "use conf1 instead")
+        )
+    )
+    val rule2 = Rule(
+        name = "EqualsNull",
+        description = "equals null",
+        nonCompliantCodeExample = "",
+        compliantCodeExample = "",
+        active = false,
+        severity = "",
+        debt = "",
+        aliases = null,
+        parent = "WildcardImport",
+        configuration = emptyList()
+    )
+    val rule3 = Rule(
+        name = "NoUnitKeyword",
+        description = "removes :Unit",
+        nonCompliantCodeExample = "fun stuff(): Unit {}",
+        compliantCodeExample = "fun stuff() {}",
+        active = true,
+        severity = "",
+        debt = "5m",
+        aliases = null,
+        parent = "",
+        configuration = emptyList(),
+        autoCorrect = true,
+        requiresTypeResolution = true
+    )
     return listOf(rule1, rule2, rule3)
 }

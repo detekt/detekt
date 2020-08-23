@@ -42,6 +42,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  *
  * @since 1.11.0
+ * @requiresTypeResolution
  */
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(

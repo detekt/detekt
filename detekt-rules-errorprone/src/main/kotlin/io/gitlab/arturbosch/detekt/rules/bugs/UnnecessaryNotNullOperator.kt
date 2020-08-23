@@ -23,6 +23,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * val a = 1
  * val b = a
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 

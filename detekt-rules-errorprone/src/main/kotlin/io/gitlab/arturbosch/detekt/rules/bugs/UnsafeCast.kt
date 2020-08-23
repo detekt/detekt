@@ -29,6 +29,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     println(s as Int)
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 

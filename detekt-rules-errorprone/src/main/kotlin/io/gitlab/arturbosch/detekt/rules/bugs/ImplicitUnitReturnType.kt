@@ -34,6 +34,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  * // explicit Unit is compliant by default; can be configured to enforce block statement
  * fun safeUnitReturn(): Unit = println("Hello Unit")
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class ImplicitUnitReturnType(config: Config) : Rule(config) {
 

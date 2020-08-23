@@ -39,6 +39,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * a?.let { it.plus(it) }
  * val b = a?.let { 1.plus(1) }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
 

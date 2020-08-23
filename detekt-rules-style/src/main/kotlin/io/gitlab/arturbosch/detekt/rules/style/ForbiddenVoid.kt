@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: `false`)
  * @configuration ignoreUsageInGenerics - ignore void types as generic arguments (default: `false`)
+ *
+ * @requiresTypeResolution
  */
 class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 

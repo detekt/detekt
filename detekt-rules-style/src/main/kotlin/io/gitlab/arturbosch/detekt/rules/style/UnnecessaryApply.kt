@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     environment = "test"
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnnecessaryApply(config: Config) : Rule(config) {
 

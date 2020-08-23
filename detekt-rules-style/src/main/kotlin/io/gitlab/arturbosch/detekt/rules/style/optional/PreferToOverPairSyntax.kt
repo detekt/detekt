@@ -27,6 +27,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * <compliant>
  * val pair = 1 to 2
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("PreferToOverPairSyntax", Severity.Style,

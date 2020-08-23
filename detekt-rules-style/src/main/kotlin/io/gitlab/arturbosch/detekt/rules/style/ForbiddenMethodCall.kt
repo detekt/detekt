@@ -27,6 +27,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden
  *  (default: `['kotlin.io.println', 'kotlin.io.print']`)
+ *
+ * @requiresTypeResolution
  */
 class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
