@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  * @since 1.12.0
+ * @requiresTypeResolution
  */
 class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
     companion object {

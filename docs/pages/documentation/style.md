@@ -1456,6 +1456,8 @@ The latter should be preferred as it is more readable.
 
 Turn on this rule to flag `check` calls for not-null check that can be replaced with a `checkNotNull` call.
 
+**Requires Type and Symbol Solving**
+
 **Severity**: Style
 
 **Debt**: 5min
@@ -1624,6 +1626,8 @@ require(value >= 0) { "value is $value but should be at least 0" }
 ### UseRequireNotNull
 
 Turn on this rule to flag `require` calls for not-null check that can be replaced with a `requireNotNull` call.
+
+**Requires Type and Symbol Solving**
 
 **Severity**: Style
 
