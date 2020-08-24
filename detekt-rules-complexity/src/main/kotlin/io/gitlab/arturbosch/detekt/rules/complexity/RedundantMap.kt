@@ -27,7 +27,7 @@ class RedundantMap(
 ) : Rule(config) {
 
     override val issue: Issue =
-        Issue("RedundantMap", Severity.CodeSmell, "map { it } does not make sense", Debt.FIVE_MINS)
+        Issue("RedundantMap", Severity.CodeSmell, "Using map { it } indicates a remnant of a recent refactoring.", Debt.FIVE_MINS)
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
