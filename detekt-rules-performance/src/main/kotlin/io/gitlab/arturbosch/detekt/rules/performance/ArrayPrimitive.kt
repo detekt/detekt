@@ -7,11 +7,17 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.builtins.PrimitiveType
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * Using Array<Primitive> leads to implicit boxing and performance hit. Prefer using Kotlin specialized Array
@@ -35,44 +41,45 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * @active since v1.2.0
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
+    companion object {
+        private val primitiveTypes = PrimitiveType.NUMBER_TYPES.map { it.typeName.asString() }
+        private val arrayOfFunctionFqName = FqName("kotlin.arrayOf")
+    }
 
-    override val issue = Issue("ArrayPrimitive",
-            Severity.Performance,
-            "Using Array<Primitive> leads to implicit boxing and a performance hit",
-            Debt.FIVE_MINS)
-
-    private val primitiveTypes = hashSetOf(
-            "Int",
-            "Double",
-            "Float",
-            "Short",
-            "Byte",
-            "Long",
-            "Char"
+    override val issue = Issue(
+        "ArrayPrimitive",
+        Severity.Performance,
+        "Using Array<Primitive> leads to implicit boxing and a performance hit",
+        Debt.FIVE_MINS
     )
 
-    override fun visitParameter(parameter: KtParameter) {
-        val typeReference = parameter.typeReference
-        if (typeReference != null) {
-            reportArrayPrimitives(typeReference)
+    @Suppress("ReturnCount")
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+        if (bindingContext == BindingContext.EMPTY) return
+
+        if (expression.calleeExpression?.text != arrayOfFunctionFqName.shortName().asString()) return
+        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
+        if (descriptor.fqNameOrNull() != arrayOfFunctionFqName) return
+
+        val type = descriptor.returnType?.arguments?.singleOrNull()?.type ?: return
+        if (KotlinBuiltIns.isPrimitiveType(type)) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
-        super.visitParameter(parameter)
     }
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.hasDeclaredReturnType()) {
-            val typeReference = function.typeReference
-            if (typeReference != null) {
-                reportArrayPrimitives(typeReference)
-            }
+    override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
+        super.visitNamedDeclaration(declaration)
+        if (declaration is KtCallableDeclaration) {
+            reportArrayPrimitives(declaration.typeReference)
+            reportArrayPrimitives(declaration.receiverTypeReference)
         }
-        super.visitNamedFunction(function)
     }
 
-    private fun reportArrayPrimitives(element: KtElement) {
-        return element
-                .collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
-                .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+    private fun reportArrayPrimitives(typeReference: KtTypeReference?) {
+        typeReference
+            ?.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
+            ?.forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun isArrayPrimitive(it: KtTypeReference): Boolean {

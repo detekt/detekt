@@ -1,11 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ArrayPrimitiveSpec : Spek({
+    setupKotlinEnvironment()
+
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { ArrayPrimitive() }
 
     describe("one function parameter") {
@@ -85,6 +91,67 @@ class ArrayPrimitiveSpec : Spek({
 
         it("is not explicitly set") {
             val code = "fun returningFunction() {}"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
+
+    describe("variable type") {
+        it("is Array<Primitive>") {
+            val code = "val foo: Array<Int>? = null"
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    describe("receiver type") {
+        it("is Array<Primitive>") {
+            val code = "fun Array<Long>.foo() { println(this) }"
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    describe("factory methods") {
+        it("is arrayOf(Char)") {
+            val code = "fun foo(x: Char) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Byte)") {
+            val code = "fun foo(x: Byte) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Short)") {
+            val code = "fun foo(x: Short) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Int)") {
+            val code = "fun foo(x: Int) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Long)") {
+            val code = "fun foo(x: Long) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Float)") {
+            val code = "fun foo(x: Float) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Double)") {
+            val code = "fun foo(x: Double) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(String)") {
+            val code = "fun foo(x: String) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("is intArrayOf()") {
+            val code = "fun test(x: Int) = intArrayOf(x)"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
