@@ -42,7 +42,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             if (rule.requiresTypeResolution) {
                 paragraph {
-                    bold { "Requires Type and Symbol Solving" }
+                    bold { "Requires Type Resolution" }
                 }
             }
 
