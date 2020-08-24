@@ -22,7 +22,6 @@ import org.kohsuke.github.GitHub
 import java.io.File
 import java.net.URL
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class GithubMilestoneReport : CliktCommand() {

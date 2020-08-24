@@ -238,7 +238,7 @@ object IgnoredReturnValueSpec : Spek({
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(11,10)
+            assertThat(findings).hasSourceLocation(11, 10)
         }
 
         it("reports when a function which returns a value is called before a semicolon") {

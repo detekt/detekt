@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 plugins {
     id("io.gitlab.arturbosch.detekt")
@@ -26,6 +27,12 @@ subprojects {
     }
 
     detekt {
+        input = objects.fileCollection().from(
+            DetektExtension.DEFAULT_SRC_DIR_JAVA,
+            "src/test/java",
+            DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
+            "src/test/kotlin"
+        )
         buildUponDefaultConfig = true
         baseline = baselineFile
 
