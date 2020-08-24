@@ -47,8 +47,8 @@ entries:
     - title: with Maven Ant Task
       url: /mavenanttask.html
       output: web
-    - title: Using Type and Symbol Solving
-      url: /type-and-symbol-solving.html
+    - title: Using Type Resolution
+      url: /type-resolution.html
       output: web
     - title: with a Git pre-commit hook
       url: /git-pre-commit-hook.html

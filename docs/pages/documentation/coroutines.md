@@ -55,7 +55,7 @@ where it's not needed.
 Based on code from Kotlin project:
 https://github.com/JetBrains/kotlin/blob/v1.3.61/idea/src/org/jetbrains/kotlin/idea/inspections/RedundantSuspendModifierInspection.kt
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Minor
 
