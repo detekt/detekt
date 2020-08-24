@@ -109,7 +109,7 @@ class ArrayPrimitiveSpec : Spek({
         }
     }
 
-    describe("factory methods") {
+    describe("arrayOf") {
         it("is arrayOf(Char)") {
             val code = "fun foo(x: Char) = arrayOf(x)"
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -152,6 +152,48 @@ class ArrayPrimitiveSpec : Spek({
 
         it("is intArrayOf()") {
             val code = "fun test(x: Int) = intArrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    describe("emptyArray") {
+        it("is emptyArray<Char>()") {
+            val code = "val a = emptyArray<Char>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Byte>()") {
+            val code = "val a = emptyArray<Byte>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Short>()") {
+            val code = "val a = emptyArray<Short>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Int>()") {
+            val code = "val a = emptyArray<Int>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Long>()") {
+            val code = "val a = emptyArray<Long>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Float>()") {
+            val code = "val a = emptyArray<Float>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Double>()") {
+            val code = "val a = emptyArray<Double>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<String>()") {
+            val code = "val a = emptyArray<String>()"
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

@@ -43,7 +43,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     companion object {
         private val primitiveTypes = PrimitiveType.NUMBER_TYPES.map { it.typeName.asString() }
-        private val arrayOfFunctionFqName = FqName("kotlin.arrayOf")
+        private val factoryMethodFqNames = listOf(FqName("kotlin.arrayOf"), FqName("kotlin.emptyArray"))
+        private val factoryMethodNames = factoryMethodFqNames.map { it.shortName().asString() }
     }
 
     override val issue = Issue(
@@ -58,9 +59,9 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
         super.visitCallExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
-        if (expression.calleeExpression?.text != arrayOfFunctionFqName.shortName().asString()) return
+        if (expression.calleeExpression?.text !in factoryMethodNames) return
         val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
-        if (descriptor.fqNameOrNull() != arrayOfFunctionFqName) return
+        if (descriptor.fqNameOrNull() !in factoryMethodFqNames) return
 
         val type = descriptor.returnType?.arguments?.singleOrNull()?.type ?: return
         if (KotlinBuiltIns.isPrimitiveType(type)) {
