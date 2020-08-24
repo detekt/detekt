@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
-import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -22,7 +21,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 internal interface Lifecycle {
 
-    val spec: ProcessingSpec
     val settings: ProcessingSettings
     val parsingStrategy: ParsingStrategy
     val bindingProvider: (files: List<KtFile>) -> BindingContext
@@ -33,7 +31,7 @@ internal interface Lifecycle {
 
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings) }
-        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(spec, settings) }
+        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(settings) }
         val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
         val (processors, ruleSets) = measure(Phase.LoadingExtensions) {
             processorsProvider.invoke() to ruleSetsProvider.invoke()
@@ -57,7 +55,6 @@ internal interface Lifecycle {
 }
 
 internal class DefaultLifecycle(
-    override val spec: ProcessingSpec,
     override val settings: ProcessingSettings,
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
@@ -65,5 +62,5 @@ internal class DefaultLifecycle(
     override val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
     override val ruleSetsProvider: () -> List<RuleSetProvider> =
-        { spec.rulesSpec.runPolicy.createRuleProviders(settings) }
+        { settings.createRuleProviders() }
 ) : Lifecycle

@@ -1,33 +1,28 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.KtCompiler
-import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
-typealias ParsingStrategy = (spec: ProcessingSpec, settings: ProcessingSettings) -> List<KtFile>
+typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
-val contentToKtFile: (content: String, path: Path) -> ParsingStrategy = { content, path ->
-    { spec, settings ->
-        listOf(
-            KtCompiler(settings.environment)
-                .createKtFile(content, spec.projectSpec.basePath ?: path, path)
-        )
-    }
+fun contentToKtFile(content: String, path: Path): ParsingStrategy = { settings ->
+    listOf(
+        KtCompiler(settings.environment)
+            .createKtFile(content, settings.spec.projectSpec.basePath ?: path, path)
+    )
 }
 
-val pathToKtFile: (path: Path) -> ParsingStrategy = { path ->
-    { spec, settings ->
-        listOf(
-            KtCompiler(settings.environment)
-                .compile(spec.projectSpec.basePath ?: path, path)
-        )
-    }
+fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
+    listOf(
+        KtCompiler(settings.environment)
+            .compile(settings.spec.projectSpec.basePath ?: path, path)
+    )
 }
 
-val inputPathsToKtFiles: ParsingStrategy = { spec, settings ->
-    val compiler = KtTreeCompiler(settings, spec.projectSpec)
-    spec.projectSpec.inputPaths.flatMap(compiler::compile)
+val inputPathsToKtFiles: ParsingStrategy = { settings ->
+    val compiler = KtTreeCompiler(settings, settings.spec.projectSpec)
+    settings.spec.projectSpec.inputPaths.flatMap(compiler::compile)
 }

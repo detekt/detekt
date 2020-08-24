@@ -54,12 +54,12 @@ fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMappi
         .toMap()
 }
 
-fun RulesSpec.RunPolicy.createRuleProviders(settings: ProcessingSettings): List<RuleSetProvider> = when (this) {
-    RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(settings).load()
+fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
+    RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()
     is RulesSpec.RunPolicy.RestrictToSingleRule -> {
-        val (ruleSetId, ruleId) = id
+        val (ruleSetId, ruleId) = runPolicy.id
         val realProvider = requireNotNull(
-            RuleSetLocator(settings).load().find { it.ruleSetId == ruleSetId }
+            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
         ) { "There was no rule set with id '$ruleSetId'." }
         listOf(SingleRuleProvider(ruleId, realProvider))
     }

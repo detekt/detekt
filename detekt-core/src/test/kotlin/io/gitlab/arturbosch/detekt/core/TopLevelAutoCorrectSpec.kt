@@ -56,7 +56,6 @@ class TopLevelAutoCorrectSpec : Spek({
 
             AnalysisFacade(spec).runAnalysis {
                 DefaultLifecycle(
-                    spec,
                     it,
                     inputPathsToKtFiles,
                     processorsProvider = { listOf(contentChangedListener) },
