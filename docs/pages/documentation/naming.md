@@ -277,7 +277,7 @@ class Manager {
 Reports when property with 'is' prefix doesn't have a boolean type.
 Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Warning
 

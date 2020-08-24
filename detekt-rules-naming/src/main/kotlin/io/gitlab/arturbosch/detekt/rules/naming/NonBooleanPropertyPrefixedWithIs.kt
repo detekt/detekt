@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val isEnabled: Boolean = false
  * </compliant>
  *
+ * @since 1.12.0
  * @requiresTypeResolution
  */
 class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
@@ -35,7 +36,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
     private val javaBooleanTypeName = "java.lang.Boolean"
 
     override val issue = Issue(
-        "IsPropertyNaming", // javaClass.simpleName,
+        javaClass.simpleName,
         Severity.Warning,
         "Only boolean property names can start with 'is' prefix.",
         debt = Debt.FIVE_MINS
