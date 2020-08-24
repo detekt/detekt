@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * fun returningFunction(): DoubleArray { }
  * </compliant>
  *
- * @active since v1.2.0
+ * @requiresTypeResolution
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     companion object {
