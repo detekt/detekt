@@ -104,7 +104,7 @@ class ArrayPrimitiveSpec : Spek({
 
     describe("receiver type") {
         it("is Array<Primitive>") {
-            val code = "fun Array<Long>.foo() { println(this) }"
+            val code = "fun Array<Boolean>.foo() { println(this) }"
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
@@ -142,6 +142,11 @@ class ArrayPrimitiveSpec : Spek({
 
         it("is arrayOf(Double)") {
             val code = "fun foo(x: Double) = arrayOf(x)"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is arrayOf(Boolean)") {
+            val code = "fun foo(x: Boolean) = arrayOf(x)"
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -189,6 +194,11 @@ class ArrayPrimitiveSpec : Spek({
 
         it("is emptyArray<Double>()") {
             val code = "val a = emptyArray<Double>()"
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("is emptyArray<Boolean>()") {
+            val code = "val a = emptyArray<Boolean>()"
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 

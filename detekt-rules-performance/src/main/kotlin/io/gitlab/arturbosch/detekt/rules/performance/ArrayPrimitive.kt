@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     companion object {
-        private val primitiveTypes = PrimitiveType.NUMBER_TYPES.map { it.typeName.asString() }
+        private val primitiveTypes = PrimitiveType.values().map { it.typeName.asString() }
         private val factoryMethodFqNames = listOf(FqName("kotlin.arrayOf"), FqName("kotlin.emptyArray"))
         private val factoryMethodNames = factoryMethodFqNames.map { it.shortName().asString() }
     }
