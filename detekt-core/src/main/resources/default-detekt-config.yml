@@ -429,7 +429,7 @@ naming:
 performance:
   active: true
   ArrayPrimitive:
-    active: false
+    active: true
   ForEachOnRange:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
