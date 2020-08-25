@@ -17,7 +17,7 @@ dependencies {
 // Implements https://github.com/brianm/really-executable-jars-maven-plugin maven plugin behaviour.
 // To check details how it works, see http://skife.org/java/unix/2011/06/20/really_executable_jars.html.
 // Extracted from https://github.com/pinterest/ktlint/blob/a86d1c76c44d0a1c1adc3f756f36d8b4cac15d32/ktlint/build.gradle#L40-L57
-tasks.register<DefaultTask>("shadowJarExecutable") {
+val shadowJarExecutable by tasks.registering {
     description = "Creates self-executable file, that runs generated shadow jar"
     group = "Distribution"
 

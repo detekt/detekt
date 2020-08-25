@@ -15,6 +15,7 @@
  * You need kotlin 1.3.70+ installed on your machine
  */
 
+@file:Suppress("detekt.CommentSpacing") // for the exec line
 @file:DependsOn("com.github.ajalt:clikt:2.7.1")
 
 import com.github.ajalt.clikt.core.CliktCommand

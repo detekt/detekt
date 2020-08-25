@@ -6,7 +6,7 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 plugins {
     `java-library` apply false // is applied in commons; make configurations available in this script
     `maven-publish` apply false
-    `signing` apply false
+    signing apply false
     id("com.jfrog.artifactory") apply false
 }
 
