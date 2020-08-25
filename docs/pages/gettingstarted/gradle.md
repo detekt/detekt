@@ -14,7 +14,7 @@ detekt requires Gradle 5.4 or higher.
 
 #### <a name="tasks">Available plugin tasks</a>
 
-The detekt Gradle plugin will generate multiple tasks
+The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 `detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
@@ -25,6 +25,34 @@ The detekt Gradle plugin will generate multiple tasks
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 - `detektIdeaFormat` - Uses a local `idea` installation to format your Kotlin (and other) code according to the specified `code-style.xml`.
 - `detektIdeaInspect` - Uses a local `idea` installation to run inspections on your Kotlin (and other) code according to the specified `inspections.xml` profile.
+
+In addition to these standard tasks, the plugin will also generate a set of experimental tasks that have
+[type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
+the Android Gradle Plugin applied:
+
+- `detektMain` - Similar to `detekt`, but runs only on the `main` source set
+  (Android: all production source sets)
+- `detektTest` - Similar to `detekt`, but runs only on the `test` source set
+  (Android: all JVM and Android Test source sets)
+- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set 
+  (Android: multiple baselines for all production source sets)
+- `detektBaselineTest` - Similar to `detektBaseline`, but creates a baseline only for the `test` source set
+  (Android: multiple baselines for all JVM and Android Test source sets)
+- Android-only: `detekt<Variant>` - Similar to `detekt`, but runs only on the specific (test) build variant
+- Android-only: `detektBaseline<Variant>` - Similar to `detektBaseline`, but creates a baseline only for the
+  specific (test) build variant
+  
+Baseline files that are generated for these specific source sets / build variants contain the name of the source set /
+the name of the build variant in their name, unless otherwise configured, such as `detekt-main.xml` or 
+`detekt-productionDebug.xml`.
+
+If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, the more specific one - `detekt-main.xml` -
+takes precendence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
+
+_NOTE:_ When analyzing Android projects that make use of specific code generators, such as databinding, Kotlin synthetic
+view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
+complete compile classpath from the Android Gradle Plugin ([upstream ticket](https://issuetracker.google.com/issues/158777988))
+and can safely be ignored.
 
 Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described [here](#closure).
@@ -152,12 +180,15 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.0"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
+        classpath "com.android.tools.build:gradle:4.0.1"
     }
 }
 
-apply plugin: "io.gitlab.arturbosch.detekt"
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android" version "1.4.0"
+    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
+}
 
 repositories {
     jcenter()
@@ -177,7 +208,26 @@ repositories {
 
 ###### Kotlin DSL
 ```kotlin
-// TODO
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:4.0.0")
+    }
+}
+
+plugins {
+    id("com.android.application")
+    kotlin("android") version "1.4.0"
+    id("io.gitlab.arturbosch.detekt") version "{{ site.detekt_version }}"
+}
+
+repositories {
+    mavenCentral()
+}
 ```
 
 ##### <a name="closure">Options for detekt configuration closure</a>
@@ -197,6 +247,9 @@ detekt {
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.
     debug = false                                         // Adds debug output during task execution. `false` by default.
     ignoreFailures = false                                // If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.
+    ignoredBuildTypes = ["release"]                       // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredFlavors = ["production"]                       // Android: Don't create tasks for the specified build flavor (e.g. "production")
+    ignoredVariants = ["productionRelease"]               // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -230,6 +283,9 @@ detekt {
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.
     debug = false                                         // Adds debug output during task execution. `false` by default.
     ignoreFailures = false                                // If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.
+    ignoredBuildTypes = listOf("release")                 // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredFlavors = listOf("production")                 // Android: Don't create tasks for the specified build flavor (e.g. "production")
+    ignoredVariants = listOf("productionRelease")         // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -253,8 +309,8 @@ detekt {
 
 ##### Using Type Resolution
 
-Type resolution is experimental and works only for predefined `detektMain` and `detektTest` tasks or when implementing a 
-custom detekt task with the `classpath` and `jvmTarget` properties present.
+Type resolution is experimental and works only for [predefined tasks listed above](#a-nametasksavailable-plugin-tasksa)
+or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
 
 ###### Groovy DSL
 ```groovy

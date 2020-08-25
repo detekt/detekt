@@ -3,8 +3,18 @@ plugins {
     id("com.gradle.plugin-publish") version "0.12.0"
 }
 
+repositories {
+    google()
+}
+
 dependencies {
+    val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
     implementation(kotlin("gradle-plugin-api"))
+    compileOnly(androidGradlePlugin)
+
+    testImplementation(project(":detekt-test-utils"))
+    testImplementation(kotlin("gradle-plugin"))
+    testImplementation(androidGradlePlugin)
 }
 
 gradlePlugin {
@@ -25,7 +35,7 @@ pluginBundle {
     website = "https://detekt.github.io/detekt"
     vcsUrl = "https://github.com/detekt/detekt"
     description = "Static code analysis for Kotlin"
-    tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells")
+    tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
 
     (plugins) {
         "detektPlugin" {

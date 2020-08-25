@@ -42,6 +42,23 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
+    /**
+     * List of Android build variants for which no detekt task should be created.
+     *
+     * This is a combination of build types and flavors, such as fooDebug or barRelease.
+     */
+    var ignoredVariants: List<String> = emptyList()
+
+    /**
+     * List of Android build types for which no detekt task should be created.
+     */
+    var ignoredBuildTypes: List<String> = emptyList()
+
+    /**
+     * List of Android build flavors for which no detekt task should be created
+     */
+    var ignoredFlavors: List<String> = emptyList()
+
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"

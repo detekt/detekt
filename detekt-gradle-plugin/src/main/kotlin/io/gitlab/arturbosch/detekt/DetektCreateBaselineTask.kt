@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CreateBaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
@@ -10,6 +11,7 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
@@ -50,6 +52,10 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Classpath
     val pluginClasspath: ConfigurableFileCollection = project.objects.fileCollection()
 
+    @get:Classpath
+    @get:Optional
+    val classpath = project.objects.fileCollection()
+
     @get:Console
     val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
@@ -76,12 +82,22 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
+    @get:Input
+    @get:Optional
+    internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var jvmTarget: String
+        @Internal
+        get() = jvmTargetProp.get()
+        set(value) = jvmTargetProp.set(value)
+
     private val invoker: DetektInvoker = DetektInvoker.create(project)
 
     @TaskAction
     fun baseline() {
         val arguments = mutableListOf(
             CreateBaselineArgument,
+            ClasspathArgument(classpath),
+            JvmTargetArgument(jvmTargetProp.orNull),
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),
