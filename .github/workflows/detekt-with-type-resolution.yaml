@@ -1,0 +1,37 @@
+name: detekt with type resolution
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  gradle:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Cache Gradle Folders
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/
+          ~/.gradle/wrapper/
+        key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        restore-keys: |
+          cache-gradle-
+
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Run analysis
+      run: ./gradlew detektMain detektTest --build-cache --parallel

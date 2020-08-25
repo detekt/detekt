@@ -83,6 +83,7 @@ private class TestMultiRule(config: Config) : MultiRule() {
     }
 }
 
+@Suppress("detekt.UnnecessaryAbstractClass") // uses inherited members
 private abstract class AbstractRule(config: Config) : Rule(config) {
     override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
     override fun visitKtFile(file: KtFile) = report(CodeSmell(issue, Entity.from(file), message = ""))
