@@ -1,5 +1,6 @@
 rootProject.name = "detekt"
 include(
+    "custom-checks",
     "detekt-api",
     "detekt-cli",
     "detekt-bom",

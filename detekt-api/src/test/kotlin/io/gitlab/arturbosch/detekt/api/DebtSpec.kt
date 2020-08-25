@@ -35,7 +35,7 @@ class DebtSpec : Spek({
 
     describe("add minutes, hours and days to debt") {
 
-        val debt = Debt(0, 22, 59)
+        val debt by memoized { Debt(0, 22, 59) }
 
         it("adds 1 min") {
             val result = debt + Debt(mins = 1)

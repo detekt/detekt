@@ -30,7 +30,7 @@ class HtmlOutputReportSpec : Spek({
 
     describe("HTML output report") {
 
-        val htmlReport = HtmlOutputReport()
+        val htmlReport by memoized { HtmlOutputReport() }
 
         it("renders the HTML headers correctly") {
             val result = htmlReport.render(TestDetektion())
