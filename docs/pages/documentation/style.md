@@ -311,7 +311,7 @@ This rule allows to set a list of forbidden methods. This can be used to discour
 or deprecated methods, especially for methods imported from external libraries.
 Detekt will then report all methods invocation that are forbidden.
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -369,7 +369,7 @@ This rule detects usages of `Void` and reports them as forbidden.
 The Kotlin type `Unit` should be used instead. This type corresponds to the `Void` class in Java
 and has only one value - the `Unit` object.
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -886,7 +886,7 @@ This rule detects the usage of the Pair constructor to create pairs of values.
 
 Using <value1> to <value2> is preferred.
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -1261,7 +1261,7 @@ class Module(@Inject private val foo: String)
 `apply` expressions are used frequently, but sometimes their usage should be replaced with
 an ordinary method/extension function call to reduce visual complexity
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -1306,7 +1306,7 @@ class B : Object()
 but sometimes their usage should be replaced with a ordinary method/extension function call
 to reduce visual complexity
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -1456,6 +1456,8 @@ The latter should be preferred as it is more readable.
 
 Turn on this rule to flag `check` calls for not-null check that can be replaced with a `checkNotNull` call.
 
+**Requires Type Resolution**
+
 **Severity**: Style
 
 **Debt**: 5min
@@ -1547,7 +1549,7 @@ class A(val b: B) : I by b
 
 Instantiation of an object's "empty" state should use the object's "empty" initializer for clarity purposes.
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Style
 
@@ -1625,6 +1627,8 @@ require(value >= 0) { "value is $value but should be at least 0" }
 
 Turn on this rule to flag `require` calls for not-null check that can be replaced with a `requireNotNull` call.
 
+**Requires Type Resolution**
+
 **Severity**: Style
 
 **Debt**: 5min
@@ -1650,7 +1654,7 @@ the value is null or not.
 
 Rule adapted from Kotlin's IntelliJ plugin: https://github.com/JetBrains/kotlin/blob/f5d0a38629e7d2e7017ee645dc4d4bee60614e93/idea/src/org/jetbrains/kotlin/idea/inspections/collections/UselessCallOnNotNullInspection.kt
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Severity**: Performance
 

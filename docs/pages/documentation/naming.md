@@ -272,6 +272,29 @@ class Manager {
 }
 ```
 
+### NonBooleanPropertyPrefixedWithIs
+
+Reports when property with 'is' prefix doesn't have a boolean type.
+Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
+
+**Requires Type Resolution**
+
+**Severity**: Warning
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val isEnabled: Int = 500
+```
+
+#### Compliant Code:
+
+```kotlin
+val isEnabled: Boolean = false
+```
+
 ### ObjectPropertyNaming
 
 Reports when property names inside objects which do not follow the specified naming convention are used.

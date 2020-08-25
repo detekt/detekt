@@ -145,7 +145,7 @@ class VarCouldBeValSpec : Spek({
                 }
             """
             with(subject.lint(code)[0]) {
-                // we accept wrong entity reporting here due to no symbol solving
+                // we accept wrong entity reporting here due to no type resolution
                 // false reporting with shadowed vars vs false positives
                 assertThat(entity.ktElement?.text).isEqualTo("private var myVar: String? = null")
             }

@@ -16,6 +16,15 @@ dependencies {
     testFixturesApi(kotlin("stdlib-jdk8"))
 }
 
+val javaComponent = components["java"] as AdhocComponentWithVariants
+listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntimeElements).forEach { config ->
+    config.configure {
+        javaComponent.withVariantsFromConfiguration(this) {
+            skip()
+        }
+    }
+}
+
 tasks.withType<DokkaTask>().configureEach {
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"

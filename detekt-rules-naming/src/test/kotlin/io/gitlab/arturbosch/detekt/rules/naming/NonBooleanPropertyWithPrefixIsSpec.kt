@@ -7,10 +7,10 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class IsPropertyNamingSpec : Spek({
+class NonBooleanPropertyWithPrefixIsSpec : Spek({
     setupKotlinEnvironment()
 
-    val subject by memoized { object : IsPropertyNaming() {} }
+    val subject by memoized { NonBooleanPropertyPrefixedWithIs() }
     val env: KotlinCoreEnvironment by memoized()
 
     describe("IsPropertyNaming rule") {

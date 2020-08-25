@@ -42,7 +42,7 @@ equals null
 
 removes :Unit
 
-**Requires Type and Symbol Solving**
+**Requires Type Resolution**
 
 **Debt**: 5m
 

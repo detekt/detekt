@@ -178,7 +178,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
             super.visitDotQualifiedExpression(expression)
         }
 
-        // Without symbol solving it is hard to tell if this is really a class or part of a package.
+        // Without type resolution it is hard to tell if this is really a class or part of a package.
         // We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
         private fun looksLikeAClassName(maybeClassName: String) =
                 maybeClassName.firstOrNull()?.isUpperCase() == true

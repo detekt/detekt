@@ -49,7 +49,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("reports a false negative apply on nullable type - #1485") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     val a: Any? = Any()
                     fun Any.b() = Unit
                     
@@ -62,7 +62,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("does not report an apply with lambda block") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     fun f() {
                         val a: Int? = null
                         a?.apply({
@@ -73,7 +73,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("does not report single statement in apply used as function argument") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     fun b(i: Int?) {}
 
                     fun main() {
@@ -86,7 +86,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("does not report single assignment statement in apply used as function argument - #1517") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C {
                         var prop = 0
                     }
@@ -118,7 +118,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("does not report applies with lambda body containing more than one statement") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     fun b(i: Int?) {}
 
                     fun main() {
@@ -143,7 +143,7 @@ class UnnecessaryApplySpec : Spek({
         context("reported false positives - #1305") {
 
             it("is used within an assignment expr itself") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C {
                         fun f() = true
                     }
@@ -153,7 +153,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("is used as return type of extension function") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C(var prop: Int)
                     
                     fun Int.f() = C(5).apply { prop = 10 }
@@ -161,7 +161,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("should not flag apply when assigning property on this") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C(var prop: Int) {
                         private val c by lazy {
                             C(1).apply { prop = 3 }
@@ -171,7 +171,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("should not report apply when using it after returning something") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C(var prop: Int)
                     
                     fun f() = (C(5)).apply { prop = 10 }
@@ -179,7 +179,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("should not report apply usage inside safe chained expressions") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     fun f() {
                         val arguments = listOf(1,2,3)
                             ?.map { it * 2 }
@@ -193,7 +193,7 @@ class UnnecessaryApplySpec : Spek({
         context("false positive in single nesting expressions - #1473") {
 
             it("should not report the if expression") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C {
                         fun has() = true
                     }
@@ -209,7 +209,7 @@ class UnnecessaryApplySpec : Spek({
             }
 
             it("should report reference expressions") {
-                assertThat(subject.compileAndLintWithContext(env,"""
+                assertThat(subject.compileAndLintWithContext(env, """
                     class C { 
                     	val prop = 5 
                     }

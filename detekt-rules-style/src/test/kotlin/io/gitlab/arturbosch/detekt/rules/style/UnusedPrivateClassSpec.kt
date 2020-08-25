@@ -20,7 +20,7 @@ class UnusedPrivateClassSpec : Spek({
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(1,1)
+            assertThat(findings).hasSourceLocation(1, 1)
         }
 
         describe("top level private classes") {
@@ -34,7 +34,7 @@ class UnusedPrivateClassSpec : Spek({
                 val findings = subject.compileAndLint(code)
 
                 assertThat(findings).hasSize(1)
-                assertThat(findings).hasSourceLocation(1,1)
+                assertThat(findings).hasSourceLocation(1, 1)
             }
 
             it("should not report them if used as parent") {
@@ -46,7 +46,7 @@ class UnusedPrivateClassSpec : Spek({
                 val findings = subject.compileAndLint(code)
 
                 assertThat(findings).hasSize(1)
-                assertThat(findings).hasSourceLocation(2,1)
+                assertThat(findings).hasSourceLocation(2, 1)
             }
 
             it("should not report them used as generic parent type") {
