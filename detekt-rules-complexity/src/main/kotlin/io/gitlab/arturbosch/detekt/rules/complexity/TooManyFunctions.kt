@@ -79,7 +79,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             klass.isInterface() -> {
                 if (amount >= thresholdInInterfaces) {
                     report(ThresholdedCodeSmell(issue,
-                        Entity.from(klass.nameIdentifier!!),
+                        Entity.atName(klass),
                         Metric("SIZE", amount, thresholdInInterfaces),
                         "Interface '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside interfaces is set to " +
@@ -89,7 +89,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             klass.isEnum() -> {
                 if (amount >= thresholdInEnums) {
                     report(ThresholdedCodeSmell(issue,
-                        Entity.from(klass.nameIdentifier!!),
+                        Entity.atName(klass),
                         Metric("SIZE", amount, thresholdInEnums),
                         "Enum class '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside enum classes is set to " +
@@ -99,7 +99,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             else -> {
                 if (amount >= thresholdInClasses) {
                     report(ThresholdedCodeSmell(issue,
-                            Entity.from(klass.nameIdentifier!!),
+                            Entity.atName(klass),
                             Metric("SIZE", amount, thresholdInClasses),
                             "Class '${klass.name}' with '$amount' functions detected. " +
                                     "Defined threshold inside classes is set to '$thresholdInClasses'"))

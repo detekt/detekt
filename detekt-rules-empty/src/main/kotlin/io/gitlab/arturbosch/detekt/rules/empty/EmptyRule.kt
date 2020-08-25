@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 /**
  * Rule to detect empty blocks of code.
  */
+@Suppress("detekt.UnnecessaryAbstractClass") // we really do not want instances of this class
 abstract class EmptyRule(
     config: Config,
     description: String = "Empty block of code detected. As they serve no purpose they should be removed.",

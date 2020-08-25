@@ -25,8 +25,6 @@ class FindingsAssert(actual: List<Finding>) :
             FindingAssert(value).`as`(description)
 
     fun hasSourceLocations(vararg expected: SourceLocation) = apply {
-        isNotNull
-
         val actualSources = actual.asSequence()
                 .map { it.location.source }
                 .sortedWith(compareBy({ it.line }, { it.column }))
@@ -46,8 +44,6 @@ class FindingsAssert(actual: List<Finding>) :
     }
 
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
-        isNotNull
-
         val actualSources = actual.asSequence()
                 .map { it.location.text }
                 .sortedWith(compareBy({ it.start }, { it.end }))
@@ -64,8 +60,6 @@ class FindingsAssert(actual: List<Finding>) :
     }
 
     fun hasTextLocations(vararg expected: String): FindingsAssert {
-        isNotNull
-
         val finding = actual.firstOrNull()
         if (finding == null) {
             if (expected.isEmpty()) {
@@ -74,13 +68,12 @@ class FindingsAssert(actual: List<Finding>) :
                 failWithMessage("Expected ${expected.size} findings but was 0")
             }
         }
-        val code = finding!!.entity.ktElement?.containingKtFile?.text
-        if (code == null) {
-            failWithMessage("Expected ${expected.size} findings but was 0")
+        val code = requireNotNull(finding?.entity?.ktElement?.containingKtFile?.text) {
+            "Finding expected to provide an KtElement."
         }
 
         val textLocations = expected.map { snippet ->
-            val index = code!!.indexOf(snippet)
+            val index = code.indexOf(snippet)
             if (index < 0) {
                 failWithMessage("The snippet \"$snippet\" doesn't exist in the code")
             } else {

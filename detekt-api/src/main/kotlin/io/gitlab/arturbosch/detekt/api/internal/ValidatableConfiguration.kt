@@ -54,16 +54,16 @@ fun validateConfig(
 
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
 
-            val matchedDeprecation = DEPRECATED_PROPERTIES
+            val deprecationWarning = DEPRECATED_PROPERTIES
                 .find { (regex, _) -> regex.matches(propertyPath) }
-            val isDeprecated = matchedDeprecation != null
+                ?.second
             val isExcluded = excludePatterns.any { it.matches(propertyPath) }
 
-            if (isDeprecated) {
-                notifications.add(propertyIsDeprecated(propertyPath, matchedDeprecation!!.second))
+            if (deprecationWarning != null) {
+                notifications.add(propertyIsDeprecated(propertyPath, deprecationWarning))
             }
 
-            if (isDeprecated || isExcluded) {
+            if (deprecationWarning != null || isExcluded) {
                 continue
             }
 

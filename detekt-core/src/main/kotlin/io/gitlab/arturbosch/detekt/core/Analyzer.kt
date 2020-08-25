@@ -37,6 +37,7 @@ internal class Analyzer(
         bindingContext: BindingContext = BindingContext.EMPTY
     ): Map<RuleSetId, List<Finding>> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
+
         @Suppress("DEPRECATION")
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
@@ -113,9 +114,9 @@ internal class Analyzer(
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in rule.findings) {
-                    val mappedRuleSet = idMapping[finding.id] ?: error("Mapping for '${finding.id}' expected.")
-                    result.putIfAbsent(mappedRuleSet, mutableListOf())
-                    result[mappedRuleSet]!!.add(finding)
+                    val mappedRuleSet = checkNotNull(idMapping[finding.id]) { "Mapping for '${finding.id}' expected." }
+                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
+                        .add(finding)
                 }
             }
         }
