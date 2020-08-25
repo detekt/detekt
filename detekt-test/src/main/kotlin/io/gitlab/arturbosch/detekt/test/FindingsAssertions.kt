@@ -69,7 +69,7 @@ class FindingsAssert(actual: List<Finding>) :
             }
         }
         val code = requireNotNull(finding?.entity?.ktElement?.containingKtFile?.text) {
-            "Finding expected to provide an KtElement."
+            "Finding expected to provide a KtElement."
         }
 
         val textLocations = expected.map { snippet ->
