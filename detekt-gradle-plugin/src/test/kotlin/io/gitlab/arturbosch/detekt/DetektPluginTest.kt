@@ -6,13 +6,13 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.testfixtures.ProjectBuilder
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
 
 object DetektPluginTest : Spek({
@@ -30,7 +30,10 @@ object DetektPluginTest : Spek({
         }
     }
 
-    describe("detekt plugin - Android") {
+    describe(
+        "detekt plugin - Android",
+        skip = if (System.getenv("ANDROID_SDK_ROOT") != null) Skip.No else Skip.Yes("No android sdk.")
+    ) {
         it("applies the base gradle plugin and creates a regular detekt task") {
             val project = ProjectBuilder.builder().build()
 
@@ -330,7 +333,7 @@ internal fun Project.evaluate() = (this as ProjectInternal).evaluate()
 
 internal fun BaseExtension.flavorTestSetup() {
     flavorDimensions("age", "name")
-    productFlavors(Action {
+    productFlavors {
         it.create("harry").apply {
             dimension = "name"
         }
@@ -343,7 +346,7 @@ internal fun BaseExtension.flavorTestSetup() {
         it.create("old").apply {
             dimension = "age"
         }
-    })
+    }
 }
 
 internal inline fun <reified T : Any> Project.configureExtension(configuration: T.() -> Unit = {}) {
