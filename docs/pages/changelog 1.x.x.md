@@ -5,6 +5,76 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.12.0 - 2020-08-25
+
+##### Notable Changes
+
+- Kotlin 1.4 support
+- New rules: `UseCheckNotNull`, `UseRequireNotNull`, `NonBooleanPropertyPrefixedWithIs`
+- The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin's Gradle plugin.
+- The Gradle plugin now supports configuration avoidance
+- The Gradle plugin now generates additional detekt tasks for Android projects
+- KtLint 0.38.1 support (via detekt-formatting)
+
+##### Migration
+
+- `ArrayPrimitive` rule is more precise but requires type resolution now.
+- The deprecated `customReports` property of the Gradle plugin got removed.
+- Deprecated properties `xmlReportFile`, `htmlReportFile`, `txtReportFile` are now internal.
+
+Note the default `gradle detekt` task does not run over test sources.
+To include test sources following setup can be used:
+
+```kt
+detekt {
+    // ...
+    input = objects.fileCollection().from(
+        "src/main/java",
+        "src/test/java",
+        "src/main/kotlin",
+        "src/test/kotlin"
+    )
+}
+```
+
+This does not apply to `gradle detektTest`.
+We encourage to also check test sources.  
+We will include test sources by default in detekt `1.15.0` or later.
+
+##### Changelog
+
+- Consolidate working for Type Resolution - [#3011](https://github.com/detekt/detekt/pull/3011)
+- ArrayPrimitive rule: report variable/receiver types and factory methods - [#3009](https://github.com/detekt/detekt/pull/3009)
+- Add requiresTypeResolution annotation to UseCheckNotNull/UseRequireNotNull - [#3008](https://github.com/detekt/detekt/pull/3008)
+- Update kotlinx.html dependencies - [#3007](https://github.com/detekt/detekt/pull/3007)
+- Do not overwrite bintray publication - [#3006](https://github.com/detekt/detekt/pull/3006)
+- Update Ktlint to 0.38.0 - [#3004](https://github.com/detekt/detekt/pull/3004)
+- Add UseRequireNotNull/UseCheckNotNull rules - [#3003](https://github.com/detekt/detekt/pull/3003)
+- Workaround config - [#3001](https://github.com/detekt/detekt/pull/3001)
+- Replace `require(x != null)` with `requireNotNull(x)` - [#2998](https://github.com/detekt/detekt/issues/2998)
+- Minor Gradle plugin cleanup - [#2997](https://github.com/detekt/detekt/pull/2997)
+- detekt-gradle-plugin has two publishing configuration - [#2996](https://github.com/detekt/detekt/issues/2996)
+- Introduce @requiresTypeResolution to KDoc for rules - [#2993](https://github.com/detekt/detekt/pull/2993)
+- Fix support for Gradle configuration cache - [#2992](https://github.com/detekt/detekt/pull/2992)
+- Fix false positive for UnnecessaryLet with disabled type resolution - [#2991](https://github.com/detekt/detekt/pull/2991)
+- Deprecation: False positive with Kotlin 1.4.0 - [#2990](https://github.com/detekt/detekt/issues/2990)
+- False positive in UnnecessaryLet - [#2987](https://github.com/detekt/detekt/issues/2987)
+- Gradle plugin fixes - [#2986](https://github.com/detekt/detekt/pull/2986)
+- Remove deprecated customReports detekt task property - #2811 - [#2944](https://github.com/detekt/detekt/pull/2944)
+- Rename IsPropertyNaming to NonBooleanPropertyPrefixedWithIs? - [#2819](https://github.com/detekt/detekt/pull/2819)
+- Add automatic detekt tasks for Android Plugins - [#2787](https://github.com/detekt/detekt/pull/2787)
+
+##### Housekeeping & Refactorings
+
+- Update Gradle to 6.6.1 - [#3016](https://github.com/detekt/detekt/pull/3016)
+- Run detekt with type resolution analysis on CI - [#3015](https://github.com/detekt/detekt/pull/3015)
+- Run Gradle Android tests conditionally when sdk path is defined - [#3014](https://github.com/detekt/detekt/pull/3014)
+- Fix documentation for NonBooleanPropertyPrefixedWithIs - [#3012](https://github.com/detekt/detekt/pull/3012)
+- Run detekt on all test sources - [#3010](https://github.com/detekt/detekt/pull/3010)
+- Do not publish test fixture; removing warning - [#3005](https://github.com/detekt/detekt/pull/3005)
+- Implement custom rule to check spek test discovery performance issues - [#2954](https://github.com/detekt/detekt/pull/2954)
+
+See all issues at: [1.12.0](https://github.com/detekt/detekt/milestone/71)
 
 #### 1.12.0-RC1 - 2020-08-20
 
