@@ -7,3 +7,11 @@
 --build-upon-default-config
 -c
 ./config/detekt/detekt.yml
+-r
+html:./build/detekt-report.html
+-r
+xml:./build/detekt-report.xml
+-r
+txt:./build/detekt-report.txt
+-p
+./build/detekt-formatting.jar
