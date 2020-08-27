@@ -6,13 +6,9 @@ import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 annotation class ConfigDsl
 
 @ConfigDsl
-fun rules(init: RulesBuilder.() -> Unit) {
-    val rules: List<RuleConfiguration<BaseRule>> = RulesBuilder().apply(init).list
+fun rules(init: RulesBuilder.() -> Unit): List<RuleBuilder<BaseRule>> {
+    return RulesBuilder().apply(init).list
         .flatMap { ruleSet -> ruleSet.rules }
-        .filter { builder -> builder.active }
-        .map { builder -> builder.build() }
-
-    // we have all the rules configured
 }
 
 @ConfigDsl

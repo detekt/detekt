@@ -7,6 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilderImpl
+import io.gitlab.arturbosch.detekt.api.dsl.ConfigDsl
+import io.gitlab.arturbosch.detekt.api.dsl.RuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.RuleSetBuilder
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
@@ -93,4 +99,22 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
         const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
         const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
     }
+}
+
+@ConfigDsl
+class UndocumentedPublicClassBuilder(
+    var searchInNestedClass: Boolean = true,
+    var searchInInnerClass: Boolean = true,
+    var searchInInnerObject: Boolean = true,
+    var searchInInnerInterface: Boolean = true,
+) : RuleBuilder<BaseRule>, BaseRuleBuilder by BaseRuleBuilderImpl() {
+
+    override fun buildRule(): BaseRule {
+        TODO("Not yet implemented")
+    }
+}
+
+@ConfigDsl
+fun RuleSetBuilder.UndocumentedPublicClass(init: UndocumentedPublicClassBuilder.() -> Unit) {
+    addRule(UndocumentedPublicClassBuilder().apply(init))
 }

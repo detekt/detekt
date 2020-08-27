@@ -7,6 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilderImpl
+import io.gitlab.arturbosch.detekt.api.dsl.ConfigDsl
+import io.gitlab.arturbosch.detekt.api.dsl.RuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.RuleSetBuilder
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
 
@@ -60,4 +66,17 @@ class GlobalCoroutineUsage(config: Config = Config.empty) : Rule(config) {
         private const val MESSAGE =
             "This use of GlobalScope should be replaced by `CoroutineScope` or `coroutineScope`."
     }
+}
+
+@ConfigDsl
+class GlobalCoroutineUsageBuilder : RuleBuilder<BaseRule>, BaseRuleBuilder by BaseRuleBuilderImpl() {
+
+    override fun buildRule(): BaseRule {
+        TODO("Not yet implemented")
+    }
+}
+
+@ConfigDsl
+fun RuleSetBuilder.GlobalCoroutineUsage(init: GlobalCoroutineUsageBuilder.() -> Unit) {
+    addRule(GlobalCoroutineUsageBuilder().apply(init))
 }

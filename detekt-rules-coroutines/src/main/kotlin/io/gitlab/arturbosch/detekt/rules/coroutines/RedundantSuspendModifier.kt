@@ -7,6 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.BaseRuleBuilderImpl
+import io.gitlab.arturbosch.detekt.api.dsl.ConfigDsl
+import io.gitlab.arturbosch.detekt.api.dsl.RuleBuilder
+import io.gitlab.arturbosch.detekt.api.dsl.RuleSetBuilder
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -125,4 +131,18 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
             }
         }
     }
+}
+
+
+@ConfigDsl
+class RedundantSuspendModifierBuilder : RuleBuilder<BaseRule>, BaseRuleBuilder by BaseRuleBuilderImpl() {
+
+    override fun buildRule(): BaseRule {
+        TODO("Not yet implemented")
+    }
+}
+
+@ConfigDsl
+fun RuleSetBuilder.RedundantSuspendModifier(init: RedundantSuspendModifierBuilder.() -> Unit) {
+    addRule(RedundantSuspendModifierBuilder().apply(init))
 }
