@@ -74,7 +74,7 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
         if (function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
             return
         } else {
-            report(CodeSmell(issue, Entity.from(suspendModifier), "When expression contains redundant `else` case."))
+            report(CodeSmell(issue, Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
         }
     }
 
