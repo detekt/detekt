@@ -7,16 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.dsl.RuleConfiguration
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
-import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.isActive
-import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -24,13 +21,11 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
-    private val providers: List<RuleSetProvider>,
+    private val providers: List<RuleConfiguration<*>>,
     private val processors: List<FileProcessListener>
 ) {
 
-    private val config: Config = settings.spec.workaroundConfiguration(settings.config)
-    private val idMapping: IdMapping =
-        associateRuleIdsToRuleSetIds(providers.associate { it.ruleSetId to it.instance(config).rules })
+    private val idMapping: IdMapping = providers.associate { it.factory().ruleId to it.ruleSet }
 
     fun run(
         ktFiles: Collection<KtFile>,
@@ -99,12 +94,8 @@ internal class Analyzer(
             else -> error("No other rule type expected.")
         }
 
-        val (correctableRules, otherRules) = providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .mapLeft { provider, ruleSetConfig -> provider.instance(ruleSetConfig) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
-            .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+        val (correctableRules, otherRules) = providers
+            .map { ruleConfiguration -> ruleConfiguration.factory() }
             .partition { isCorrectable(it) }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()

@@ -54,7 +54,8 @@ interface RuleBuilder<out T : BaseRule> : BaseRuleBuilder {
     }
 }
 
-data class RuleConfiguration<out T>(
+data class RuleConfiguration<out T : BaseRule>(
+    val ruleSet: String,
     val include: MutableList<String>,
     val exclude: MutableList<String>,
     val aliases: MutableList<String>,
@@ -79,6 +80,6 @@ class BaseRuleBuilderImpl(
     override var aliases: MutableList<String> = mutableListOf(),
 ) : BaseRuleBuilder {
     override fun <T : BaseRule> build(factory: () -> T): RuleConfiguration<T> {
-        return RuleConfiguration(include, exclude, aliases, factory)
+        return RuleConfiguration(TODO("I need to get the ruleSet name here"), include, exclude, aliases, factory)
     }
 }
