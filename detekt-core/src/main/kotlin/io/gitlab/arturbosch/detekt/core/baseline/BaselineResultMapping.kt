@@ -14,30 +14,40 @@ class BaselineResultMapping : ReportingExtension {
 
     private var baselineFile: Path? = null
     private var createBaseline: Boolean = false
+    private var output: Appendable? = null
 
     override fun init(context: SetupContext) {
         baselineFile = context.getOrNull(DETEKT_BASELINE_PATH_KEY)
         createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
+        output = context.outputChannel
     }
 
     override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
         val baselineFile = baselineFile
         require(
             !createBaseline ||
-                (createBaseline && baselineFile != null)
+                    (createBaseline && baselineFile != null)
         ) { "Invalid baseline options invariant." }
 
-        if (baselineFile != null) {
-            val facade = BaselineFacade()
+        return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings
+    }
 
-            if (createBaseline) {
-                val flatten = findings.flatMap { it.value }
-                facade.createOrUpdate(baselineFile, flatten)
+    private fun Map<RuleSetId, List<Finding>>.transformWithBaseline(baselinePath: Path): Map<RuleSetId, List<Finding>> {
+        val facade = BaselineFacade()
+        val flatten = this.flatMap { it.value }
+
+        if (createBaseline) {
+            if (flatten.isNotEmpty()) {
+                facade.createOrUpdate(baselinePath, flatten)
+            } else {
+                output?.appendLine("No issues found, baseline file will not be created / updated.")
             }
-
-            return facade.transformResult(baselineFile, DetektResult(findings)).findings
         }
 
-        return findings
+        if (flatten.isEmpty() && facade.baselineExists(baselinePath)) {
+            output?.appendLine("No issues found, you can safely delete the existing baseline file at $baselinePath.")
+        }
+
+        return facade.transformResult(baselinePath, DetektResult(this)).findings
     }
 }
