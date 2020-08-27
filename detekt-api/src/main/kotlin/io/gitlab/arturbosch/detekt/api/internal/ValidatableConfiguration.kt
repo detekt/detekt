@@ -29,11 +29,29 @@ private val DEPRECATED_PROPERTIES = setOf(
     "naming>MemberNameEqualsClassName>ignoreOverriddenFunction" to "Use 'ignoreOverridden' instead"
 ).map { (first, second) -> first.toRegex() to second }
 
-@Suppress("UNCHECKED_CAST", "ComplexMethod")
 fun validateConfig(
     config: Config,
     baseline: Config,
     excludePatterns: Set<Regex> = CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
+): List<Notification> = validateConfig(
+    config,
+    baseline,
+    ValidationSettings(
+        config.subConfig("config").valueOrDefault("warningsAsErrors", false),
+        excludePatterns,
+    )
+)
+
+internal data class ValidationSettings(
+    val warningsAsErrors: Boolean,
+    val excludePatterns: Set<Regex>,
+)
+
+@Suppress("UNCHECKED_CAST", "ComplexMethod")
+internal fun validateConfig(
+    config: Config,
+    baseline: Config,
+    settings: ValidationSettings,
 ): List<Notification> {
     require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
     require(baseline is YamlConfig) {
@@ -47,6 +65,7 @@ fun validateConfig(
         return emptyList()
     }
 
+    val (warningsAsErrors, excludePatterns) = settings
     val notifications = mutableListOf<Notification>()
 
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {
@@ -60,7 +79,7 @@ fun validateConfig(
             val isExcluded = excludePatterns.any { it.matches(propertyPath) }
 
             if (deprecationWarning != null) {
-                notifications.add(propertyIsDeprecated(propertyPath, deprecationWarning))
+                notifications.add(propertyIsDeprecated(propertyPath, deprecationWarning, warningsAsErrors))
             }
 
             if (deprecationWarning != null || isExcluded) {
@@ -101,5 +120,12 @@ internal fun nestedConfigurationExpected(prop: String): Notification =
 internal fun unexpectedNestedConfiguration(prop: String): Notification =
     SimpleNotification("Unexpected nested config for '$prop'.")
 
-internal fun propertyIsDeprecated(prop: String, deprecationDescription: String): Notification =
-    SimpleNotification("Property '$prop' is deprecated. $deprecationDescription.", Notification.Level.Warning)
+internal fun propertyIsDeprecated(
+    prop: String,
+    deprecationDescription: String,
+    reportAsError: Boolean,
+): Notification =
+    SimpleNotification(
+        "Property '$prop' is deprecated. $deprecationDescription.",
+        if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
+    )

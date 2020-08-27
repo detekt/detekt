@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api.internal
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
@@ -178,15 +179,30 @@ internal class ConfigValidationSpec : Spek({
 
         describe("deprecated configuration option") {
 
-            it("uses a deprecated property") {
-                val description = "Use 'ignoreOverridden' instead"
-                val config = yamlConfig("config_validation/deprecated-property.yml")
+            arrayOf(
+                "reports a deprecated property as a warning" to false,
+                "reports a deprecated property as an error" to true,
+            ).forEach { (testName, warningsAsErrors) ->
 
-                val result = validateConfig(config, config)
+                it(testName) {
+                    val config = yamlConfigFromContent("""
+                    config:
+                      warningsAsErrors: $warningsAsErrors
+                    naming:
+                      FunctionParameterNaming:
+                        ignoreOverriddenFunctions: ''
+                """.trimIndent())
 
-                assertThat(result).contains(
-                    propertyIsDeprecated("naming>FunctionParameterNaming>ignoreOverriddenFunctions", description)
-                )
+                    val result = validateConfig(config, config)
+
+                    assertThat(result).contains(
+                        propertyIsDeprecated(
+                            "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
+                            "Use 'ignoreOverridden' instead",
+                            reportAsError = warningsAsErrors
+                        )
+                    )
+                }
             }
         }
     }

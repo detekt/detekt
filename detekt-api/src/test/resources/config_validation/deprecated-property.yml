@@ -1,4 +1,0 @@
-naming:
-  FunctionParameterNaming:
-    active: true
-    ignoreOverriddenFunctions: ''
