@@ -319,11 +319,9 @@ tasks.detekt.jvmTarget = "1.8"
 
 ###### Kotlin DSL
 ```kotlin
-tasks {
-    withType<Detekt> {
-        // Target version of the generated JVM bytecode. It is used for type resolution.
-        this.jvmTarget = "1.8"
-    }
+tasks.withType<Detekt>().configureEach {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    this.jvmTarget = "1.8"
 }
 ```
 
@@ -339,7 +337,7 @@ detekt {
     ...
 }
 
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
@@ -351,7 +349,7 @@ detekt {
     ...
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
@@ -364,7 +362,7 @@ uses the type `Detekt`.
 
 ###### Groovy DSL
 ```groovy
-task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
+tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
     description = "Runs a failfast detekt build."
     source = files("src/main/java")
     config.from(files("$rootDir/config.yml"))
@@ -384,7 +382,7 @@ task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 
 ###### Kotlin DSL
 ```kotlin
-task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
+tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
     description = "Runs a failfast detekt build."
     source = files("src/main/kotlin", "src/test/kotlin")
     config = files("$rootDir/config.yml")
@@ -417,7 +415,7 @@ exclude detekt from the check task.
 
 ###### Kotlin DSL
 ```kotlin
-tasks.getByName("check") {
+tasks.named("check").configure {
     this.setDependsOn(this.dependsOn.filterNot {
         it is TaskProvider<*> && it.name == "detekt"
     })
