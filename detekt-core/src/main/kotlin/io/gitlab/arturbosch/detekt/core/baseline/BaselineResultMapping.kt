@@ -36,13 +36,14 @@ class BaselineResultMapping : ReportingExtension {
         val facade = BaselineFacade()
         val flatten = this.flatMap { it.value }
 
+        if (flatten.isEmpty()) {
+            val action = if (facade.baselineExists(baselinePath)) "updated" else "created"
+            output?.appendLine("No issues found, baseline file will not be $action.")
+            return this
+        }
+
         if (createBaseline) {
-            if (flatten.isNotEmpty()) {
-                facade.createOrUpdate(baselinePath, flatten)
-            } else {
-                val action = if (facade.baselineExists(baselinePath)) "updated" else "created"
-                output?.appendLine("No issues found, baseline file will not be $action.")
-            }
+            facade.createOrUpdate(baselinePath, flatten)
         }
 
         return facade.transformResult(baselinePath, DetektResult(this)).findings
