@@ -68,18 +68,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -90,18 +79,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup("org.jetbrains.kotlinx")
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -121,18 +99,7 @@ buildscript {
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -150,18 +117,7 @@ buildscript {
 apply(plugin = "io.gitlab.arturbosch.detekt")
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup("org.jetbrains.kotlinx")
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -191,18 +147,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -226,7 +171,7 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
