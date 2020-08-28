@@ -39,12 +39,9 @@ class BaselineResultMapping : ReportingExtension {
             if (flatten.isNotEmpty()) {
                 facade.createOrUpdate(baselinePath, flatten)
             } else {
-                output?.appendLine("No issues found, baseline file will not be created / updated.")
+                val action = if (facade.baselineExists(baselinePath)) "updated" else "created"
+                output?.appendLine("No issues found, baseline file will not be $action.")
             }
-        }
-
-        if (flatten.isEmpty() && facade.baselineExists(baselinePath)) {
-            output?.appendLine("No issues found, you can safely delete the existing baseline file at $baselinePath.")
         }
 
         return facade.transformResult(baselinePath, DetektResult(this)).findings
