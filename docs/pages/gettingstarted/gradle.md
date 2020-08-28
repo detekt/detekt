@@ -49,7 +49,7 @@ the name of the build variant in their name, unless otherwise configured, such a
 If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, the more specific one - `detekt-main.xml` -
 takes precendence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
 
-_NOTE:_ When analyzing Android projects that make use of specific code generators, such as databinding, Kotlin synthetic
+_NOTE:_ When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
 view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
 complete compile classpath from the Android Gradle Plugin ([upstream ticket](https://issuetracker.google.com/issues/158777988))
 and can safely be ignored.
