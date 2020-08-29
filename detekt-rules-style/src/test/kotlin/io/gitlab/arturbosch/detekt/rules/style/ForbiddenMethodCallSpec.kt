@@ -115,5 +115,43 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
+
+        it("should report equals operator") {
+            val code = """
+                fun main() {
+                    java.math.BigDecimal(5.5) == java.math.BigDecimal(5.5) 
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.math.BigDecimal.equals")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        it("should report prefix operator") {
+            val code = """
+                fun test() {
+                    var i = 1
+                    ++i
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("kotlin.Int.inc")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        it("should report postfix operator") {
+            val code = """
+                fun test() {
+                    var i = 1
+                    i--
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("kotlin.Int.dec")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 })

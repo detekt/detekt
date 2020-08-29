@@ -8,7 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -44,6 +48,25 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
+        check(expression)
+    }
+
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+        super.visitBinaryExpression(expression)
+        check(expression.operationReference)
+    }
+
+    override fun visitPrefixExpression(expression: KtPrefixExpression) {
+        super.visitPrefixExpression(expression)
+        check(expression.operationReference)
+    }
+
+    override fun visitPostfixExpression(expression: KtPostfixExpression) {
+        super.visitPostfixExpression(expression)
+        check(expression.operationReference)
+    }
+
+    private fun check(expression: KtExpression) {
         if (bindingContext == BindingContext.EMPTY) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
