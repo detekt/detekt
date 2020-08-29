@@ -18,11 +18,16 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * This rule reports unused imports. Unused imports are dead code and should be removed.
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
+ *
+ * @requiresTypeResolution
  */
 class UnusedImports(config: Config) : Rule(config) {
 
@@ -44,7 +49,7 @@ class UnusedImports(config: Config) : Rule(config) {
     }
 
     override fun visit(root: KtFile) {
-        with(UnusedImportsVisitor()) {
+        with(UnusedImportsVisitor(bindingContext)) {
             root.accept(this)
             unusedImports().forEach {
                 report(CodeSmell(issue, Entity.from(it), "The import '${it.importedFqName}' is unused."))
@@ -53,17 +58,31 @@ class UnusedImports(config: Config) : Rule(config) {
         super.visit(root)
     }
 
-    private class UnusedImportsVisitor : DetektVisitor() {
+    private class UnusedImportsVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
         private var currentPackage: FqName? = null
         private var imports: List<KtImportDirective>? = null
-        private val namedReferences = mutableSetOf<String>()
+        private val namedReferences = mutableSetOf<KtReferenceExpression>()
+        private val namedReferencesInKDoc = mutableSetOf<String>()
 
         fun unusedImports(): List<KtImportDirective> {
             fun KtImportDirective.isFromSamePackage() =
                     importedFqName?.parent() == currentPackage && alias == null
 
-            fun KtImportDirective.isNotUsed() =
-                    aliasName !in namedReferences && identifier() !in namedReferences
+            @Suppress("ReturnCount")
+            fun KtImportDirective.isNotUsed(): Boolean {
+                val namedReferencesAsString = namedReferences.map { it.text.trim('`') }
+                if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
+                val identifier = identifier()
+                if (identifier in namedReferencesInKDoc) return false
+                return if (bindingContext == BindingContext.EMPTY) {
+                    identifier !in namedReferencesAsString
+                } else {
+                    val fqNames = namedReferences.mapNotNull {
+                        it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull()
+                    }
+                    importPath?.fqName?.let { it !in fqNames } == true
+                }
+            }
 
             return imports?.filter { it.isFromSamePackage() || it.isNotUsed() }.orEmpty()
         }
@@ -87,7 +106,7 @@ class UnusedImports(config: Config) : Rule(config) {
             expression
                     .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
                     ?.takeIf { it.children.isEmpty() }
-                    ?.run { namedReferences.add(text.trim('`')) }
+                    ?.run { namedReferences.add(this) }
             super.visitReferenceExpression(expression)
         }
 
@@ -107,10 +126,10 @@ class UnusedImports(config: Config) : Rule(config) {
         private fun handleKDoc(content: String) {
             kotlinDocReferencesRegExp.findAll(content, 0)
                     .map { it.groupValues[1] }
-                    .forEach { namedReferences.add(it.split(".")[0]) }
+                    .forEach { namedReferencesInKDoc.add(it.split(".")[0]) }
             kotlinDocBlockTagReferenceRegExp.find(content)?.let {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
-                namedReferences.add(str.split(".")[0])
+                namedReferencesInKDoc.add(str.split(".")[0])
             }
         }
     }

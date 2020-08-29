@@ -1397,6 +1397,8 @@ This rule reports unused imports. Unused imports are dead code and should be rem
 Exempt from this rule are imports resulting from references to elements within KDoc and
 from destructuring declarations (componentN imports).
 
+**Requires Type Resolution**
+
 **Severity**: Style
 
 **Debt**: 5min

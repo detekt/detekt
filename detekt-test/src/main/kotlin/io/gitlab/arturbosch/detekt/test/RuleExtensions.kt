@@ -40,13 +40,17 @@ fun BaseRule.lint(path: Path): List<Finding> {
 
 fun BaseRule.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String
+    @Language("kotlin") content: String,
+    @Language("kotlin") vararg additionalContents: String,
 ): List<Finding> {
-    if (shouldCompileTestSnippets) {
+    if (shouldCompileTestSnippets && additionalContents.isEmpty()) {
         KotlinScriptEngine.compile(content)
     }
     val ktFile = compileContentForTest(content.trimIndent())
-    val bindingContext = getContextForPaths(environment, listOf(ktFile))
+    val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
+        compileContentForTest(additionalContent.trimIndent(), "AdditionalTest$index.kt")
+    }
+    val bindingContext = getContextForPaths(environment, listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
     @Suppress("DEPRECATION")
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
