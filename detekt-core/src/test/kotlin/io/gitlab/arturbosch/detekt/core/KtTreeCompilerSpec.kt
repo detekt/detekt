@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.NullPrintStream
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -20,7 +21,7 @@ class KtTreeCompilerSpec : Spek({
         }
 
         it("should filter the file 'Default.kt'") {
-            val ktFiles = fixture("**/Default.kt") { compile(path) }
+            val ktFiles = fixture("**/Default.kt", assertIgnoreMessage = true) { compile(path) }
             val ktFile = ktFiles.find { it.name == "Default.kt" }
             assertThat(ktFile).describedAs("It should have no Default.kt file").isNull()
         }
@@ -47,13 +48,13 @@ class KtTreeCompilerSpec : Spek({
         }
 
         it("does not compile a folder with a css file") {
-            val cssPath = Paths.get(resource("css"))
+            val cssPath = resourceAsPath("css")
             val ktFiles = fixture { compile(cssPath) }
             assertThat(ktFiles).isEmpty()
         }
 
         it("does not compile a css file") {
-            val cssPath = Paths.get(resource("css")).resolve("test.css")
+            val cssPath = resourceAsPath("css").resolve("test.css")
             val ktFiles = fixture { compile(cssPath) }
             assertThat(ktFiles).isEmpty()
         }
@@ -62,13 +63,25 @@ class KtTreeCompilerSpec : Spek({
 
 internal inline fun <reified T> fixture(
     vararg filters: String,
+    assertIgnoreMessage: Boolean = false,
     crossinline block: KtTreeCompiler.() -> T
 ): T {
+    val channel = if (assertIgnoreMessage) StringBuilder() else NullPrintStream()
     val spec = createNullLoggingSpec {
         project {
             inputPaths = listOf(path)
             excludes = filters.toList()
         }
+        logging {
+            debug = assertIgnoreMessage
+            outputChannel = channel
+        }
     }
-    return spec.withSettings { block(KtTreeCompiler(this, spec.projectSpec)) }
+    val result = spec.withSettings { block(KtTreeCompiler(this, spec.projectSpec)) }
+
+    if (assertIgnoreMessage) {
+        assertThat(channel.toString()).contains("Ignoring file ")
+    }
+
+    return result
 }

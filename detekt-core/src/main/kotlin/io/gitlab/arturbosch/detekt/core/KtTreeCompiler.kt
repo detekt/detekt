@@ -57,5 +57,11 @@ class KtTreeCompiler(
         return kotlinEnding in KT_ENDINGS
     }
 
-    private fun isIgnored(path: Path): Boolean = pathFilters?.isIgnored(path) ?: false
+    private fun isIgnored(path: Path): Boolean {
+        val ignored = pathFilters?.isIgnored(path)
+        if (ignored == true) {
+            settings.debug { "Ignoring file '$path'" }
+        }
+        return ignored ?: false
+    }
 }
