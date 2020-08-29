@@ -71,9 +71,3 @@ interface Config {
         )
     }
 }
-
-/**
- * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
- */
-@Deprecated("'BaseConfig' exposes implementation details of 'YamlConfig' and should't be relied on.")
-typealias BaseConfig = io.gitlab.arturbosch.detekt.api.internal.BaseConfig

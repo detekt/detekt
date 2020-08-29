@@ -19,7 +19,6 @@ http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html
 
 ### Functions
 
-| [buildRuleset](build-ruleset.html) | Can return a rule set if this specific rule set is not considered as ignore.`open fun ~~buildRuleset~~(config: `[`Config`](../-config/index.html)`): `[`RuleSet`](../-rule-set/index.html)`?` |
 | [instance](instance.html) | This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.`abstract fun instance(config: `[`Config`](../-config/index.html)`): `[`RuleSet`](../-rule-set/index.html) |
 
 ### Inheritors

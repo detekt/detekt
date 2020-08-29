@@ -8,9 +8,20 @@ title: BaseRule - detekt-api
 
 `abstract class BaseRule : `[`DetektVisitor`](../../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html)`, `[`Context`](../../io.gitlab.arturbosch.detekt.api/-context/index.html)
 
+Defines the visiting mechanism for KtFile's.
+
+Custom rule implementations should actually use [Rule](../../io.gitlab.arturbosch.detekt.api/-rule/index.html) as base class.
+
+The extraction of this class from [Rule](../../io.gitlab.arturbosch.detekt.api/-rule/index.html) actually resulted from the need
+of running many different checks on the same KtFile but within a single
+potential costly visiting process, see [MultiRule](../../io.gitlab.arturbosch.detekt.api/-multi-rule/index.html).
+
+This base rule class abstracts over single and multi rules and allows the
+detekt core engine to only care about a single type.
+
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `BaseRule(context: `[`Context`](../../io.gitlab.arturbosch.detekt.api/-context/index.html)` = DefaultContext())` |
+| [&lt;init&gt;](-init-.html) | Defines the visiting mechanism for KtFile's.`BaseRule(context: `[`Context`](../../io.gitlab.arturbosch.detekt.api/-context/index.html)` = DefaultContext())` |
 
 ### Properties
 

@@ -30,16 +30,6 @@ open class SplitPattern(
     fun contains(value: String?): Boolean = excludes.any { value?.contains(it, ignoreCase = true) == true }
 
     /**
-     * Is there any element which matches given [value]?
-     */
-    @Deprecated(
-        "The name 'equals' should only be used when matching the 'equals contract'.",
-        replaceWith = ReplaceWith("any(value)")
-    )
-    @Suppress("WrongEqualsTypeParameter")
-    fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
-
-    /**
      * Is there any element which matches the given [value]?
      */
     fun any(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }

@@ -15,13 +15,6 @@ is present over the element.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.BaseConfig](../io.gitlab.arturbosch.detekt.api/-base-config.html)
-
-Convenient base configuration which parses/casts the configuration value based on the type of the default value.
-
-
-|
-
 ##### [io.gitlab.arturbosch.detekt.api.internal.BaseConfig](../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.html)
 
 Convenient base configuration which parses/casts the configuration value based on the type of the default value.
@@ -29,14 +22,9 @@ Convenient base configuration which parses/casts the configuration value based o
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.BaseRule](../io.gitlab.arturbosch.detekt.api/-base-rule.html)
+##### [io.gitlab.arturbosch.detekt.api.internal.BaseRule](../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)
 
 Defines the visiting mechanism for KtFile's.
-
-
-|
-
-##### [io.gitlab.arturbosch.detekt.api.internal.BaseRule](../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)
 
 
 |
@@ -64,13 +52,6 @@ Provides a compact string representation.
 ##### [io.gitlab.arturbosch.detekt.api.internal.CompilerResources](../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html)
 
 Provides compiler resources.
-
-
-|
-
-##### [io.gitlab.arturbosch.detekt.api.CompositeConfig](../io.gitlab.arturbosch.detekt.api/-composite-config.html)
-
-Wraps two different configuration which should be considered when retrieving properties.
 
 
 |
@@ -224,19 +205,9 @@ Adds metric container behaviour.
 An issue represents a problem in the codebase.
 
 
-| (extensions in package io.gitlab.arturbosch.detekt.api)
-
-##### [org.jetbrains.kotlin.psi.KtAnnotated](../io.gitlab.arturbosch.detekt.api/org.jetbrains.kotlin.psi.-kt-annotated/index.html)
-
-
 | (extensions in package io.gitlab.arturbosch.detekt.api.internal)
 
 ##### [org.jetbrains.kotlin.psi.KtAnnotated](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-annotated/index.html)
-
-
-| (extensions in package io.gitlab.arturbosch.detekt.api)
-
-##### [org.jetbrains.kotlin.psi.KtElement](../io.gitlab.arturbosch.detekt.api/org.jetbrains.kotlin.psi.-kt-element/index.html)
 
 
 | (extensions in package io.gitlab.arturbosch.detekt.api.internal)
@@ -438,14 +409,6 @@ Experimental detekt api which may change on minor or patch versions.
 |
 
 ##### [io.gitlab.arturbosch.detekt.api.internal.ValidatableConfiguration](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html)
-
-
-|
-
-##### [io.gitlab.arturbosch.detekt.api.YamlConfig](../io.gitlab.arturbosch.detekt.api/-yaml-config.html)
-
-Config implementation using the yaml format. SubConfigurations can return sub maps according to the
-yaml specification.
 
 
 |

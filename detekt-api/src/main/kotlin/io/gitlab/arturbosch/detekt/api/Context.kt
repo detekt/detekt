@@ -16,12 +16,6 @@ interface Context {
 
     /**
      * Reports a single new violation.
-     */
-    @Deprecated("Overloaded version with extra ruleSetId parameter should be used.")
-    fun report(finding: Finding, aliases: Set<String> = emptySet())
-
-    /**
-     * Reports a single new violation.
      * By contract the implementation can check if
      * this finding is already suppressed and should not get reported.
      * An alias set can be given to additionally check if an alias was used when suppressing.
@@ -30,12 +24,6 @@ interface Context {
     fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
         report(finding, aliases, null)
     }
-
-    /**
-     * Same as [report] but reports a list of findings.
-     */
-    @Deprecated("Overloaded version with extra ruleSetId parameter should be used.")
-    fun report(findings: List<Finding>, aliases: Set<String> = emptySet())
 
     /**
      * Same as [report] but reports a list of findings.
@@ -89,13 +77,5 @@ open class DefaultContext : Context {
 
     final override fun clearFindings() {
         _findings = mutableListOf()
-    }
-
-    override fun report(finding: Finding, aliases: Set<String>) {
-        report(finding, aliases, null)
-    }
-
-    override fun report(findings: List<Finding>, aliases: Set<String>) {
-        report(findings, aliases, null)
     }
 }

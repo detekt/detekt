@@ -17,5 +17,5 @@ Guarantees a better looking name as the extended base class :).
 
 ### Inheritors
 
-| [BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](./index.html)`, `[`Context`](../-context/index.html) |
+| [BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html) | Defines the visiting mechanism for KtFile's.`abstract class BaseRule : `[`DetektVisitor`](./index.html)`, `[`Context`](../-context/index.html) |
 
