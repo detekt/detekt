@@ -1,12 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnusedImportsSpec : Spek({
+    setupKotlinEnvironment()
+
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { UnusedImports(Config.empty) }
 
     describe("UnusedImports rule") {
@@ -275,6 +281,27 @@ class UnusedImportsSpec : Spek({
                 assertThat(this[2].entity.signature).endsWith("import com.example.components")
                 assertThat(this[3].entity.signature).endsWith("import com.example.component1AndSomethingElse")
             }
+        }
+
+        it("reports when same name identifiers are imported and used") {
+            val mainFile = """
+                import foo.test
+                import bar.test
+                fun main() {
+                    test(1)
+                }      
+            """
+            val additionalFile1 = """
+                package foo
+                fun test(i: Int) {}
+            """
+            val additionalFile2 = """
+                package bar
+                fun test(s: String) {}
+            """
+            val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile1, additionalFile2)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].entity.signature).endsWith("import bar.test")
         }
     }
 })
