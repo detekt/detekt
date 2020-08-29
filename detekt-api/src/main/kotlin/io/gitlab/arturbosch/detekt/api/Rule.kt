@@ -78,3 +78,8 @@ abstract class Rule(
         report(findings, aliases, ruleSetId)
     }
 }
+
+/**
+ * The type to use when referring to rule ids giving it more context then a String would.
+ */
+typealias RuleId = String

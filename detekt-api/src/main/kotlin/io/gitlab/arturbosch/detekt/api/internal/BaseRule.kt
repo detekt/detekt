@@ -4,10 +4,24 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.DefaultContext
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleId
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
+/**
+ * Defines the visiting mechanism for KtFile's.
+ *
+ * Custom rule implementations should actually use [Rule] as base class.
+ *
+ * The extraction of this class from [Rule] actually resulted from the need
+ * of running many different checks on the same KtFile but within a single
+ * potential costly visiting process, see [MultiRule].
+ *
+ * This base rule class abstracts over single and multi rules and allows the
+ * detekt core engine to only care about a single type.
+ */
 abstract class BaseRule(
     protected val context: Context = DefaultContext()
 ) : DetektVisitor(), Context by context {
