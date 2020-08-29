@@ -32,7 +32,7 @@ class DetektPlugin : Plugin<Project> {
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
         project.registerOldCreateBaselineTask(extension)
-        project.registerGenerateConfigTask()
+        project.registerGenerateConfigTask(extension)
     }
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
@@ -76,8 +76,11 @@ class DetektPlugin : Plugin<Project> {
             baseline.set(project.layout.file(project.provider { extension.baseline }))
         }
 
-    private fun Project.registerGenerateConfigTask() =
-        tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
+    private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
+        tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
+            it.config.setFrom(project.provider { extension.config })
+        }
+    }
 
     private fun existingInputDirectoriesProvider(
         project: Project,
