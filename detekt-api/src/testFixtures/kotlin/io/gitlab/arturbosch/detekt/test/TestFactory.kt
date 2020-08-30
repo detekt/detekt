@@ -41,7 +41,6 @@ fun createEntity(
     ktElement: KtElement? = null
 ) = Entity(
     name = "TestEntity",
-    className = "",
     signature = "TestEntitySignature",
     location = createLocation(
         file = file,
@@ -55,10 +54,8 @@ fun createLocation(
     file: String,
     source: SourceLocation = SourceLocation(1, 1),
     text: TextLocation = TextLocation(0, 0),
-    locationString: String = ""
 ) = Location(
     source = source,
     text = text,
-    locationString = locationString,
     file = file
 )

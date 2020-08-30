@@ -61,7 +61,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val location = Location(
                 SourceLocation(line, column),
                 TextLocation(node.startOffset, node.psi.endOffset),
-                "($line, $column)",
                 root.fileName
             )
 
@@ -73,7 +72,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                 .takeIf { it.isNotEmpty() }
                 ?.plus(".")
                 ?: ""
-            val entity = Entity("", "", "$packageName${root.fileName}:$line", location, root)
+            val entity = Entity("", "$packageName${root.fileName}:$line", location, root)
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }
