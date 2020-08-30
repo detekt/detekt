@@ -64,11 +64,15 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
-internal data class ConfigArgument(val config: FileCollection) : CliArgument() {
-    override fun toArgument() = if (config.isEmpty) {
+internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {
+
+    constructor(configFile: File) : this(listOf(configFile))
+    constructor(config: FileCollection) : this(config.files)
+
+    override fun toArgument() = if (files.isEmpty()) {
         emptyList()
     } else {
-        listOf(CONFIG_PARAMETER, config.joinToString(",") { it.absolutePath })
+        listOf(CONFIG_PARAMETER, files.joinToString(",") { it.absolutePath })
     }
 }
 
