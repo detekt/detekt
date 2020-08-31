@@ -93,23 +93,5 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
     require(methodStart < methodEnd) {
         "Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
     }
-    return getTextSafe(
-        { element.nameAsSafeName.identifier },
-        { element.text.substring(methodStart, methodEnd) })
-}
-
-/*
- * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
- * a RuntimeException stating 'Underestimated text length' - #65.
- */
-@Suppress("TooGenericExceptionCaught")
-internal fun getTextSafe(defaultValue: () -> String, block: () -> String) = try {
-    block()
-} catch (e: RuntimeException) {
-    val message = e.message
-    if (message != null && message.contains("Underestimated text length")) {
-        defaultValue() + "!<UnderestimatedTextLengthException>"
-    } else {
-        defaultValue()
-    }
+    return element.text.substring(methodStart, methodEnd)
 }
