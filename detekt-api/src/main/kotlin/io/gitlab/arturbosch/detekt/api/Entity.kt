@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.internal.buildFullSignature
-import io.gitlab.arturbosch.detekt.api.internal.searchClass
 import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
@@ -13,16 +12,27 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * Stores information about a specific code fragment.
  */
 data class Entity(
-    @Deprecated("Will be made private in the future. Use queries on 'ktElement' instead.")
-    val name: String,
-    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
-    val className: String,
+    private val name: String,
     val signature: String,
     val location: Location,
     val ktElement: KtElement? = null
 ) : Compactable {
 
-    @Suppress("DEPRECATION")
+    @Deprecated(
+        "className property is not used and will be removed in the future. ",
+        ReplaceWith(
+            "Entity(name, signature, location, ktElement)",
+            "io.gitlab.arturbosch.detekt.api.Entity"
+        )
+    )
+    constructor(
+        name: String,
+        @Suppress("UNUSED_PARAMETER") className: String,
+        signature: String,
+        location: Location,
+        ktElement: KtElement? = null
+    ) : this(name, signature, location, ktElement)
+
     override fun compact(): String = "[$name] at ${location.compact()}"
 
     companion object {
@@ -62,9 +72,8 @@ data class Entity(
         ): Entity {
             val name = elementToReport.searchName()
             val signature = elementForSignature.buildFullSignature()
-            val clazz = elementToReport.searchClass()
             val ktElement = elementToReport.getNonStrictParentOfType<KtElement>() ?: error("KtElement expected")
-            return Entity(name, clazz, signature, location, ktElement)
+            return Entity(name, signature, location, ktElement)
         }
     }
 }
