@@ -1,14 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.getTextSafe
-import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
 /**
@@ -17,10 +14,25 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 data class Location(
     val source: SourceLocation,
     val text: TextLocation,
-    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
-    val locationString: String,
     val file: String
 ) : Compactable {
+
+    @Deprecated(
+        """
+        locationString was removed and won't get passed to the main constructor.
+        Use queries on 'ktElement' instead.
+        """,
+        ReplaceWith(
+            "Location(source, text, file)",
+            "io.gitlab.arturbosch.detekt.api.Location"
+        )
+    )
+    constructor(
+        source: SourceLocation,
+        text: TextLocation,
+        @Suppress("UNUSED_PARAMETER") locationString: String,
+        file: String
+    ) : this(source, text, file)
 
     override fun compact(): String = "$file:$source"
 
@@ -34,8 +46,7 @@ data class Location(
             val sourceLocation = SourceLocation(start.line, start.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
             val fileName = element.containingFile.name
-            val locationText = element.getTextAtLocationSafe()
-            return Location(sourceLocation, textLocation, locationText, fileName)
+            return Location(sourceLocation, textLocation, fileName)
         }
 
         /**
@@ -52,9 +63,6 @@ data class Location(
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
             }
         }
-
-        private fun PsiElement.getTextAtLocationSafe() =
-            getTextSafe({ searchName() }, { getTextWithLocation() })
     }
 }
 
