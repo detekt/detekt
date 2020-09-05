@@ -109,5 +109,26 @@ class ModifierOrderSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
+
+        context("fun interface") {
+
+            it("should not report correctly ordered modifiers") {
+                val code = """
+                    private fun interface LoadMoreCallback {
+                        fun loadMore(): Boolean
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("should report incorrectly ordered modifiers") {
+                val code = """
+                    expect internal fun interface LoadMoreCallback {
+                        fun loadMore(): Boolean
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+        }
     }
 })
