@@ -120,15 +120,6 @@ class ModifierOrderSpec : Spek({
                 """.trimIndent()
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
-
-            it("should report incorrectly ordered modifiers") {
-                val code = """
-                    expect internal fun interface LoadMoreCallback {
-                        fun loadMore(): Boolean
-                    }
-                """.trimIndent()
-                assertThat(subject.compileAndLint(code)).hasSize(1)
-            }
         }
     }
 })
