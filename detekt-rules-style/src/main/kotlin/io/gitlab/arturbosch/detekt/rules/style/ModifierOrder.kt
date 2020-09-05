@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.lexer.KtTokens.ENUM_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.EXPECT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.EXTERNAL_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.FINAL_KEYWORD
+import org.jetbrains.kotlin.lexer.KtTokens.FUN_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.INFIX_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.INLINE_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.INNER_KEYWORD
@@ -74,7 +75,8 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
             INLINE_KEYWORD,
             INFIX_KEYWORD,
             OPERATOR_KEYWORD,
-            DATA_KEYWORD
+            DATA_KEYWORD,
+            FUN_KEYWORD
     )
 
     override fun visitModifierList(list: KtModifierList) {

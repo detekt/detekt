@@ -211,6 +211,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Zachary Moore](https://github.com/zsmoore) - Rule, cli, gradle plugin, and config improvements
 - [Veyndan Stuart](https://github.com/veyndan) - New rule: UseEmptyCounterpart; Rule improvement: UselessCallOnNotNull
 - [Parimatch Tech](https://github.com/parimatchtech) - New rule: LibraryEntitiesShouldNotBePublic
+- [Chao Zhang](https://github.com/chao2zhang) - Rule improvement: ImplicitDefaultLocale, ModifierOrder.
 
 ### Mentions
 
