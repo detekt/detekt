@@ -175,6 +175,8 @@ repositories {
 }
 ```
 
+For more information about how to configure the repositories read [about the repositories](#repositories)
+
 ##### <a name="closure">Options for detekt configuration closure</a>
 
 ###### Groovy DSL
@@ -374,3 +376,20 @@ Instead of disabling detekt for the check task, you may want to increase the bui
 detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
 
 The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)
+
+#### <a name="repositories">About the repositories</a>
+
+If you prefer to use Maven Central instead of JCenter you can use this configuration:
+
+```kotlin
+repositories {
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup("org.jetbrains.kotlinx")
+        }
+    }
+}
+```
