@@ -19,6 +19,15 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
+        it("allows anonymous functions") {
+            val code = """
+            val f: (Int) -> Int = fun(i: Int): Int {
+                return i + i
+            }
+        """
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        }
+
         it("ignores functions in classes matching excludeClassPattern") {
             val code = """
             class WhateverTest {

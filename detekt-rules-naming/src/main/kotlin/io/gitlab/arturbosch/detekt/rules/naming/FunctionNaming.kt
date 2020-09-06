@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -42,21 +41,23 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
     private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, listOf("Composable"))
 
+    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
+        val functionName = function.nameIdentifier?.text ?: return
 
         if (ignoreOverridden && function.isOverride()) {
             return
         }
 
+        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
         if (annotationExcluder.shouldExclude(function.annotationEntries)) {
             return
         }
 
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
-            !function.identifierName().matches(functionPattern) &&
-            function.identifierName() != function.typeReference?.name) {
+            !functionName.matches(functionPattern) &&
+            functionName != function.typeReference?.name) {
             report(
                 CodeSmell(
                     issue,
