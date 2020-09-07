@@ -70,13 +70,12 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
             VARARG_KEYWORD,
             SUSPEND_KEYWORD,
             INNER_KEYWORD,
-            ENUM_KEYWORD, ANNOTATION_KEYWORD,
+            ENUM_KEYWORD, ANNOTATION_KEYWORD, FUN_KEYWORD,
             COMPANION_KEYWORD,
             INLINE_KEYWORD,
             INFIX_KEYWORD,
             OPERATOR_KEYWORD,
-            DATA_KEYWORD,
-            FUN_KEYWORD
+            DATA_KEYWORD
     )
 
     override fun visitModifierList(list: KtModifierList) {
