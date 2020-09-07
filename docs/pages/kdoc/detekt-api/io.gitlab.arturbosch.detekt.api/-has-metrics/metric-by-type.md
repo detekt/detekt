@@ -1,12 +1,20 @@
 ---
-title: HasMetrics.metricByType - detekt-api
+title: metricByType -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[HasMetrics](index.md)/[metricByType](metric-by-type.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [HasMetrics](index.html) / [metricByType](./metric-by-type.html)
 
-# metricByType
 
-`open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?`
+# metricByType  
+[jvm]  
+Brief description  
 
-Finds the first metric matching given [type](metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type).
+
+Finds the first metric matching given type.
+
+  
+Content  
+open fun [metricByType](metric-by-type.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Metric](../-metric/index.md)?  
+
+
 

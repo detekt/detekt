@@ -1,23 +1,35 @@
 ---
-title: SetupContext - detekt-api
+title: SetupContext -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SetupContext](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SetupContext](./index.html)
 
-# SetupContext
 
-`interface SetupContext : `[`PropertiesAware`](../-properties-aware/index.html)
+# SetupContext  
+ [jvm] 
 
 Context providing useful processing settings to initialize extensions.
 
-### Properties
+interface [SetupContext](index.md) : [PropertiesAware](../-properties-aware/index.md)   
 
-| [config](config.html) | Configuration which is used to setup detekt.`abstract val config: `[`Config`](../-config/index.html) |
-| [configUris](config-uris.html) | All config locations which where used to create [config](config.html).`abstract val configUris: `[`Collection`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html)`<`[`URI`](https://docs.oracle.com/javase/8/docs/api/java/net/URI.html)`>` |
-| [errorChannel](error-channel.html) | The channel to log all the errors.`abstract val errorChannel: `[`Appendable`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html) |
-| [outputChannel](output-channel.html) | The channel to log all the output.`abstract val outputChannel: `[`Appendable`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html) |
 
-### Extension Functions
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [register](../-properties-aware/register.md)| [jvm]  <br>Brief description  <br><br><br>Binds a given value with given key and stores it for later use.<br><br>  <br>Content  <br>abstract override fun [register](../-properties-aware/register.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html))  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [getOrNull](../get-or-null.html) | Allows to retrieve stored properties in a type safe way.`fun <T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`> `[`PropertiesAware`](../-properties-aware/index.html)`.getOrNull(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): T?` |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [config](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/config/#/PointingToDeclaration/)|  [jvm] <br><br>Configuration which is used to setup detekt.<br><br>abstract val [config](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/config/#/PointingToDeclaration/): [Config](../-config/index.md)   <br>
+| [configUris](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/configUris/#/PointingToDeclaration/)|  [jvm] <br><br>All config locations which where used to create [config](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/config/#/PointingToDeclaration/).<br><br>abstract val [configUris](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/configUris/#/PointingToDeclaration/): [Collection](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html)<[URI](https://docs.oracle.com/javase/8/docs/api/java/net/URI.html)>   <br>
+| [errorChannel](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/errorChannel/#/PointingToDeclaration/)|  [jvm] <br><br>The channel to log all the errors.<br><br>abstract val [errorChannel](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/errorChannel/#/PointingToDeclaration/): [Appendable](https://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html)   <br>
+| [outputChannel](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/outputChannel/#/PointingToDeclaration/)|  [jvm] <br><br>The channel to log all the output.<br><br>abstract val [outputChannel](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/outputChannel/#/PointingToDeclaration/): [Appendable](https://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html)   <br>
+| [properties](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/properties/#/PointingToDeclaration/)|  [jvm] <br><br>Raw properties.<br><br>abstract override val [properties](index.md#io.gitlab.arturbosch.detekt.api/SetupContext/properties/#/PointingToDeclaration/): [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?>   <br>
 

@@ -1,17 +1,31 @@
 ---
-title: Extension.init - detekt-api
+title: init -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Extension](index.md)/[init](init.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Extension](index.html) / [init](./init.html)
 
-# init
 
-`open fun init(config: `[`Config`](../-config/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# init  
+[jvm]  
+Brief description  
 
-Allows to read any or even user defined properties from the detekt yaml config
-to setup this extension.
 
-`open fun init(context: `[`SetupContext`](../-setup-context/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+Allows to read any or even user defined properties from the detekt yaml config to setup this extension.
+
+  
+Content  
+open fun [init](init.md)(config: [Config](../-config/index.md))  
+
+
+[jvm]  
+Brief description  
+
 
 Setup extension by querying common paths and config options.
+
+  
+Content  
+open fun [init](init.md)(context: [SetupContext](../-setup-context/index.md))  
+
+
 

@@ -1,24 +1,39 @@
 ---
-title: LazyRegex - detekt-api
+title: LazyRegex -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[LazyRegex](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [LazyRegex](./index.html)
 
-# LazyRegex
 
-`class LazyRegex : `[`ReadOnlyProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html)`<`[`Rule`](../-rule/index.html)`, `[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)`>`
+# LazyRegex  
+ [jvm] 
 
-LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules.
-It computes the value once when reaching the point of its usage and returns the same
-value when requested again.
 
-`key` &amp; `default` are used to retrieve a value from config.
 
-### Constructors
+LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.
 
-| [&lt;init&gt;](-init-.html) | LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.`LazyRegex(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, default: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)` |
 
-### Functions
 
-| [getValue](get-value.html) | `fun getValue(thisRef: `[`Rule`](../-rule/index.html)`, property: `[`KProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)`<*>): `[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html) |
+key & default are used to retrieve a value from config.
+
+
+
+class [LazyRegex](index.md)(**key**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **default**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) : [ReadOnlyProperty](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html)<[Rule](../-rule/index.md), [Regex](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)>    
+
+
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [LazyRegex](-lazy-regex.md)|  [jvm] fun [LazyRegex](-lazy-regex.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), default: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))   <br>
+
+
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [getValue](get-value.md)| [jvm]  <br>Content  <br>open operator override fun [getValue](get-value.md)(thisRef: [Rule](../-rule/index.md), property: [KProperty](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)<*>): [Regex](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 

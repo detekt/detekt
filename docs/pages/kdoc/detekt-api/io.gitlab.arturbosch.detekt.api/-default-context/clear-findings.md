@@ -1,13 +1,20 @@
 ---
-title: DefaultContext.clearFindings - detekt-api
+title: clearFindings -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[DefaultContext](index.md)/[clearFindings](clear-findings.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [DefaultContext](index.html) / [clearFindings](./clear-findings.html)
 
-# clearFindings
 
-`fun clearFindings(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# clearFindings  
+[jvm]  
+Brief description  
 
-Clears previous findings.
-Normally this is done on every new [KtFile](#) analyzed and should be called by clients.
+
+Clears previous findings. Normally this is done on every new KtFile analyzed and should be called by clients.
+
+  
+Content  
+override fun [clearFindings](clear-findings.md)()  
+
+
 

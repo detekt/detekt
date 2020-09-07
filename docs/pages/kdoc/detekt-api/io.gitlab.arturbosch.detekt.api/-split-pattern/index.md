@@ -1,31 +1,43 @@
 ---
-title: SplitPattern - detekt-api
+title: SplitPattern -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SplitPattern](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SplitPattern](./index.html)
 
-# SplitPattern
 
-`open class SplitPattern`
+# SplitPattern  
+ [jvm] 
 
-Splits given text into parts and provides testing utilities for its elements.
-Basic use cases are to specify different function or class names in the detekt
-yaml config and test for their appearance in specific rules.
+Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.
 
-### Constructors
+open class [SplitPattern](index.md)(**text**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **delimiters**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **removeTrailingAsterisks**: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html))   
 
-| [&lt;init&gt;](-init-.html) | Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.`SplitPattern(text: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, delimiters: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = ",", removeTrailingAsterisks: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = true)` |
 
-### Functions
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [SplitPattern](-split-pattern.md)|  [jvm] fun [SplitPattern](-split-pattern.md)(text: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), delimiters: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), removeTrailingAsterisks: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html))   <br>
 
-| [any](any.html) | Is there any element which matches the given [value](any.html#io.gitlab.arturbosch.detekt.api.SplitPattern$any(kotlin.String)/value)?`fun any(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-| [contains](contains.html) | Does any part contain given [value](contains.html#io.gitlab.arturbosch.detekt.api.SplitPattern$contains(kotlin.String)/value)?`fun contains(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-| [mapAll](map-all.html) | Transforms all parts by given [transform](map-all.html#io.gitlab.arturbosch.detekt.api.SplitPattern$mapAll(kotlin.Function1((kotlin.String, io.gitlab.arturbosch.detekt.api.SplitPattern.mapAll.T)))/transform) function.`fun <T> mapAll(transform: (`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`) -> T): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<T>` |
-| [matches](matches.html) | Finds all parts which match the given [value](matches.html#io.gitlab.arturbosch.detekt.api.SplitPattern$matches(kotlin.String)/value).`fun matches(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
-| [none](none.html) | Tests if none of the parts contain the given [value](none.html#io.gitlab.arturbosch.detekt.api.SplitPattern$none(kotlin.String)/value).`fun none(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-| [startWith](start-with.html) | Tests if any part starts with the given [value](start-with.html#io.gitlab.arturbosch.detekt.api.SplitPattern$startWith(kotlin.String)/value)`fun startWith(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 
-### Inheritors
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [any](any.md)| [jvm]  <br>Brief description  <br><br><br>Is there any element which matches the given value?<br><br>  <br>Content  <br>fun [any](any.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [contains](contains.md)| [jvm]  <br>Brief description  <br><br><br>Does any part contain given value?<br><br>  <br>Content  <br>fun [contains](contains.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [mapAll](map-all.md)| [jvm]  <br>Brief description  <br><br><br>Transforms all parts by given transform function.<br><br>  <br>Content  <br>fun <[T](map-all.md)> [mapAll](map-all.md)(transform: ([String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) -> [T](map-all.md)): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[T](map-all.md)>  <br><br><br>
+| [matches](matches.md)| [jvm]  <br>Brief description  <br><br><br>Finds all parts which match the given value.<br><br>  <br>Content  <br>fun [matches](matches.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>  <br><br><br>
+| [none](none.md)| [jvm]  <br>Brief description  <br><br><br>Tests if none of the parts contain the given value.<br><br>  <br>Content  <br>fun [none](none.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [startWith](start-with.md)| [jvm]  <br>Brief description  <br><br><br>Tests if any part starts with the given value<br><br>  <br>Content  <br>fun [startWith](start-with.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [CommaSeparatedPattern](../../io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/index.html) | `class CommaSeparatedPattern : `[`SplitPattern`](./index.html) |
+
+## Inheritors  
+  
+|  Name| 
+|---|
+| [CommaSeparatedPattern](../../io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/index.md)
 

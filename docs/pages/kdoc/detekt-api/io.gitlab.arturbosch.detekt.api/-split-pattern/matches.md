@@ -1,12 +1,20 @@
 ---
-title: SplitPattern.matches - detekt-api
+title: matches -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SplitPattern](index.md)/[matches](matches.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SplitPattern](index.html) / [matches](./matches.html)
 
-# matches
 
-`fun matches(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>`
+# matches  
+[jvm]  
+Brief description  
 
-Finds all parts which match the given [value](matches.html#io.gitlab.arturbosch.detekt.api.SplitPattern$matches(kotlin.String)/value).
+
+Finds all parts which match the given value.
+
+  
+Content  
+fun [matches](matches.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>  
+
+
 

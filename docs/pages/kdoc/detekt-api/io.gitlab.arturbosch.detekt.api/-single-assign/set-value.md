@@ -1,12 +1,20 @@
 ---
-title: SingleAssign.setValue - detekt-api
+title: setValue -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SingleAssign](index.md)/[setValue](set-value.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SingleAssign](index.html) / [setValue](./set-value.html)
 
-# setValue
 
-`operator fun setValue(thisRef: `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`?, property: `[`KProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)`<*>, value: T): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# setValue  
+[jvm]  
+Brief description  
 
-Sets [_value](#) to the given [value](set-value.html#io.gitlab.arturbosch.detekt.api.SingleAssign$setValue(kotlin.Any, kotlin.reflect.KProperty((kotlin.Any)), io.gitlab.arturbosch.detekt.api.SingleAssign.T)/value). If it was set before, an error is thrown.
+
+Sets _value to the given value. If it was set before, an error is thrown.
+
+  
+Content  
+operator fun [setValue](set-value.md)(thisRef: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?, property: [KProperty](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html)<*>, value: [T](index.md))  
+
+
 

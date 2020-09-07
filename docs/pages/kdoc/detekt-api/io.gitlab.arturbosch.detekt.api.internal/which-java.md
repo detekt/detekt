@@ -1,12 +1,20 @@
 ---
-title: whichJava - detekt-api
+title: whichJava -
 ---
+//[detekt-api](../index.md)/[io.gitlab.arturbosch.detekt.api.internal](index.md)/[whichJava](which-java.md)
 
-[detekt-api](../index.html) / [io.gitlab.arturbosch.detekt.api.internal](index.html) / [whichJava](./which-java.html)
 
-# whichJava
 
-`fun whichJava(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+# whichJava  
+[jvm]  
+Brief description  
+
 
 Returns the version of the running JVM.
+
+  
+Content  
+fun [whichJava](which-java.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+
+
 

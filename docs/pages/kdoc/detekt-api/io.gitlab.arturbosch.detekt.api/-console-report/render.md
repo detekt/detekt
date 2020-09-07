@@ -1,14 +1,20 @@
 ---
-title: ConsoleReport.render - detekt-api
+title: render -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[ConsoleReport](index.md)/[render](render.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [ConsoleReport](index.html) / [render](./render.html)
 
-# render
 
-`abstract fun render(detektion: `[`Detektion`](../-detektion/index.html)`): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
+# render  
+[jvm]  
+Brief description  
 
-Converts the given [detektion](render.html#io.gitlab.arturbosch.detekt.api.ConsoleReport$render(io.gitlab.arturbosch.detekt.api.Detektion)/detektion) into a string representation
-to present it to the client.
-The implementation specifies which parts of the report are important to the user.
+
+Converts the given detektion into a string representation to present it to the client. The implementation specifies which parts of the report are important to the user.
+
+  
+Content  
+abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
+
+
 

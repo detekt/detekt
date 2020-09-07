@@ -1,21 +1,30 @@
 ---
-title: ValidatableConfiguration - detekt-api
+title: ValidatableConfiguration -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api.internal](../index.md)/[ValidatableConfiguration](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api.internal](../index.html) / [ValidatableConfiguration](./index.html)
 
-# ValidatableConfiguration
 
-`interface ValidatableConfiguration`
+# ValidatableConfiguration  
+ [jvm] interface [ValidatableConfiguration](index.md)   
 
-### Functions
 
-| [validate](validate.html) | `abstract fun validate(baseline: `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, excludePatterns: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)`>): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Notification`](../../io.gitlab.arturbosch.detekt.api/-notification/index.html)`>` |
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [validate](validate.md)| [jvm]  <br>Content  <br>abstract fun [validate](validate.md)(baseline: [Config](../../io.gitlab.arturbosch.detekt.api/-config/index.md), excludePatterns: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[Regex](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)>): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Notification](../../io.gitlab.arturbosch.detekt.api/-notification/index.md)>  <br><br><br>
 
-### Inheritors
 
-| [CompositeConfig](../-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
-| [DisabledAutoCorrectConfig](../-disabled-auto-correct-config/index.html) | `class DisabledAutoCorrectConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
-| [FailFastConfig](../-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
-| [YamlConfig](../-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](../-base-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
+## Inheritors  
+  
+|  Name| 
+|---|
+| [CompositeConfig](../-composite-config/index.md)
+| [DisabledAutoCorrectConfig](../-disabled-auto-correct-config/index.md)
+| [FailFastConfig](../-fail-fast-config/index.md)
+| [YamlConfig](../-yaml-config/index.md)
 

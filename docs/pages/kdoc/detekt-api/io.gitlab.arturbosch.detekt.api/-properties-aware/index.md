@@ -1,28 +1,45 @@
 ---
-title: PropertiesAware - detekt-api
+title: PropertiesAware -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[PropertiesAware](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [PropertiesAware](./index.html)
 
-# PropertiesAware
 
-`interface PropertiesAware`
+# PropertiesAware  
+ [jvm] 
 
 Properties holder. Allows to store and retrieve any data.
 
-### Properties
+interface [PropertiesAware](index.md)   
 
-| [properties](properties.html) | Raw properties.`abstract val properties: `[`Map`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`?>` |
 
-### Functions
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [register](register.md)| [jvm]  <br>Brief description  <br><br><br>Binds a given value with given key and stores it for later use.<br><br>  <br>Content  <br>abstract fun [register](register.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html))  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [register](register.html) | Binds a given value with given key and stores it for later use.`abstract fun register(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, value: `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 
-### Extension Functions
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [properties](index.md#io.gitlab.arturbosch.detekt.api/PropertiesAware/properties/#/PointingToDeclaration/)|  [jvm] <br><br>Raw properties.<br><br>abstract val [properties](index.md#io.gitlab.arturbosch.detekt.api/PropertiesAware/properties/#/PointingToDeclaration/): [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?>   <br>
 
-| [getOrNull](../get-or-null.html) | Allows to retrieve stored properties in a type safe way.`fun <T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`> `[`PropertiesAware`](./index.html)`.getOrNull(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): T?` |
 
-### Inheritors
+## Inheritors  
+  
+|  Name| 
+|---|
+| [SetupContext](../-setup-context/index.md)
 
-| [SetupContext](../-setup-context/index.html) | Context providing useful processing settings to initialize extensions.`interface SetupContext : `[`PropertiesAware`](./index.html) |
+
+## Extensions  
+  
+|  Name|  Summary| 
+|---|---|
+| [getOrNull](../get-or-null.md)| [jvm]  <br>Brief description  <br><br><br>Allows to retrieve stored properties in a type safe way.<br><br>  <br>Content  <br>inline fun <[T](../get-or-null.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [PropertiesAware](index.md).[getOrNull](../get-or-null.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [T](../get-or-null.md)?  <br><br><br>
 

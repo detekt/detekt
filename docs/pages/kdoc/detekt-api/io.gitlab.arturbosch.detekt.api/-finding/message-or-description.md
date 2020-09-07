@@ -1,12 +1,20 @@
 ---
-title: Finding.messageOrDescription - detekt-api
+title: messageOrDescription -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Finding](index.md)/[messageOrDescription](message-or-description.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Finding](index.html) / [messageOrDescription](./message-or-description.html)
 
-# messageOrDescription
 
-`abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+# messageOrDescription  
+[jvm]  
+Brief description  
+
 
 Explanation why this finding was raised.
+
+  
+Content  
+abstract fun [messageOrDescription](message-or-description.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+
+
 

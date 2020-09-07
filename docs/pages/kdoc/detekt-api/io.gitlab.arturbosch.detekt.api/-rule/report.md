@@ -1,13 +1,21 @@
 ---
-title: Rule.report - detekt-api
+title: report -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Rule](index.md)/[report](report.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Rule](index.html) / [report](./report.html)
 
-# report
 
-`fun report(finding: `[`Finding`](../-finding/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
-`fun report(findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# report  
+[jvm]  
+Brief description  
 
-Simplified version of [Context.report](../-context/report.html) with rule defaults.
+
+Simplified version of [Context.report](../-context/report.md) with rule defaults.
+
+  
+Content  
+fun [report](report.md)(finding: [Finding](../-finding/index.md))  
+fun [report](report.md)(findings: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>)  
+
+
 

@@ -1,25 +1,41 @@
 ---
-title: SourceLocation - detekt-api
+title: SourceLocation -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SourceLocation](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SourceLocation](./index.html)
 
-# SourceLocation
 
-`data class SourceLocation`
+# SourceLocation  
+ [jvm] 
 
 Stores line and column information of a location.
 
-### Constructors
+data class [SourceLocation](index.md)(**line**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), **column**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   
 
-| [&lt;init&gt;](-init-.html) | Stores line and column information of a location.`SourceLocation(line: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, column: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`)` |
 
-### Properties
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [SourceLocation](-source-location.md)|  [jvm] fun [SourceLocation](-source-location.md)(line: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), column: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   <br>
 
-| [column](column.html) | `val column: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
-| [line](line.html) | `val line: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
 
-### Functions
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)| [jvm]  <br>Content  <br>operator fun [component1](component1.md)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [component2](component2.md)| [jvm]  <br>Content  <br>operator fun [component2](component2.md)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [copy](copy.md)| [jvm]  <br>Content  <br>fun [copy](copy.md)(line: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), column: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): [SourceLocation](index.md)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](to-string.md)| [jvm]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [toString](to-string.html) | `fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [column](index.md#io.gitlab.arturbosch.detekt.api/SourceLocation/column/#/PointingToDeclaration/)|  [jvm] val [column](index.md#io.gitlab.arturbosch.detekt.api/SourceLocation/column/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+| [line](index.md#io.gitlab.arturbosch.detekt.api/SourceLocation/line/#/PointingToDeclaration/)|  [jvm] val [line](index.md#io.gitlab.arturbosch.detekt.api/SourceLocation/line/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
 

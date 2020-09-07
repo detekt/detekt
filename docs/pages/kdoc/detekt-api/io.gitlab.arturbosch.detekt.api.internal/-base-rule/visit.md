@@ -1,13 +1,20 @@
 ---
-title: BaseRule.visit - detekt-api
+title: visit -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api.internal](../index.md)/[BaseRule](index.md)/[visit](visit.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api.internal](../index.html) / [BaseRule](index.html) / [visit](./visit.html)
 
-# visit
 
-`open fun visit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# visit  
+[jvm]  
+Brief description  
 
-Init function to start visiting the [KtFile](#).
-Can be overridden to start a different visiting process.
+
+Init function to start visiting the KtFile. Can be overridden to start a different visiting process.
+
+  
+Content  
+open fun [visit](visit.md)(root: KtFile)  
+
+
 

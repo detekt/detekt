@@ -1,12 +1,20 @@
 ---
-title: SplitPattern.startWith - detekt-api
+title: startWith -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[SplitPattern](index.md)/[startWith](start-with.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [SplitPattern](index.html) / [startWith](./start-with.html)
 
-# startWith
 
-`fun startWith(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+# startWith  
+[jvm]  
+Brief description  
 
-Tests if any part starts with the given [value](start-with.html#io.gitlab.arturbosch.detekt.api.SplitPattern$startWith(kotlin.String)/value)
+
+Tests if any part starts with the given value
+
+  
+Content  
+fun [startWith](start-with.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
+
+
 

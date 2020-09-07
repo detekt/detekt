@@ -1,33 +1,51 @@
 ---
-title: Debt - detekt-api
+title: Debt -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Debt](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Debt](./index.html)
 
-# Debt
 
-`data class Debt`
+# Debt  
+ [jvm] 
 
 Debt describes the estimated amount of work needed to fix a given issue.
 
-### Constructors
+data class [Debt](index.md)(**days**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), **hours**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), **mins**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   
 
-| [&lt;init&gt;](-init-.html) | Debt describes the estimated amount of work needed to fix a given issue.`Debt(days: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, hours: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, mins: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0)` |
 
-### Properties
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [Debt](-debt.md)|  [jvm] fun [Debt](-debt.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   <br>
 
-| [days](days.html) | `val days: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
-| [hours](hours.html) | `val hours: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
-| [mins](mins.html) | `val mins: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
 
-### Functions
+## Types  
+  
+|  Name|  Summary| 
+|---|---|
+| [Companion](-companion/index.md)| [jvm]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>
 
-| [plus](plus.html) | Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.`operator fun plus(other: `[`Debt`](./index.html)`): `[`Debt`](./index.html) |
-| [toString](to-string.html) | `fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Companion Object Properties
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [component1](component1.md)| [jvm]  <br>Content  <br>operator fun [component1](component1.md)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [component2](component2.md)| [jvm]  <br>Content  <br>operator fun [component2](component2.md)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [component3](component3.md)| [jvm]  <br>Content  <br>operator fun [component3](component3.md)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [copy](copy.md)| [jvm]  <br>Content  <br>fun [copy](copy.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): [Debt](index.md)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [plus](plus.md)| [jvm]  <br>Brief description  <br><br><br>Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.<br><br>  <br>Content  <br>operator fun [plus](plus.md)(other: [Debt](index.md)): [Debt](index.md)  <br><br><br>
+| [toString](to-string.md)| [jvm]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [FIVE_MINS](-f-i-v-e_-m-i-n-s.html) | `val FIVE_MINS: `[`Debt`](./index.html) |
-| [TEN_MINS](-t-e-n_-m-i-n-s.html) | `val TEN_MINS: `[`Debt`](./index.html) |
-| [TWENTY_MINS](-t-w-e-n-t-y_-m-i-n-s.html) | `val TWENTY_MINS: `[`Debt`](./index.html) |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [days](index.md#io.gitlab.arturbosch.detekt.api/Debt/days/#/PointingToDeclaration/)|  [jvm] val [days](index.md#io.gitlab.arturbosch.detekt.api/Debt/days/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+| [hours](index.md#io.gitlab.arturbosch.detekt.api/Debt/hours/#/PointingToDeclaration/)|  [jvm] val [hours](index.md#io.gitlab.arturbosch.detekt.api/Debt/hours/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
+| [mins](index.md#io.gitlab.arturbosch.detekt.api/Debt/mins/#/PointingToDeclaration/)|  [jvm] val [mins](index.md#io.gitlab.arturbosch.detekt.api/Debt/mins/#/PointingToDeclaration/): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>
 

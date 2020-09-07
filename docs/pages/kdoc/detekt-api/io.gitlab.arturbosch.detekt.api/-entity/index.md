@@ -1,32 +1,53 @@
 ---
-title: Entity - detekt-api
+title: Entity -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Entity](index.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Entity](./index.html)
 
-# Entity
 
-`data class Entity : `[`Compactable`](../-compactable/index.html)
+# Entity  
+ [jvm] 
 
 Stores information about a specific code fragment.
 
-### Constructors
+data class [Entity](index.md)(**name**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **signature**: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), **location**: [Location](../-location/index.md), **ktElement**: KtElement?) : [Compactable](../-compactable/index.md)   
 
-| [&lt;init&gt;](-init-.html) | `Entity(name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, className: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, location: `[`Location`](../-location/index.html)`, ktElement: KtElement? = null)`<br>Stores information about a specific code fragment.`Entity(name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, location: `[`Location`](../-location/index.html)`, ktElement: KtElement? = null)` |
 
-### Properties
+## Constructors  
+  
+|  Name|  Summary| 
+|---|---|
+| [Entity](-entity.md)|  [jvm] ~~fun~~ [~~Entity~~](-entity.md)~~(~~~~name~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~className~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~signature~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~location~~~~:~~ [Location](../-location/index.md)~~,~~ ~~ktElement~~~~:~~ KtElement?~~)~~   <br>
+| [Entity](-entity.md)|  [jvm] fun [Entity](-entity.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement?)   <br>
 
-| [ktElement](kt-element.html) | `val ktElement: KtElement?` |
-| [location](location.html) | `val location: `[`Location`](../-location/index.html) |
-| [signature](signature.html) | `val signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Functions
+## Types  
+  
+|  Name|  Summary| 
+|---|---|
+| [Companion](-companion/index.md)| [jvm]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>
 
-| [compact](compact.html) | Contract to format implementing object to a string representation.`fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
-### Companion Object Functions
+## Functions  
+  
+|  Name|  Summary| 
+|---|---|
+| [compact](compact.md)| [jvm]  <br>Brief description  <br><br><br>Contract to format implementing object to a string representation.<br><br>  <br>Content  <br>open override fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [compactWithSignature](../-compactable/compact-with-signature.md)| [jvm]  <br>Brief description  <br><br><br>Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.<br><br>  <br>Content  <br>open override fun [compactWithSignature](../-compactable/compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [component2](component2.md)| [jvm]  <br>Content  <br>operator fun [component2](component2.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| [component3](component3.md)| [jvm]  <br>Content  <br>operator fun [component3](component3.md)(): [Location](../-location/index.md)  <br><br><br>
+| [component4](component4.md)| [jvm]  <br>Content  <br>operator fun [component4](component4.md)(): KtElement?  <br><br><br>
+| [copy](copy.md)| [jvm]  <br>Content  <br>fun [copy](copy.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement?): [Entity](index.md)  <br><br><br>
+| [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)| [jvm]  <br>Content  <br>open operator override fun [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)| [jvm]  <br>Content  <br>open override fun [hashCode](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)| [jvm]  <br>Content  <br>open override fun [toString](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/to-string.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
-| [atName](at-name.html) | Create an entity at the location of the identifier of given named declaration.`fun atName(element: KtNamedDeclaration): `[`Entity`](./index.html) |
-| [atPackageOrFirstDecl](at-package-or-first-decl.html) | Create an entity at the location of the package, first import or first declaration.`fun atPackageOrFirstDecl(file: KtFile): `[`Entity`](./index.html) |
-| [from](from.html) | Factory function which retrieves all needed information from the PsiElement itself.`fun from(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): `[`Entity`](./index.html)<br>Use this factory method if the location can be calculated much more precisely than using the given PsiElement.`fun from(element: PsiElement, location: `[`Location`](../-location/index.html)`): `[`Entity`](./index.html) |
+
+## Properties  
+  
+|  Name|  Summary| 
+|---|---|
+| [ktElement](index.md#io.gitlab.arturbosch.detekt.api/Entity/ktElement/#/PointingToDeclaration/)|  [jvm] val [ktElement](index.md#io.gitlab.arturbosch.detekt.api/Entity/ktElement/#/PointingToDeclaration/): KtElement?   <br>
+| [location](index.md#io.gitlab.arturbosch.detekt.api/Entity/location/#/PointingToDeclaration/)|  [jvm] val [location](index.md#io.gitlab.arturbosch.detekt.api/Entity/location/#/PointingToDeclaration/): [Location](../-location/index.md)   <br>
+| [signature](index.md#io.gitlab.arturbosch.detekt.api/Entity/signature/#/PointingToDeclaration/)|  [jvm] val [signature](index.md#io.gitlab.arturbosch.detekt.api/Entity/signature/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
 

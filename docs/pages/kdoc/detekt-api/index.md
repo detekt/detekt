@@ -1,14 +1,17 @@
 ---
-title: detekt-api
+title: detekt-api -
 ---
+//[detekt-api](index.md)
 
-[detekt-api](./index.html)
 
-### Packages
 
-| [io.gitlab.arturbosch.detekt.api](io.gitlab.arturbosch.detekt.api/index.html) |  |
-| [io.gitlab.arturbosch.detekt.api.internal](io.gitlab.arturbosch.detekt.api.internal/index.html) |  |
+# detekt-api  
 
-### Index
 
-[All Types](alltypes/index.html)
+## Packages  
+  
+|  Name|  Summary| 
+|---|---|
+| [io.gitlab.arturbosch.detekt.api](io.gitlab.arturbosch.detekt.api/index.md) | 
+| [io.gitlab.arturbosch.detekt.api.internal](io.gitlab.arturbosch.detekt.api.internal/index.md) | 
+

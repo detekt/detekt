@@ -1,13 +1,20 @@
 ---
-title: Debt.plus - detekt-api
+title: plus -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Debt](index.md)/[plus](plus.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Debt](index.html) / [plus](./plus.html)
 
-# plus
 
-`operator fun plus(other: `[`Debt`](index.html)`): `[`Debt`](index.html)
+# plus  
+[jvm]  
+Brief description  
 
-Adds the other debt to this debt.
-This recalculates the potential overflow resulting from the addition.
+
+Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.
+
+  
+Content  
+operator fun [plus](plus.md)(other: [Debt](index.md)): [Debt](index.md)  
+
+
 

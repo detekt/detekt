@@ -1,12 +1,20 @@
 ---
-title: Detektion.addData - detekt-api
+title: addData -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Detektion](index.md)/[addData](add-data.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Detektion](index.html) / [addData](./add-data.html)
 
-# addData
 
-`abstract fun <V> addData(key: Key<V>, value: V): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+# addData  
+[jvm]  
+Brief description  
+
 
 Stores an arbitrary value inside the result binded to the given key.
+
+  
+Content  
+abstract fun <[V](add-data.md)> [addData](add-data.md)(key: Key<[V](add-data.md)>, value: [V](add-data.md))  
+
+
 

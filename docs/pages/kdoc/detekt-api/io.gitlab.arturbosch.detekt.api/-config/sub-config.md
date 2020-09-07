@@ -1,12 +1,20 @@
 ---
-title: Config.subConfig - detekt-api
+title: subConfig -
 ---
+//[detekt-api](../../index.md)/[io.gitlab.arturbosch.detekt.api](../index.md)/[Config](index.md)/[subConfig](sub-config.md)
 
-[detekt-api](../../index.html) / [io.gitlab.arturbosch.detekt.api](../index.html) / [Config](index.html) / [subConfig](./sub-config.html)
 
-# subConfig
 
-`abstract fun subConfig(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Config`](index.html)
+# subConfig  
+[jvm]  
+Brief description  
+
 
 Tries to retrieve part of the configuration based on given key.
+
+  
+Content  
+abstract fun [subConfig](sub-config.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Config](index.md)  
+
+
 
