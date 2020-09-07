@@ -49,7 +49,7 @@ the name of the build variant in their name, unless otherwise configured, such a
 If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, the more specific one - `detekt-main.xml` -
 takes precendence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
 
-_NOTE:_ When analyzing Android projects that make use of specific code generators, such as databinding, Kotlin synthetic
+_NOTE:_ When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
 view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
 complete compile classpath from the Android Gradle Plugin ([upstream ticket](https://issuetracker.google.com/issues/158777988))
 and can safely be ignored.
@@ -68,18 +68,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -90,18 +79,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup("org.jetbrains.kotlinx")
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -121,18 +99,7 @@ buildscript {
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -150,18 +117,7 @@ buildscript {
 apply(plugin = "io.gitlab.arturbosch.detekt")
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup("org.jetbrains.kotlinx")
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -191,18 +147,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
-        }
-    }
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
 
@@ -226,9 +171,11 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
+    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
 }
 ```
+
+For more information about how to configure the repositories read [about the repositories](#repositories)
 
 ##### <a name="closure">Options for detekt configuration closure</a>
 
@@ -429,3 +376,20 @@ Instead of disabling detekt for the check task, you may want to increase the bui
 detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
 
 The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)
+
+#### <a name="repositories">About the repositories</a>
+
+If you prefer to use Maven Central instead of JCenter you can use this configuration:
+
+```kotlin
+repositories {
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup("org.jetbrains.kotlinx")
+        }
+    }
+}
+```
