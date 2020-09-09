@@ -22,7 +22,10 @@ object PreferToOverPairSyntaxSpec : Spek({
                 val pair2: Pair<Int, Int> = Pair(1, 2)
                 val pair3 = Pair(Pair(1, 2), Pair(3, 4))
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(5)
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(5)
+            assertThat(findings[0].message).endsWith("`1 to 2`")
         }
 
         it("does not report if it is created using the to syntax") {
