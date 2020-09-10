@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import io.gitlab.arturbosch.detekt.rules.isPartOf
+import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -108,7 +109,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
             valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
     private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
 
+    @Suppress("ReturnCount")
     override fun visitConstantExpression(expression: KtConstantExpression) {
+        val elementType = expression.elementType
+        if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
+
         if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
                 expression.isPartOfConstructorOrFunctionConstant()) {
             return
