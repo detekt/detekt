@@ -18,6 +18,14 @@ val sonatypePassword: String? = findProperty("sonatypePassword")
     ?.toString()
     ?: System.getenv("MAVEN_CENTRAL_PW")
 
+// still needed for artifactory snapshot publishing
+val bintrayUser: String? = findProperty("bintrayUser")
+    ?.toString()
+    ?: System.getenv("BINTRAY_USER")
+val bintrayKey: String? = findProperty("bintrayKey")
+    ?.toString()
+    ?: System.getenv("BINTRAY_API_KEY")
+
 nexusStaging {
     packageGroup = "io.gitlab.arturbosch"
     stagingProfileId = "1d8efc8232c5c"
@@ -89,8 +97,8 @@ subprojects {
         publish(delegateClosureOf<PublisherConfig> {
             repository(delegateClosureOf<GroovyObject> {
                 setProperty("repoKey", "oss-snapshot-local")
-                setProperty("username", sonatypeUsername)
-                setProperty("password", sonatypePassword)
+                setProperty("username", bintrayUser)
+                setProperty("password", bintrayKey)
                 setProperty("maven", true)
             })
             defaults(delegateClosureOf<GroovyObject> {
