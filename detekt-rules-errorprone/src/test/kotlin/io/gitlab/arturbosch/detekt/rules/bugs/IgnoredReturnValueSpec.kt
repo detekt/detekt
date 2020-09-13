@@ -180,6 +180,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called before a valid return") {
@@ -198,6 +199,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called in chain as first statement and the return is ignored") {
@@ -216,6 +218,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called in the middle of a chain and the return is ignored") {
@@ -239,6 +242,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(11, 10)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called before a semicolon") {
@@ -256,6 +260,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called after a semicolon") {
@@ -274,6 +279,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 20)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function which returns a value is called between comments") {
@@ -292,6 +298,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 14)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when an extension function which returns a value is called and the return is ignored") {
@@ -309,6 +316,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(7, 11)
+            assertThat(findings[0]).hasMessage("The call isTheAnswer is returning a value that is ignored.")
         }
 
         it("does not report when the return value is assigned to a pre-existing variable") {
@@ -467,6 +475,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("does not report when a function is annotated with the not included annotation") {
@@ -519,6 +528,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         it("reports when a function is not annotated") {
@@ -533,6 +543,7 @@ object IgnoredReturnValueSpec : Spek({
             val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(4, 5)
+            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
     }
 })

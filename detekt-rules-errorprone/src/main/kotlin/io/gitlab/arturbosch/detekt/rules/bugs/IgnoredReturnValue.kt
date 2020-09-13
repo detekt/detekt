@@ -99,11 +99,12 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         }
 
         if (elementsToInspect.any(PsiElement::isIsolated)) {
+            val messageText = expression.calleeExpression?.text ?: expression.text
             report(
                     CodeSmell(
                             issue,
                             Entity.from(expression),
-                            message = "The call ${expression.text} is returning a value that is ignored."
+                            message = "The call $messageText is returning a value that is ignored."
                     )
             )
         }
