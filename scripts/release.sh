@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 gradle build publishToMavenLocal -x detekt -x test
 gradle build
-gradle publishDetektPublicationPublicationToBintrayRepository
-gradle publishPlugins
+gradle publishAllPublicationsToMavenCentralRepository --max-workers 1
+gradle publishPlugins -DautomatePublishing=true
 gradle githubRelease
-gradle applyDocVersion
+gradle applyDocVersion applySelfAnalysisVersion
