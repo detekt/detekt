@@ -5,6 +5,13 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.13.1 - 2020-09-13
+
+##### Notable Changes
+
+We now publish directly to maven central.
+The 1.13.0 release got corrupted and should not be used.
+
 #### 1.13.0 - 2020-09-07
 
 ##### Migration

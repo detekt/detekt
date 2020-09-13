@@ -8,6 +8,21 @@ plugins {
     `maven-publish` apply false
     signing apply false
     id("com.jfrog.artifactory") apply false
+    id("io.codearte.nexus-staging")
+}
+
+val sonatypeUsername: String? = findProperty("sonatypeUsername")
+    ?.toString()
+    ?: System.getenv("MAVEN_CENTRAL_USER")
+val sonatypePassword: String? = findProperty("sonatypePassword")
+    ?.toString()
+    ?: System.getenv("MAVEN_CENTRAL_PW")
+
+nexusStaging {
+    packageGroup = "io.gitlab.arturbosch"
+    stagingProfileId = "1d8efc8232c5c"
+    username = sonatypeUsername
+    password = sonatypePassword
 }
 
 project(":detekt-cli") {
@@ -16,7 +31,7 @@ project(":detekt-cli") {
         plugin("com.github.johnrengelman.shadow")
     }
 
-    tasks.withType<ShadowJar>() {
+    tasks.withType<ShadowJar>().configureEach {
         mergeServiceFiles()
     }
 }
@@ -29,19 +44,14 @@ subprojects {
         plugin("com.jfrog.artifactory")
     }
 
-    val bintrayUser = findProperty("bintrayUser")?.toString()
-        ?: System.getenv("BINTRAY_USER")
-    val bintrayKey = findProperty("bintrayKey")?.toString()
-        ?: System.getenv("BINTRAY_API_KEY")
-
     publishing {
         repositories {
             maven {
-                name = "bintray"
-                url = uri("https://api.bintray.com/maven/arturbosch/code-analysis/detekt/;publish=1;override=1")
+                name = "mavenCentral"
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
                 credentials {
-                    username = bintrayUser
-                    password = bintrayKey
+                    username = sonatypeUsername
+                    password = sonatypePassword
                 }
             }
         }
@@ -79,8 +89,8 @@ subprojects {
         publish(delegateClosureOf<PublisherConfig> {
             repository(delegateClosureOf<GroovyObject> {
                 setProperty("repoKey", "oss-snapshot-local")
-                setProperty("username", bintrayUser)
-                setProperty("password", bintrayKey)
+                setProperty("username", sonatypeUsername)
+                setProperty("password", sonatypePassword)
                 setProperty("maven", true)
             })
             defaults(delegateClosureOf<GroovyObject> {
