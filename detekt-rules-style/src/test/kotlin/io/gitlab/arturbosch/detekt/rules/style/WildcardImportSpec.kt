@@ -15,8 +15,6 @@ class WildcardImportSpec : Spek({
 
         context("a kt file with wildcard imports") {
             val code = """
-                package org
-
                 import io.gitlab.arturbosch.detekt.*
                 import org.spekframework.*
 
