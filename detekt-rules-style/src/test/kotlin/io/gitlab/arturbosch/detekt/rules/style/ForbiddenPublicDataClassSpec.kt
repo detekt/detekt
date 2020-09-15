@@ -125,7 +125,7 @@ class ForbiddenPublicDataClassSpec : Spek({
 
         it("public data class inside a random package should fail") {
             val code = """
-                package com.example
+                package com.random
 
                 data class C(val a: String)                
             """
@@ -148,12 +148,12 @@ class ForbiddenPublicDataClassSpec : Spek({
 
         it("public data class inside an ignored package should pass config as string") {
             val code = """
-                package com.example
+                package org.example
 
                 data class C(val a: String)                
             """
 
-            val config = TestConfig("ignorePackages" to "*.hello,com.example", Config.INCLUDES_KEY to "*.kt")
+            val config = TestConfig("ignorePackages" to "*.hello,org.example", Config.INCLUDES_KEY to "*.kt")
             assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
         }
     }
