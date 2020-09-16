@@ -283,25 +283,52 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("reports when same name identifiers are imported and used") {
-            val mainFile = """
-                import foo.test
-                import bar.test
-                fun main() {
-                    test(1)
-                }      
-            """
-            val additionalFile1 = """
-                package foo
-                fun test(i: Int) {}
-            """
-            val additionalFile2 = """
-                package bar
-                fun test(s: String) {}
-            """
-            val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile1, additionalFile2)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.signature).endsWith("import bar.test")
+        context("with type resolution enabled") {
+            it("reports when same name identifiers are imported and used") {
+                val mainFile = """
+                    import foo.test
+                    import bar.test
+                    fun main() {
+                        test(1)
+                    }      
+                """
+                val additionalFile1 = """
+                    package foo
+                    fun test(i: Int) {}
+                """
+                val additionalFile2 = """
+                    package bar
+                    fun test(s: String) {}
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile1, additionalFile2)
+                assertThat(findings).hasSize(1)
+                assertThat(findings[0].entity.signature).endsWith("import bar.test")
+            }
+
+            it("does not report when used as a type") {
+                val code = """
+                    import java.util.HashMap
+                    
+                    fun doesNothing(thing: HashMap<String, String>) {
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report when used in a class literal expression") {
+                val code = """
+                    import java.util.HashMap
+                    import kotlin.reflect.KClass
+                    
+                    annotation class Ann(val value: KClass<*>)
+                    
+                    @Ann(HashMap::class)
+                    fun foo() {}
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
         }
     }
 })
