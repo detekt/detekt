@@ -76,7 +76,9 @@ class UnusedImports(config: Config) : Rule(config) {
                     identifier !in namedReferencesAsString
                 } else {
                     val fqNames = namedReferences.mapNotNull {
-                        bindingContext[BindingContext.REFERENCE_TARGET, it]?.getImportableDescriptor()?.fqNameOrNull()
+                        val descriptor = bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, it]
+                            ?: bindingContext[BindingContext.REFERENCE_TARGET, it]
+                        descriptor?.getImportableDescriptor()?.fqNameOrNull()
                     }
                     importPath?.fqName?.let { it !in fqNames } == true
                 }

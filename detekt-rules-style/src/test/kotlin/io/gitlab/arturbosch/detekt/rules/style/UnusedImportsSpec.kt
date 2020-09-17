@@ -360,6 +360,61 @@ class UnusedImportsSpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
                 assertThat(findings).isEmpty()
             }
+
+            it("does not report companion object") {
+                val mainFile = """
+                    import x.y.z.Foo
+                    
+                    val x = Foo
+                """
+                val additionalFile = """
+                    package x.y.z
+                    
+                    class Foo {
+                        companion object
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report companion object that calls function") {
+                val mainFile = """
+                    import x.y.z.Foo
+                    
+                    val x = Foo.create()
+                """
+                val additionalFile = """
+                    package x.y.z
+                    
+                    class Foo {
+                        companion object {
+                            fun create(): Foo = Foo()
+                        }
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report companion object that references variable") {
+                val mainFile = """
+                    import x.y.z.Foo
+                    
+                    val x = Foo.BAR
+                """
+                val additionalFile = """
+                    package x.y.z
+                    
+                    class Foo {
+                        companion object {
+                            const val BAR = 1
+                        }
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
+                assertThat(findings).isEmpty()
+            }
         }
     }
 })
