@@ -19,6 +19,14 @@ in the command line interface.
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
+### AnnotationSpacing
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
+### ArgumentListWrapping
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### ChainWrapping
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
