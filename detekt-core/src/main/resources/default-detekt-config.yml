@@ -229,6 +229,9 @@ formatting:
   AnnotationOnSeparateLine:
     active: false
     autoCorrect: true
+  AnnotationSpacing:
+    active: false
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
