@@ -232,6 +232,9 @@ formatting:
   AnnotationSpacing:
     active: false
     autoCorrect: true
+  ArgumentListWrapping:
+    active: false
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true

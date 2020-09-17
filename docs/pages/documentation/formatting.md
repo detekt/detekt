@@ -23,6 +23,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
+### ArgumentListWrapping
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### ChainWrapping
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
