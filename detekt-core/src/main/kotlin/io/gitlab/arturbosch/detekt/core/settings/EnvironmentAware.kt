@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.Closeable
+import java.io.File
 
 interface EnvironmentAware {
 
@@ -43,7 +44,7 @@ internal class EnvironmentFacade(
 }
 
 internal fun CompilerSpec.classpathEntries(): List<String> =
-    classpath?.split(":", ";") ?: emptyList() // support both windows ; and unix :
+    classpath?.split(File.pathSeparator) ?: emptyList() // support both windows ; and unix :
 
 internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
     fun parse(value: String): LanguageVersion {
