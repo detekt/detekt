@@ -329,6 +329,37 @@ class UnusedImportsSpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
+
+            it("does not report when used as a constructor call") {
+                val mainFile = """
+                    import x.y.z.Foo
+                    
+                    val foo = Foo()
+                """
+                val additionalFile = """
+                    package x.y.z
+                    
+                    class Foo
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
+                assertThat(findings).isEmpty()
+            }
+
+            it("does not report when used as a annotation") {
+                val mainFile = """
+                    import x.y.z.Ann
+
+                    @Ann
+                    fun foo() {}
+                """
+                val additionalFile = """
+                    package x.y.z
+                    
+                    annotation class Ann
+                """
+                val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
+                assertThat(findings).isEmpty()
+            }
         }
     }
 })

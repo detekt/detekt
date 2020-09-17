@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 
 /**
  * This rule reports unused imports. Unused imports are dead code and should be removed.
@@ -75,7 +76,7 @@ class UnusedImports(config: Config) : Rule(config) {
                     identifier !in namedReferencesAsString
                 } else {
                     val fqNames = namedReferences.mapNotNull {
-                        bindingContext[BindingContext.REFERENCE_TARGET, it]?.fqNameOrNull()
+                        bindingContext[BindingContext.REFERENCE_TARGET, it]?.getImportableDescriptor()?.fqNameOrNull()
                     }
                     importPath?.fqName?.let { it !in fqNames } == true
                 }
