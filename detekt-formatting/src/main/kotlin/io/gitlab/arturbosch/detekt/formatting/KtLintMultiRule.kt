@@ -4,6 +4,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
+import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
@@ -53,6 +55,8 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
     override val rules: List<Rule> = listOf(
         AnnotationOnSeparateLine(config),
+        AnnotationSpacing(config),
+        ArgumentListWrapping(config),
         ChainWrapping(config),
         CommentSpacing(config),
         EnumEntryNameCase(config),

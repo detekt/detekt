@@ -5,6 +5,53 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.13.1 - 2020-09-13
+
+##### Notable Changes
+
+We now publish directly to maven central.
+The 1.13.0 release got corrupted and should not be used.
+
+#### 1.13.0 - 2020-09-07
+
+##### Migration
+
+- This release drops several deprecations in `detekt-api`.
+
+##### Changelog
+
+- Set modifier order based on Kotlin coding conventions - [#3056](https://github.com/detekt/detekt/pull/3056)
+- FunctionNaming: allow anonymous functions - [#3055](https://github.com/detekt/detekt/pull/3055)
+- FunctionNaming should ignore anonymous functions - [#3054](https://github.com/detekt/detekt/issues/3054)
+- Fix ModifierOrder for false positive reported by ModifierOrder when using fun interfaces - [#3051](https://github.com/detekt/detekt/pull/3051)
+- False positive reported by ModifierOrder when using fun interfaces - [#3050](https://github.com/detekt/detekt/issues/3050)
+- Fix PreferToOverPairSyntax exception - [#3046](https://github.com/detekt/detekt/pull/3046)
+- PreferToOverPairSyntax throws exceptions - [#3044](https://github.com/detekt/detekt/issues/3044)
+- Remove deprecated entity and location members - [#3037](https://github.com/detekt/detekt/pull/3037)
+- Respect configured config file when running the detektCreateConfig task - [#3036](https://github.com/detekt/detekt/pull/3036)
+- Remove last years api deprecations - [#3035](https://github.com/detekt/detekt/pull/3035)
+- UnusedImports rule: fix false negative when same name identifiers are imported and used - [#3033](https://github.com/detekt/detekt/pull/3033)
+- ForbiddenMethodCall: report operator calls - [#3032](https://github.com/detekt/detekt/pull/3032)
+- Improve documentation for Gradle repositories setup - [#3030](https://github.com/detekt/detekt/pull/3030)
+- how to use the type resolution to make ForbiddenMethodCall to check bigdecimal.equals using bigdecimal == bigdecimal? - [#3029](https://github.com/detekt/detekt/issues/3029)
+- Use lazy gradle APIs in docs - [#3028](https://github.com/detekt/detekt/pull/3028)
+- Implement option to turn config property deprecation warnings as errors - [#3026](https://github.com/detekt/detekt/pull/3026)
+- Fix RedundantSuspendModifier message - [#3025](https://github.com/detekt/detekt/pull/3025)
+- Print filtered paths in debug mode for easier bug tracing - [#3022](https://github.com/detekt/detekt/pull/3022)
+- Unused import not detected - [#3020](https://github.com/detekt/detekt/issues/3020)
+- Include reports and formatting features to the system test - [#3018](https://github.com/detekt/detekt/pull/3018)
+- detektGenerateConfig ignores detekt.config paramenter - [#2565](https://github.com/detekt/detekt/issues/2565)
+- Treat config property deprecations as errors - [#2545](https://github.com/detekt/detekt/issues/2545)
+- Print filtered paths in debug mode - [#869](https://github.com/detekt/detekt/issues/869)
+
+##### Housekeeping & Refactorings
+
+- Remove confusing annotation for UnusedImports rule - [#3039](https://github.com/detekt/detekt/pull/3039)
+- Remove obsolete signature workaround for formatting plugin - [#3038](https://github.com/detekt/detekt/pull/3038)
+- Upgrade to new dokka - [#2931](https://github.com/detekt/detekt/pull/2931)
+
+See all issues at: [1.13.0](https://github.com/detekt/detekt/milestone/75)
+
 #### 1.12.0 - 2020-08-25
 
 ##### Notable Changes
