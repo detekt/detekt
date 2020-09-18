@@ -10,6 +10,50 @@ The Style ruleset provides rules that assert the style of the code.
 This will help keep code in line with the given
 code style guidelines.
 
+### ClassOrdering
+
+This rule ensures class contents are ordered as follows as recommended by the Kotlin Coding Conventions:
+- Property declarations and initializer blocks
+- Secondary constructors
+- Method declarations
+- Companion object
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+class OutOfOrder {
+    companion object {
+        const val IMPORTANT_VALUE = 3
+    }
+
+    fun returnX(): Int {
+        return x
+    }
+
+    private val x = 2
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class InOrder {
+    private val x = 2
+
+    fun returnX(): Int {
+        return x
+    }
+
+    companion object {
+        const val IMPORTANT_VALUE = 3
+    }
+}
+```
+
 ### CollapsibleIfStatements
 
 This rule detects `if` statements which can be collapsed. This can reduce nesting and help improve readability.
