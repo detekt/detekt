@@ -10,11 +10,6 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
     private var mccPerThousandLines = 0
     private var commentSourceRatio = 0
 
-    companion object Factory {
-        fun create(detektion: Detektion): ComplexityReportGenerator =
-            ComplexityReportGenerator(ComplexityMetric(detektion))
-    }
-
     fun generate(): List<String>? {
         if (cannotGenerate()) return null
         return listOf(
@@ -48,5 +43,10 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
                 false
             }
         }
+    }
+
+    companion object Factory {
+        fun create(detektion: Detektion): ComplexityReportGenerator =
+            ComplexityReportGenerator(ComplexityMetric(detektion))
     }
 }

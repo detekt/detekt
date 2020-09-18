@@ -42,12 +42,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * @requiresTypeResolution
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
-    companion object {
-        private val primitiveTypes = PrimitiveType.values().map { it.typeName.asString() }
-        private val factoryMethodFqNames = listOf(FqName("kotlin.arrayOf"), FqName("kotlin.emptyArray"))
-        private val factoryMethodNames = factoryMethodFqNames.map { it.shortName().asString() }
-    }
-
     override val issue = Issue(
         "ArrayPrimitive",
         Severity.Performance,
@@ -90,5 +84,11 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
             return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
         }
         return false
+    }
+
+    companion object {
+        private val primitiveTypes = PrimitiveType.values().map { it.typeName.asString() }
+        private val factoryMethodFqNames = listOf(FqName("kotlin.arrayOf"), FqName("kotlin.emptyArray"))
+        private val factoryMethodNames = factoryMethodFqNames.map { it.shortName().asString() }
     }
 }

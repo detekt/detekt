@@ -27,10 +27,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * @requiresTypeResolution
  */
 class UseRequireNotNull(config: Config = Config.empty) : Rule(config) {
-    companion object {
-        private val requireFunctionFqName = FqName("kotlin.require")
-    }
-
     override val issue = Issue(
         "UseRequireNotNull",
         Severity.Style,
@@ -44,5 +40,9 @@ class UseRequireNotNull(config: Config = Config.empty) : Rule(config) {
         if (expression.isCallingWithNonNullCheckArgument(requireFunctionFqName, bindingContext)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
+    }
+
+    companion object {
+        private val requireFunctionFqName = FqName("kotlin.require")
     }
 }

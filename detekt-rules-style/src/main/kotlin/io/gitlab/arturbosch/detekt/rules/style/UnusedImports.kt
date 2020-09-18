@@ -35,17 +35,6 @@ class UnusedImports(config: Config) : Rule(config) {
             "Unused Imports are dead code and should be removed.",
             Debt.FIVE_MINS)
 
-    companion object {
-        private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
-                "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
-                "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
-
-        private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
-        private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
-        private val whiteSpaceRegex = Regex("\\s+")
-        private val componentNRegex = Regex("component\\d+")
-    }
-
     override fun visit(root: KtFile) {
         with(UnusedImportsVisitor(bindingContext)) {
             root.accept(this)
@@ -130,6 +119,17 @@ class UnusedImports(config: Config) : Rule(config) {
                 namedReferencesInKDoc.add(str.split(".")[0])
             }
         }
+    }
+
+    companion object {
+        private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
+            "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
+            "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
+
+        private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
+        private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
+        private val whiteSpaceRegex = Regex("\\s+")
+        private val componentNRegex = Regex("component\\d+")
     }
 }
 

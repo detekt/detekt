@@ -66,11 +66,6 @@ private open class FixedDateFile(path: String) : File(path) {
 
 private class DifferentDateFile(path: String) : FixedDateFile(path) {
 
-    companion object {
-        private val random = Random(seed = 200)
-        private val cache = HashSet<Long>()
-    }
-
     override fun lastModified(): Long {
         var nextDate = random.nextLong()
         while (cache.contains(nextDate)) {
@@ -78,5 +73,10 @@ private class DifferentDateFile(path: String) : FixedDateFile(path) {
         }
         cache.add(nextDate)
         return nextDate
+    }
+
+    companion object {
+        private val random = Random(seed = 200)
+        private val cache = HashSet<Long>()
     }
 }

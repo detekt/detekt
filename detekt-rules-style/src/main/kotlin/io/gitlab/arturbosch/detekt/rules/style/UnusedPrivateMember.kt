@@ -47,10 +47,6 @@ import org.jetbrains.kotlin.types.expressions.OperatorConventions
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
-    companion object {
-        const val ALLOWED_NAMES_PATTERN = "allowedNames"
-    }
-
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
     override val issue: Issue = Issue("UnusedPrivateMember",
@@ -70,6 +66,10 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedMemberVisitor) {
         accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
+    }
+
+    companion object {
+        const val ALLOWED_NAMES_PATTERN = "allowedNames"
     }
 }
 

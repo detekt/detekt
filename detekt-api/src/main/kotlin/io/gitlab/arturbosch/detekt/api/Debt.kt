@@ -26,6 +26,15 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
         return Debt(days, hours, minutes)
     }
 
+    override fun toString(): String {
+        return with(StringBuilder()) {
+            if (days > 0) append("${days}d ")
+            if (hours > 0) append("${hours}h ")
+            if (mins > 0) append("${mins}min")
+            toString()
+        }.trimEnd()
+    }
+
     companion object {
         val TWENTY_MINS: Debt =
             Debt(0, 0, 20)
@@ -35,14 +44,5 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
             Debt(0, 0, 5)
         private const val HOURS_PER_DAY = 24
         private const val MINUTES_PER_HOUR = 60
-    }
-
-    override fun toString(): String {
-        return with(StringBuilder()) {
-            if (days > 0) append("${days}d ")
-            if (hours > 0) append("${hours}h ")
-            if (mins > 0) append("${mins}min")
-            toString()
-        }.trimEnd()
     }
 }

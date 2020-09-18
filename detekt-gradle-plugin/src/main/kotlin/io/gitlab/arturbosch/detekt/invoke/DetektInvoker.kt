@@ -18,6 +18,8 @@ internal interface DetektInvoker {
     )
 
     companion object {
+        private const val DRY_RUN_PROPERTY = "detekt-dry-run"
+
         fun create(project: Project): DetektInvoker =
             if (project.isDryRunEnabled()) {
                 DryRunInvoker(project.logger)
@@ -28,8 +30,6 @@ internal interface DetektInvoker {
         private fun Project.isDryRunEnabled(): Boolean {
             return hasProperty(DRY_RUN_PROPERTY) && property(DRY_RUN_PROPERTY) == "true"
         }
-
-        private const val DRY_RUN_PROPERTY = "detekt-dry-run"
     }
 }
 

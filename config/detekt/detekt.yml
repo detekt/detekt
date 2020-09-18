@@ -105,6 +105,8 @@ potential-bugs:
     active: true
 
 style:
+  ClassOrdering:
+    active: true
   CollapsibleIfStatements:
     active: true
   EqualsNullCall:

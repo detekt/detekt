@@ -26,9 +26,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     abstract val wrapping: com.pinterest.ktlint.core.Rule
 
-    protected fun issueFor(description: String) =
-        Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
-
     /**
      * Should the android style guide be enforced?
      * This property is read from the ruleSet config.
@@ -38,6 +35,9 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
+
+    protected fun issueFor(description: String) =
+        Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
     override fun visit(root: KtFile) {
         this.root = root

@@ -27,10 +27,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * @requiresTypeResolution
  */
 class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
-    companion object {
-        private val checkFunctionFqName = FqName("kotlin.check")
-    }
-
     override val issue = Issue(
         "UseCheckNotNull",
         Severity.Style,
@@ -44,5 +40,9 @@ class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
         if (expression.isCallingWithNonNullCheckArgument(checkFunctionFqName, bindingContext)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
+    }
+
+    companion object {
+        private val checkFunctionFqName = FqName("kotlin.check")
     }
 }

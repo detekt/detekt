@@ -52,6 +52,18 @@ internal class DetektAndroid(private val project: Project) {
         }
     }
 
+    private val BaseExtension.variants: DomainObjectSet<out BaseVariant>?
+        get() = when (this) {
+            is AppExtension -> applicationVariants
+            is LibraryExtension -> libraryVariants
+            is TestExtension -> applicationVariants
+            else -> null
+        }
+
+    private val BaseVariant.testVariants: List<BaseVariant>
+        get() = if (this is TestedVariant) listOfNotNull(testVariant, unitTestVariant)
+        else emptyList()
+
     fun registerDetektAndroidTasks(extension: DetektExtension) {
         // There is not a single Android plugin, but each registers an extension based on BaseExtension,
         // so we catch them all by looking for this one
@@ -90,18 +102,6 @@ internal class DetektAndroid(private val project: Project) {
         ignoredVariants.contains(variant.name) ||
                 ignoredBuildTypes.contains(variant.buildType.name) ||
                 ignoredFlavors.contains(variant.flavorName)
-
-    private val BaseExtension.variants: DomainObjectSet<out BaseVariant>?
-        get() = when (this) {
-            is AppExtension -> applicationVariants
-            is LibraryExtension -> libraryVariants
-            is TestExtension -> applicationVariants
-            else -> null
-        }
-
-    private val BaseVariant.testVariants: List<BaseVariant>
-        get() = if (this is TestedVariant) listOfNotNull(testVariant, unitTestVariant)
-        else emptyList()
 
     private fun Project.registerAndroidDetektTask(
         bootClasspath: FileCollection,

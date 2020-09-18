@@ -30,30 +30,6 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
         var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
     )
 
-    companion object {
-
-        val CONDITIONALS = setOf(KtTokens.ELVIS, KtTokens.ANDAND, KtTokens.OROR)
-        val DEFAULT_NESTING_FUNCTIONS = setOf(
-            "run",
-            "let",
-            "apply",
-            "with",
-            "also",
-            "use",
-            "forEach",
-            "isNotNull",
-            "ifNull"
-        )
-
-        fun calculate(node: KtElement, configure: (Config.() -> Unit)? = null): Int {
-            val config = Config()
-            configure?.invoke(config)
-            val visitor = CyclomaticComplexity(config)
-            node.accept(visitor)
-            return visitor.complexity
-        }
-    }
-
     var complexity: Int = 0
         private set
 
@@ -123,5 +99,29 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
             }
         }
         super.visitCallExpression(expression)
+    }
+
+    companion object {
+
+        val CONDITIONALS = setOf(KtTokens.ELVIS, KtTokens.ANDAND, KtTokens.OROR)
+        val DEFAULT_NESTING_FUNCTIONS = setOf(
+            "run",
+            "let",
+            "apply",
+            "with",
+            "also",
+            "use",
+            "forEach",
+            "isNotNull",
+            "ifNull"
+        )
+
+        fun calculate(node: KtElement, configure: (Config.() -> Unit)? = null): Int {
+            val config = Config()
+            configure?.invoke(config)
+            val visitor = CyclomaticComplexity(config)
+            node.accept(visitor)
+            return visitor.complexity
+        }
     }
 }

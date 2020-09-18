@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,14 +30,14 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  */
 class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
-    override fun visitCondition(root: KtFile): Boolean = super.visitCondition(root) && filters != null
-
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Style,
         "Library class should not be public",
         Debt.FIVE_MINS
     )
+
+    override fun visitCondition(root: KtFile): Boolean = super.visitCondition(root) && filters != null
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInner()) {
