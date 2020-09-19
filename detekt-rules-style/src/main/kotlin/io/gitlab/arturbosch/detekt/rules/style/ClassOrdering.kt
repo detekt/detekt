@@ -66,11 +66,11 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClassBody(classBody: KtClassBody) {
+        super.visitClassBody(classBody)
+
         if (!classBody.declarations.isInOrder(lengthComparator)) {
             report(CodeSmell(issue, Entity.from(classBody), issue.description))
         }
-
-        super.visitClassBody(classBody)
     }
 
     @Suppress("MagicNumber")
