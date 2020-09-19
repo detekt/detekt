@@ -23,7 +23,7 @@ object LLOC {
         private var escape: Boolean = false
 
         @Suppress("LoopWithTooManyJumpStatements")
-        internal fun run(): Int {
+        fun run(): Int {
             for (line in lines) {
 
                 val trimmed = line.trim()

@@ -137,6 +137,8 @@ style:
     active: true
   ProtectedMemberInFinalClass:
     active: true
+  RedundantVisibilityModifierRule:
+    active: true
   SpacingBetweenPackageAndImports:
     active: true
   UnnecessaryAbstractClass:
