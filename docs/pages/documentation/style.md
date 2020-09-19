@@ -12,7 +12,8 @@ code style guidelines.
 
 ### ClassOrdering
 
-This rule ensures class contents are ordered as follows as recommended by the Kotlin Coding Conventions:
+This rule ensures class contents are ordered as follows as recommended by the Kotlin
+[Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html#class-layout):
 - Property declarations and initializer blocks
 - Secondary constructors
 - Method declarations
