@@ -127,5 +127,27 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("reports internal modifier on nested class in private object") {
+            val code = """
+                private object Xml10EscapeSymbolsInitializer {
+
+                    internal class XmlCodepointValidator
+
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports internal modifier on function declaration in private object") {
+            val code = """
+                private object Xml10EscapeSymbolsInitializer {
+
+                    internal fun xmlCodepointValidator()
+
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
     }
 })

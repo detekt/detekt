@@ -8,13 +8,17 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * This rule checks for redundant visibility modifiers.
@@ -38,9 +42,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
     override val issue: Issue = Issue(
         "RedundantVisibilityModifierRule",
         Severity.Style,
-        "Checks for redundant visibility modifiers. " +
-            "Public is the default visibility for classes. " +
-            "The public modifier is redundant.",
+        "Checks for redundant visibility modifiers.",
         Debt.FIVE_MINS
     )
 
@@ -56,6 +58,22 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
         file.declarations.forEach {
             it.accept(classVisitor)
             it.acceptChildren(childrenVisitor)
+        }
+    }
+
+    override fun visitDeclaration(declaration: KtDeclaration) {
+        super.visitDeclaration(declaration)
+        if (
+            declaration.isInternal() &&
+            declaration.containingClassOrObject?.let { it.isLocal || it.isPrivate() } == true
+        ) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(declaration),
+                    "The `internal` modifier on ${declaration.name} is redundant and should be removed."
+                )
+            )
         }
     }
 
