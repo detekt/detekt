@@ -280,6 +280,37 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
    the nested depth required to trigger rule
 
+### ReplaceSafeCallChainWithRun
+
+Chains of safe calls on non-nullable types are redundant and can be removed by enclosing the redundant safe calls in
+a `run {}` block. This improves code coverage and reduces cyclomatic complexity as redundant null checks are removed.
+
+**Requires Type Resolution**
+
+**Severity**: Maintainability
+
+**Debt**: 10min
+
+#### Noncompliant Code:
+
+```kotlin
+val x = classOrObject.body?.declarations
+    ?.filterIsInstance<KtNamedFunction>()
+    ?.filter { !isIgnoredFunction(it) }
+    ?.size ?: 0
+```
+
+#### Compliant Code:
+
+```kotlin
+val x = classOrObject.body?.run {
+        declarations
+            .filterIsInstance<KtNamedFunction>()
+            .filter { !isIgnoredFunction(it) }
+            .size
+    } ?: 0
+```
+
 ### StringLiteralDuplication
 
 This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the

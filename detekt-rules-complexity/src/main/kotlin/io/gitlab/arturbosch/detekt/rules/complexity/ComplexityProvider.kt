@@ -26,7 +26,8 @@ class ComplexityProvider : DefaultRuleSetProvider {
             NestedBlockDepth(config),
             TooManyFunctions(config),
             ComplexCondition(config),
-            LabeledExpression(config)
+            LabeledExpression(config),
+            ReplaceSafeCallChainWithRun(config),
         )
     )
 }

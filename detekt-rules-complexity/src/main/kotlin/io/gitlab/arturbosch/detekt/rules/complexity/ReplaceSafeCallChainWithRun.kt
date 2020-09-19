@@ -1,0 +1,76 @@
+package io.gitlab.arturbosch.detekt.rules.complexity
+
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.types.isNullable
+
+/**
+ * Chains of safe calls on non-nullable types are redundant and can be removed by enclosing the redundant safe calls in
+ * a `run {}` block. This improves code coverage and reduces cyclomatic complexity as redundant null checks are removed.
+ *
+ * <noncompliant>
+ * val x = classOrObject.body?.declarations
+ *         ?.filterIsInstance<KtNamedFunction>()
+ *         ?.filter { !isIgnoredFunction(it) }
+ *         ?.size ?: 0
+ * </noncompliant>
+ *
+ * <compliant>
+ * val x = classOrObject.body?.run {
+ *         declarations
+ *             .filterIsInstance<KtNamedFunction>()
+ *             .filter { !isIgnoredFunction(it) }
+ *             .size
+ *     } ?: 0
+ * </compliant>
+ *
+ * @requiresTypeResolution
+ */
+class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) {
+
+    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
+        "Chains of safe calls on non-nullable types can be surrounded with run {}",
+            Debt.TEN_MINS)
+
+    override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
+        super.visitSafeQualifiedExpression(expression)
+
+        if (bindingContext == BindingContext.EMPTY) return
+
+        /* We want the last safe qualified expression in the chain, so if there are more in this chain then there's no
+        need to run checks on this one */
+        if (expression.parent is KtSafeQualifiedExpression) return
+
+        var counter = 0
+
+        var check: PsiElement = expression
+
+        while (check.firstChild is KtSafeQualifiedExpression) {
+            if (
+                (expression.firstChild as KtElement)
+                    .getResolvedCall(bindingContext)
+                    ?.resultingDescriptor
+                    ?.returnType
+                    ?.isNullable() == true
+            ) {
+                break
+            }
+
+            check = check.firstChild
+            counter++
+        }
+        if (counter >= 1) report(
+            CodeSmell(issue, Entity.from(expression), issue.description)
+        )
+    }
+}
