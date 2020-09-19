@@ -99,6 +99,5 @@ private fun KtQualifiedExpression.containsStringTemplate(): Boolean {
     val lastCallExpression = lastChild as? KtCallExpression
     return lastCallExpression?.valueArguments
         ?.firstOrNull()
-        ?.children
-        ?.firstOrNull() is KtStringTemplateExpression
+        ?.run { children.firstOrNull() } is KtStringTemplateExpression
 }

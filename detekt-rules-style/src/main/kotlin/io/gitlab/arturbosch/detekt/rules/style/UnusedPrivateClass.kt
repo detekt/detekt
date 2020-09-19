@@ -109,15 +109,17 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                     ?.run { namedClasses.add(this) }
 
             // Try with the type being a generic argument of other type (e.g. List<Foo>, List<Foo?>)
-            typeReference.typeElement?.typeArgumentsAsTypes
-                    ?.asSequence()
-                    ?.filterNotNull()
-                    ?.map { it.orInnerType() }
-                    ?.forEach {
+            typeReference.typeElement?.run {
+                typeArgumentsAsTypes
+                    .asSequence()
+                    .filterNotNull()
+                    .map { it.orInnerType() }
+                    .forEach {
                         namedClasses.add(it.text)
                         // Recursively register for nested generic types (e.g. List<List<Foo>>)
                         if (it is KtTypeReference) registerAccess(it)
                     }
+            }
         }
 
         override fun visitParameter(parameter: KtParameter) {
