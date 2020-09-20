@@ -34,17 +34,6 @@ interface ConfigAware : Config {
         get() = ruleSetConfig.subConfig(ruleId)
 
     /**
-     * If your rule supports to automatically correct the misbehaviour of underlying smell,
-     * specify your code inside this method call, to allow the user of your rule to trigger auto correction
-     * only when needed.
-     */
-    fun withAutoCorrect(block: () -> Unit) {
-        if (autoCorrect) {
-            block()
-        }
-    }
-
-    /**
      * Does this rule have auto correct specified in configuration?
      * For auto correction to work the rule set itself enable it.
      */
@@ -57,6 +46,17 @@ interface ConfigAware : Config {
      * If an rule is not specified in the underlying configuration, we assume it should not be run.
      */
     val active: Boolean get() = valueOrDefault("active", false)
+
+    /**
+     * If your rule supports to automatically correct the misbehaviour of underlying smell,
+     * specify your code inside this method call, to allow the user of your rule to trigger auto correction
+     * only when needed.
+     */
+    fun withAutoCorrect(block: () -> Unit) {
+        if (autoCorrect) {
+            block()
+        }
+    }
 
     override fun subConfig(key: String): Config =
         ruleConfig.subConfig(key)

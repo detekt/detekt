@@ -10,6 +10,14 @@ class PathFilters internal constructor(
     private val excludes: Set<PathMatcher>?
 ) {
 
+    fun isIgnored(path: Path): Boolean {
+
+        fun isIncluded() = includes?.any { it.matches(path) }
+        fun isExcluded() = excludes?.any { it.matches(path) }
+
+        return isIncluded()?.not() ?: isExcluded() ?: true
+    }
+
     companion object {
         fun of(includes: List<String>, excludes: List<String>): PathFilters? {
             if (includes.isEmpty() && excludes.isEmpty()) {
@@ -26,14 +34,6 @@ class PathFilters internal constructor(
                     .map { pathMatcher(it) }
                     .toSet()
             }
-    }
-
-    fun isIgnored(path: Path): Boolean {
-
-        fun isIncluded() = includes?.any { it.matches(path) }
-        fun isExcluded() = excludes?.any { it.matches(path) }
-
-        return isIncluded()?.not() ?: isExcluded() ?: true
     }
 }
 

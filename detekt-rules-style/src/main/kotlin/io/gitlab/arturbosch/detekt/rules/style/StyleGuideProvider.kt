@@ -23,6 +23,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
+            ClassOrdering(config),
             CollapsibleIfStatements(config),
             ReturnCount(config),
             ThrowsCount(config),

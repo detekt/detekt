@@ -18,10 +18,6 @@ class KtTreeCompiler(
     private val pathFilters: PathFilters? =
         PathFilters.of(spec.includes.toList(), spec.excludes.toList())
 
-    companion object {
-        val KT_ENDINGS = setOf("kt", "kts")
-    }
-
     fun compile(path: Path): List<KtFile> {
         require(Files.exists(path)) { "Given path $path does not exist!" }
         return when {
@@ -63,5 +59,9 @@ class KtTreeCompiler(
             settings.debug { "Ignoring file '$path'" }
         }
         return ignored ?: false
+    }
+
+    companion object {
+        val KT_ENDINGS = setOf("kt", "kts")
     }
 }

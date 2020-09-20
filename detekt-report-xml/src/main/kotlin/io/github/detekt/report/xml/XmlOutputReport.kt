@@ -15,6 +15,18 @@ class XmlOutputReport : OutputReport() {
 
     override val name = "Checkstyle XML report"
 
+    private val Finding.severityLabel: String
+        get() = when (issue.severity) {
+            Severity.CodeSmell,
+            Severity.Style,
+            Severity.Warning,
+            Severity.Maintainability,
+            Severity.Performance -> "warning"
+            Severity.Defect -> "error"
+            Severity.Minor -> "info"
+            Severity.Security -> "fatal"
+        }
+
     override fun render(detektion: Detektion): String {
         val smells = detektion.findings.flatMap { it.value }
 
@@ -39,18 +51,6 @@ class XmlOutputReport : OutputReport() {
         lines += "</checkstyle>"
         return lines.joinToString(separator = "\n")
     }
-
-    private val Finding.severityLabel: String
-        get() = when (issue.severity) {
-            Severity.CodeSmell,
-            Severity.Style,
-            Severity.Warning,
-            Severity.Maintainability,
-            Severity.Performance -> "warning"
-            Severity.Defect -> "error"
-            Severity.Minor -> "info"
-            Severity.Security -> "fatal"
-        }
 
     private fun Any.toXmlString() = XmlEscape.escapeXml(toString().trim())
 }

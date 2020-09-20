@@ -60,11 +60,6 @@ open class Detekt @Inject constructor(
     @get:Classpath
     val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
 
-    @InputFiles
-    @SkipWhenEmpty
-    @PathSensitive(PathSensitivity.RELATIVE)
-    override fun getSource(): FileTree = super.getSource()
-
     @get:InputFile
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -133,11 +128,6 @@ open class Detekt @Inject constructor(
     @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Input
-    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
-
-    override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
-
     @get:Internal
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
@@ -147,8 +137,6 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     var reports = DetektReports()
-
-    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
@@ -182,6 +170,18 @@ open class Detekt @Inject constructor(
     }
 
     private val invoker: DetektInvoker = DetektInvoker.create(project)
+
+    @InputFiles
+    @SkipWhenEmpty
+    @PathSensitive(PathSensitivity.RELATIVE)
+    override fun getSource(): FileTree = super.getSource()
+
+    @Input
+    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
+
+    override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
+
+    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @Suppress("DEPRECATION")
     @TaskAction

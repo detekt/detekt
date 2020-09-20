@@ -21,7 +21,6 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         get() = reportsDir
 
     val reports = DetektReports()
-    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     var input: ConfigurableFileCollection =
         objects.fileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
@@ -58,6 +57,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
      * List of Android build flavors for which no detekt task should be created
      */
     var ignoredFlavors: List<String> = emptyList()
+
+    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"

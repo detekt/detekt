@@ -94,9 +94,6 @@ abstract class DslTestBuilder {
     }
 
     companion object {
-        fun kotlin(): DslTestBuilder = KotlinBuilder()
-        fun groovy(): DslTestBuilder = GroovyBuilder()
-
         private const val GROOVY_PLUGINS_SECTION = """
             |plugins {
             |   id 'java-library'
@@ -126,5 +123,8 @@ abstract class DslTestBuilder {
         private const val KOTLIN_APPLY_PLUGINS = """
             |plugins.apply("io.gitlab.arturbosch.detekt")
             |"""
+
+        fun kotlin(): DslTestBuilder = KotlinBuilder()
+        fun groovy(): DslTestBuilder = GroovyBuilder()
     }
 }

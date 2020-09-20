@@ -10,14 +10,6 @@ import org.jetbrains.kotlin.psi.KtStatementExpression
 
 class ElementPrinter : DetektVisitor() {
 
-    companion object {
-        fun dump(file: KtFile): String = ElementPrinter().run {
-            sb.appendLine("0: " + file.javaClass.simpleName)
-            visitKtFile(file)
-            sb.toString()
-        }
-    }
-
     private val sb = StringBuilder()
 
     private val indentation
@@ -60,4 +52,12 @@ class ElementPrinter : DetektVisitor() {
         this is KtStatementExpression ||
             this is KtDeclarationContainer ||
             this is KtContainerNode
+
+    companion object {
+        fun dump(file: KtFile): String = ElementPrinter().run {
+            sb.appendLine("0: " + file.javaClass.simpleName)
+            visitKtFile(file)
+            sb.toString()
+        }
+    }
 }

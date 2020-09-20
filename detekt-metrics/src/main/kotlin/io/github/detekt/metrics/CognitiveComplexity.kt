@@ -53,6 +53,8 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
 
         private var nesting: Int = 0
 
+        private var topMostBinExpr: KtBinaryExpression? = null
+
         private fun addComplexity() {
             complexity += 1 + nesting
         }
@@ -141,8 +143,6 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
             nestAround { super.visitLambdaExpression(lambdaExpression) }
         }
-
-        private var topMostBinExpr: KtBinaryExpression? = null
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (topMostBinExpr == null) {
