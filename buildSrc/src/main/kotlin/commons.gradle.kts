@@ -44,6 +44,7 @@ configure(subprojects.filter { it.name != "detekt-bom" }) {
         useJUnitPlatform()
         systemProperty("spek2.jvm.cg.scan.concurrency", 1) // use one thread for classpath scanning
         systemProperty("spek2.execution.test.timeout", 0) // disable test timeout
+        systemProperty("spek2.discovery.parallel.enabled", 1) // enable parallel test discovery
         val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
             (project.property("compile-test-snippets") as String).toBoolean()
         } else {
