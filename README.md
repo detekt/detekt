@@ -115,7 +115,7 @@ tasks {
 }
 ```
 
-See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases and [artifactory](https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/io/gitlab/arturbosch/detekt/detekt-cli/) for snapshots.
+See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io.gitlab.arturbosch.detekt) for snapshots.
 
 ### Adding more rule sets
 

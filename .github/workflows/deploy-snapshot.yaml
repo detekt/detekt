@@ -35,7 +35,7 @@ jobs:
 
     - name: Deploy Snapshot
       env:
-        BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-        BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
-      run: ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace
+        MAVEN_CENTRAL_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
+        MAVEN_CENTRAL_PW: ${{ secrets.MAVEN_CENTRAL_PW }}
+      run: ./gradlew publishAllPublicationsToSonatypeSnapshotRepository -Dsnapshot=true --stacktrace
       if: ${{ github.repository == 'detekt/detekt'}}
