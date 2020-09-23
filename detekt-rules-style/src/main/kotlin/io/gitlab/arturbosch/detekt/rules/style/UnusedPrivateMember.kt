@@ -96,16 +96,16 @@ private class UnusedFunctionVisitor(
                     val referencesViaOperator = if (isOperator) {
                         val operatorToken = OperatorConventions.getOperationSymbolForName(Name.identifier(name))
                         val operatorValue = (operatorToken as? KtSingleValueToken)?.value
-                        when (operatorToken) {
+                        val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
+                        val assignmentReferences = when (operatorToken) {
                             KtTokens.PLUS,
                             KtTokens.MINUS,
                             KtTokens.MUL,
                             KtTokens.DIV,
-                            KtTokens.PERC -> operatorValue?.let {
-                                functionReferences[it].orEmpty() + functionReferences["$it="].orEmpty()
-                            }.orEmpty()
-                            else -> operatorValue?.let { functionReferences[it] }.orEmpty()
+                            KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+                            else -> emptyList()
                         }
+                        directReferences + assignmentReferences
                     } else {
                         emptyList()
                     }
