@@ -17,6 +17,7 @@ import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -95,7 +96,16 @@ private class UnusedFunctionVisitor(
                     val referencesViaOperator = if (isOperator) {
                         val operatorToken = OperatorConventions.getOperationSymbolForName(Name.identifier(name))
                         val operatorValue = (operatorToken as? KtSingleValueToken)?.value
-                        operatorValue?.let { functionReferences[it] }.orEmpty()
+                        val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
+                        val assignmentReferences = when (operatorToken) {
+                            KtTokens.PLUS,
+                            KtTokens.MINUS,
+                            KtTokens.MUL,
+                            KtTokens.DIV,
+                            KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+                            else -> emptyList()
+                        }
+                        directReferences + assignmentReferences
                     } else {
                         emptyList()
                     }
