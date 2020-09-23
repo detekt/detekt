@@ -17,7 +17,8 @@ class CoroutinesProvider : DefaultRuleSetProvider {
         ruleSetId,
         listOf(
             GlobalCoroutineUsage(config),
-            RedundantSuspendModifier(config)
+            RedundantSuspendModifier(config),
+            SuspendFunWithFlowReturnType(config)
         )
     )
 }

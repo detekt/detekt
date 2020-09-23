@@ -127,6 +127,8 @@ coroutines:
     active: false
   RedundantSuspendModifier:
     active: false
+  SuspendFunWithFlowReturnType:
+    active: false
 
 empty-blocks:
   active: true
