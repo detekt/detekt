@@ -1054,15 +1054,22 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report used plus operator in methods with +=") {
+        it("does not report used operator methods when used with the equal sign") {
             val code = """
-                import java.util.Date
-                class Foo {
-                    var number: Float? = null
-                    fun foo() {
-                        number += 3f
+                class Test {
+                    fun f() {
+                        var number: Int? = 0
+                        number += 1
+                        number -= 1
+                        number *= 1
+                        number /= 1
+                        number %= 1
                     }
-                    private operator fun Float?.plus(other: Float?) = if (this == null && other == null) null else this ?: 0f + (other ?: 0f)
+                    private operator fun Int?.plus(other: Int) = 1
+                    private operator fun Int?.minus(other: Int) = 2
+                    private operator fun Int?.times(other: Int) = 3
+                    private operator fun Int?.div(other: Int) = 4
+                    private operator fun Int?.rem(other: Int) = 5
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
