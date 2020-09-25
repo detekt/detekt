@@ -84,7 +84,7 @@ Functions that return `Flow` from `kotlinx.coroutines.flow` should not be marked
 returns a `Flow`, should not have any side effects. Only once collection begins against the
 returned `Flow`, should work actually be done.
 
-See https://kotlinlang.org/docs/reference/coroutines/flow.html
+See https://kotlinlang.org/docs/reference/coroutines/flow.html#flows-are-cold
 
 **Requires Type Resolution**
 
