@@ -292,5 +292,27 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        it("does not report when non-suspend functions have Flow return types") {
+            val code = """
+                import kotlinx.coroutines.flow.flowOf
+                import kotlinx.coroutines.flow.Flow
+                import kotlinx.coroutines.flow.MutableStateFlow
+                import kotlinx.coroutines.flow.StateFlow
+
+                fun flowValues(): Flow<Long> {
+                    return flowOf(1L, 2L, 3L)
+                }
+
+                fun stateFlowValues(): StateFlow<Long> {
+                    return MutableStateFlow(value = 1L)
+                }
+
+                fun mutableStateFlowValues(): MutableStateFlow<Long> {
+                    return MutableStateFlow(value = 1L)
+                }
+                """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
     }
 })
