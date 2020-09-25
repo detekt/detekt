@@ -1054,6 +1054,27 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
+        it("does not report used operator methods when used with the equal sign") {
+            val code = """
+                class Test {
+                    fun f() {
+                        var number: Int? = 0
+                        number += 1
+                        number -= 1
+                        number *= 1
+                        number /= 1
+                        number %= 1
+                    }
+                    private operator fun Int?.plus(other: Int) = 1
+                    private operator fun Int?.minus(other: Int) = 2
+                    private operator fun Int?.times(other: Int) = 3
+                    private operator fun Int?.div(other: Int) = 4
+                    private operator fun Int?.rem(other: Int) = 5
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
         it("report unused minus operator") {
             val code = """
                 import java.util.Date
