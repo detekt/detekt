@@ -22,6 +22,11 @@ class KotlinCoreEnvironmentWrapper(
     }
 }
 
-fun createEnvironment(): KotlinCoreEnvironmentWrapper = KtTestCompiler.createEnvironment()
+/**
+ * Create a {@link KotlinCoreEnvironmentWrapper} used for test.
+ * 
+ * @param additionalRootPaths the optional JVM classpath roots list.
+ */
+fun createEnvironment(additionalRootPaths: List<File> = listOf()): KotlinCoreEnvironmentWrapper = KtTestCompiler.createEnvironment(additionalRootPaths)
 
 fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.project(), false)
