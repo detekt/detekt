@@ -247,52 +247,6 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when suspend functions have non-coroutine Flow return types") {
-            val code = """
-                import some.other.type.of.flow.Flow
-                import some.other.type.of.flow.flowOf
-                import some.other.type.of.flow.MutableStateFlow
-                import some.other.type.of.flow.StateFlow
-                import kotlinx.coroutines.yield
-
-                suspend fun flowValues(): Flow<Long> {
-                    yield()
-                    return flowOf(1L, 2L, 3L)
-                }
-
-                suspend fun stateFlowValues(): StateFlow<Long> {
-                    yield()
-                    return MutableStateFlow(value = 1L)
-                }
-
-                suspend fun mutableStateFlowValues(): MutableStateFlow<Long> {
-                    yield()
-                    return MutableStateFlow(value = 1L)
-                }
-                """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        it("does not report when suspend functions have unresolved Flow return types") {
-            val code = """
-                suspend fun flowValues(): Flow<Long> {
-                    yield()
-                    return flowOf(1L, 2L, 3L)
-                }
-
-                suspend fun stateFlowValues(): StateFlow<Long> {
-                    yield()
-                    return MutableStateFlow(value = 1L)
-                }
-
-                suspend fun mutableStateFlowValues(): MutableStateFlow<Long> {
-                    yield()
-                    return MutableStateFlow(value = 1L)
-                }
-                """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
         it("does not report when non-suspend functions have Flow return types") {
             val code = """
                 import kotlinx.coroutines.flow.flowOf
