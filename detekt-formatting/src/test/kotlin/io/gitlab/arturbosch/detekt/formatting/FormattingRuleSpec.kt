@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class FormattingRuleSpec : Spek({
 
@@ -54,5 +55,19 @@ class FormattingRuleSpec : Spek({
 
             assertThat(findings.first().signature).isEqualTo("test.test.test.Test.kt:3")
         }
+    }
+
+    test("#3063: formatting issues have an absolute path") {
+        val expectedPath = Paths.get("/root/kotlin/test.kt").toString()
+
+        val findings = subject.lint(
+            """
+                fun main()
+                = Unit
+                """,
+            expectedPath
+        )
+
+        assertThat(findings.first().location.file).isEqualTo(expectedPath)
     }
 })
