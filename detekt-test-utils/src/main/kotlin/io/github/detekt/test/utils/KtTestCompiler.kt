@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -42,13 +43,11 @@ internal object KtTestCompiler : KtCompiler() {
 
         // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
         // to the compiler so it's available to generate the BindingContext for rules under test.
-        configuration.addJvmClasspathRoots(
-            listOf(
-                kotlinStdLibPath(),
-                kotlinxCoroutinesCorePath()
-            )
-        )
-        configuration.addJvmClasspathRoots(additionalRootPaths)
+        configuration.apply {
+            addJvmClasspathRoot(kotlinStdLibPath())
+            addJvmClasspathRoot(kotlinxCoroutinesCorePath())
+            addJvmClasspathRoots(additionalRootPaths)
+        }
 
         val parentDisposable = Disposer.newDisposable()
         val kotlinCoreEnvironment =
