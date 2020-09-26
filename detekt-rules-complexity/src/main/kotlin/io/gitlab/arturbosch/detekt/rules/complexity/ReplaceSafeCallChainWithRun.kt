@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -58,22 +56,13 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
 
         var counter = 0
 
-        var check: PsiElement = expression
-
-        while (check.firstChild is KtSafeQualifiedExpression) {
-            if (
-                (expression.firstChild as KtElement)
-                    .getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-                    ?.returnType
-                    ?.isNullable() == true
-            ) {
-                break
-            }
-
-            check = check.firstChild
+        var receiver = expression.receiverExpression
+        while (receiver is KtSafeQualifiedExpression) {
+            if (receiver.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType?.isNullable() == true) break
             counter++
+            receiver = receiver.receiverExpression
         }
+
         if (counter >= 1) report(
             CodeSmell(issue, Entity.from(expression), issue.description)
         )
