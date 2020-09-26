@@ -8,7 +8,7 @@ title: RuleSet -
 # RuleSet  
 [jvm]  
 Content  
-fun [RuleSet](-rule-set.md)(id: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), rules: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.md)>)  
+fun [RuleSet](-rule-set.md)(id: [RuleSetId](../index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/), rules: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.md)>)  
 
 
 
