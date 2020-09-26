@@ -14,7 +14,7 @@ Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annot
 
   
 Content  
-fun KtElement.[isSuppressedBy](is-suppressed-by.md)(id: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
+fun KtElement.[isSuppressedBy](is-suppressed-by.md)(id: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../io.gitlab.arturbosch.detekt.api/index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
 
 
 [jvm]  
@@ -25,7 +25,7 @@ Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annota
 
   
 Content  
-fun KtAnnotated.[isSuppressedBy](is-suppressed-by.md)(id: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
+fun KtAnnotated.[isSuppressedBy](is-suppressed-by.md)(id: [RuleId](../io.gitlab.arturbosch.detekt.api/index.md#io.gitlab.arturbosch.detekt.api/RuleId///PointingToDeclaration/), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../io.gitlab.arturbosch.detekt.api/index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  
 
 
 
