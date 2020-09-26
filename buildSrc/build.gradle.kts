@@ -13,13 +13,13 @@ repositories {
 }
 
 object Plugins {
-    const val KOTLIN = "1.4.0"
+    const val KOTLIN = "1.4.10"
     const val DETEKT = "1.13.1"
     const val GITHUB_RELEASE = "2.2.12"
     const val SHADOW = "5.2.0"
     const val VERSIONS = "0.28.0"
     const val SONAR = "2.8"
-    const val DOKKA = "1.4.0"
+    const val DOKKA = "1.4.10"
     const val SEMVER4J = "3.1.0"
     const val NEXUS = "0.22.0"
 }
