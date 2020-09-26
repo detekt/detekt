@@ -14,7 +14,7 @@ repositories {
 
 object Plugins {
     const val KOTLIN = "1.4.10"
-    const val DETEKT = "1.13.1"
+    const val DETEKT = "1.14.0"
     const val GITHUB_RELEASE = "2.2.12"
     const val SHADOW = "5.2.0"
     const val VERSIONS = "0.28.0"
