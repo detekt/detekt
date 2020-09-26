@@ -74,7 +74,7 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         bindingContext[BindingContext.FUNCTION, function]
             ?.returnType
-            ?.takeIf { it.isCoroutineFlow() }
+            ?.takeIf { it.isCoroutinesFlow() }
             ?.also {
                 report(
                     CodeSmell(
@@ -86,10 +86,10 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
             }
     }
 
-    private fun KotlinType.isCoroutineFlow(): Boolean {
+    private fun KotlinType.isCoroutinesFlow(): Boolean {
         return sequence {
-            yield(this@isCoroutineFlow)
-            yieldAll(this@isCoroutineFlow.supertypes())
+            yield(this@isCoroutinesFlow)
+            yieldAll(this@isCoroutinesFlow.supertypes())
         }
             .map { it.getJetTypeFqName(printTypeArguments = false) }
             .contains("kotlinx.coroutines.flow.Flow")
