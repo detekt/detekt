@@ -53,17 +53,6 @@ object ReplaceSafeCallChainWithRunSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report a safe call chain which is too short to benefit") {
-            val code = """
-                val x: String? = "string"
-
-                val y = x
-                    ?.asSequence()
-            """
-
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
         it("does not report a safe call chain on left side of assignment") {
             val code = """
                 class Something {
