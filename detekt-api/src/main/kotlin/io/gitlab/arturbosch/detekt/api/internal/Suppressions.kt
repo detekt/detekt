@@ -47,9 +47,11 @@ fun KtAnnotated.isSuppressedBy(id: RuleId, aliases: Set<String>, ruleSetId: Rule
     acceptedSuppressionIds.addAll(aliases)
     return annotationEntries
         .find { it.typeReference?.text in suppressionAnnotations }
-        ?.valueArguments
-        ?.map { it.getArgumentExpression()?.text }
-        ?.map { it?.replace(detektSuppressionPrefixRegex, "") }
-        ?.map { it?.replace(QUOTES, "") }
-        ?.find { it in acceptedSuppressionIds } != null
+        ?.run {
+            valueArguments
+                .map { it.getArgumentExpression()?.text }
+                .map { it?.replace(detektSuppressionPrefixRegex, "") }
+                .map { it?.replace(QUOTES, "") }
+                .find { it in acceptedSuppressionIds }
+        } != null
 }

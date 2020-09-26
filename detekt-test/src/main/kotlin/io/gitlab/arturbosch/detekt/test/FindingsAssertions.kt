@@ -68,7 +68,7 @@ class FindingsAssert(actual: List<Finding>) :
                 failWithMessage("Expected ${expected.size} findings but was 0")
             }
         }
-        val code = requireNotNull(finding?.entity?.ktElement?.containingKtFile?.text) {
+        val code = requireNotNull(finding?.entity?.ktElement?.run { containingKtFile.text }) {
             "Finding expected to provide a KtElement."
         }
 

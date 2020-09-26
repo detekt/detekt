@@ -121,10 +121,13 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         super.visitObjectDeclaration(declaration)
     }
 
-    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body?.declarations
-            ?.filterIsInstance<KtNamedFunction>()
-            ?.filter { !isIgnoredFunction(it) }
-            ?.size ?: 0
+    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body
+        ?.run {
+            declarations
+                .filterIsInstance<KtNamedFunction>()
+                .filter { !isIgnoredFunction(it) }
+                .size
+        } ?: 0
 
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
         ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
