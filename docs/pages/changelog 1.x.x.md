@@ -5,6 +5,49 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.14.0 - 2020-09-26
+
+##### Notable Changes
+
+- New standard rules: `ReplaceSafeCallChainWithRun`, `ClassOrdering`, `SuspendFunWithFlowReturnType`
+- New experimental KtLint rules: `AnnotationSpacing`, `ArgumentListWrapping`
+
+##### Changelog
+
+- Add additional classpaths to KtTestCompiler - [#3101](https://github.com/detekt/detekt/pull/3101)
+- New rule: SuspendFunWithFlowReturnType - [#3098](https://github.com/detekt/detekt/pull/3098)
+- Fix formatting issues have no absolute path - #3063 - [#3097](https://github.com/detekt/detekt/pull/3097)
+- Fix false positive (+= overload) in UnusedPrivateMember - [#3094](https://github.com/detekt/detekt/pull/3094)
+- Update RedundantVisibilityModifierRule to find redundant internal modifiers - [#3092](https://github.com/detekt/detekt/pull/3092)
+- New rule: ReplaceSafeCallChainWithRun - [#3089](https://github.com/detekt/detekt/pull/3089)
+- New rule: ClassOrdering - [#3088](https://github.com/detekt/detekt/pull/3088)
+- Use File.pathSeparator to split entries in classpath - [#3084](https://github.com/detekt/detekt/pull/3084)
+- Wrap new KtLint rules - [#3083](https://github.com/detekt/detekt/pull/3083)
+- Wrap KtLint AnnotationSpacingRule - [#3081](https://github.com/detekt/detekt/issues/3081)
+- Wrap KtLint ArgumentListWrappingRule - [#3080](https://github.com/detekt/detekt/issues/3080)
+- UnusedImports rule: fix false positives when type resolution is enabled - [#3079](https://github.com/detekt/detekt/pull/3079)
+- Move SNAPSHOT from artifactory to sonatype - [#3076](https://github.com/detekt/detekt/pull/3076)
+- Update KtLint to 0.39.0 - [#3075](https://github.com/detekt/detekt/pull/3075)
+- UnusedImports: Lots of false positives - [#3074](https://github.com/detekt/detekt/issues/3074)
+- Update dependency badge to maven central - [#3072](https://github.com/detekt/detekt/pull/3072)
+- Simplify reporting message for IgnoredReturnValue - [#3068](https://github.com/detekt/detekt/pull/3068)
+- Add ability to pass rootclasspaths to KtTestCompiler - [#3066](https://github.com/detekt/detekt/issues/3066)
+- MagicNumber rule: don't check Character, Boolean and null - [#3064](https://github.com/detekt/detekt/pull/3064)
+- KtLint formatting checks do not include full path in report - [#3063](https://github.com/detekt/detekt/issues/3063)
+- IgnoredReturnValue should only report name of method/function called - [#3052](https://github.com/detekt/detekt/issues/3052)
+
+##### Housekeeping & Refactorings
+
+- Update jacoco with Java 15 support - [#3105](https://github.com/detekt/detekt/pull/3105)
+- Update project dependencies - [#3104](https://github.com/detekt/detekt/pull/3104)
+- Enable parallel spek test discovery - [#3090](https://github.com/detekt/detekt/pull/3090)
+- Update Gradle to 6.7-rc-2 - [#3071](https://github.com/detekt/detekt/pull/3071)
+- Update spek framework to 2.0.13 - [#3070](https://github.com/detekt/detekt/pull/3070)
+- Update kramdown dependency due to a vulnerability - [#3069](https://github.com/detekt/detekt/pull/3069)
+- Add test asserting the report message - [#3061](https://github.com/detekt/detekt/pull/3061)
+
+See all issues at: [1.14.0](https://github.com/detekt/detekt/milestone/76)
+
 #### 1.13.1 - 2020-09-13
 
 ##### Notable Changes
