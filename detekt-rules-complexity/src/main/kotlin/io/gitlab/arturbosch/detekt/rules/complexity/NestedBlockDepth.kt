@@ -58,9 +58,9 @@ class NestedBlockDepth(
 
     private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {
 
-        internal var depth = 0
-        internal var maxDepth = 0
-        internal var isTooDeep = false
+        var depth = 0
+        var maxDepth = 0
+        var isTooDeep = false
         private fun inc() {
             depth++
             if (depth >= threshold) {

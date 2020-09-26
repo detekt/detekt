@@ -127,5 +127,27 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("reports internal modifier on nested class in private object") {
+            val code = """
+                private object A {
+
+                    internal class InternalClass
+
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports internal modifier on function declaration in private object") {
+            val code = """
+                private object A {
+
+                    internal fun internalFunction() {}
+
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
     }
 })
