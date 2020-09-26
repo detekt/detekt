@@ -130,9 +130,9 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports internal modifier on nested class in private object") {
             val code = """
-                private object Xml10EscapeSymbolsInitializer {
+                private object A {
 
-                    internal class XmlCodepointValidator
+                    internal class InternalClass
 
                 }
             """
@@ -141,9 +141,9 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports internal modifier on function declaration in private object") {
             val code = """
-                private object Xml10EscapeSymbolsInitializer {
+                private object A {
 
-                    internal fun xmlCodepointValidator()
+                    internal fun internalFunction() {}
 
                 }
             """
