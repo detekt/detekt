@@ -54,7 +54,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Classpath
     @get:Optional
-    val classpath = project.objects.fileCollection()
+    val classpath: ConfigurableFileCollection = project.objects.fileCollection()
 
     @get:Console
     val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
