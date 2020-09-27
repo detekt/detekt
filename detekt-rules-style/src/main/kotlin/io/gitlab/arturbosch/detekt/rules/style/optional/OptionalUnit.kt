@@ -54,8 +54,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.funKeyword == null) return
-        if (function.hasDeclaredReturnType() && function.colon != null) {
+        if (function.hasDeclaredReturnType()) {
             checkFunctionWithExplicitReturnType(function)
         } else if (!function.isOverride()) {
             checkFunctionWithInferredReturnType(function)
