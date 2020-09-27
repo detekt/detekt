@@ -7,5 +7,5 @@ class CommaSeparatedPattern(
     delimiters: String = ","
 ) : SplitPattern(text, delimiters, false) {
 
-    fun mapToRegex(): Set<Regex> = mapAll(::Regex).toSet()
+    fun mapToRegex(): Set<Regex> = mapAll { it.toRegex() }.toSet()
 }
