@@ -10,13 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -57,7 +55,6 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.funKeyword == null) return
-        if (isInInterface(function)) return
         if (function.hasDeclaredReturnType() && function.colon != null) {
             checkFunctionWithExplicitReturnType(function)
         } else if (!function.isOverride()) {
@@ -116,9 +113,6 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
             report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
         }
     }
-
-    private fun isInInterface(function: KtNamedFunction) =
-        function.getStrictParentOfType<KtClass>()?.isInterface() ?: false
 
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
             "defines a return type of Unit. This is unnecessary and can safely be removed."
