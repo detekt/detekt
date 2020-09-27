@@ -116,14 +116,14 @@ class OptionalUnitSpec : Spek({
         }
 
         context("a default interface implementation") {
-            it("should not report Unit as part of default interface implementations") {
+            it("should report Unit as part of default interface implementations") {
                 val code = """
                     interface Foo {
                         fun method(i: Int) = Unit
                     }
                 """
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).isEmpty()
+                assertThat(findings).hasSize(1)
             }
         }
 
