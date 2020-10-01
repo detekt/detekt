@@ -5,6 +5,27 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.14.1 - 2020-09-30
+
+##### Changelog
+
+- Write recipe to compare user and default config - #3065 - [#3114](https://github.com/detekt/detekt/pull/3114)
+- Improve description of AbsentOrWrongFileLicense rule - [#3109](https://github.com/detekt/detekt/pull/3109)
+- Report Unit returned by method implementations in interfaces - [#3108](https://github.com/detekt/detekt/pull/3108)
+- Change OptionalUnit to report Unit returned by method implementations in interfaces - [#3099](https://github.com/detekt/detekt/issues/3099)
+- 1.13.0 changes to detektGenerateConfig - [#3065](https://github.com/detekt/detekt/issues/3065)
+- detekt 1.12.0 and org.springframework.boot 2.2.6.RELEASE clash - [#3058](https://github.com/detekt/detekt/issues/3058)
+
+##### Housekeeping & Refactorings
+
+- Update mockk to 1.10.2 - [#3113](https://github.com/detekt/detekt/pull/3113)
+- Refactoring: Use indices syntax in loop - [#3112](https://github.com/detekt/detekt/pull/3112)
+- Specify type explicitly in DetektCreateBaselineTask - [#3111](https://github.com/detekt/detekt/pull/3111)
+- Refactoring: Class member can have private visibility - [#3110](https://github.com/detekt/detekt/pull/3110)
+- Fix kotlin-reflect problem for idea plugin - [#3107](https://github.com/detekt/detekt/pull/3107)
+
+See all issues at: [1.14.1](https://github.com/detekt/detekt/milestone/77)
+
 #### 1.14.0 - 2020-09-26
 
 ##### Notable Changes
