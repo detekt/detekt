@@ -16,6 +16,8 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
@@ -29,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -86,8 +89,12 @@ private class UnusedFunctionVisitor(
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
+    private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
+        val propertyDelegateResultingDescriptors by lazy {
+            propertyDelegates.flatMap { it.resultingDescriptors() }
+        }
         return functionDeclarations.flatMap { (name, functions) ->
             val isOperator = functions.any { it.isOperator() }
             val references = functionReferences[name].orEmpty()
@@ -111,7 +118,7 @@ private class UnusedFunctionVisitor(
                     }
                     val referenceDescriptors = (references + referencesViaOperator)
                         .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
-                        .map { it.original }
+                        .map { it.original } + propertyDelegateResultingDescriptors
                     functions.filterNot {
                         bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                     }
@@ -140,6 +147,20 @@ private class UnusedFunctionVisitor(
         if (!allowedNames.matches(name)) {
             functionDeclarations.getOrPut(name) { mutableListOf() }.add(function)
         }
+    }
+
+    private fun KtPropertyDelegate.resultingDescriptors(): List<FunctionDescriptor> {
+        val property = this.parent as? KtProperty ?: return emptyList()
+        val propertyDescriptor =
+            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
+        return listOfNotNull(propertyDescriptor?.getter, propertyDescriptor?.setter).mapNotNull {
+            bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]?.resultingDescriptor
+        }
+    }
+
+    override fun visitPropertyDelegate(delegate: KtPropertyDelegate) {
+        super.visitPropertyDelegate(delegate)
+        propertyDelegates.add(delegate)
     }
 
     /*

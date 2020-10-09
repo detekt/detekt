@@ -1212,4 +1212,43 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
     }
+
+    describe("getValue/setValue operator functions - #3128") {
+
+        it("does not report used private getValue/setValue operator functions") {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class Test {
+                    var delegated by "Hello"
+
+                    private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
+                        return "working"
+                    }
+                    
+                    private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
+                        error("setValue")
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+
+        it("reports unused private getValue/setValue operator functions") {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class Test {
+                    private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
+                        return "working"
+                    }
+                    
+                    private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
+                        error("setValue")
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        }
+    }
 })
