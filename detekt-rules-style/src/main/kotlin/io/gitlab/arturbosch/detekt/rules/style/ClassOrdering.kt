@@ -70,7 +70,6 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
 
         comparator.findOutOfOrder(classBody.declarations)?.let {
             report(CodeSmell(issue, Entity.from(classBody), generateMessage(it)))
-
         }
     }
 
