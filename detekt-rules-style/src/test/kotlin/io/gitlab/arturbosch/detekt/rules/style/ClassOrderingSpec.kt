@@ -142,5 +142,49 @@ class ClassOrderingSpec : Spek({
 
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
+
+        it("does not report nested class order") {
+            val code = """
+                class OutOfOrder(private val x: String) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    class Nested {
+                        fun foo() = 2
+                    }
+
+                    fun returnX() = x
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
+
+        it("does not report anonymous object order") {
+            val code = """
+                class OutOfOrder(private val x: String) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    object AnonymousObject {
+                        fun foo() = 2
+                    }
+
+                    fun returnX() = x
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
     }
 })
