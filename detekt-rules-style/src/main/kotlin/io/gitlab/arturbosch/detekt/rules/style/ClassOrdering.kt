@@ -73,9 +73,9 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun generateMessage(misorderedPair: Pair<KtDeclaration, KtDeclaration>): String {
-        return "${misorderedPair.first.name} (${misorderedPair.first.printableDeclaration}) should not come before " +
-                "${misorderedPair.second.name} (${misorderedPair.second.printableDeclaration})"
+    private fun generateMessage(misordered: Pair<KtDeclaration, KtDeclaration>): String {
+        return "${misordered.first.name} (${misordered.first.printableDeclaration}) should not come before " +
+                "${misordered.second.name} (${misordered.second.printableDeclaration})"
     }
 }
 
