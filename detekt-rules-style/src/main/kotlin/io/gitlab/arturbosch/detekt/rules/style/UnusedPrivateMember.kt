@@ -40,6 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.jetbrains.kotlin.util.OperatorNameConventions
 
 /**
  * Reports unused private properties, function parameters and functions.
@@ -92,16 +93,17 @@ private class UnusedFunctionVisitor(
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
-        val propertyDelegateResultingDescriptors by lazy {
+        val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
-        return functionDeclarations.flatMap { (name, functions) ->
+        return functionDeclarations.flatMap { (functionName, functions) ->
             val isOperator = functions.any { it.isOperator() }
-            val references = functionReferences[name].orEmpty()
+            val references = functionReferences[functionName].orEmpty()
             val unusedFunctions = when {
                 (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                    val functionNameAsName = Name.identifier(functionName)
                     val referencesViaOperator = if (isOperator) {
-                        val operatorToken = OperatorConventions.getOperationSymbolForName(Name.identifier(name))
+                        val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
                         val operatorValue = (operatorToken as? KtSingleValueToken)?.value
                         val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
                         val assignmentReferences = when (operatorToken) {
@@ -118,7 +120,14 @@ private class UnusedFunctionVisitor(
                     }
                     val referenceDescriptors = (references + referencesViaOperator)
                         .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
-                        .map { it.original } + propertyDelegateResultingDescriptors
+                        .map { it.original }
+                        .let {
+                            if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
+                                it + propertyDelegateResultingDescriptors
+                            } else {
+                                it
+                            }
+                        }
                     functions.filterNot {
                         bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                     }
@@ -127,7 +136,7 @@ private class UnusedFunctionVisitor(
                 else -> emptyList()
             }
             unusedFunctions.map {
-                CodeSmell(issue, Entity.from(it), "Private function $name is unused.")
+                CodeSmell(issue, Entity.from(it), "Private function $functionName is unused.")
             }
         }
     }
