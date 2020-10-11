@@ -60,33 +60,53 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val lengthComparator: Comparator<KtDeclaration> = Comparator { str1: KtDeclaration, str2: KtDeclaration ->
-        if (orderPriority(str1) == null || orderPriority(str2) == null) return@Comparator 0
-        compareValues(orderPriority(str1), orderPriority(str2))
+    private val comparator: Comparator<KtDeclaration> = Comparator { dec1: KtDeclaration, dec2: KtDeclaration ->
+        if (dec1.priority == null || dec2.priority == null) return@Comparator 0
+        compareValues(dec1.priority, dec2.priority)
     }
 
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
 
-        if (!classBody.declarations.isInOrder(lengthComparator)) {
-            report(CodeSmell(issue, Entity.from(classBody), issue.description))
+        comparator.findOutOfOrder(classBody.declarations)?.let {
+            report(CodeSmell(issue, Entity.from(classBody), generateMessage(it)))
         }
     }
 
-    @Suppress("MagicNumber")
-    private fun orderPriority(declaration: KtDeclaration): Int? {
-        return when (declaration) {
-            is KtProperty -> 0
-            is KtClassInitializer -> 0
-            is KtSecondaryConstructor -> 1
-            is KtNamedFunction -> 2
-            is KtObjectDeclaration -> if (declaration.isCompanion()) 3 else null
-            else -> null
-        }
-    }
-
-    private fun Iterable<KtDeclaration>.isInOrder(comparator: Comparator<KtDeclaration>): Boolean {
-        zipWithNext { a, b -> if (comparator.compare(a, b) > 0) return false }
-        return true
+    private fun generateMessage(misordered: Pair<KtDeclaration, KtDeclaration>): String {
+        return "${misordered.first.description} should not come before ${misordered.second.description}"
     }
 }
+
+private fun Comparator<KtDeclaration>.findOutOfOrder(
+    declarations: List<KtDeclaration>
+): Pair<KtDeclaration, KtDeclaration>? {
+    declarations.zipWithNext { a, b -> if (compare(a, b) > 0) return Pair(a, b) }
+    return null
+}
+
+private val KtDeclaration.description: String
+    get() = when (this) {
+        is KtClassInitializer -> "class initializer"
+        is KtObjectDeclaration -> if (isCompanion()) "Companion object" else ""
+        else -> "$name ($printableDeclaration)"
+    }
+
+private val KtDeclaration.printableDeclaration: String
+    get() = when (this) {
+        is KtProperty -> "property"
+        is KtSecondaryConstructor -> "secondary constructor"
+        is KtNamedFunction -> "function"
+        else -> ""
+    }
+
+@Suppress("MagicNumber")
+private val KtDeclaration.priority: Int?
+    get() = when (this) {
+        is KtProperty -> 0
+        is KtClassInitializer -> 0
+        is KtSecondaryConstructor -> 1
+        is KtNamedFunction -> 2
+        is KtObjectDeclaration -> if (isCompanion()) 3 else null
+        else -> null
+    }

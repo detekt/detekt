@@ -74,7 +74,10 @@ class ClassOrderingSpec : Spek({
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("OutOfOrder (secondary constructor) " +
+                "should not come before class initializer")
         }
 
         it("reports when secondary constructor is out of order") {
@@ -96,7 +99,10 @@ class ClassOrderingSpec : Spek({
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("OutOfOrder (secondary constructor) " +
+                "should not come before y (property)")
         }
 
         it("reports when method is out of order") {
@@ -118,7 +124,9 @@ class ClassOrderingSpec : Spek({
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("returnX (function) should not come before y (property)")
         }
 
         it("reports when companion object is out of order") {
@@ -140,7 +148,53 @@ class ClassOrderingSpec : Spek({
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Companion object should not come before returnX (function)")
+        }
+
+        it("does not report nested class order") {
+            val code = """
+                class OutOfOrder(private val x: String) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    class Nested {
+                        fun foo() = 2
+                    }
+
+                    fun returnX() = x
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
+
+        it("does not report anonymous object order") {
+            val code = """
+                class OutOfOrder(private val x: String) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    object AnonymousObject {
+                        fun foo() = 2
+                    }
+
+                    fun returnX() = x
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })
