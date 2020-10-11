@@ -196,5 +196,23 @@ class ClassOrderingSpec : Spek({
 
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
+
+        it("does report all issues in a class with multiple misorderings") {
+            val code = """
+                class MultipleOutOfOrder(private val x: String) {
+                    companion object {
+                        const val IMPORTANT_VALUE = 3
+                    }
+
+                    fun returnX() = x
+
+                    constructor(z: Int): this(z.toString())
+                    
+                    val y = x
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).hasSize(3)
+        }
     }
 })

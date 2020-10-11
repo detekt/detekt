@@ -68,22 +68,27 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
 
-        comparator.findOutOfOrder(classBody.declarations)?.let {
-            report(CodeSmell(issue, Entity.from(classBody), generateMessage(it)))
+        comparator.findOutOfOrder(classBody.declarations).letNotEmpty { misorders ->
+            report(
+                misorders.map {
+                    CodeSmell(
+                        issue = issue,
+                        entity = Entity.from(it.first),
+                        message = "${it.first.description} should not come before ${it.second.description}",
+                        references = listOf(Entity.from(classBody))
+                    )
+                }
+            )
         }
-    }
-
-    private fun generateMessage(misordered: Pair<KtDeclaration, KtDeclaration>): String {
-        return "${misordered.first.description} should not come before ${misordered.second.description}"
     }
 }
 
 private fun Comparator<KtDeclaration>.findOutOfOrder(
     declarations: List<KtDeclaration>
-): Pair<KtDeclaration, KtDeclaration>? {
-    declarations.zipWithNext { a, b -> if (compare(a, b) > 0) return Pair(a, b) }
-    return null
-}
+): List<Pair<KtDeclaration, KtDeclaration>> =
+    declarations
+        .zipWithNext { a, b -> if (compare(a, b) > 0) Pair(a, b) else null }
+        .filterNotNull()
 
 private val KtDeclaration.description: String
     get() = when (this) {
@@ -110,3 +115,5 @@ private val KtDeclaration.priority: Int?
         is KtObjectDeclaration -> if (isCompanion()) 3 else null
         else -> null
     }
+private fun <T, R> Collection<T>.letNotEmpty(block: (Collection<T>) -> R?): R? =
+    if (isEmpty()) null else block(this)
