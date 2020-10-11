@@ -77,7 +77,7 @@ class ClassOrderingSpec : Spek({
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0].message).isEqualTo("OutOfOrder (secondary constructor) " +
-                "should not come before null (class initializer)")
+                "should not come before class initializer")
         }
 
         it("reports when secondary constructor is out of order") {
@@ -150,7 +150,7 @@ class ClassOrderingSpec : Spek({
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Companion (companion) should not come before returnX (function)")
+            assertThat(findings[0].message).isEqualTo("Companion object should not come before returnX (function)")
         }
 
         it("does not report nested class order") {

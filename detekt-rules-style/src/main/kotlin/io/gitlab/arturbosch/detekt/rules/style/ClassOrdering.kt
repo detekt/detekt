@@ -74,8 +74,7 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun generateMessage(misordered: Pair<KtDeclaration, KtDeclaration>): String {
-        return "${misordered.first.name} (${misordered.first.printableDeclaration}) should not come before " +
-                "${misordered.second.name} (${misordered.second.printableDeclaration})"
+        return "${misordered.first.description} should not come before ${misordered.second.description}"
     }
 }
 
@@ -86,13 +85,18 @@ private fun Comparator<KtDeclaration>.findOutOfOrder(
     return null
 }
 
+private val KtDeclaration.description: String
+    get() = when (this) {
+        is KtClassInitializer -> "class initializer"
+        is KtObjectDeclaration -> if (isCompanion()) "Companion object" else ""
+        else -> "$name ($printableDeclaration)"
+    }
+
 private val KtDeclaration.printableDeclaration: String
     get() = when (this) {
         is KtProperty -> "property"
-        is KtClassInitializer -> "class initializer"
         is KtSecondaryConstructor -> "secondary constructor"
         is KtNamedFunction -> "function"
-        is KtObjectDeclaration -> if (isCompanion()) "companion" else ""
         else -> ""
     }
 
