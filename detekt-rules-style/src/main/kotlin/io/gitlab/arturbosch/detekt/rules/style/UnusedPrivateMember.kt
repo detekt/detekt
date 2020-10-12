@@ -16,6 +16,8 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
@@ -29,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -37,6 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.jetbrains.kotlin.util.OperatorNameConventions
 
 /**
  * Reports unused private properties, function parameters and functions.
@@ -86,15 +90,20 @@ private class UnusedFunctionVisitor(
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
+    private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
-        return functionDeclarations.flatMap { (name, functions) ->
+        val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
+            propertyDelegates.flatMap { it.resultingDescriptors() }
+        }
+        return functionDeclarations.flatMap { (functionName, functions) ->
             val isOperator = functions.any { it.isOperator() }
-            val references = functionReferences[name].orEmpty()
+            val references = functionReferences[functionName].orEmpty()
             val unusedFunctions = when {
                 (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                    val functionNameAsName = Name.identifier(functionName)
                     val referencesViaOperator = if (isOperator) {
-                        val operatorToken = OperatorConventions.getOperationSymbolForName(Name.identifier(name))
+                        val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
                         val operatorValue = (operatorToken as? KtSingleValueToken)?.value
                         val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
                         val assignmentReferences = when (operatorToken) {
@@ -112,6 +121,13 @@ private class UnusedFunctionVisitor(
                     val referenceDescriptors = (references + referencesViaOperator)
                         .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
                         .map { it.original }
+                        .let {
+                            if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
+                                it + propertyDelegateResultingDescriptors
+                            } else {
+                                it
+                            }
+                        }
                     functions.filterNot {
                         bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                     }
@@ -120,7 +136,7 @@ private class UnusedFunctionVisitor(
                 else -> emptyList()
             }
             unusedFunctions.map {
-                CodeSmell(issue, Entity.from(it), "Private function $name is unused.")
+                CodeSmell(issue, Entity.from(it), "Private function $functionName is unused.")
             }
         }
     }
@@ -140,6 +156,20 @@ private class UnusedFunctionVisitor(
         if (!allowedNames.matches(name)) {
             functionDeclarations.getOrPut(name) { mutableListOf() }.add(function)
         }
+    }
+
+    private fun KtPropertyDelegate.resultingDescriptors(): List<FunctionDescriptor> {
+        val property = this.parent as? KtProperty ?: return emptyList()
+        val propertyDescriptor =
+            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
+        return listOfNotNull(propertyDescriptor?.getter, propertyDescriptor?.setter).mapNotNull {
+            bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]?.resultingDescriptor
+        }
+    }
+
+    override fun visitPropertyDelegate(delegate: KtPropertyDelegate) {
+        super.visitPropertyDelegate(delegate)
+        propertyDelegates.add(delegate)
     }
 
     /*
