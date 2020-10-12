@@ -199,7 +199,7 @@ class ClassOrderingSpec : Spek({
 
         it("does report all issues in a class with multiple misorderings") {
             val code = """
-                class MultipleOutOfOrder(private val x: String) {
+                class MultipleMisorders(private val x: String) {
                     companion object {
                         const val IMPORTANT_VALUE = 3
                     }
@@ -212,7 +212,14 @@ class ClassOrderingSpec : Spek({
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(3)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(3)
+            assertThat(findings[0].message)
+                .isEqualTo("Companion object should not come before returnX (function)")
+            assertThat(findings[1].message)
+                .isEqualTo("returnX (function) should not come before MultipleMisorders (secondary constructor)")
+            assertThat(findings[2].message)
+                .isEqualTo("MultipleMisorders (secondary constructor) should not come before y (property)")
         }
     }
 })

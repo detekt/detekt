@@ -68,7 +68,8 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
 
-        comparator.findOutOfOrder(classBody.declarations).letNotEmpty { misorders ->
+        val misorders = comparator.findOutOfOrder(classBody.declarations)
+        if (misorders.isNotEmpty()) {
             report(
                 misorders.map {
                     CodeSmell(
@@ -115,5 +116,3 @@ private val KtDeclaration.priority: Int?
         is KtObjectDeclaration -> if (isCompanion()) 3 else null
         else -> null
     }
-private fun <T, R> Collection<T>.letNotEmpty(block: (Collection<T>) -> R?): R? =
-    if (isEmpty()) null else block(this)
