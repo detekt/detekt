@@ -213,6 +213,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Parimatch Tech](https://github.com/parimatchtech) - New rule: LibraryEntitiesShouldNotBePublic
 - [Chao Zhang](https://github.com/chao2zhang) - Rule improvement: ImplicitDefaultLocale, ModifierOrder.
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
+- [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
 
 ### Mentions
 
