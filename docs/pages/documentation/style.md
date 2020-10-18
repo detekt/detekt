@@ -1006,6 +1006,8 @@ This rule checks for redundant visibility modifiers.
 
 **Debt**: 5min
 
+**Aliases**: RedundantVisibilityModifier
+
 #### Noncompliant Code:
 
 ```kotlin
