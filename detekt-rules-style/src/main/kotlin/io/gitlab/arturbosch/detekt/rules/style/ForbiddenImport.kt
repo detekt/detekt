@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
@@ -39,7 +40,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         .distinct()
         .map { it.simplePatternToRegex() }
 
-    private val forbiddenPatterns: Regex = Regex(valueOrDefault(FORBIDDEN_PATTERNS, ""))
+    private val forbiddenPatterns: Regex by LazyRegex(FORBIDDEN_PATTERNS, "")
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
