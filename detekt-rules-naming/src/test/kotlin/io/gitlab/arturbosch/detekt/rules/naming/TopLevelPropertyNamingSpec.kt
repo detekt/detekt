@@ -15,19 +15,19 @@ class TopLevelPropertyNamingSpec : Spek({
             val code = """
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
+                const val MyNAME = "Artur"
+                const val name = "Artur"
+                const val nAme = "Artur"
+                const val serialVersionUID = 42L
             """
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("should detect five constants not complying to the naming rules") {
+        it("should detect one constants not complying to the naming rules") {
             val code = """
-                const val MyNAME = "Artur"
-                const val name = "Artur"
-                const val nAme = "Artur"
                 private const val _nAme = "Artur"
-                const val serialVersionUID = 42L
             """
-            assertThat(subject.lint(code)).hasSize(5)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
