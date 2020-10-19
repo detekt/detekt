@@ -341,7 +341,7 @@ Reports when top level constant names which do not follow the specified naming c
 
 #### Configuration options:
 
-* ``constantPattern`` (default: ``'[A-Z][_A-Z0-9]*'``)
+* ``constantPattern`` (default: ``'[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
