@@ -14,7 +14,7 @@ class PackageNamingSpec : Spek({
                 PackageNaming().compileAndLint("""
                     @file:Suppress("PackageDirectoryMismatch")
                     package FOO.BAR
-                """.trimIndent())
+                """)
             ).isEmpty()
         }
 
