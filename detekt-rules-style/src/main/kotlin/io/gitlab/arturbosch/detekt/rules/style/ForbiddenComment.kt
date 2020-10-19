@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
@@ -35,7 +36,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     private val values: List<String> = valueOrDefaultCommaSeparated(VALUES, listOf("TODO:", "FIXME:", "STOPSHIP:"))
 
-    private val allowedPatterns: Regex = Regex(valueOrDefault(ALLOWED_PATTERNS, ""))
+    private val allowedPatterns: Regex by LazyRegex(ALLOWED_PATTERNS, "")
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
