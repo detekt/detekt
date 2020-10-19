@@ -9,8 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
@@ -64,22 +66,40 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
         list.arguments
             .filter { it.isSpread }
             .filterNotNull()
-            .forEach {
-                if (bindingContext == BindingContext.EMPTY) {
-                    report(CodeSmell(issue, Entity.from(list), issue.description))
-                    return
-                }
-                if (!it.canSkipArrayCopyForSpreadArgument()) {
-                    report(
-                        CodeSmell(
-                            issue,
-                            Entity.from(list),
-                            "Used in this way a spread operator causes a full copy of the array to be created before " +
-                                "calling a method. This may result in a performance penalty."
-                        )
-                    )
-                }
+            .forEach { checkCanSkipArrayCopy(it, list) }
+    }
+
+    // Check for non type resolution case if call vararg argument is exactly the vararg parameter.
+    // In this case Kotlin 1.1.60+ does not create an additional copy.
+    // Note: this does not check the control flow like the type solution case does.
+    // It will not report corner cases like shadowed variables.
+    // This is okay as our users are encouraged to use type resolution for better results.
+    private fun isSimplePassThroughVararg(arg: KtValueArgument): Boolean {
+        val argumentName = arg.getArgumentExpression()?.text
+        return arg.getStrictParentOfType<KtNamedFunction>()
+            ?.valueParameters
+            ?.any { it.isVarArg && it.name == argumentName } == true
+    }
+
+    private fun checkCanSkipArrayCopy(arg: KtValueArgument, argsList: KtValueArgumentList) {
+        if (bindingContext == BindingContext.EMPTY) {
+            if (isSimplePassThroughVararg(arg)) {
+                return
             }
+            report(CodeSmell(issue, Entity.from(argsList), issue.description))
+        } else {
+            if (arg.canSkipArrayCopyForSpreadArgument()) {
+                return
+            }
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(argsList),
+                    "Used in this way a spread operator causes a full copy of the array to be created before " +
+                        "calling a method. This may result in a performance penalty."
+                )
+            )
+        }
     }
 
     /**
@@ -90,7 +110,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
         val resolvedCall = getArgumentExpression().getResolvedCall(bindingContext) ?: return false
         val calleeDescriptor = resolvedCall.resultingDescriptor
         if (calleeDescriptor is ParameterDescriptor && calleeDescriptor.isVararg) {
-            return true // As of Kotlin 1.1 passing varargs parameters to vararg calls does not create a new array copy
+            return true // As of Kotlin 1.1.60 passing varargs parameters to vararg calls does not create a new copy
         }
         return calleeDescriptor is ConstructorDescriptor ||
             CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall) ||
