@@ -9,6 +9,15 @@ class PackageNamingSpec : Spek({
 
     describe("PackageNaming rule") {
 
+        it("should ignore the issue by alias suppression") {
+            assertThat(
+                PackageNaming().compileAndLint("""
+                    @file:Suppress("PackageDirectoryMismatch")
+                    package FOO.BAR
+                """)
+            ).isEmpty()
+        }
+
         it("should find a uppercase package name") {
             assertThat(PackageNaming().compileAndLint("package FOO.BAR")).hasSize(1)
         }

@@ -16,6 +16,8 @@ Reports when class or object names which do not follow the specified naming conv
 
 **Debt**: 5min
 
+**Aliases**: ClassName
+
 #### Configuration options:
 
 * ``classPattern`` (default: ``'[A-Z][a-zA-Z0-9]*'``)
@@ -324,6 +326,8 @@ Reports when package names which do not follow the specified naming convention a
 **Severity**: Style
 
 **Debt**: 5min
+
+**Aliases**: PackageDirectoryMismatch
 
 #### Configuration options:
 

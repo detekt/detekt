@@ -32,5 +32,14 @@ class ClassNamingSpec : Spek({
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(6 to 24, 32 to 49)
         }
+
+        it("should ignore the issue by alias suppression") {
+            assertThat(
+                ClassNaming().compileAndLint("""
+                    @Suppress("ClassName")
+                    class namingConventions {}
+                """)
+            ).isEmpty()
+        }
     }
 })

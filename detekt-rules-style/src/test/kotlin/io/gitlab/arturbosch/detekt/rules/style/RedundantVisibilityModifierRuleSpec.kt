@@ -48,6 +48,16 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("should ignore the issue by alias suppression") {
+            val code = """
+                class Test{
+                    @Suppress("RedundantVisibilityModifier")
+                    public fun A() {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("reports public function in class") {
             val code = """
                 class Test{
