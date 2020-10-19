@@ -93,6 +93,28 @@ class SpreadOperatorSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            it("respects pass through of vararg parameter - #3145") {
+                val code = """
+                    fun b(vararg bla: Int) = Unit
+                    fun a(vararg bla: Int) { 
+                        b(*bla) 
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("reports shadowed vararg declaration which may lead to array copy - #3145") {
+                val code = """
+                    fun b(vararg bla: String) = Unit
+
+                    fun a(vararg bla: Int) {
+                        val bla = arrayOf("")
+                        b(*bla)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
         }
 
         context("without type resolution") {

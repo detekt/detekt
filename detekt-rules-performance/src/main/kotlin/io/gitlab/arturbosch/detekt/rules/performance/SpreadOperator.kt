@@ -8,12 +8,14 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
+import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.components.isVararg
 
 /**
  * In most cases using a spread operator causes a full copy of the array to be created before calling a method.
@@ -84,6 +86,9 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
     private fun KtValueArgument.canSkipArrayCopyForSpreadArgument(): Boolean {
         val resolvedCall = getArgumentExpression().getResolvedCall(bindingContext) ?: return false
         val calleeDescriptor = resolvedCall.resultingDescriptor
+        if (calleeDescriptor is ParameterDescriptor && calleeDescriptor.isVararg) {
+            return true // As of Kotlin 1.1 passing varargs parameters to vararg calls does not create a new array copy
+        }
         return calleeDescriptor is ConstructorDescriptor ||
                 CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall) ||
                 DescriptorUtils.getFqName(calleeDescriptor).asString() == "kotlin.arrayOfNulls"
