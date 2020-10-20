@@ -8,7 +8,7 @@ title: SplitPattern -
 # SplitPattern  
 [jvm]  
 Content  
-fun [SplitPattern](-split-pattern.md)(text: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), delimiters: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), removeTrailingAsterisks: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html))  
+fun [SplitPattern](-split-pattern.md)(text: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), delimiters: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = ",", removeTrailingAsterisks: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = true)  
 
 
 

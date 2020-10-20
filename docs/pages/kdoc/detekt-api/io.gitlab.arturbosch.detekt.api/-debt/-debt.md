@@ -8,7 +8,7 @@ title: Debt -
 # Debt  
 [jvm]  
 Content  
-fun [Debt](-debt.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))  
+fun [Debt](-debt.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0, hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0, mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0)  
 
 
 

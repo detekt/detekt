@@ -8,7 +8,7 @@ title: copy -
 # copy  
 [jvm]  
 Content  
-fun [copy](copy.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement?): [Entity](index.md)  
+fun [copy](copy.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement? = null): [Entity](index.md)  
 
 
 

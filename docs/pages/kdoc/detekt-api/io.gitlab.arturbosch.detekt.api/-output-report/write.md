@@ -7,14 +7,14 @@ title: write -
 
 # write  
 [jvm]  
-Brief description  
+Content  
+fun [write](write.md)(filePath: [Path](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html), detektion: [Detektion](../-detektion/index.md))  
+More info  
 
 
 Renders result and writes it to the given filePath.
 
   
-Content  
-fun [write](write.md)(filePath: [Path](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html), detektion: [Detektion](../-detektion/index.md))  
 
 
 

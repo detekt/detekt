@@ -8,7 +8,7 @@ title: CommaSeparatedPattern -
 # CommaSeparatedPattern  
 [jvm]  
 Content  
-fun [CommaSeparatedPattern](-comma-separated-pattern.md)(text: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), delimiters: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))  
+fun [CommaSeparatedPattern](-comma-separated-pattern.md)(text: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), delimiters: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = ",")  
 
 
 

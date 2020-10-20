@@ -7,14 +7,14 @@ title: instance -
 
 # instance  
 [jvm]  
-Brief description  
+Content  
+abstract fun [instance](instance.md)(config: [Config](../-config/index.md)): [RuleSet](../-rule-set/index.md)  
+More info  
 
 
 This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.
 
   
-Content  
-abstract fun [instance](instance.md)(config: [Config](../-config/index.md)): [RuleSet](../-rule-set/index.md)  
 
 
 

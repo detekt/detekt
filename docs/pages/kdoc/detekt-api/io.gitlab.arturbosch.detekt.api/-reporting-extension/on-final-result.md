@@ -7,14 +7,14 @@ title: onFinalResult -
 
 # onFinalResult  
 [jvm]  
-Brief description  
+Content  
+open fun [onFinalResult](on-final-result.md)(result: [Detektion](../-detektion/index.md))  
+More info  
 
 
 Is called after all extensions's [transformFindings](transform-findings.md) were called.
 
   
-Content  
-open fun [onFinalResult](on-final-result.md)(result: [Detektion](../-detektion/index.md))  
 
 
 

@@ -7,14 +7,14 @@ title: render -
 
 # render  
 [jvm]  
-Brief description  
+Content  
+abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
+More info  
 
 
 Defines the translation process of detekt's result into a string.
 
   
-Content  
-abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
 
 
 

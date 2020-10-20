@@ -7,14 +7,14 @@ title: subConfig -
 
 # subConfig  
 [jvm]  
-Brief description  
+Content  
+open override fun [subConfig](sub-config.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Config](../-config/index.md)  
+More info  
 
 
 Tries to retrieve part of the configuration based on given key.
 
   
-Content  
-open override fun [subConfig](sub-config.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Config](../-config/index.md)  
 
 
 

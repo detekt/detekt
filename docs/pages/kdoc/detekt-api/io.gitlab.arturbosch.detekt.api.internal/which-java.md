@@ -7,14 +7,14 @@ title: whichJava -
 
 # whichJava  
 [jvm]  
-Brief description  
+Content  
+fun [whichJava](which-java.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+More info  
 
 
 Returns the version of the running JVM.
 
   
-Content  
-fun [whichJava](which-java.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
 
 
 

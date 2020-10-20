@@ -7,15 +7,15 @@ title: onProcess -
 
 # onProcess  
 [jvm]  
-Brief description  
+Content  
+~~open~~ ~~fun~~ [~~onProcess~~](on-process.md)~~(~~~~file~~~~:~~ KtFile~~)~~  
+open fun [onProcess](on-process.md)(file: KtFile, bindingContext: BindingContext)  
+More info  
 
 
 Called when processing of a file begins. This method is called from a thread pool thread. Heavy computations allowed.
 
   
-Content  
-~~open~~ ~~fun~~ [~~onProcess~~](on-process.md)~~(~~~~file~~~~:~~ KtFile~~)~~  
-open fun [onProcess](on-process.md)(file: KtFile, bindingContext: BindingContext)  
 
 
 

@@ -8,7 +8,7 @@ title: Rule -
 # Rule  
 [jvm]  
 Content  
-fun [Rule](-rule.md)(ruleSetConfig: [Config](../-config/index.md), ruleContext: [Context](../-context/index.md))  
+fun [Rule](-rule.md)(ruleSetConfig: [Config](../-config/index.md) = Config.empty, ruleContext: [Context](../-context/index.md) = DefaultContext())  
 
 
 

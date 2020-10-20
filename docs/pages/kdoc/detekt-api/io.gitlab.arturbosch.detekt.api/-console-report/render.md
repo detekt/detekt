@@ -7,14 +7,14 @@ title: render -
 
 # render  
 [jvm]  
-Brief description  
+Content  
+abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
+More info  
 
 
 Converts the given detektion into a string representation to present it to the client. The implementation specifies which parts of the report are important to the user.
 
   
-Content  
-abstract fun [render](render.md)(detektion: [Detektion](../-detektion/index.md)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?  
 
 
 

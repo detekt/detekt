@@ -6,34 +6,34 @@ title: DefaultContext -
 
 
 # DefaultContext  
- [jvm] 
+ [jvm] open class [DefaultContext](index.md) : [Context](../-context/index.md)
 
 Default [Context](../-context/index.md) implementation.
 
-open class [DefaultContext](index.md) : [Context](../-context/index.md)   
+   
 
 
 ## Constructors  
   
 |  Name|  Summary| 
 |---|---|
-| [DefaultContext](-default-context.md)|  [jvm] fun [DefaultContext](-default-context.md)()   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/DefaultContext/#/PointingToDeclaration/"></a>[DefaultContext](-default-context.md)| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/DefaultContext/#/PointingToDeclaration/"></a> [jvm] fun [DefaultContext](-default-context.md)()   <br>
 
 
 ## Functions  
   
 |  Name|  Summary| 
 |---|---|
-| [clearFindings](clear-findings.md)| [jvm]  <br>Brief description  <br><br><br>Clears previous findings. Normally this is done on every new KtFile analyzed and should be called by clients.<br><br>  <br>Content  <br>override fun [clearFindings](clear-findings.md)()  <br><br><br>
-| [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)| [jvm]  <br>Content  <br>open operator override fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
-| [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
-| [report](report.md)| [jvm]  <br>Brief description  <br><br><br><br><br>Reports a single code smell finding.<br><br><br><br>Before adding a finding, it is checked if it is not suppressed by @Suppress or @SuppressWarnings annotations.<br><br><br><br>  <br>Content  <br>open override fun [report](report.md)(finding: [Finding](../-finding/index.md), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/)?)  <br><br><br>[jvm]  <br>Brief description  <br><br><br><br><br>Reports a list of code smell findings.<br><br><br><br>Before adding a finding, it is checked if it is not suppressed by @Suppress or @SuppressWarnings annotations.<br><br><br><br>  <br>Content  <br>open override fun [report](report.md)(findings: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>, aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/)?)  <br><br><br>
-| [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/clearFindings/#/PointingToDeclaration/"></a>[clearFindings](clear-findings.md)| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/clearFindings/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>override fun [clearFindings](clear-findings.md)()  <br>More info  <br>Clears previous findings.  <br><br><br>
+| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open operator fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/"></a>[report](report.md)| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open override fun [report](report.md)(finding: [Finding](../-finding/index.md), aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../index.md#%5Bio.gitlab.arturbosch.detekt.api%2FRuleSetId%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F-931080397)?)  <br>More info  <br>Reports a single code smell finding.  <br><br><br>[jvm]  <br>Content  <br>open override fun [report](report.md)(findings: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>, aliases: [Set](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>, ruleSetId: [RuleSetId](../index.md#%5Bio.gitlab.arturbosch.detekt.api%2FRuleSetId%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F-931080397)?)  <br>More info  <br>Reports a list of code smell findings.  <br><br><br>
+| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
 
 ## Properties  
   
 |  Name|  Summary| 
 |---|---|
-| [findings](index.md#io.gitlab.arturbosch.detekt.api/DefaultContext/findings/#/PointingToDeclaration/)|  [jvm] <br><br>Returns a copy of violations for this rule.<br><br>open override val [findings](index.md#io.gitlab.arturbosch.detekt.api/DefaultContext/findings/#/PointingToDeclaration/): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/findings/#/PointingToDeclaration/"></a>[findings](findings.md)| <a name="io.gitlab.arturbosch.detekt.api/DefaultContext/findings/#/PointingToDeclaration/"></a> [jvm] open override val [findings](findings.md): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>Returns a copy of violations for this rule.   <br>
 

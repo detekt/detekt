@@ -8,7 +8,7 @@ title: UnstableApi -
 # UnstableApi  
 [jvm]  
 Content  
-fun [UnstableApi](-unstable-api.md)(reason: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))  
+fun [UnstableApi](-unstable-api.md)(reason: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = "")  
 
 
 

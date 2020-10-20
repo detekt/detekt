@@ -7,14 +7,14 @@ title: loadResource -
 
 # loadResource  
 [jvm]  
-Brief description  
+Content  
+fun [loadResource](load-resource.md)(url: [URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)): [Config](../../../io.gitlab.arturbosch.detekt.api/-config/index.md)  
+More info  
 
 
 Factory method to load a yaml configuration from a URL.
 
   
-Content  
-fun [loadResource](load-resource.md)(url: [URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)): [Config](../../../io.gitlab.arturbosch.detekt.api/-config/index.md)  
 
 
 

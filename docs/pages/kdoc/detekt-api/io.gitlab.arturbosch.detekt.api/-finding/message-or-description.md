@@ -7,14 +7,14 @@ title: messageOrDescription -
 
 # messageOrDescription  
 [jvm]  
-Brief description  
+Content  
+abstract fun [messageOrDescription](message-or-description.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+More info  
 
 
 Explanation why this finding was raised.
 
   
-Content  
-abstract fun [messageOrDescription](message-or-description.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
 
 
 

@@ -8,7 +8,7 @@ title: RuleSet -
 # RuleSet  
 [jvm]  
 Content  
-fun [RuleSet](-rule-set.md)(id: [RuleSetId](../index.md#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/), rules: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.md)>)  
+fun [RuleSet](-rule-set.md)(id: [RuleSetId](../index.md#%5Bio.gitlab.arturbosch.detekt.api%2FRuleSetId%2F%2F%2FPointingToDeclaration%2F%5D%2FClasslikes%2F-931080397), rules: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.md)>)  
 
 
 

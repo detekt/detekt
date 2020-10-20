@@ -7,14 +7,14 @@ title: atName -
 
 # atName  
 [jvm]  
-Brief description  
+Content  
+fun [atName](at-name.md)(element: KtNamedDeclaration): [Entity](../index.md)  
+More info  
 
 
 Create an entity at the location of the identifier of given named declaration.
 
   
-Content  
-fun [atName](at-name.md)(element: KtNamedDeclaration): [Entity](../index.md)  
 
 
 

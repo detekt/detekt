@@ -8,7 +8,7 @@ title: InvalidConfigurationError -
 # InvalidConfigurationError  
 [jvm]  
 Content  
-fun [InvalidConfigurationError](-invalid-configuration-error.md)(throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)?)  
+fun [InvalidConfigurationError](-invalid-configuration-error.md)(throwable: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)? = null)  
 
 
 

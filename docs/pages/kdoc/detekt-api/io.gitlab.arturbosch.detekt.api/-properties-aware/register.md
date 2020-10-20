@@ -7,14 +7,14 @@ title: register -
 
 # register  
 [jvm]  
-Brief description  
+Content  
+abstract fun [register](register.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html))  
+More info  
 
 
 Binds a given value with given key and stores it for later use.
 
   
-Content  
-abstract fun [register](register.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html))  
 
 
 

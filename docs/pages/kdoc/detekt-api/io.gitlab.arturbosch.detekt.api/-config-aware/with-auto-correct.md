@@ -7,14 +7,14 @@ title: withAutoCorrect -
 
 # withAutoCorrect  
 [jvm]  
-Brief description  
+Content  
+open fun [withAutoCorrect](with-auto-correct.md)(block: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
+More info  
 
 
 If your rule supports to automatically correct the misbehaviour of underlying smell, specify your code inside this method call, to allow the user of your rule to trigger auto correction only when needed.
 
   
-Content  
-open fun [withAutoCorrect](with-auto-correct.md)(block: () -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html))  
 
 
 

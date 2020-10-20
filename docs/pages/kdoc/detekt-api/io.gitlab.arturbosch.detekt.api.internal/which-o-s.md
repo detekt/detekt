@@ -7,14 +7,14 @@ title: whichOS -
 
 # whichOS  
 [jvm]  
-Brief description  
+Content  
+fun [whichOS](which-o-s.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+More info  
 
 
 Returns the name of the running OS.
 
   
-Content  
-fun [whichOS](which-o-s.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
 
 
 

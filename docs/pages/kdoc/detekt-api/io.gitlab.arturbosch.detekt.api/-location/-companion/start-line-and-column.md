@@ -7,14 +7,14 @@ title: startLineAndColumn -
 
 # startLineAndColumn  
 [jvm]  
-Brief description  
+Content  
+fun [startLineAndColumn](start-line-and-column.md)(element: PsiElement, offset: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0): PsiDiagnosticUtils.LineAndColumn  
+More info  
 
 
 Determines the line and column of a PsiElement in the source file.
 
   
-Content  
-fun [startLineAndColumn](start-line-and-column.md)(element: PsiElement, offset: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): PsiDiagnosticUtils.LineAndColumn  
 
 
 

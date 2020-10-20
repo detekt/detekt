@@ -7,14 +7,14 @@ title: doubleThreshold -
 
 # doubleThreshold  
 [jvm]  
-Brief description  
+Content  
+fun [doubleThreshold](double-threshold.md)(): [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)  
+More info  
 
 
 Specified threshold for this metric as a double value.
 
   
-Content  
-fun [doubleThreshold](double-threshold.md)(): [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)  
 
 
 

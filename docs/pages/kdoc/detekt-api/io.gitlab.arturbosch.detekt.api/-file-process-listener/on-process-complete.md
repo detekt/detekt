@@ -7,15 +7,15 @@ title: onProcessComplete -
 
 # onProcessComplete  
 [jvm]  
-Brief description  
+Content  
+~~open~~ ~~fun~~ [~~onProcessComplete~~](on-process-complete.md)~~(~~~~file~~~~:~~ KtFile~~,~~ ~~findings~~~~:~~ [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>>~~)~~  
+open fun [onProcessComplete](on-process-complete.md)(file: KtFile, findings: [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>>, bindingContext: BindingContext)  
+More info  
 
 
 Called when processing of a file completes. This method is called from a thread pool thread. Heavy computations allowed.
 
   
-Content  
-~~open~~ ~~fun~~ [~~onProcessComplete~~](on-process-complete.md)~~(~~~~file~~~~:~~ KtFile~~,~~ ~~findings~~~~:~~ [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>>~~)~~  
-open fun [onProcessComplete](on-process-complete.md)(file: KtFile, findings: [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>>, bindingContext: BindingContext)  
 
 
 

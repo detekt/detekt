@@ -6,41 +6,41 @@ title: Notification -
 
 
 # Notification  
- [jvm] 
+ [jvm] interface [Notification](index.md)
 
 Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.
 
-interface [Notification](index.md)   
+   
 
 
 ## Types  
   
 |  Name|  Summary| 
 |---|---|
-| [Level](-level/index.md)| [jvm]  <br>Brief description  <br><br><br>Level of severity of the notification<br><br>  <br>Content  <br>enum [Level](-level/index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[Notification.Level](-level/index.md)>   <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Notification.Level///PointingToDeclaration/"></a>[Level](-level/index.md)| <a name="io.gitlab.arturbosch.detekt.api/Notification.Level///PointingToDeclaration/"></a>[jvm]  <br>Content  <br>enum [Level](-level/index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[Notification.Level](-level/index.md)>   <br>More info  <br>Level of severity of the notification  <br><br><br>
 
 
 ## Functions  
   
 |  Name|  Summary| 
 |---|---|
-| [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)| [jvm]  <br>Content  <br>open operator override fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
-| [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
-| [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open operator fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
 
 
 ## Properties  
   
 |  Name|  Summary| 
 |---|---|
-| [isError](index.md#io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/)|  [jvm] open val [isError](index.md#io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)   <br>
-| [level](index.md#io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/)|  [jvm] abstract val [level](index.md#io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/): [Notification.Level](-level/index.md)   <br>
-| [message](index.md#io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/)|  [jvm] abstract val [message](index.md#io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/"></a>[isError](is-error.md)| <a name="io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/"></a> [jvm] open val [isError](is-error.md): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/"></a>[level](level.md)| <a name="io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/"></a> [jvm] abstract val [level](level.md): [Notification.Level](-level/index.md)   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/"></a>[message](message.md)| <a name="io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/"></a> [jvm] abstract val [message](message.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>
 
 
 ## Inheritors  
   
 |  Name| 
 |---|
-| [SimpleNotification](../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api.internal/SimpleNotification///PointingToDeclaration/"></a>[SimpleNotification](../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.md)
 

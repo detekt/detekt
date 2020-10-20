@@ -7,14 +7,14 @@ title: validate -
 
 # validate  
 [jvm]  
-Brief description  
+Content  
+abstract fun [validate](validate.md)(config: [Config](../-config/index.md)): [Collection](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html)<[Notification](../-notification/index.md)>  
+More info  
 
 
 Executes queries on given config and reports any warnings or errors via [Notification](../-notification/index.md)s.
 
   
-Content  
-abstract fun [validate](validate.md)(config: [Config](../-config/index.md)): [Collection](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html)<[Notification](../-notification/index.md)>  
 
 
 

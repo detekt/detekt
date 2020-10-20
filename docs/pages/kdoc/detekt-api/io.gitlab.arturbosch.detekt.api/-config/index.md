@@ -6,55 +6,55 @@ title: Config -
 
 
 # Config  
- [jvm] 
+ [jvm] interface [Config](index.md)
 
 A configuration holds information about how to configure specific rules.
 
-interface [Config](index.md)   
+   
 
 
 ## Types  
   
 |  Name|  Summary| 
 |---|---|
-| [Companion](-companion/index.md)| [jvm]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>
-| [InvalidConfigurationError](-invalid-configuration-error/index.md)| [jvm]  <br>Brief description  <br><br><br>Is thrown when loading a configuration results in errors.<br><br>  <br>Content  <br>class [InvalidConfigurationError](-invalid-configuration-error/index.md)(**throwable**: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)?) : [RuntimeException](https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="io.gitlab.arturbosch.detekt.api/Config.Companion///PointingToDeclaration/"></a>[jvm]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config.InvalidConfigurationError///PointingToDeclaration/"></a>[InvalidConfigurationError](-invalid-configuration-error/index.md)| <a name="io.gitlab.arturbosch.detekt.api/Config.InvalidConfigurationError///PointingToDeclaration/"></a>[jvm]  <br>Content  <br>class [InvalidConfigurationError](-invalid-configuration-error/index.md)(**throwable**: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)?) : [RuntimeException](https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html)  <br>More info  <br>Is thrown when loading a configuration results in errors.  <br><br><br>
 
 
 ## Functions  
   
 |  Name|  Summary| 
 |---|---|
-| [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)| [jvm]  <br>Content  <br>open operator override fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
-| [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/hashCode/#/PointingToDeclaration/)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
-| [subConfig](sub-config.md)| [jvm]  <br>Brief description  <br><br><br>Tries to retrieve part of the configuration based on given key.<br><br>  <br>Content  <br>abstract fun [subConfig](sub-config.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Config](index.md)  <br><br><br>
-| [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)| [jvm]  <br>Content  <br>open override fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#kotlin/Any/toString/#/PointingToDeclaration/)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
-| [valueOrDefault](value-or-default.md)| [jvm]  <br>Brief description  <br><br><br>Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.<br><br>  <br>Content  <br>open fun <[T](value-or-default.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [valueOrDefault](value-or-default.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), default: [T](value-or-default.md)): [T](value-or-default.md)  <br><br><br>
-| [valueOrNull](value-or-null.md)| [jvm]  <br>Brief description  <br><br><br>Retrieves a sub configuration or value based on given key. If the configuration property cannot be found, null is returned.<br><br>  <br>Content  <br>abstract fun <[T](value-or-null.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [valueOrNull](value-or-null.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [T](value-or-null.md)?  <br><br><br>
+| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open operator fun [equals](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(other: [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)?): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)  <br><br><br>
+| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/hashCode/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [hashCode](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config/subConfig/#kotlin.String/PointingToDeclaration/"></a>[subConfig](sub-config.md)| <a name="io.gitlab.arturbosch.detekt.api/Config/subConfig/#kotlin.String/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>abstract fun [subConfig](sub-config.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Config](index.md)  <br>More info  <br>Tries to retrieve part of the configuration based on given key.  <br><br><br>
+| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)| <a name="kotlin/Any/toString/#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun [toString](../../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/-companion/index.md#%5Bkotlin%2FAny%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F-931080397)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config/valueOrDefault/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a>[valueOrDefault](value-or-default.md)| <a name="io.gitlab.arturbosch.detekt.api/Config/valueOrDefault/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>open fun <[T](value-or-default.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [valueOrDefault](value-or-default.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), default: [T](value-or-default.md)): [T](value-or-default.md)  <br>More info  <br>Retrieves a sub configuration or value based on given key.  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config/valueOrNull/#kotlin.String/PointingToDeclaration/"></a>[valueOrNull](value-or-null.md)| <a name="io.gitlab.arturbosch.detekt.api/Config/valueOrNull/#kotlin.String/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>abstract fun <[T](value-or-null.md) : [Any](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)> [valueOrNull](value-or-null.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [T](value-or-null.md)?  <br>More info  <br>Retrieves a sub configuration or value based on given key.  <br><br><br>
 
 
 ## Properties  
   
 |  Name|  Summary| 
 |---|---|
-| [parentPath](index.md#io.gitlab.arturbosch.detekt.api/Config/parentPath/#/PointingToDeclaration/)|  [jvm] <br><br><br><br>Keeps track of which key was taken to [subConfig](sub-config.md) this configuration. Sub-sequential calls to [subConfig](sub-config.md) are tracked with '>' as a separator.<br><br><br><br>May be null if this is the top most configuration object.<br><br><br><br>open val [parentPath](index.md#io.gitlab.arturbosch.detekt.api/Config/parentPath/#/PointingToDeclaration/): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?   <br>
+| <a name="io.gitlab.arturbosch.detekt.api/Config/parentPath/#/PointingToDeclaration/"></a>[parentPath](parent-path.md)| <a name="io.gitlab.arturbosch.detekt.api/Config/parentPath/#/PointingToDeclaration/"></a> [jvm] open val [parentPath](parent-path.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?Keeps track of which key was taken to [subConfig](sub-config.md) this configuration.   <br>
 
 
 ## Inheritors  
   
 |  Name| 
 |---|
-| [ConfigAware](../-config-aware/index.md)
-| [BaseConfig](../../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.md)
-| [CompositeConfig](../../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.md)
-| [DisabledAutoCorrectConfig](../../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.md)
-| [FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api/ConfigAware///PointingToDeclaration/"></a>[ConfigAware](../-config-aware/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api.internal/BaseConfig///PointingToDeclaration/"></a>[BaseConfig](../../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api.internal/CompositeConfig///PointingToDeclaration/"></a>[CompositeConfig](../../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api.internal/DisabledAutoCorrectConfig///PointingToDeclaration/"></a>[DisabledAutoCorrectConfig](../../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.md)
+| <a name="io.gitlab.arturbosch.detekt.api.internal/FailFastConfig///PointingToDeclaration/"></a>[FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.md)
 
 
 ## Extensions  
   
 |  Name|  Summary| 
 |---|---|
-| [createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md)| [jvm]  <br>Content  <br>fun [Config](index.md).[createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md)(): [PathFilters](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.md)?  <br><br><br>
-| [valueOrDefaultCommaSeparated](../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.md)| [jvm]  <br>Content  <br>fun [Config](index.md).[valueOrDefaultCommaSeparated](../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), default: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api.internal//createPathFilters/io.gitlab.arturbosch.detekt.api.Config#/PointingToDeclaration/"></a>[createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md)| <a name="io.gitlab.arturbosch.detekt.api.internal//createPathFilters/io.gitlab.arturbosch.detekt.api.Config#/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>fun [Config](index.md).[createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md)(): [PathFilters](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.md)?  <br><br><br>
+| <a name="io.gitlab.arturbosch.detekt.api.internal//valueOrDefaultCommaSeparated/io.gitlab.arturbosch.detekt.api.Config#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/"></a>[valueOrDefaultCommaSeparated](../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.md)| <a name="io.gitlab.arturbosch.detekt.api.internal//valueOrDefaultCommaSeparated/io.gitlab.arturbosch.detekt.api.Config#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/"></a>[jvm]  <br>Content  <br>fun [Config](index.md).[valueOrDefaultCommaSeparated](../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), default: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)>  <br><br><br>
 

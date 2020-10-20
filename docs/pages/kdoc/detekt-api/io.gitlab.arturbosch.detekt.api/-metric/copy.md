@@ -8,7 +8,7 @@ title: copy -
 # copy  
 [jvm]  
 Content  
-fun [copy](copy.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), threshold: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), isDouble: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), conversionFactor: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): [Metric](index.md)  
+fun [copy](copy.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), value: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), threshold: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), isDouble: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false, conversionFactor: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = DEFAULT_FLOAT_CONVERSION_FACTOR): [Metric](index.md)  
 
 
 

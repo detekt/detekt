@@ -7,14 +7,14 @@ title: compactWithSignature -
 
 # compactWithSignature  
 [jvm]  
-Brief description  
+Content  
+open override fun [compactWithSignature](compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+More info  
 
 
 Same as [compact](compact.md) except the content should contain a substring which represents this exact findings via a custom identifier.
 
   
-Content  
-open override fun [compactWithSignature](compact-with-signature.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
 
 
 

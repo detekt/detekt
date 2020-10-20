@@ -8,7 +8,7 @@ title: SimpleNotification -
 # SimpleNotification  
 [jvm]  
 Content  
-fun [SimpleNotification](-simple-notification.md)(message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), level: [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md))  
+fun [SimpleNotification](-simple-notification.md)(message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), level: [Notification.Level](../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.md) = Notification.Level.Error)  
 
 
 

@@ -7,14 +7,14 @@ title: onRawResult -
 
 # onRawResult  
 [jvm]  
-Brief description  
+Content  
+open fun [onRawResult](on-raw-result.md)(result: [Detektion](../-detektion/index.md))  
+More info  
 
 
 Is called before any [transformFindings](transform-findings.md) calls were executed.
 
   
-Content  
-open fun [onRawResult](on-raw-result.md)(result: [Detektion](../-detektion/index.md))  
 
 
 

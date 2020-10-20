@@ -7,14 +7,14 @@ title: addData -
 
 # addData  
 [jvm]  
-Brief description  
+Content  
+abstract fun <[V](add-data.md)> [addData](add-data.md)(key: Key<[V](add-data.md)>, value: [V](add-data.md))  
+More info  
 
 
 Stores an arbitrary value inside the result binded to the given key.
 
   
-Content  
-abstract fun <[V](add-data.md)> [addData](add-data.md)(key: Key<[V](add-data.md)>, value: [V](add-data.md))  
 
 
 

@@ -7,14 +7,14 @@ title: compact -
 
 # compact  
 [jvm]  
-Brief description  
+Content  
+abstract fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
+More info  
 
 
 Contract to format implementing object to a string representation.
 
   
-Content  
-abstract fun [compact](compact.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  
 
 
 

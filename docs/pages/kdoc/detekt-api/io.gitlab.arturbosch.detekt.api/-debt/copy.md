@@ -8,7 +8,7 @@ title: copy -
 # copy  
 [jvm]  
 Content  
-fun [copy](copy.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): [Debt](index.md)  
+fun [copy](copy.md)(days: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0, hours: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0, mins: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0): [Debt](index.md)  
 
 
 

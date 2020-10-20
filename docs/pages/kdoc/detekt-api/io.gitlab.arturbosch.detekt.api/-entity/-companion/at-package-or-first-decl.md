@@ -7,14 +7,14 @@ title: atPackageOrFirstDecl -
 
 # atPackageOrFirstDecl  
 [jvm]  
-Brief description  
+Content  
+fun [atPackageOrFirstDecl](at-package-or-first-decl.md)(file: KtFile): [Entity](../index.md)  
+More info  
 
 
 Create an entity at the location of the package, first import or first declaration.
 
   
-Content  
-fun [atPackageOrFirstDecl](at-package-or-first-decl.md)(file: KtFile): [Entity](../index.md)  
 
 
 

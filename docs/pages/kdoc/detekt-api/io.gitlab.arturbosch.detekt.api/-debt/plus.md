@@ -7,14 +7,14 @@ title: plus -
 
 # plus  
 [jvm]  
-Brief description  
+Content  
+operator fun [plus](plus.md)(other: [Debt](index.md)): [Debt](index.md)  
+More info  
 
 
 Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.
 
   
-Content  
-operator fun [plus](plus.md)(other: [Debt](index.md)): [Debt](index.md)  
 
 
 

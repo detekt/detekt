@@ -7,14 +7,14 @@ title: metricByType -
 
 # metricByType  
 [jvm]  
-Brief description  
+Content  
+open fun [metricByType](metric-by-type.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Metric](../-metric/index.md)?  
+More info  
 
 
 Finds the first metric matching given type.
 
   
-Content  
-open fun [metricByType](metric-by-type.md)(type: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Metric](../-metric/index.md)?  
 
 
 

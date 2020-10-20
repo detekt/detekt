@@ -7,15 +7,15 @@ title: report -
 
 # report  
 [jvm]  
-Brief description  
+Content  
+fun [report](report.md)(finding: [Finding](../-finding/index.md))  
+fun [report](report.md)(findings: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>)  
+More info  
 
 
 Simplified version of [Context.report](../-context/report.md) with rule defaults.
 
   
-Content  
-fun [report](report.md)(finding: [Finding](../-finding/index.md))  
-fun [report](report.md)(findings: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<[Finding](../-finding/index.md)>)  
 
 
 

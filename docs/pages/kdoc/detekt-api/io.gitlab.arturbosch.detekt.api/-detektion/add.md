@@ -7,25 +7,25 @@ title: add -
 
 # add  
 [jvm]  
-Brief description  
+Content  
+abstract fun [add](add.md)(notification: [Notification](../-notification/index.md))  
+More info  
 
 
 Stores a notification in the result.
 
   
-Content  
-abstract fun [add](add.md)(notification: [Notification](../-notification/index.md))  
 
 
 [jvm]  
-Brief description  
+Content  
+abstract fun [add](add.md)(projectMetric: [ProjectMetric](../-project-metric/index.md))  
+More info  
 
 
 Stores a metric calculated for the whole project in the result.
 
   
-Content  
-abstract fun [add](add.md)(projectMetric: [ProjectMetric](../-project-metric/index.md))  
 
 
 

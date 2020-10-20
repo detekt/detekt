@@ -8,7 +8,7 @@ title: BaseRule -
 # BaseRule  
 [jvm]  
 Content  
-fun [BaseRule](-base-rule.md)(context: [Context](../../io.gitlab.arturbosch.detekt.api/-context/index.md))  
+fun [BaseRule](-base-rule.md)(context: [Context](../../io.gitlab.arturbosch.detekt.api/-context/index.md) = DefaultContext())  
 
 
 

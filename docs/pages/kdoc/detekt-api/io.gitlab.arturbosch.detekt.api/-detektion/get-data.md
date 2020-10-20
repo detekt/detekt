@@ -7,14 +7,14 @@ title: getData -
 
 # getData  
 [jvm]  
-Brief description  
+Content  
+abstract fun <[V](get-data.md)> [getData](get-data.md)(key: Key<[V](get-data.md)>): [V](get-data.md)?  
+More info  
 
 
 Retrieves a value stored by the given key of the result.
 
   
-Content  
-abstract fun <[V](get-data.md)> [getData](get-data.md)(key: Key<[V](get-data.md)>): [V](get-data.md)?  
 
 
 

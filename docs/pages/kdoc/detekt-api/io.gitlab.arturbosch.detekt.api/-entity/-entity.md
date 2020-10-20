@@ -8,8 +8,8 @@ title: Entity -
 # Entity  
 [jvm]  
 Content  
-~~fun~~ [~~Entity~~](-entity.md)~~(~~~~name~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~className~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~signature~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~location~~~~:~~ [Location](../-location/index.md)~~,~~ ~~ktElement~~~~:~~ KtElement?~~)~~  
-fun [Entity](-entity.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement?)  
+~~fun~~ [~~Entity~~](-entity.md)~~(~~~~name~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~className~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~signature~~~~:~~ [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)~~,~~ ~~location~~~~:~~ [Location](../-location/index.md)~~,~~ ~~ktElement~~~~:~~ KtElement? ~~= null~~~~)~~  
+fun [Entity](-entity.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), signature: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), location: [Location](../-location/index.md), ktElement: KtElement? = null)  
 
 
 

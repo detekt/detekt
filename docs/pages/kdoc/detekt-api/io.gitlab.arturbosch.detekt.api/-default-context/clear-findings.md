@@ -7,14 +7,14 @@ title: clearFindings -
 
 # clearFindings  
 [jvm]  
-Brief description  
+Content  
+override fun [clearFindings](clear-findings.md)()  
+More info  
 
 
 Clears previous findings. Normally this is done on every new KtFile analyzed and should be called by clients.
 
   
-Content  
-override fun [clearFindings](clear-findings.md)()  
 
 
 

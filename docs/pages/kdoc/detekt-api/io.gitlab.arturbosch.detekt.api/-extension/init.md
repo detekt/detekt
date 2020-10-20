@@ -7,25 +7,25 @@ title: init -
 
 # init  
 [jvm]  
-Brief description  
+Content  
+open fun [init](init.md)(config: [Config](../-config/index.md))  
+More info  
 
 
 Allows to read any or even user defined properties from the detekt yaml config to setup this extension.
 
   
-Content  
-open fun [init](init.md)(config: [Config](../-config/index.md))  
 
 
 [jvm]  
-Brief description  
+Content  
+open fun [init](init.md)(context: [SetupContext](../-setup-context/index.md))  
+More info  
 
 
 Setup extension by querying common paths and config options.
 
   
-Content  
-open fun [init](init.md)(context: [SetupContext](../-setup-context/index.md))  
 
 
 
