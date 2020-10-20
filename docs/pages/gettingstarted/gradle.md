@@ -311,8 +311,8 @@ uses the type `Detekt`.
 ```groovy
 tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
     description = "Runs a failfast detekt build."
-    source = files("src/main/java")
-    config.from(files("$rootDir/config.yml"))
+    setSource(files("src/main/kotlin", "src/test/kotlin"))
+    config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
         xml {
@@ -331,8 +331,8 @@ tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
 ```kotlin
 tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
     description = "Runs a failfast detekt build."
-    source = files("src/main/kotlin", "src/test/kotlin")
-    config = files("$rootDir/config.yml")
+    setSource(files("src/main/kotlin", "src/test/kotlin"))
+    config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
         xml {
