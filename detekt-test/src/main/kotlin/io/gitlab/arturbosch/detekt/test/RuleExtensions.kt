@@ -38,14 +38,15 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.compileAndLintWithContext(
+/**
+ * Compare with [compileAndLintWithContext], this does not use [KotlinScriptEngine]
+ * to compile. Please use this sparingly: A typical usecase is when KotlinScript
+ */
+fun BaseRule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
 ): List<Finding> {
-    if (shouldCompileTestSnippets && additionalContents.isEmpty()) {
-        KotlinScriptEngine.compile(content)
-    }
     val ktFile = compileContentForTest(content.trimIndent())
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent.trimIndent(), "AdditionalTest$index.kt")
@@ -56,6 +57,17 @@ fun BaseRule.compileAndLintWithContext(
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
     return findingsAfterVisit(ktFile, bindingContext, compilerResources)
+}
+
+fun BaseRule.compileAndLintWithContext(
+    environment: KotlinCoreEnvironment,
+    @Language("kotlin") content: String,
+    @Language("kotlin") vararg additionalContents: String,
+): List<Finding> {
+    if (shouldCompileTestSnippets && additionalContents.isEmpty()) {
+        KotlinScriptEngine.compile(content)
+    }
+    return lintWithContext(environment, content, *additionalContents)
 }
 
 private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =

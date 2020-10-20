@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -96,8 +97,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
         describe("negative cases with no public scope") {
 
             it("should not report a private top level function") {
-                // Kotlin Script Engine reports wrongly local functions here
-                assertThat(subject.compileAndLintWithContext(env, """
+                assertThat(subject.lintWithContext(env, """
                     internal fun bar() = 5
                     private fun foo() = 5
                 """)).isEmpty()
