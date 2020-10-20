@@ -5,6 +5,31 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.14.2 - 2020-10-20
+
+##### Changelog
+
+- Do not report vararg arguments which are just passed to a vararg parameter - [#3157](https://github.com/detekt/detekt/pull/3157)
+- Simplify documentation - [#3156](https://github.com/detekt/detekt/pull/3156)
+- Respect inspection aliases ClassName, PackageDirectoryMismatch, RedundantVisibilityModifier - [#3153](https://github.com/detekt/detekt/pull/3153)
+- Change spek and assertj to compile only dependencies for detekt-test consumers - [#3152](https://github.com/detekt/detekt/pull/3152)
+- False positive performance SpreadOperator in case of pass-through vararg - [#3145](https://github.com/detekt/detekt/issues/3145)
+- ClassOrdering rule reports a list of errors - [#3142](https://github.com/detekt/detekt/pull/3142)
+- ClassOrdering only reports first misorder, not all misorders - [#3141](https://github.com/detekt/detekt/issues/3141)
+- UnusedPrivateMember: fix false positive with getValue/setValue operator functions - [#3139](https://github.com/detekt/detekt/pull/3139)
+- ClassOrdering reports a message describing the misorder - [#3138](https://github.com/detekt/detekt/pull/3138)
+- False positive UnusedPrivateMember for getValue, setValue operator functions - [#3128](https://github.com/detekt/detekt/issues/3128)
+- Add aliases to class and package Naming rules - [#3124](https://github.com/detekt/detekt/issues/3124)
+- Artifact detekt-test forces dependency constraining - [#3082](https://github.com/detekt/detekt/issues/3082)
+
+##### Housekeeping & Refactorings
+
+- Fix two eager Regex creations in rules which may confuse users if this rules are inactive but evaluated - [#3154](https://github.com/detekt/detekt/pull/3154)
+- Update Gradle to 6.7 - [#3148](https://github.com/detekt/detekt/pull/3148)
+- Bump github-pages from 208 to 209 in /docs - [#3135](https://github.com/detekt/detekt/pull/3135)
+
+See all issues at: [1.14.2](https://github.com/detekt/detekt/milestone/78)
+
 #### 1.14.1 - 2020-09-30
 
 ##### Changelog
