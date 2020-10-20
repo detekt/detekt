@@ -139,6 +139,8 @@ style:
     active: true
   RedundantVisibilityModifierRule:
     active: true
+  ReturnCount:
+    excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
     active: true
   UnnecessaryAbstractClass:

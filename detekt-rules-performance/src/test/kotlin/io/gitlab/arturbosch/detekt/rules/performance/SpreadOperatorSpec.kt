@@ -15,14 +15,15 @@ class SpreadOperatorSpec : Spek({
     val subject by memoized { SpreadOperator() }
 
     describe("SpreadOperator rule") {
-        /** This rule has different behaviour depending on whether type resolution is enabled in detekt or not. The two
+        /**
+         * This rule has different behaviour depending on whether type resolution is enabled in detekt or not. The two
          * `context` blocks are there to test behaviour when type resolution is enabled and type resolution is disabled
          * as different warning messages are shown in each case.
          */
         context("with type resolution") {
 
             val typeResolutionEnabledMessage = "Used in this way a spread operator causes a full copy of the array to" +
-                " be created before calling a method which has a very high performance penalty."
+                " be created before calling a method. This may result in a performance penalty."
 
             it("reports when array copy required using named parameters") {
                 val code = """
@@ -92,13 +93,35 @@ class SpreadOperatorSpec : Spek({
                 }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("respects pass through of vararg parameter - #3145") {
+                val code = """
+                    fun b(vararg bla: Int) = Unit
+                    fun a(vararg bla: Int) { 
+                        b(*bla) 
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("reports shadowed vararg declaration which may lead to array copy - #3145") {
+                val code = """
+                    fun b(vararg bla: String) = Unit
+
+                    fun a(vararg bla: Int) {
+                        val bla = arrayOf("")
+                        b(*bla)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
         }
 
         context("without type resolution") {
 
             val typeResolutionDisabledMessage = "In most cases using a spread operator causes a full copy of the " +
-                "array to be created before calling a method which has a very high performance penalty."
+                "array to be created before calling a method. This may result in a performance penalty."
 
             it("reports when array copy required using named parameters") {
                 val code = """
@@ -171,6 +194,28 @@ class SpreadOperatorSpec : Spek({
                     println(test)
                 }
                 """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("respects pass through of vararg parameter - #3145") {
+                val code = """
+                    fun b(vararg bla: Int) = Unit
+                    fun a(vararg bla: Int) { 
+                        b(*bla)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report shadowed vararg declaration, we except this false negative here - #3145") {
+                val code = """
+                    fun b(vararg bla: String) = Unit
+
+                    fun a(vararg bla: Int) {
+                        val bla = arrayOf("")
+                        b(*bla)
+                    }
+                """.trimIndent()
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
