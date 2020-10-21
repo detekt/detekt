@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,7 +19,9 @@ import java.net.URI
 internal class AbsentOrWrongFileLicenseSpec : Spek({
 
     describe("AbsentOrWrongFileLicense rule") {
+
         context("file with correct license header") {
+
             it("reports nothing") {
                 val findings = checkLicence("""
                     /* LICENSE */
@@ -31,6 +33,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         }
 
         context("file with incorrect license header") {
+
             it("reports missed license header") {
                 val findings = checkLicence("""
                     /* WRONG LICENSE */
@@ -42,6 +45,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         }
 
         context("file with absent license header") {
+
             it("reports missed license header") {
                 val findings = checkLicence("""
                     package cases
@@ -58,7 +62,8 @@ private fun checkLicence(content: String): List<Finding> {
     val file = compileContentForTest(content)
 
     val resource = resourceAsPath("license-config.yml")
-    val config = YamlConfig.load(resource)
+    val config = yamlConfig("license-config.yml")
+
     LicenceHeaderLoaderExtension().apply {
         init(object : SetupContext {
             override val configUris: Collection<URI> = listOf(resource.toUri())

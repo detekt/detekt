@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 
 internal object DefaultConfig {
 

@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
@@ -17,7 +17,7 @@ import java.nio.file.Path
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
     override val parentPath: String? = null
-) : BaseConfig(), ValidatableConfiguration {
+) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }

@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
