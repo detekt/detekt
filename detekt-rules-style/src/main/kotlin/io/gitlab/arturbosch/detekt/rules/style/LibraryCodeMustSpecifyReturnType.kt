@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * }
  * </compliant>
  *
+ * @requiresTypeResolution
  * @active since v1.2.0
  */
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
@@ -55,6 +56,9 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         super.visitCondition(root) && filters != null
 
     override fun visitProperty(property: KtProperty) {
+        if (bindingContext == BindingContext.EMPTY) {
+            return
+        }
         if (property.explicitReturnTypeRequired()) {
             report(CodeSmell(
                 issue,
@@ -66,6 +70,9 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        if (bindingContext == BindingContext.EMPTY) {
+            return
+        }
         if (function.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(
