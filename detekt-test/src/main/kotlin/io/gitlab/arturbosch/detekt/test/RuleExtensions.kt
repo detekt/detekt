@@ -41,6 +41,7 @@ fun BaseRule.lint(path: Path): List<Finding> {
 /**
  * Compare with [compileAndLintWithContext], this does not use [KotlinScriptEngine]
  * to compile. Please use this sparingly: A typical usecase is when KotlinScript
+ * failed to compile even when the Kotlin code in [content] is legal.
  */
 fun BaseRule.lintWithContext(
     environment: KotlinCoreEnvironment,

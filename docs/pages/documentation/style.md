@@ -486,6 +486,8 @@ Inferred return type can easily be changed by mistake which may lead to breaking
 
 See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
 
+**Requires Type Resolution**
+
 **Severity**: Style
 
 **Debt**: 5min
