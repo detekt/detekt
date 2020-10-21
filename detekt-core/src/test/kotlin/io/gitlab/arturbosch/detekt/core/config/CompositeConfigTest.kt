@@ -1,5 +1,6 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.config
 
+import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

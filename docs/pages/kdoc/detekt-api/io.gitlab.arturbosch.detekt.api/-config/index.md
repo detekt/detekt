@@ -47,8 +47,6 @@ interface [Config](index.md)
 | [ConfigAware](../-config-aware/index.md)
 | [BaseConfig](../../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.md)
 | [CompositeConfig](../../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.md)
-| [DisabledAutoCorrectConfig](../../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.md)
-| [FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.md)
 
 
 ## Extensions  

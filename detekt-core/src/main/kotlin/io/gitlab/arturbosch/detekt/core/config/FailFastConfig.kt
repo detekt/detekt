@@ -1,6 +1,8 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.ValidatableConfiguration
+import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 
 @Suppress("UNCHECKED_CAST")
 data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) :

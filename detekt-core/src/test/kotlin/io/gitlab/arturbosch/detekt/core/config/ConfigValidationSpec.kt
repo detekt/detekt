@@ -1,6 +1,13 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
+import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
+import io.gitlab.arturbosch.detekt.api.internal.nestedConfigurationExpected
+import io.gitlab.arturbosch.detekt.api.internal.propertyDoesNotExists
+import io.gitlab.arturbosch.detekt.api.internal.propertyIsDeprecated
+import io.gitlab.arturbosch.detekt.api.internal.unexpectedNestedConfiguration
+import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent

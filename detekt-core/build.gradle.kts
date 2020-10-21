@@ -1,4 +1,5 @@
 dependencies {
+    implementation("org.yaml:snakeyaml")
     implementation(project(":detekt-api"))
     implementation(project(":detekt-metrics"))
     implementation(project(":detekt-parser"))
