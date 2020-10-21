@@ -113,16 +113,16 @@ internal fun validateConfig(
     return notifications
 }
 
-fun propertyDoesNotExists(prop: String): Notification =
+internal fun propertyDoesNotExists(prop: String): Notification =
     SimpleNotification("Property '$prop' is misspelled or does not exist.")
 
-fun nestedConfigurationExpected(prop: String): Notification =
+internal fun nestedConfigurationExpected(prop: String): Notification =
     SimpleNotification("Nested config expected for '$prop'.")
 
-fun unexpectedNestedConfiguration(prop: String): Notification =
+internal fun unexpectedNestedConfiguration(prop: String): Notification =
     SimpleNotification("Unexpected nested config for '$prop'.")
 
-fun propertyIsDeprecated(
+internal fun propertyIsDeprecated(
     prop: String,
     deprecationDescription: String,
     reportAsError: Boolean,
