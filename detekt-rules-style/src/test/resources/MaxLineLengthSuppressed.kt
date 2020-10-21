@@ -55,3 +55,14 @@ class MaxLineLengthSuppressed {
 
 @Suppress("MaxLineLength")
 class AClassWithSuperLongNameItIsSooooLongThatIHaveTroubleThinkingAboutAVeryLongNameManThisIsReallyHardToFillAllTheNecessaryCharacters
+
+@Suppress("MaxLineLength")
+class AClassWithReallyLongCommentsInside {
+    /*
+     a really long line that is inside a normal comment ------------------------------------------------------------------------------------------------>
+     */
+
+    /**
+     a really long line that is inside a KDoc comment   ------------------------------------------------------------------------------------------------>
+     */
+}
