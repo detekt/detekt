@@ -7,14 +7,18 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.isPublic
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
 
 /**
- * Library functions/properties should have an explicit return type.
+ * Functions/properties exposed as public APIs of a library should have an explicit return type.
  * Inferred return type can easily be changed by mistake which may lead to breaking changes.
+ *
+ * See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
  *
  * <noncompliant>
  * // code from a library
@@ -35,6 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * }
  * </compliant>
  *
+ * @requiresTypeResolution
  * @active since v1.2.0
  */
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
@@ -51,7 +56,10 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         super.visitCondition(root) && filters != null
 
     override fun visitProperty(property: KtProperty) {
-        if (!property.isLocal && property.isPublic && property.typeReference == null) {
+        if (bindingContext == BindingContext.EMPTY) {
+            return
+        }
+        if (property.explicitReturnTypeRequired()) {
             report(CodeSmell(
                 issue,
                 Entity.atName(property),
@@ -62,9 +70,10 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isLocal &&
-            function.isPublic &&
-            function.hasExpressionBodyWithoutExplicitReturnType()) {
+        if (bindingContext == BindingContext.EMPTY) {
+            return
+        }
+        if (function.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(
                     issue,
@@ -76,6 +85,13 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         super.visitNamedFunction(function)
     }
 
-    private fun KtNamedFunction.hasExpressionBodyWithoutExplicitReturnType(): Boolean =
-        equalsToken != null && !hasDeclaredReturnType()
+    private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =
+        ExplicitApiDeclarationChecker.returnTypeCheckIsApplicable(this) &&
+            ExplicitApiDeclarationChecker.returnTypeRequired(
+                element = this,
+                descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this],
+                checkForPublicApi = true,
+                checkForInternal = false,
+                checkForPrivate = false
+            )
 }

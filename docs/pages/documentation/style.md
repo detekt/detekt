@@ -481,8 +481,12 @@ const val constantString = "1"
 
 ### LibraryCodeMustSpecifyReturnType
 
-Library functions/properties should have an explicit return type.
+Functions/properties exposed as public APIs of a library should have an explicit return type.
 Inferred return type can easily be changed by mistake which may lead to breaking changes.
+
+See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
+
+**Requires Type Resolution**
 
 **Severity**: Style
 
