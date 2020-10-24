@@ -263,6 +263,20 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
    number of overloads which will trigger the rule
 
+### NamedArguments
+
+Reports functions invocations which have more parameters than a certain threshold and are not named.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* ``threshold`` (default: ``3``)
+
+   number of non-named parameters allowed in function invocation
+
 ### NestedBlockDepth
 
 This rule reports excessive nesting depth in functions. Excessively nested code becomes harder to read and increases

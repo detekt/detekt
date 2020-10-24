@@ -99,6 +99,9 @@ complexity:
   MethodOverloading:
     active: false
     threshold: 6
+  NamedArguments:
+    active: false
+    threshold: 3
   NestedBlockDepth:
     active: true
     threshold: 4
