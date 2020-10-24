@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
- * Reports functions invocations which have more parameters than a certain threshold and are not named.
+ * Reports function invocations which have more parameters than a certain threshold and are all not named.
  *
- * @configuration threshold - number of non-named parameters allowed in function invocation (default: `3`)
+ * @configuration threshold - number of parameters that triggers this inspection (default: `3`)
  */
 class NamedArguments(
     config: Config = Config.empty,
@@ -21,18 +21,13 @@ class NamedArguments(
 
     override val issue = Issue(
         "NamedArguments", Severity.Maintainability,
-        "Function invocation with more number of parameters must be named.",
+        "Function invocation with more than $threshold parameters must all be named",
         Debt.FIVE_MINS
     )
 
-    private val functionInvocationThreshold: Int =
-        valueOrDefault(
-            THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_FUNCTION_THRESHOLD)
-        )
-
     override fun visitCallExpression(expression: KtCallExpression) {
         val valueArguments = expression.valueArguments
-        if (valueArguments.size > functionInvocationThreshold && valueArguments.any { !it.isNamed() }) {
+        if (valueArguments.size > threshold && valueArguments.any { !it.isNamed() }) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         } else {
             super.visitCallExpression(expression)
@@ -40,7 +35,6 @@ class NamedArguments(
     }
 
     companion object {
-        const val THRESHOLD = "threshold"
         const val DEFAULT_FUNCTION_THRESHOLD = 3
     }
 }

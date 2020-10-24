@@ -265,7 +265,7 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 ### NamedArguments
 
-Reports functions invocations which have more parameters than a certain threshold and are not named.
+Reports function invocations which have more parameters than a certain threshold and are all not named.
 
 **Severity**: Maintainability
 
@@ -275,7 +275,7 @@ Reports functions invocations which have more parameters than a certain threshol
 
 * ``threshold`` (default: ``3``)
 
-   number of non-named parameters allowed in function invocation
+   number of parameters that triggers this inspection
 
 ### NestedBlockDepth
 
