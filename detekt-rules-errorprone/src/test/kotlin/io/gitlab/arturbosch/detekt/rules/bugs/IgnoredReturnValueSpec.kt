@@ -442,6 +442,44 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("does not report when a function is the last statement in a block and it's used") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                val result = if (Random.nextBoolean()) {
+                    1
+                } else {
+                    returnsInt()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report when a function is the last statement in a block and it's in a chain") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                if (Random.nextBoolean()) {
+                    1
+                } else {
+                    returnsInt()
+                }.plus(1)
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).isEmpty()
+        }
+
         it("does not report when a function is the last statement in a block") {
             val code = """
                 package test
@@ -450,15 +488,9 @@ object IgnoredReturnValueSpec : Spek({
 
                 @CheckReturnValue
                 fun returnsInt() = 42
-                
+
                 if (Random.nextBoolean()) {
                     println("hello")
-                } else {
-                    returnsInt()
-                }
-                
-                val result = if (Random.nextBoolean()) {
-                    1
                 } else {
                     returnsInt()
                 }
@@ -479,8 +511,8 @@ object IgnoredReturnValueSpec : Spek({
                     val hello = "world "
                     hello.toUpperCase()
                         .trim()
-                        .listOfChecked() 
-                        .print()         
+                        .listOfChecked()
+                        .print()
                     return 42
                 }
             """
