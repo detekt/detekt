@@ -12,9 +12,10 @@ object IgnoredReturnValueSpec : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { IgnoredReturnValue() }
 
     describe("default config with non-annotated return values") {
+        val subject by memoized { IgnoredReturnValue() }
+
         it("does not report when a function which returns a value is called and the return is ignored") {
             val code = """
                 fun foo() {
@@ -162,6 +163,8 @@ object IgnoredReturnValueSpec : Spek({
     }
 
     describe("default config with annotated return values") {
+        val subject by memoized { IgnoredReturnValue() }
+
         it("reports when a function which returns a value is called and the return is ignored") {
             val code = """
                 package test
@@ -449,7 +452,11 @@ object IgnoredReturnValueSpec : Spek({
     }
 
     describe("custom annotation config") {
-        val config = TestConfig(mapOf(IgnoredReturnValue.RETURN_VALUE_ANNOTATIONS to listOf("*.CustomReturn")))
+        val subject by memoized {
+            IgnoredReturnValue(
+                TestConfig(mapOf(IgnoredReturnValue.RETURN_VALUE_ANNOTATIONS to listOf("*.CustomReturn")))
+            )
+        }
 
         it("reports when a function is annotated with the custom annotation") {
             val code = """
@@ -464,7 +471,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
@@ -482,7 +489,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
         }
 
@@ -495,13 +502,15 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
         }
     }
 
     describe("restrict to annotated methods config") {
-        val config = TestConfig(mapOf(IgnoredReturnValue.RESTRICT_TO_ANNOTATED_METHODS to false))
+        val subject by memoized {
+            IgnoredReturnValue(TestConfig(mapOf(IgnoredReturnValue.RESTRICT_TO_ANNOTATED_METHODS to false)))
+        }
 
         it("reports when a function is annotated with a custom annotation") {
             val code = """
@@ -515,7 +524,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(7, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
@@ -530,7 +539,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(4, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
