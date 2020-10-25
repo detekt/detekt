@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Path
@@ -27,7 +28,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
         this.configPath = context.configUris.lastOrNull()?.let(Paths::get)
     }
 
-    override fun onStart(files: List<KtFile>) {
+    override fun onStart(files: List<KtFile>, bindingContext: BindingContext) {
         fun Config.isActive() = this.valueOrDefault(Config.ACTIVE_KEY, false)
 
         fun shouldRuleRun(): Boolean {
