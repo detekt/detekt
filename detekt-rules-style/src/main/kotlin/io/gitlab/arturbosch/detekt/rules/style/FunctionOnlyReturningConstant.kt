@@ -47,7 +47,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         Debt.TEN_MINS)
 
     private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
-    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
+    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "describeContents"))
     private val excludeAnnotatedFunctions = valueOrDefaultCommaSeparated(
             EXCLUDE_ANNOTATED_FUNCTION, listOf("dagger.Provides"))
         .map { it.removePrefix("*").removeSuffix("*") }

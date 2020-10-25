@@ -65,7 +65,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     )
 
     private val max = valueOrDefault(MAX, 2)
-    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
+    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "equals"))
     private val excludeLabeled = valueOrDefault(EXCLUDE_LABELED, false)
     private val excludeLambdas = valueOrDefault(EXCLUDE_RETURN_FROM_LAMBDA, true)
     private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)

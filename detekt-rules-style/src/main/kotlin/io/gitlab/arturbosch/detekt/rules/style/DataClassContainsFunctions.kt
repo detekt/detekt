@@ -35,7 +35,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
                     "(Compiler will automatically generate equals, toString and hashCode functions)",
             Debt.TWENTY_MINS)
 
-    private val conversionFunctionPrefix = SplitPattern(valueOrDefault(CONVERSION_FUNCTION_PREFIX, ""))
+    private val conversionFunctionPrefix = SplitPattern(valueOrDefault(CONVERSION_FUNCTION_PREFIX, "to"))
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
