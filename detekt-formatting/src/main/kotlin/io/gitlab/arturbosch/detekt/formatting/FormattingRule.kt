@@ -43,7 +43,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     override fun visit(root: KtFile) {
         this.root = root
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
-        positionByOffset = KtLint.calculateLineColByOffset(KtLint.normalizeText(root.text))
+        positionByOffset = KtLintLineColCalculator
+            .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
         editorConfigUpdater()?.let { updateFunc ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
