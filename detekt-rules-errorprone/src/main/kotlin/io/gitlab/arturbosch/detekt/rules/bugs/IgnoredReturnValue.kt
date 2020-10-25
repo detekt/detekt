@@ -13,14 +13,17 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -72,12 +75,9 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         if (bindingContext == BindingContext.EMPTY) return
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val returnType = resolvedCall.resultingDescriptor.returnType ?: return
+        if (resolvedCall.returnsUnit()) return
         val annotations = resolvedCall.resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
 
-        if (returnType.isUnit()) {
-            return
-        }
         if (restrictToAnnotatedMethods &&
                 annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
             return
@@ -87,13 +87,10 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val parent = expression.parent
 
         if (parent is KtDotQualifiedExpression &&
-                parent == parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent
+                parent == parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent &&
+                !parent.returnsUnit()
         ) {
-            val parentResolvedCall = parent.getResolvedCall(bindingContext)
-            val parentReturnType = parentResolvedCall?.resultingDescriptor?.returnType
-            if (false == parentReturnType?.isUnit()) {
-                elementsToInspect += parent
-            }
+            elementsToInspect += parent
         }
         if (parent is KtBlockExpression && parent.lastBlockStatementOrThis() == expression) {
             elementsToInspect -= expression
@@ -111,12 +108,20 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun KtExpression.returnsUnit(): Boolean {
+        return getResolvedCall(bindingContext)?.returnsUnit() != false
+    }
+
     companion object {
         const val RESTRICT_TO_ANNOTATED_METHODS = "restrictToAnnotatedMethods"
         const val DEFAULT_RESTRICT_TO_ANNOTATED_METHODS = true
         const val RETURN_VALUE_ANNOTATIONS = "returnValueAnnotations"
         val DEFAULT_RETURN_VALUE_ANNOTATIONS = listOf("*.CheckReturnValue", "*.CheckResult")
     }
+}
+
+private fun ResolvedCall<out CallableDescriptor>.returnsUnit(): Boolean {
+    return resultingDescriptor.returnType?.isUnit() != false
 }
 
 private val PsiElement.isIsolated: Boolean
