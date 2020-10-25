@@ -211,12 +211,10 @@ object IgnoredReturnValueSpec : Spek({
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(7, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
+            assertThat(findings).isEmpty()
         }
 
-        it("reports when a function which returns a value is called in the middle of a chain and the return is ignored") {
+        it("does not report when a function which returns a value is called in the middle of a chain and the return is ignored") {
             val code = """
                 package test
                 
@@ -230,6 +228,25 @@ object IgnoredReturnValueSpec : Spek({
                         .listOfChecked()
                         .isEmpty()
                         .not()
+                    return 42
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).isEmpty()
+        }
+
+        it("reports when a function which returns a value is called in the end of a chain and the return is ignored") {
+            val code = """
+                package test
+
+                @CheckReturnValue
+                fun String.listOfChecked() = listOf(this)
+
+                fun foo() : Int {
+                    val hello = "world "
+                    hello.toUpperCase()
+                        .trim()
+                        .listOfChecked()
                     return 42
                 }
             """

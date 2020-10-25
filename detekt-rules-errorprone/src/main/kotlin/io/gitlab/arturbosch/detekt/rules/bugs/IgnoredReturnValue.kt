@@ -86,12 +86,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val elementsToInspect = mutableListOf<PsiElement>(expression)
         val parent = expression.parent
 
-        if (parent is KtDotQualifiedExpression) {
-            val parentToInspect = parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent
-            val parentResolvedCall = parentToInspect.getResolvedCall(bindingContext)
+        if (parent is KtDotQualifiedExpression &&
+                parent == parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent
+        ) {
+            val parentResolvedCall = parent.getResolvedCall(bindingContext)
             val parentReturnType = parentResolvedCall?.resultingDescriptor?.returnType
             if (false == parentReturnType?.isUnit()) {
-                elementsToInspect += parentToInspect
+                elementsToInspect += parent
             }
         }
         if (parent is KtBlockExpression && parent.lastBlockStatementOrThis() == expression) {
