@@ -496,7 +496,7 @@ object IgnoredReturnValueSpec : Spek({
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
-            assertThat(findings).isEmpty()
+            assertThat(findings).isEmpty() // FIXME we should flag this one
         }
 
         it("does not report when a function return value is consumed in a chain that returns a Unit") {
