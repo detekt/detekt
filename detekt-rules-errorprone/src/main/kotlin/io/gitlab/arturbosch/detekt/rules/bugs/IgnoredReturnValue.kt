@@ -64,7 +64,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
             .distinct()
             .map { it.simplePatternToRegex() }
 
-    private val restrictToAnnotatedMethods = valueOrDefault(
+    private val restrictToAnnotatedMethods: Boolean = valueOrDefault(
         RESTRICT_TO_ANNOTATED_METHODS,
         DEFAULT_RESTRICT_TO_ANNOTATED_METHODS
     )
@@ -76,11 +76,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         if (resolvedCall.returnsUnit()) return
-        val annotations = resolvedCall.resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
-
-        if (restrictToAnnotatedMethods &&
-                annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
-            return
+        if (restrictToAnnotatedMethods) {
+            val annotations = resolvedCall.resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
+            if (annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
+                return
+            }
         }
 
         val elementsToInspect = mutableListOf<PsiElement>(expression)
