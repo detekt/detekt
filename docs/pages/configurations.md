@@ -121,3 +121,13 @@ processors:
         # - 'PackageCountProcessor'
         # - 'KtFileCountProcessor'
 ```
+
+#### Config JSON Schema
+
+A JSON Schema for the config file is available on: [json.schemastore.org/detekt](https://json.schemastore.org/detekt).
+
+You can configured your IDE (e.g. IntelliJ or Android Studio have built-in support) to use that schema to give you **autocompletion** capabilities on your config file. More details on the IntelliJ support are available [at this page](https://www.jetbrains.com/help/ruby/yaml.html#remote_json).
+
+![JSON Schema validator on IntelliJ](../images/json_schema_validator_intellij.png)
+
+The JSON Schema is not currently automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).
