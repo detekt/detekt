@@ -24,6 +24,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * This rule checks for redundant visibility modifiers.
+
+ * One exemption is the
+ * [explicit API mode](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
+ * In this mode, the visibility modifier should be defined explicitly even if it is public.
+ * Hence, the rule ignores the visibility modifiers in explicit API mode.
  *
  * <noncompliant>
  * public interface Foo { // public per default
