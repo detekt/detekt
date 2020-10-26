@@ -8,9 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
-import org.jetbrains.kotlin.psi.KtFile
-
-data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
 /**
  * This rule reports lines of code which exceed a defined maximum line length.

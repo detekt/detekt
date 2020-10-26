@@ -20,3 +20,5 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
         noTabs.runIfActive { findTabs(file) }
     }
 }
+
+data class KtFileContent(val file: KtFile, val content: Sequence<String>)
