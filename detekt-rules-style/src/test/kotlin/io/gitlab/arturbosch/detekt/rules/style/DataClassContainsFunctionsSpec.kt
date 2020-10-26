@@ -22,14 +22,14 @@ class DataClassContainsFunctionsSpec : Spek({
                 }
             """
 
-            it("reports valid data class w/o conversion function") {
-                assertThat(subject.compileAndLint(code)).hasSize(2)
+            it("reports valid data class w/ conversion function") {
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports valid data class w/ conversion function") {
-                val config = TestConfig(mapOf(DataClassContainsFunctions.CONVERSION_FUNCTION_PREFIX to "to"))
+            it("reports valid data class w/o conversion function") {
+                val config = TestConfig(mapOf(DataClassContainsFunctions.CONVERSION_FUNCTION_PREFIX to ""))
                 val rule = DataClassContainsFunctions(config)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.compileAndLint(code)).hasSize(2)
             }
         }
 
