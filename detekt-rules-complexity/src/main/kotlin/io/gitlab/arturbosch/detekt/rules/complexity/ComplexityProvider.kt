@@ -28,6 +28,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
             ComplexCondition(config),
             LabeledExpression(config),
             ReplaceSafeCallChainWithRun(config),
+            NamedArguments(config)
         )
     )
 }
