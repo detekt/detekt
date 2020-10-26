@@ -12,6 +12,18 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 /**
  * Reports function invocations which have more parameters than a certain threshold and are all not named.
  *
+ * <noncompliant>
+ * fun sum(a: Int, b: Int, c: Int, d: Int) {
+ * }
+ * sum(1, 2, 3, 4)
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun sum(a: Int, b: Int, c: Int, d: Int) {
+ * }
+ * sum(a = 1, b = 2, c = 3, d = 4)
+ * </compliant>
+ *
  * @configuration threshold - number of parameters that triggers this inspection (default: `3`)
  */
 class NamedArguments(

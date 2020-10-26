@@ -79,5 +79,36 @@ class NamedArgumentsSpec : Spek({
             val findings = namedArguments.compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
+
+        it("constructor invocation with more than 3 non-named parameters should throw error") {
+            val code = """
+                class C(val a: Int, val b:Int, val c:Int)
+                
+                val obj = C(1, 2, 3)
+            """
+            val findings = namedArguments.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo(errorMessage)
+        }
+
+        it("constructor invocation with more than 3 named parameters should not throw error") {
+            val code = """
+                class C(val a: Int, val b:Int, val c:Int)
+                
+                val obj = C(a = 1, b = 2, c= 3)
+            """
+            val findings = namedArguments.compileAndLint(code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("constructor invocation with less than 3 non-named parameters should not throw error") {
+            val code = """
+                class C(val a: Int, val b:Int)
+                
+                val obj = C(1, 2)
+            """
+            val findings = namedArguments.compileAndLint(code)
+            assertThat(findings).hasSize(0)
+        }
     }
 })

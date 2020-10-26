@@ -277,6 +277,22 @@ Reports function invocations which have more parameters than a certain threshold
 
    number of parameters that triggers this inspection
 
+#### Noncompliant Code:
+
+```kotlin
+fun sum(a: Int, b: Int, c: Int, d: Int) {
+}
+sum(1, 2, 3, 4)
+```
+
+#### Compliant Code:
+
+```kotlin
+fun sum(a: Int, b: Int, c: Int, d: Int) {
+}
+sum(a = 1, b = 2, c = 3, d = 4)
+```
+
 ### NestedBlockDepth
 
 This rule reports excessive nesting depth in functions. Excessively nested code becomes harder to read and increases
