@@ -470,11 +470,13 @@ object IgnoredReturnValueSpec : Spek({
                 @CheckReturnValue
                 fun returnsInt() = 42
 
-                if (Random.nextBoolean()) {
-                    1
-                } else {
-                    returnsInt()
-                }.plus(1)
+                fun test() {
+                    if (Random.nextBoolean()) {
+                        1
+                    } else {
+                        returnsInt()
+                    }.plus(1)
+                }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
@@ -489,14 +491,16 @@ object IgnoredReturnValueSpec : Spek({
                 @CheckReturnValue
                 fun returnsInt() = 42
 
-                if (Random.nextBoolean()) {
-                    println("hello")
-                } else {
-                    returnsInt()
+                fun test() {
+                    if (Random.nextBoolean()) {
+                        println("hello")
+                    } else {
+                        returnsInt()
+                    }
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
-            assertThat(findings).isEmpty() // FIXME we should flag this one
+            assertThat(findings).hasSize(1)
         }
 
         it("does not report when a function return value is consumed in a chain that returns a Unit") {

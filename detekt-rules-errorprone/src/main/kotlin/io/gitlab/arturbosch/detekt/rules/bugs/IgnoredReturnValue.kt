@@ -9,19 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
-import org.jetbrains.kotlin.com.intellij.psi.PsiComment
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.lexer.KtSingleValueToken
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
-import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isUnit
@@ -72,8 +65,12 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
         if (bindingContext == BindingContext.EMPTY) return
+
+        val parentQualifiedExpression = expression.getStrictParentOfType<KtQualifiedExpression>()
+        if (parentQualifiedExpression != null && parentQualifiedExpression.selectorExpression != expression) return
+        if (expression.isUsedAsExpression(bindingContext)) return
+
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         if (resolvedCall.returnsUnit()) return
         if (restrictToAnnotatedMethods) {
@@ -83,33 +80,14 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        val elementsToInspect = mutableListOf<PsiElement>(expression)
-        val parent = expression.parent
-
-        if (parent is KtDotQualifiedExpression &&
-                parent == parent.getTopmostParentOfType<KtDotQualifiedExpression>() ?: parent &&
-                !parent.returnsUnit()
-        ) {
-            elementsToInspect += parent
-        }
-        if (parent is KtBlockExpression && parent.lastBlockStatementOrThis() == expression) {
-            elementsToInspect -= expression
-        }
-
-        if (elementsToInspect.any(PsiElement::isIsolated)) {
-            val messageText = expression.calleeExpression?.text ?: expression.text
-            report(
-                    CodeSmell(
-                            issue,
-                            Entity.from(expression),
-                            message = "The call $messageText is returning a value that is ignored."
-                    )
+        val messageText = expression.calleeExpression?.text ?: expression.text
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(expression),
+                message = "The call $messageText is returning a value that is ignored."
             )
-        }
-    }
-
-    private fun KtExpression.returnsUnit(): Boolean {
-        return getResolvedCall(bindingContext)?.returnsUnit() != false
+        )
     }
 
     companion object {
@@ -123,21 +101,3 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 private fun ResolvedCall<out CallableDescriptor>.returnsUnit(): Boolean {
     return resultingDescriptor.returnType?.isUnit() != false
 }
-
-private val PsiElement.isIsolated: Boolean
-    get() =
-        this.prevSibling?.isAnIsolationElement == true && this.nextSibling?.isAnIsolationElement == true
-
-private val PsiElement.isAnIsolationElement: Boolean
-    get() {
-        if (this is PsiWhiteSpace || this is PsiComment) {
-            return true
-        }
-        if (this is LeafPsiElement && this.elementType is KtSingleValueToken) {
-            val token = this.elementType as KtSingleValueToken
-            if (token.value == ";") {
-                return true
-            }
-        }
-        return false
-    }
