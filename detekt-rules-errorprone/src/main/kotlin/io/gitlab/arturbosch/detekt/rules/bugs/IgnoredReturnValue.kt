@@ -126,15 +126,15 @@ private fun ResolvedCall<out CallableDescriptor>.returnsUnit(): Boolean {
 
 private val PsiElement.isIsolated: Boolean
     get() =
-        true == this.prevSibling?.isAnIsolationElement && true == this.nextSibling?.isAnIsolationElement
+        this.prevSibling?.isAnIsolationElement == true && this.nextSibling?.isAnIsolationElement == true
 
-private val PsiElement?.isAnIsolationElement: Boolean
+private val PsiElement.isAnIsolationElement: Boolean
     get() {
         if (this is PsiWhiteSpace || this is PsiComment) {
             return true
         }
         if (this is LeafPsiElement && this.elementType is KtSingleValueToken) {
-            val token = (this.elementType as KtSingleValueToken)
+            val token = this.elementType as KtSingleValueToken
             if (token.value == ";") {
                 return true
             }

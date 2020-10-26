@@ -12,11 +12,14 @@ object IgnoredReturnValueSpec : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { IgnoredReturnValue() }
 
     describe("default config with non-annotated return values") {
+        val subject by memoized { IgnoredReturnValue() }
+
         it("does not report when a function which returns a value is called and the return is ignored") {
             val code = """
+                package test
+
                 fun foo() {
                     listOf("hello")
                 }
@@ -27,6 +30,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which returns a value is called before a valid return") {
             val code = """
+                package test
+
                 fun foo() : Int {
                     listOf("hello")
                     return 42
@@ -38,6 +43,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which returns a value is called in chain and the return is ignored") {
             val code = """
+                package test
+
                 fun foo() {
                     listOf("hello").isEmpty().not()
                 }
@@ -48,6 +55,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which returns a value is called before a semicolon") {
             val code = """
+                package test
+
                 fun foo() {
                     listOf("hello");println("foo")
                 }
@@ -58,6 +67,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which returns a value is called after a semicolon") {
             val code = """
+                package test
+
                 fun foo() {
                     println("foo");listOf("hello")
                 }
@@ -68,6 +79,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which returns a value is called between comments") {
             val code = """
+                package test
+
                 fun foo() {
                     listOf("hello")//foo
                 }
@@ -78,6 +91,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when an extension function which returns a value is called and the return is ignored") {
             val code = """
+                package test
+
                 fun Int.isTheAnswer(): Boolean = this == 42
                 fun foo(input: Int) {
                     input.isTheAnswer()
@@ -106,6 +121,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which doesn't return a value is called") {
             val code = """
+                package test
+
                 fun noReturnValue() {}
 
                 fun foo() {
@@ -118,6 +135,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used in a test statement") {
             val code = """
+                package test
+
                 fun returnsBoolean() = true
                 
                 if (returnsBoolean()) {
@@ -130,6 +149,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used in a comparison") {
             val code = """
+                package test
+
                 fun returnsInt() = 42
                 
                 if (42 == returnsInt()) {
@@ -142,6 +163,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used as parameter for another call") {
             val code = """
+                package test
+
                 fun returnsInt() = 42
                 
                 println(returnsInt())
@@ -152,6 +175,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used with named parameters") {
             val code = """
+                package test
+
                 fun returnsInt() = 42
                 
                 println(message = returnsInt())
@@ -162,6 +187,8 @@ object IgnoredReturnValueSpec : Spek({
     }
 
     describe("default config with annotated return values") {
+        val subject by memoized { IgnoredReturnValue() }
+
         it("reports when a function which returns a value is called and the return is ignored") {
             val code = """
                 package test
@@ -328,6 +355,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when the return value is assigned to a pre-existing variable") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun listOfChecked(value: String) = listOf(value)
                 
@@ -343,6 +372,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function which doesn't return a value is called") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun noReturnValue() {}
 
@@ -357,6 +388,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used in a test statement") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun returnsBoolean() = true
                 
@@ -370,6 +403,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used in a comparison") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -383,6 +418,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used as parameter for another call") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -394,6 +431,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("does not report when a function's return value is used with named parameters") {
             val code = """
+                package test
+
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -403,19 +442,15 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is the last statement in a block") {
+        it("does not report when a function is the last statement in a block and it's used") {
             val code = """
+                package test
+
                 import kotlin.random.Random
 
                 @CheckReturnValue
                 fun returnsInt() = 42
-                
-                if (Random.nextBoolean()) {
-                    println("hello")
-                } else {
-                    returnsInt()
-                }
-                
+
                 val result = if (Random.nextBoolean()) {
                     1
                 } else {
@@ -424,6 +459,44 @@ object IgnoredReturnValueSpec : Spek({
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
+        }
+
+        it("does not report when a function is the last statement in a block and it's in a chain") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                if (Random.nextBoolean()) {
+                    1
+                } else {
+                    returnsInt()
+                }.plus(1)
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report when a function is the last statement in a block") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                if (Random.nextBoolean()) {
+                    println("hello")
+                } else {
+                    returnsInt()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).isEmpty() // FIXME we should flag this one
         }
 
         it("does not report when a function return value is consumed in a chain that returns a Unit") {
@@ -438,8 +511,8 @@ object IgnoredReturnValueSpec : Spek({
                     val hello = "world "
                     hello.toUpperCase()
                         .trim()
-                        .listOfChecked() 
-                        .print()         
+                        .listOfChecked()
+                        .print()
                     return 42
                 }
             """
@@ -449,7 +522,11 @@ object IgnoredReturnValueSpec : Spek({
     }
 
     describe("custom annotation config") {
-        val config = TestConfig(mapOf(IgnoredReturnValue.RETURN_VALUE_ANNOTATIONS to listOf("*.CustomReturn")))
+        val subject by memoized {
+            IgnoredReturnValue(
+                TestConfig(mapOf(IgnoredReturnValue.RETURN_VALUE_ANNOTATIONS to listOf("*.CustomReturn")))
+            )
+        }
 
         it("reports when a function is annotated with the custom annotation") {
             val code = """
@@ -464,7 +541,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(8, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
@@ -482,12 +559,14 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
         }
 
         it("does not report when a function is not annotated") {
             val code = """
+                package test
+
                 fun listOfChecked(value: String) = listOf(value)
                 
                 fun foo() : Int {
@@ -495,13 +574,15 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
         }
     }
 
     describe("restrict to annotated methods config") {
-        val config = TestConfig(mapOf(IgnoredReturnValue.RESTRICT_TO_ANNOTATED_METHODS to false))
+        val subject by memoized {
+            IgnoredReturnValue(TestConfig(mapOf(IgnoredReturnValue.RESTRICT_TO_ANNOTATED_METHODS to false)))
+        }
 
         it("reports when a function is annotated with a custom annotation") {
             val code = """
@@ -515,7 +596,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(7, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
@@ -523,6 +604,8 @@ object IgnoredReturnValueSpec : Spek({
 
         it("reports when a function is not annotated") {
             val code = """
+                package test
+
                 fun listOfChecked(value: String) = listOf(value)
                 
                 fun foo() : Int {
@@ -530,9 +613,9 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = IgnoredReturnValue(config).compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(4, 5)
+            assertThat(findings).hasSourceLocation(6, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
     }
