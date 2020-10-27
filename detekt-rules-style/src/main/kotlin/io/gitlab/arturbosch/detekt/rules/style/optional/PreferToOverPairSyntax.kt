@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementOrCallableRef
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
@@ -42,7 +43,7 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
         val subjectType =
             callReference.getType(bindingContext)?.constructor?.declarationDescriptor as? ClassDescriptor ?: return
 
-        if (subjectType.fqNameOrNull()?.asString() == PAIR_CONSTRUCTOR_REFERENCE_NAME) {
+        if (subjectType.fqNameOrNull()?.asString() == PAIR_CONSTRUCTOR_REFERENCE_NAME && callReference.isPairUsed()) {
             val arg = callReference.valueArguments.joinToString(" to ") { it.text }
 
             report(CodeSmell(issue, Entity.from(expression),
@@ -53,7 +54,13 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
         super.visitSimpleNameExpression(expression)
     }
 
+    private fun KtCallExpression.isPairUsed(): Boolean = when (getCallNameExpression()?.text) {
+        PAIR_REFERENCE -> true
+        else -> false
+    }
+
     companion object {
         const val PAIR_CONSTRUCTOR_REFERENCE_NAME = "kotlin.Pair"
+        const val PAIR_REFERENCE = "Pair"
     }
 }
