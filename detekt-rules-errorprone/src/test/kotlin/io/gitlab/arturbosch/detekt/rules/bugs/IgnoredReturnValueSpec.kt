@@ -461,6 +461,26 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("report when a function is not the last statement in a 'if' block and 'if' block is used") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                val result = if (Random.nextBoolean()) {
+                    1
+                } else {
+                    returnsInt()
+                    2
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).hasSize(1)
+        }
+
         it("does not report when a function is the last statement in a block and it's in a chain") {
             val code = """
                 package test
@@ -482,7 +502,7 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is the last statement in a block") {
+        it("report when a function is the last statement in a block") {
             val code = """
                 package test
 
