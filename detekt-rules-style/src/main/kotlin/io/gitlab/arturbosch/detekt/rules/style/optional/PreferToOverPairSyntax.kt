@@ -54,10 +54,7 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
         super.visitSimpleNameExpression(expression)
     }
 
-    private fun KtCallExpression.isPairUsed(): Boolean = when (getCallNameExpression()?.text) {
-        PAIR_REFERENCE -> true
-        else -> false
-    }
+    private fun KtCallExpression.isPairUsed(): Boolean = getCallNameExpression()?.text == PAIR_REFERENCE
 
     companion object {
         const val PAIR_CONSTRUCTOR_REFERENCE_NAME = "kotlin.Pair"
