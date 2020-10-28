@@ -9,14 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -69,10 +65,10 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         if (expression.isUsedAsExpression(bindingContext)) return
 
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        if (resolvedCall.returnsUnit()) return
+        val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
+        if (resultingDescriptor.returnType?.isUnit() == true) return
         if (restrictToAnnotatedMethods) {
-            val annotations = resolvedCall.resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
+            val annotations = resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
             if (annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
                 return
             }
@@ -94,8 +90,4 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         const val RETURN_VALUE_ANNOTATIONS = "returnValueAnnotations"
         val DEFAULT_RETURN_VALUE_ANNOTATIONS = listOf("*.CheckReturnValue", "*.CheckResult")
     }
-}
-
-private fun ResolvedCall<out CallableDescriptor>.returnsUnit(): Boolean {
-    return resultingDescriptor.returnType?.isUnit() != false
 }
