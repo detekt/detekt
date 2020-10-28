@@ -99,14 +99,10 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
 
         if (!functionLiteral.isRedundant(lambdaStatements)) return
 
-        val message = if (lambdaStatements.size == 1) {
-            if (receiverIsSet) {
-                "This 'map' call can be replaced with 'toList'."
-            } else {
-                "This 'map' call can be removed."
-            }
-        } else {
-            "This 'map' call can be replaced with 'onEach' or 'forEach'."
+        val message = when {
+            lambdaStatements.size != 1 -> "This 'map' call can be replaced with 'onEach' or 'forEach'."
+            receiverIsSet -> "This 'map' call can be replaced with 'toList'."
+            else -> "This 'map' call can be removed."
         }
         report(CodeSmell(issue, Entity.from(calleeExpression), message))
     }
