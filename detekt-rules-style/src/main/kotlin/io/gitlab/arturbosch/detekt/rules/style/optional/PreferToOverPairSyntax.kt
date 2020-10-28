@@ -7,13 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
-import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementOrCallableRef
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
@@ -37,27 +36,20 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS)
 
     @Suppress("ReturnCount")
-    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
+    override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        val callReference = expression.getQualifiedElementOrCallableRef() as? KtCallExpression ?: return
-        val subjectType =
-            callReference.getType(bindingContext)?.constructor?.declarationDescriptor as? ClassDescriptor ?: return
-
-        if (subjectType.fqNameOrNull()?.asString() == PAIR_CONSTRUCTOR_REFERENCE_NAME && callReference.isPairUsed()) {
-            val arg = callReference.valueArguments.joinToString(" to ") { it.text }
-
+        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
+        val fqName = descriptor.safeAs<ClassConstructorDescriptor>()?.containingDeclaration?.fqNameOrNull() ?: return
+        if (fqName == PAIR_FQ_NAME) {
+            val arg = expression.valueArguments.joinToString(" to ") { it.text }
             report(CodeSmell(issue, Entity.from(expression),
                     message = "Pair is created by using the pair constructor. " +
                             "This can replaced by `$arg`"))
         }
-
-        super.visitSimpleNameExpression(expression)
+        super.visitCallExpression(expression)
     }
 
-    private fun KtCallExpression.isPairUsed(): Boolean = getCallNameExpression()?.text == PAIR_REFERENCE
-
     companion object {
-        const val PAIR_CONSTRUCTOR_REFERENCE_NAME = "kotlin.Pair"
-        const val PAIR_REFERENCE = "Pair"
+        private val PAIR_FQ_NAME = FqName("kotlin.Pair")
     }
 }
