@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+@Suppress("LargeClass")
 object IgnoredReturnValueSpec : Spek({
     setupKotlinEnvironment()
 
@@ -461,6 +462,26 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("report when a function is not the last statement in a 'if' block and 'if' block is used") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                val result = if (Random.nextBoolean()) {
+                    1
+                } else {
+                    returnsInt()
+                    2
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).hasSize(1)
+        }
+
         it("does not report when a function is the last statement in a block and it's in a chain") {
             val code = """
                 package test
@@ -470,17 +491,19 @@ object IgnoredReturnValueSpec : Spek({
                 @CheckReturnValue
                 fun returnsInt() = 42
 
-                if (Random.nextBoolean()) {
-                    1
-                } else {
-                    returnsInt()
-                }.plus(1)
+                fun test() {
+                    if (Random.nextBoolean()) {
+                        1
+                    } else {
+                        returnsInt()
+                    }.plus(1)
+                }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is the last statement in a block") {
+        it("report when a function is not the last statement in a block and it's in a chain") {
             val code = """
                 package test
 
@@ -489,14 +512,38 @@ object IgnoredReturnValueSpec : Spek({
                 @CheckReturnValue
                 fun returnsInt() = 42
 
-                if (Random.nextBoolean()) {
-                    println("hello")
-                } else {
-                    returnsInt()
+                fun test() {
+                    if (Random.nextBoolean()) {
+                        1
+                    } else {
+                        returnsInt()
+                        2
+                    }.plus(1)
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
-            assertThat(findings).isEmpty() // FIXME we should flag this one
+            assertThat(findings).hasSize(1)
+        }
+
+        it("report when a function is the last statement in a block") {
+            val code = """
+                package test
+
+                import kotlin.random.Random
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+
+                fun test() {
+                    if (Random.nextBoolean()) {
+                        println("hello")
+                    } else {
+                        returnsInt()
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code, checkReturnValueAnnotationCode)
+            assertThat(findings).hasSize(1)
         }
 
         it("does not report when a function return value is consumed in a chain that returns a Unit") {
