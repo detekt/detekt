@@ -67,8 +67,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         super.visitCallExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
-        val parentQualifiedExpression = expression.getStrictParentOfType<KtQualifiedExpression>()
-        if (parentQualifiedExpression != null && parentQualifiedExpression.selectorExpression != expression) return
         if (expression.isUsedAsExpression(bindingContext)) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
