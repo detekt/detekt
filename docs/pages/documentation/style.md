@@ -1002,6 +1002,60 @@ val x = "string"
 }
 ```
 
+### RedundantHigherOrderMapUsage
+
+Turn on this rule to flag redundant 'map' calls.
+
+**Requires Type Resolution**
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(list: List<Int>): List<Int> {
+    return list
+        .filter { it > 5 }
+        .map { it }
+}
+
+fun bar(list: List<Int>): List<Int> {
+    return list
+        .filter { it > 5 }
+        .map {
+            doSomething(it)
+            it
+        }
+}
+
+fun baz(set: Set<Int>): List<Int> {
+    return set.map { it }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(list: List<Int>): List<Int> {
+    return list
+        .filter { it > 5 }
+}
+
+fun bar(list: List<Int>): List<Int> {
+    return list
+        .filter { it > 5 }
+        .onEach {
+            doSomething(it)
+        }
+}
+
+fun baz(set: Set<Int>): List<Int> {
+    return set.toList()
+}
+```
+
 ### RedundantVisibilityModifierRule
 
 This rule checks for redundant visibility modifiers.
