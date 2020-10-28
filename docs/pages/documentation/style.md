@@ -1004,7 +1004,8 @@ val x = "string"
 
 ### RedundantHigherOrderMapUsage
 
-Turn on this rule to flag redundant 'map' calls.
+Redundant maps add complexity to the code and accomplish nothing. They should be removed or replaced with the proper
+operator.
 
 **Requires Type Resolution**
 
