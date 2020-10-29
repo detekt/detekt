@@ -609,6 +609,8 @@ style:
     active: true
   RedundantExplicitType:
     active: false
+  RedundantHigherOrderMapUsage:
+    active: false
   RedundantVisibilityModifierRule:
     active: false
   ReturnCount:

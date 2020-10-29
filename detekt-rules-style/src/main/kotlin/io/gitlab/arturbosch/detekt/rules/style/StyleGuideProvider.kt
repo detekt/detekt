@@ -83,7 +83,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseArrayLiteralsInAnnotations(config),
             UseEmptyCounterpart(config),
             UseCheckNotNull(config),
-            UseRequireNotNull(config)
+            UseRequireNotNull(config),
+            RedundantHigherOrderMapUsage(config)
         )
     )
 }
