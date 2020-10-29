@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.internal
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import org.gradle.api.Project
@@ -39,8 +38,6 @@ internal fun Project.registerCreateBaselineTask(
         it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
         it.failFast.set(project.provider { extension.failFast })
         it.autoCorrect.set(project.provider { extension.autoCorrect })
-        it.setIncludes(DetektPlugin.defaultIncludes)
-        it.setExcludes(DetektPlugin.defaultExcludes)
         configuration(it)
     }
 
