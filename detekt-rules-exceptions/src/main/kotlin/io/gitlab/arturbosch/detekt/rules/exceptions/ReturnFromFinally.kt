@@ -10,12 +10,18 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
 /**
  * Reports all `return` statements in `finally` blocks.
  * Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
+ * Also report unaffected return value in `finally` block if it used as expression.
+ * See: https://kotlinlang.org/docs/reference/exceptions.html#try-is-an-expression
  *
  * <noncompliant>
  * fun foo() {
@@ -25,9 +31,12 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *         return // prevents MyException from being propagated
  *     }
  * }
+ *
+ * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
  * </noncompliant>
  *
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
+ * @requiresTypeResolution
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
@@ -43,6 +52,30 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
             .collectDescendantsOfType<KtReturnExpression> { isNotInInnerFunction(it, innerFunctions) &&
                     canFilterLabeledExpression(it) }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+    }
+
+    override fun visitTryExpression(expression: KtTryExpression) {
+        super.visitTryExpression(expression)
+        if (bindingContext == BindingContext.EMPTY) return
+
+        val finallyBlock = expression.finallyBlock
+
+        if (expression.isUsedAsExpression(bindingContext) && finallyBlock != null) {
+            val finallyExpression = finallyBlock.finalExpression
+            if (finallyExpression.statements.isEmpty()) return
+
+            val finallyReturnType = finallyBlock.finalExpression.getType(bindingContext)
+
+            if (finallyReturnType == expression.getType(bindingContext)) {
+                report(
+                    CodeSmell(
+                        issue = issue,
+                        entity = Entity.Companion.from(finallyBlock),
+                        message = issue.description
+                    )
+                )
+            }
+        }
     }
 
     private fun isNotInInnerFunction(
