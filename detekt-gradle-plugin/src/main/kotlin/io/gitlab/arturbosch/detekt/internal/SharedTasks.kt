@@ -39,8 +39,6 @@ internal fun Project.registerCreateBaselineTask(
         it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
         it.failFast.set(project.provider { extension.failFast })
         it.autoCorrect.set(project.provider { extension.autoCorrect })
-        it.setIncludes(DetektPlugin.defaultIncludes)
-        it.setExcludes(DetektPlugin.defaultExcludes)
         configuration(it)
     }
 
