@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * This rule inspects 'isEmpty' or 'isBlank' calls to assign default value. They are can be replaced with 'ifEmpty' or
+ * This rule inspects 'isEmpty' or 'isBlank' calls to assign default value. They can be replaced with 'ifEmpty' or
  * 'ifBlank' calls.
  *
  * <noncompliant>

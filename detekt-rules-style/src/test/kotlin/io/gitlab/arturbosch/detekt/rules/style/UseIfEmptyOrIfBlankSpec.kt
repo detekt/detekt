@@ -58,7 +58,7 @@ class UseIfEmptyOrIfBlankSpec : Spek({
             assertThat(findings[0]).hasMessage("This 'isEmpty' call can be replaced with 'ifEmpty'")
         }
 
-        it("String..isNotEmpty") {
+        it("String.isNotEmpty") {
             val code = """
                 class Api(val name: String)
                 
