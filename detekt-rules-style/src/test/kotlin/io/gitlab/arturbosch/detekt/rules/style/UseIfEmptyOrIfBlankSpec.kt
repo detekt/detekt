@@ -218,6 +218,32 @@ class UseIfEmptyOrIfBlankSpec : Spek({
     }
 
     describe("does not report UseIfEmptyOrIfBlank rule") {
+        it("String.isNullOrBlank") {
+            val code = """
+                class Api(val name: String?)
+                
+                fun test(api: Api) {
+                    val name = if (api.name.isNullOrBlank()) "John" else api.name
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("List.isNullOrEmpty") {
+            val code = """
+                fun test2(list: List<Int>): List<Int> {
+                    return if (list.isNullOrEmpty()) {
+                        listOf(1)
+                    } else {
+                        list
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
         it("Array.isEmpty") {
             val code = """
                 fun test(arr: Array<String>): Array<String> {
