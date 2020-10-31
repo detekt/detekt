@@ -242,6 +242,20 @@ object MissingWhenCaseSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            it("does not report when else is used for non enum or sealed `when` expression") {
+                val code = """
+                     fun whenChecks() {
+                        val x = 3
+
+                        when (x) {
+                            0, 1 -> print("x == 0 or x == 1")
+                            else -> print("otherwise")
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
     }
 })
