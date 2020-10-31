@@ -555,9 +555,9 @@ class UnusedImportsSpec : Spek({
 
         it("does not report static import") {
             val mainFile = """
-                import x.y.z.Foo
+                import x.y.z.FetchType
                 
-                val x = Foo.LAZY
+                val x = FetchType.LAZY
             """
             val additionalFile = """
                 package x.y.z
