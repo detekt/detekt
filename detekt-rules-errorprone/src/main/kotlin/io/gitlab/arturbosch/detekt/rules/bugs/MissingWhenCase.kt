@@ -100,7 +100,7 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         super.visitWhenExpression(expression)
     }
 
-    private fun getReport(
+    private fun reportMissingCases(
         missingCases: List<WhenMissingCase>,
         expression: KtWhenExpression
     ) {
