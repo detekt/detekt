@@ -215,6 +215,36 @@ class UseIfEmptyOrIfBlankSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        it("!isEmpty") {
+            val code = """
+                fun test(list: List<Int>): List<Int> {
+                    return if (!list.isEmpty()) { // list.isNotEmpty()
+                        list
+                    } else {
+                        listOf(1)
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("This 'isEmpty' call can be replaced with 'ifEmpty'")
+        }
+
+        it("!isNotEmpty") {
+            val code = """
+                fun test(list: List<Int>): List<Int> {
+                    return if (!list.isNotEmpty()) { // list.isEmpty() 
+                        listOf(1)
+                    } else {
+                        list
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("This 'isNotEmpty' call can be replaced with 'ifEmpty'")
+        }
     }
 
     describe("does not report UseIfEmptyOrIfBlank rule") {
@@ -350,20 +380,6 @@ class UseIfEmptyOrIfBlankSpec : Spek({
                     } else {
                         println()
                         list
-                    }
-                }
-            """
-            val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).isEmpty()
-        }
-
-        it("condition is prefix expression") {
-            val code = """
-                fun test(list: List<Int>): List<Int> {
-                    return if (!list.isEmpty()) {
-                        list
-                    } else {
-                        listOf(1)
                     }
                 }
             """

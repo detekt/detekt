@@ -9,11 +9,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
@@ -45,6 +47,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * @requiresTypeResolution
  */
+@Suppress("ReturnCount", "ComplexMethod")
 class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfEmptyOrIfBlank",
@@ -53,7 +56,6 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount", "ComplexMethod")
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
@@ -63,14 +65,14 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         val elseExpression = expression.`else` ?: return
         if (elseExpression is KtIfExpression) return
 
-        val condition = expression.condition ?: return
+        val (condition, isNegatedCondition) = expression.condition() ?: return
         val conditionCallExpression = condition.getPossiblyQualifiedCallExpression() ?: return
         val conditionCalleeExpression = conditionCallExpression.calleeExpression ?: return
         val conditionCalleeExpressionText = conditionCalleeExpression.text
         if (conditionCalleeExpressionText !in conditionFunctionShortNames) return
 
         val replacement = conditionCallExpression.replacement() ?: return
-        val selfBranch = if (replacement.negativeCondition) thenExpression else elseExpression
+        val selfBranch = if (isNegatedCondition xor replacement.negativeCondition) thenExpression else elseExpression
         val selfValueExpression = selfBranch.blockExpressionsOrSingle().singleOrNull() ?: return
         if (condition is KtDotQualifiedExpression) {
             if (selfValueExpression.text != condition.receiverExpression.text) return
@@ -85,7 +87,17 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
 
     private fun KtExpression.isElseIf(): Boolean = parent.node.elementType == KtNodeTypes.ELSE
 
-    @Suppress("ReturnCount")
+    private fun KtIfExpression.condition(): Pair<KtExpression, Boolean>? {
+        val condition = this.condition ?: return null
+        return if (condition is KtPrefixExpression) {
+            if (condition.operationToken != KtTokens.EXCL) return null
+            val baseExpression = condition.baseExpression ?: return null
+            baseExpression to true
+        } else {
+            condition to false
+        }
+    }
+
     private fun KtCallExpression.replacement(): Replacement? {
         val descriptor = getResolvedCall(bindingContext)?.resultingDescriptor ?: return null
         val receiverParameter = descriptor.dispatchReceiverParameter ?: descriptor.extensionReceiverParameter
