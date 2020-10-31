@@ -1688,8 +1688,8 @@ emptySet()
 
 ### UseIfEmptyOrIfBlank
 
-This rule inspects 'isEmpty' or 'isBlank' calls to assign default value. They can be replaced with 'ifEmpty' or
-'ifBlank' calls.
+This rule detects `isEmpty` or `isBlank` calls to assign a default value. They can be replaced with `ifEmpty` or
+`ifBlank` calls.
 
 **Requires Type Resolution**
 
