@@ -552,5 +552,18 @@ class UnusedImportsSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
             assertThat(findings).isEmpty()
         }
+
+        it("does not report static import") {
+            val main = """
+                package com.example
+
+                import org.eclipse.persistence.annotations.FetchType
+
+                class Test {
+                    var fetch = FetchType.LAZY
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, main)).isEmpty()
+        }
     }
 })
