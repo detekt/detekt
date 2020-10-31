@@ -491,6 +491,7 @@ potential-bugs:
     active: false
   MissingWhenCase:
     active: true
+    allowElseExpression: true
   NullableToStringCall:
     active: false
   RedundantElseInWhen:
