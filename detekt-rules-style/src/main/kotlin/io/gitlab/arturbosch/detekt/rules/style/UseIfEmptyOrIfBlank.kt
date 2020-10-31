@@ -74,8 +74,8 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         val selfValueExpression = selfBranch.blockExpressionsOrSingle().singleOrNull() ?: return
         if (condition is KtDotQualifiedExpression) {
             if (selfValueExpression.text != condition.receiverExpression.text) return
-        } else {
-            if (selfValueExpression !is KtThisExpression) return
+        } else if (selfValueExpression !is KtThisExpression) {
+            return
         }
 
         val message =
