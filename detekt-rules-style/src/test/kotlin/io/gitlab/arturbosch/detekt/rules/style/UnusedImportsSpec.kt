@@ -554,16 +554,19 @@ class UnusedImportsSpec : Spek({
         }
 
         it("does not report static import") {
-            val main = """
-                package com.example
-
-                import org.eclipse.persistence.annotations.FetchType
-
-                class Test {
-                    var fetch = FetchType.LAZY
+            val mainFile = """
+                import x.y.z.Foo
+                
+                val x = Foo.LAZY
+            """
+            val additionalFile = """
+                package x.y.z
+                
+                enum class FetchType {
+                    LAZY
                 }
             """
-            assertThat(subject.compileAndLintWithContext(env, main)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, mainFile, additionalFile)).isEmpty()
         }
     }
 })
