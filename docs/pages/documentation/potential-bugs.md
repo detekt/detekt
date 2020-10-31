@@ -444,7 +444,7 @@ either handle all cases or use a default `else` statement to cover the unhandled
 
 * ``allowElseExpression`` (default: ``true``)
 
-   whether else can be treated as a valid case for enums and sealed classes 
+   whether `else` can be treated as a valid case for enums and sealed classes 
 
 Based on code from Kotlin compiler:
 https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt

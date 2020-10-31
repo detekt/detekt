@@ -58,7 +58,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *     }
  * }
  * </compliant>
- * @configuration allowElseExpression - whether else can be treated as a valid case for enums and sealed classes (default: `true`)
+ * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
  *
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
@@ -105,11 +105,11 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         expression: KtWhenExpression
     ) {
         if (missingCases.isNotEmpty()) {
-            val defaultMessage = "When expression is missing cases: ${missingCases.joinToString()}."
-            val message = if (allowElseExpression) {
-                "$defaultMessage Either add missing cases or a default `else` case."
+            var message = "When expression is missing cases: ${missingCases.joinToString()}."
+            message = if (allowElseExpression) {
+                "$message Either add missing cases or a default `else` case."
             } else {
-                defaultMessage
+                message
             }
             report(
                 CodeSmell(
