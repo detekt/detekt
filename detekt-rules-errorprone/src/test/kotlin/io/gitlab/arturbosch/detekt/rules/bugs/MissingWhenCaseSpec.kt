@@ -15,8 +15,9 @@ object MissingWhenCaseSpec : Spek({
 
     describe("MissingWhenCase rule") {
         val subject by memoized { MissingWhenCase() }
+
         context("enum") {
-            it("reports when `when` expression used as statement and not all cases covered") {
+            it("reports when `when` expression used as statement and not all cases are covered") {
                 val code = """
                 enum class Color {
                     RED,
@@ -37,7 +38,7 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED. Either add missing cases or a default `else` case.")
             }
 
-            it("does not report when `when` expression used as statement and all cases covered") {
+            it("does not report when `when` expression used as statement and all cases are covered") {
                 val code = """
                 enum class Color {
                     RED,
@@ -63,8 +64,9 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
+
         context("sealed classes") {
-            it("reports when `when` expression used as statement and not all cases covered") {
+            it("reports when `when` expression used as statement and not all cases are covered") {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -85,7 +87,7 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
             }
 
-            it("does not report when `when` expression used as statement and all cases covered") {
+            it("does not report when `when` expression used as statement and all cases are covered") {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -112,6 +114,7 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
+
         context("standard when") {
             it("does not report when `when` not checking for missing cases") {
                 val code = """
@@ -151,6 +154,7 @@ object MissingWhenCaseSpec : Spek({
             }
         }
     }
+
     describe("MissingWhenCase rule when else expression is not considered") {
         val subject by memoized {
             MissingWhenCase(
@@ -159,7 +163,7 @@ object MissingWhenCaseSpec : Spek({
         }
 
         context("enum") {
-            it("reports when `when` expression used as statement and not all cases covered") {
+            it("reports when `when` expression used as statement and not all cases are covered") {
                 val code = """
                 enum class Color {
                     RED,
@@ -201,6 +205,7 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual).isEmpty()
             }
         }
+
         context("sealed classes") {
             it("reports when `when` expression used as statement and not all cases covered") {
                 val code = """
@@ -224,7 +229,7 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC.")
             }
 
-            it("does not report when `when` expression used as statement and all cases covered") {
+            it("does not report when `when` expression used as statement and all cases are covered") {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -242,7 +247,9 @@ object MissingWhenCaseSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+        }
 
+        context("standard when") {
             it("does not report when else is used for non enum or sealed `when` expression") {
                 val code = """
                      fun whenChecks() {
