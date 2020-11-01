@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.cfg.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -57,6 +58,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *     }
  * }
  * </compliant>
+ * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
  *
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
@@ -74,40 +76,51 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    private val allowElseExpression = valueOrDefault(ALLOW_ELSE_EXPRESSION, true)
+
     @Suppress("ReturnCount")
     override fun visitWhenExpression(expression: KtWhenExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        if (expression.elseExpression != null) return
+        if (allowElseExpression && expression.elseExpression != null) return
         if (expression.isUsedAsExpression(bindingContext)) return
         val subjectExpression = expression.subjectExpression ?: return
         val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
         if (enumClassDescriptor != null) {
-            val enumMissingCases = WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)
-            if (enumMissingCases.isNotEmpty()) {
-                report(
-                    CodeSmell(
-                        issue, Entity.from(expression),
-                        "When expression is missing cases: ${enumMissingCases.joinToString()}. Either add missing " +
-                                "cases or a default `else` case."
-                    )
-                )
-            }
+            val enumMissingCases =
+                WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)
+            reportMissingCases(enumMissingCases, expression)
         }
         val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType)
         if (sealedClassDescriptor != null) {
             val sealedClassMissingCases =
                 WhenChecker.getSealedMissingCases(expression, bindingContext, sealedClassDescriptor)
-            if (sealedClassMissingCases.isNotEmpty()) {
-                report(
-                    CodeSmell(
-                        issue, Entity.from(expression),
-                        "When expression is missing cases: ${sealedClassMissingCases.joinToString()}. Either add " +
-                                "missing cases or a default `else` case."
-                    )
-                )
-            }
+            reportMissingCases(sealedClassMissingCases, expression)
         }
         super.visitWhenExpression(expression)
+    }
+
+    private fun reportMissingCases(
+        missingCases: List<WhenMissingCase>,
+        expression: KtWhenExpression
+    ) {
+        if (missingCases.isNotEmpty()) {
+            var message = "When expression is missing cases: ${missingCases.joinToString()}."
+            message = if (allowElseExpression) {
+                "$message Either add missing cases or a default `else` case."
+            } else {
+                message
+            }
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    message
+                )
+            )
+        }
+    }
+
+    companion object {
+        const val ALLOW_ELSE_EXPRESSION = "allowElseExpression"
     }
 }
