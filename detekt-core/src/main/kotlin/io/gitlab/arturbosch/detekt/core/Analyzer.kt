@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -70,7 +69,7 @@ internal class Analyzer(
         ktFiles.map { file ->
             processors.forEach { it.onProcess(file, bindingContext) }
             val findings = runCatching { analyze(file, bindingContext, compilerResources) }
-                .onFailure { throw UnexpectedError(message = createErrorMessage(file, it), cause = it) }
+                .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyMap())
             processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
             findings
@@ -88,9 +87,7 @@ internal class Analyzer(
                 val findings = analyze(file, bindingContext, compilerResources)
                 processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
                 findings
-            }.recover {
-                throw UnexpectedError(message = createErrorMessage(file, it), cause = it)
-            }
+            }.recover { throwIllegalStateException(file, it) }
         }
         return awaitAll(tasks).filterNotNull()
     }
@@ -144,12 +141,15 @@ private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, Lis
     }
 }
 
-private fun createErrorMessage(file: KtFile, error: Throwable): String = """
+private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing {
+    val message = """
     Analyzing ${file.absolutePath()} led to an exception. 
     The original exception message was: ${error.localizedMessage}
     Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'
     If the exception message does not help, please feel free to create an issue on our GitHub page.
-""".trimIndent()
+    """.trimIndent()
+    throw IllegalStateException(message, error)
+}
 
 internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = with(configSpec) {
     var declaredConfig: Config? = when {

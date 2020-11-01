@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.tooling.api.UnexpectedError
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -38,7 +37,7 @@ class AnalyzerSpec : Spek({
 
             assertThatThrownBy {
                 settings.use { analyzer.run(listOf(compileForTest(testFile))) }
-            }.isInstanceOf(UnexpectedError::class.java)
+            }.isInstanceOf(IllegalStateException::class.java)
         }
 
         it("throw error explicitly in parallel when config has wrong value in config") {
@@ -57,7 +56,7 @@ class AnalyzerSpec : Spek({
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(CompletionException::class.java)
-                .hasCauseInstanceOf(UnexpectedError::class.java)
+                .hasCauseInstanceOf(IllegalStateException::class.java)
         }
     }
 })
