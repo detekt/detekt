@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.psi.absolutePath
+import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -10,9 +12,12 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.api.internal.whichJava
+import io.gitlab.arturbosch.detekt.api.internal.whichOS
+import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.FailFastConfig
-import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
@@ -21,6 +26,8 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
+
+private typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -63,7 +70,7 @@ internal class Analyzer(
         ktFiles.map { file ->
             processors.forEach { it.onProcess(file, bindingContext) }
             val findings = runCatching { analyze(file, bindingContext, compilerResources) }
-                .onFailure { settings.error(createErrorMessage(file, it), it) }
+                .onFailure { throw UnexpectedError(message = createErrorMessage(file, it), cause = it) }
                 .getOrDefault(emptyMap())
             processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
             findings
@@ -82,8 +89,7 @@ internal class Analyzer(
                 processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
                 findings
             }.recover {
-                settings.error(createErrorMessage(file, it), it)
-                emptyMap()
+                throw UnexpectedError(message = createErrorMessage(file, it), cause = it)
             }
         }
         return awaitAll(tasks).filterNotNull()
@@ -131,6 +137,19 @@ internal class Analyzer(
 private fun <T, U, R> Sequence<Pair<T, U>>.mapLeft(transform: (T, U) -> R): Sequence<Pair<R, U>> {
     return this.map { (first, second) -> transform(first, second) to second }
 }
+
+private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
+    for ((key, findings) in other.entries) {
+        merge(key, findings) { f1, f2 -> f1.plus(f2) }
+    }
+}
+
+private fun createErrorMessage(file: KtFile, error: Throwable): String = """
+    Analyzing ${file.absolutePath()} led to an exception. 
+    The original exception message was: ${error.localizedMessage}
+    Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'
+    If the exception message does not help, please feel free to create an issue on our GitHub page.
+""".trimIndent()
 
 internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = with(configSpec) {
     var declaredConfig: Config? = when {

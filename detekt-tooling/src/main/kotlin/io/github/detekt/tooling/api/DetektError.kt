@@ -9,4 +9,6 @@ class MaxIssuesReached(message: String) : DetektError(message)
 
 class InvalidConfig(message: String) : DetektError(message)
 
-class UnexpectedError(override val cause: Throwable) : DetektError(null, cause)
+class UnexpectedError(message: String?, override val cause: Throwable) : DetektError(message, cause) {
+    constructor(cause: Throwable) : this(null, cause)
+}
