@@ -52,9 +52,6 @@ fun onDestroy() {
 functions. This needlessly restricts use of the function and should be avoided by removing the `suspend` modifier
 where it's not needed.
 
-Based on code from Kotlin project:
-https://github.com/JetBrains/kotlin/blob/v1.3.61/idea/src/org/jetbrains/kotlin/idea/inspections/RedundantSuspendModifierInspection.kt
-
 **Requires Type Resolution**
 
 **Severity**: Minor
