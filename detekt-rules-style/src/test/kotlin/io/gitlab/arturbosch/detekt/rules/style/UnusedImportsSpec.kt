@@ -552,5 +552,21 @@ class UnusedImportsSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, mainFile, additionalFile)
             assertThat(findings).isEmpty()
         }
+
+        it("does not report static import") {
+            val mainFile = """
+                import x.y.z.FetchType
+                
+                val x = FetchType.LAZY
+            """
+            val additionalFile = """
+                package x.y.z
+                
+                enum class FetchType {
+                    LAZY
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, mainFile, additionalFile)).isEmpty()
+        }
     }
 })

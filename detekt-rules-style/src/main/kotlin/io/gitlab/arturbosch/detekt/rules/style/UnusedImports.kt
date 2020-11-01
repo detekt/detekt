@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
+import org.jetbrains.kotlin.psi.psiUtil.isDotReceiver
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
@@ -49,6 +50,7 @@ class UnusedImports(config: Config) : Rule(config) {
         private var currentPackage: FqName? = null
         private var imports: List<KtImportDirective>? = null
         private val namedReferences = mutableSetOf<KtReferenceExpression>()
+        private val staticReferences = mutableSetOf<KtReferenceExpression>()
         private val namedReferencesInKDoc = mutableSetOf<String>()
 
         fun unusedImports(): List<KtImportDirective> {
@@ -58,9 +60,10 @@ class UnusedImports(config: Config) : Rule(config) {
             @Suppress("ReturnCount")
             fun KtImportDirective.isNotUsed(): Boolean {
                 val namedReferencesAsString = namedReferences.map { it.text.trim('`') }
+                val staticReferencesAsString = staticReferences.map { it.text.trim('`') }
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()
-                if (identifier in namedReferencesInKDoc) return false
+                if (identifier in namedReferencesInKDoc || identifier in staticReferencesAsString) return false
                 return if (bindingContext == BindingContext.EMPTY) {
                     identifier !in namedReferencesAsString
                 } else {
@@ -93,9 +96,15 @@ class UnusedImports(config: Config) : Rule(config) {
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
             expression
-                    .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
-                    ?.takeIf { it.children.isEmpty() }
-                    ?.run { namedReferences.add(this) }
+                .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
+                ?.takeIf { it.children.isEmpty() }
+                ?.run {
+                    if (this.isDotReceiver()) {
+                        staticReferences.add(this)
+                    } else {
+                        namedReferences.add(this)
+                    }
+                }
             super.visitReferenceExpression(expression)
         }
 
