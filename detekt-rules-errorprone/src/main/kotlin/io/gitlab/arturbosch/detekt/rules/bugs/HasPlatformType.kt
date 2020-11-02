@@ -16,11 +16,12 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.isFlexible
 
-/**
- * Platform types must be declared explicitly in public APIs to prevent unexpected errors.
- *
+/*
  * Based on code from Kotlin project:
  * https://github.com/JetBrains/kotlin/blob/1.3.50/idea/src/org/jetbrains/kotlin/idea/intentions/SpecifyTypeExplicitlyIntention.kt#L86-L107
+ */
+/**
+ * Platform types must be declared explicitly in public APIs to prevent unexpected errors.
  *
  * <noncompliant>
  * class Person {

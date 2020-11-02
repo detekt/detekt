@@ -14,6 +14,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
+/*
+ * Based on code from Kotlin compiler:
+ * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
+ */
 /**
  * Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum
  * or sealed class and the `when` expression is used as a statement.
@@ -59,9 +63,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * }
  * </compliant>
  * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
- *
- * Based on code from Kotlin compiler:
- * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
  *
  * @active since v1.2.0
  *

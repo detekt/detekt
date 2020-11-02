@@ -18,12 +18,13 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.source.getPsi
 
+/*
+ * Based on code from Kotlin compiler:
+ * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
+ */
 /**
  * Turn on this rule to flag `when` expressions that contain a redundant `else` case. This occurs when it can be
  * verified that all cases are already covered when checking cases on an enum or sealed class.
- *
- * Based on code from Kotlin compiler:
- * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
  *
  * <noncompliant>
  * enum class Color {

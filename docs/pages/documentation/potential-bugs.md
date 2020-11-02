@@ -138,9 +138,6 @@ System.runFinalization()
 
 Platform types must be declared explicitly in public APIs to prevent unexpected errors.
 
-Based on code from Kotlin project:
-https://github.com/JetBrains/kotlin/blob/1.3.50/idea/src/org/jetbrains/kotlin/idea/intentions/SpecifyTypeExplicitlyIntention.kt#L86-L107
-
 **Requires Type Resolution**
 
 **Severity**: Maintainability
@@ -444,10 +441,7 @@ either handle all cases or use a default `else` statement to cover the unhandled
 
 * ``allowElseExpression`` (default: ``true``)
 
-   whether `else` can be treated as a valid case for enums and sealed classes 
-
-Based on code from Kotlin compiler:
-https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
+   whether `else` can be treated as a valid case for enums and sealed classes
 
 #### Noncompliant Code:
 
@@ -529,9 +523,6 @@ fun bar(a: Any?): String {
 
 Turn on this rule to flag `when` expressions that contain a redundant `else` case. This occurs when it can be
 verified that all cases are already covered when checking cases on an enum or sealed class.
-
-Based on code from Kotlin compiler:
-https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
 
 **Requires Type Resolution**
 

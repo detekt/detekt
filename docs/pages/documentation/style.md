@@ -1763,8 +1763,6 @@ functions can also be called on non-nullable references or on collections or seq
 the calls are redundant in this case and can be removed or should be changed to a call that does not check whether
 the value is null or not.
 
-Rule adapted from Kotlin's IntelliJ plugin: https://github.com/JetBrains/kotlin/blob/f5d0a38629e7d2e7017ee645dc4d4bee60614e93/idea/src/org/jetbrains/kotlin/idea/inspections/collections/UselessCallOnNotNullInspection.kt
-
 **Requires Type Resolution**
 
 **Severity**: Performance
