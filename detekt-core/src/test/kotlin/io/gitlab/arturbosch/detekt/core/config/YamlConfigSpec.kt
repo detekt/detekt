@@ -1,4 +1,6 @@
-package io.gitlab.arturbosch.detekt.api.internal
+@file:Suppress("detekt.MaxLineLength")
+
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
@@ -13,7 +15,6 @@ import org.spekframework.spek2.style.specification.describe
 import org.yaml.snakeyaml.parser.ParserException
 import java.nio.file.Paths
 
-@Suppress("DEPRECATION")
 class YamlConfigSpec : Spek({
 
     describe("load yaml config") {

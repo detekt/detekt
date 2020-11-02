@@ -3,8 +3,6 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
-import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException

@@ -24,7 +24,5 @@ title: ValidatableConfiguration -
 |  Name| 
 |---|
 | [CompositeConfig](../-composite-config/index.md)
-| [DisabledAutoCorrectConfig](../-disabled-auto-correct-config/index.md)
-| [FailFastConfig](../-fail-fast-config/index.md)
 | [YamlConfig](../-yaml-config/index.md)
 

@@ -1,7 +1,9 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
+import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 
 interface ValidatableConfiguration {
 

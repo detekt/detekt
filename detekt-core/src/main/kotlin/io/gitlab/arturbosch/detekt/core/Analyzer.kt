@@ -10,8 +10,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
-import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
-import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
+import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
+import io.gitlab.arturbosch.detekt.core.config.FailFastConfig
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
