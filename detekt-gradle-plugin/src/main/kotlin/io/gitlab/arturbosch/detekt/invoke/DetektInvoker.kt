@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
+import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
@@ -33,7 +34,9 @@ internal interface DetektInvoker {
     }
 }
 
-private class DefaultCliInvoker : DetektInvoker {
+internal class DefaultCliInvoker(
+    private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache
+) : DetektInvoker {
 
     override fun invokeCli(
         arguments: List<CliArgument>,
@@ -43,7 +46,7 @@ private class DefaultCliInvoker : DetektInvoker {
     ) {
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
         try {
-            val loader = ClassLoaderCache.getOrCreate(classpath)
+            val loader = classLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
             val runner = clazz.getMethod("buildRunner",
                 Array<String>::class.java,
