@@ -38,6 +38,49 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED. Either add missing cases or a default `else` case.")
             }
 
+            it("reports when `when` expression used as statement and not all cases including null are not covered") {
+                val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+
+                fun whenOnEnumFail(c: Color?) {
+                    when(c) {
+                        Color.BLUE -> {}
+                        Color.GREEN -> {}
+                    }
+                }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+                assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
+                assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED, null. Either add missing cases or a default `else` case.")
+            }
+
+            it("reports when `when` expression used as statement and null case is not covered") {
+                val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+
+                fun whenOnEnumFail(c: Color?) {
+                    when(c) {
+                        Color.BLUE -> {}
+                        Color.GREEN -> {}
+                        Color.RED -> {}
+                    }
+                }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+                assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
+                assertThat(actual.first().message).isEqualTo("When expression is missing cases: null. Either add missing cases or a default `else` case.")
+            }
+
             it("does not report when `when` expression used as statement and all cases are covered") {
                 val code = """
                 enum class Color {
@@ -85,6 +128,49 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
+            }
+
+            it("reports when `when` expression used as statement and null case is not covered") {
+                val code = """
+                    sealed class Variant {
+                        object VariantA : Variant()
+                        class VariantB : Variant()
+                        object VariantC : Variant()
+                    }
+
+                    fun whenOnEnumFail(v: Variant?) {
+                        when(v) {
+                            is Variant.VariantA -> {}
+                            is Variant.VariantB -> {}
+                            is Variant.VariantC -> {}
+                        }
+                    }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+                assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
+                assertThat(actual.first().message).isEqualTo("When expression is missing cases: null. Either add missing cases or a default `else` case.")
+            }
+
+            it("reports when `when` expression used as statement and not all cases including null are not covered") {
+                val code = """
+                    sealed class Variant {
+                        object VariantA : Variant()
+                        class VariantB : Variant()
+                        object VariantC : Variant()
+                    }
+
+                    fun whenOnEnumFail(v: Variant?) {
+                        when(v) {
+                            is Variant.VariantA -> {}
+                            is Variant.VariantB -> {}
+                        }
+                    }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+                assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
+                assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC, null. Either add missing cases or a default `else` case.")
             }
 
             it("does not report when `when` expression used as statement and all cases are covered") {
@@ -183,6 +269,29 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED.")
+            }
+
+            it("reports when `when` expression used as statement and null case is not covered") {
+                val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+
+                fun whenOnEnumFail(c: Color?) {
+                    when(c) {
+                        Color.BLUE -> {}
+                        Color.GREEN -> {}
+                        Color.RED -> {}
+                        else -> {}
+                    }
+                }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+                assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
+                assertThat(actual.first().message).isEqualTo("When expression is missing cases: null.")
             }
 
             it("does not reports when `when` expression used as statement and all cases are covered") {

@@ -86,31 +86,36 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         val subjectExpression = expression.subjectExpression ?: return
         val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
+        val containsMissingNullCase =
+            subjectType?.isMarkedNullable ?: false && !WhenChecker.containsNullCase(expression, bindingContext)
         if (enumClassDescriptor != null) {
             val enumMissingCases =
                 WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)
-            reportMissingCases(enumMissingCases, expression)
+            reportMissingCases(enumMissingCases, containsMissingNullCase, expression)
         }
         val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType)
         if (sealedClassDescriptor != null) {
             val sealedClassMissingCases =
                 WhenChecker.getSealedMissingCases(expression, bindingContext, sealedClassDescriptor)
-            reportMissingCases(sealedClassMissingCases, expression)
+            reportMissingCases(sealedClassMissingCases, containsMissingNullCase, expression)
         }
         super.visitWhenExpression(expression)
     }
 
     private fun reportMissingCases(
         missingCases: List<WhenMissingCase>,
+        containsMissingNullCase: Boolean,
         expression: KtWhenExpression
     ) {
-        if (missingCases.isNotEmpty()) {
-            var message = "When expression is missing cases: ${missingCases.joinToString()}."
+        if (missingCases.isNotEmpty() || containsMissingNullCase) {
+            val reportCases = returnMissingCases(missingCases, containsMissingNullCase)
+            var message = "When expression is missing cases: $reportCases."
             message = if (allowElseExpression) {
                 "$message Either add missing cases or a default `else` case."
             } else {
                 message
             }
+
             report(
                 CodeSmell(
                     issue, Entity.from(expression),
@@ -120,7 +125,21 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun returnMissingCases(
+        missingCases: List<WhenMissingCase>,
+        containsMissingNullCase: Boolean
+    ): String {
+        return if (missingCases.isNotEmpty() && containsMissingNullCase) {
+            "${missingCases.joinToString()}, $NULL_CASE"
+        } else if (missingCases.isEmpty()) {
+            NULL_CASE
+        } else {
+            missingCases.joinToString()
+        }
+    }
+
     companion object {
         const val ALLOW_ELSE_EXPRESSION = "allowElseExpression"
+        const val NULL_CASE = "null"
     }
 }
