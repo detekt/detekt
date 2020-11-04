@@ -102,7 +102,7 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
 
         it("has no class") {
             val code = """
-                package com.my
+                package com.my.has.no.clazz
 
                 import kotlin.collections.List
                 import kotlin.collections.Set
