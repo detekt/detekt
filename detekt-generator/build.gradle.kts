@@ -75,4 +75,3 @@ fun assertDefaultConfigUpToDate() {
             "You can execute the generateDocumentation Gradle task to update it and commit the changed files.")
     }
 }
-
