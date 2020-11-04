@@ -60,7 +60,7 @@ jobs:
       run: java -jar ./detekt-cli/build/run/detekt "@./config/detekt/argsfile"
 
 
-  verify-documentation:
+  verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     runs-on: ubuntu-latest
     env:
@@ -84,7 +84,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
-    - name: Verify Generator Output
+    - name: Verify Generated Detekt Config File
       run: ./gradlew verifyGeneratorOutput
 
 
