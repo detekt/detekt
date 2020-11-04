@@ -7,12 +7,15 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
-import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -44,6 +47,7 @@ import org.jetbrains.kotlin.types.isNullable
  * @since 1.11.0
  * @requiresTypeResolution
  */
+@Suppress("ReturnCount")
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
@@ -52,40 +56,54 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
-
         if (bindingContext == BindingContext.EMPTY) return
 
-        val qualified = expression.getQualifiedExpressionForReceiver()
-        when {
-            qualified != null -> {
-                if (qualified.descriptor()?.fqNameOrNull() != FqName("kotlin.toString")) return
+        val simpleOrCallExpression = expression.parent.safeAs<KtCallExpression>() ?: expression
+        val targetExpression = simpleOrCallExpression.targetExpression() ?: return
+        val toBeReportedExpression = when {
+            simpleOrCallExpression.safeAs<KtCallExpression>()?.calleeExpression?.text == "toString" -> {
+                if (simpleOrCallExpression.descriptor()?.fqNameOrNull() != FqName("kotlin.toString")) return
+                targetExpression
             }
-            expression.parent is KtStringTemplateEntry -> {
-                val compilerResources = compilerResources ?: return
-                val descriptor = expression.descriptor() ?: return
-                val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return
-                val dataFlowInfo =
-                    bindingContext[BindingContext.EXPRESSION_TYPE_INFO, expression]?.dataFlowInfo ?: return
-                val dataFlowValue = compilerResources.dataFlowValueFactory.createDataFlowValue(
-                    expression, originalType, bindingContext, descriptor
-                )
-                val dataFlowTypes =
-                    dataFlowInfo.getStableTypes(dataFlowValue, compilerResources.languageVersionSettings)
-                if (dataFlowTypes.any { !it.isNullable() }) return
+            targetExpression.parent is KtStringTemplateEntry -> {
+                if (!targetExpression.isNullable()) return
+                targetExpression.parent
             }
             else -> return
         }
 
-        val targetExpression = qualified ?: expression.parent
         val codeSmell = CodeSmell(
             issue,
-            Entity.from(targetExpression),
-            "This call '${targetExpression.text}' may return the string \"null\"."
+            Entity.from(toBeReportedExpression),
+            "This call '${toBeReportedExpression.text}' may return the string \"null\"."
         )
         report(codeSmell)
+    }
+
+    private fun KtExpression.targetExpression(): KtExpression? {
+        val qualifiedExpression = getStrictParentOfType<KtQualifiedExpression>()
+        val targetExpression = if (qualifiedExpression != null) {
+            qualifiedExpression.takeIf { it.selectorExpression == this } ?: return null
+        } else {
+            this
+        }
+        if (targetExpression.getStrictParentOfType<KtQualifiedExpression>() != null) return null
+        return targetExpression
+    }
+
+    private fun KtExpression.isNullable(): Boolean {
+        val compilerResources = compilerResources ?: return false
+        val descriptor = descriptor() ?: return false
+        val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return false
+        val dataFlowInfo =
+            bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.dataFlowInfo ?: return false
+        val dataFlowValue =
+            compilerResources.dataFlowValueFactory.createDataFlowValue(this, originalType, bindingContext, descriptor)
+        val dataFlowTypes =
+            dataFlowInfo.getStableTypes(dataFlowValue, compilerResources.languageVersionSettings)
+        return dataFlowTypes.all { it.isNullable() }
     }
 
     private fun KtExpression.descriptor(): CallableDescriptor? = getResolvedCall(bindingContext)?.resultingDescriptor
