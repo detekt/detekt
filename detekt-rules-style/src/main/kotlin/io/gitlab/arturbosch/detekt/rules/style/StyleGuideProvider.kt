@@ -84,7 +84,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseEmptyCounterpart(config),
             UseCheckNotNull(config),
             UseRequireNotNull(config),
-            RedundantHigherOrderMapUsage(config)
+            RedundantHigherOrderMapUsage(config),
+            UseIfEmptyOrIfBlank(config)
         )
     )
 }

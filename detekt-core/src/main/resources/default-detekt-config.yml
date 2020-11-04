@@ -669,6 +669,8 @@ style:
     allowVars: false
   UseEmptyCounterpart:
     active: false
+  UseIfEmptyOrIfBlank:
+    active: false
   UseIfInsteadOfWhen:
     active: false
   UseRequire:
