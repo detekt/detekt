@@ -1,0 +1,102 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-detekt-docs:
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Cache Gradle Folders
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/
+            ~/.gradle/wrapper/
+          key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+          restore-keys: |
+            cache-gradle-
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build Detekt Documentation
+        run: ./gradlew :detekt-generator:generateDocumentation --build-cache --parallel
+
+      - name: Upload Generated Rules documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: detekt-generated-docs
+          path: docs/pages/documentation/
+
+      - name: Upload KDoc documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: detekt-kdoc
+          path: docs/pages/kdoc/
+
+
+  build-website:
+    needs: build-detekt-docs
+    runs-on: ubuntu-latest
+    container: jekyll/builder
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - uses: actions/cache@v2
+      with:
+        path: docs/vendor/bundle
+        key: cache-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: cache-gems-
+
+    - name: Unzipping Generated Rules documentation
+      uses: actions/download-artifact@v2
+      with:
+        name: detekt-generated-docs
+        path: docs/pages/documentation/
+
+    - name: Unzipping KDoc documentation
+      uses: actions/download-artifact@v2
+      with:
+        name: detekt-kdoc
+        path: docs/pages/kdoc/
+
+    - name: Display structure of files
+      run: ls -R
+      working-directory: docs/
+
+    - name: Create Directories
+      run: |
+        mkdir _site/
+        mkdir -p vendor/bundle/
+        chmod -R 777 _site/
+        chmod -R 777 vendor/
+      working-directory: docs/
+
+    - name: Install Ruby Dependencies
+      working-directory: docs/
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+
+    - name: Build the Jekyll Website
+      run: bundle exec jekyll build -d _site/
+      working-directory: docs/
+
+    - name: Deploy Github Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: docs/_site/

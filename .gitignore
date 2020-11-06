@@ -163,3 +163,8 @@ target/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Avoid committing generated documentation to the repo
+/docs/pages/documentation
+/docs/pages/kdoc
+/docs/vendor/

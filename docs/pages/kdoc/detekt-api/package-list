@@ -1,6 +1,0 @@
-$dokka.format:jekyll-v1
-$dokka.linkExtension:md
-
-io.gitlab.arturbosch.detekt.api
-io.gitlab.arturbosch.detekt.api.internal
-
