@@ -1,0 +1,1579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-diff-config.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-silent-reports.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//calling-it-one-zero.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-snapshots.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-migratetestpattern.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-buildupondefaultconfig.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//howto-buildupondefaultconfig.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//website-online.html</loc>
+  </url>
+  
+  
+
+
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/-annotation-excluder.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/-base-rule.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/-code-smell.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/-comma-separated-pattern.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/-compiler-resources.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/-console-report.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/-debt.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/-default-context.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/-detekt-visitor.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-entity.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/-invalid-configuration-error.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/-issue.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/-lazy-regex.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-location.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/-metric.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/-multi-rule.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/-output-report.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/-project-metric.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/-rule-set.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/-rule.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/-simple-notification.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/-single-assign.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/-source-location.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/-split-pattern.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/-text-location.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/-threshold-rule.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/-thresholded-code-smell.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/-unstable-api.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/accept.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/any.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/at-name.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/at-package-or-first-decl.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//baseline.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//changelog.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//changelog-rc.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/clear-findings.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//cli.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//comments.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact-with-signature.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/compact-with-signature.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/compact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/compact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/compact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/compact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//complexity.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component1.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component2.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component3.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component3.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/component3.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component3.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component3.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component4.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/component4.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component4.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component5.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//configurations.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/contains.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/copy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//coroutines.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/double-threshold.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/double-value.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//empty-blocks.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//exceptions.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//extensions.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//failonbuild.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//formatting.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/from.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/from.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/get-value.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/get-value.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//git-pre-commit-hook.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//gradle.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//gradletask.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-default-rule-set-provider/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/-companion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/-companion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-performance/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-error/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-info/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-companion/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-security/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-warning/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-defect/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-code-smell/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-minor/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-maintainability/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-style/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/instance.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/is-ignored.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/is-suppressed-by.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/map-all.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/map-to-regex.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/matches.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//mavenanttask.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/message-or-description.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/message-or-description.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/metric-by-type.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//naming.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//news.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//news_archive.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/none.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/-companion/of.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-final-result.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-finish.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process-complete.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-raw-result.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-start.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/path-matcher.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//performance.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/plus.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//potential-bugs.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/print.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/register.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/render.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/render.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/report.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/report.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/run-if-active.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/set-value.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/should-exclude.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/simple-pattern-to-regex.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/start-line-and-column.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/start-with.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//style.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/sub-config.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/sub-config.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//suppressing-rules.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/to-string.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/to-string.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/transform-findings.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//type-resolution.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/validate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/value-or-default.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/value-or-null.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit-condition.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/visit-condition.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/visit-condition.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit-file.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-detekt.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-java.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-o-s.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/with-auto-correct.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/write.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//assets/css/style.css</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//groovydsl.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//kotlindsl.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//type-and-symbol-solving.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://detekt.github.io/detekt//redirects.json</loc>
+  </url>
+  
+  
+</urlset>

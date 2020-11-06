@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" detekt static analysis code kotlin">
+<title>Run detekt using the Detekt Gradle Plugin | A static code analyzer for Kotlin</title>
+<link rel="stylesheet" href="/detekt/css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="/detekt/css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="/detekt/css/customstyles.css">
+<link rel="stylesheet" href="/detekt/css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="/detekt/css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="/detekt/js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="/detekt/js/toc.js"></script>
+<script src="/detekt/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="/detekt/images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="detekt" href="https://detekt.github.io/detekt//feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> detekt</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="news">News</a></li>
+                
+                
+                
+                <li><a href="https://github.com/detekt/detekt" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://kotlinlang.slack.com/messages/C88E12QH4/convo/C88E12QH4-1518006028.000268/" target="_blank">Slack</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="/detekt/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '/detekt/search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Run detekt using the Detekt Gradle Plugin">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle"> </li>
+  
+  
+  
+  <li>
+      <a href="#">User Documentation</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog.html">Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog-rc.html">Pre 1.0 Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/suppressing-rules.html">Suppressing Issues in Code</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/extensions.html">Extending detekt</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Getting Started</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/cli.html">with the Command Line Interface</a></li>
+          
+          
+          
+          
+          
+          
+          <li class="active"><a href="/detekt/gradle.html">with Gradle</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradletask.html">with Gradle Plain Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/mavenanttask.html">with Maven Ant Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/type-resolution.html">Using Type Resolution</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/git-pre-commit-hook.html">with a Git pre-commit hook</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Rule Sets</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/comments.html">comments</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/complexity.html">complexity</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/coroutines.html">coroutines</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/empty-blocks.html">empty-blocks</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/exceptions.html">exceptions</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/formatting.html">formatting</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/naming.html">naming</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/performance.html">performance</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/potential-bugs.html">potential-bugs</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/style.html">style</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">KDoc</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/pages/kdoc/detekt-api/index.html">detekt-api</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Run detekt using the Detekt Gradle Plugin</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
+
+    
+
+
+    
+
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages/gettingstarted/gradle.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+
+    
+
+
+    
+
+  <p>detekt requires Gradle 5.4 or higher.</p>
+
+<h4 id="available-plugin-tasks"><a name="tasks">Available plugin tasks</a></h4>
+
+<p>The detekt Gradle plugin will generate multiple tasks:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">detekt</code> - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
+<code class="language-plaintext highlighter-rouge">detekt</code> closure. By default the standard rule set without any ignore list is executed on sources files located
+ in <code class="language-plaintext highlighter-rouge">src/main/java</code> and <code class="language-plaintext highlighter-rouge">src/main/kotlin</code>. Reports are automatically generated in xml, html and txt format and can be 
+ found in <code class="language-plaintext highlighter-rouge">build/reports/detekt/detekt.[xml|html|txt]</code> respectively. Please note that the <code class="language-plaintext highlighter-rouge">detekt</code> task is automatically 
+ run when executing <code class="language-plaintext highlighter-rouge">gradle check</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">detektGenerateConfig</code> - Generates a default detekt configuration file into your project directory.</li>
+  <li><code class="language-plaintext highlighter-rouge">detektBaseline</code> - Similar to <code class="language-plaintext highlighter-rouge">detekt</code>, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.</li>
+  <li><code class="language-plaintext highlighter-rouge">detektIdeaFormat</code> - Uses a local <code class="language-plaintext highlighter-rouge">idea</code> installation to format your Kotlin (and other) code according to the specified <code class="language-plaintext highlighter-rouge">code-style.xml</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">detektIdeaInspect</code> - Uses a local <code class="language-plaintext highlighter-rouge">idea</code> installation to run inspections on your Kotlin (and other) code according to the specified <code class="language-plaintext highlighter-rouge">inspections.xml</code> profile.</li>
+</ul>
+
+<p>In addition to these standard tasks, the plugin will also generate a set of experimental tasks that have
+<a href="/detekt/type-resolution.html">type resolution</a> enabled. This happens for both, pure JVM projects and Android projects that have
+the Android Gradle Plugin applied:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">detektMain</code> - Similar to <code class="language-plaintext highlighter-rouge">detekt</code>, but runs only on the <code class="language-plaintext highlighter-rouge">main</code> source set
+(Android: all production source sets)</li>
+  <li><code class="language-plaintext highlighter-rouge">detektTest</code> - Similar to <code class="language-plaintext highlighter-rouge">detekt</code>, but runs only on the <code class="language-plaintext highlighter-rouge">test</code> source set
+(Android: all JVM and Android Test source sets)</li>
+  <li><code class="language-plaintext highlighter-rouge">detektBaselineMain</code> - Similar to <code class="language-plaintext highlighter-rouge">detektBaseline</code>, but creates a baseline only for the <code class="language-plaintext highlighter-rouge">main</code> source set 
+(Android: multiple baselines for all production source sets)</li>
+  <li><code class="language-plaintext highlighter-rouge">detektBaselineTest</code> - Similar to <code class="language-plaintext highlighter-rouge">detektBaseline</code>, but creates a baseline only for the <code class="language-plaintext highlighter-rouge">test</code> source set
+(Android: multiple baselines for all JVM and Android Test source sets)</li>
+  <li>Android-only: <code class="language-plaintext highlighter-rouge">detekt&lt;Variant&gt;</code> - Similar to <code class="language-plaintext highlighter-rouge">detekt</code>, but runs only on the specific (test) build variant</li>
+  <li>Android-only: <code class="language-plaintext highlighter-rouge">detektBaseline&lt;Variant&gt;</code> - Similar to <code class="language-plaintext highlighter-rouge">detektBaseline</code>, but creates a baseline only for the
+specific (test) build variant</li>
+</ul>
+
+<p>Baseline files that are generated for these specific source sets / build variants contain the name of the source set /
+the name of the build variant in their name, unless otherwise configured, such as <code class="language-plaintext highlighter-rouge">detekt-main.xml</code> or 
+<code class="language-plaintext highlighter-rouge">detekt-productionDebug.xml</code>.</p>
+
+<p>If both, a <code class="language-plaintext highlighter-rouge">detekt-main.xml</code> and a <code class="language-plaintext highlighter-rouge">detekt.xml</code> baseline file exists in place, the more specific one - <code class="language-plaintext highlighter-rouge">detekt-main.xml</code> -
+takes precendence when the <code class="language-plaintext highlighter-rouge">detektMain</code> task is executed, likewise for Android variant-specific baseline files.</p>
+
+<p><em>NOTE:</em> When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
+view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
+complete compile classpath from the Android Gradle Plugin (<a href="https://issuetracker.google.com/issues/158777988">upstream ticket</a>)
+and can safely be ignored.</p>
+
+<p>Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
+using the detekt closure as described <a href="#closure">here</a>.</p>
+
+<h5 id="configuration"><a name="gradle">Configuration</a></h5>
+
+<p>Using the plugins DSL:</p>
+
+<h6 id="groovy-dsl">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plugins</span> <span class="o">{</span>
+    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.14.2"</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">jcenter</span><span class="o">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">plugins</span> <span class="p">{</span>
+    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">).</span><span class="nf">version</span><span class="p">(</span><span class="s">"1.14.2"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">repositories</span> <span class="p">{</span>
+    <span class="nf">jcenter</span><span class="p">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Using legacy plugin application (<code class="language-plaintext highlighter-rouge">buildscript{}</code>):</p>
+
+<h6 id="groovy-dsl-1">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">gradlePluginPortal</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span> <span class="s2">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.14.2"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">jcenter</span><span class="o">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-1">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">buildscript</span> <span class="p">{</span>
+    <span class="nf">repositories</span> <span class="p">{</span>
+        <span class="nf">gradlePluginPortal</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="nf">dependencies</span> <span class="p">{</span>
+        <span class="nf">classpath</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.14.2"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nf">apply</span><span class="p">(</span><span class="n">plugin</span> <span class="p">=</span> <span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">)</span>
+
+<span class="nf">repositories</span> <span class="p">{</span>
+    <span class="nf">jcenter</span><span class="p">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="configuration-for-android-projects"><a name="gradleandroid">Configuration for Android projects</a></h5>
+
+<p>When using Android make sure to have detekt configured in the project level build.gradle file.</p>
+
+<p>You can configure the plugin in the same way as indicated above.</p>
+
+<h6 id="groovy-dsl-2">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">()</span>
+        <span class="n">jcenter</span><span class="o">()</span>
+        <span class="n">gradlePluginPortal</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="n">classpath</span> <span class="s2">"com.android.tools.build:gradle:4.0.1"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">plugins</span> <span class="o">{</span>
+    <span class="n">id</span> <span class="s2">"com.android.application"</span>
+    <span class="n">id</span> <span class="s2">"org.jetbrains.kotlin.android"</span> <span class="n">version</span> <span class="s2">"1.4.0"</span>
+    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.14.2"</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">jcenter</span><span class="o">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-2">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">buildscript</span> <span class="p">{</span>
+    <span class="nf">repositories</span> <span class="p">{</span>
+        <span class="nf">google</span><span class="p">()</span>
+        <span class="nf">jcenter</span><span class="p">()</span>
+        <span class="nf">gradlePluginPortal</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="nf">dependencies</span> <span class="p">{</span>
+        <span class="nf">classpath</span><span class="p">(</span><span class="s">"com.android.tools.build:gradle:4.0.0"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nf">plugins</span> <span class="p">{</span>
+    <span class="nf">id</span><span class="p">(</span><span class="s">"com.android.application"</span><span class="p">)</span>
+    <span class="nf">kotlin</span><span class="p">(</span><span class="s">"android"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"1.4.0"</span>
+    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"1.14.2"</span>
+<span class="p">}</span>
+
+<span class="nf">repositories</span> <span class="p">{</span>
+    <span class="nf">jcenter</span><span class="p">()</span> <span class="c1">// jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>For more information about how to configure the repositories read <a href="#repositories">about the repositories</a></p>
+
+<h5 id="options-for-detekt-configuration-closure"><a name="closure">Options for detekt configuration closure</a></h5>
+
+<h6 id="groovy-dsl-3">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
+    <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.14.2"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
+    <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>                                        <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
+        <span class="s2">"src/main/kotlin"</span><span class="o">,</span>
+        <span class="s2">"gensrc/main/kotlin"</span>
+    <span class="o">)</span>
+    <span class="n">parallel</span> <span class="o">=</span> <span class="kc">false</span>                                      <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span><span class="s2">"path/to/config.yml"</span><span class="o">)</span>                  <span class="c1">// Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.</span>
+    <span class="n">buildUponDefaultConfig</span> <span class="o">=</span> <span class="kc">false</span>                        <span class="c1">// Interpret config files as updates to the default config. `false` by default.</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"path/to/baseline.xml"</span><span class="o">)</span>               <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
+    <span class="n">disableDefaultRuleSets</span> <span class="o">=</span> <span class="kc">false</span>                        <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">false</span>                                         <span class="c1">// Adds debug output during task execution. `false` by default.</span>
+    <span class="n">ignoreFailures</span> <span class="o">=</span> <span class="kc">false</span>                                <span class="c1">// If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.</span>
+    <span class="n">ignoredBuildTypes</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"release"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
+    <span class="n">ignoredFlavors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"production"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
+    <span class="n">ignoredVariants</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"productionRelease"</span><span class="o">]</span>               <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="n">reports</span> <span class="o">{</span>
+        <span class="n">xml</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.xml"</span><span class="o">)</span> <span class="c1">// Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)</span>
+        <span class="o">}</span>
+        <span class="n">html</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable HTML report (default: true)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.html"</span><span class="o">)</span> <span class="c1">// Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)</span>
+        <span class="o">}</span>
+        <span class="n">txt</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable TXT report (default: true)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.txt"</span><span class="o">)</span> <span class="c1">// Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)</span>
+        <span class="o">}</span>
+        <span class="n">custom</span> <span class="o">{</span>
+            <span class="n">reportId</span> <span class="o">=</span> <span class="s2">"CustomJsonReport"</span>                   <span class="c1">// The simple class name of your custom report.</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.json"</span><span class="o">)</span> <span class="c1">// Path where report will be stored</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-3">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
+    <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.14.2"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
+    <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
+    <span class="n">parallel</span> <span class="p">=</span> <span class="k">false</span>                                      <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.</span>
+    <span class="n">config</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"path/to/config.yml"</span><span class="p">)</span>                  <span class="c1">// Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.</span>
+    <span class="n">buildUponDefaultConfig</span> <span class="p">=</span> <span class="k">false</span>                        <span class="c1">// Interpret config files as updates to the default config. `false` by default.</span>
+    <span class="n">baseline</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/baseline.xml"</span><span class="p">)</span>               <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
+    <span class="n">disableDefaultRuleSets</span> <span class="p">=</span> <span class="k">false</span>                        <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
+    <span class="n">debug</span> <span class="p">=</span> <span class="k">false</span>                                         <span class="c1">// Adds debug output during task execution. `false` by default.</span>
+    <span class="n">ignoreFailures</span> <span class="p">=</span> <span class="k">false</span>                                <span class="c1">// If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.</span>
+    <span class="n">ignoredBuildTypes</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"release"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
+    <span class="n">ignoredFlavors</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"production"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
+    <span class="n">ignoredVariants</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"productionRelease"</span><span class="p">)</span>         <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="nf">reports</span> <span class="p">{</span>
+        <span class="nf">xml</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.xml"</span><span class="p">)</span> <span class="c1">// Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)</span>
+        <span class="p">}</span>
+        <span class="nf">html</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable HTML report (default: true)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.html"</span><span class="p">)</span> <span class="c1">// Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)</span>
+        <span class="p">}</span>
+        <span class="nf">txt</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable TXT report (default: true)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.txt"</span><span class="p">)</span> <span class="c1">// Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)</span>
+        <span class="p">}</span>
+        <span class="nf">custom</span> <span class="p">{</span>
+            <span class="n">reportId</span> <span class="p">=</span> <span class="s">"CustomJsonReport"</span>                 <span class="c1">// The simple class name of your custom report.</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.json"</span><span class="p">)</span> <span class="c1">// Path where report will be stored</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="using-type-resolution">Using Type Resolution</h5>
+
+<p>Type resolution is experimental and works only for <a href="#a-nametasksavailable-plugin-tasksa">predefined tasks listed above</a>
+or when implementing a custom detekt task with the <code class="language-plaintext highlighter-rouge">classpath</code> and <code class="language-plaintext highlighter-rouge">jvmTarget</code> properties present.</p>
+
+<h6 id="groovy-dsl-4">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-4">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
+    <span class="c1">// Target version of the generated JVM bytecode. It is used for type resolution.</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">jvmTarget</span> <span class="p">=</span> <span class="s">"1.8"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="leveraging-gradles-sourcetask---excluding-and-including-source-files"><a name="excluding">Leveraging Gradle’s SourceTask - Excluding and including source files</a></h5>
+
+<p>A detekt task extends the Gradle <code class="language-plaintext highlighter-rouge">SourceTask</code> to be only scheduled when watched source files are changed.
+It also allows to match files that should be excluded from the analysis.
+To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:</p>
+
+<h6 id="groovy-dsl-5">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+
+<span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
+    <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
+    <span class="n">exclude</span><span class="o">(</span><span class="s2">"**/special/package/internal/**"</span><span class="o">)</span> <span class="c1">// but exclude our legacy internal package</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-5">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+<span class="p">}</span>
+
+<span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
+    <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
+    <span class="nf">exclude</span><span class="p">(</span><span class="s">"**/special/package/internal/**"</span><span class="p">)</span> <span class="c1">// but exclude our legacy internal package</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="defining-custom-detekt-task"><a name="customdetekttask">Defining custom detekt task</a></h5>
+
+<p>Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
+uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.</p>
+
+<h6 id="groovy-dsl-6">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="nl">name:</span> <span class="n">detektFailFast</span><span class="o">,</span> <span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">"Runs a failfast detekt build."</span>
+    <span class="n">setSource</span><span class="o">(</span><span class="n">files</span><span class="o">(</span><span class="s2">"src/main/kotlin"</span><span class="o">,</span> <span class="s2">"src/test/kotlin"</span><span class="o">))</span>
+    <span class="n">config</span><span class="o">.</span><span class="na">setFrom</span><span class="o">(</span><span class="n">files</span><span class="o">(</span><span class="s2">"$rootDir/config.yml"</span><span class="o">))</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">reports</span> <span class="o">{</span>
+        <span class="n">xml</span> <span class="o">{</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/failfast.xml"</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="n">html</span><span class="o">.</span><span class="na">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/failfast.html"</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="n">include</span> <span class="s1">'**/*.kt'</span>
+    <span class="n">include</span> <span class="s1">'**/*.kts'</span>
+    <span class="n">exclude</span> <span class="s1">'resources/'</span>
+    <span class="n">exclude</span> <span class="s1">'build/'</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-6">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;(</span><span class="s">"detektFailFast"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">description</span> <span class="p">=</span> <span class="s">"Runs a failfast detekt build."</span>
+    <span class="nf">setSource</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="s">"src/main/kotlin"</span><span class="p">,</span> <span class="s">"src/test/kotlin"</span><span class="p">))</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">setFrom</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="s">"$rootDir/config.yml"</span><span class="p">))</span>
+    <span class="n">debug</span> <span class="p">=</span> <span class="k">true</span>
+    <span class="nf">reports</span> <span class="p">{</span>
+        <span class="nf">xml</span> <span class="p">{</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/failfast.xml"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">html</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/failfast.html"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nf">include</span><span class="p">(</span><span class="s">"**/*.kt"</span><span class="p">)</span>
+    <span class="nf">include</span><span class="p">(</span><span class="s">"**/*.kts"</span><span class="p">)</span>
+    <span class="nf">exclude</span><span class="p">(</span><span class="s">"resources/"</span><span class="p">)</span>
+    <span class="nf">exclude</span><span class="p">(</span><span class="s">"build/"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="disabling-detekt-from-the-check-task"><a name="check-lifecycle">Disabling detekt from the check task</a></h5>
+
+<p>Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+This aligns with the behavior of other code analysis plugins for Gradle.</p>
+
+<p>If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
+exclude detekt from the check task.</p>
+
+<h6 id="groovy-dsl-7">Groovy DSL</h6>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// TODO</span>
+</code></pre></div></div>
+
+<h6 id="kotlin-dsl-7">Kotlin DSL</h6>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="nf">named</span><span class="p">(</span><span class="s">"check"</span><span class="p">).</span><span class="nf">configure</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nf">setDependsOn</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">dependsOn</span><span class="p">.</span><span class="nf">filterNot</span> <span class="p">{</span>
+        <span class="n">it</span> <span class="k">is</span> <span class="nc">TaskProvider</span><span class="p">&lt;</span><span class="err">*</span><span class="p">&gt;</span> <span class="p">&amp;&amp;</span> <span class="n">it</span><span class="p">.</span><span class="n">name</span> <span class="p">==</span> <span class="s">"detekt"</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the <a href="/detekt/configurations.html">configuration file</a>.</p>
+
+<h5 id="integrating-detekt-inside-your-intellij-idea"><a name="idea">Integrating detekt inside your IntelliJ IDEA</a></h5>
+
+<p>detekt comes with an <a href="https://plugins.jetbrains.com/plugin/10761-detekt">IntelliJ Plugin</a> that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.</p>
+
+<p>The source code of the plugin is available here: <a href="https://github.com/detekt/detekt-intellij-plugin">detekt/detekt-intellij-plugin</a></p>
+
+<h4 id="about-the-repositories"><a name="repositories">About the repositories</a></h4>
+
+<p>If you prefer to use Maven Central instead of JCenter you can use this configuration:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">repositories</span> <span class="p">{</span>
+    <span class="nf">mavenCentral</span><span class="p">()</span>
+    <span class="nf">jcenter</span> <span class="p">{</span>
+        <span class="nf">content</span> <span class="p">{</span>
+            <span class="c1">// just allow to include kotlinx projects</span>
+            <span class="c1">// detekt needs 'kotlinx-html' for the html report</span>
+            <span class="nf">includeGroup</span><span class="p">(</span><span class="s">"org.jetbrains.kotlinx"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+    <div class="tags">
+        
+    </div>
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2020 The detekt Team. All rights reserved. <br />
+ Site last generated: Nov 6, 2020 <br />
+                </div>
+            </div>
+</footer>
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>

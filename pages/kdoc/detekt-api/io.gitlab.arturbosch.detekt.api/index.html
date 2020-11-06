@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+<title>io.gitlab.arturbosch.detekt.api - | A static code analyzer for Kotlin</title>
+<link rel="stylesheet" href="/detekt/css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="/detekt/css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="/detekt/css/customstyles.css">
+<link rel="stylesheet" href="/detekt/css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="/detekt/css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="/detekt/js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="/detekt/js/toc.js"></script>
+<script src="/detekt/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="/detekt/images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="detekt" href="https://detekt.github.io/detekt//feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> detekt</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="news">News</a></li>
+                
+                
+                
+                <li><a href="https://github.com/detekt/detekt" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://kotlinlang.slack.com/messages/C88E12QH4/convo/C88E12QH4-1518006028.000268/" target="_blank">Slack</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="/detekt/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '/detekt/search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="io.gitlab.arturbosch.detekt.api -">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle"> </li>
+  
+  
+  
+  <li>
+      <a href="#">User Documentation</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog.html">Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog-rc.html">Pre 1.0 Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/suppressing-rules.html">Suppressing Issues in Code</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/extensions.html">Extending detekt</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Getting Started</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/cli.html">with the Command Line Interface</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradle.html">with Gradle</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradletask.html">with Gradle Plain Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/mavenanttask.html">with Maven Ant Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/type-resolution.html">Using Type Resolution</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/git-pre-commit-hook.html">with a Git pre-commit hook</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Rule Sets</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/comments.html">comments</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/complexity.html">complexity</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/coroutines.html">coroutines</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/empty-blocks.html">empty-blocks</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/exceptions.html">exceptions</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/formatting.html">formatting</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/naming.html">naming</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/performance.html">performance</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/potential-bugs.html">potential-bugs</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/style.html">style</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">KDoc</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/pages/kdoc/detekt-api/index.html">detekt-api</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">io.gitlab.arturbosch.detekt.api -</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
+
+    
+
+
+    
+
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+
+    
+
+
+    
+
+  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a></p>
+
+<h1 id="package-iogitlabarturboschdetektapi">Package io.gitlab.arturbosch.detekt.api</h1>
+
+<h2 id="types">Types</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/">AnnotationExcluder</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.<br /><br />  <br />Content  <br />class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/">AnnotationExcluder</a>(<strong>root</strong>: KtFile, <strong>excludes</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>.<br /><br /><br /><br />If the design problem results from metric violations, a list of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>’s can describe further the kind of metrics.<br /><br /><br /><br />If the design problem manifests by different source locations, references to these locations can be stored in additional <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>’s.<br /><br /><br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a>(<strong>issue</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, <strong>entity</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, <strong>message</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>metrics</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt;, <strong>references</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/">Compactable</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Provides a compact string representation.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/">Compactable</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />A configuration holds information about how to configure specific rules.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.<br /><br /><br /><br />Be aware that there are three config levels by default:<br /><br />&lt;ul&gt;&lt;li&gt;the top level config layer specifies rule sets and detekt engine properties&lt;/li&gt;&lt;li&gt;the rule set level specifies properties concerning the whole rule set and rules&lt;/li&gt;&lt;li&gt;the rule level provides additional properties which are used to configure rules&lt;/li&gt;&lt;/ul&gt;<br /><br />This interface operates on the rule set level as the rule set config is passed to each rule in the #RuleSetProvider interface. This is due the fact that users create the rule set and all rules upfront and letting them ‘sub config’ the rule set config would be error-prone.<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />An extension which allows users to validate parts of the configuration.<br /><br /><br /><br />Rule authors can validate if specific properties do appear in their config or if their value lies in a specified range.<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Extension point which describes how findings should be printed on the console.<br /><br /><br /><br />Additional <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a>’s can be made available through the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">java.util.ServiceLoader</a> pattern. If the default reporting mechanism should be turned off, exclude the entry ‘FindingsReport’ in the ‘console-reports’ property of a detekt yaml config.<br /><br /><br /><br />  <br />Content  <br />abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />A context describes the storing and reporting mechanism of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>’s inside a <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>. Additionally it handles suppression and aliases management.<br /><br /><br /><br />The detekt engine retrieves the findings after each KtFile visit and resets the context before the next KtFile.<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/">CorrectableCodeSmell</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Represents a code smell for that can be auto corrected.<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/">CorrectableCodeSmell</a>(<strong>issue</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, <strong>entity</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, <strong>message</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>metrics</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt;, <strong>references</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;, <strong>autoCorrectEnabled</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/">Debt</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Debt describes the estimated amount of work needed to fix a given issue.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/">Debt</a>(<strong>days</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>hours</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>mins</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/">DefaultContext</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Default <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a> implementation.<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/">DefaultContext</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/">DetektVisitor</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :).<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/">DetektVisitor</a> : KtTreeVisitorVoid  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Stores information about a specific code fragment.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>(<strong>name</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>signature</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>location</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/">Location</a>, <strong>ktElement</strong>: KtElement?) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/">Compactable</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Defines extension points in detekt. Currently supported extensions are:<br /><br />&lt;ul&gt;&lt;li&gt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/">FileProcessListener</a>&lt;/li&gt;&lt;li&gt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a>&lt;/li&gt;&lt;li&gt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/">OutputReport</a>&lt;/li&gt;&lt;li&gt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a>&lt;/li&gt;&lt;li&gt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a>&lt;/li&gt;&lt;/ul&gt;<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/">FileProcessListener</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Gather additional metrics about the analyzed kotlin file. Pay attention to the thread policy of each function!<br /><br /><br /><br />A bindingContext != BindingContext.EMPTY is only available if Kotlin compiler settings are used.<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/">FileProcessListener</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.<br /><br /><br /><br />Basic behaviour of a finding is that is can be assigned to an id and a source code position described as an entity. Metrics and entity references can also considered for deeper characterization.<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/">Compactable</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/">HasEntity</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/">HasMetrics</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/">HasEntity</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Describes a source code position.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/">HasEntity</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/">HasMetrics</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Adds metric container behaviour.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/">HasMetrics</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />An issue represents a problem in the codebase.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>(<strong>id</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>severity</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a>, <strong>description</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>debt</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/">Debt</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/">LazyRegex</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.<br /><br /><br /><br />key &amp; default are used to retrieve a value from config.<br /><br /><br /><br />  <br />Content  <br />class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/">LazyRegex</a>(<strong>key</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>default</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>) : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a>&gt;   <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/">Location</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Specifies a position within a source code fragment.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/">Location</a>(<strong>source</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/">SourceLocation</a>, <strong>text</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/">TextLocation</a>, <strong>file</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/">Compactable</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>(<strong>type</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>value</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>threshold</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>isDouble</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, <strong>conversionFactor</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/">MultiRule</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.<br /><br />  <br />Content  <br />abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/">MultiRule</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/">OutputReport</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Translates detekt’s result container - <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a> - into an output report which is written inside a file.<br /><br />  <br />Content  <br />abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/">OutputReport</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/">ProjectMetric</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Anything that can be expressed as a numeric value for projects.<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/">ProjectMetric</a>(<strong>type</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>value</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>priority</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>isDouble</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, <strong>conversionFactor</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/">PropertiesAware</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Properties holder. Allows to store and retrieve any data.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/">PropertiesAware</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Allows to intercept detekt’s result container by listening to the initial and final state and manipulate the reported findings.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.<br /><br /><br /><br />A rule is implemented using the visitor pattern and should be started using the visit(KtFile) function. If calculations must be done before or after the visiting process, here are two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.<br /><br /><br /><br />  <br />Content  <br />abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>(<strong>ruleSetConfig</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>, <strong>ruleContext</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a>) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleId///PointingToDeclaration/">RuleId</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />The type to use when referring to rule ids giving it more context then a String would.<br /><br />  <br />Content  <br />typealias <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleId///PointingToDeclaration/">RuleId</a> = <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/">RuleSet</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />A rule set is a collection of rules and must be defined within a rule set provider implementation.<br /><br />  <br />Content  <br />class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/">RuleSet</a>(<strong>id</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a>, <strong>rules</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a>&gt;)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a></td>
+      <td>[jvm]  <br />Content  <br />typealias <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a> = <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/">RuleSetProvider</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />A rule set provider, as the name states, is responsible for creating rule sets.<br /><br /><br /><br />When writing own rule set providers make sure to register them according the ServiceLoader documentation. http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html<br /><br /><br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/">RuleSetProvider</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Context providing useful processing settings to initialize extensions.<br /><br />  <br />Content  <br />interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/">PropertiesAware</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.<br /><br />  <br />Content  <br />enum <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a>&gt;   <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/">SingleAssign</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Allows to assign a property just once. Further assignments result in <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a>’s.<br /><br />  <br />Content  <br />class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/">SingleAssign</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt;  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/">SourceLocation</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Stores line and column information of a location.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/">SourceLocation</a>(<strong>line</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>column</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/">SplitPattern</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/">SplitPattern</a>(<strong>text</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>delimiters</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>removeTrailingAsterisks</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/">TextLocation</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Stores character start and end positions of an text file.<br /><br />  <br />Content  <br />data class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/">TextLocation</a>(<strong>start</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>end</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/">ThresholdedCodeSmell</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.<br /><br />  <br />Content  <br />open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/">ThresholdedCodeSmell</a>(<strong>issue</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, <strong>entity</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, <strong>metric</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>, <strong>message</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>references</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/">ThresholdRule</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.<br /><br />  <br />Content  <br />abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/">ThresholdRule</a>(<strong>config</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>, <strong>defaultThreshold</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/">UnstableApi</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Experimental detekt api which may change on minor or patch versions.<br /><br />  <br />Content  <br />annotation class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/">UnstableApi</a>(<strong>reason</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)  <br /><br /><br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="functions">Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.html">commaSeparatedPattern</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Splits given String into a sequence of strings splited by the provided delimiters (“,” by default).<br /><br /><br /><br />It also trims the strings and removes the empty ones<br /><br /><br /><br />  <br />Content  <br />fun <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>.<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.html">commaSeparatedPattern</a>(vararg delimiters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a>&lt;out <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html">getOrNull</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Allows to retrieve stored properties in a type safe way.<br /><br />  <br />Content  <br />inline fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/">PropertiesAware</a>.<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html">getOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html">T</a>?  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/simple-pattern-to-regex.html">simplePatternToRegex</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Convert a simple pattern String to a Regex<br /><br /><br /><br />The simple pattern is a subset of the shell pattern matching or https://en.wikipedia.org/wiki/Glob_(programming)<br /><br /><br /><br />‘*’ matches any zero or more characters ‘?’ matches any one character<br /><br /><br /><br />  <br />Content  <br />fun <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>.<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/simple-pattern-to-regex.html">simplePatternToRegex</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a>  <br /><br /><br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="properties">Properties</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api//DEFAULT_FLOAT_CONVERSION_FACTOR/#/PointingToDeclaration/">DEFAULT_FLOAT_CONVERSION_FACTOR</a></td>
+      <td>[jvm] <br /><br />To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5)<br /><br />const val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api//DEFAULT_FLOAT_CONVERSION_FACTOR/#/PointingToDeclaration/">DEFAULT_FLOAT_CONVERSION_FACTOR</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>   <br /></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+    <div class="tags">
+        
+    </div>
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2020 The detekt Team. All rights reserved. <br />
+ Site last generated: Nov 6, 2020 <br />
+                </div>
+            </div>
+</footer>
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>

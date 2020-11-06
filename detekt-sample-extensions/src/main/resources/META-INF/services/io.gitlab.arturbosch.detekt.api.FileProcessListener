@@ -1,2 +1,0 @@
-io.gitlab.arturbosch.detekt.sample.extensions.processors.QualifiedNameProcessor
-io.gitlab.arturbosch.detekt.sample.extensions.processors.NumberOfLoopsProcessor

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+<title>Rule - | A static code analyzer for Kotlin</title>
+<link rel="stylesheet" href="/detekt/css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="/detekt/css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="/detekt/css/customstyles.css">
+<link rel="stylesheet" href="/detekt/css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="/detekt/css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="/detekt/js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="/detekt/js/toc.js"></script>
+<script src="/detekt/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="/detekt/images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="detekt" href="https://detekt.github.io/detekt//feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> detekt</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="news">News</a></li>
+                
+                
+                
+                <li><a href="https://github.com/detekt/detekt" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://kotlinlang.slack.com/messages/C88E12QH4/convo/C88E12QH4-1518006028.000268/" target="_blank">Slack</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="/detekt/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '/detekt/search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Rule -">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle"> </li>
+  
+  
+  
+  <li>
+      <a href="#">User Documentation</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog.html">Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog-rc.html">Pre 1.0 Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/suppressing-rules.html">Suppressing Issues in Code</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/extensions.html">Extending detekt</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Getting Started</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/cli.html">with the Command Line Interface</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradle.html">with Gradle</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradletask.html">with Gradle Plain Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/mavenanttask.html">with Maven Ant Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/type-resolution.html">Using Type Resolution</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/git-pre-commit-hook.html">with a Git pre-commit hook</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Rule Sets</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/comments.html">comments</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/complexity.html">complexity</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/coroutines.html">coroutines</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/empty-blocks.html">empty-blocks</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/exceptions.html">exceptions</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/formatting.html">formatting</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/naming.html">naming</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/performance.html">performance</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/potential-bugs.html">potential-bugs</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/style.html">style</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">KDoc</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/pages/kdoc/detekt-api/index.html">detekt-api</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Rule -</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
+
+    
+
+
+    
+
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+
+    
+
+
+    
+
+  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a></p>
+
+<h1 id="rule">Rule</h1>
+<p>[jvm]</p>
+
+<p>A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p>
+
+<p>A rule is implemented using the visitor pattern and should be started using the visit(KtFile) function. If calculations must be done before or after the visiting process, here are two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.</p>
+
+<p>abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>(<strong>ruleSetConfig</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>, <strong>ruleContext</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a>) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a></p>
+
+<h2 id="constructors">Constructors</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/-rule.html">Rule</a></td>
+      <td>[jvm] fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/-rule.html">Rule</a>(ruleSetConfig: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>, ruleContext: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a>)   <br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="functions">Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Clears previous findings. Normally this is done on every new KtFile analyzed and should be called by clients.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a>()  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a></td>
+      <td>[jvm]  <br />Content  <br />open operator override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/report.html">report</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Simplified version of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">Context.report</a> with rule defaults.<br /><br />  <br />Content  <br />fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/report.html">report</a>(finding: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>)  <br />fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/report.html">report</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;)  <br /><br /><br />[jvm]  <br />Brief description  <br /><br /><br />Reports a single new violation. By contract the implementation can check if this finding is already suppressed and should not get reported. An alias set can be given to additionally check if an alias was used when suppressing. Additionally suppression by rule set id is supported.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(finding: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a>?)  <br /><br /><br />[jvm]  <br />Brief description  <br /><br /><br />Same as <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/report.html">report</a> but reports a list of findings.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a>?)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/sub-config.html">subConfig</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Tries to retrieve part of the configuration based on given key.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/sub-config.html">subConfig</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/-companion/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/-companion/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">valueOrDefault</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.<br /><br />  <br />Content  <br />open override fun &lt;T : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: T): T  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html">valueOrNull</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Retrieves a sub configuration or value based on given key. If the configuration property cannot be found, null is returned.<br /><br />  <br />Content  <br />open override fun &lt;T : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html">valueOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): T?  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit.html">visit</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />Init function to start visiting the KtFile. Can be overridden to start a different visiting process.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit.html">visit</a>(root: KtFile)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotatedExpression/#org.jetbrains.kotlin.psi.KtAnnotatedExpression/PointingToDeclaration/">visitAnnotatedExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotatedExpression/#org.jetbrains.kotlin.psi.KtAnnotatedExpression/PointingToDeclaration/">visitAnnotatedExpression</a>(@NotNull()p0: KtAnnotatedExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotatedExpression/#org.jetbrains.kotlin.psi.KtAnnotatedExpression#java.lang.Void/PointingToDeclaration/">visitAnnotatedExpression</a>(@NotNull()p0: KtAnnotatedExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotation/#org.jetbrains.kotlin.psi.KtAnnotation/PointingToDeclaration/">visitAnnotation</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotation/#org.jetbrains.kotlin.psi.KtAnnotation/PointingToDeclaration/">visitAnnotation</a>(@NotNull()p0: KtAnnotation)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotation/#org.jetbrains.kotlin.psi.KtAnnotation#java.lang.Void/PointingToDeclaration/">visitAnnotation</a>(@NotNull()p0: KtAnnotation, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotationEntry/#org.jetbrains.kotlin.psi.KtAnnotationEntry/PointingToDeclaration/">visitAnnotationEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotationEntry/#org.jetbrains.kotlin.psi.KtAnnotationEntry/PointingToDeclaration/">visitAnnotationEntry</a>(@NotNull()p0: KtAnnotationEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnnotationEntry/#org.jetbrains.kotlin.psi.KtAnnotationEntry#java.lang.Void/PointingToDeclaration/">visitAnnotationEntry</a>(@NotNull()p0: KtAnnotationEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitAnnotationUseSiteTarget/#org.jetbrains.kotlin.psi.KtAnnotationUseSiteTarget#java.lang.Void/PointingToDeclaration/">visitAnnotationUseSiteTarget</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitAnnotationUseSiteTarget/#org.jetbrains.kotlin.psi.KtAnnotationUseSiteTarget#java.lang.Void/PointingToDeclaration/">visitAnnotationUseSiteTarget</a>(@NotNull()p0: KtAnnotationUseSiteTarget, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnonymousInitializer/#org.jetbrains.kotlin.psi.KtAnonymousInitializer/PointingToDeclaration/">visitAnonymousInitializer</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnonymousInitializer/#org.jetbrains.kotlin.psi.KtAnonymousInitializer/PointingToDeclaration/">visitAnonymousInitializer</a>(@NotNull()p0: KtAnonymousInitializer)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitAnonymousInitializer/#org.jetbrains.kotlin.psi.KtAnonymousInitializer#java.lang.Void/PointingToDeclaration/">visitAnonymousInitializer</a>(@NotNull()p0: KtAnonymousInitializer, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArgument/#org.jetbrains.kotlin.psi.KtValueArgument/PointingToDeclaration/">visitArgument</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArgument/#org.jetbrains.kotlin.psi.KtValueArgument/PointingToDeclaration/">visitArgument</a>(@NotNull()p0: KtValueArgument)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArgument/#org.jetbrains.kotlin.psi.KtValueArgument#java.lang.Void/PointingToDeclaration/">visitArgument</a>(@NotNull()p0: KtValueArgument, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArrayAccessExpression/#org.jetbrains.kotlin.psi.KtArrayAccessExpression/PointingToDeclaration/">visitArrayAccessExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArrayAccessExpression/#org.jetbrains.kotlin.psi.KtArrayAccessExpression/PointingToDeclaration/">visitArrayAccessExpression</a>(@NotNull()p0: KtArrayAccessExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitArrayAccessExpression/#org.jetbrains.kotlin.psi.KtArrayAccessExpression#java.lang.Void/PointingToDeclaration/">visitArrayAccessExpression</a>(@NotNull()p0: KtArrayAccessExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryExpression/#org.jetbrains.kotlin.psi.KtBinaryExpression/PointingToDeclaration/">visitBinaryExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryExpression/#org.jetbrains.kotlin.psi.KtBinaryExpression/PointingToDeclaration/">visitBinaryExpression</a>(@NotNull()p0: KtBinaryExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryExpression/#org.jetbrains.kotlin.psi.KtBinaryExpression#java.lang.Void/PointingToDeclaration/">visitBinaryExpression</a>(@NotNull()p0: KtBinaryExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitBinaryFile/#org.jetbrains.kotlin.com.intellij.psi.PsiBinaryFile/PointingToDeclaration/">visitBinaryFile</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitBinaryFile/#org.jetbrains.kotlin.com.intellij.psi.PsiBinaryFile/PointingToDeclaration/">visitBinaryFile</a>(p0: PsiBinaryFile)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryWithTypeRHSExpression/#org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS/PointingToDeclaration/">visitBinaryWithTypeRHSExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryWithTypeRHSExpression/#org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS/PointingToDeclaration/">visitBinaryWithTypeRHSExpression</a>(@NotNull()p0: KtBinaryExpressionWithTypeRHS)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBinaryWithTypeRHSExpression/#org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS#java.lang.Void/PointingToDeclaration/">visitBinaryWithTypeRHSExpression</a>(@NotNull()p0: KtBinaryExpressionWithTypeRHS, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockExpression/#org.jetbrains.kotlin.psi.KtBlockExpression/PointingToDeclaration/">visitBlockExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockExpression/#org.jetbrains.kotlin.psi.KtBlockExpression/PointingToDeclaration/">visitBlockExpression</a>(@NotNull()p0: KtBlockExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockExpression/#org.jetbrains.kotlin.psi.KtBlockExpression#java.lang.Void/PointingToDeclaration/">visitBlockExpression</a>(@NotNull()p0: KtBlockExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockStringTemplateEntry/#org.jetbrains.kotlin.psi.KtBlockStringTemplateEntry/PointingToDeclaration/">visitBlockStringTemplateEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockStringTemplateEntry/#org.jetbrains.kotlin.psi.KtBlockStringTemplateEntry/PointingToDeclaration/">visitBlockStringTemplateEntry</a>(@NotNull()p0: KtBlockStringTemplateEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBlockStringTemplateEntry/#org.jetbrains.kotlin.psi.KtBlockStringTemplateEntry#java.lang.Void/PointingToDeclaration/">visitBlockStringTemplateEntry</a>(@NotNull()p0: KtBlockStringTemplateEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBreakExpression/#org.jetbrains.kotlin.psi.KtBreakExpression/PointingToDeclaration/">visitBreakExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBreakExpression/#org.jetbrains.kotlin.psi.KtBreakExpression/PointingToDeclaration/">visitBreakExpression</a>(@NotNull()p0: KtBreakExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitBreakExpression/#org.jetbrains.kotlin.psi.KtBreakExpression#java.lang.Void/PointingToDeclaration/">visitBreakExpression</a>(@NotNull()p0: KtBreakExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallableReferenceExpression/#org.jetbrains.kotlin.psi.KtCallableReferenceExpression/PointingToDeclaration/">visitCallableReferenceExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallableReferenceExpression/#org.jetbrains.kotlin.psi.KtCallableReferenceExpression/PointingToDeclaration/">visitCallableReferenceExpression</a>(@NotNull()p0: KtCallableReferenceExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallableReferenceExpression/#org.jetbrains.kotlin.psi.KtCallableReferenceExpression#java.lang.Void/PointingToDeclaration/">visitCallableReferenceExpression</a>(@NotNull()p0: KtCallableReferenceExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallExpression/#org.jetbrains.kotlin.psi.KtCallExpression/PointingToDeclaration/">visitCallExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallExpression/#org.jetbrains.kotlin.psi.KtCallExpression/PointingToDeclaration/">visitCallExpression</a>(@NotNull()p0: KtCallExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCallExpression/#org.jetbrains.kotlin.psi.KtCallExpression#java.lang.Void/PointingToDeclaration/">visitCallExpression</a>(@NotNull()p0: KtCallExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCatchSection/#org.jetbrains.kotlin.psi.KtCatchClause/PointingToDeclaration/">visitCatchSection</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCatchSection/#org.jetbrains.kotlin.psi.KtCatchClause/PointingToDeclaration/">visitCatchSection</a>(@NotNull()p0: KtCatchClause)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCatchSection/#org.jetbrains.kotlin.psi.KtCatchClause#java.lang.Void/PointingToDeclaration/">visitCatchSection</a>(@NotNull()p0: KtCatchClause, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClass/#org.jetbrains.kotlin.psi.KtClass/PointingToDeclaration/">visitClass</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClass/#org.jetbrains.kotlin.psi.KtClass/PointingToDeclaration/">visitClass</a>(@NotNull()p0: KtClass)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClass/#org.jetbrains.kotlin.psi.KtClass#java.lang.Void/PointingToDeclaration/">visitClass</a>(@NotNull()p0: KtClass, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassBody/#org.jetbrains.kotlin.psi.KtClassBody/PointingToDeclaration/">visitClassBody</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassBody/#org.jetbrains.kotlin.psi.KtClassBody/PointingToDeclaration/">visitClassBody</a>(@NotNull()p0: KtClassBody)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassBody/#org.jetbrains.kotlin.psi.KtClassBody#java.lang.Void/PointingToDeclaration/">visitClassBody</a>(@NotNull()p0: KtClassBody, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassInitializer/#org.jetbrains.kotlin.psi.KtClassInitializer/PointingToDeclaration/">visitClassInitializer</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassInitializer/#org.jetbrains.kotlin.psi.KtClassInitializer/PointingToDeclaration/">visitClassInitializer</a>(@NotNull()p0: KtClassInitializer)  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassInitializer/#org.jetbrains.kotlin.psi.KtClassInitializer#java.lang.Void/PointingToDeclaration/">visitClassInitializer</a>(@NotNull()p0: KtClassInitializer, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassLiteralExpression/#org.jetbrains.kotlin.psi.KtClassLiteralExpression/PointingToDeclaration/">visitClassLiteralExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassLiteralExpression/#org.jetbrains.kotlin.psi.KtClassLiteralExpression/PointingToDeclaration/">visitClassLiteralExpression</a>(@NotNull()p0: KtClassLiteralExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassLiteralExpression/#org.jetbrains.kotlin.psi.KtClassLiteralExpression#java.lang.Void/PointingToDeclaration/">visitClassLiteralExpression</a>(@NotNull()p0: KtClassLiteralExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassOrObject/#org.jetbrains.kotlin.psi.KtClassOrObject/PointingToDeclaration/">visitClassOrObject</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassOrObject/#org.jetbrains.kotlin.psi.KtClassOrObject/PointingToDeclaration/">visitClassOrObject</a>(@NotNull()p0: KtClassOrObject)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitClassOrObject/#org.jetbrains.kotlin.psi.KtClassOrObject#java.lang.Void/PointingToDeclaration/">visitClassOrObject</a>(@NotNull()p0: KtClassOrObject, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCollectionLiteralExpression/#org.jetbrains.kotlin.psi.KtCollectionLiteralExpression/PointingToDeclaration/">visitCollectionLiteralExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCollectionLiteralExpression/#org.jetbrains.kotlin.psi.KtCollectionLiteralExpression/PointingToDeclaration/">visitCollectionLiteralExpression</a>(@NotNull()p0: KtCollectionLiteralExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitCollectionLiteralExpression/#org.jetbrains.kotlin.psi.KtCollectionLiteralExpression#java.lang.Void/PointingToDeclaration/">visitCollectionLiteralExpression</a>(@NotNull()p0: KtCollectionLiteralExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitComment/#org.jetbrains.kotlin.com.intellij.psi.PsiComment/PointingToDeclaration/">visitComment</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitComment/#org.jetbrains.kotlin.com.intellij.psi.PsiComment/PointingToDeclaration/">visitComment</a>(p0: PsiComment)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/visit-condition.html">visitCondition</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br /><br /><br />Basic mechanism to decide if a rule should run or not.<br /><br /><br /><br />By default any rule which is declared ‘active’ in the <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a> or not suppressed by a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-suppress/index.html">Suppress</a> annotation on file level should run.<br /><br /><br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/visit-condition.html">visitCondition</a>(root: KtFile): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstantExpression/#org.jetbrains.kotlin.psi.KtConstantExpression/PointingToDeclaration/">visitConstantExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstantExpression/#org.jetbrains.kotlin.psi.KtConstantExpression/PointingToDeclaration/">visitConstantExpression</a>(@NotNull()p0: KtConstantExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstantExpression/#org.jetbrains.kotlin.psi.KtConstantExpression#java.lang.Void/PointingToDeclaration/">visitConstantExpression</a>(@NotNull()p0: KtConstantExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorCalleeExpression/#org.jetbrains.kotlin.psi.KtConstructorCalleeExpression/PointingToDeclaration/">visitConstructorCalleeExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorCalleeExpression/#org.jetbrains.kotlin.psi.KtConstructorCalleeExpression/PointingToDeclaration/">visitConstructorCalleeExpression</a>(@NotNull()p0: KtConstructorCalleeExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorCalleeExpression/#org.jetbrains.kotlin.psi.KtConstructorCalleeExpression#java.lang.Void/PointingToDeclaration/">visitConstructorCalleeExpression</a>(@NotNull()p0: KtConstructorCalleeExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorDelegationCall/#org.jetbrains.kotlin.psi.KtConstructorDelegationCall/PointingToDeclaration/">visitConstructorDelegationCall</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorDelegationCall/#org.jetbrains.kotlin.psi.KtConstructorDelegationCall/PointingToDeclaration/">visitConstructorDelegationCall</a>(@NotNull()p0: KtConstructorDelegationCall)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitConstructorDelegationCall/#org.jetbrains.kotlin.psi.KtConstructorDelegationCall#java.lang.Void/PointingToDeclaration/">visitConstructorDelegationCall</a>(@NotNull()p0: KtConstructorDelegationCall, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitContinueExpression/#org.jetbrains.kotlin.psi.KtContinueExpression/PointingToDeclaration/">visitContinueExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitContinueExpression/#org.jetbrains.kotlin.psi.KtContinueExpression/PointingToDeclaration/">visitContinueExpression</a>(@NotNull()p0: KtContinueExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitContinueExpression/#org.jetbrains.kotlin.psi.KtContinueExpression#java.lang.Void/PointingToDeclaration/">visitContinueExpression</a>(@NotNull()p0: KtContinueExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDeclaration/#org.jetbrains.kotlin.psi.KtDeclaration/PointingToDeclaration/">visitDeclaration</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDeclaration/#org.jetbrains.kotlin.psi.KtDeclaration/PointingToDeclaration/">visitDeclaration</a>(@NotNull()p0: KtDeclaration)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDeclaration/#org.jetbrains.kotlin.psi.KtDeclaration#java.lang.Void/PointingToDeclaration/">visitDeclaration</a>(@NotNull()p0: KtDeclaration, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDelegatedSuperTypeEntry/#org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry/PointingToDeclaration/">visitDelegatedSuperTypeEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDelegatedSuperTypeEntry/#org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry/PointingToDeclaration/">visitDelegatedSuperTypeEntry</a>(@NotNull()p0: KtDelegatedSuperTypeEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDelegatedSuperTypeEntry/#org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry#java.lang.Void/PointingToDeclaration/">visitDelegatedSuperTypeEntry</a>(@NotNull()p0: KtDelegatedSuperTypeEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclaration/#org.jetbrains.kotlin.psi.KtDestructuringDeclaration/PointingToDeclaration/">visitDestructuringDeclaration</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclaration/#org.jetbrains.kotlin.psi.KtDestructuringDeclaration/PointingToDeclaration/">visitDestructuringDeclaration</a>(@NotNull()p0: KtDestructuringDeclaration)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclaration/#org.jetbrains.kotlin.psi.KtDestructuringDeclaration#java.lang.Void/PointingToDeclaration/">visitDestructuringDeclaration</a>(@NotNull()p0: KtDestructuringDeclaration, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclarationEntry/#org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry/PointingToDeclaration/">visitDestructuringDeclarationEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclarationEntry/#org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry/PointingToDeclaration/">visitDestructuringDeclarationEntry</a>(@NotNull()p0: KtDestructuringDeclarationEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDestructuringDeclarationEntry/#org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry#java.lang.Void/PointingToDeclaration/">visitDestructuringDeclarationEntry</a>(@NotNull()p0: KtDestructuringDeclarationEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitDirectory/#org.jetbrains.kotlin.com.intellij.psi.PsiDirectory/PointingToDeclaration/">visitDirectory</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitDirectory/#org.jetbrains.kotlin.com.intellij.psi.PsiDirectory/PointingToDeclaration/">visitDirectory</a>(p0: PsiDirectory)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDotQualifiedExpression/#org.jetbrains.kotlin.psi.KtDotQualifiedExpression/PointingToDeclaration/">visitDotQualifiedExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDotQualifiedExpression/#org.jetbrains.kotlin.psi.KtDotQualifiedExpression/PointingToDeclaration/">visitDotQualifiedExpression</a>(@NotNull()p0: KtDotQualifiedExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDotQualifiedExpression/#org.jetbrains.kotlin.psi.KtDotQualifiedExpression#java.lang.Void/PointingToDeclaration/">visitDotQualifiedExpression</a>(@NotNull()p0: KtDotQualifiedExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoubleColonExpression/#org.jetbrains.kotlin.psi.KtDoubleColonExpression/PointingToDeclaration/">visitDoubleColonExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoubleColonExpression/#org.jetbrains.kotlin.psi.KtDoubleColonExpression/PointingToDeclaration/">visitDoubleColonExpression</a>(@NotNull()p0: KtDoubleColonExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoubleColonExpression/#org.jetbrains.kotlin.psi.KtDoubleColonExpression#java.lang.Void/PointingToDeclaration/">visitDoubleColonExpression</a>(@NotNull()p0: KtDoubleColonExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoWhileExpression/#org.jetbrains.kotlin.psi.KtDoWhileExpression/PointingToDeclaration/">visitDoWhileExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoWhileExpression/#org.jetbrains.kotlin.psi.KtDoWhileExpression/PointingToDeclaration/">visitDoWhileExpression</a>(@NotNull()p0: KtDoWhileExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDoWhileExpression/#org.jetbrains.kotlin.psi.KtDoWhileExpression#java.lang.Void/PointingToDeclaration/">visitDoWhileExpression</a>(@NotNull()p0: KtDoWhileExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDynamicType/#org.jetbrains.kotlin.psi.KtDynamicType/PointingToDeclaration/">visitDynamicType</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDynamicType/#org.jetbrains.kotlin.psi.KtDynamicType/PointingToDeclaration/">visitDynamicType</a>(@NotNull()p0: KtDynamicType)  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitDynamicType/#org.jetbrains.kotlin.psi.KtDynamicType#java.lang.Void/PointingToDeclaration/">visitDynamicType</a>(@NotNull()p0: KtDynamicType, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtTreeVisitorVoid/visitElement/#org.jetbrains.kotlin.com.intellij.psi.PsiElement/PointingToDeclaration/">visitElement</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtTreeVisitorVoid/visitElement/#org.jetbrains.kotlin.com.intellij.psi.PsiElement/PointingToDeclaration/">visitElement</a>(@NotNull()p0: PsiElement)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEnumEntry/#org.jetbrains.kotlin.psi.KtEnumEntry/PointingToDeclaration/">visitEnumEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEnumEntry/#org.jetbrains.kotlin.psi.KtEnumEntry/PointingToDeclaration/">visitEnumEntry</a>(@NotNull()p0: KtEnumEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEnumEntry/#org.jetbrains.kotlin.psi.KtEnumEntry#java.lang.Void/PointingToDeclaration/">visitEnumEntry</a>(@NotNull()p0: KtEnumEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitErrorElement/#org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement/PointingToDeclaration/">visitErrorElement</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitErrorElement/#org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement/PointingToDeclaration/">visitErrorElement</a>(p0: PsiErrorElement)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEscapeStringTemplateEntry/#org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry/PointingToDeclaration/">visitEscapeStringTemplateEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEscapeStringTemplateEntry/#org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry/PointingToDeclaration/">visitEscapeStringTemplateEntry</a>(@NotNull()p0: KtEscapeStringTemplateEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitEscapeStringTemplateEntry/#org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry#java.lang.Void/PointingToDeclaration/">visitEscapeStringTemplateEntry</a>(@NotNull()p0: KtEscapeStringTemplateEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpression/#org.jetbrains.kotlin.psi.KtExpression/PointingToDeclaration/">visitExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpression/#org.jetbrains.kotlin.psi.KtExpression/PointingToDeclaration/">visitExpression</a>(@NotNull()p0: KtExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpression/#org.jetbrains.kotlin.psi.KtExpression#java.lang.Void/PointingToDeclaration/">visitExpression</a>(@NotNull()p0: KtExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpressionWithLabel/#org.jetbrains.kotlin.psi.KtExpressionWithLabel/PointingToDeclaration/">visitExpressionWithLabel</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpressionWithLabel/#org.jetbrains.kotlin.psi.KtExpressionWithLabel/PointingToDeclaration/">visitExpressionWithLabel</a>(@NotNull()p0: KtExpressionWithLabel)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitExpressionWithLabel/#org.jetbrains.kotlin.psi.KtExpressionWithLabel#java.lang.Void/PointingToDeclaration/">visitExpressionWithLabel</a>(@NotNull()p0: KtExpressionWithLabel, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitFile/#org.jetbrains.kotlin.com.intellij.psi.PsiFile/PointingToDeclaration/">visitFile</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitFile/#org.jetbrains.kotlin.com.intellij.psi.PsiFile/PointingToDeclaration/">visitFile</a>(p0: PsiFile)  <br /><br /><br />[jvm]  <br />Brief description  <br /><br /><br />Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.<br /><br />  <br />Content  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/visit-file.html">visitFile</a>(root: KtFile, bindingContext: BindingContext, compilerResources: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/">CompilerResources</a>?)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitFileAnnotationList/#org.jetbrains.kotlin.psi.KtFileAnnotationList#java.lang.Void/PointingToDeclaration/">visitFileAnnotationList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitFileAnnotationList/#org.jetbrains.kotlin.psi.KtFileAnnotationList#java.lang.Void/PointingToDeclaration/">visitFileAnnotationList</a>(@NotNull()p0: KtFileAnnotationList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFinallySection/#org.jetbrains.kotlin.psi.KtFinallySection/PointingToDeclaration/">visitFinallySection</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFinallySection/#org.jetbrains.kotlin.psi.KtFinallySection/PointingToDeclaration/">visitFinallySection</a>(@NotNull()p0: KtFinallySection)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFinallySection/#org.jetbrains.kotlin.psi.KtFinallySection#java.lang.Void/PointingToDeclaration/">visitFinallySection</a>(@NotNull()p0: KtFinallySection, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitForExpression/#org.jetbrains.kotlin.psi.KtForExpression/PointingToDeclaration/">visitForExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitForExpression/#org.jetbrains.kotlin.psi.KtForExpression/PointingToDeclaration/">visitForExpression</a>(@NotNull()p0: KtForExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitForExpression/#org.jetbrains.kotlin.psi.KtForExpression#java.lang.Void/PointingToDeclaration/">visitForExpression</a>(@NotNull()p0: KtForExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFunctionType/#org.jetbrains.kotlin.psi.KtFunctionType/PointingToDeclaration/">visitFunctionType</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFunctionType/#org.jetbrains.kotlin.psi.KtFunctionType/PointingToDeclaration/">visitFunctionType</a>(@NotNull()p0: KtFunctionType)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitFunctionType/#org.jetbrains.kotlin.psi.KtFunctionType#java.lang.Void/PointingToDeclaration/">visitFunctionType</a>(@NotNull()p0: KtFunctionType, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIfExpression/#org.jetbrains.kotlin.psi.KtIfExpression/PointingToDeclaration/">visitIfExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIfExpression/#org.jetbrains.kotlin.psi.KtIfExpression/PointingToDeclaration/">visitIfExpression</a>(@NotNull()p0: KtIfExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIfExpression/#org.jetbrains.kotlin.psi.KtIfExpression#java.lang.Void/PointingToDeclaration/">visitIfExpression</a>(@NotNull()p0: KtIfExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportAlias/#org.jetbrains.kotlin.psi.KtImportAlias/PointingToDeclaration/">visitImportAlias</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportAlias/#org.jetbrains.kotlin.psi.KtImportAlias/PointingToDeclaration/">visitImportAlias</a>(@NotNull()p0: KtImportAlias)  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitImportAlias/#org.jetbrains.kotlin.psi.KtImportAlias#java.lang.Void/PointingToDeclaration/">visitImportAlias</a>(@NotNull()p0: KtImportAlias, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportDirective/#org.jetbrains.kotlin.psi.KtImportDirective/PointingToDeclaration/">visitImportDirective</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportDirective/#org.jetbrains.kotlin.psi.KtImportDirective/PointingToDeclaration/">visitImportDirective</a>(@NotNull()p0: KtImportDirective)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportDirective/#org.jetbrains.kotlin.psi.KtImportDirective#java.lang.Void/PointingToDeclaration/">visitImportDirective</a>(@NotNull()p0: KtImportDirective, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportList/#org.jetbrains.kotlin.psi.KtImportList/PointingToDeclaration/">visitImportList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportList/#org.jetbrains.kotlin.psi.KtImportList/PointingToDeclaration/">visitImportList</a>(@NotNull()p0: KtImportList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitImportList/#org.jetbrains.kotlin.psi.KtImportList#java.lang.Void/PointingToDeclaration/">visitImportList</a>(@NotNull()p0: KtImportList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitInitializerList/#org.jetbrains.kotlin.psi.KtInitializerList/PointingToDeclaration/">visitInitializerList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitInitializerList/#org.jetbrains.kotlin.psi.KtInitializerList/PointingToDeclaration/">visitInitializerList</a>(@NotNull()p0: KtInitializerList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitInitializerList/#org.jetbrains.kotlin.psi.KtInitializerList#java.lang.Void/PointingToDeclaration/">visitInitializerList</a>(@NotNull()p0: KtInitializerList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIsExpression/#org.jetbrains.kotlin.psi.KtIsExpression/PointingToDeclaration/">visitIsExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIsExpression/#org.jetbrains.kotlin.psi.KtIsExpression/PointingToDeclaration/">visitIsExpression</a>(@NotNull()p0: KtIsExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitIsExpression/#org.jetbrains.kotlin.psi.KtIsExpression#java.lang.Void/PointingToDeclaration/">visitIsExpression</a>(@NotNull()p0: KtIsExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtElement/#org.jetbrains.kotlin.psi.KtElement/PointingToDeclaration/">visitKtElement</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtElement/#org.jetbrains.kotlin.psi.KtElement/PointingToDeclaration/">visitKtElement</a>(@NotNull()p0: KtElement)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtElement/#org.jetbrains.kotlin.psi.KtElement#java.lang.Void/PointingToDeclaration/">visitKtElement</a>(@NotNull()p0: KtElement, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtFile/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/">visitKtFile</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtFile/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/">visitKtFile</a>(@NotNull()p0: KtFile)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitKtFile/#org.jetbrains.kotlin.psi.KtFile#java.lang.Void/PointingToDeclaration/">visitKtFile</a>(@NotNull()p0: KtFile, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLabeledExpression/#org.jetbrains.kotlin.psi.KtLabeledExpression/PointingToDeclaration/">visitLabeledExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLabeledExpression/#org.jetbrains.kotlin.psi.KtLabeledExpression/PointingToDeclaration/">visitLabeledExpression</a>(@NotNull()p0: KtLabeledExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLabeledExpression/#org.jetbrains.kotlin.psi.KtLabeledExpression#java.lang.Void/PointingToDeclaration/">visitLabeledExpression</a>(@NotNull()p0: KtLabeledExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLambdaExpression/#org.jetbrains.kotlin.psi.KtLambdaExpression/PointingToDeclaration/">visitLambdaExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLambdaExpression/#org.jetbrains.kotlin.psi.KtLambdaExpression/PointingToDeclaration/">visitLambdaExpression</a>(@NotNull()p0: KtLambdaExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLambdaExpression/#org.jetbrains.kotlin.psi.KtLambdaExpression#java.lang.Void/PointingToDeclaration/">visitLambdaExpression</a>(@NotNull()p0: KtLambdaExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLiteralStringTemplateEntry/#org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry/PointingToDeclaration/">visitLiteralStringTemplateEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLiteralStringTemplateEntry/#org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry/PointingToDeclaration/">visitLiteralStringTemplateEntry</a>(@NotNull()p0: KtLiteralStringTemplateEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLiteralStringTemplateEntry/#org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry#java.lang.Void/PointingToDeclaration/">visitLiteralStringTemplateEntry</a>(@NotNull()p0: KtLiteralStringTemplateEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLoopExpression/#org.jetbrains.kotlin.psi.KtLoopExpression/PointingToDeclaration/">visitLoopExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLoopExpression/#org.jetbrains.kotlin.psi.KtLoopExpression/PointingToDeclaration/">visitLoopExpression</a>(@NotNull()p0: KtLoopExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitLoopExpression/#org.jetbrains.kotlin.psi.KtLoopExpression#java.lang.Void/PointingToDeclaration/">visitLoopExpression</a>(@NotNull()p0: KtLoopExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitModifierList/#org.jetbrains.kotlin.psi.KtModifierList/PointingToDeclaration/">visitModifierList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitModifierList/#org.jetbrains.kotlin.psi.KtModifierList/PointingToDeclaration/">visitModifierList</a>(@NotNull()p0: KtModifierList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitModifierList/#org.jetbrains.kotlin.psi.KtModifierList#java.lang.Void/PointingToDeclaration/">visitModifierList</a>(@NotNull()p0: KtModifierList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedDeclaration/#org.jetbrains.kotlin.psi.KtNamedDeclaration/PointingToDeclaration/">visitNamedDeclaration</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedDeclaration/#org.jetbrains.kotlin.psi.KtNamedDeclaration/PointingToDeclaration/">visitNamedDeclaration</a>(@NotNull()p0: KtNamedDeclaration)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedDeclaration/#org.jetbrains.kotlin.psi.KtNamedDeclaration#java.lang.Void/PointingToDeclaration/">visitNamedDeclaration</a>(@NotNull()p0: KtNamedDeclaration, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedFunction/#org.jetbrains.kotlin.psi.KtNamedFunction/PointingToDeclaration/">visitNamedFunction</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedFunction/#org.jetbrains.kotlin.psi.KtNamedFunction/PointingToDeclaration/">visitNamedFunction</a>(@NotNull()p0: KtNamedFunction)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNamedFunction/#org.jetbrains.kotlin.psi.KtNamedFunction#java.lang.Void/PointingToDeclaration/">visitNamedFunction</a>(@NotNull()p0: KtNamedFunction, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNullableType/#org.jetbrains.kotlin.psi.KtNullableType/PointingToDeclaration/">visitNullableType</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNullableType/#org.jetbrains.kotlin.psi.KtNullableType/PointingToDeclaration/">visitNullableType</a>(@NotNull()p0: KtNullableType)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitNullableType/#org.jetbrains.kotlin.psi.KtNullableType#java.lang.Void/PointingToDeclaration/">visitNullableType</a>(@NotNull()p0: KtNullableType, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectDeclaration/#org.jetbrains.kotlin.psi.KtObjectDeclaration/PointingToDeclaration/">visitObjectDeclaration</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectDeclaration/#org.jetbrains.kotlin.psi.KtObjectDeclaration/PointingToDeclaration/">visitObjectDeclaration</a>(@NotNull()p0: KtObjectDeclaration)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectDeclaration/#org.jetbrains.kotlin.psi.KtObjectDeclaration#java.lang.Void/PointingToDeclaration/">visitObjectDeclaration</a>(@NotNull()p0: KtObjectDeclaration, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectLiteralExpression/#org.jetbrains.kotlin.psi.KtObjectLiteralExpression/PointingToDeclaration/">visitObjectLiteralExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectLiteralExpression/#org.jetbrains.kotlin.psi.KtObjectLiteralExpression/PointingToDeclaration/">visitObjectLiteralExpression</a>(@NotNull()p0: KtObjectLiteralExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitObjectLiteralExpression/#org.jetbrains.kotlin.psi.KtObjectLiteralExpression#java.lang.Void/PointingToDeclaration/">visitObjectLiteralExpression</a>(@NotNull()p0: KtObjectLiteralExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitOuterLanguageElement/#org.jetbrains.kotlin.com.intellij.psi.templateLanguages.OuterLanguageElement/PointingToDeclaration/">visitOuterLanguageElement</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitOuterLanguageElement/#org.jetbrains.kotlin.com.intellij.psi.templateLanguages.OuterLanguageElement/PointingToDeclaration/">visitOuterLanguageElement</a>(p0: OuterLanguageElement)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPackageDirective/#org.jetbrains.kotlin.psi.KtPackageDirective/PointingToDeclaration/">visitPackageDirective</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPackageDirective/#org.jetbrains.kotlin.psi.KtPackageDirective/PointingToDeclaration/">visitPackageDirective</a>(@NotNull()p0: KtPackageDirective)  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPackageDirective/#org.jetbrains.kotlin.psi.KtPackageDirective#java.lang.Void/PointingToDeclaration/">visitPackageDirective</a>(@NotNull()p0: KtPackageDirective, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameter/#org.jetbrains.kotlin.psi.KtParameter/PointingToDeclaration/">visitParameter</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameter/#org.jetbrains.kotlin.psi.KtParameter/PointingToDeclaration/">visitParameter</a>(@NotNull()p0: KtParameter)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameter/#org.jetbrains.kotlin.psi.KtParameter#java.lang.Void/PointingToDeclaration/">visitParameter</a>(@NotNull()p0: KtParameter, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameterList/#org.jetbrains.kotlin.psi.KtParameterList/PointingToDeclaration/">visitParameterList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameterList/#org.jetbrains.kotlin.psi.KtParameterList/PointingToDeclaration/">visitParameterList</a>(@NotNull()p0: KtParameterList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParameterList/#org.jetbrains.kotlin.psi.KtParameterList#java.lang.Void/PointingToDeclaration/">visitParameterList</a>(@NotNull()p0: KtParameterList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParenthesizedExpression/#org.jetbrains.kotlin.psi.KtParenthesizedExpression/PointingToDeclaration/">visitParenthesizedExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParenthesizedExpression/#org.jetbrains.kotlin.psi.KtParenthesizedExpression/PointingToDeclaration/">visitParenthesizedExpression</a>(@NotNull()p0: KtParenthesizedExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitParenthesizedExpression/#org.jetbrains.kotlin.psi.KtParenthesizedExpression#java.lang.Void/PointingToDeclaration/">visitParenthesizedExpression</a>(@NotNull()p0: KtParenthesizedExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitPlainText/#org.jetbrains.kotlin.com.intellij.psi.PsiPlainText/PointingToDeclaration/">visitPlainText</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitPlainText/#org.jetbrains.kotlin.com.intellij.psi.PsiPlainText/PointingToDeclaration/">visitPlainText</a>(p0: PsiPlainText)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitPlainTextFile/#org.jetbrains.kotlin.com.intellij.psi.PsiPlainTextFile/PointingToDeclaration/">visitPlainTextFile</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitPlainTextFile/#org.jetbrains.kotlin.com.intellij.psi.PsiPlainTextFile/PointingToDeclaration/">visitPlainTextFile</a>(p0: PsiPlainTextFile)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPostfixExpression/#org.jetbrains.kotlin.psi.KtPostfixExpression/PointingToDeclaration/">visitPostfixExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPostfixExpression/#org.jetbrains.kotlin.psi.KtPostfixExpression/PointingToDeclaration/">visitPostfixExpression</a>(@NotNull()p0: KtPostfixExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPostfixExpression/#org.jetbrains.kotlin.psi.KtPostfixExpression#java.lang.Void/PointingToDeclaration/">visitPostfixExpression</a>(@NotNull()p0: KtPostfixExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrefixExpression/#org.jetbrains.kotlin.psi.KtPrefixExpression/PointingToDeclaration/">visitPrefixExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrefixExpression/#org.jetbrains.kotlin.psi.KtPrefixExpression/PointingToDeclaration/">visitPrefixExpression</a>(@NotNull()p0: KtPrefixExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrefixExpression/#org.jetbrains.kotlin.psi.KtPrefixExpression#java.lang.Void/PointingToDeclaration/">visitPrefixExpression</a>(@NotNull()p0: KtPrefixExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrimaryConstructor/#org.jetbrains.kotlin.psi.KtPrimaryConstructor/PointingToDeclaration/">visitPrimaryConstructor</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrimaryConstructor/#org.jetbrains.kotlin.psi.KtPrimaryConstructor/PointingToDeclaration/">visitPrimaryConstructor</a>(@NotNull()p0: KtPrimaryConstructor)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPrimaryConstructor/#org.jetbrains.kotlin.psi.KtPrimaryConstructor#java.lang.Void/PointingToDeclaration/">visitPrimaryConstructor</a>(@NotNull()p0: KtPrimaryConstructor, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitProperty/#org.jetbrains.kotlin.psi.KtProperty/PointingToDeclaration/">visitProperty</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitProperty/#org.jetbrains.kotlin.psi.KtProperty/PointingToDeclaration/">visitProperty</a>(@NotNull()p0: KtProperty)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitProperty/#org.jetbrains.kotlin.psi.KtProperty#java.lang.Void/PointingToDeclaration/">visitProperty</a>(@NotNull()p0: KtProperty, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyAccessor/#org.jetbrains.kotlin.psi.KtPropertyAccessor/PointingToDeclaration/">visitPropertyAccessor</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyAccessor/#org.jetbrains.kotlin.psi.KtPropertyAccessor/PointingToDeclaration/">visitPropertyAccessor</a>(@NotNull()p0: KtPropertyAccessor)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyAccessor/#org.jetbrains.kotlin.psi.KtPropertyAccessor#java.lang.Void/PointingToDeclaration/">visitPropertyAccessor</a>(@NotNull()p0: KtPropertyAccessor, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyDelegate/#org.jetbrains.kotlin.psi.KtPropertyDelegate/PointingToDeclaration/">visitPropertyDelegate</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyDelegate/#org.jetbrains.kotlin.psi.KtPropertyDelegate/PointingToDeclaration/">visitPropertyDelegate</a>(@NotNull()p0: KtPropertyDelegate)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitPropertyDelegate/#org.jetbrains.kotlin.psi.KtPropertyDelegate#java.lang.Void/PointingToDeclaration/">visitPropertyDelegate</a>(@NotNull()p0: KtPropertyDelegate, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitQualifiedExpression/#org.jetbrains.kotlin.psi.KtQualifiedExpression/PointingToDeclaration/">visitQualifiedExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitQualifiedExpression/#org.jetbrains.kotlin.psi.KtQualifiedExpression/PointingToDeclaration/">visitQualifiedExpression</a>(@NotNull()p0: KtQualifiedExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitQualifiedExpression/#org.jetbrains.kotlin.psi.KtQualifiedExpression#java.lang.Void/PointingToDeclaration/">visitQualifiedExpression</a>(@NotNull()p0: KtQualifiedExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReferenceExpression/#org.jetbrains.kotlin.psi.KtReferenceExpression/PointingToDeclaration/">visitReferenceExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReferenceExpression/#org.jetbrains.kotlin.psi.KtReferenceExpression/PointingToDeclaration/">visitReferenceExpression</a>(@NotNull()p0: KtReferenceExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReferenceExpression/#org.jetbrains.kotlin.psi.KtReferenceExpression#java.lang.Void/PointingToDeclaration/">visitReferenceExpression</a>(@NotNull()p0: KtReferenceExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReturnExpression/#org.jetbrains.kotlin.psi.KtReturnExpression/PointingToDeclaration/">visitReturnExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReturnExpression/#org.jetbrains.kotlin.psi.KtReturnExpression/PointingToDeclaration/">visitReturnExpression</a>(@NotNull()p0: KtReturnExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitReturnExpression/#org.jetbrains.kotlin.psi.KtReturnExpression#java.lang.Void/PointingToDeclaration/">visitReturnExpression</a>(@NotNull()p0: KtReturnExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSafeQualifiedExpression/#org.jetbrains.kotlin.psi.KtSafeQualifiedExpression/PointingToDeclaration/">visitSafeQualifiedExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSafeQualifiedExpression/#org.jetbrains.kotlin.psi.KtSafeQualifiedExpression/PointingToDeclaration/">visitSafeQualifiedExpression</a>(@NotNull()p0: KtSafeQualifiedExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSafeQualifiedExpression/#org.jetbrains.kotlin.psi.KtSafeQualifiedExpression#java.lang.Void/PointingToDeclaration/">visitSafeQualifiedExpression</a>(@NotNull()p0: KtSafeQualifiedExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScript/#org.jetbrains.kotlin.psi.KtScript/PointingToDeclaration/">visitScript</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScript/#org.jetbrains.kotlin.psi.KtScript/PointingToDeclaration/">visitScript</a>(@NotNull()p0: KtScript)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScript/#org.jetbrains.kotlin.psi.KtScript#java.lang.Void/PointingToDeclaration/">visitScript</a>(@NotNull()p0: KtScript, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScriptInitializer/#org.jetbrains.kotlin.psi.KtScriptInitializer/PointingToDeclaration/">visitScriptInitializer</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScriptInitializer/#org.jetbrains.kotlin.psi.KtScriptInitializer/PointingToDeclaration/">visitScriptInitializer</a>(@NotNull()p0: KtScriptInitializer)  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitScriptInitializer/#org.jetbrains.kotlin.psi.KtScriptInitializer#java.lang.Void/PointingToDeclaration/">visitScriptInitializer</a>(@NotNull()p0: KtScriptInitializer, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSecondaryConstructor/#org.jetbrains.kotlin.psi.KtSecondaryConstructor/PointingToDeclaration/">visitSecondaryConstructor</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSecondaryConstructor/#org.jetbrains.kotlin.psi.KtSecondaryConstructor/PointingToDeclaration/">visitSecondaryConstructor</a>(@NotNull()p0: KtSecondaryConstructor)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSecondaryConstructor/#org.jetbrains.kotlin.psi.KtSecondaryConstructor#java.lang.Void/PointingToDeclaration/">visitSecondaryConstructor</a>(@NotNull()p0: KtSecondaryConstructor, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSelfType/#org.jetbrains.kotlin.psi.KtSelfType/PointingToDeclaration/">visitSelfType</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSelfType/#org.jetbrains.kotlin.psi.KtSelfType/PointingToDeclaration/">visitSelfType</a>(@NotNull()p0: KtSelfType)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSelfType/#org.jetbrains.kotlin.psi.KtSelfType#java.lang.Void/PointingToDeclaration/">visitSelfType</a>(@NotNull()p0: KtSelfType, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameExpression/#org.jetbrains.kotlin.psi.KtSimpleNameExpression/PointingToDeclaration/">visitSimpleNameExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameExpression/#org.jetbrains.kotlin.psi.KtSimpleNameExpression/PointingToDeclaration/">visitSimpleNameExpression</a>(@NotNull()p0: KtSimpleNameExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameExpression/#org.jetbrains.kotlin.psi.KtSimpleNameExpression#java.lang.Void/PointingToDeclaration/">visitSimpleNameExpression</a>(@NotNull()p0: KtSimpleNameExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameStringTemplateEntry/#org.jetbrains.kotlin.psi.KtSimpleNameStringTemplateEntry/PointingToDeclaration/">visitSimpleNameStringTemplateEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameStringTemplateEntry/#org.jetbrains.kotlin.psi.KtSimpleNameStringTemplateEntry/PointingToDeclaration/">visitSimpleNameStringTemplateEntry</a>(@NotNull()p0: KtSimpleNameStringTemplateEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSimpleNameStringTemplateEntry/#org.jetbrains.kotlin.psi.KtSimpleNameStringTemplateEntry#java.lang.Void/PointingToDeclaration/">visitSimpleNameStringTemplateEntry</a>(@NotNull()p0: KtSimpleNameStringTemplateEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntry/#org.jetbrains.kotlin.psi.KtStringTemplateEntry/PointingToDeclaration/">visitStringTemplateEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntry/#org.jetbrains.kotlin.psi.KtStringTemplateEntry/PointingToDeclaration/">visitStringTemplateEntry</a>(@NotNull()p0: KtStringTemplateEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntry/#org.jetbrains.kotlin.psi.KtStringTemplateEntry#java.lang.Void/PointingToDeclaration/">visitStringTemplateEntry</a>(@NotNull()p0: KtStringTemplateEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntryWithExpression/#org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression/PointingToDeclaration/">visitStringTemplateEntryWithExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntryWithExpression/#org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression/PointingToDeclaration/">visitStringTemplateEntryWithExpression</a>(@NotNull()p0: KtStringTemplateEntryWithExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateEntryWithExpression/#org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression#java.lang.Void/PointingToDeclaration/">visitStringTemplateEntryWithExpression</a>(@NotNull()p0: KtStringTemplateEntryWithExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateExpression/#org.jetbrains.kotlin.psi.KtStringTemplateExpression/PointingToDeclaration/">visitStringTemplateExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateExpression/#org.jetbrains.kotlin.psi.KtStringTemplateExpression/PointingToDeclaration/">visitStringTemplateExpression</a>(@NotNull()p0: KtStringTemplateExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitStringTemplateExpression/#org.jetbrains.kotlin.psi.KtStringTemplateExpression#java.lang.Void/PointingToDeclaration/">visitStringTemplateExpression</a>(@NotNull()p0: KtStringTemplateExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperExpression/#org.jetbrains.kotlin.psi.KtSuperExpression/PointingToDeclaration/">visitSuperExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperExpression/#org.jetbrains.kotlin.psi.KtSuperExpression/PointingToDeclaration/">visitSuperExpression</a>(@NotNull()p0: KtSuperExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperExpression/#org.jetbrains.kotlin.psi.KtSuperExpression#java.lang.Void/PointingToDeclaration/">visitSuperExpression</a>(@NotNull()p0: KtSuperExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeCallEntry/#org.jetbrains.kotlin.psi.KtSuperTypeCallEntry/PointingToDeclaration/">visitSuperTypeCallEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeCallEntry/#org.jetbrains.kotlin.psi.KtSuperTypeCallEntry/PointingToDeclaration/">visitSuperTypeCallEntry</a>(@NotNull()p0: KtSuperTypeCallEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeCallEntry/#org.jetbrains.kotlin.psi.KtSuperTypeCallEntry#java.lang.Void/PointingToDeclaration/">visitSuperTypeCallEntry</a>(@NotNull()p0: KtSuperTypeCallEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeEntry/#org.jetbrains.kotlin.psi.KtSuperTypeEntry/PointingToDeclaration/">visitSuperTypeEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeEntry/#org.jetbrains.kotlin.psi.KtSuperTypeEntry/PointingToDeclaration/">visitSuperTypeEntry</a>(@NotNull()p0: KtSuperTypeEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeEntry/#org.jetbrains.kotlin.psi.KtSuperTypeEntry#java.lang.Void/PointingToDeclaration/">visitSuperTypeEntry</a>(@NotNull()p0: KtSuperTypeEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeList/#org.jetbrains.kotlin.psi.KtSuperTypeList/PointingToDeclaration/">visitSuperTypeList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeList/#org.jetbrains.kotlin.psi.KtSuperTypeList/PointingToDeclaration/">visitSuperTypeList</a>(@NotNull()p0: KtSuperTypeList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeList/#org.jetbrains.kotlin.psi.KtSuperTypeList#java.lang.Void/PointingToDeclaration/">visitSuperTypeList</a>(@NotNull()p0: KtSuperTypeList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeListEntry/#org.jetbrains.kotlin.psi.KtSuperTypeListEntry/PointingToDeclaration/">visitSuperTypeListEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeListEntry/#org.jetbrains.kotlin.psi.KtSuperTypeListEntry/PointingToDeclaration/">visitSuperTypeListEntry</a>(@NotNull()p0: KtSuperTypeListEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitSuperTypeListEntry/#org.jetbrains.kotlin.psi.KtSuperTypeListEntry#java.lang.Void/PointingToDeclaration/">visitSuperTypeListEntry</a>(@NotNull()p0: KtSuperTypeListEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThisExpression/#org.jetbrains.kotlin.psi.KtThisExpression/PointingToDeclaration/">visitThisExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThisExpression/#org.jetbrains.kotlin.psi.KtThisExpression/PointingToDeclaration/">visitThisExpression</a>(@NotNull()p0: KtThisExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThisExpression/#org.jetbrains.kotlin.psi.KtThisExpression#java.lang.Void/PointingToDeclaration/">visitThisExpression</a>(@NotNull()p0: KtThisExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThrowExpression/#org.jetbrains.kotlin.psi.KtThrowExpression/PointingToDeclaration/">visitThrowExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThrowExpression/#org.jetbrains.kotlin.psi.KtThrowExpression/PointingToDeclaration/">visitThrowExpression</a>(@NotNull()p0: KtThrowExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitThrowExpression/#org.jetbrains.kotlin.psi.KtThrowExpression#java.lang.Void/PointingToDeclaration/">visitThrowExpression</a>(@NotNull()p0: KtThrowExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTryExpression/#org.jetbrains.kotlin.psi.KtTryExpression/PointingToDeclaration/">visitTryExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTryExpression/#org.jetbrains.kotlin.psi.KtTryExpression/PointingToDeclaration/">visitTryExpression</a>(@NotNull()p0: KtTryExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTryExpression/#org.jetbrains.kotlin.psi.KtTryExpression#java.lang.Void/PointingToDeclaration/">visitTryExpression</a>(@NotNull()p0: KtTryExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeAlias/#org.jetbrains.kotlin.psi.KtTypeAlias/PointingToDeclaration/">visitTypeAlias</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeAlias/#org.jetbrains.kotlin.psi.KtTypeAlias/PointingToDeclaration/">visitTypeAlias</a>(@NotNull()p0: KtTypeAlias)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeAlias/#org.jetbrains.kotlin.psi.KtTypeAlias#java.lang.Void/PointingToDeclaration/">visitTypeAlias</a>(@NotNull()p0: KtTypeAlias, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeArgumentList/#org.jetbrains.kotlin.psi.KtTypeArgumentList/PointingToDeclaration/">visitTypeArgumentList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeArgumentList/#org.jetbrains.kotlin.psi.KtTypeArgumentList/PointingToDeclaration/">visitTypeArgumentList</a>(@NotNull()p0: KtTypeArgumentList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeArgumentList/#org.jetbrains.kotlin.psi.KtTypeArgumentList#java.lang.Void/PointingToDeclaration/">visitTypeArgumentList</a>(@NotNull()p0: KtTypeArgumentList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraint/#org.jetbrains.kotlin.psi.KtTypeConstraint/PointingToDeclaration/">visitTypeConstraint</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraint/#org.jetbrains.kotlin.psi.KtTypeConstraint/PointingToDeclaration/">visitTypeConstraint</a>(@NotNull()p0: KtTypeConstraint)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraint/#org.jetbrains.kotlin.psi.KtTypeConstraint#java.lang.Void/PointingToDeclaration/">visitTypeConstraint</a>(@NotNull()p0: KtTypeConstraint, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraintList/#org.jetbrains.kotlin.psi.KtTypeConstraintList/PointingToDeclaration/">visitTypeConstraintList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraintList/#org.jetbrains.kotlin.psi.KtTypeConstraintList/PointingToDeclaration/">visitTypeConstraintList</a>(@NotNull()p0: KtTypeConstraintList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeConstraintList/#org.jetbrains.kotlin.psi.KtTypeConstraintList#java.lang.Void/PointingToDeclaration/">visitTypeConstraintList</a>(@NotNull()p0: KtTypeConstraintList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitTypeElement/#org.jetbrains.kotlin.psi.KtTypeElement#java.lang.Void/PointingToDeclaration/">visitTypeElement</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitor/visitTypeElement/#org.jetbrains.kotlin.psi.KtTypeElement#java.lang.Void/PointingToDeclaration/">visitTypeElement</a>(@NotNull()p0: KtTypeElement, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameter/#org.jetbrains.kotlin.psi.KtTypeParameter/PointingToDeclaration/">visitTypeParameter</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameter/#org.jetbrains.kotlin.psi.KtTypeParameter/PointingToDeclaration/">visitTypeParameter</a>(@NotNull()p0: KtTypeParameter)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameter/#org.jetbrains.kotlin.psi.KtTypeParameter#java.lang.Void/PointingToDeclaration/">visitTypeParameter</a>(@NotNull()p0: KtTypeParameter, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameterList/#org.jetbrains.kotlin.psi.KtTypeParameterList/PointingToDeclaration/">visitTypeParameterList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameterList/#org.jetbrains.kotlin.psi.KtTypeParameterList/PointingToDeclaration/">visitTypeParameterList</a>(@NotNull()p0: KtTypeParameterList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeParameterList/#org.jetbrains.kotlin.psi.KtTypeParameterList#java.lang.Void/PointingToDeclaration/">visitTypeParameterList</a>(@NotNull()p0: KtTypeParameterList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeProjection/#org.jetbrains.kotlin.psi.KtTypeProjection/PointingToDeclaration/">visitTypeProjection</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeProjection/#org.jetbrains.kotlin.psi.KtTypeProjection/PointingToDeclaration/">visitTypeProjection</a>(@NotNull()p0: KtTypeProjection)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeProjection/#org.jetbrains.kotlin.psi.KtTypeProjection#java.lang.Void/PointingToDeclaration/">visitTypeProjection</a>(@NotNull()p0: KtTypeProjection, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeReference/#org.jetbrains.kotlin.psi.KtTypeReference/PointingToDeclaration/">visitTypeReference</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeReference/#org.jetbrains.kotlin.psi.KtTypeReference/PointingToDeclaration/">visitTypeReference</a>(@NotNull()p0: KtTypeReference)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitTypeReference/#org.jetbrains.kotlin.psi.KtTypeReference#java.lang.Void/PointingToDeclaration/">visitTypeReference</a>(@NotNull()p0: KtTypeReference, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUnaryExpression/#org.jetbrains.kotlin.psi.KtUnaryExpression/PointingToDeclaration/">visitUnaryExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUnaryExpression/#org.jetbrains.kotlin.psi.KtUnaryExpression/PointingToDeclaration/">visitUnaryExpression</a>(@NotNull()p0: KtUnaryExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUnaryExpression/#org.jetbrains.kotlin.psi.KtUnaryExpression#java.lang.Void/PointingToDeclaration/">visitUnaryExpression</a>(@NotNull()p0: KtUnaryExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUserType/#org.jetbrains.kotlin.psi.KtUserType/PointingToDeclaration/">visitUserType</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUserType/#org.jetbrains.kotlin.psi.KtUserType/PointingToDeclaration/">visitUserType</a>(@NotNull()p0: KtUserType)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitUserType/#org.jetbrains.kotlin.psi.KtUserType#java.lang.Void/PointingToDeclaration/">visitUserType</a>(@NotNull()p0: KtUserType, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitValueArgumentList/#org.jetbrains.kotlin.psi.KtValueArgumentList/PointingToDeclaration/">visitValueArgumentList</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitValueArgumentList/#org.jetbrains.kotlin.psi.KtValueArgumentList/PointingToDeclaration/">visitValueArgumentList</a>(@NotNull()p0: KtValueArgumentList)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitValueArgumentList/#org.jetbrains.kotlin.psi.KtValueArgumentList#java.lang.Void/PointingToDeclaration/">visitValueArgumentList</a>(@NotNull()p0: KtValueArgumentList, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionInRange/#org.jetbrains.kotlin.psi.KtWhenConditionInRange/PointingToDeclaration/">visitWhenConditionInRange</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionInRange/#org.jetbrains.kotlin.psi.KtWhenConditionInRange/PointingToDeclaration/">visitWhenConditionInRange</a>(@NotNull()p0: KtWhenConditionInRange)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionInRange/#org.jetbrains.kotlin.psi.KtWhenConditionInRange#java.lang.Void/PointingToDeclaration/">visitWhenConditionInRange</a>(@NotNull()p0: KtWhenConditionInRange, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionIsPattern/#org.jetbrains.kotlin.psi.KtWhenConditionIsPattern/PointingToDeclaration/">visitWhenConditionIsPattern</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionIsPattern/#org.jetbrains.kotlin.psi.KtWhenConditionIsPattern/PointingToDeclaration/">visitWhenConditionIsPattern</a>(@NotNull()p0: KtWhenConditionIsPattern)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionIsPattern/#org.jetbrains.kotlin.psi.KtWhenConditionIsPattern#java.lang.Void/PointingToDeclaration/">visitWhenConditionIsPattern</a>(@NotNull()p0: KtWhenConditionIsPattern, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionWithExpression/#org.jetbrains.kotlin.psi.KtWhenConditionWithExpression/PointingToDeclaration/">visitWhenConditionWithExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionWithExpression/#org.jetbrains.kotlin.psi.KtWhenConditionWithExpression/PointingToDeclaration/">visitWhenConditionWithExpression</a>(@NotNull()p0: KtWhenConditionWithExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenConditionWithExpression/#org.jetbrains.kotlin.psi.KtWhenConditionWithExpression#java.lang.Void/PointingToDeclaration/">visitWhenConditionWithExpression</a>(@NotNull()p0: KtWhenConditionWithExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenEntry/#org.jetbrains.kotlin.psi.KtWhenEntry/PointingToDeclaration/">visitWhenEntry</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenEntry/#org.jetbrains.kotlin.psi.KtWhenEntry/PointingToDeclaration/">visitWhenEntry</a>(@NotNull()p0: KtWhenEntry)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenEntry/#org.jetbrains.kotlin.psi.KtWhenEntry#java.lang.Void/PointingToDeclaration/">visitWhenEntry</a>(@NotNull()p0: KtWhenEntry, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenExpression/#org.jetbrains.kotlin.psi.KtWhenExpression/PointingToDeclaration/">visitWhenExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenExpression/#org.jetbrains.kotlin.psi.KtWhenExpression/PointingToDeclaration/">visitWhenExpression</a>(@NotNull()p0: KtWhenExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhenExpression/#org.jetbrains.kotlin.psi.KtWhenExpression#java.lang.Void/PointingToDeclaration/">visitWhenExpression</a>(@NotNull()p0: KtWhenExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhileExpression/#org.jetbrains.kotlin.psi.KtWhileExpression/PointingToDeclaration/">visitWhileExpression</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhileExpression/#org.jetbrains.kotlin.psi.KtWhileExpression/PointingToDeclaration/">visitWhileExpression</a>(@NotNull()p0: KtWhileExpression)  <br />override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.psi/KtVisitorVoid/visitWhileExpression/#org.jetbrains.kotlin.psi.KtWhileExpression#java.lang.Void/PointingToDeclaration/">visitWhileExpression</a>(@NotNull()p0: KtWhileExpression, p1: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitWhiteSpace/#org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace/PointingToDeclaration/">visitWhiteSpace</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/#org.jetbrains.kotlin.com.intellij.psi/PsiElementVisitor/visitWhiteSpace/#org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace/PointingToDeclaration/">visitWhiteSpace</a>(p0: PsiWhiteSpace)  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/with-auto-correct.html">withAutoCorrect</a></td>
+      <td>[jvm]  <br />Brief description  <br /><br /><br />If your rule supports to automatically correct the misbehaviour of underlying smell, specify your code inside this method call, to allow the user of your rule to trigger auto correction only when needed.<br /><br />  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/with-auto-correct.html">withAutoCorrect</a>(block: () -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)  <br /><br /><br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="properties">Properties</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/active/#/PointingToDeclaration/">active</a></td>
+      <td>[jvm] <br /><br />Is this rule specified as active in configuration? If an rule is not specified in the underlying configuration, we assume it should not be run.<br /><br />open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/active/#/PointingToDeclaration/">active</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/aliases/#/PointingToDeclaration/">aliases</a></td>
+      <td>[jvm] <br /><br />List of rule ids which can optionally be used in suppress annotations to refer to this rule.<br /><br />val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/aliases/#/PointingToDeclaration/">aliases</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/autoCorrect/#/PointingToDeclaration/">autoCorrect</a></td>
+      <td>[jvm] <br /><br />Does this rule have auto correct specified in configuration? For auto correction to work the rule set itself enable it.<br /><br />open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/autoCorrect/#/PointingToDeclaration/">autoCorrect</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/bindingContext/#/PointingToDeclaration/">bindingContext</a></td>
+      <td>[jvm] override var <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/bindingContext/#/PointingToDeclaration/">bindingContext</a>: BindingContext   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/compilerResources/#/PointingToDeclaration/">compilerResources</a></td>
+      <td>[jvm] override var <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/compilerResources/#/PointingToDeclaration/">compilerResources</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/">CompilerResources</a>?   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/defaultRuleIdAliases/#/PointingToDeclaration/">defaultRuleIdAliases</a></td>
+      <td>[jvm] <br /><br /><br /><br />The default names which can be used instead of this #ruleId to refer to this rule in suppression’s.<br /><br /><br /><br />When overriding this property make sure to meet following structure for detekt-generator to pick it up and generate documentation for aliases:<br /><br />    override val defaultRuleIdAliases = setOf(“Name1”, “Name2”)<br /><br />open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/defaultRuleIdAliases/#/PointingToDeclaration/">defaultRuleIdAliases</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/filters/#/PointingToDeclaration/">filters</a></td>
+      <td>[jvm] <br /><br />Rules are aware of the paths they should run on via configuration properties.<br /><br />open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/filters/#/PointingToDeclaration/">filters</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/">PathFilters</a>?   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/findings/#/PointingToDeclaration/">findings</a></td>
+      <td>[jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/findings/#/PointingToDeclaration/">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/issue/#/PointingToDeclaration/">issue</a></td>
+      <td>[jvm] <br /><br />A rule is motivated to point out a specific issue in the code base.<br /><br />abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/issue/#/PointingToDeclaration/">issue</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/parentPath/#/PointingToDeclaration/">parentPath</a></td>
+      <td>[jvm] <br /><br /><br /><br />Keeps track of which key was taken to subConfig this configuration. Sub-sequential calls to subConfig are tracked with ‘&gt;’ as a separator.<br /><br /><br /><br />May be null if this is the top most configuration object.<br /><br /><br /><br />open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/parentPath/#/PointingToDeclaration/">parentPath</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleConfig/#/PointingToDeclaration/">ruleConfig</a></td>
+      <td>[jvm] override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleConfig/#/PointingToDeclaration/">ruleConfig</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleId/#/PointingToDeclaration/">ruleId</a></td>
+      <td>[jvm] <br /><br />An id this rule is identified with. Conventionally the rule id is derived from the issue id as these two classes have a coexistence.<br /><br />override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleId/#/PointingToDeclaration/">ruleId</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleId///PointingToDeclaration/">RuleId</a>   <br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleSetConfig/#/PointingToDeclaration/">ruleSetConfig</a></td>
+      <td>[jvm] <br /><br />Wrapped configuration of the ruleSet this rule is in. Use #valueOrDefault function to retrieve properties specified for the rule implementing this interface instead. Only use this property directly if you need a specific rule set property.<br /><br />open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/#io.gitlab.arturbosch.detekt.api/Rule/ruleSetConfig/#/PointingToDeclaration/">ruleSetConfig</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>   <br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="inheritors">Inheritors</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/">ThresholdRule</a></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+    <div class="tags">
+        
+    </div>
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2020 The detekt Team. All rights reserved. <br />
+ Site last generated: Nov 6, 2020 <br />
+                </div>
+            </div>
+</footer>
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>

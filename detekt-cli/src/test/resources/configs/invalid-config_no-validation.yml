@@ -1,5 +1,0 @@
-config:
-  validation: false
-
-non-existing-property:
-  active: true

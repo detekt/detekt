@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" changelog, release-notes, migration">
+<title>Changelog and Migration Guide | A static code analyzer for Kotlin</title>
+<link rel="stylesheet" href="/detekt/css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="/detekt/css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="/detekt/css/customstyles.css">
+<link rel="stylesheet" href="/detekt/css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="/detekt/css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="/detekt/js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="/detekt/js/toc.js"></script>
+<script src="/detekt/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="/detekt/images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="detekt" href="https://detekt.github.io/detekt//feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> detekt</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="news">News</a></li>
+                
+                
+                
+                <li><a href="https://github.com/detekt/detekt" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://kotlinlang.slack.com/messages/C88E12QH4/convo/C88E12QH4-1518006028.000268/" target="_blank">Slack</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="/detekt/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '/detekt/search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Changelog and Migration Guide">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle"> </li>
+  
+  
+  
+  <li>
+      <a href="#">User Documentation</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li class="active"><a href="/detekt/changelog.html">Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/changelog-rc.html">Pre 1.0 Release Notes</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/suppressing-rules.html">Suppressing Issues in Code</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/extensions.html">Extending detekt</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Getting Started</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/cli.html">with the Command Line Interface</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradle.html">with Gradle</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/gradletask.html">with Gradle Plain Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/mavenanttask.html">with Maven Ant Task</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/type-resolution.html">Using Type Resolution</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/git-pre-commit-hook.html">with a Git pre-commit hook</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">Rule Sets</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/comments.html">comments</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/complexity.html">complexity</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/coroutines.html">coroutines</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/empty-blocks.html">empty-blocks</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/exceptions.html">exceptions</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/formatting.html">formatting</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/naming.html">naming</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/performance.html">performance</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/potential-bugs.html">potential-bugs</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a href="/detekt/style.html">style</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a href="#">KDoc</a>
+      <ul>
+          
+          
+          
+          <li><a href="/detekt/pages/kdoc/detekt-api/index.html">detekt-api</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Changelog and Migration Guide</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
+
+    
+
+
+    
+
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//changelog.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+
+    
+
+
+    
+
+  <h4 id="1142---2020-10-20">1.14.2 - 2020-10-20</h4>
+
+<h5 id="changelog">Changelog</h5>
+
+<ul>
+  <li>Do not report vararg arguments which are just passed to a vararg parameter - <a href="https://github.com/detekt/detekt/pull/3157">#3157</a></li>
+  <li>Simplify documentation - <a href="https://github.com/detekt/detekt/pull/3156">#3156</a></li>
+  <li>Respect inspection aliases ClassName, PackageDirectoryMismatch, RedundantVisibilityModifier - <a href="https://github.com/detekt/detekt/pull/3153">#3153</a></li>
+  <li>Change spek and assertj to compile only dependencies for detekt-test consumers - <a href="https://github.com/detekt/detekt/pull/3152">#3152</a></li>
+  <li>False positive performance SpreadOperator in case of pass-through vararg - <a href="https://github.com/detekt/detekt/issues/3145">#3145</a></li>
+  <li>ClassOrdering rule reports a list of errors - <a href="https://github.com/detekt/detekt/pull/3142">#3142</a></li>
+  <li>ClassOrdering only reports first misorder, not all misorders - <a href="https://github.com/detekt/detekt/issues/3141">#3141</a></li>
+  <li>UnusedPrivateMember: fix false positive with getValue/setValue operator functions - <a href="https://github.com/detekt/detekt/pull/3139">#3139</a></li>
+  <li>ClassOrdering reports a message describing the misorder - <a href="https://github.com/detekt/detekt/pull/3138">#3138</a></li>
+  <li>False positive UnusedPrivateMember for getValue, setValue operator functions - <a href="https://github.com/detekt/detekt/issues/3128">#3128</a></li>
+  <li>Add aliases to class and package Naming rules - <a href="https://github.com/detekt/detekt/issues/3124">#3124</a></li>
+  <li>Artifact detekt-test forces dependency constraining - <a href="https://github.com/detekt/detekt/issues/3082">#3082</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Fix two eager Regex creations in rules which may confuse users if this rules are inactive but evaluated - <a href="https://github.com/detekt/detekt/pull/3154">#3154</a></li>
+  <li>Update Gradle to 6.7 - <a href="https://github.com/detekt/detekt/pull/3148">#3148</a></li>
+  <li>Bump github-pages from 208 to 209 in /docs - <a href="https://github.com/detekt/detekt/pull/3135">#3135</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/78">1.14.2</a></p>
+
+<h4 id="1141---2020-09-30">1.14.1 - 2020-09-30</h4>
+
+<h5 id="changelog-1">Changelog</h5>
+
+<ul>
+  <li>Write recipe to compare user and default config - #3065 - <a href="https://github.com/detekt/detekt/pull/3114">#3114</a></li>
+  <li>Improve description of AbsentOrWrongFileLicense rule - <a href="https://github.com/detekt/detekt/pull/3109">#3109</a></li>
+  <li>Report Unit returned by method implementations in interfaces - <a href="https://github.com/detekt/detekt/pull/3108">#3108</a></li>
+  <li>Change OptionalUnit to report Unit returned by method implementations in interfaces - <a href="https://github.com/detekt/detekt/issues/3099">#3099</a></li>
+  <li>1.13.0 changes to detektGenerateConfig - <a href="https://github.com/detekt/detekt/issues/3065">#3065</a></li>
+  <li>detekt 1.12.0 and org.springframework.boot 2.2.6.RELEASE clash - <a href="https://github.com/detekt/detekt/issues/3058">#3058</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-1">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Update mockk to 1.10.2 - <a href="https://github.com/detekt/detekt/pull/3113">#3113</a></li>
+  <li>Refactoring: Use indices syntax in loop - <a href="https://github.com/detekt/detekt/pull/3112">#3112</a></li>
+  <li>Specify type explicitly in DetektCreateBaselineTask - <a href="https://github.com/detekt/detekt/pull/3111">#3111</a></li>
+  <li>Refactoring: Class member can have private visibility - <a href="https://github.com/detekt/detekt/pull/3110">#3110</a></li>
+  <li>Fix kotlin-reflect problem for idea plugin - <a href="https://github.com/detekt/detekt/pull/3107">#3107</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/77">1.14.1</a></p>
+
+<h4 id="1140---2020-09-26">1.14.0 - 2020-09-26</h4>
+
+<h5 id="notable-changes">Notable Changes</h5>
+
+<ul>
+  <li>New standard rules: <code class="language-plaintext highlighter-rouge">ReplaceSafeCallChainWithRun</code>, <code class="language-plaintext highlighter-rouge">ClassOrdering</code>, <code class="language-plaintext highlighter-rouge">SuspendFunWithFlowReturnType</code></li>
+  <li>New experimental KtLint rules: <code class="language-plaintext highlighter-rouge">AnnotationSpacing</code>, <code class="language-plaintext highlighter-rouge">ArgumentListWrapping</code></li>
+</ul>
+
+<h5 id="changelog-2">Changelog</h5>
+
+<ul>
+  <li>Add additional classpaths to KtTestCompiler - <a href="https://github.com/detekt/detekt/pull/3101">#3101</a></li>
+  <li>New rule: SuspendFunWithFlowReturnType - <a href="https://github.com/detekt/detekt/pull/3098">#3098</a></li>
+  <li>Fix formatting issues have no absolute path - #3063 - <a href="https://github.com/detekt/detekt/pull/3097">#3097</a></li>
+  <li>Fix false positive (+= overload) in UnusedPrivateMember - <a href="https://github.com/detekt/detekt/pull/3094">#3094</a></li>
+  <li>Update RedundantVisibilityModifierRule to find redundant internal modifiers - <a href="https://github.com/detekt/detekt/pull/3092">#3092</a></li>
+  <li>New rule: ReplaceSafeCallChainWithRun - <a href="https://github.com/detekt/detekt/pull/3089">#3089</a></li>
+  <li>New rule: ClassOrdering - <a href="https://github.com/detekt/detekt/pull/3088">#3088</a></li>
+  <li>Use File.pathSeparator to split entries in classpath - <a href="https://github.com/detekt/detekt/pull/3084">#3084</a></li>
+  <li>Wrap new KtLint rules - <a href="https://github.com/detekt/detekt/pull/3083">#3083</a></li>
+  <li>Wrap KtLint AnnotationSpacingRule - <a href="https://github.com/detekt/detekt/issues/3081">#3081</a></li>
+  <li>Wrap KtLint ArgumentListWrappingRule - <a href="https://github.com/detekt/detekt/issues/3080">#3080</a></li>
+  <li>UnusedImports rule: fix false positives when type resolution is enabled - <a href="https://github.com/detekt/detekt/pull/3079">#3079</a></li>
+  <li>Move SNAPSHOT from artifactory to sonatype - <a href="https://github.com/detekt/detekt/pull/3076">#3076</a></li>
+  <li>Update KtLint to 0.39.0 - <a href="https://github.com/detekt/detekt/pull/3075">#3075</a></li>
+  <li>UnusedImports: Lots of false positives - <a href="https://github.com/detekt/detekt/issues/3074">#3074</a></li>
+  <li>Update dependency badge to maven central - <a href="https://github.com/detekt/detekt/pull/3072">#3072</a></li>
+  <li>Simplify reporting message for IgnoredReturnValue - <a href="https://github.com/detekt/detekt/pull/3068">#3068</a></li>
+  <li>Add ability to pass rootclasspaths to KtTestCompiler - <a href="https://github.com/detekt/detekt/issues/3066">#3066</a></li>
+  <li>MagicNumber rule: don’t check Character, Boolean and null - <a href="https://github.com/detekt/detekt/pull/3064">#3064</a></li>
+  <li>KtLint formatting checks do not include full path in report - <a href="https://github.com/detekt/detekt/issues/3063">#3063</a></li>
+  <li>IgnoredReturnValue should only report name of method/function called - <a href="https://github.com/detekt/detekt/issues/3052">#3052</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-2">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Update jacoco with Java 15 support - <a href="https://github.com/detekt/detekt/pull/3105">#3105</a></li>
+  <li>Update project dependencies - <a href="https://github.com/detekt/detekt/pull/3104">#3104</a></li>
+  <li>Enable parallel spek test discovery - <a href="https://github.com/detekt/detekt/pull/3090">#3090</a></li>
+  <li>Update Gradle to 6.7-rc-2 - <a href="https://github.com/detekt/detekt/pull/3071">#3071</a></li>
+  <li>Update spek framework to 2.0.13 - <a href="https://github.com/detekt/detekt/pull/3070">#3070</a></li>
+  <li>Update kramdown dependency due to a vulnerability - <a href="https://github.com/detekt/detekt/pull/3069">#3069</a></li>
+  <li>Add test asserting the report message - <a href="https://github.com/detekt/detekt/pull/3061">#3061</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/76">1.14.0</a></p>
+
+<h4 id="1131---2020-09-13">1.13.1 - 2020-09-13</h4>
+
+<h5 id="notable-changes-1">Notable Changes</h5>
+
+<p>We now publish directly to maven central.
+The 1.13.0 release got corrupted and should not be used.</p>
+
+<h4 id="1130---2020-09-07">1.13.0 - 2020-09-07</h4>
+
+<h5 id="migration">Migration</h5>
+
+<ul>
+  <li>This release drops several deprecations in <code class="language-plaintext highlighter-rouge">detekt-api</code>.</li>
+</ul>
+
+<h5 id="changelog-3">Changelog</h5>
+
+<ul>
+  <li>Set modifier order based on Kotlin coding conventions - <a href="https://github.com/detekt/detekt/pull/3056">#3056</a></li>
+  <li>FunctionNaming: allow anonymous functions - <a href="https://github.com/detekt/detekt/pull/3055">#3055</a></li>
+  <li>FunctionNaming should ignore anonymous functions - <a href="https://github.com/detekt/detekt/issues/3054">#3054</a></li>
+  <li>Fix ModifierOrder for false positive reported by ModifierOrder when using fun interfaces - <a href="https://github.com/detekt/detekt/pull/3051">#3051</a></li>
+  <li>False positive reported by ModifierOrder when using fun interfaces - <a href="https://github.com/detekt/detekt/issues/3050">#3050</a></li>
+  <li>Fix PreferToOverPairSyntax exception - <a href="https://github.com/detekt/detekt/pull/3046">#3046</a></li>
+  <li>PreferToOverPairSyntax throws exceptions - <a href="https://github.com/detekt/detekt/issues/3044">#3044</a></li>
+  <li>Remove deprecated entity and location members - <a href="https://github.com/detekt/detekt/pull/3037">#3037</a></li>
+  <li>Respect configured config file when running the detektCreateConfig task - <a href="https://github.com/detekt/detekt/pull/3036">#3036</a></li>
+  <li>Remove last years api deprecations - <a href="https://github.com/detekt/detekt/pull/3035">#3035</a></li>
+  <li>UnusedImports rule: fix false negative when same name identifiers are imported and used - <a href="https://github.com/detekt/detekt/pull/3033">#3033</a></li>
+  <li>ForbiddenMethodCall: report operator calls - <a href="https://github.com/detekt/detekt/pull/3032">#3032</a></li>
+  <li>Improve documentation for Gradle repositories setup - <a href="https://github.com/detekt/detekt/pull/3030">#3030</a></li>
+  <li>how to use the type resolution to make ForbiddenMethodCall to check bigdecimal.equals using bigdecimal == bigdecimal? - <a href="https://github.com/detekt/detekt/issues/3029">#3029</a></li>
+  <li>Use lazy gradle APIs in docs - <a href="https://github.com/detekt/detekt/pull/3028">#3028</a></li>
+  <li>Implement option to turn config property deprecation warnings as errors - <a href="https://github.com/detekt/detekt/pull/3026">#3026</a></li>
+  <li>Fix RedundantSuspendModifier message - <a href="https://github.com/detekt/detekt/pull/3025">#3025</a></li>
+  <li>Print filtered paths in debug mode for easier bug tracing - <a href="https://github.com/detekt/detekt/pull/3022">#3022</a></li>
+  <li>Unused import not detected - <a href="https://github.com/detekt/detekt/issues/3020">#3020</a></li>
+  <li>Include reports and formatting features to the system test - <a href="https://github.com/detekt/detekt/pull/3018">#3018</a></li>
+  <li>detektGenerateConfig ignores detekt.config paramenter - <a href="https://github.com/detekt/detekt/issues/2565">#2565</a></li>
+  <li>Treat config property deprecations as errors - <a href="https://github.com/detekt/detekt/issues/2545">#2545</a></li>
+  <li>Print filtered paths in debug mode - <a href="https://github.com/detekt/detekt/issues/869">#869</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-3">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Remove confusing annotation for UnusedImports rule - <a href="https://github.com/detekt/detekt/pull/3039">#3039</a></li>
+  <li>Remove obsolete signature workaround for formatting plugin - <a href="https://github.com/detekt/detekt/pull/3038">#3038</a></li>
+  <li>Upgrade to new dokka - <a href="https://github.com/detekt/detekt/pull/2931">#2931</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/75">1.13.0</a></p>
+
+<h4 id="1120---2020-08-25">1.12.0 - 2020-08-25</h4>
+
+<h5 id="notable-changes-2">Notable Changes</h5>
+
+<ul>
+  <li>Kotlin 1.4 support</li>
+  <li>New rules: <code class="language-plaintext highlighter-rouge">UseCheckNotNull</code>, <code class="language-plaintext highlighter-rouge">UseRequireNotNull</code>, <code class="language-plaintext highlighter-rouge">NonBooleanPropertyPrefixedWithIs</code></li>
+  <li>The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin’s Gradle plugin.</li>
+  <li>The Gradle plugin now supports configuration avoidance</li>
+  <li>The Gradle plugin now generates additional detekt tasks for Android projects</li>
+  <li>KtLint 0.38.1 support (via detekt-formatting)</li>
+</ul>
+
+<h5 id="migration-1">Migration</h5>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ArrayPrimitive</code> rule is more precise but requires type resolution now.</li>
+  <li>The deprecated <code class="language-plaintext highlighter-rouge">customReports</code> property of the Gradle plugin got removed.</li>
+  <li>Deprecated properties <code class="language-plaintext highlighter-rouge">xmlReportFile</code>, <code class="language-plaintext highlighter-rouge">htmlReportFile</code>, <code class="language-plaintext highlighter-rouge">txtReportFile</code> are now internal.</li>
+</ul>
+
+<p>Note the default <code class="language-plaintext highlighter-rouge">gradle detekt</code> task does not run over test sources.
+To include test sources following setup can be used:</p>
+
+<pre><code class="language-kt">detekt {
+    // ...
+    input = objects.fileCollection().from(
+        "src/main/java",
+        "src/test/java",
+        "src/main/kotlin",
+        "src/test/kotlin"
+    )
+}
+</code></pre>
+
+<p>This does not apply to <code class="language-plaintext highlighter-rouge">gradle detektTest</code>.
+We encourage to also check test sources.<br />
+We will include test sources by default in detekt <code class="language-plaintext highlighter-rouge">1.15.0</code> or later.</p>
+
+<h5 id="changelog-4">Changelog</h5>
+
+<ul>
+  <li>Consolidate working for Type Resolution - <a href="https://github.com/detekt/detekt/pull/3011">#3011</a></li>
+  <li>ArrayPrimitive rule: report variable/receiver types and factory methods - <a href="https://github.com/detekt/detekt/pull/3009">#3009</a></li>
+  <li>Add requiresTypeResolution annotation to UseCheckNotNull/UseRequireNotNull - <a href="https://github.com/detekt/detekt/pull/3008">#3008</a></li>
+  <li>Update kotlinx.html dependencies - <a href="https://github.com/detekt/detekt/pull/3007">#3007</a></li>
+  <li>Do not overwrite bintray publication - <a href="https://github.com/detekt/detekt/pull/3006">#3006</a></li>
+  <li>Update Ktlint to 0.38.0 - <a href="https://github.com/detekt/detekt/pull/3004">#3004</a></li>
+  <li>Add UseRequireNotNull/UseCheckNotNull rules - <a href="https://github.com/detekt/detekt/pull/3003">#3003</a></li>
+  <li>Workaround config - <a href="https://github.com/detekt/detekt/pull/3001">#3001</a></li>
+  <li>Replace <code class="language-plaintext highlighter-rouge">require(x != null)</code> with <code class="language-plaintext highlighter-rouge">requireNotNull(x)</code> - <a href="https://github.com/detekt/detekt/issues/2998">#2998</a></li>
+  <li>Minor Gradle plugin cleanup - <a href="https://github.com/detekt/detekt/pull/2997">#2997</a></li>
+  <li>detekt-gradle-plugin has two publishing configuration - <a href="https://github.com/detekt/detekt/issues/2996">#2996</a></li>
+  <li>Introduce @requiresTypeResolution to KDoc for rules - <a href="https://github.com/detekt/detekt/pull/2993">#2993</a></li>
+  <li>Fix support for Gradle configuration cache - <a href="https://github.com/detekt/detekt/pull/2992">#2992</a></li>
+  <li>Fix false positive for UnnecessaryLet with disabled type resolution - <a href="https://github.com/detekt/detekt/pull/2991">#2991</a></li>
+  <li>Deprecation: False positive with Kotlin 1.4.0 - <a href="https://github.com/detekt/detekt/issues/2990">#2990</a></li>
+  <li>False positive in UnnecessaryLet - <a href="https://github.com/detekt/detekt/issues/2987">#2987</a></li>
+  <li>Gradle plugin fixes - <a href="https://github.com/detekt/detekt/pull/2986">#2986</a></li>
+  <li>Remove deprecated customReports detekt task property - #2811 - <a href="https://github.com/detekt/detekt/pull/2944">#2944</a></li>
+  <li>Rename IsPropertyNaming to NonBooleanPropertyPrefixedWithIs? - <a href="https://github.com/detekt/detekt/pull/2819">#2819</a></li>
+  <li>Add automatic detekt tasks for Android Plugins - <a href="https://github.com/detekt/detekt/pull/2787">#2787</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-4">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Update Gradle to 6.6.1 - <a href="https://github.com/detekt/detekt/pull/3016">#3016</a></li>
+  <li>Run detekt with type resolution analysis on CI - <a href="https://github.com/detekt/detekt/pull/3015">#3015</a></li>
+  <li>Run Gradle Android tests conditionally when sdk path is defined - <a href="https://github.com/detekt/detekt/pull/3014">#3014</a></li>
+  <li>Fix documentation for NonBooleanPropertyPrefixedWithIs - <a href="https://github.com/detekt/detekt/pull/3012">#3012</a></li>
+  <li>Run detekt on all test sources - <a href="https://github.com/detekt/detekt/pull/3010">#3010</a></li>
+  <li>Do not publish test fixture; removing warning - <a href="https://github.com/detekt/detekt/pull/3005">#3005</a></li>
+  <li>Implement custom rule to check spek test discovery performance issues - <a href="https://github.com/detekt/detekt/pull/2954">#2954</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/71">1.12.0</a></p>
+
+<h4 id="1120-rc1---2020-08-20">1.12.0-RC1 - 2020-08-20</h4>
+
+<h5 id="notable-changes-3">Notable Changes</h5>
+
+<p>The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin’s Gradle plugin.</p>
+
+<h5 id="changelog-5">Changelog</h5>
+
+<ul>
+  <li>Support Kotlin 1.4 - <a href="https://github.com/detekt/detekt/pull/2981">#2981</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>1.10.0 to 1.11.0</td>
+          <td>Could not find org.spekframework.spek2:spek-dsl-jvm - <a href="https://github.com/detekt/detekt/issues/2976">#2976</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Make a release built against Kotlin 1.4 - <a href="https://github.com/detekt/detekt/issues/2974">#2974</a></li>
+  <li>Roll back to non snapshot spek version - <a href="https://github.com/detekt/detekt/pull/2922">#2922</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/73">1.12.0-RC1</a></p>
+
+<h4 id="1112---2020-08-19">1.11.2 - 2020-08-19</h4>
+
+<h5 id="changelog-6">Changelog</h5>
+
+<ul>
+  <li>Fix formatting regression where issues printed the whole filename - <a href="https://github.com/detekt/detekt/pull/2988">#2988</a></li>
+  <li>Baseline adds file path instead package - <a href="https://github.com/detekt/detekt/issues/2985">#2985</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/74">1.11.2</a></p>
+
+<h4 id="1111---2020-08-18">1.11.1 - 2020-08-18</h4>
+
+<h5 id="changelog-7">Changelog</h5>
+
+<ul>
+  <li>Fix regression separating classpath entries - #2961 - <a href="https://github.com/detekt/detekt/pull/2977">#2977</a></li>
+  <li>Show groovy and kotlin dsl in the same page - <a href="https://github.com/detekt/detekt/pull/2971">#2971</a></li>
+  <li>Fix typo - <a href="https://github.com/detekt/detekt/pull/2969">#2969</a></li>
+  <li>UnnecessaryLet: fix false positive when let is used for destructuring - <a href="https://github.com/detekt/detekt/pull/2968">#2968</a></li>
+  <li>UnnecessaryLet false positive when let is used for destructuring - <a href="https://github.com/detekt/detekt/issues/2966">#2966</a></li>
+  <li>Merge gradle groovy dsl and kotlin dsl documentation in the same page - <a href="https://github.com/detekt/detekt/issues/2846">#2846</a></li>
+  <li>Run Detekt as Kotlin Compiler Plugin - <a href="https://github.com/detekt/detekt/issues/2119">#2119</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/72">1.11.1</a></p>
+
+<h4 id="1110---2020-08-13">1.11.0 - 2020-08-13</h4>
+
+<h5 id="changelog-8">Changelog</h5>
+
+<ul>
+  <li>Fix false positive for UnnecessaryApply with disabled type resolution - <a href="https://github.com/detekt/detekt/pull/2963">#2963</a></li>
+  <li>Add new rule: LibraryEntitiesCannotBePublic - <a href="https://github.com/detekt/detekt/pull/2959">#2959</a></li>
+  <li>Suggest rule: Class cannot be public. - <a href="https://github.com/detekt/detekt/issues/2943">#2943</a></li>
+  <li>False positive in UnnecessaryApply - <a href="https://github.com/detekt/detekt/issues/2938">#2938</a></li>
+  <li>Add NullableToStringCall rule - <a href="https://github.com/detekt/detekt/pull/2903">#2903</a></li>
+  <li>New rule: toString over a nullable value - <a href="https://github.com/detekt/detekt/issues/2901">#2901</a></li>
+  <li>Introduce tooling-api - <a href="https://github.com/detekt/detekt/issues/2860">#2860</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/70">1.11.0</a><br />
+See all issues at: <a href="https://github.com/detekt/detekt/milestone/68">1.11.0-RC2</a><br />
+See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.0-RC1</a></p>
+
+<h4 id="1110-rc2---2020-08-09">1.11.0-RC2 - 2020-08-09</h4>
+
+<h5 id="changelog-9">Changelog</h5>
+
+<ul>
+  <li>Actually print the invalid properties - <a href="https://github.com/detekt/detekt/pull/2955">#2955</a></li>
+  <li>Update FindingsReport doc - <a href="https://github.com/detekt/detekt/pull/2942">#2942</a></li>
+  <li>Document reports on homepage - <a href="https://github.com/detekt/detekt/pull/2941">#2941</a></li>
+  <li>Set missing code languages in doc - <a href="https://github.com/detekt/detekt/pull/2935">#2935</a></li>
+  <li>Fix sitemap.xml - <a href="https://github.com/detekt/detekt/pull/2933">#2933</a></li>
+  <li>Flag listOfNotNull if all arguments are non-nullable - <a href="https://github.com/detekt/detekt/pull/2932">#2932</a></li>
+  <li>Add LanguageVersionSettings and DataFlowValueFactory to BaseRule - <a href="https://github.com/detekt/detekt/pull/2929">#2929</a></li>
+  <li>Generate release date to the changelog entries - <a href="https://github.com/detekt/detekt/pull/2924">#2924</a></li>
+  <li>Add informative message to UselessCallOnNotNull report - <a href="https://github.com/detekt/detekt/pull/2920">#2920</a></li>
+  <li>Flag listOfNotNull if all arguments are non-nullable - <a href="https://github.com/detekt/detekt/issues/2916">#2916</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-5">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Reduce test discovery for metrics module - <a href="https://github.com/detekt/detekt/pull/2953">#2953</a></li>
+  <li>Reduce test discovery for rules-style module - <a href="https://github.com/detekt/detekt/pull/2952">#2952</a></li>
+  <li>Reduce test discovery for rules-naming module - <a href="https://github.com/detekt/detekt/pull/2951">#2951</a></li>
+  <li>Reduce test discovery for rules-exceptions module - <a href="https://github.com/detekt/detekt/pull/2950">#2950</a></li>
+  <li>Reduce test discovery for rules-complexity module - <a href="https://github.com/detekt/detekt/pull/2949">#2949</a></li>
+  <li>Reduce test discovery for formatting module - <a href="https://github.com/detekt/detekt/pull/2948">#2948</a></li>
+  <li>Reduce test discovery for core module - <a href="https://github.com/detekt/detekt/pull/2947">#2947</a></li>
+  <li>Reduce test discovery for cli module - <a href="https://github.com/detekt/detekt/pull/2946">#2946</a></li>
+  <li>Reduce test discovery for api module - <a href="https://github.com/detekt/detekt/pull/2945">#2945</a></li>
+  <li>Update kramdown to remedy CVE vulnerability - <a href="https://github.com/detekt/detekt/pull/2940">#2940</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/68">1.11.0-RC2</a></p>
+
+<h4 id="1110-rc1---2020-08-02">1.11.0-RC1 - 2020-08-02</h4>
+
+<h5 id="changelog-10">Changelog</h5>
+
+<ul>
+  <li>Add non-affirming test cases for UselessCallOnNotNull - <a href="https://github.com/detekt/detekt/pull/2918">#2918</a></li>
+  <li>Add Github Action: Detekt All to readme - <a href="https://github.com/detekt/detekt/pull/2915">#2915</a></li>
+  <li>Remove deprecated BuildFailureReport from doc - <a href="https://github.com/detekt/detekt/pull/2914">#2914</a></li>
+  <li>Document Console Reports code - <a href="https://github.com/detekt/detekt/pull/2913">#2913</a></li>
+  <li>Update docs in ProjectMetric class - <a href="https://github.com/detekt/detekt/pull/2912">#2912</a></li>
+  <li>Document Output Reports code - <a href="https://github.com/detekt/detekt/pull/2911">#2911</a></li>
+  <li>Document Output Reports on the home page - <a href="https://github.com/detekt/detekt/pull/2910">#2910</a></li>
+  <li>Add doc to UseDataClass - <a href="https://github.com/detekt/detekt/pull/2909">#2909</a></li>
+  <li>Generate output report config parts for config validation to know the properties - <a href="https://github.com/detekt/detekt/pull/2907">#2907</a></li>
+  <li>Fix UseDataClass to accept classes that implement interfaces - <a href="https://github.com/detekt/detekt/pull/2905">#2905</a></li>
+  <li>UseDataClass does not report for classes that implement interfaces - <a href="https://github.com/detekt/detekt/issues/2904">#2904</a></li>
+  <li>Add bindingContext function to FileProcessListener - #2872 - <a href="https://github.com/detekt/detekt/pull/2900">#2900</a></li>
+  <li>IgnoredReturnValue: Fix false positive on chained statements - <a href="https://github.com/detekt/detekt/pull/2895">#2895</a></li>
+  <li>Setup local PGP signing of published artifacts - <a href="https://github.com/detekt/detekt/pull/2893">#2893</a></li>
+  <li>error in output-reports config - <a href="https://github.com/detekt/detekt/issues/2891">#2891</a></li>
+  <li>OptionalUnit: fix false positive with ‘else if’ - <a href="https://github.com/detekt/detekt/pull/2888">#2888</a></li>
+  <li>OptionalUnit: don’t report it if Unit is used as an expression - <a href="https://github.com/detekt/detekt/pull/2886">#2886</a></li>
+  <li>Preserve original exception when loading an invalid config - <a href="https://github.com/detekt/detekt/pull/2884">#2884</a></li>
+  <li>Sign artifacts and publish checksums - <a href="https://github.com/detekt/detekt/issues/2883">#2883</a></li>
+  <li>Check string arguments with TR enabled - <a href="https://github.com/detekt/detekt/pull/2879">#2879</a></li>
+  <li>Detekt Deployment is missing Gradle Module files - <a href="https://github.com/detekt/detekt/issues/2878">#2878</a></li>
+  <li>Better Support for Guard Clauses in ThrowsCount Rule - <a href="https://github.com/detekt/detekt/pull/2876">#2876</a></li>
+  <li>Make KtTestCompiler internal - <a href="https://github.com/detekt/detekt/pull/2874">#2874</a></li>
+  <li>Don’t mention the old performance impact - <a href="https://github.com/detekt/detekt/pull/2873">#2873</a></li>
+  <li>Support for BindingContext in FileProcessListener - <a href="https://github.com/detekt/detekt/issues/2872">#2872</a></li>
+  <li>Hide KtTestCompiler as internal - <a href="https://github.com/detekt/detekt/issues/2871">#2871</a></li>
+  <li>Document Console and Output Reports - <a href="https://github.com/detekt/detekt/issues/2869">#2869</a></li>
+  <li>Split rules module into a module per rule set - <a href="https://github.com/detekt/detekt/pull/2865">#2865</a></li>
+  <li>Add new rule UseEmptyCounterpart - <a href="https://github.com/detekt/detekt/pull/2864">#2864</a></li>
+  <li>Introduce tooling api module - <a href="https://github.com/detekt/detekt/pull/2861">#2861</a></li>
+  <li>Extend docs on Processors - <a href="https://github.com/detekt/detekt/pull/2854">#2854</a></li>
+  <li>Add a rule to flag places where <code class="language-plaintext highlighter-rouge">emptyList</code> (and similar)  can be used - <a href="https://github.com/detekt/detekt/issues/2850">#2850</a></li>
+  <li>Clarify / document processors and console reports in config - <a href="https://github.com/detekt/detekt/issues/2833">#2833</a></li>
+  <li>Fix UnnecessaryLet false negatives - <a href="https://github.com/detekt/detekt/pull/2828">#2828</a></li>
+  <li>UnnecessaryLet false negatives - <a href="https://github.com/detekt/detekt/issues/2826">#2826</a></li>
+  <li>False positive in OptionalUnit rule - <a href="https://github.com/detekt/detekt/issues/2452">#2452</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-6">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>Test performance improvements - <a href="https://github.com/detekt/detekt/pull/2921">#2921</a></li>
+  <li>Remove redundant guard clauses - <a href="https://github.com/detekt/detekt/pull/2919">#2919</a></li>
+  <li>The tests are slow - <a href="https://github.com/detekt/detekt/issues/2902">#2902</a></li>
+  <li>Drop dependency on detekt test utils for Gradle plugin - <a href="https://github.com/detekt/detekt/pull/2899">#2899</a></li>
+  <li>Use KtFile.name instead of storing an absolute path key - <a href="https://github.com/detekt/detekt/pull/2898">#2898</a></li>
+  <li>Fix testcase with early access jdk’s - <a href="https://github.com/detekt/detekt/pull/2897">#2897</a></li>
+  <li>Publish to Bintray using maven-publish - <a href="https://github.com/detekt/detekt/pull/2885">#2885</a></li>
+  <li>Simplify internal parsing to KtFile’s - <a href="https://github.com/detekt/detekt/pull/2875">#2875</a></li>
+  <li>Mention bazel integration and a new blog article - <a href="https://github.com/detekt/detekt/pull/2867">#2867</a></li>
+  <li>Mention bazel and github actions integration - <a href="https://github.com/detekt/detekt/pull/2866">#2866</a></li>
+  <li>Cleanup code - <a href="https://github.com/detekt/detekt/pull/2862">#2862</a></li>
+  <li>Make sure to always target JVM 8 bytecode - <a href="https://github.com/detekt/detekt/pull/2853">#2853</a></li>
+  <li>Refactor - <a href="https://github.com/detekt/detekt/pull/2849">#2849</a></li>
+  <li>Clear findings even if we are not going to visit the file - <a href="https://github.com/detekt/detekt/pull/2848">#2848</a></li>
+  <li>Update Spek to 2.0.12 - <a href="https://github.com/detekt/detekt/pull/2847">#2847</a></li>
+  <li>Speed up generateDocumentation - <a href="https://github.com/detekt/detekt/pull/2832">#2832</a></li>
+  <li>Simplify pre-merge.yaml - <a href="https://github.com/detekt/detekt/pull/2823">#2823</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.0-RC1</a></p>
+
+<h4 id="1100">1.10.0</h4>
+
+<h5 id="notable-changes-4">Notable Changes</h5>
+
+<ul>
+  <li>New rules: <code class="language-plaintext highlighter-rouge">IgnoredReturnValue</code>, <code class="language-plaintext highlighter-rouge">ImplictUnitReturnType</code></li>
+  <li>The complexity report (console/html) now calculates the <a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">cognitive complexity metric</a> for your project.</li>
+  <li>Issues at functions and classes are now reported at the identifiers. This is especially helpful in the IntelliJ plugin.</li>
+  <li>Extension authors can now manipulate the findings with the new <a href="https://github.com/detekt/detekt/blob/master/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/ReportingExtension.kt">ReportingExtension</a>.</li>
+  <li><code class="language-plaintext highlighter-rouge">detekt-formatting</code> was updated to use KtLint 0.37.2 which includes a lot of improvements and changes. Please see their <a href="https://github.com/pinterest/ktlint/releases/tag/0.37.0">changelog</a>.
+    <ul>
+      <li>New wrapper rules: <code class="language-plaintext highlighter-rouge">SpacingAroundDoubleColon</code>, <code class="language-plaintext highlighter-rouge">SpacingBetweenDeclarationsWithCommentsRule</code>, <code class="language-plaintext highlighter-rouge">SpacingBetweenDeclarationsWithAnnotationsRule</code></li>
+      <li>You can configure the <a href="https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt#L18">layoutPattern</a> for <code class="language-plaintext highlighter-rouge">ImportOrdering</code> in detekt’s configuration file.</li>
+      <li><code class="language-plaintext highlighter-rouge">Indentation</code> rule was replaced with a new <a href="https://github.com/pinterest/ktlint/pull/758">implementation</a>.</li>
+    </ul>
+  </li>
+  <li>The <code class="language-plaintext highlighter-rouge">default-detekt-config</code> moved to <code class="language-plaintext highlighter-rouge">detekt-core/src/main/resources/default-detekt-config.yml</code>.
+Please update your links if you used it for references.</li>
+</ul>
+
+<h5 id="migration-2">Migration</h5>
+
+<ul>
+  <li>We fixed a regression in baseline signatures. This breaks baseline ids for reported issues at functions for some rules. You may need to regenerate the baseline file or manually change the ids. We are very sorry for this inconvenience.</li>
+  <li>KtLint replaced their default <code class="language-plaintext highlighter-rouge">Indentation</code> rule. Expect new formatting issues here!</li>
+  <li>We removed <code class="language-plaintext highlighter-rouge">HierachicalConfig</code> interface. It was deprecated in 1.7.0 and could lead to OOM errors when reusing <code class="language-plaintext highlighter-rouge">Config</code>
+embedding detekt.
+If you used <code class="language-plaintext highlighter-rouge">Config.parent.key</code> in your code, <code class="language-plaintext highlighter-rouge">Config.parentPath</code> is an alternative for this interface.</li>
+  <li>We are dropping the thin wrapper tasks over Intellij’s <code class="language-plaintext highlighter-rouge">inspections.sh</code> and <code class="language-plaintext highlighter-rouge">format.sh</code>.
+They were broken for some time and in general sparingly used. 
+There are alternative ways to run these scripts: https://www.jetbrains.com/help/idea/command-line-formatter.html or https://github.com/bentolor/idea-cli-inspector.</li>
+  <li>XML-tags in the baseline file now have more meaningful names:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Whitelist</code> -&gt; <code class="language-plaintext highlighter-rouge">ManuallySuppressedIssues</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Blacklist</code> -&gt; <code class="language-plaintext highlighter-rouge">CurrentIssues</code></li>
+      <li>Note: the old names will work until a new major release</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="changelog-11">Changelog</h5>
+
+<ul>
+  <li>UnusedPrivateClass: fix false negative with import directives - <a href="https://github.com/detekt/detekt/pull/2817">#2817</a></li>
+  <li>UnusedPrivateClass: false negative with import directives - <a href="https://github.com/detekt/detekt/issues/2816">#2816</a></li>
+  <li>Publish detekt-bom module - <a href="https://github.com/detekt/detekt/pull/2814">#2814</a></li>
+  <li>[Gradle] Configuration cache support - <a href="https://github.com/detekt/detekt/pull/2813">#2813</a></li>
+  <li>UnusedPrivateClass: don’t report imported classes - <a href="https://github.com/detekt/detekt/pull/2812">#2812</a></li>
+  <li>False positive UnusedPrivateClass when importing private enum constants directly. - <a href="https://github.com/detekt/detekt/issues/2809">#2809</a></li>
+  <li>Upgrade ktlint to version 0.37.2 - <a href="https://github.com/detekt/detekt/pull/2807">#2807</a></li>
+  <li>LongMethod: disregard params in method definition - <a href="https://github.com/detekt/detekt/pull/2806">#2806</a></li>
+  <li>LongMethod should not consider parameters while calculating the number of lines - <a href="https://github.com/detekt/detekt/issues/2804">#2804</a></li>
+  <li>Local vars inside object literals can’t be const - Closes #2794 - <a href="https://github.com/detekt/detekt/pull/2799">#2799</a></li>
+  <li>MayBeConst should not report properties in local anonymous object declarations - <a href="https://github.com/detekt/detekt/issues/2794">#2794</a></li>
+  <li>Fix false positive for UnusedPrivateClass on generics - <a href="https://github.com/detekt/detekt/pull/2793">#2793</a></li>
+  <li>Report ComplexInterface issues at identifiers - <a href="https://github.com/detekt/detekt/pull/2786">#2786</a></li>
+  <li>Construct signatures based on named declaration instead of just the identifier - <a href="https://github.com/detekt/detekt/pull/2785">#2785</a></li>
+  <li>KtLint to 0.37.1 - <a href="https://github.com/detekt/detekt/pull/2783">#2783</a></li>
+  <li>Implement new rule ImplictUnitReturnTypet - <a href="https://github.com/detekt/detekt/pull/2781">#2781</a></li>
+  <li>Feature/restrict is properties - <a href="https://github.com/detekt/detekt/pull/2779">#2779</a></li>
+  <li>Rename Blacklist and Whitelist to be self explanatory - <a href="https://github.com/detekt/detekt/pull/2778">#2778</a></li>
+  <li>Remove deprecated HierarchicalConfig which could lead to OOM when reusing Config objects - <a href="https://github.com/detekt/detekt/pull/2768">#2768</a></li>
+  <li>Support layout property for ImportOrdering rule - <a href="https://github.com/detekt/detekt/pull/2763">#2763</a></li>
+  <li>Wrap three new experimental KtLint rules - <a href="https://github.com/detekt/detekt/pull/2762">#2762</a></li>
+  <li>Upgrade to ktlint 0.37.0 - <a href="https://github.com/detekt/detekt/pull/2760">#2760</a></li>
+  <li>Introduce reporting extensions - <a href="https://github.com/detekt/detekt/pull/2755">#2755</a></li>
+  <li>Add default print methods to ForbiddenMethodCall - <a href="https://github.com/detekt/detekt/pull/2753">#2753</a></li>
+  <li>Add the <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> array parameter to the FunctionNaming rule - <a href="https://github.com/detekt/detekt/pull/2734">#2734</a></li>
+  <li>FunctionNaming: Needs “ignoreAnnotated” - <a href="https://github.com/detekt/detekt/issues/2733">#2733</a></li>
+  <li>State that speeding the detekt task just applies to version &lt; 1.7.0 - <a href="https://github.com/detekt/detekt/pull/2730">#2730</a></li>
+  <li>Add cognitive complexity in complexity report - <a href="https://github.com/detekt/detekt/pull/2727">#2727</a></li>
+  <li>add better documentation for the LongParameterList ignoreAnnotated - <a href="https://github.com/detekt/detekt/pull/2714">#2714</a></li>
+  <li>IgnoreReturnValue: config options - <a href="https://github.com/detekt/detekt/pull/2712">#2712</a></li>
+  <li>Use experimental indentation rule set instead of the unused from the standard rule set - <a href="https://github.com/detekt/detekt/pull/2709">#2709</a></li>
+  <li>Remove idea integration - <a href="https://github.com/detekt/detekt/pull/2706">#2706</a></li>
+  <li>Improve issue reporting/report at identifiers and package declarations - #2699 - <a href="https://github.com/detekt/detekt/pull/2702">#2702</a></li>
+  <li>Feature request - limit number of lines for an issue to 1 - <a href="https://github.com/detekt/detekt/issues/2699">#2699</a></li>
+  <li>New Rule: IgnoredReturnValue - <a href="https://github.com/detekt/detekt/pull/2698">#2698</a></li>
+  <li>New rule: NoPrintStatement - <a href="https://github.com/detekt/detekt/issues/2678">#2678</a></li>
+  <li>Add default values to SwallowedException rule - <a href="https://github.com/detekt/detekt/pull/2661">#2661</a></li>
+  <li>[V1.6.0 -&gt; V1.7.4] Error reading configuration file, java.util.zip.ZipException: invalid code lengths set. - <a href="https://github.com/detekt/detekt/issues/2582">#2582</a></li>
+  <li>New rule: Warn on ignored return value - <a href="https://github.com/detekt/detekt/issues/2239">#2239</a></li>
+  <li>File ‘C....idea’ specified for property ‘ideaExtension.path’ is not a file. - <a href="https://github.com/detekt/detekt/issues/2172">#2172</a></li>
+  <li>ktlint integration does not report most errors - <a href="https://github.com/detekt/detekt/issues/2161">#2161</a></li>
+  <li>Non deterministic output. False positives on Indentation rule - <a href="https://github.com/detekt/detekt/issues/1633">#1633</a></li>
+</ul>
+
+<h5 id="housekeeping--refactorings-7">Housekeeping &amp; Refactorings</h5>
+
+<ul>
+  <li>use parallel build options - <a href="https://github.com/detekt/detekt/pull/2808">#2808</a></li>
+  <li>Compile Test Snippets on Java 14 - <a href="https://github.com/detekt/detekt/pull/2803">#2803</a></li>
+  <li>Cleanup MayBeConst tests - <a href="https://github.com/detekt/detekt/pull/2802">#2802</a></li>
+  <li>Refactor compare_releases script to use clikt - <a href="https://github.com/detekt/detekt/pull/2801">#2801</a></li>
+  <li>Simplify the Code Coverage workflow - <a href="https://github.com/detekt/detekt/pull/2798">#2798</a></li>
+  <li>Run compile-test-snippets in a isolated job - <a href="https://github.com/detekt/detekt/pull/2797">#2797</a></li>
+  <li>Run verifyGeneratorOutput in a isolated job - <a href="https://github.com/detekt/detekt/pull/2796">#2796</a></li>
+  <li>Introduce BoM to manage our own dependencies - <a href="https://github.com/detekt/detekt/pull/2792">#2792</a></li>
+  <li>Smarter Caching on Github Actions - <a href="https://github.com/detekt/detekt/pull/2788">#2788</a></li>
+  <li>Fix config generation directory - <a href="https://github.com/detekt/detekt/pull/2782">#2782</a></li>
+  <li>Disable Gradle daemon on CI - <a href="https://github.com/detekt/detekt/pull/2780">#2780</a></li>
+  <li>Convert github-milestone-report.groovy to main.kts - <a href="https://github.com/detekt/detekt/pull/2777">#2777</a></li>
+  <li>Prepare 1.10.0-RC1 release - <a href="https://github.com/detekt/detekt/pull/2776">#2776</a></li>
+  <li>Fix memory leak with not closing processing settings - <a href="https://github.com/detekt/detekt/pull/2775">#2775</a></li>
+  <li>Do not print passing tests on the console - <a href="https://github.com/detekt/detekt/pull/2774">#2774</a></li>
+  <li>Run in parallel by default - <a href="https://github.com/detekt/detekt/pull/2773">#2773</a></li>
+  <li>Remove core module dependency for detekt-test - <a href="https://github.com/detekt/detekt/pull/2771">#2771</a></li>
+  <li>Unify extension debug printing - <a href="https://github.com/detekt/detekt/pull/2770">#2770</a></li>
+  <li>Package editorconfig dependency into the jar for formatting module - <a href="https://github.com/detekt/detekt/pull/2769">#2769</a></li>
+  <li>Update spek to 2.0.11 disabling timeouts - <a href="https://github.com/detekt/detekt/pull/2767">#2767</a></li>
+  <li>Introduce additional changelog section filtering developing/refactoring noise for the users - <a href="https://github.com/detekt/detekt/pull/2766">#2766</a></li>
+  <li>Move config validation from cli to core - <a href="https://github.com/detekt/detekt/pull/2764">#2764</a></li>
+  <li>Improve the performance of tests which use type resolution - <a href="https://github.com/detekt/detekt/pull/2756">#2756</a></li>
+  <li>Move reporting logic to core module - <a href="https://github.com/detekt/detekt/pull/2754">#2754</a></li>
+  <li>Cleanup tests in ProtectedMemberInFinalClass - <a href="https://github.com/detekt/detekt/pull/2752">#2752</a></li>
+  <li>Add referential equality test case in EqualsAlwaysReturnsTrueOrFalse - <a href="https://github.com/detekt/detekt/pull/2751">#2751</a></li>
+  <li>Extract xml and html reports to own modules - <a href="https://github.com/detekt/detekt/pull/2750">#2750</a></li>
+  <li>Separate console and output report loading - <a href="https://github.com/detekt/detekt/pull/2749">#2749</a></li>
+  <li>Bump actions/cache to v2 - <a href="https://github.com/detekt/detekt/pull/2746">#2746</a></li>
+  <li>Fix EqualsAlwaysReturnsTrueOrFalse doc - <a href="https://github.com/detekt/detekt/pull/2744">#2744</a></li>
+  <li>Simplify core facade class - <a href="https://github.com/detekt/detekt/pull/2743">#2743</a></li>
+  <li>Mark some well known cli functions as implicit unsupported api - <a href="https://github.com/detekt/detekt/pull/2742">#2742</a></li>
+  <li>Move baseline feature to core module - <a href="https://github.com/detekt/detekt/pull/2741">#2741</a></li>
+  <li>Make baseline entities internal - <a href="https://github.com/detekt/detekt/pull/2740">#2740</a></li>
+  <li>Simplify baseline data structures - <a href="https://github.com/detekt/detekt/pull/2739">#2739</a></li>
+  <li>Move baseline utils to the baseline package - <a href="https://github.com/detekt/detekt/pull/2738">#2738</a></li>
+  <li>Bump github-pages from 204 to 206 in /docs - <a href="https://github.com/detekt/detekt/pull/2737">#2737</a></li>
+  <li>Update gradle scan plugin - <a href="https://github.com/detekt/detekt/pull/2736">#2736</a></li>
+  <li>Update test dependencies - <a href="https://github.com/detekt/detekt/pull/2735">#2735</a></li>
+  <li>Move three core-related tests to core module - <a href="https://github.com/detekt/detekt/pull/2731">#2731</a></li>
+  <li>Update to Gradle 6.4.1 - <a href="https://github.com/detekt/detekt/pull/2729">#2729</a></li>
+  <li>Migrate to resource function of test-utils - <a href="https://github.com/detekt/detekt/pull/2728">#2728</a></li>
+  <li>Remove own collectByType function as Kotlin’s does not crash anymore - <a href="https://github.com/detekt/detekt/pull/2726">#2726</a></li>
+  <li>Move processors to metrics module - <a href="https://github.com/detekt/detekt/pull/2725">#2725</a></li>
+  <li>Create publish tasks lazily - <a href="https://github.com/detekt/detekt/pull/2723">#2723</a></li>
+  <li>Faster documentation generation - <a href="https://github.com/detekt/detekt/pull/2722">#2722</a></li>
+  <li>Modularize test module - <a href="https://github.com/detekt/detekt/pull/2720">#2720</a></li>
+  <li>Introduce parser and psi module - <a href="https://github.com/detekt/detekt/pull/2716">#2716</a></li>
+  <li>Clean up code by using builtin associateBy function - <a href="https://github.com/detekt/detekt/pull/2715">#2715</a></li>
+  <li>[Security] Bump activesupport from 6.0.2.1 to 6.0.3.1 in /docs - <a href="https://github.com/detekt/detekt/pull/2708">#2708</a></li>
+  <li>Correct formatting issues - <a href="https://github.com/detekt/detekt/pull/2707">#2707</a></li>
+  <li></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/67">1.10.0</a></p>
+
+<h4 id="191">1.9.1</h4>
+
+<h5 id="changelog-12">Changelog</h5>
+
+<ul>
+  <li>Add negative tests to UnreachableCode rule - <a href="https://github.com/detekt/detekt/pull/2697">#2697</a></li>
+  <li>Inline test cases of CollapsibleIfStatements - <a href="https://github.com/detekt/detekt/pull/2696">#2696</a></li>
+  <li>Inline unreachable code - <a href="https://github.com/detekt/detekt/pull/2695">#2695</a></li>
+  <li>Fix wrong test cases for CollapsibleIfs rule - <a href="https://github.com/detekt/detekt/pull/2694">#2694</a></li>
+  <li>Print loaded rule set classes on debug - <a href="https://github.com/detekt/detekt/pull/2691">#2691</a></li>
+  <li>Fix wrong test cases for MandatoryBracesIfStatements - <a href="https://github.com/detekt/detekt/pull/2689">#2689</a></li>
+  <li>Simplify LongParameterList tests - <a href="https://github.com/detekt/detekt/pull/2688">#2688</a></li>
+  <li>Fix serialVersionUID false positive in UnderscoresInNumericLiteral - <a href="https://github.com/detekt/detekt/pull/2687">#2687</a></li>
+  <li>False positive UnderscoresInNumericLiterals in Serializable - <a href="https://github.com/detekt/detekt/issues/2686">#2686</a></li>
+  <li>Report a better message for LongParameterList - <a href="https://github.com/detekt/detekt/pull/2685">#2685</a></li>
+  <li>Report a better message for LongParameterList - <a href="https://github.com/detekt/detekt/pull/2684">#2684</a></li>
+  <li>Test against the newest Java version - <a href="https://github.com/detekt/detekt/pull/2682">#2682</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/66">1.9.1</a></p>
+
+<h4 id="190">1.9.0</h4>
+
+<h5 id="changelog-13">Changelog</h5>
+
+<ul>
+  <li>Extra documentation added to pitfalls section - <a href="https://github.com/detekt/detekt/pull/2675">#2675</a></li>
+  <li>Use configuration avoidance for withType usages - <a href="https://github.com/detekt/detekt/pull/2672">#2672</a></li>
+  <li>GuardClause also matches if-with-body that contains a return - <a href="https://github.com/detekt/detekt/pull/2671">#2671</a></li>
+  <li>Simplify patterns - <a href="https://github.com/detekt/detekt/pull/2668">#2668</a></li>
+  <li>Include Kotlin multiplatform test folders to default exclude config - <a href="https://github.com/detekt/detekt/pull/2667">#2667</a></li>
+  <li>Remove duplicate MandatoryBracesLoops rule tests - <a href="https://github.com/detekt/detekt/pull/2665">#2665</a></li>
+  <li>Remove print statement in MandatoryBracesLoops - <a href="https://github.com/detekt/detekt/pull/2664">#2664</a></li>
+  <li>Remove $ as a valid char in class and method names - <a href="https://github.com/detekt/detekt/pull/2662">#2662</a></li>
+  <li>Build detekt executable before publishing it - #2654 - <a href="https://github.com/detekt/detekt/pull/2659">#2659</a></li>
+  <li>Add style rule for mandatory braces in for loop bodies - <a href="https://github.com/detekt/detekt/pull/2658">#2658</a></li>
+  <li>Asset in release 1.8.0 is not up-to-date - <a href="https://github.com/detekt/detekt/issues/2654">#2654</a></li>
+  <li>Rule: Mandatory braces for single-line for loop bodies - <a href="https://github.com/detekt/detekt/issues/2652">#2652</a></li>
+  <li>Use task configuration avoidance for detekt plugin - <a href="https://github.com/detekt/detekt/pull/2651">#2651</a></li>
+  <li>Add detekt GitHub action to readme - <a href="https://github.com/detekt/detekt/pull/2650">#2650</a></li>
+  <li>Don’t report unused private properties in expect class - <a href="https://github.com/detekt/detekt/pull/2646">#2646</a></li>
+  <li>UnusedPrivateMember: don’t report parameters in expect/actual functions - <a href="https://github.com/detekt/detekt/pull/2643">#2643</a></li>
+  <li>UnusedPrivateMembers on expect class - <a href="https://github.com/detekt/detekt/issues/2636">#2636</a></li>
+  <li>Include Kotlin multiplatform test folders to default exclude configuration - <a href="https://github.com/detekt/detekt/issues/2608">#2608</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/65">1.9.0</a></p>
+
+<h4 id="180">1.8.0</h4>
+
+<h5 id="notable-changes-5">Notable Changes</h5>
+
+<ul>
+  <li>Most rule properties now support yaml lists next to string’s with comma-separated-entries.</li>
+  <li>Standalone <code class="language-plaintext highlighter-rouge">detekt</code> executable on GitHub release pages</li>
+  <li>New rules: <code class="language-plaintext highlighter-rouge">UnnecessaryNotNullOperator</code> and <code class="language-plaintext highlighter-rouge">UnnecessarySafeCall</code></li>
+</ul>
+
+<h5 id="migration-3">Migration</h5>
+
+<ul>
+  <li>Formatting rules get reported now on the correct lines. The baseline file may need to be adjusted/regenerated.</li>
+  <li>Issues concerning classes and objects are now reported at the identifier. The baseline file may need to be adjusted/regenerated.</li>
+</ul>
+
+<h5 id="changelog-14">Changelog</h5>
+
+<ul>
+  <li>Use yaml lists in our own configuration and tests - <a href="https://github.com/detekt/detekt/pull/2623">#2623</a></li>
+  <li>Run code coverage as an own action - <a href="https://github.com/detekt/detekt/pull/2622">#2622</a></li>
+  <li>Modularize build script by introducing buildSrc module - <a href="https://github.com/detekt/detekt/pull/2621">#2621</a></li>
+  <li>*&gt;excludes allow yaml list - <a href="https://github.com/detekt/detekt/pull/2620">#2620</a></li>
+  <li>Kotlin to 1.3.72 - <a href="https://github.com/detekt/detekt/pull/2619">#2619</a></li>
+  <li>Set failfast to false for pre-merge - <a href="https://github.com/detekt/detekt/pull/2618">#2618</a></li>
+  <li>Update documentation - <a href="https://github.com/detekt/detekt/pull/2617">#2617</a></li>
+  <li>ThrowingExceptionsWithoutMessageOrCause&gt;exceptions allow yaml list - <a href="https://github.com/detekt/detekt/pull/2616">#2616</a></li>
+  <li>SwallowedException&gt;ignoredExceptionTypes allow yaml list - <a href="https://github.com/detekt/detekt/pull/2615">#2615</a></li>
+  <li>ForbiddenPublicDataClass&gt;ignorePackages allow yaml list - <a href="https://github.com/detekt/detekt/pull/2614">#2614</a></li>
+  <li>LabeledExpression&gt;ignoredLabels allow yaml list - <a href="https://github.com/detekt/detekt/pull/2613">#2613</a></li>
+  <li>ForbiddenMethodCall&gt;methods allow yaml list - <a href="https://github.com/detekt/detekt/pull/2612">#2612</a></li>
+  <li>Generate the cli as a stand alone executable - <a href="https://github.com/detekt/detekt/pull/2607">#2607</a></li>
+  <li>Report class and object violations at the identifier - <a href="https://github.com/detekt/detekt/pull/2606">#2606</a></li>
+  <li>Fix formatting line reporting - <a href="https://github.com/detekt/detekt/pull/2604">#2604</a></li>
+  <li>Correct documentation/recommendation of EmptyCatchBlock rule - <a href="https://github.com/detekt/detekt/pull/2603">#2603</a></li>
+  <li>Incorrect (or unclear) EmptyCatchBlock rule - <a href="https://github.com/detekt/detekt/issues/2602">#2602</a></li>
+  <li>Use more lintAndCompile - <a href="https://github.com/detekt/detekt/pull/2601">#2601</a></li>
+  <li>MagicNumber&gt;ignoredNumbers allow yaml list - <a href="https://github.com/detekt/detekt/pull/2600">#2600</a></li>
+  <li>Remove unnecesary symbolic link - <a href="https://github.com/detekt/detekt/pull/2598">#2598</a></li>
+  <li>WildcardImport&gt;excludeImports allow yaml list - <a href="https://github.com/detekt/detekt/pull/2596">#2596</a></li>
+  <li>ForbiddenClassName&gt;forbiddenName allow yaml list - <a href="https://github.com/detekt/detekt/pull/2595">#2595</a></li>
+  <li>Fix false positives in UndocumentedPublicProperty - <a href="https://github.com/detekt/detekt/pull/2591">#2591</a></li>
+  <li>Fix false positive in UndocumentedPublicClass - <a href="https://github.com/detekt/detekt/pull/2588">#2588</a></li>
+  <li><em>&gt;</em>Annotated* allow yaml lists - <a href="https://github.com/detekt/detekt/pull/2587">#2587</a></li>
+  <li>ForbiddenComment&gt;values allow yaml list - <a href="https://github.com/detekt/detekt/pull/2585">#2585</a></li>
+  <li>ExceptionRaisedInUnexpectedLocation&gt;methodNames allow yaml list - <a href="https://github.com/detekt/detekt/pull/2584">#2584</a></li>
+  <li>ComplexMethod&gt;nestingFunctions allow yaml list - <a href="https://github.com/detekt/detekt/pull/2583">#2583</a></li>
+  <li>UndocumentedPublicClass false positive for inner types - <a href="https://github.com/detekt/detekt/issues/2580">#2580</a></li>
+  <li>New Rule: UnnecessaryNotNullOperator - <a href="https://github.com/detekt/detekt/pull/2578">#2578</a></li>
+  <li>New Rule: UnnecessarySafeCall - <a href="https://github.com/detekt/detekt/pull/2574">#2574</a></li>
+  <li>New Rule: UnnecessarySafeCall - <a href="https://github.com/detekt/detekt/issues/2572">#2572</a></li>
+  <li>Add ignoreAnnotated option to LongParameterList - <a href="https://github.com/detekt/detekt/pull/2570">#2570</a></li>
+  <li>Rule configuration request: Ignore based on annotations - <a href="https://github.com/detekt/detekt/issues/2563">#2563</a></li>
+  <li>codecov test coverage report doesn’t work correctly - <a href="https://github.com/detekt/detekt/issues/2558">#2558</a></li>
+  <li>Support yaml lists in the configuration values - <a href="https://github.com/detekt/detekt/issues/2498">#2498</a></li>
+  <li>Baseline ignoring MaxLineLength: on 1.0.1 - <a href="https://github.com/detekt/detekt/issues/1906">#1906</a></li>
+  <li>Formatting rules are reported at wrong line (e.g. MaximumLineLength) - <a href="https://github.com/detekt/detekt/issues/1843">#1843</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/63">1.8.0</a></p>
+
+<h4 id="174">1.7.4</h4>
+
+<h5 id="notable-changes-6">Notable Changes</h5>
+
+<p>The last Gradle plugin version was referencing 1.7.2 instead of 1.7.3.
+This was fixed and specifying the <code class="language-plaintext highlighter-rouge">toolVersion</code> is not necessary anymore.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
+    <span class="n">toolversion</span> <span class="p">=</span> <span class="s">"1.7.3"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="changelog-15">Changelog</h5>
+
+<ul>
+  <li>Revert warning: jcenter is missing (#2550) - <a href="https://github.com/detekt/detekt/pull/2576">#2576</a></li>
+  <li>Add additional task input for plugin version task - <a href="https://github.com/detekt/detekt/pull/2575">#2575</a></li>
+  <li>jcenter() requirement - <a href="https://github.com/detekt/detekt/issues/2571">#2571</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/64">1.7.4</a></p>
+
+<h4 id="173">1.7.3</h4>
+
+<h5 id="changelog-16">Changelog</h5>
+
+<ul>
+  <li>OptionalWhenBraces: fix false positive with lambda which has no arrow - <a href="https://github.com/detekt/detekt/pull/2568">#2568</a></li>
+  <li>OptionalWhenBraces: false positive with lambda which has no arrow - <a href="https://github.com/detekt/detekt/issues/2567">#2567</a></li>
+  <li>valueOrDefaultCommaSeparated throws a ClassCastException - <a href="https://github.com/detekt/detekt/pull/2566">#2566</a></li>
+  <li>1.6.0 -&gt; 1.7.2: java.lang.String cannot be cast to java.util.List - <a href="https://github.com/detekt/detekt/issues/2561">#2561</a></li>
+  <li>Display actual and threshold values for several metric rules - <a href="https://github.com/detekt/detekt/pull/2559">#2559</a></li>
+  <li>Return the actual values for complexity rules - <a href="https://github.com/detekt/detekt/issues/2557">#2557</a></li>
+  <li>UseCheckOrError/UseRequire: fix false positive with a non-String argument - <a href="https://github.com/detekt/detekt/pull/2556">#2556</a></li>
+  <li>InstanceOfCheckForException: do not report when catch blocks do not check for the subtype of an exception - <a href="https://github.com/detekt/detekt/pull/2555">#2555</a></li>
+  <li>Include statistics for our custom detekt tasks - <a href="https://github.com/detekt/detekt/pull/2554">#2554</a></li>
+  <li>Remove unnecesary parentheses - <a href="https://github.com/detekt/detekt/pull/2553">#2553</a></li>
+  <li>Fix console output indentation - <a href="https://github.com/detekt/detekt/pull/2552">#2552</a></li>
+  <li>Console output is not indented correctly - <a href="https://github.com/detekt/detekt/issues/2551">#2551</a></li>
+  <li>Check jcenter repository present in Gradle plugin - <a href="https://github.com/detekt/detekt/pull/2550">#2550</a></li>
+  <li>Adding Detekt to a project from scratch, detektGenerateConfig is broken - <a href="https://github.com/detekt/detekt/issues/2549">#2549</a></li>
+  <li>Validate Wrapper only on push to master - <a href="https://github.com/detekt/detekt/pull/2548">#2548</a></li>
+  <li>Cleanup Gradle Folders - <a href="https://github.com/detekt/detekt/pull/2547">#2547</a></li>
+  <li>Require CI to pass to run codecov - <a href="https://github.com/detekt/detekt/pull/2546">#2546</a></li>
+  <li>Export bintray key to publish snapshots - <a href="https://github.com/detekt/detekt/pull/2544">#2544</a></li>
+  <li>Activate UseErrorOrCheck rule - <a href="https://github.com/detekt/detekt/pull/2542">#2542</a></li>
+  <li>Refactor build file to sections - <a href="https://github.com/detekt/detekt/pull/2541">#2541</a></li>
+  <li>False positive: UseCheckOrError - <a href="https://github.com/detekt/detekt/issues/2514">#2514</a></li>
+  <li>InstanceOfCheckForException should be ignored for catch blocks that is more than an if expression - <a href="https://github.com/detekt/detekt/issues/1927">#1927</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/62">1.7.3</a></p>
+
+<h4 id="172">1.7.2</h4>
+
+<h5 id="changelog-17">Changelog</h5>
+
+<ul>
+  <li>Remove ignore:AppVeyor from codecov config - <a href="https://github.com/detekt/detekt/pull/2540">#2540</a></li>
+  <li>Use kotlin-stdlib-jdk8 to reduce dependency conflicts - #2527 - <a href="https://github.com/detekt/detekt/pull/2538">#2538</a></li>
+  <li>Update Gradle plugin-publish to 0.11.0 - <a href="https://github.com/detekt/detekt/pull/2537">#2537</a></li>
+  <li>Delete created temp dir automatically on JVM exit - <a href="https://github.com/detekt/detekt/pull/2536">#2536</a></li>
+  <li>Delete created temp file automatically on JVM exit - <a href="https://github.com/detekt/detekt/pull/2535">#2535</a></li>
+  <li>Refactor MemberNameEqualsClassNameSpec tests - <a href="https://github.com/detekt/detekt/pull/2534">#2534</a></li>
+  <li>Fix UnnecessaryAbstractClass false-positive - <a href="https://github.com/detekt/detekt/pull/2533">#2533</a></li>
+  <li>Update GroovyDSL doc to mention input - <a href="https://github.com/detekt/detekt/pull/2532">#2532</a></li>
+  <li>Update KotlinDSL doc to mention input - <a href="https://github.com/detekt/detekt/pull/2531">#2531</a></li>
+  <li>Fix report for documented data classes property - <a href="https://github.com/detekt/detekt/pull/2530">#2530</a></li>
+  <li>UndocumentedPublicProperty reported for documented data classes property - <a href="https://github.com/detekt/detekt/issues/2529">#2529</a></li>
+  <li>Detekt using gradle documentation out of data - <a href="https://github.com/detekt/detekt/issues/2528">#2528</a></li>
+  <li>1.7.1 does not depend on Kotlin 1.3.71 - <a href="https://github.com/detekt/detekt/issues/2527">#2527</a></li>
+  <li>UnnecessaryAbstractClass false positive for abstractproperties - <a href="https://github.com/detekt/detekt/issues/2526">#2526</a></li>
+  <li>Do not fail the build on config property warnings/deprecations - #2523 - <a href="https://github.com/detekt/detekt/pull/2525">#2525</a></li>
+  <li>regression 1.7.1, threshhold does not exist - <a href="https://github.com/detekt/detekt/issues/2523">#2523</a></li>
+  <li>Setup GitHub Actions - <a href="https://github.com/detekt/detekt/pull/2512">#2512</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/61">1.7.2</a></p>
+
+<h4 id="171">1.7.1</h4>
+
+<h5 id="changelog-18">Changelog</h5>
+
+<ul>
+  <li>UnnecessaryAbstractClass: fix false positive when abstract class has abstract inherited members - <a href="https://github.com/detekt/detekt/pull/2513">#2513</a></li>
+  <li>UnusedPrivateMember: report unused overloaded operators - <a href="https://github.com/detekt/detekt/pull/2510">#2510</a></li>
+  <li>Fix build compile error resulted from merging two conflicting PRs - <a href="https://github.com/detekt/detekt/pull/2508">#2508</a></li>
+  <li>Update Kotlin to 1.3.71 - <a href="https://github.com/detekt/detekt/pull/2507">#2507</a></li>
+  <li>Remove duplicated test task setup for gradle plugin - <a href="https://github.com/detekt/detekt/pull/2506">#2506</a></li>
+  <li>Add LicenceHeaderExtension test to verify resource path loading is supported - <a href="https://github.com/detekt/detekt/pull/2505">#2505</a></li>
+  <li>Ensure filesystems are created so paths can be gotten - <a href="https://github.com/detekt/detekt/pull/2504">#2504</a></li>
+  <li>FileSystemNotFoundException in detekt 1.7.0 when using –config-resource - <a href="https://github.com/detekt/detekt/issues/2503">#2503</a></li>
+  <li>MemberNameEqualsClassName: fix false negative when function has no explicit return type - <a href="https://github.com/detekt/detekt/pull/2502">#2502</a></li>
+  <li>Use the system-dependent line separator in NotificationReport - <a href="https://github.com/detekt/detekt/pull/2497">#2497</a></li>
+  <li>Remove default print stream - <a href="https://github.com/detekt/detekt/pull/2496">#2496</a></li>
+  <li>Don’t use System.out in the ProgressListeners - <a href="https://github.com/detekt/detekt/pull/2495">#2495</a></li>
+  <li>Make the gradle plugin a sub project again - <a href="https://github.com/detekt/detekt/pull/2493">#2493</a></li>
+  <li>Move test factory outside the main code - <a href="https://github.com/detekt/detekt/pull/2491">#2491</a></li>
+  <li>Single runner - <a href="https://github.com/detekt/detekt/pull/2490">#2490</a></li>
+  <li>ProcessingSettings - <a href="https://github.com/detekt/detekt/pull/2489">#2489</a></li>
+  <li>Don’t use println :detekt-generator - <a href="https://github.com/detekt/detekt/pull/2488">#2488</a></li>
+  <li>Simplify tests with StringPrintStream - <a href="https://github.com/detekt/detekt/pull/2487">#2487</a></li>
+  <li>Improve tests - <a href="https://github.com/detekt/detekt/pull/2486">#2486</a></li>
+  <li>Use PrinterStream in AstPrinter - <a href="https://github.com/detekt/detekt/pull/2485">#2485</a></li>
+  <li>Errors running detekt in the detekt project - <a href="https://github.com/detekt/detekt/issues/2484">#2484</a></li>
+  <li>Unify yml strings - <a href="https://github.com/detekt/detekt/pull/2482">#2482</a></li>
+  <li>Use yml arrays to list the ForbiddenImports - <a href="https://github.com/detekt/detekt/pull/2474">#2474</a></li>
+  <li>Add date, detekt-version + link to HtmlReport - <a href="https://github.com/detekt/detekt/pull/2470">#2470</a></li>
+  <li>Refactor FindingsReport + FileBasedFindingsReport - <a href="https://github.com/detekt/detekt/pull/2454">#2454</a></li>
+  <li>The Detekt HTML Report should include date, version number, website link (Feature Request) - <a href="https://github.com/detekt/detekt/issues/2416">#2416</a></li>
+  <li>Added validation of constructors to LongParameterList - <a href="https://github.com/detekt/detekt/pull/2410">#2410</a></li>
+  <li>UnusedPrivateMember doesn’t report the correct warning count - <a href="https://github.com/detekt/detekt/issues/1981">#1981</a></li>
+  <li>UnusedPrivateMember should consider overloaded operators - <a href="https://github.com/detekt/detekt/issues/1444">#1444</a></li>
+  <li>False positive on rule UnnecessaryAbstractClass - <a href="https://github.com/detekt/detekt/issues/727">#727</a></li>
+  <li>MemberNameEqualsClassName ignores functions which return a single expression - <a href="https://github.com/detekt/detekt/issues/655">#655</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/60">1.7.1</a></p>
+
+<h4 id="170">1.7.0</h4>
+
+<h5 id="notable-changes-7">Notable Changes</h5>
+
+<ul>
+  <li>The Gradle plugin should be on par with the CLI performance-wise</li>
+  <li>Good to know: detekt CLI always supported argument files (<code class="language-plaintext highlighter-rouge">java -jar detekt-cli.jar @argsfile</code>)</li>
+  <li>New CLI <code class="language-plaintext highlighter-rouge">--version</code> flag</li>
+  <li>New Rule <code class="language-plaintext highlighter-rouge">AbsentOrWrongFileLicense</code> and other rule improvements</li>
+</ul>
+
+<h5 id="changelog-19">Changelog</h5>
+
+<ul>
+  <li>Update Travis to use the newest xcode11.3 image - <a href="https://github.com/detekt/detekt/pull/2480">#2480</a></li>
+  <li>Synchronize use of root extension point - <a href="https://github.com/detekt/detekt/pull/2479">#2479</a></li>
+  <li>Extend ComplexInterface to support exclusion of private member/functions - <a href="https://github.com/detekt/detekt/pull/2478">#2478</a></li>
+  <li>Minor refactors around –create-baseline - <a href="https://github.com/detekt/detekt/pull/2477">#2477</a></li>
+  <li>Check primary ctor in UndocumentedPublicProperty - <a href="https://github.com/detekt/detekt/pull/2475">#2475</a></li>
+  <li>Unify yaml strings - <a href="https://github.com/detekt/detekt/pull/2472">#2472</a></li>
+  <li>Running detektBaseline generates too general exceptions, disabling rules - <a href="https://github.com/detekt/detekt/issues/2471">#2471</a></li>
+  <li>UndocumentedPublicProperty doesn’t check primary constructor - <a href="https://github.com/detekt/detekt/issues/2468">#2468</a></li>
+  <li>Remove default implementations of toString() - <a href="https://github.com/detekt/detekt/pull/2467">#2467</a></li>
+  <li>Remove tags from core documentation sites - <a href="https://github.com/detekt/detekt/pull/2466">#2466</a></li>
+  <li>Validate boolean config values - Closes #2045 - <a href="https://github.com/detekt/detekt/pull/2465">#2465</a></li>
+  <li>Add test for BaselineHandler - <a href="https://github.com/detekt/detekt/pull/2462">#2462</a></li>
+  <li>Refactor BaselineFormatSpec.kt - <a href="https://github.com/detekt/detekt/pull/2461">#2461</a></li>
+  <li>Add tests for BaselineFacade - <a href="https://github.com/detekt/detekt/pull/2460">#2460</a></li>
+  <li>Fix toString() output for Whitelist class - <a href="https://github.com/detekt/detekt/pull/2459">#2459</a></li>
+  <li>Remove unused functions in XmlExtensions.kt - <a href="https://github.com/detekt/detekt/pull/2458">#2458</a></li>
+  <li>Add test cases for invalid yaml config - <a href="https://github.com/detekt/detekt/pull/2457">#2457</a></li>
+  <li>Add edge test cases for ComplexityReportGenerator - <a href="https://github.com/detekt/detekt/pull/2456">#2456</a></li>
+  <li>Simplify anonymous Detektion object creation - <a href="https://github.com/detekt/detekt/pull/2455">#2455</a></li>
+  <li>Update trim logic in Debt:toString() - <a href="https://github.com/detekt/detekt/pull/2453">#2453</a></li>
+  <li>Refactor FindingsReport + FileBasedFindingsReport - <a href="https://github.com/detekt/detekt/pull/2451">#2451</a></li>
+  <li>Rename tests with _Test prefix to _Spec - <a href="https://github.com/detekt/detekt/pull/2450">#2450</a></li>
+  <li>Refactor HtmlOutputReport - <a href="https://github.com/detekt/detekt/pull/2449">#2449</a></li>
+  <li>Simplify UnnecessaryApplySpec test cases - <a href="https://github.com/detekt/detekt/pull/2448">#2448</a></li>
+  <li>Link code samples package for extension guide - <a href="https://github.com/detekt/detekt/pull/2447">#2447</a></li>
+  <li>ComplexInterface - should it also count private methods? - <a href="https://github.com/detekt/detekt/issues/2446">#2446</a></li>
+  <li>Update AppVeyor branch conf to comply with Travis - <a href="https://github.com/detekt/detekt/pull/2445">#2445</a></li>
+  <li>Add PsiViewer plugin to Contributing guide - <a href="https://github.com/detekt/detekt/pull/2444">#2444</a></li>
+  <li>UnnecessaryApply: fix false positive when it’s used as an expression - <a href="https://github.com/detekt/detekt/pull/2442">#2442</a></li>
+  <li>Add detekt-hint to integrations - <a href="https://github.com/detekt/detekt/pull/2441">#2441</a></li>
+  <li>SwallowedException: fix false negative when using variables - <a href="https://github.com/detekt/detekt/pull/2436">#2436</a></li>
+  <li>UnnecessaryApply false positive cases - <a href="https://github.com/detekt/detekt/issues/2435">#2435</a></li>
+  <li>Prepare 1.7.0-beta2 release - <a href="https://github.com/detekt/detekt/pull/2434">#2434</a></li>
+  <li>Parallel invocation of DetektFacade fails spuriously - <a href="https://github.com/detekt/detekt/issues/2433">#2433</a></li>
+  <li>Deprecate BaseRule and state that it will be make sealed - #2365 - <a href="https://github.com/detekt/detekt/pull/2432">#2432</a></li>
+  <li>Add License rule - <a href="https://github.com/detekt/detekt/pull/2429">#2429</a></li>
+  <li>Skip all guard clauses at function start for ReturnCount - Closes #2342 - <a href="https://github.com/detekt/detekt/pull/2428">#2428</a></li>
+  <li>Fail if <code class="language-plaintext highlighter-rouge">--baseline</code> file not found - <a href="https://github.com/detekt/detekt/pull/2427">#2427</a></li>
+  <li>Add tests for YamlConfig - <a href="https://github.com/detekt/detekt/pull/2426">#2426</a></li>
+  <li>Choose a minimum codecov patch coverage ratio - <a href="https://github.com/detekt/detekt/pull/2425">#2425</a></li>
+  <li>Include ruleset-suppression feature doc - <a href="https://github.com/detekt/detekt/pull/2424">#2424</a></li>
+  <li>Add Groovy DSL example for jvmTarget to homepage - <a href="https://github.com/detekt/detekt/pull/2423">#2423</a></li>
+  <li>Add groovy dsl example for jvmTarget - Closes #2408 - <a href="https://github.com/detekt/detekt/pull/2422">#2422</a></li>
+  <li>Deprecate hierarchical config - <a href="https://github.com/detekt/detekt/pull/2421">#2421</a></li>
+  <li>Deprecate implementations of Config - <a href="https://github.com/detekt/detekt/pull/2420">#2420</a></li>
+  <li>Remove YAML Extension Requirement - <a href="https://github.com/detekt/detekt/pull/2419">#2419</a></li>
+  <li>Update Spek version to 2.0.10 - <a href="https://github.com/detekt/detekt/pull/2418">#2418</a></li>
+  <li>file does not end with .yml! - <a href="https://github.com/detekt/detekt/issues/2417">#2417</a></li>
+  <li>Disable autoCorrect property for all rules if global flag is set to false - <a href="https://github.com/detekt/detekt/pull/2413">#2413</a></li>
+  <li>Release 1.7.0 beta - <a href="https://github.com/detekt/detekt/pull/2409">#2409</a></li>
+  <li>Stop using kotlin-reflect - <a href="https://github.com/detekt/detekt/pull/2405">#2405</a></li>
+  <li>Stop compiling with experimental flag - <a href="https://github.com/detekt/detekt/pull/2404">#2404</a></li>
+  <li>Only post a code coverage patch status to PRs - <a href="https://github.com/detekt/detekt/pull/2402">#2402</a></li>
+  <li>ExplicitCollectionElementAccessMethod: Don’t report on nullable collection - <a href="https://github.com/detekt/detekt/pull/2401">#2401</a></li>
+  <li>Discourage new Case files - <a href="https://github.com/detekt/detekt/pull/2399">#2399</a></li>
+  <li>Use argsfiles for CI - <a href="https://github.com/detekt/detekt/pull/2397">#2397</a></li>
+  <li>Update to Kotlin v1.3.70 - <a href="https://github.com/detekt/detekt/pull/2396">#2396</a></li>
+  <li>Fix typo in VersionPrinter test - <a href="https://github.com/detekt/detekt/pull/2395">#2395</a></li>
+  <li>Add documentation for cli –version flag - <a href="https://github.com/detekt/detekt/pull/2392">#2392</a></li>
+  <li>ExplicitCollectionElementAccessMethod: Do not report map?.get(“foo”) - <a href="https://github.com/detekt/detekt/issues/2391">#2391</a></li>
+  <li>Update Gradle to 6.2.1 - <a href="https://github.com/detekt/detekt/pull/2390">#2390</a></li>
+  <li>Do not report conditional elvis continue statements - Closes#2388 - <a href="https://github.com/detekt/detekt/pull/2389">#2389</a></li>
+  <li>False positive: UnconditionalJumpStatementInLoop with elvis operator ?: - <a href="https://github.com/detekt/detekt/issues/2388">#2388</a></li>
+  <li>Refactor getting the detekt version for readability - <a href="https://github.com/detekt/detekt/pull/2387">#2387</a></li>
+  <li>Create less objects and sets when creating findings id map - <a href="https://github.com/detekt/detekt/pull/2385">#2385</a></li>
+  <li>Add –version to cli - <a href="https://github.com/detekt/detekt/pull/2383">#2383</a></li>
+  <li>Add <code class="language-plaintext highlighter-rouge">--version</code> CLI option - <a href="https://github.com/detekt/detekt/issues/2382">#2382</a></li>
+  <li>Add test cases for cli/runners package - <a href="https://github.com/detekt/detekt/pull/2381">#2381</a></li>
+  <li>Sort and run correctable rules first - #2341 - <a href="https://github.com/detekt/detekt/pull/2378">#2378</a></li>
+  <li>Should fail if <code class="language-plaintext highlighter-rouge">--baseline</code> file does not found? - <a href="https://github.com/detekt/detekt/issues/2374">#2374</a></li>
+  <li>Deprecate rule set methods which expose implementation details of detekt-core - <a href="https://github.com/detekt/detekt/pull/2366">#2366</a></li>
+  <li>Deprecate api’s exposing detekt-core implementation details - <a href="https://github.com/detekt/detekt/issues/2365">#2365</a></li>
+  <li>ReturnCount excludeGuardClauses not working - <a href="https://github.com/detekt/detekt/issues/2342">#2342</a></li>
+  <li>Mixing autocorrectable and non correctable rules results in obsolete issue locations for reports - <a href="https://github.com/detekt/detekt/issues/2341">#2341</a></li>
+  <li>Allow Detekt CLI to take an args file. - <a href="https://github.com/detekt/detekt/issues/2318">#2318</a></li>
+  <li>Homepage doesn’t show Jekyll tags correctly - <a href="https://github.com/detekt/detekt/issues/2309">#2309</a></li>
+  <li>Call detekt reflectively - <a href="https://github.com/detekt/detekt/pull/2282">#2282</a></li>
+  <li>Copyright header rule for Kotlin files - #1515 - <a href="https://github.com/detekt/detekt/pull/2077">#2077</a></li>
+  <li>SwallowedException false negative - <a href="https://github.com/detekt/detekt/issues/2049">#2049</a></li>
+  <li>Invalid boolean config values are evaluated silently to false - <a href="https://github.com/detekt/detekt/issues/2045">#2045</a></li>
+  <li>Detekt gradle is much slower than the jar - <a href="https://github.com/detekt/detekt/issues/2035">#2035</a></li>
+  <li>Cases files are super rigorous to work with - <a href="https://github.com/detekt/detekt/issues/1089">#1089</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/59">1.7.0</a></p>
+
+<h4 id="160">1.6.0</h4>
+
+<h5 id="migration-4">Migration</h5>
+
+<p>Rule set authors do not need to exclude their rule set from config validation anymore.
+This will be done by default now.</p>
+
+<p>If you need to include further config property checks, give the new <code class="language-plaintext highlighter-rouge">ConfigValidator</code> api a try.</p>
+
+<h5 id="changelog-20">Changelog</h5>
+
+<ul>
+  <li>Check-in ConfigValidator documentation - <a href="https://github.com/detekt/detekt/pull/2368">#2368</a></li>
+  <li>Remove obsolete PathFilter class - <a href="https://github.com/detekt/detekt/pull/2367">#2367</a></li>
+  <li>Reference coroutines doc for homepage - <a href="https://github.com/detekt/detekt/pull/2363">#2363</a></li>
+  <li>[Documentation Request] Coroutine Ruleset - <a href="https://github.com/detekt/detekt/issues/2362">#2362</a></li>
+  <li>Extend AnnotationExcluder to catch fully qualified annotations - <a href="https://github.com/detekt/detekt/pull/2361">#2361</a></li>
+  <li>UnnecessaryAbstractClass excludeAnnotatedClasses not working - <a href="https://github.com/detekt/detekt/issues/2360">#2360</a></li>
+  <li>Replace LinkedList with ArrayDeque - <a href="https://github.com/detekt/detekt/pull/2358">#2358</a></li>
+  <li>Fix detection of CRLF line endings - <a href="https://github.com/detekt/detekt/pull/2357">#2357</a></li>
+  <li>Introduce new ConfigValidator extensions - #2285 - <a href="https://github.com/detekt/detekt/pull/2356">#2356</a></li>
+  <li>Include options to better meet requirements for utility files - <a href="https://github.com/detekt/detekt/pull/2355">#2355</a></li>
+  <li>Don’t normalize file content twice - <a href="https://github.com/detekt/detekt/pull/2354">#2354</a></li>
+  <li>Remove unused code in rules/Case.kt - <a href="https://github.com/detekt/detekt/pull/2351">#2351</a></li>
+  <li>Add blog post about speeding up a detekt task - <a href="https://github.com/detekt/detekt/pull/2349">#2349</a></li>
+  <li>Add tests for setting KtLint’s config - <a href="https://github.com/detekt/detekt/pull/2348">#2348</a></li>
+  <li>add details into internal validation - <a href="https://github.com/detekt/detekt/pull/2347">#2347</a></li>
+  <li>Minor change in the HTML report: Remove extra space when you copy the file path - <a href="https://github.com/detekt/detekt/pull/2344">#2344</a></li>
+  <li>detekt does not always inject the required EDITOR_CONFIG_USER_DATA_KEY for ktlint - <a href="https://github.com/detekt/detekt/issues/2339">#2339</a></li>
+  <li>Remove duplicate tests for TooManyFunctions rule - <a href="https://github.com/detekt/detekt/pull/2338">#2338</a></li>
+  <li>Add EmptyTryBlock rule - <a href="https://github.com/detekt/detekt/pull/2337">#2337</a></li>
+  <li>Use requireNotNull for arguments checking - <a href="https://github.com/detekt/detekt/pull/2336">#2336</a></li>
+  <li>Refactor and add tests to Ast- and ElementPrinter - <a href="https://github.com/detekt/detekt/pull/2335">#2335</a></li>
+  <li>Add test case for disabled reports - <a href="https://github.com/detekt/detekt/pull/2334">#2334</a></li>
+  <li>Refactor ReportPath:load() - <a href="https://github.com/detekt/detekt/pull/2333">#2333</a></li>
+  <li>Add test case for FileProcessorLocator - <a href="https://github.com/detekt/detekt/pull/2332">#2332</a></li>
+  <li>Add test cases for Kt(Tree)Compiler - <a href="https://github.com/detekt/detekt/pull/2331">#2331</a></li>
+  <li>Add equality test cases for PathFiler - <a href="https://github.com/detekt/detekt/pull/2330">#2330</a></li>
+  <li>Add local function test case for MethodOverloading rule - <a href="https://github.com/detekt/detekt/pull/2328">#2328</a></li>
+  <li>Add anonymous object expression test case for MethodOverloading rule - <a href="https://github.com/detekt/detekt/pull/2327">#2327</a></li>
+  <li>Validate Gradle Wrapper - <a href="https://github.com/detekt/detekt/pull/2326">#2326</a></li>
+  <li>Use more consistent metrics in HtmlReport - <a href="https://github.com/detekt/detekt/pull/2325">#2325</a></li>
+  <li>Fix ClassCastException in ExplicitCollectionElementAccessMethod - <a href="https://github.com/detekt/detekt/pull/2323">#2323</a></li>
+  <li>ExplicitCollectionElementAccessMethod crashes - <a href="https://github.com/detekt/detekt/issues/2322">#2322</a></li>
+  <li>use same behaviour for valueOrNull as for valueOrDefault - <a href="https://github.com/detekt/detekt/pull/2319">#2319</a></li>
+  <li>FailFastConfig.valueOrNull should return specified value for active and maxIssues - <a href="https://github.com/detekt/detekt/issues/2316">#2316</a></li>
+  <li>Bugfix: MagicNumber with ignoreNamedArgument and a negative value - <a href="https://github.com/detekt/detekt/pull/2315">#2315</a></li>
+  <li>More consistent reports - <a href="https://github.com/detekt/detekt/issues/2291">#2291</a></li>
+  <li>Change MatchingDeclarationName to handle utility files - <a href="https://github.com/detekt/detekt/issues/1500">#1500</a></li>
+  <li>False-positive MagicNumber issue reported when using negative numbers - <a href="https://github.com/detekt/detekt/issues/530">#530</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/57">1.6.0</a></p>
+
+<h4 id="151">1.5.1</h4>
+
+<ul>
+  <li>Update intro page to deprecate input property - <a href="https://github.com/detekt/detekt/pull/2311">#2311</a></li>
+  <li>Update codecov run settings to after_n_builds=4 - <a href="https://github.com/detekt/detekt/pull/2305">#2305</a></li>
+  <li>Update GroovyDSL doc to deprecate input property - <a href="https://github.com/detekt/detekt/pull/2304">#2304</a></li>
+  <li>Update KotlinDSL doc to deprecate input property - <a href="https://github.com/detekt/detekt/pull/2303">#2303</a></li>
+  <li>Fix ExplicitCollectionElementAccessMethod crash - <a href="https://github.com/detekt/detekt/pull/2302">#2302</a></li>
+  <li>ExplicitCollectionElementAccessMethod crashes - <a href="https://github.com/detekt/detekt/issues/2301">#2301</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/58">1.5.1</a></p>
+
+<h4 id="150">1.5.0</h4>
+
+<h5 id="notable-changes-8">Notable Changes</h5>
+
+<ul>
+  <li>detekt is now <em>silent</em> by default. It only prints something if issues are found.
+Remove the following excludes if you want the old behavior back.</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">console-reports</span><span class="pi">:</span>
+  <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">exclude</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="s1">'</span><span class="s">ProjectStatisticsReport'</span>
+     <span class="pi">-</span> <span class="s1">'</span><span class="s">ComplexityReport'</span>
+     <span class="pi">-</span> <span class="s1">'</span><span class="s">NotificationReport'</span>
+</code></pre></div></div>
+
+<ul>
+  <li>detekt now fails the build if any issue is found. Change the <code class="language-plaintext highlighter-rouge">maxIssues</code> property to 10 for the old threshold.</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">build</span><span class="pi">:</span>
+  <span class="na">maxIssues</span><span class="pi">:</span> <span class="m">0</span>
+</code></pre></div></div>
+
+<ul>
+  <li>The <code class="language-plaintext highlighter-rouge">HTML</code> report now prints the issue count per rule and rule set.</li>
+  <li>New rules: <code class="language-plaintext highlighter-rouge">ExplicitCollectionElementAccessMethod</code> and <code class="language-plaintext highlighter-rouge">ForbiddenMethod</code></li>
+</ul>
+
+<h5 id="changelog-21">Changelog</h5>
+
+<ul>
+  <li>add new mention to README.md - <a href="https://github.com/detekt/detekt/pull/2293">#2293</a></li>
+  <li>Sort html report - <a href="https://github.com/detekt/detekt/pull/2290">#2290</a></li>
+  <li>Number format in some report - <a href="https://github.com/detekt/detekt/pull/2289">#2289</a></li>
+  <li>Show the finding count in the html report - <a href="https://github.com/detekt/detekt/pull/2288">#2288</a></li>
+  <li>Keep the order of the issues in the html report - <a href="https://github.com/detekt/detekt/issues/2287">#2287</a></li>
+  <li>Show issue count in the html report - <a href="https://github.com/detekt/detekt/issues/2286">#2286</a></li>
+  <li>Fixing the Documentation not properly calling the superclass - <a href="https://github.com/detekt/detekt/pull/2284">#2284</a></li>
+  <li>Do you have to call super in custom rules? - <a href="https://github.com/detekt/detekt/issues/2283">#2283</a></li>
+  <li>Measure performance of various stages when using –debug - <a href="https://github.com/detekt/detekt/pull/2281">#2281</a></li>
+  <li>Remove printing the whole config for –debug - <a href="https://github.com/detekt/detekt/pull/2280">#2280</a></li>
+  <li>Introduce DefaultRuleSetProvider interface marking detekt-rules providers as default - <a href="https://github.com/detekt/detekt/pull/2279">#2279</a></li>
+  <li>Simplify test dependency setup in build files - <a href="https://github.com/detekt/detekt/pull/2278">#2278</a></li>
+  <li>Fix class loader memory leaks when loading services - <a href="https://github.com/detekt/detekt/pull/2277">#2277</a></li>
+  <li>Always dispose Kotlin environment fixing memory leak in error cases - <a href="https://github.com/detekt/detekt/pull/2276">#2276</a></li>
+  <li>Sanitize gradle build scripts and suppress unstable api usages - <a href="https://github.com/detekt/detekt/pull/2271">#2271</a></li>
+  <li>Update website ruby dependencies fixing potential security vulnerability - <a href="https://github.com/detekt/detekt/pull/2270">#2270</a></li>
+  <li>Fix regression not considering baseline file when calculating build failure threshold - <a href="https://github.com/detekt/detekt/pull/2269">#2269</a></li>
+  <li>Turn detekt silent by default - <a href="https://github.com/detekt/detekt/pull/2268">#2268</a></li>
+  <li>Remove redundant build failure message - #2264 - <a href="https://github.com/detekt/detekt/pull/2266">#2266</a></li>
+  <li>Build failed with… is printed twice in the cli - <a href="https://github.com/detekt/detekt/issues/2264">#2264</a></li>
+  <li>Update config:maxIssues value to 0 - <a href="https://github.com/detekt/detekt/pull/2263">#2263</a></li>
+  <li>Don’t flag inherited visibility in NestedClassesVisibility - <a href="https://github.com/detekt/detekt/pull/2261">#2261</a></li>
+  <li>Simplify argument parsing logic, remove any exitProcess() calls from buildRunner - <a href="https://github.com/detekt/detekt/pull/2260">#2260</a></li>
+  <li>Modify default behavior to not output unless errors are found.  Adding a verbose flag which will have legacy behavior - <a href="https://github.com/detekt/detekt/pull/2258">#2258</a></li>
+  <li>Test some edge cases in detekt-api - <a href="https://github.com/detekt/detekt/pull/2256">#2256</a></li>
+  <li>Add a new line at the end of the txt report - <a href="https://github.com/detekt/detekt/pull/2255">#2255</a></li>
+  <li>Implement ExplicitCollectionElementAccessMethod rule - <a href="https://github.com/detekt/detekt/pull/2215">#2215</a></li>
+  <li>ForbiddenMethod Rule - <a href="https://github.com/detekt/detekt/pull/1954">#1954</a></li>
+  <li>NestedClassesVisibility(False negative): Nested class doesn’t inherit visibility from parent - <a href="https://github.com/detekt/detekt/issues/1930">#1930</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/56">1.5.0</a></p>
+
+<h4 id="140">1.4.0</h4>
+
+<h5 id="notable-changes-9">Notable Changes</h5>
+
+<p>New rule set <code class="language-plaintext highlighter-rouge">coroutines</code> with two specialized rules was added.<br />
+As always new rules must be activated by the user until they get stable.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">coroutines</span><span class="pi">:</span>
+  <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">GlobalCoroutineUsage</span><span class="pi">:</span>
+    <span class="na">active</span><span class="pi">:</span> <span class="no">false</span>
+  <span class="na">RedundantSuspendModifier</span><span class="pi">:</span>
+    <span class="na">active</span><span class="pi">:</span> <span class="no">false</span>
+</code></pre></div></div>
+
+<p>Wrapped <code class="language-plaintext highlighter-rouge">KtLint</code> was updated to <code class="language-plaintext highlighter-rouge">0.36.0</code> introducing two rules</p>
+<ul>
+  <li>EnumEntryNameCase</li>
+  <li>NoEmptyFirstLineInMethodBlock</li>
+</ul>
+
+<h5 id="migration-5">Migration</h5>
+
+<p>The properties <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunction</code> and <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunctions</code> of some rules got deprecated and unified to a new property <code class="language-plaintext highlighter-rouge">ignoreOverridden</code>.</p>
+
+<h5 id="changelog-22">Changelog</h5>
+
+<ul>
+  <li>Refactor BuildFailure code - <a href="https://github.com/detekt/detekt/pull/2250">#2250</a></li>
+  <li>Fix nested methods bug in MethodOverloading rule - <a href="https://github.com/detekt/detekt/pull/2249">#2249</a></li>
+  <li>ThrowingExceptionInMain rule should consider main() function with no parameters - <a href="https://github.com/detekt/detekt/issues/2248">#2248</a></li>
+  <li>MethodOverloading bug with nested overloaded methods - <a href="https://github.com/detekt/detekt/issues/2247">#2247</a></li>
+  <li>Reduce complexity in FindingsReport - <a href="https://github.com/detekt/detekt/pull/2246">#2246</a></li>
+  <li>Add RedundantSuspendModifier rule - <a href="https://github.com/detekt/detekt/pull/2244">#2244</a></li>
+  <li>New ktlint rules - <a href="https://github.com/detekt/detekt/pull/2243">#2243</a></li>
+  <li>Inline MethodOverloading case file - <a href="https://github.com/detekt/detekt/pull/2241">#2241</a></li>
+  <li>ThrowingExceptionInMain: fix #2248 and add tests - <a href="https://github.com/detekt/detekt/pull/2240">#2240</a></li>
+  <li>Add disposing Kotlin environment. - <a href="https://github.com/detekt/detekt/pull/2238">#2238</a></li>
+  <li>OOM on multiple invocations - <a href="https://github.com/detekt/detekt/issues/2237">#2237</a></li>
+  <li>Improve doc for UnusedPrivateMember - <a href="https://github.com/detekt/detekt/pull/2236">#2236</a></li>
+  <li>Don’t resolve dependencies during project configuration - <a href="https://github.com/detekt/detekt/pull/2235">#2235</a></li>
+  <li>Revert “Introduce Pull Request Labeler” - <a href="https://github.com/detekt/detekt/pull/2234">#2234</a></li>
+  <li>Fix #2230 equals() func detection - <a href="https://github.com/detekt/detekt/pull/2233">#2233</a></li>
+  <li>Fix git commit-hook label and code snippet doc - <a href="https://github.com/detekt/detekt/pull/2232">#2232</a></li>
+  <li>WrongEqualsTypeParameter does not ignore multi-parameter equals methods - <a href="https://github.com/detekt/detekt/issues/2230">#2230</a></li>
+  <li>Introduce Pull Request Labeler - <a href="https://github.com/detekt/detekt/pull/2228">#2228</a></li>
+  <li>Gradle plugin: Build upon default detekt config - <a href="https://github.com/detekt/detekt/pull/2227">#2227</a></li>
+  <li>Apply ktlint formatting plugin to Gradle plugin - <a href="https://github.com/detekt/detekt/pull/2226">#2226</a></li>
+  <li>Bump dependencies - <a href="https://github.com/detekt/detekt/pull/2225">#2225</a></li>
+  <li>Run shadowJar &amp; installShadowDist task with everything else - <a href="https://github.com/detekt/detekt/pull/2220">#2220</a></li>
+  <li>Travis: Use consistent Java vendor - <a href="https://github.com/detekt/detekt/pull/2219">#2219</a></li>
+  <li>“Property is misspelled or does not exist” error for new rules in default rulesets - <a href="https://github.com/detekt/detekt/issues/2217">#2217</a></li>
+  <li>MethodOverloading false positive if every entry of an enum implement a method. - <a href="https://github.com/detekt/detekt/issues/2216">#2216</a></li>
+  <li>Add Git detekt pre-commit hook doc - <a href="https://github.com/detekt/detekt/pull/2214">#2214</a></li>
+  <li>Remove exclude workaround for new build property - <a href="https://github.com/detekt/detekt/pull/2203">#2203</a></li>
+  <li>Add GlobalCoroutineUsage rule + coroutines ruleset - <a href="https://github.com/detekt/detekt/pull/2174">#2174</a></li>
+  <li>Add rule [RedundantSuspend] to detect redundant suspend modifiers - <a href="https://github.com/detekt/detekt/issues/2156">#2156</a></li>
+  <li>Deprecate ignoreOverriddenFunction/s in favor of ignoreOverridden - <a href="https://github.com/detekt/detekt/pull/2132">#2132</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/55">1.4.0</a></p>
+
+<h4 id="131">1.3.1</h4>
+
+<ul>
+  <li>Remove old unused documentation - <a href="https://github.com/detekt/detekt/pull/2210">#2210</a></li>
+  <li>Show code snippet erros in html reports - <a href="https://github.com/detekt/detekt/pull/2209">#2209</a></li>
+  <li>Use compileAndLint in UnusedPrivateClassSpec - <a href="https://github.com/detekt/detekt/pull/2208">#2208</a></li>
+  <li>Fix false positive in UnusedPrivateClass - <a href="https://github.com/detekt/detekt/pull/2207">#2207</a></li>
+  <li>Update readme promoting new properties of the gradle plugin - <a href="https://github.com/detekt/detekt/pull/2205">#2205</a></li>
+  <li>Rename default const containing <em>ACCEPTED</em> - <a href="https://github.com/detekt/detekt/pull/2204">#2204</a></li>
+  <li>Mistake From LongParameterList.kt - <a href="https://github.com/detekt/detekt/issues/2202">#2202</a></li>
+  <li>Exclude yet unknown new build property - <a href="https://github.com/detekt/detekt/pull/2201">#2201</a></li>
+  <li>Add comment regarding type resolution to README - <a href="https://github.com/detekt/detekt/pull/2199">#2199</a></li>
+  <li>Type resolution doc - <a href="https://github.com/detekt/detekt/pull/2198">#2198</a></li>
+  <li>Correct indentation for Groovy DSL doc - <a href="https://github.com/detekt/detekt/pull/2197">#2197</a></li>
+  <li>Use shorthand syntax for assertThat() - <a href="https://github.com/detekt/detekt/pull/2196">#2196</a></li>
+  <li>Refactor MagicNumber to use commaSeparatedPatterns - <a href="https://github.com/detekt/detekt/pull/2195">#2195</a></li>
+  <li>Attach FILE_PATH_USER_DATA_KEY user data on FormattingRules (#1907) - <a href="https://github.com/detekt/detekt/pull/2194">#2194</a></li>
+  <li>Handle invalid config exit code in gradle plugin - <a href="https://github.com/detekt/detekt/pull/2193">#2193</a></li>
+  <li>Add tests showing how to exclude custom config properties in plugins - <a href="https://github.com/detekt/detekt/pull/2192">#2192</a></li>
+  <li>Fix suppression of KtLint rules on file level - #2179 - <a href="https://github.com/detekt/detekt/pull/2191">#2191</a></li>
+  <li>Mention needed kotlinx.html library from jcenter - #2146 - <a href="https://github.com/detekt/detekt/pull/2190">#2190</a></li>
+  <li>UnusedPrivateClass has false positive behavior for deserialized items - <a href="https://github.com/detekt/detekt/issues/2158">#2158</a></li>
+  <li>Use JDK 11 (LTS) + 13 for AppVeyor builds - <a href="https://github.com/detekt/detekt/pull/2141">#2141</a></li>
+  <li>Document how to create a common baseline file for multi module gradle projects - <a href="https://github.com/detekt/detekt/pull/2140">#2140</a></li>
+  <li>DetektAll with baseline fails with error - <a href="https://github.com/detekt/detekt/issues/2100">#2100</a></li>
+  <li>ForbiddenMethod Rule - <a href="https://github.com/detekt/detekt/pull/1954">#1954</a></li>
+  <li>Do not report auto-corrected formatting issues - <a href="https://github.com/detekt/detekt/pull/1840">#1840</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/54">1.3.1</a></p>
+
+<h4 id="130">1.3.0</h4>
+
+<h5 id="notable-changes-10">Notable changes</h5>
+
+<ul>
+  <li>Minimal Gradle version increased to 5.0</li>
+  <li>New rules:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">UnnecessaryAnnotationUseSiteTargetRule</code></li>
+      <li><code class="language-plaintext highlighter-rouge">MapGetWithNotNullAssertionOperator</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="changelog-23">Changelog</h5>
+
+<ul>
+  <li>Add printers to the command line runner - <a href="https://github.com/detekt/detekt/pull/2188">#2188</a></li>
+  <li>Fix documentation of UseArrayLiteralsInAnnotations - <a href="https://github.com/detekt/detekt/pull/2186">#2186</a></li>
+  <li>Inline resolving severity label for XML reports - <a href="https://github.com/detekt/detekt/pull/2184">#2184</a></li>
+  <li>Extract common jvm target value, add jvmTarget into documentation. Cl… - <a href="https://github.com/detekt/detekt/pull/2183">#2183</a></li>
+  <li>Fix Detekt gradle task cache restoration issue (#2180) - <a href="https://github.com/detekt/detekt/pull/2182">#2182</a></li>
+  <li>Fix exception when running ArrayPrimitive on star-projected arrays - <a href="https://github.com/detekt/detekt/pull/2181">#2181</a></li>
+  <li>Gradle cache restoration issue - <a href="https://github.com/detekt/detekt/issues/2180">#2180</a></li>
+  <li>Add MacOS JDK13 build job to TravisCI - <a href="https://github.com/detekt/detekt/pull/2177">#2177</a></li>
+  <li>Running “ArrayPrimitive” rule on “Array&lt;*&gt;” causes detekt to throw exception - <a href="https://github.com/detekt/detekt/issues/2176">#2176</a></li>
+  <li>Update Spek to v2.0.9 - <a href="https://github.com/detekt/detekt/pull/2173">#2173</a></li>
+  <li>Create Rule: MapGetWithNotNullAssertionOperator - <a href="https://github.com/detekt/detekt/pull/2171">#2171</a></li>
+  <li>EqualsAlwaysReturnsTrueOrFalse fails hard on <code class="language-plaintext highlighter-rouge">override fun equals(other:Any) = ...</code> - <a href="https://github.com/detekt/detekt/issues/2167">#2167</a></li>
+  <li>Prepare 1.3.0 release - <a href="https://github.com/detekt/detekt/pull/2165">#2165</a></li>
+  <li>UnsafeCast: update documentation to match new behavior - <a href="https://github.com/detekt/detekt/pull/2164">#2164</a></li>
+  <li>Add jvmTarget change into documentation - <a href="https://github.com/detekt/detekt/issues/2157">#2157</a></li>
+  <li>Create UnnecessaryAnnotationUseSiteTargetRule - <a href="https://github.com/detekt/detekt/pull/2099">#2099</a></li>
+  <li>Gradle 6 - <a href="https://github.com/detekt/detekt/pull/1902">#1902</a></li>
+  <li>Gradle 6 planning - <a href="https://github.com/detekt/detekt/issues/1820">#1820</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/51">1.3.0</a></p>
+
+<h4 id="122">1.2.2</h4>
+
+<h5 id="notable-changes-11">Notable Changes</h5>
+
+<ul>
+  <li>1.2.1 introduced breaking changes for users of Gradle &lt; 5. This was reverted.</li>
+  <li>1.3.0 will drop support for Gradle &lt; 5.</li>
+  <li>Fixed a regression in the html report.</li>
+</ul>
+
+<h5 id="changelog-24">Changelog</h5>
+
+<ul>
+  <li>regression updating 1.2.0 to 1.2.1, unknown property ‘filters’ for object of type DetektExtension - <a href="https://github.com/detekt/detekt/issues/2163">#2163</a></li>
+  <li>StringIndexOutOfBoundsException when generating HTML report - <a href="https://github.com/detekt/detekt/pull/2160">#2160</a></li>
+  <li>Restore KotlinExtension - <a href="https://github.com/detekt/detekt/pull/2159">#2159</a></li>
+  <li>1.2.1 breaks the build with: unresolved reference: detekt - <a href="https://github.com/detekt/detekt/issues/2152">#2152</a></li>
+  <li>Updated to correct classpath documentation for Android projects. - <a href="https://github.com/detekt/detekt/pull/2149">#2149</a></li>
+  <li>Update to Kotlin v1.3.61 - <a href="https://github.com/detekt/detekt/pull/2147">#2147</a></li>
+  <li>Document how to exclude detekt from the check task - #1894 - <a href="https://github.com/detekt/detekt/pull/2144">#2144</a></li>
+  <li>Use JDK 11 (LTS) + 13 for Travis builds - <a href="https://github.com/detekt/detekt/pull/2142">#2142</a></li>
+  <li>Don’t compile test snippets (bindingContext) - <a href="https://github.com/detekt/detekt/pull/2137">#2137</a></li>
+  <li>StringIndexOutOfBoundsException: String index out of range: 8 when generating HTML report after update to 1.2.0 - <a href="https://github.com/detekt/detekt/issues/2134">#2134</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/53">1.2.2</a></p>
+
+<h4 id="121">1.2.1</h4>
+
+<h5 id="notable-changes-12">Notable changes</h5>
+
+<ul>
+  <li>Supports Kotlin 1.3.60</li>
+  <li>Fixed a regression in configuration validation logic when using <code class="language-plaintext highlighter-rouge">build&gt;weights&gt;[RuleSet|Rule]</code> properties.</li>
+  <li>Some rules got improvements (see changelog)</li>
+</ul>
+
+<h5 id="changelog-25">Changelog</h5>
+
+<ul>
+  <li>Exception analyzing file - <a href="https://github.com/detekt/detekt/issues/2139">#2139</a></li>
+  <li>Simplify ConstructorParameterNaming:ignoreOverridden check - <a href="https://github.com/detekt/detekt/pull/2136">#2136</a></li>
+  <li>Test common config sections pass through config validation - <a href="https://github.com/detekt/detekt/pull/2135">#2135</a></li>
+  <li>Kotlin 1.3.60 with fix for “Unable to load JNA library” warning - <a href="https://github.com/detekt/detekt/pull/2129">#2129</a></li>
+  <li>Unexpected nested config for ‘build&gt;weights’. - <a href="https://github.com/detekt/detekt/issues/2128">#2128</a></li>
+  <li>Remove redundant Javadoc - <a href="https://github.com/detekt/detekt/pull/2127">#2127</a></li>
+  <li>Lazy init KotlinScriptEnginePool - <a href="https://github.com/detekt/detekt/pull/2126">#2126</a></li>
+  <li>Add tests for MagicNumber:ignoreLocalVariableDeclaration - <a href="https://github.com/detekt/detekt/pull/2125">#2125</a></li>
+  <li>Fix NPE for EqualsAlwaysReturnsTrueOrFalse - <a href="https://github.com/detekt/detekt/pull/2124">#2124</a></li>
+  <li>Add MagicNumber:ignoreLocalVariableDeclaration config - <a href="https://github.com/detekt/detekt/pull/2123">#2123</a></li>
+  <li>Fix MagicNumber:ignoreConstantDeclaration doc - <a href="https://github.com/detekt/detekt/pull/2116">#2116</a></li>
+  <li>Return non-nullable string in DebtSumming class - <a href="https://github.com/detekt/detekt/pull/2113">#2113</a></li>
+  <li>Refactor TrailingWhitespace test - <a href="https://github.com/detekt/detekt/pull/2112">#2112</a></li>
+  <li>Use inline code snippets instead of case files - <a href="https://github.com/detekt/detekt/pull/2111">#2111</a></li>
+  <li>UnusedImports: False positive if referenced in @throws/@exception/@sample - <a href="https://github.com/detekt/detekt/pull/2106">#2106</a></li>
+  <li>Don’t compile test snippets - <a href="https://github.com/detekt/detekt/pull/2105">#2105</a></li>
+  <li>MemberNameEqualsClassName should ignore overridden property names too - <a href="https://github.com/detekt/detekt/pull/2104">#2104</a></li>
+  <li>EqualsAlwaysReturnsTrueOrFalse crashes on certain input - <a href="https://github.com/detekt/detekt/issues/2103">#2103</a></li>
+  <li>UnusedImports: False positive if referenced only in @throws/@exception clause - <a href="https://github.com/detekt/detekt/issues/2098">#2098</a></li>
+  <li>Add config flag ignoreOverridden to ConstructorParameterNaming - <a href="https://github.com/detekt/detekt/pull/2097">#2097</a></li>
+  <li>compileAndLint is 2.5 times slower than lint - <a href="https://github.com/detekt/detekt/issues/2095">#2095</a></li>
+  <li>Improve naming tests - <a href="https://github.com/detekt/detekt/pull/2094">#2094</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/52">1.2.1</a></p>
+
+<h4 id="120">1.2.0</h4>
+
+<h5 id="notable-changes-13">Notable changes</h5>
+
+<ul>
+  <li>The HTML report now includes the complexity metrics and previews of the code locations.</li>
+  <li>Suppression by rule set id is now supported <code class="language-plaintext highlighter-rouge">@Suppress("detekt.[RuleSetId].[RuleId]")</code></li>
+  <li><code class="language-plaintext highlighter-rouge">parallel=true</code> and <code class="language-plaintext highlighter-rouge">--parallel</code> now effect both the compilation and analysis phase.</li>
+  <li>Users of Gradle’s <code class="language-plaintext highlighter-rouge">--parallel</code> flag are encouraged to turn off the parallelism of detekt. Or turn it on otherwise.</li>
+  <li>detekt internally does not use the <code class="language-plaintext highlighter-rouge">ForkJoinPool.commonPool()</code> anymore. When embedding detekt feel free to pass your own <code class="language-plaintext highlighter-rouge">ExecutionService</code> to the <code class="language-plaintext highlighter-rouge">ProcessingSettings</code>.</li>
+</ul>
+
+<h5 id="migration-6">Migration</h5>
+
+<ul>
+  <li>Some reported positions of rules have changed, see issues starting with “Improve text location: “.
+This may lead to some unexpected changes in the baseline file.</li>
+  <li>The rule <code class="language-plaintext highlighter-rouge">ComplexMethod</code> got refactored and counts the cyclomatic complexity according to https://www.ndepend.com/docs/code-metrics#CC.
+This change lead to increasing the threshold to 15 (was ten).</li>
+</ul>
+
+<h5 id="changelog-26">Changelog</h5>
+
+<ul>
+  <li>Update to Kotlin v1.3.60 - <a href="https://github.com/detekt/detekt/pull/2109">#2109</a></li>
+  <li>UnusedPrivateClass: Fix false positive with private annotations - <a href="https://github.com/detekt/detekt/pull/2108">#2108</a></li>
+  <li>Refactor ComplexMethod - <a href="https://github.com/detekt/detekt/pull/2090">#2090</a></li>
+  <li>Fix NestedBlockDepth false negative - <a href="https://github.com/detekt/detekt/pull/2086">#2086</a></li>
+  <li>NestedBlockDepth false negative - <a href="https://github.com/detekt/detekt/issues/2085">#2085</a></li>
+  <li>Deprecate Location.locationString - <a href="https://github.com/detekt/detekt/pull/2084">#2084</a></li>
+  <li>Add license badge to README - <a href="https://github.com/detekt/detekt/pull/2080">#2080</a></li>
+  <li>Deploy SNAPSHOTs automatically - <a href="https://github.com/detekt/detekt/pull/2079">#2079</a></li>
+  <li>Fix TrailingWhitespace reported position - <a href="https://github.com/detekt/detekt/pull/2078">#2078</a></li>
+  <li>Activate more rules by default - #1911 - <a href="https://github.com/detekt/detekt/pull/2075">#2075</a></li>
+  <li>Report InvalidRange for empty until range - <a href="https://github.com/detekt/detekt/pull/2074">#2074</a></li>
+  <li>Deprecate properties on Entity - Closes #2014 - <a href="https://github.com/detekt/detekt/pull/2072">#2072</a></li>
+  <li>Add complexity report to html output - <a href="https://github.com/detekt/detekt/pull/2071">#2071</a></li>
+  <li>Use constants for config keys in tests - <a href="https://github.com/detekt/detekt/pull/2070">#2070</a></li>
+  <li>Mention location adjustment in rules for 1.2.0 - <a href="https://github.com/detekt/detekt/issues/2068">#2068</a></li>
+  <li>Improve text location: TooManyFunctions - <a href="https://github.com/detekt/detekt/pull/2065">#2065</a></li>
+  <li>Improve text location: OptionalAbstractKeyword - <a href="https://github.com/detekt/detekt/pull/2064">#2064</a></li>
+  <li>Improve text location: NestedBlockDepth - <a href="https://github.com/detekt/detekt/pull/2063">#2063</a></li>
+  <li>Improve text location: MatchingDeclarationName - <a href="https://github.com/detekt/detekt/pull/2062">#2062</a></li>
+  <li>Improve text location: LongMethod - <a href="https://github.com/detekt/detekt/pull/2061">#2061</a></li>
+  <li>Improve text location: LargeClass - <a href="https://github.com/detekt/detekt/pull/2060">#2060</a></li>
+  <li>Improve text location: ComplexMethod - <a href="https://github.com/detekt/detekt/pull/2059">#2059</a></li>
+  <li>Improve text location: EmptyClassBlock - <a href="https://github.com/detekt/detekt/pull/2058">#2058</a></li>
+  <li>Replace spek test hasSize(0) with isEmpty() - <a href="https://github.com/detekt/detekt/pull/2057">#2057</a></li>
+  <li>Remove MacOS JDK11 CI run as discussed in #2015 - <a href="https://github.com/detekt/detekt/pull/2056">#2056</a></li>
+  <li>Introduces mocking library ‘mockk’ - <a href="https://github.com/detekt/detekt/pull/2055">#2055</a></li>
+  <li>Improve text location: InvalidPackageDeclaration - <a href="https://github.com/detekt/detekt/pull/2052">#2052</a></li>
+  <li>Improve text location: MandatoryBracesIfStatements - <a href="https://github.com/detekt/detekt/pull/2051">#2051</a></li>
+  <li>Improve text location: ClassNaming - <a href="https://github.com/detekt/detekt/pull/2050">#2050</a></li>
+  <li>potential-bugs InvalidRange does not work in all cases - <a href="https://github.com/detekt/detekt/issues/2044">#2044</a></li>
+  <li>Don’t checkBuildFailureThreshold if we are creating the baseline - <a href="https://github.com/detekt/detekt/pull/2034">#2034</a></li>
+  <li>gradle detektBaseline task fails - <a href="https://github.com/detekt/detekt/issues/2033">#2033</a></li>
+  <li>Fix #2021 - <a href="https://github.com/detekt/detekt/pull/2032">#2032</a></li>
+  <li>Update dependencies - <a href="https://github.com/detekt/detekt/pull/2031">#2031</a></li>
+  <li>Dokka fix - <a href="https://github.com/detekt/detekt/pull/2030">#2030</a></li>
+  <li>Simplify and refactor RuleProviderTest - <a href="https://github.com/detekt/detekt/pull/2029">#2029</a></li>
+  <li>Simplify MultiRuleCollector test cases - <a href="https://github.com/detekt/detekt/pull/2028">#2028</a></li>
+  <li>Dont check WrongEqualsTypeParameter if the function is topLevel - <a href="https://github.com/detekt/detekt/pull/2027">#2027</a></li>
+  <li>Fix false positive at EmptyIfBlock - <a href="https://github.com/detekt/detekt/pull/2026">#2026</a></li>
+  <li>Support guard clause exclusion for ThrowsCount rule - <a href="https://github.com/detekt/detekt/pull/2025">#2025</a></li>
+  <li>Add ImplicitDefaultLocale rule - <a href="https://github.com/detekt/detekt/pull/2024">#2024</a></li>
+  <li>Use double backtick for the in-line code - <a href="https://github.com/detekt/detekt/pull/2022">#2022</a></li>
+  <li>EqualsAlwaysReturnsTrueOrFalse: The original exception message was: java.util.NoSuchElementException: Array is empty. - <a href="https://github.com/detekt/detekt/issues/2021">#2021</a></li>
+  <li>Ignore sealed classes for utility class having public constructor rule - <a href="https://github.com/detekt/detekt/pull/2016">#2016</a></li>
+  <li>Better handling for the Suppresion of errors - <a href="https://github.com/detekt/detekt/pull/2013">#2013</a></li>
+  <li>Fix description of NoLineBreakBeforeAssignment - <a href="https://github.com/detekt/detekt/pull/2011">#2011</a></li>
+  <li>Copy paste error in message in NoLineBreakBeforeAssignment.kt - <a href="https://github.com/detekt/detekt/issues/2008">#2008</a></li>
+  <li>UtilityClassWithPublicConstructor should not be reported for sealed classes - <a href="https://github.com/detekt/detekt/issues/2005">#2005</a></li>
+  <li>Validate yaml configurations by comparing their structure - #516 - <a href="https://github.com/detekt/detekt/pull/1998">#1998</a></li>
+  <li>Allow the user to collapse the rules in the html report - <a href="https://github.com/detekt/detekt/pull/1997">#1997</a></li>
+  <li>Allow detekt findings to be suppessed with rule set id - Closes #766 - <a href="https://github.com/detekt/detekt/pull/1994">#1994</a></li>
+  <li>Upgrade Spek to v2.0.8 - <a href="https://github.com/detekt/detekt/pull/1992">#1992</a></li>
+  <li>Reimplement parallelism internal logic - <a href="https://github.com/detekt/detekt/pull/1991">#1991</a></li>
+  <li>Findings assertions - <a href="https://github.com/detekt/detekt/pull/1978">#1978</a></li>
+  <li>Fix EnumNaming textLocation - <a href="https://github.com/detekt/detekt/pull/1977">#1977</a></li>
+  <li>Add snippet code in html report - <a href="https://github.com/detekt/detekt/pull/1975">#1975</a></li>
+  <li>Change reported element in 2 documentation rules - <a href="https://github.com/detekt/detekt/pull/1952">#1952</a></li>
+  <li>Enable more rules in failfast - <a href="https://github.com/detekt/detekt/pull/1935">#1935</a></li>
+  <li>Add UndocumentedPublicProperty rule - closes #1670 - <a href="https://github.com/detekt/detekt/pull/1923">#1923</a></li>
+  <li>Calculate MCC (McCabe Complexity) accordingly - <a href="https://github.com/detekt/detekt/issues/1921">#1921</a></li>
+  <li>UseDataClass conflicts with DataClassShouldBeImmutable - <a href="https://github.com/detekt/detekt/issues/1920">#1920</a></li>
+  <li>Redesign “parallel” flag/property - <a href="https://github.com/detekt/detekt/issues/1845">#1845</a></li>
+  <li>SNAPSHOT process feedback - <a href="https://github.com/detekt/detekt/issues/1826">#1826</a></li>
+  <li>Initial MCC change - <a href="https://github.com/detekt/detekt/pull/1793">#1793</a></li>
+  <li>@Suppress(“Detekt.ruleset”) feature - <a href="https://github.com/detekt/detekt/issues/766">#766</a></li>
+  <li>Validate Configuration file before using it - <a href="https://github.com/detekt/detekt/issues/516">#516</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/49">1.2.0</a></p>
+
+<h4 id="111">1.1.1</h4>
+
+<h5 id="changelog-27">Changelog</h5>
+
+<ul>
+  <li>Improved test case for resolved #1971 (TrailingWhitespace and multiline string) - <a href="https://github.com/detekt/detekt/pull/2003">#2003</a></li>
+  <li>Set defaults for boolean property when writing custom detekt tasks - <a href="https://github.com/detekt/detekt/pull/1996">#1996</a></li>
+  <li>Generate PluginVersion.kt with newline at end - <a href="https://github.com/detekt/detekt/pull/1993">#1993</a></li>
+  <li>Remove unnecessary logs from RuleProviderTest - <a href="https://github.com/detekt/detekt/pull/1990">#1990</a></li>
+  <li>Use inline code snippets instead of case files - <a href="https://github.com/detekt/detekt/pull/1989">#1989</a></li>
+  <li>Use config parameter for UseIfInsteadOfWhen rule - <a href="https://github.com/detekt/detekt/pull/1987">#1987</a></li>
+  <li>Use inline code snippets instead of case files - <a href="https://github.com/detekt/detekt/pull/1976">#1976</a></li>
+  <li>Don’t flag trailing whitespaces in multiline strings - <a href="https://github.com/detekt/detekt/pull/1971">#1971</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/50">1.1.1</a></p>
+
+<h4 id="110">1.1.0</h4>
+
+<h5 id="changelog-28">Changelog</h5>
+
+<ul>
+  <li>Clarify threshold pararameter meaning in docs - <a href="https://github.com/detekt/detekt/pull/1974">#1974</a></li>
+  <li>Introduce ignoreLabeled config for ReturnFromFinally - <a href="https://github.com/detekt/detekt/pull/1973">#1973</a></li>
+  <li>Ignore FunctionOnlyReturningConstant for allowed annotations - <a href="https://github.com/detekt/detekt/pull/1968">#1968</a></li>
+  <li>Allow regex configuration support for Forbidden Import rule - <a href="https://github.com/detekt/detekt/pull/1963">#1963</a></li>
+  <li>Refactor and simplify RuleCollectorSpec - <a href="https://github.com/detekt/detekt/pull/1959">#1959</a></li>
+  <li>Use inline code snippets instead of case files - <a href="https://github.com/detekt/detekt/pull/1958">#1958</a></li>
+  <li>Improve UnusedPrivateMember when it’s related with parameters - <a href="https://github.com/detekt/detekt/pull/1949">#1949</a></li>
+  <li>Fix SpacingBetweenPackageAndImports issue for scripts without packages - <a href="https://github.com/detekt/detekt/pull/1947">#1947</a></li>
+  <li>Remove ConditionalPathVisitor - <a href="https://github.com/detekt/detekt/pull/1944">#1944</a></li>
+  <li>Extend UseDataClass with the allowVars configuration property - <a href="https://github.com/detekt/detekt/pull/1942">#1942</a></li>
+  <li>HasPlatformType rule - <a href="https://github.com/detekt/detekt/pull/1938">#1938</a></li>
+  <li>Bogus SpacingBetweenPackageAndImports violation for KTS without package - <a href="https://github.com/detekt/detekt/issues/1937">#1937</a></li>
+  <li>Gradle deprecations - <a href="https://github.com/detekt/detekt/pull/1934">#1934</a></li>
+  <li>UnnecessaryParentheses should be ignored for bit operations - <a href="https://github.com/detekt/detekt/issues/1929">#1929</a></li>
+  <li>Prepare 1.1.0 release - <a href="https://github.com/detekt/detekt/pull/1919">#1919</a></li>
+  <li>Deprecate debug in IDEA tasks - <a href="https://github.com/detekt/detekt/pull/1918">#1918</a></li>
+  <li>Refactoring: use more readable functions - <a href="https://github.com/detekt/detekt/pull/1916">#1916</a></li>
+  <li>Don’t fail on master when test coverage decreases - <a href="https://github.com/detekt/detekt/pull/1914">#1914</a></li>
+  <li>Detect deprecations - <a href="https://github.com/detekt/detekt/pull/1913">#1913</a></li>
+  <li>Fix typos - <a href="https://github.com/detekt/detekt/pull/1908">#1908</a></li>
+  <li>Report PreferToOverPairSyntax only for kotlin.Pair - <a href="https://github.com/detekt/detekt/pull/1905">#1905</a></li>
+  <li>Fix TimeoutCancellationException - downgrade Spek - <a href="https://github.com/detekt/detekt/pull/1903">#1903</a></li>
+  <li>Update dependencies - <a href="https://github.com/detekt/detekt/pull/1901">#1901</a></li>
+  <li>Add RedundantExplicitType rule - <a href="https://github.com/detekt/detekt/pull/1900">#1900</a></li>
+  <li>Remove unused KtAnnotated util functions - <a href="https://github.com/detekt/detekt/pull/1899">#1899</a></li>
+  <li>Simplify detekt rules - <a href="https://github.com/detekt/detekt/pull/1898">#1898</a></li>
+  <li>Fix shared variable in detekt-extension rules - <a href="https://github.com/detekt/detekt/pull/1897">#1897</a></li>
+  <li>Make samples more idiomatic - <a href="https://github.com/detekt/detekt/pull/1895">#1895</a></li>
+  <li>Update detekt extensions doc - <a href="https://github.com/detekt/detekt/pull/1893">#1893</a></li>
+  <li>Clarify <code class="language-plaintext highlighter-rouge">WildcardImport</code> rule configuration - <a href="https://github.com/detekt/detekt/pull/1888">#1888</a></li>
+  <li>Add configuration to allow patterns for forbidden comment - <a href="https://github.com/detekt/detekt/pull/1887">#1887</a></li>
+  <li>Only report UnsafeCallOnNullableType on actual nullable types - <a href="https://github.com/detekt/detekt/pull/1886">#1886</a></li>
+  <li>Minimise usage of Kotlin reflection - <a href="https://github.com/detekt/detekt/pull/1883">#1883</a></li>
+  <li>Refactor KotlinCoreEnvironment test setup - <a href="https://github.com/detekt/detekt/pull/1880">#1880</a></li>
+  <li>Trust Kotlin compiler to identify unsafe casts - <a href="https://github.com/detekt/detekt/pull/1879">#1879</a></li>
+  <li>Replace tabs with spaces in rule KDoc - <a href="https://github.com/detekt/detekt/pull/1876">#1876</a></li>
+  <li>Make all Gradle tasks cacheable - <a href="https://github.com/detekt/detekt/pull/1875">#1875</a></li>
+  <li>Indentation for compliant and non-compliant code examples is missing - <a href="https://github.com/detekt/detekt/issues/1871">#1871</a></li>
+  <li>Don’t build twice when PR created from branch - <a href="https://github.com/detekt/detekt/pull/1866">#1866</a></li>
+  <li>Print rendered report if it’s null or blank - <a href="https://github.com/detekt/detekt/pull/1862">#1862</a></li>
+  <li>Silence report if containing no findings - <a href="https://github.com/detekt/detekt/pull/1860">#1860</a></li>
+  <li>Group console violation reports by file - <a href="https://github.com/detekt/detekt/pull/1852">#1852</a></li>
+  <li>Update Kotlin to v1.3.50 - <a href="https://github.com/detekt/detekt/pull/1841">#1841</a></li>
+  <li>Gradle 5.6 - <a href="https://github.com/detekt/detekt/pull/1833">#1833</a></li>
+  <li>Implement rule to suggest array literal instead of arrayOf-expression in annotations - <a href="https://github.com/detekt/detekt/pull/1823">#1823</a></li>
+  <li>Make UnsafeCast less aggressive - <a href="https://github.com/detekt/detekt/issues/1601">#1601</a></li>
+  <li>Consider publishing artifacts to mavenCentral instead of jCenter - <a href="https://github.com/detekt/detekt/issues/1396">#1396</a></li>
+  <li>false positive unnecessary parentheses in conjunction with lambdas - <a href="https://github.com/detekt/detekt/issues/1222">#1222</a></li>
+  <li>False positives on UnsafeCast on AppVeyor (Windows?) only - <a href="https://github.com/detekt/detekt/issues/1137">#1137</a></li>
+  <li>PreferToOverPairSyntax false positive - <a href="https://github.com/detekt/detekt/issues/1066">#1066</a></li>
+  <li>Rule ForbiddenComment - regexp support - <a href="https://github.com/detekt/detekt/issues/959">#959</a></li>
+  <li>UnsafeCallOnNullableType should not be reported for platform types - <a href="https://github.com/detekt/detekt/issues/880">#880</a></li>
+  <li>Exclusion patterns in detekt-config - <a href="https://github.com/detekt/detekt/issues/775">#775</a></li>
+  <li>Rule: OptionalTypeDeclaration - <a href="https://github.com/detekt/detekt/issues/336">#336</a></li>
+  <li>Check if it is feasible to integrate ktlint as a rule set - <a href="https://github.com/detekt/detekt/issues/38">#38</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/19">1.1.0</a></p>
+
+<h4 id="101">1.0.1</h4>
+
+<h5 id="notable-changes-14">Notable changes</h5>
+
+<ul>
+  <li><a href="https://arturbosch.github.io/detekt/howto-silent-reports.html">detekt runs can be completely silent on absence of findings</a></li>
+  <li>All detekt’s dependencies are now on MavenCentral. Bogus “<em>could not find JCommander dependency</em>” should be gone.</li>
+</ul>
+
+<h5 id="changelog-29">Changelog</h5>
+
+<ul>
+  <li>Migrate SafeCast test cases to JSR223 - <a href="https://github.com/detekt/detekt/pull/1832">#1832</a></li>
+  <li>Remove unused case entries - <a href="https://github.com/detekt/detekt/pull/1831">#1831</a></li>
+  <li>Migrate ComplexInterface test cases to JSR223 - <a href="https://github.com/detekt/detekt/pull/1830">#1830</a></li>
+  <li>Remove <pluginrepository> from maventask.md - [#1827](https://github.com/detekt/detekt/pull/1827)</pluginrepository></li>
+  <li>Update maven-task –excludes arg - <a href="https://github.com/detekt/detekt/pull/1825">#1825</a></li>
+  <li>Improve grammar on 1.0 release post - <a href="https://github.com/detekt/detekt/pull/1822">#1822</a></li>
+  <li>Write guide on how to make detekt silent - <a href="https://github.com/detekt/detekt/pull/1819">#1819</a></li>
+  <li>Use notifications instead of println - <a href="https://github.com/detekt/detekt/pull/1818">#1818</a></li>
+  <li>JCommander 1.78 - <a href="https://github.com/detekt/detekt/pull/1817">#1817</a></li>
+  <li>Fix typo in spelling of –auto-correct flag - <a href="https://github.com/detekt/detekt/pull/1816">#1816</a></li>
+  <li>Update dependency versions - <a href="https://github.com/detekt/detekt/pull/1815">#1815</a></li>
+  <li>Tidy the build files - <a href="https://github.com/detekt/detekt/pull/1814">#1814</a></li>
+  <li>Downgrade to jcommander v1.72 - <a href="https://github.com/detekt/detekt/pull/1809">#1809</a></li>
+  <li>Update docs to mention test-pattern deprecation - <a href="https://github.com/detekt/detekt/pull/1808">#1808</a></li>
+  <li>Quiet mode or ability to disable all output in Gradle - <a href="https://github.com/detekt/detekt/issues/1797">#1797</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/47">1.0.1</a></p>
+
+<h4 id="100">1.0.0</h4>
+
+<h5 id="migration-7">Migration</h5>
+
+<ul>
+  <li>Gradle Plugin: removed report consolidation. It was flawed and some users were stuck with RC14. It will be replaced in a further version.</li>
+  <li>Gradle Plugin: <code class="language-plaintext highlighter-rouge">autoCorrect</code> property is now allowed on the detekt extension. No need to create a new task anymore.</li>
+  <li>Formatting: updated to KtLint 0.34.2 which removed the two rules <code class="language-plaintext highlighter-rouge">NoItParamInMultilineLambda</code> and <code class="language-plaintext highlighter-rouge">SpacingAroundUnaryOperators</code>.</li>
+</ul>
+
+<h5 id="changelog-30">Changelog</h5>
+
+<ul>
+  <li>Gradle plugin: Set default path for “config” parameter - <a href="https://github.com/detekt/detekt/pull/1801">#1801</a></li>
+  <li>Don’t use provider value that may not have been set - <a href="https://github.com/detekt/detekt/pull/1800">#1800</a></li>
+  <li>Remove raw URLs from README - <a href="https://github.com/detekt/detekt/pull/1799">#1799</a></li>
+  <li>Add missing autoCorrect declarations - <a href="https://github.com/detekt/detekt/pull/1798">#1798</a></li>
+  <li>Docs: Missing autoCorrect option for various rules - <a href="https://github.com/detekt/detekt/issues/1796">#1796</a></li>
+  <li>Update to KtLint 0.34.2 - <a href="https://github.com/detekt/detekt/pull/1791">#1791</a></li>
+  <li>Add auto correct flag to detekt extension - <a href="https://github.com/detekt/detekt/pull/1790">#1790</a></li>
+  <li>Gradle plugin: Fix visibility of internal properties - <a href="https://github.com/detekt/detekt/pull/1789">#1789</a></li>
+  <li>Check classes and functions documented for api module - <a href="https://github.com/detekt/detekt/pull/1788">#1788</a></li>
+  <li>Provide default value for ignoreFailures - <a href="https://github.com/detekt/detekt/pull/1787">#1787</a></li>
+  <li>Update detekt-api documentation - <a href="https://github.com/detekt/detekt/pull/1786">#1786</a></li>
+  <li>Document meanings of rule severity levels - <a href="https://github.com/detekt/detekt/pull/1785">#1785</a></li>
+  <li>Remove unused code - <a href="https://github.com/detekt/detekt/pull/1784">#1784</a></li>
+  <li>Fix UseDataClass false positive (delegation) - <a href="https://github.com/detekt/detekt/pull/1783">#1783</a></li>
+  <li>Add ignore pattern to SwallowedException - <a href="https://github.com/detekt/detekt/pull/1782">#1782</a></li>
+  <li>Prevent adding author tags in code - <a href="https://github.com/detekt/detekt/pull/1776">#1776</a></li>
+  <li>Remove xml report consolidation. - <a href="https://github.com/detekt/detekt/pull/1774">#1774</a></li>
+  <li>Update Complex Method doc - closes #1009 - <a href="https://github.com/detekt/detekt/pull/1773">#1773</a></li>
+  <li>Implement dry-run option for detekt gradle tasks. - <a href="https://github.com/detekt/detekt/pull/1769">#1769</a></li>
+  <li>Fix missing report file issue. - <a href="https://github.com/detekt/detekt/pull/1767">#1767</a></li>
+  <li>Not running formatting autocorrect - <a href="https://github.com/detekt/detekt/issues/1766">#1766</a></li>
+  <li>Check if file exists before considering it for report merges - <a href="https://github.com/detekt/detekt/pull/1763">#1763</a></li>
+  <li>Preset ignoreFailures property with false as it is also used by Gradle - <a href="https://github.com/detekt/detekt/pull/1762">#1762</a></li>
+  <li>Rearrange badges, add codefactor - <a href="https://github.com/detekt/detekt/pull/1760">#1760</a></li>
+  <li>Update Kotlin to 1.3.41 - <a href="https://github.com/detekt/detekt/pull/1759">#1759</a></li>
+  <li>Update EmptyClassBlock to skip classes with comments in the body - <a href="https://github.com/detekt/detekt/pull/1758">#1758</a></li>
+  <li>EmptyClassBlock should consider comment as “body” (via option?) - <a href="https://github.com/detekt/detekt/issues/1756">#1756</a></li>
+  <li>Remove obsolete NoWildcardImports autoCorrect param - <a href="https://github.com/detekt/detekt/pull/1751">#1751</a></li>
+  <li>Kotlin language version handling - <a href="https://github.com/detekt/detekt/pull/1748">#1748</a></li>
+  <li>Fix cli execution doc - <a href="https://github.com/detekt/detekt/pull/1747">#1747</a></li>
+  <li>Add naming test for ForbiddenVoid rule - <a href="https://github.com/detekt/detekt/pull/1740">#1740</a></li>
+  <li>ForbiddenVoid: New option ‘ignoreUsageInGenerics’ - <a href="https://github.com/detekt/detekt/pull/1738">#1738</a></li>
+  <li>Default Gradle config path should be config/detekt/config.yml - <a href="https://github.com/detekt/detekt/issues/1262">#1262</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/46">1.0.0</a></p>
+
+
+    <div class="tags">
+        
+    </div>
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2020 The detekt Team. All rights reserved. <br />
+ Site last generated: Nov 6, 2020 <br />
+                </div>
+            </div>
+</footer>
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>
