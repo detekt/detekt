@@ -79,14 +79,14 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
+        super.visitWhenExpression(whenExpression)
+
         if (bindingContext == BindingContext.EMPTY) return
         if (whenExpression.elseExpression == null) return
-        val subjectExpression = whenExpression.subjectExpression ?: return
-        val subjectType = subjectExpression.getType(bindingContext) ?: return
+        val subjectType = whenExpression.subjectExpression?.getType(bindingContext)
 
-        if (WhenChecker.getMissingCases(whenExpression, bindingContext).isEmpty()) {
+        if (subjectType != null && WhenChecker.getMissingCases(whenExpression, bindingContext).isEmpty()) {
             val subjectClass = subjectType.constructor.declarationDescriptor as? ClassDescriptor
             val pseudocodeDescriptor =
                 bindingContext[DECLARATION_TO_DESCRIPTOR, subjectClass?.toSourceElement?.getPsi()]
@@ -97,6 +97,5 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(whenExpression), "When expression contains redundant `else` case."))
             }
         }
-        super.visitWhenExpression(whenExpression)
     }
 }
