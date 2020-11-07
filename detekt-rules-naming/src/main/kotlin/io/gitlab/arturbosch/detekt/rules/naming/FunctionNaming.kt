@@ -41,20 +41,14 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
     private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, listOf("Composable"))
 
-    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
+
+        if (ignoreOverridden && function.isOverride() || shouldAnnotatedFunctionBeExcluded(function)) {
+            return
+        }
+
         val functionName = function.nameIdentifier?.text ?: return
-
-        if (ignoreOverridden && function.isOverride()) {
-            return
-        }
-
-        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
-        if (annotationExcluder.shouldExclude(function.annotationEntries)) {
-            return
-        }
-
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !functionName.matches(functionPattern) &&
             functionName != function.typeReference?.name) {
@@ -65,6 +59,11 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
                     message = "Function names should match the pattern: $functionPattern")
             )
         }
+    }
+
+    private fun shouldAnnotatedFunctionBeExcluded(function: KtNamedFunction): Boolean {
+        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
+        return annotationExcluder.shouldExclude(function.annotationEntries)
     }
 
     companion object {
