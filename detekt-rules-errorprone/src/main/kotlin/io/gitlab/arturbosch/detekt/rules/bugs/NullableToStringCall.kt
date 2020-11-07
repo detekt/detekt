@@ -65,24 +65,13 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
 
         val simpleOrCallExpression = expression.parent.safeAs<KtCallExpression>() ?: expression
         val targetExpression = simpleOrCallExpression.targetExpression() ?: return
-        val toBeReportedExpression = when {
-            simpleOrCallExpression.safeAs<KtCallExpression>()?.calleeExpression?.text == "toString" -> {
-                if (simpleOrCallExpression.descriptor()?.fqNameOrNull() != FqName("kotlin.toString")) return
-                targetExpression
-            }
-            targetExpression.parent is KtStringTemplateEntry -> {
-                if (!targetExpression.isNullable()) return
-                targetExpression.parent
-            }
-            else -> return
-        }
 
-        val codeSmell = CodeSmell(
-            issue,
-            Entity.from(toBeReportedExpression),
-            "This call '${toBeReportedExpression.text}' may return the string \"null\"."
-        )
-        report(codeSmell)
+        if (simpleOrCallExpression.safeAs<KtCallExpression>()?.calleeExpression?.text == "toString" &&
+            simpleOrCallExpression.descriptor()?.fqNameOrNull() == toString) {
+            report(targetExpression)
+        } else if (targetExpression.parent is KtStringTemplateEntry && targetExpression.isNullable()) {
+            report(targetExpression.parent)
+        }
     }
 
     private fun KtExpression.targetExpression(): KtExpression? {
@@ -115,5 +104,18 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         return dataFlowTypes.all { it.isNullable() }
     }
 
+    private fun report(element: PsiElement) {
+        val codeSmell = CodeSmell(
+            issue,
+            Entity.from(element),
+            "This call '${element.text}' may return the string \"null\"."
+        )
+        report(codeSmell)
+    }
+
     private fun KtExpression.descriptor(): CallableDescriptor? = getResolvedCall(bindingContext)?.resultingDescriptor
+
+    companion object {
+        val toString = FqName("kotlin.toString")
+    }
 }
