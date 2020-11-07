@@ -84,13 +84,16 @@ class UnusedImports(config: Config) : Rule(config) {
             super.visitPackageDirective(directive)
         }
 
-        @Suppress("UnsafeCallOnNullableType")
         override fun visitImportList(importList: KtImportList) {
-            imports = importList.imports.asSequence().filter { it.isValidImport }
-                .filter { it.identifier()?.contains("*")?.not() == true }
-                .filter { it.identifier() != null }
-                .filter { !operatorSet.contains(it.identifier()) }
-                .filter { !componentNRegex.matches(it.identifier()!!) }.toList()
+            imports = importList.imports.asSequence()
+                .filter { it.isValidImport }
+                .filter {
+                    val identifier = it.identifier()
+                    identifier?.contains("*")?.not() == true &&
+                            !operatorSet.contains(identifier) &&
+                            !componentNRegex.matches(identifier)
+                }
+                .toList()
             super.visitImportList(importList)
         }
 
