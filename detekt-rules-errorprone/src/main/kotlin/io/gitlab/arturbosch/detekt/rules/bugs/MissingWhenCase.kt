@@ -79,12 +79,17 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
     private val allowElseExpression = valueOrDefault(ALLOW_ELSE_EXPRESSION, true)
 
-    @Suppress("ReturnCount")
     override fun visitWhenExpression(expression: KtWhenExpression) {
+        super.visitWhenExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
         if (allowElseExpression && expression.elseExpression != null) return
+        checkMissingWhenExpression(expression)
+    }
+
+    private fun checkMissingWhenExpression(expression: KtWhenExpression) {
         if (expression.isUsedAsExpression(bindingContext)) return
         val subjectExpression = expression.subjectExpression ?: return
+
         val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
         val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType)
@@ -92,7 +97,6 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
             val missingCases = WhenChecker.getMissingCases(expression, bindingContext)
             reportMissingCases(missingCases, expression)
         }
-        super.visitWhenExpression(expression)
     }
 
     private fun reportMissingCases(
