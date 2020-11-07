@@ -35,18 +35,22 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
             "Pair was created using the Pair constructor, using the to syntax is preferred.",
             Debt.FIVE_MINS)
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+
         if (bindingContext == BindingContext.EMPTY) return
-        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
-        val fqName = descriptor.safeAs<ClassConstructorDescriptor>()?.containingDeclaration?.fqNameOrNull() ?: return
-        if (fqName == PAIR_FQ_NAME) {
+        if (expression.isPairConstructor()) {
             val arg = expression.valueArguments.joinToString(" to ") { it.text }
             report(CodeSmell(issue, Entity.from(expression),
                     message = "Pair is created by using the pair constructor. " +
                             "This can replaced by `$arg`"))
         }
-        super.visitCallExpression(expression)
+    }
+
+    private fun KtCallExpression.isPairConstructor(): Boolean {
+        val descriptor = getResolvedCall(bindingContext)?.resultingDescriptor
+        val fqName = descriptor?.safeAs<ClassConstructorDescriptor>()?.containingDeclaration?.fqNameOrNull()
+        return fqName == PAIR_FQ_NAME
     }
 
     companion object {
