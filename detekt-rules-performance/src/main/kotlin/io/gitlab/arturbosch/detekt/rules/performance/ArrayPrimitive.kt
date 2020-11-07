@@ -49,18 +49,20 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
+        expression.checkArrayPrimitive()
+    }
+
+    private fun KtCallExpression.checkArrayPrimitive() {
         if (bindingContext == BindingContext.EMPTY) return
-
-        if (expression.calleeExpression?.text !in factoryMethodNames) return
-        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
+        if (calleeExpression?.text !in factoryMethodNames) return
+        val descriptor = this.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (descriptor.fqNameOrNull() !in factoryMethodFqNames) return
-
         val type = descriptor.returnType?.arguments?.singleOrNull()?.type ?: return
+
         if (KotlinBuiltIns.isPrimitiveType(type)) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
+            report(CodeSmell(issue, Entity.from(this), issue.description))
         }
     }
 
@@ -74,11 +76,11 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     private fun reportArrayPrimitives(typeReference: KtTypeReference?) {
         typeReference
-            ?.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
+            ?.collectDescendantsOfType<KtTypeReference> { checkArrayPrimitive(it) }
             ?.forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
-    private fun isArrayPrimitive(it: KtTypeReference): Boolean {
+    private fun checkArrayPrimitive(it: KtTypeReference): Boolean {
         if (it.text?.startsWith("Array<") == true) {
             val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
             return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
