@@ -68,14 +68,20 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         super.visitQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
-        val conversion = uselessFqNames[fqName] ?: return
-
         val safeExpression = expression as? KtSafeQualifiedExpression
         val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
         if (notNullType || safeExpression != null) {
-            val shortName = fqName.shortName().asString()
+            resolveCallForExpression(expression)
+        }
+    }
+
+    private fun resolveCallForExpression(expression: KtQualifiedExpression) {
+        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
+
+        val shortName = fqName.shortName().asString()
+        val conversion = uselessFqNames[fqName]
+        if (conversion != null) {
             val message = if (conversion.replacementName == null) {
                 "Remove redundant call to $shortName"
             } else {
@@ -85,17 +91,16 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
-        if (fqName != FqName("kotlin.collections.listOfNotNull")) return
 
-        val varargs = resolvedCall.valueArguments.entries.single().value.arguments
-        if (varargs.none { it.isNullable() }) {
-            report(CodeSmell(issue, Entity.from(expression), "Replace listOfNotNull with listOf"))
+        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull()
+        if (fqName == listOfNotNull) {
+            val varargs = resolvedCall.valueArguments.entries.single().value.arguments
+            if (varargs.none { it.isNullable() }) {
+                report(CodeSmell(issue, Entity.from(expression), "Replace listOfNotNull with listOf"))
+            }
         }
     }
 
@@ -103,4 +108,8 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         getArgumentExpression()?.getType(bindingContext)?.isNullable() == true
 
     private data class Conversion(val replacementName: String? = null)
+
+    companion object {
+        private val listOfNotNull = FqName("kotlin.collections.listOfNotNull")
+    }
 }
