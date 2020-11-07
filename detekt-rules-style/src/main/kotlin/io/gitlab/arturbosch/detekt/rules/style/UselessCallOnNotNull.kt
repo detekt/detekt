@@ -79,9 +79,9 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
 
-        val shortName = fqName.shortName().asString()
         val conversion = uselessFqNames[fqName]
         if (conversion != null) {
+            val shortName = fqName.shortName().asString()
             val message = if (conversion.replacementName == null) {
                 "Remove redundant call to $shortName"
             } else {
