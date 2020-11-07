@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.PrimitiveType
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -51,18 +52,12 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        expression.checkArrayPrimitive()
-    }
-
-    private fun KtCallExpression.checkArrayPrimitive() {
         if (bindingContext == BindingContext.EMPTY) return
-        if (calleeExpression?.text !in factoryMethodNames) return
-        val descriptor = this.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
-        if (descriptor.fqNameOrNull() !in factoryMethodFqNames) return
-        val type = descriptor.returnType?.arguments?.singleOrNull()?.type ?: return
+        if (expression.calleeExpression?.text !in factoryMethodNames) return
 
-        if (KotlinBuiltIns.isPrimitiveType(type)) {
-            report(CodeSmell(issue, Entity.from(this), issue.description))
+        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor
+        if (descriptor != null && isArrayPrimitive(descriptor)) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
@@ -76,11 +71,16 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     private fun reportArrayPrimitives(typeReference: KtTypeReference?) {
         typeReference
-            ?.collectDescendantsOfType<KtTypeReference> { checkArrayPrimitive(it) }
+            ?.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
             ?.forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
-    private fun checkArrayPrimitive(it: KtTypeReference): Boolean {
+    private fun isArrayPrimitive(descriptor: CallableDescriptor): Boolean {
+        val type = descriptor.returnType?.arguments?.singleOrNull()?.type
+        return descriptor.fqNameOrNull() in factoryMethodFqNames && type != null && KotlinBuiltIns.isPrimitiveType(type)
+    }
+
+    private fun isArrayPrimitive(it: KtTypeReference): Boolean {
         if (it.text?.startsWith("Array<") == true) {
             val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
             return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
