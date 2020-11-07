@@ -48,9 +48,9 @@ class HasPlatformType(config: Config) : Rule(config) {
 
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)
+        if (bindingContext == BindingContext.EMPTY) return
 
-        if (bindingContext != BindingContext.EMPTY && element is KtCallableDeclaration &&
-            element.hasImplicitPlatformType()) {
+        if (element is KtCallableDeclaration && element.hasImplicitPlatformType()) {
             report(
                 CodeSmell(
                     issue,
@@ -61,19 +61,21 @@ class HasPlatformType(config: Config) : Rule(config) {
         }
     }
 
-    @Suppress("ReturnCount", "ComplexMethod")
     private fun KtCallableDeclaration.hasImplicitPlatformType(): Boolean {
-        when (this) {
-            is KtFunction -> if (isLocal || hasDeclaredReturnType()) return false
-            is KtProperty -> if (isLocal || typeReference != null) return false
-            else -> return false
+        fun isPlatFormType(): Boolean {
+            if (containingClassOrObject?.isLocal == true) return false
+            val callable =
+                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this] as? CallableDescriptor ?: return false
+
+            val isPublicApi = callable.visibility.isPublicAPI
+            val isReturnTypeFlexible = callable.returnType?.isFlexible()
+            return isPublicApi && isReturnTypeFlexible == true
         }
 
-        if (containingClassOrObject?.isLocal == true) return false
-
-        val callable =
-            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this] as? CallableDescriptor ?: return false
-        if (!callable.visibility.isPublicAPI) return false
-        return callable.returnType?.isFlexible() ?: return false
+        return when (this) {
+            is KtFunction -> !isLocal && !hasDeclaredReturnType() && isPlatFormType()
+            is KtProperty -> !isLocal && typeReference == null && isPlatFormType()
+            else -> false
+        }
     }
 }
