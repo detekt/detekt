@@ -87,16 +87,10 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         val subjectExpression = expression.subjectExpression ?: return
         val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
-        if (enumClassDescriptor != null) {
-            val enumMissingCases =
-                WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)
-            reportMissingCases(enumMissingCases, expression)
-        }
         val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType)
-        if (sealedClassDescriptor != null) {
-            val sealedClassMissingCases =
-                WhenChecker.getSealedMissingCases(expression, bindingContext, sealedClassDescriptor)
-            reportMissingCases(sealedClassMissingCases, expression)
+        if (enumClassDescriptor != null || sealedClassDescriptor != null) {
+            val missingCases = WhenChecker.getMissingCases(expression, bindingContext)
+            reportMissingCases(missingCases, expression)
         }
         super.visitWhenExpression(expression)
     }
