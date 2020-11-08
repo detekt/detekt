@@ -81,6 +81,26 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: null. Either add missing cases or a default `else` case.")
             }
 
+            it("does not report missing null case in `when` expression when it is handled outside of `when`") {
+                val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+
+                fun whenNulLCheckEnum(c: Color?) {
+                    if(c == null) return
+                    when(c) {
+                        Color.BLUE -> {}
+                        Color.GREEN -> {}
+                        Color.RED -> {}
+                    }
+                }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
             it("does not report when `when` expression used as statement and all cases are covered") {
                 val code = """
                 enum class Color {
@@ -171,6 +191,26 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC, null. Either add missing cases or a default `else` case.")
+            }
+
+            it("does not report missing null case in `when` expression when it is handled outside of `when`") {
+                val code = """
+                sealed class Variant {
+                        object VariantA : Variant()
+                        class VariantB : Variant()
+                        object VariantC : Variant()
+                    }
+
+                    fun whenOnEnumFail(v: Variant?) {
+                        if(v == null) return
+                        when(v) {
+                            is Variant.VariantA -> {}
+                            is Variant.VariantB -> {}
+                            is Variant.VariantC -> {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when `when` expression used as statement and all cases are covered") {
