@@ -98,6 +98,19 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual[2].message).isEqualTo("This call '\${baz()}' may return the string \"null\".")
         }
 
+        it("reports when a nullable toString is implicitly called and the expression is safe qualified expression") {
+            val code = """
+                data class Foo(val a: Any)
+                
+                fun test(foo: Foo?) {
+                    val y = "${'$'}{foo?.a}"
+                }
+            """
+            val actual = subject.compileAndLintWithContext(env, code)
+            assertThat(actual).hasSize(1)
+            assertThat(actual[0].message).isEqualTo("This call '\${foo?.a}' may return the string \"null\".")
+        }
+
         it("does not report when a nullable toString is not called") {
             val code = """
                 fun test(a: Any?) {
@@ -132,6 +145,13 @@ object NullableToStringCallSpec : Spek({
                     val x = foo.a.toString()
                     val y = "${'$'}{foo.a}"
                 }                
+
+                data class Bar(val a: Any)
+                fun test6(bar: Bar?) {
+                    if (bar == null) return
+                    val x = bar?.a.toString()
+                    val y = "${'$'}{bar?.a}"
+                }
             """
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).isEmpty()

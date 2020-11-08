@@ -8,11 +8,14 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -94,6 +97,12 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression.isNullable(): Boolean {
+        val safeAccessOperation = safeAs<KtSafeQualifiedExpression>()?.operationTokenNode?.safeAs<PsiElement>()
+        if (safeAccessOperation != null) {
+            return bindingContext.diagnostics.forElement(safeAccessOperation).none {
+                it.factory == Errors.UNNECESSARY_SAFE_CALL
+            }
+        }
         val compilerResources = compilerResources ?: return false
         val descriptor = descriptor() ?: return false
         val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return false
