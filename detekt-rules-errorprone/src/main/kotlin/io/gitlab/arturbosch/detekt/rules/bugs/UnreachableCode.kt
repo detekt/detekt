@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
@@ -42,29 +43,44 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
             "Unreachable code detected. This code should be removed", Debt.TEN_MINS)
 
     override fun visitReturnExpression(expression: KtReturnExpression) {
-        followedByUnreachableCode(expression)
         super.visitReturnExpression(expression)
+        followedByUnreachableCode(expression)
     }
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        followedByUnreachableCode(expression)
         super.visitThrowExpression(expression)
+        followedByUnreachableCode(expression)
     }
 
     override fun visitContinueExpression(expression: KtContinueExpression) {
+        super.visitContinueExpression(expression)
         followedByUnreachableCode(expression)
     }
 
     override fun visitBreakExpression(expression: KtBreakExpression) {
+        super.visitBreakExpression(expression)
         followedByUnreachableCode(expression)
     }
 
     private fun followedByUnreachableCode(expression: KtExpression) {
+        if (bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }) {
+            report(expression)
+            return
+        }
         val statements = (expression.parent as? KtBlockExpression)?.statements ?: return
         val indexOfStatement = statements.indexOf(expression)
         if (indexOfStatement < statements.size - 1) {
-            report(CodeSmell(issue, Entity.from(expression), "This expression is followed by unreachable " +
-                    "code which should either be used or removed."))
+            report(expression)
         }
+    }
+
+    private fun report(expression: KtExpression) {
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(expression),
+                "This expression is followed by unreachable code which should either be used or removed."
+            )
+        )
     }
 }
