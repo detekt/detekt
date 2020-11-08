@@ -109,7 +109,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
             valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
     private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
 
-    @Suppress("ReturnCount")
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val elementType = expression.elementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
@@ -126,8 +125,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
             expression.text
         }
 
-        val number = parseAsDoubleOrNull(rawNumber) ?: return
-        if (!ignoredNumbers.contains(number)) {
+        val number = parseAsDoubleOrNull(rawNumber)
+        if (number != null && !ignoredNumbers.contains(number)) {
             report(CodeSmell(issue, Entity.from(expression), "This expression contains a magic number." +
                     " Consider defining it to a well named constant."))
         }
