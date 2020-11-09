@@ -101,17 +101,10 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
     ) {
         if (missingCases.isNotEmpty()) {
             var message = "When expression is missing cases: ${missingCases.joinToString()}."
-            message = if (allowElseExpression) {
-                "$message Either add missing cases or a default `else` case."
-            } else {
-                message
+            if (allowElseExpression) {
+                message += " Either add missing cases or a default `else` case."
             }
-            report(
-                CodeSmell(
-                    issue, Entity.from(expression),
-                    message
-                )
-            )
+            report(CodeSmell(issue, Entity.from(expression), message))
         }
     }
 
