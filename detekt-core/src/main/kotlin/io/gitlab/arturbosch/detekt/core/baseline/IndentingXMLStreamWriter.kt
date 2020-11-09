@@ -43,7 +43,6 @@ internal class IndentingXMLStreamWriter(
         }
     }
 
-    @Suppress("RedundantLambdaArrow")
     private fun writeIndent() {
         if (indentationDepth > 0) {
             (0 until indentationDepth).forEach { _ -> super.writeCharacters(indent) }
