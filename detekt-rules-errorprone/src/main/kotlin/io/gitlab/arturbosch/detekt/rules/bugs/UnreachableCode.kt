@@ -8,12 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtBreakExpression
-import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unreachable code.
@@ -36,51 +32,25 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * </noncompliant>
  *
  * @active since v1.0.0
+ * @requiresTypeResolution
  */
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("UnreachableCode", Severity.Warning,
             "Unreachable code detected. This code should be removed", Debt.TEN_MINS)
 
-    override fun visitReturnExpression(expression: KtReturnExpression) {
-        super.visitReturnExpression(expression)
-        followedByUnreachableCode(expression)
-    }
-
-    override fun visitThrowExpression(expression: KtThrowExpression) {
-        super.visitThrowExpression(expression)
-        followedByUnreachableCode(expression)
-    }
-
-    override fun visitContinueExpression(expression: KtContinueExpression) {
-        super.visitContinueExpression(expression)
-        followedByUnreachableCode(expression)
-    }
-
-    override fun visitBreakExpression(expression: KtBreakExpression) {
-        super.visitBreakExpression(expression)
-        followedByUnreachableCode(expression)
-    }
-
-    private fun followedByUnreachableCode(expression: KtExpression) {
-        if (bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }) {
-            report(expression)
-            return
-        }
-        val statements = (expression.parent as? KtBlockExpression)?.statements ?: return
-        val indexOfStatement = statements.indexOf(expression)
-        if (indexOfStatement < statements.size - 1) {
-            report(expression)
-        }
-    }
-
-    private fun report(expression: KtExpression) {
-        report(
-            CodeSmell(
-                issue,
-                Entity.from(expression),
-                "This expression is followed by unreachable code which should either be used or removed."
+    override fun visitExpression(expression: KtExpression) {
+        super.visitExpression(expression)
+        if (bindingContext != BindingContext.EMPTY &&
+            bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }
+        ) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "This expression is unreachable code which should either be used or removed."
+                )
             )
-        )
+        }
     }
 }

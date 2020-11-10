@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -25,7 +24,7 @@ class UnreachableCodeSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports unreachable code after return in lambda") {
@@ -38,7 +37,7 @@ class UnreachableCodeSpec : Spek({
                     return false
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("reports unreachable code after return with label") {
@@ -53,7 +52,7 @@ class UnreachableCodeSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports unreachable code after throwing an exception") {
@@ -65,7 +64,7 @@ class UnreachableCodeSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports unreachable code after break and continue") {
@@ -81,7 +80,7 @@ class UnreachableCodeSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("does not report reachable code after conditional return with label") {
@@ -93,7 +92,7 @@ class UnreachableCodeSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report reachable code after if") {
@@ -105,7 +104,7 @@ class UnreachableCodeSpec : Spek({
                     throw IllegalArgumentException()
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report reachable code in if body") {
@@ -118,7 +117,7 @@ class UnreachableCodeSpec : Spek({
                     println()
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports unreachable code after if expression") {
