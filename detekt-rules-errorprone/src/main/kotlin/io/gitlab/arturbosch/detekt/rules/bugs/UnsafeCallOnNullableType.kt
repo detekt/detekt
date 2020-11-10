@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
@@ -40,14 +40,12 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
             "It will throw a NullPointerException at runtime if your nullable value is null.",
             Debt.TWENTY_MINS)
 
-    @Suppress("ReturnCount")
-    override fun visitUnaryExpression(expression: KtUnaryExpression) {
-        super.visitUnaryExpression(expression)
+    override fun visitPostfixExpression(expression: KtPostfixExpression) {
+        super.visitPostfixExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
-        val type = expression.baseExpression?.getType(bindingContext) ?: return
-        if (type.nullability() != TypeNullability.NULLABLE) return
-
-        if (expression.operationToken == KtTokens.EXCLEXCL) {
+        if (expression.operationToken == KtTokens.EXCLEXCL &&
+            expression.baseExpression?.getType(bindingContext)?.nullability() == TypeNullability.NULLABLE
+        ) {
             report(CodeSmell(issue, Entity.from(expression), "Calling !! on a nullable type will throw a " +
                     "NullPointerException at runtime in case the value is null. It should be avoided."))
         }
