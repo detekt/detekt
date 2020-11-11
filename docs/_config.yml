@@ -34,6 +34,9 @@ exclude:
   - .idea/
   - .gitignore
   - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - licenses/
 # these are the files and directories that jekyll will exclude from the build
 
 feedback_subject_line: detekt documentation
