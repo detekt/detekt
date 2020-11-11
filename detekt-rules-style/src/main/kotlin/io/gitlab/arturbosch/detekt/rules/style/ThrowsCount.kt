@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Functions should have clear `throw` statements. Functions with many `throw` statements can be harder to read and lead
@@ -60,7 +61,11 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
             }
 
             val countOfThrows = statements
-                .flatMap { it.collectDescendantsOfType<KtThrowExpression>().asSequence() }
+                .flatMap { statement ->
+                    statement.collectDescendantsOfType<KtThrowExpression> {
+                        it.getStrictParentOfType<KtNamedFunction>() == function
+                    }.asSequence()
+                }
                 .count()
 
             if (countOfThrows > max) {

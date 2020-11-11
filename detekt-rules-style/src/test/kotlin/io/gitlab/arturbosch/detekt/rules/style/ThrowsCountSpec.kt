@@ -81,6 +81,30 @@ class ThrowsCountSpec : Spek({
             }
         }
 
+        context("code with a nested function with 3 throw expressions") {
+            val code = """
+                import java.io.IOException
+
+                fun foo(x: Int) {
+                    fun bar(x: Int) {
+                        when (x) {
+                            1 -> throw IOException()
+                            2 -> throw IOException()
+                            3 -> throw IOException()
+                        }
+                    }
+                    return bar(x)
+                }
+            """
+            val subject by memoized { ThrowsCount(Config.empty) }
+
+            it("reports violation by default") {
+                val findings = subject.lint(code)
+                assertThat(findings).hasSize(1)
+                assertThat(findings[0].entity.location.source.line).isEqualTo(4)
+            }
+        }
+
         context("max count == 3") {
             val code = """
                 fun f4(x: String?) {
