@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.siblings
@@ -37,22 +38,13 @@ class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(javaClass.simpleName, Severity.Style, MESSAGE, Debt.FIVE_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val equals = function.equalsToken ?: return
-
-        // Get the tokens after the parameter list (but not including)
-        val afterParams = function.valueParameterList?.siblings(forward = true, withItself = false) ?: return
-
-        // Collect tokens until we find the equals sign
-        val untilEquals = afterParams.takeWhile { it !== equals }.toList()
-
-        // Walk backwards from the '=' to find the whitespace right behind it
-        val whitespace = untilEquals.takeLastWhile { it is PsiWhiteSpace }
-
-        // Search the whitespace tokens to see if they contain newlines
-        whitespace.forEach {
-            if (it.textContains('\n')) {
-                report(CodeSmell(issue, Entity.from(equals), MESSAGE))
-            }
+        val equalsToken = function.equalsToken ?: return
+        val hasLineBreakBeforeEqualsToken = equalsToken
+            .siblings(forward = false, withItself = false)
+            .takeWhile { it is PsiWhiteSpace || it is PsiComment }
+            .any { it is PsiWhiteSpace && it.textContains('\n') }
+        if (hasLineBreakBeforeEqualsToken) {
+            report(CodeSmell(issue, Entity.from(equalsToken), MESSAGE))
         }
     }
 
