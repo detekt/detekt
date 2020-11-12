@@ -143,18 +143,8 @@ style:
     excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
     active: true
-  UnnecessaryAbstractClass:
-    active: true
-  UnnecessaryInheritance:
-    active: true
-  UnusedPrivateClass:
-    active: true
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
-    active: true
-  UselessCallOnNotNull:
-    active: true
-  UtilityClassWithPublicConstructor:
     active: true
