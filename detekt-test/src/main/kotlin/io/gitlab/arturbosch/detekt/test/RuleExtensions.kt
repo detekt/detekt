@@ -93,11 +93,6 @@ fun Rule.format(@Language("kotlin") content: String): String {
     return contentAfterVisit(ktFile)
 }
 
-fun Rule.format(path: Path): String {
-    val ktFile = compileForTest(path)
-    return contentAfterVisit(ktFile)
-}
-
 private fun Rule.contentAfterVisit(ktFile: KtFile): String {
     this.visit(ktFile)
     return ktFile.text
