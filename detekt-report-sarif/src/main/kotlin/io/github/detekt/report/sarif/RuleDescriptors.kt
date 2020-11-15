@@ -35,7 +35,7 @@ fun MultiRule.toDescriptors(ruleSetId: RuleSetId): List<ReportingDescriptor> =
 
 fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor = descriptor {
     id = "detekt.$ruleSetId.$ruleId"
-    name = "$ruleSetId>$ruleId"
+    name = ruleId
     shortDescription = MultiformatMessageString().apply { text = issue.description }
     helpUri = URI.create("https://detekt.github.io/detekt/${ruleSetId.toLowerCase()}.html#${ruleId.toLowerCase()}")
 }
