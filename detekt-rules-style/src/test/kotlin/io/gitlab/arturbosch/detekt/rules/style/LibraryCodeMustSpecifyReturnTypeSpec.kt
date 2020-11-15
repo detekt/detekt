@@ -97,7 +97,6 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
         describe("negative cases with no public scope") {
 
             it("should not report a private top level function") {
-                // Kotlin Script Engine reports wrongly local functions here
                 assertThat(subject.lintWithContext(env, """
                     internal fun bar() = 5
                     private fun foo() = 5
