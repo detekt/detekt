@@ -16,12 +16,14 @@ fun ruleDescriptors(config: Config): HashMap<String, ReportingDescriptor> {
     val descriptors = HashMap<String, ReportingDescriptor>()
     for (ruleSet in sets) {
         for (rule in ruleSet.rules) {
-            if (rule is MultiRule) {
-                descriptors.putAll(rule.toDescriptors(ruleSet.id).associateBy { it.name })
-            } else {
-                assert(rule is Rule)
-                val descriptor = (rule as Rule).toDescriptor(ruleSet.id)
-                descriptors[descriptor.name] = descriptor
+            when (rule) {
+                is MultiRule -> {
+                    descriptors.putAll(rule.toDescriptors(ruleSet.id).associateBy { it.name })
+                }
+                is Rule -> {
+                    val descriptor = rule.toDescriptor(ruleSet.id)
+                    descriptors[descriptor.name] = descriptor
+                }
             }
         }
     }
