@@ -88,11 +88,6 @@ private fun BaseRule.findingsAfterVisit(
     return this.findings
 }
 
-fun Rule.format(@Language("kotlin") content: String): String {
-    val ktFile = compileContentForTest(content.trimIndent())
-    return contentAfterVisit(ktFile)
-}
-
 fun Rule.format(path: Path): String {
     val ktFile = compileForTest(path)
     return contentAfterVisit(ktFile)
