@@ -87,13 +87,3 @@ private fun BaseRule.findingsAfterVisit(
     this.visitFile(ktFile, bindingContext, compilerResources)
     return this.findings
 }
-
-fun Rule.format(path: Path): String {
-    val ktFile = compileForTest(path)
-    return contentAfterVisit(ktFile)
-}
-
-private fun Rule.contentAfterVisit(ktFile: KtFile): String {
-    this.visit(ktFile)
-    return ktFile.text
-}
