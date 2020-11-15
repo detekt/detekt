@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
  *     }
  * }
  * </noncompliant>
+ * @active since v1.16.0
  */
 class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config) {
 

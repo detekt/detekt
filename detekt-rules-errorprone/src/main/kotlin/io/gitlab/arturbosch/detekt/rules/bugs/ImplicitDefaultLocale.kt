@@ -40,6 +40,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * str.toUpperCase(Locale.US)
  * str.toLowerCase(Locale.US)
  * </compliant>
+ *
+ * @active since v1.16.0
  */
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 

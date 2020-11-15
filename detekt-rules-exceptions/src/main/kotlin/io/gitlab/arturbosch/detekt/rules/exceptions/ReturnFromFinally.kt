@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * </noncompliant>
  *
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
+ * @active since v1.16.0
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 

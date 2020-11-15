@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * val b = someValue?.length
  * </compliant>
  *
+ * @active since v1.16.0
  * @requiresTypeResolution
  */
 class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
