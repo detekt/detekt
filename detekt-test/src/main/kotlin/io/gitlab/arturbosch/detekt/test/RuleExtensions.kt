@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import org.intellij.lang.annotations.Language
@@ -86,14 +85,4 @@ private fun BaseRule.findingsAfterVisit(
 ): List<Finding> {
     this.visitFile(ktFile, bindingContext, compilerResources)
     return this.findings
-}
-
-fun Rule.format(@Language("kotlin") content: String): String {
-    val ktFile = compileContentForTest(content.trimIndent())
-    return contentAfterVisit(ktFile)
-}
-
-private fun Rule.contentAfterVisit(ktFile: KtFile): String {
-    this.visit(ktFile)
-    return ktFile.text
 }
