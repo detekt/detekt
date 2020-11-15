@@ -10,17 +10,15 @@ import java.net.URI
 
 const val SCHEMA_URL = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
 
-fun sarif(init: SarifSchema210.() -> Unit): SarifSchema210 {
-    val sarif = SarifSchema210().apply {
-        version = SarifSchema210.Version._2_1_0
-        `$schema` = URI.create(SCHEMA_URL)
-    }
-    return sarif.apply(init)
-}
+fun sarif(init: SarifSchema210.() -> Unit): SarifSchema210 = SarifSchema210()
+    .`with$schema`(URI.create(SCHEMA_URL))
+    .withVersion(SarifSchema210.Version._2_1_0)
+    .withRuns(ArrayList())
+    .apply(init)
 
 typealias SarifIssue = io.github.detekt.sarif4j.Result
 
-fun result(init: SarifIssue.() -> Unit): SarifIssue = SarifIssue().apply(init)
+fun result(init: SarifIssue.() -> Unit): SarifIssue = SarifIssue().withLocations(ArrayList()).apply(init)
 
 fun tool(init: Tool.() -> Unit): Tool = Tool().apply(init)
 
@@ -28,8 +26,9 @@ fun component(init: ToolComponent.() -> Unit): ToolComponent = ToolComponent().a
 
 fun SarifSchema210.withDetektRun(config: Config, init: Run.() -> Unit) {
     runs.add(
-        Run().apply {
-            tool = tool {
+        Run()
+            .withResults(ArrayList())
+            .withTool(tool {
                 driver = component {
                     guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3"
                     name = "detekt"
@@ -42,8 +41,7 @@ fun SarifSchema210.withDetektRun(config: Config, init: Run.() -> Unit) {
                     informationUri = URI.create("https://detekt.github.io/detekt")
                     rules = ruleDescriptors(config).values.toSet()
                 }
-            }
-            apply(init)
-        }
+            })
+            .apply(init)
     )
 }

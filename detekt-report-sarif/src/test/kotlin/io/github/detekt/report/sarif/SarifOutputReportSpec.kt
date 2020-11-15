@@ -21,12 +21,12 @@ class SarifOutputReportSpec : Spek({
             )
 
             val report = SarifOutputReport().apply { init(EmptySetupContext()) }
-            val json = JsonPath.from(report.render(result))
+            val jsonResult = report.render(result)
+            val json = JsonPath.from(jsonResult)
 
             assertThat(json.getString("runs[0].tool.driver.name")).isEqualTo("detekt")
             assertThat(json.getString("runs[0].tool.driver.informationUri"))
                 .isEqualTo("https://detekt.github.io/detekt")
-            assertThat(json.getString("runs[0].results[0].hostedViewerUri")).isEqualTo("TestFile.kt")
             assertThat(json.getList<Any>("runs[0].results")).hasSize(3)
         }
     }
