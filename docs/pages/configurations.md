@@ -130,4 +130,4 @@ You can configured your IDE (e.g. IntelliJ or Android Studio have built-in suppo
 
 ![JSON Schema validator on IntelliJ](../images/json_schema_validator_intellij.png)
 
-The JSON Schema is not currently automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).
+The JSON Schema is currently not automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).
