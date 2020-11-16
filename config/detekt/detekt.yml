@@ -38,6 +38,9 @@ complexity:
   ComplexMethod:
     active: true
     ignoreSingleWhenExpression: true
+  LargeClass:
+    active: true
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   MethodOverloading:
     active: true
 
