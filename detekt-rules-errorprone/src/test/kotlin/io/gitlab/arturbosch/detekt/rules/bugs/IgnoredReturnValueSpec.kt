@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -174,9 +175,7 @@ object IgnoredReturnValueSpec : Spek({
 
         it("reports when a function which returns a value is called and the return is ignored") {
             val code = """
-                package noreturn
-                
-                annotation class CheckReturnValue
+                package annotation
                 
                 @CheckReturnValue
                 fun listOfChecked(value: String) = listOf(value)
@@ -186,9 +185,15 @@ object IgnoredReturnValueSpec : Spek({
                     println("foo")
                 }
             """
-            val findings = subject.compileAndLintWithContext(env, code)
+            val annotationClass = """
+                package annotation
+
+                annotation class CheckReturnValue
+            """
+
+            val findings = subject.lintWithContext(env, code, annotationClass)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(9, 5)
+            assertThat(findings).hasSourceLocation(7, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
@@ -206,7 +211,7 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(9, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
