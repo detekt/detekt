@@ -53,8 +53,6 @@ exceptions:
     active: true
   ReturnFromFinally:
     active: true
-  SwallowedException:
-    active: false
   ThrowingExceptionFromFinally:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
@@ -71,40 +69,11 @@ formatting:
   ParameterListWrapping:
     active: false
 
-naming:
-  MemberNameEqualsClassName:
-    active: true
-  VariableNaming:
-    active: true
-    variablePattern: '[a-z][A-Za-z0-9]*'
-    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
-    excludeClassPattern: '$^'
-
-performance:
-  ArrayPrimitive:
-    active: true
-
 potential-bugs:
-  EqualsAlwaysReturnsTrueOrFalse:
-    active: true
-  InvalidRange:
-    active: true
-  IteratorHasNextCallsNextMethod:
-    active: true
-  IteratorNotThrowingNoSuchElementException:
-    active: true
-  MissingWhenCase:
-    active: true
-  RedundantElseInWhen:
-    active: true
-  UnsafeCallOnNullableType:
-    active: true
   UnsafeCast:
     active: true
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
-    active: true
-  WrongEqualsTypeParameter:
     active: true
 
 style:
@@ -112,37 +81,28 @@ style:
     active: true
   CollapsibleIfStatements:
     active: true
-  EqualsNullCall:
-    active: true
   ForbiddenComment:
     active: true
     values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author']
-  FunctionOnlyReturningConstant:
-    active: true
-  LoopWithTooManyJumpStatements:
-    active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
   MaxLineLength:
+    active: true
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
     excludeCommentStatements: true
   MagicNumber:
-    ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
     ignoreNumbers: ['-1', '0', '1', '2', '100', '1000']
-  MayBeConst:
-    active: true
   NestedClassesVisibility:
-    active: true
-  ProtectedMemberInFinalClass:
     active: true
   RedundantVisibilityModifierRule:
     active: true
   ReturnCount:
+    active: true
     excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
     active: true
