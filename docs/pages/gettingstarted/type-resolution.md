@@ -56,7 +56,7 @@ Issues and proposals for rules that requires type resolution are labelled with [
 
 ## Enabling on a JVM project
 
-The easiest way to use typer resolution, is to use the Detekt Gradle plugin. On a JVM project, the following task will be created:
+The easiest way to use type resolution is to use the Detekt Gradle plugin. On a JVM project, the following tasks will be created:
 
 - `detekt` - Runs detekt WITHOUT type resolution
 - `detektMain` - Runs detekt with type resolution on the `main` source set
