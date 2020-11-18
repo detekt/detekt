@@ -11,13 +11,13 @@ summary:
 
 This page describes how to use detekt's **type resolution** feature.
 
-{% include important.html content="Please note that type resolution is still an **experimental feature** of Detekt. We expect to release it as stable with the upcoming release of Detekt (2.x)" %}
+{% include important.html content="Please note that type resolution is still an **experimental feature** of Detekt. We expect it to be stable with the upcoming release of Detekt (2.x)" %}
 
 ## What is type resolution
 
 Type resolution is a feature that allows Detekt to perform more **advanced** static analysis on your Kotlin source code. 
 
-Normally, Detekt doesn't have access to the types and symbols that are available to the compiler during the compilation. This restricts the inspection capability to one of a **text processor**.
+Normally, Detekt doesn't have access to the types and symbols that are available to the compiler during the compilation. This restricts the inspection capability.
 By enabling type resolution, you provide to Detekt all the information to understand types and symbols in your code needed to perform more accurate analysis. This extends Detekt's inspection capability to ones of the Kotlin **compiler**.
 
 ### An example
@@ -30,29 +30,29 @@ In the following code:
 val user = getUserById(42)?.toString()
 ```
 
-Detekt is able to report the usage of the number `42` as a magic number, **without** type resolution. All the information needed to run this inspection are already available in the source code.
+Detekt is able to report the usage of the number `42` as a magic number, **without** type resolution. All the information needed to run this inspection is already available in the source code.
 
-Similarly, Detekt has another rule called [UnnecessarySafeCall](./potential-bugs.html#unnecessarysafecall) to detect unnecessary usages of safe call operator (`?.`).
+Similarly, Detekt has another rule called [UnnecessarySafeCall](./potential-bugs.html#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
 
 In the previous example, Detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution. 
 
-This because Detekt needs to know what is the **return type** of `getUserById()` in order to correctly perform the inspection. If the return type is a nullable type, then the code is valid. If the return type is a non-nullable type, Detekt will report an `UnnecessarySafeCall` as the `?.` is actually not needed.
+This is because Detekt needs to know what is the **return type** of `getUserById()` in order to correctly perform the inspection. If the return type is a nullable type, then the code is valid. If the return type is a non-nullable type, Detekt will report an `UnnecessarySafeCall` as the `?.` is actually not needed.
 
-With type resolution, Detekt has access to all the symbols and types of your codebase. Type resolution can be enabled by providing the **classpath** that is used during compilation. This will give Detekt access to all the code used to compile your project (both first and third party code) and will allow for more advanced analysis.
+With type resolution, Detekt has access to all the symbols and types of your codebase. Type resolution can be enabled by providing the **classpath** that is used during compilation. This will give Detekt access to all the code used to compile your project (both first and third party code) and will allow more advanced analysis.
 
 ## Is my rule using type resolution?
 
-If you're running Detekt **without** type resolution, all the rules that requires type resolution **will not run**.
+If you're running Detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that requires type resolution are annotated with [`@requiresTypeResolution`](https://github.com/detekt/detekt/search?q=%5C%40requiresTypeResolution) in the KDoc. 
+All the rules that require type resolution are annotated with [`@requiresTypeResolution`](https://github.com/detekt/detekt/search?q=%5C%40requiresTypeResolution) in the KDoc. 
 
 Moreover, their official documentation in the Detekt website will mention _Requires Type Resolution_ ([like here](./potential-bugs.html#unnecessarysafecall)).
 
 {% include note.html content="Please note that we do have some rules that have mixed behavior whether type resolution is enabled or not. Those rules are listed here: [#2994](https://github.com/detekt/detekt/issues/2994)" %}
 
-Before opening an issue that you're rule is not working, please verify if your rule requires type resolution and check if you have type resolution enabled.
+Before opening an issue that you're rule is not working, please verify, whether your rule requires type resolution and check if you have type resolution enabled.
 
-Issues and proposals for rules that requires type resolution are labelled with [needs type and symbol solving](https://github.com/detekt/detekt/labels/needs%20type%20and%20symbol%20solving) on the Issue tracker.
+Issues and proposals for rules that require type resolution are labelled with [needs type and symbol solving](https://github.com/detekt/detekt/labels/needs%20type%20and%20symbol%20solving) on the Issue tracker.
 
 ## Enabling on a JVM project
 
