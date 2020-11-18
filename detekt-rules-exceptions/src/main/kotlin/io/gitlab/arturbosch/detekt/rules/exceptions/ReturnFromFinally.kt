@@ -48,6 +48,8 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
+        if (bindingContext == BindingContext.EMPTY) return
+
         finallySection.finalExpression
             .collectDescendantsOfType<KtReturnExpression> { expression ->
                 isReturnFromTargetFunction(finallySection.finalExpression, expression) &&
@@ -84,7 +86,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
         val targetFunctionBodyExpressionStatements = targetFunction
             .blockExpressionsOrSingle()
-            .toList()
+            .asIterable()
 
         return blockExpression.isInsideOf(targetFunctionBodyExpressionStatements)
     }

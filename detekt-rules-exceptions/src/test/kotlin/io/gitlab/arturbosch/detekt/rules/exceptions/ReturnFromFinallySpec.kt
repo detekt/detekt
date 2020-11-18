@@ -18,25 +18,12 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return statement") {
             val code = """
-                class Main {
-                fun main() {
-                Second().main()
-                }
-                }
-                
-                class Second {
-                fun main() {
-                test()
-                }
-                
-                fun test() {
+            fun x() {
                 try {
                 } finally {
                     return
                 }
-                return
-                }
-                }
+            }
         """
 
             it("should report") {
