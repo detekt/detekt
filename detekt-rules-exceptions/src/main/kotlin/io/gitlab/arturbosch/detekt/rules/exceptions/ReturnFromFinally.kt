@@ -20,8 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 /**
  * Reports all `return` statements in `finally` blocks.
  * Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
- * Also report unaffected return value in `finally` block if it used as expression.
- * See: https://kotlinlang.org/docs/reference/exceptions.html#try-is-an-expression
+ * Furthermore, this rule reports values from `finally` blocks, if the corresponding `try` is used as an expression.
  *
  * <noncompliant>
  * fun foo() {
