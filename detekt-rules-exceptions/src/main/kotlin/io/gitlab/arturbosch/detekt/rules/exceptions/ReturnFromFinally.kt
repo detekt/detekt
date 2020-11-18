@@ -57,23 +57,18 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         super.visitTryExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
 
-        val finallyBlock = expression.finallyBlock
+        val finallyBlock = expression.finallyBlock ?: return
 
-        if (expression.isUsedAsExpression(bindingContext) && finallyBlock != null) {
-            val finallyExpression = finallyBlock.finalExpression
-            if (finallyExpression.statements.isEmpty()) return
-
-            val finallyReturnType = finallyBlock.finalExpression.getType(bindingContext)
-
-            if (finallyReturnType == expression.getType(bindingContext)) {
-                report(
-                    CodeSmell(
-                        issue = issue,
-                        entity = Entity.Companion.from(finallyBlock),
-                        message = issue.description
-                    )
+        if (expression.isUsedAsExpression(bindingContext) &&
+            finallyBlock.typeEqualsTo(expression.getType(bindingContext))
+        ) {
+            report(
+                CodeSmell(
+                    issue = issue,
+                    entity = Entity.Companion.from(finallyBlock),
+                    message = issue.description
                 )
-            }
+            )
         }
     }
 
@@ -85,6 +80,13 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     private fun canFilterLabeledExpression(
         returnStmt: KtReturnExpression
     ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
+
+    private fun KtFinallySection.typeEqualsTo(type: KotlinType?): Boolean {
+        val finallyExpression = finalExpression
+        if (finallyExpression.statements.isEmpty()) return false
+
+        return finalExpression.getType(bindingContext) == type
+    }
 
     companion object {
         const val IGNORE_LABELED = "ignoreLabeled"
