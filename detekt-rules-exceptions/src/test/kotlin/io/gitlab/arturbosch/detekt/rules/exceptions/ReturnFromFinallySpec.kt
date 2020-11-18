@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -19,16 +18,29 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return statement") {
             val code = """
-            fun x() {
+                class Main {
+                fun main() {
+                Second().main()
+                }
+                }
+                
+                class Second {
+                fun main() {
+                test()
+                }
+                
+                fun test() {
                 try {
                 } finally {
                     return
                 }
-            }
+                return
+                }
+                }
         """
 
             it("should report") {
-                val findings = subject.compileAndLint(code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -43,7 +55,7 @@ class ReturnFromFinallySpec : Spek({
         """
 
             it("should not report") {
-                val findings = subject.compileAndLint(code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -61,7 +73,7 @@ class ReturnFromFinallySpec : Spek({
         """
 
             it("should report") {
-                val findings = subject.compileAndLint(code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -80,7 +92,7 @@ class ReturnFromFinallySpec : Spek({
         """
 
             it("should not report") {
-                val findings = subject.compileAndLint(code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -88,22 +100,22 @@ class ReturnFromFinallySpec : Spek({
         context("a finally block with a return as labelled expression") {
             val code = """
             fun x() {
-                try {
+                label@{ 
+try {
                 } finally {
-                    label@{
                      return@label
                     }
                 }
             }
         """
             it("should report when ignoreLabeled is false") {
-                val findings = subject.compileAndLint(code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
             it("should not report when ignoreLabeled is true") {
                 val config = TestConfig(mapOf(ReturnFromFinally.IGNORE_LABELED to "true"))
-                val findings = ReturnFromFinally(config).compileAndLint(code)
+                val findings = ReturnFromFinally(config).compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }

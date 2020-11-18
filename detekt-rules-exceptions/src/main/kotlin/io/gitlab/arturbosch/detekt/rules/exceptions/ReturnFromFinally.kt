@@ -7,15 +7,18 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
+import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunction
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * Reports all `return` statements in `finally` blocks.
@@ -45,11 +48,11 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
-        val innerFunctions = finallySection.finalExpression
-            .collectDescendantsOfType<KtNamedFunction>()
         finallySection.finalExpression
-            .collectDescendantsOfType<KtReturnExpression> { isNotInInnerFunction(it, innerFunctions) &&
-                    canFilterLabeledExpression(it) }
+            .collectDescendantsOfType<KtReturnExpression> { expression ->
+                isReturnFromTargetFunction(finallySection.finalExpression, expression) &&
+                        canFilterLabeledExpression(expression)
+            }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
@@ -66,16 +69,25 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue = issue,
                     entity = Entity.Companion.from(finallyBlock),
-                    message = issue.description
+                    message = TRY_CATCH_FINALLY_AS_EXPRESSION_MESSAGE
                 )
             )
         }
     }
 
-    private fun isNotInInnerFunction(
-        returnStmts: KtReturnExpression,
-        childFunctions: Collection<KtNamedFunction>
-    ): Boolean = !returnStmts.parents.any { childFunctions.contains(it) }
+    private fun isReturnFromTargetFunction(
+        blockExpression: KtBlockExpression,
+        returnStmts: KtReturnExpression
+    ): Boolean {
+        val targetFunction = returnStmts.getTargetFunction(bindingContext)
+            ?: return false
+
+        val targetFunctionBodyExpressionStatements = targetFunction
+            .blockExpressionsOrSingle()
+            .toList()
+
+        return blockExpression.isInsideOf(targetFunctionBodyExpressionStatements)
+    }
 
     private fun canFilterLabeledExpression(
         returnStmt: KtReturnExpression
@@ -90,5 +102,8 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val IGNORE_LABELED = "ignoreLabeled"
+
+        private const val TRY_CATCH_FINALLY_AS_EXPRESSION_MESSAGE = "Contents of the finally block do not affect " +
+                "the result of the expression."
     }
 }
