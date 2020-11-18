@@ -115,7 +115,7 @@ If the `bindingContext` is not `EMPTY`, you are free to use it to resolve types 
 
 ## Testing a rule that uses type resolution
 
-To test a rule that uses type resolution, you can use the [`compileAndLintWithContext`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L63-L72) extension function.
+To test a rule that uses type resolution, you can use the [`lintWithContext`](https://github.com/detekt/detekt/blob/d3546ff0d539d57e7a502dacbf66e91587fff098/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L40-L44) and [`compileAndLintWithContext`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L63-L72) extension functions.
 
 If you're using Spek for testing, you can use the `setupKotlinEnvironment()` util function, and get access to the `KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:  
 
