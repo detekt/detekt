@@ -619,7 +619,10 @@ It ignores caught exceptions that are rethrown if there is work done before that
 <h3 id="returnfromfinally">ReturnFromFinally</h3>
 
 <p>Reports all <code class="language-plaintext highlighter-rouge">return</code> statements in <code class="language-plaintext highlighter-rouge">finally</code> blocks.
-Using <code class="language-plaintext highlighter-rouge">return</code> statements in <code class="language-plaintext highlighter-rouge">finally</code> blocks can discard and hide exceptions that are thrown in the <code class="language-plaintext highlighter-rouge">try</code> block.</p>
+Using <code class="language-plaintext highlighter-rouge">return</code> statements in <code class="language-plaintext highlighter-rouge">finally</code> blocks can discard and hide exceptions that are thrown in the <code class="language-plaintext highlighter-rouge">try</code> block.
+Furthermore, this rule reports values from <code class="language-plaintext highlighter-rouge">finally</code> blocks, if the corresponding <code class="language-plaintext highlighter-rouge">try</code> is used as an expression.</p>
+
+<p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Severity</strong>: Defect</p>
 
@@ -644,6 +647,8 @@ Using <code class="language-plaintext highlighter-rouge">return</code> statement
         <span class="k">return</span> <span class="c1">// prevents MyException from being propagated</span>
     <span class="p">}</span>
 <span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="k">try</span> <span class="p">{</span> <span class="s">"s"</span> <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">Exception</span><span class="p">)</span> <span class="p">{</span> <span class="s">"e"</span> <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span> <span class="s">"f"</span> <span class="p">}</span>
 </code></pre></div></div>
 
 <h3 id="swallowedexception">SwallowedException</h3>
@@ -933,7 +938,7 @@ exceptions to the case that has currently occurred.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2020 The detekt Team. All rights reserved. <br />
- Site last generated: Nov 17, 2020 <br />
+ Site last generated: Nov 19, 2020 <br />
                 </div>
             </div>
 </footer>
