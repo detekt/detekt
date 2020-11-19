@@ -214,6 +214,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Chao Zhang](https://github.com/chao2zhang) - Rule improvement: ImplicitDefaultLocale, ModifierOrder, and LibraryCodeMustReturnSpecifyReturnType
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
+- [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
 
 ### Mentions
 
