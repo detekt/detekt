@@ -55,14 +55,13 @@ fun BaseRule.lintWithContext(
 }
 
 fun BaseRule.compileAndLintWithContext(
-    environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String,
-    @Language("kotlin") vararg additionalContents: String,
+        environment: KotlinCoreEnvironment,
+        @Language("kotlin") content: String
 ): List<Finding> {
-    if (shouldCompileTestSnippets && additionalContents.isEmpty()) {
+    if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lintWithContext(environment, content, *additionalContents)
+    return lintWithContext(environment, content)
 }
 
 private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
