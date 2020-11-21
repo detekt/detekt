@@ -259,6 +259,8 @@ detekt {
 Type resolution is experimental and works only for [predefined tasks listed above](#a-nametasksavailable-plugin-tasksa)
 or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
 
+More information on type resolution are available on the [type resolution](type-resolution.md) page.
+
 ###### Groovy DSL
 ```groovy
 tasks.detekt.jvmTarget = "1.8"
