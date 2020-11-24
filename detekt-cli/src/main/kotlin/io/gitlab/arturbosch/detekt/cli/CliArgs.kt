@@ -116,6 +116,12 @@ class CliArgs {
     var failFast: Boolean = false
 
     @Parameter(
+        names = ["--all-rules"],
+        description = "Activates all available (even unstable) rules."
+    )
+    var allRules: Boolean = false
+
+    @Parameter(
         names = ["--auto-correct", "-ac"],
         description = "Allow rules to auto correct code if they support it. " +
             "The default rule sets do NOT support auto correcting and won't change any line in the users code base. " +
