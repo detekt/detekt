@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
-import io.gitlab.arturbosch.detekt.core.config.FailFastConfig
+import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
@@ -161,7 +161,7 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
 
     if (rulesSpec.activateAllRules) {
         val defaultConfig = DefaultConfig.newInstance()
-        declaredConfig = FailFastConfig(declaredConfig ?: defaultConfig, defaultConfig)
+        declaredConfig = AllRulesConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
 
     if (!rulesSpec.autoCorrect) {
