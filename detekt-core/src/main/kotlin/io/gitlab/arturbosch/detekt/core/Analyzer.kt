@@ -159,7 +159,7 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
         else -> null
     }
 
-    if (rulesSpec.activateExperimentalRules) {
+    if (rulesSpec.activateAllRules) {
         val defaultConfig = DefaultConfig.newInstance()
         declaredConfig = FailFastConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
