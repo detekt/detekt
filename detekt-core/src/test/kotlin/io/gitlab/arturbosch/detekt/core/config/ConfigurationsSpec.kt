@@ -76,7 +76,7 @@ internal class ConfigurationsSpec : Spek({
                     resources = listOf(resourceUrl("/configs/fail-fast-wont-override-here.yml"))
                     useDefaultConfig = true
                 }
-                rules { activateExperimentalRules = true }
+                rules { activateAllRules = true }
             }.loadConfiguration()
         }
 
