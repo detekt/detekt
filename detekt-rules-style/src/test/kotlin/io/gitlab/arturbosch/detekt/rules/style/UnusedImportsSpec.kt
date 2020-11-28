@@ -568,8 +568,7 @@ class UnusedImportsSpec : Spek({
             """
             assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
         }
-
-
+        
         it("does not report annotations used as attributes - #3246") {
             val mainFile = """
                 import x.y.z.AnnotationA
