@@ -62,7 +62,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
         fun violation() = equals && !hashCode || !equals && hashCode
     }
 
-    override fun visitFile(file: PsiFile?) {
+    override fun visitFile(file: PsiFile) {
         queue.clear()
         super.visitFile(file)
     }
