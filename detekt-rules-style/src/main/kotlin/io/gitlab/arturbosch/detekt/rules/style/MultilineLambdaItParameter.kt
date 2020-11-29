@@ -57,7 +57,7 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
             report(
                 CodeSmell(
                     issue, Entity.from(lambdaExpression),
-                    "The parameter name in a multiline lambda should not be an implicit/explicit `it`"
+                    "The parameter name in a multiline lambda should not be an implicit/explicit `it`. Consider giving your parameter a name"
                 )
             )
         }
