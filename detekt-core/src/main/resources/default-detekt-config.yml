@@ -463,6 +463,8 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  ExitOutsideMain:
+    active: false
   ExplicitGarbageCollectionCall:
     active: true
   HasPlatformType:
