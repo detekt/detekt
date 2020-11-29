@@ -216,6 +216,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
 - [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
+- [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
 
 ### Mentions
 
