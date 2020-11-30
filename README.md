@@ -123,8 +123,10 @@ detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktli
 which can be easily added to the Gradle configuration:
 
 ```kotlin
-dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+detekt {
+    dependencies {
+        detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    }
 }
 ```
 

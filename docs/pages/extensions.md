@@ -216,8 +216,10 @@ To enable it, we add the published dependency to `detekt` via the `detektPlugins
 
 ###### Gradle (Kotlin/Groovy DSL)
 ```kotlin
-dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+detekt {
+    dependencies {
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+    }
 }
 ```
 
