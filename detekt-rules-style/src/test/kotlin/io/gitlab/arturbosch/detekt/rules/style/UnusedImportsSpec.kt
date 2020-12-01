@@ -575,15 +575,15 @@ class UnusedImportsSpec : Spek({
                 import x.y.z.AnnotationB
                 
                 class SomeClass {
-                    @AnnotationB(attribute = AnnotationA)
-                    val someProp: Int
+                    @AnnotationB(attribute = AnnotationA())
+                    val someProp: Int = 42
                 }
             """
             val additionalFile = """
                 package x.y.z
                 
                 annotation class AnnotationA
-                annotation class AnnotationB
+                annotation class AnnotationB(val attribute: AnnotationA)
             """
             assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
         }
