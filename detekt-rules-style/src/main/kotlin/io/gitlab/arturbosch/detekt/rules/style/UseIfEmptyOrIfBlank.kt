@@ -127,7 +127,8 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
             Replacement(FqName("kotlin.collections.Collection.isEmpty"), ifEmpty),
             Replacement(FqName("kotlin.text.isNotBlank"), ifBlank, negativeCondition = true),
             Replacement(FqName("kotlin.text.isNotEmpty"), ifEmpty, negativeCondition = true),
-            Replacement(FqName("kotlin.collections.isNotEmpty"), ifEmpty, negativeCondition = true)
+            Replacement(FqName("kotlin.collections.isNotEmpty"), ifEmpty, negativeCondition = true),
+            Replacement(FqName("kotlin.String.isEmpty"), ifEmpty)
         ).associateBy { it.conditionFunctionFqName }
 
         private val conditionFunctionShortNames = replacements.keys.map { it.shortName().asString() }.toSet()
