@@ -87,6 +87,7 @@ output-reports:
   #  - 'HtmlOutputReport'
   #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
+  #  - 'SarifOutputReport'
 ```
 
 **HtmlOutputReport** contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
@@ -94,6 +95,8 @@ output-reports:
 **TxtOutputReport** contains rule violations in a plain text report similar to a log file.
 
 **XmlOutputReport** contains rule violations in an XML format. The report follows the structure of a [Checkstyle report](https://checkstyle.sourceforge.io).
+
+**SarifOutputReport** contains rule violations in the SARIF format. Please check [SARIF](https://sarifweb.azurewebsites.net/).
 
 Rule violations show the name of the violated rule and in which file the issue happened.
 The mentioned metrics show detailed statistics concerning the analyzed code.

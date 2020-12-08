@@ -156,6 +156,11 @@ open class Detekt @Inject constructor(
         @Optional
         get() = getTargetFileProvider(reports.txt)
 
+    internal val sarifReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = getTargetFileProvider(reports.sarif)
+
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
         @Optional
@@ -196,6 +201,7 @@ open class Detekt @Inject constructor(
             DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
             DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
+            DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
             DebugArgument(debugProp.getOrElse(false)),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),

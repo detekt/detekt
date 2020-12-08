@@ -119,6 +119,7 @@ internal class DetektAndroid(private val project: Project) {
             reports.xml.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".xml"))
             reports.html.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".html"))
             reports.txt.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".txt"))
+            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".sarif"))
             description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
         }
 

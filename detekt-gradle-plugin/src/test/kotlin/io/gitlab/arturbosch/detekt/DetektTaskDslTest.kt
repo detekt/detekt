@@ -42,6 +42,11 @@ internal object DetektTaskDslTest : Spek({
                         val textReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.txt")
                         assertThat(result.output).contains("--report txt:$textReportFile")
                     }
+
+                    it("enables sarif report to default location") {
+                        val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
+                        assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                    }
                 }
 
                 describe("without multiple detekt configs") {
@@ -154,6 +159,11 @@ internal object DetektTaskDslTest : Spek({
                         val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
                         assertThat(result.output).contains("--report txt:$textReportFile")
                     }
+
+                    it("configures sarif report to custom directory") {
+                        val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.sarif")
+                        assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                    }
                 }
 
                 describe("with custom reports dir and custom report filename") {
@@ -203,6 +213,9 @@ internal object DetektTaskDslTest : Spek({
                         |            enabled = false
                         |        }
                         |        txt {
+                        |            enabled = false
+                        |        }
+                        |        sarif {
                         |            enabled = false
                         |        }
                         |    }
@@ -329,9 +342,9 @@ internal object DetektTaskDslTest : Spek({
                                         |detekt {
                                         |    reports {
                                         |        custom {
-                                        |           reportId = "${wellKnownType.reportId}"
-                                        |           destination = file("build/reports/custom.xml")
-                                        |       }
+                                        |            reportId = "${wellKnownType.reportId}"
+                                        |            destination = file("build/reports/custom.xml")
+                                        |        }
                                         |    }
                                         |}
                                         """
@@ -472,6 +485,7 @@ internal object DetektTaskDslTest : Spek({
                         |        }
                         |        html.destination = file("build/reports/failfast.html")
                         |        txt.destination = file("build/reports/failfast.txt")
+                        |        sarif.destination = file("build/reports/failfast.sarif")
                         |    }
                         |}
                         """
@@ -501,6 +515,11 @@ internal object DetektTaskDslTest : Spek({
                 it("enables text report to specified location") {
                     val textReportFile = gradleRunner.projectFile("build/reports/failfast.txt")
                     assertThat(result.output).contains("--report txt:$textReportFile")
+                }
+
+                it("enables sarif report to specified location") {
+                    val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
+                    assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
@@ -548,6 +567,7 @@ internal object DetektTaskDslTest : Spek({
                         |        }
                         |        html.destination = file("build/reports/failfast.html")
                         |        txt.destination = file("build/reports/failfast.txt")
+                        |        sarif.destination = file("build/reports/failfast.sarif")
                         |    }
                         |}
                         """
@@ -577,6 +597,11 @@ internal object DetektTaskDslTest : Spek({
                 it("enables text report to specified location") {
                     val textReportFile = gradleRunner.projectFile("build/reports/failfast.txt")
                     assertThat(result.output).contains("--report txt:$textReportFile")
+                }
+
+                it("enables sarif report to specified location") {
+                    val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
+                    assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
