@@ -211,7 +211,7 @@ detekt {
             destination = file("build/reports/detekt.txt") // Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)
         }
         sarif {
-            enabled = true                                // Enable/Disable SARIF report (default: true)
+            enabled = true                                // Enable/Disable SARIF report (default: false)
             destination = file("build/reports/detekt.sarif") // Path where SARIF report will be stored (default: `build/reports/detekt/detekt.sarif`)
         }
         custom {

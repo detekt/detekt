@@ -43,9 +43,9 @@ internal object DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--report txt:$textReportFile")
                     }
 
-                    it("enables sarif report to default location") {
+                    it("disables sarif report to default location") {
                         val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
-                        assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                        assertThat(result.output).doesNotContain("--report sarif:$sarifReportFile")
                     }
                 }
 
@@ -136,6 +136,11 @@ internal object DetektTaskDslTest : Spek({
                         val config = """
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
+                        |    reports {
+                        |        sarif {
+                        |            enabled = true
+                        |        }
+                        |    }
                         |}
                         """
 
@@ -485,7 +490,10 @@ internal object DetektTaskDslTest : Spek({
                         |        }
                         |        html.destination = file("build/reports/failfast.html")
                         |        txt.destination = file("build/reports/failfast.txt")
-                        |        sarif.destination = file("build/reports/failfast.sarif")
+                        |        sarif {
+                        |            enabled = true
+                        |            destination = file("build/reports/failfast.sarif")
+                        |        }
                         |    }
                         |}
                         """
@@ -567,7 +575,10 @@ internal object DetektTaskDslTest : Spek({
                         |        }
                         |        html.destination = file("build/reports/failfast.html")
                         |        txt.destination = file("build/reports/failfast.txt")
-                        |        sarif.destination = file("build/reports/failfast.sarif")
+                        |        sarif {
+                        |            enabled = true
+                        |            destination = file("build/reports/failfast.sarif")
+                        |        }
                         |    }
                         |}
                         """
