@@ -61,12 +61,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
         values.forEach {
             if (text.contains(it, ignoreCase = true)) {
-                report(
-                    CodeSmell(
-                        issue, Entity.from(comment), "This comment contains text that has been " +
-                                "defined as forbidden in detekt."
-                    )
-                )
+                report(CodeSmell(issue, Entity.from(comment), "This comment contains text that has been " +
+                    "defined as forbidden in detekt."))
             }
         }
     }
