@@ -71,7 +71,8 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue = issue,
                     entity = Entity.Companion.from(finallyBlock),
-                    message = TRY_CATCH_FINALLY_AS_EXPRESSION_MESSAGE
+                    message = "Contents of the finally block do not affect " +
+                            "the result of the expression."
                 )
             )
         }
@@ -104,8 +105,5 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val IGNORE_LABELED = "ignoreLabeled"
-
-        private const val TRY_CATCH_FINALLY_AS_EXPRESSION_MESSAGE = "Contents of the finally block do not affect " +
-                "the result of the expression."
     }
 }
