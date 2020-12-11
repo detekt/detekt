@@ -13,7 +13,7 @@ dependencies {
         api("org.spekframework.spek2:spek-dsl-jvm:${version.spek}")
         api("org.spekframework.spek2:spek-runner-junit5:${version.spek}")
         api("org.reflections:reflections:0.9.12")
-        api("io.mockk:mockk:1.10.2")
+        api("io.mockk:mockk:1.10.3")
         api("org.junit.platform:junit-platform-launcher:1.7.0")
         api("org.yaml:snakeyaml:1.27")
         api("com.beust:jcommander:1.78")
