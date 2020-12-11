@@ -18,13 +18,13 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return statement") {
             val code = """
-            fun x() {
-                try {
-                } finally {
-                    return
+                fun x() {
+                    try {
+                    } finally {
+                        return
+                    }
                 }
-            }
-        """
+            """
 
             it("should report") {
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -34,12 +34,12 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with no return statement") {
             val code = """
-            fun x() {
-                try {
-                } finally {
+                fun x() {
+                    try {
+                    } finally {
+                    }
                 }
-            }
-        """
+            """
 
             it("should not report") {
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -49,15 +49,15 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a nested return statement") {
             val code = """
-            fun x() {
-                try {
-                } finally {
-                    if (1 == 1) {
-                        return
+                fun x() {
+                    try {
+                    } finally {
+                        if (1 == 1) {
+                            return
+                        }
                     }
                 }
-            }
-        """
+            """
 
             it("should report") {
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -67,16 +67,16 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return in an inner function") {
             val code = """
-            fun x() {
-                try {
-                } finally {
-                    fun y() {
-                        return
+                fun x() {
+                    try {
+                    } finally {
+                        fun y() {
+                            return
+                        }
+                        y()
                     }
-                    y()
                 }
-            }
-        """
+            """
 
             it("should not report") {
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -86,15 +86,15 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return as labelled expression") {
             val code = """
-            fun x() {
-                label@{ 
-try {
-                } finally {
-                     return@label
+                fun x() {
+                    label@{ 
+                        try {
+                        } finally {
+                            return@label
+                        }
                     }
                 }
-            }
-        """
+            """
             it("should report when ignoreLabeled is false") {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
@@ -110,14 +110,14 @@ try {
         context("a finally block as expression for property") {
             it("should report") {
                 val code = """
-                val expression = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } finally {
-                    "finally"
-                }
-            """
+                    val expression = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        "finally"
+                    }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -128,14 +128,14 @@ try {
         context("a finally block as expression for method") {
             it("should report") {
                 val code = """
-                fun expression() = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } finally {
-                    "finally"
-                }
-            """
+                    fun expression() = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        "finally"
+                    }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -146,16 +146,16 @@ try {
         context("when a finally block called method that return value") {
             it("should report") {
                 val code = """
-                fun expression() = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } finally {
-                    compute()
-                }
-                
-                fun compute(): String = "value"
-            """
+                    fun expression() = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        compute()
+                    }
+                    
+                    fun compute(): String = "value"
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -166,12 +166,12 @@ try {
         context("when finally block absents in expression for property") {
             it("shouldn't report") {
                 val code = """
-                val expression = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } 
-            """
+                    val expression = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } 
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -183,12 +183,12 @@ try {
 
             it("shouldn't report") {
                 val code = """
-                fun expression() = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                }
-            """
+                    fun expression() = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -199,16 +199,16 @@ try {
         context("when try catch finally block is independent") {
             it("shouldn't report") {
                 val code = """
-                fun expression() {
-                    try {
-                        "try"
-                    } catch (e: Exception) {
-                        "exception"
-                    } finally {
-                        "finally"
-                    }
-                }
-             """
+                   fun expression() {
+                       try {
+                           "try"
+                       } catch (e: Exception) {
+                           "exception"
+                       } finally {
+                           "finally"
+                       }
+                   }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -219,14 +219,14 @@ try {
         context("when finally block doesn't contain return value") {
             it("shouldn't report") {
                 val code = """
-                val expression = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } finally {
-                    println("finally")
-                }
-            """
+                    val expression = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        println("finally")
+                    }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
@@ -237,16 +237,16 @@ try {
         context("when return value in finally block is property") {
             it("should report") {
                 val code = """
-                val property: String = "property"
-                val expression = try {
-                    "try"
-                } catch (e: Exception) {
-                    "exception"
-                } finally {
-                    println("finally")
-                    property
-                }
-            """
+                    val property: String = "property"
+                    val expression = try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        println("finally")
+                        property
+                    }
+                """
 
                 val finding = subject.compileAndLintWithContext(env, code)
 
