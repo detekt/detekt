@@ -1,15 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
@@ -31,7 +28,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
             Severity.Style,
-            "Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
+            "Flags a forbidden comment.",
             Debt.TEN_MINS)
 
     private val values: List<String> = valueOrDefaultCommaSeparated(VALUES, listOf("TODO:", "FIXME:", "STOPSHIP:"))
@@ -40,15 +37,29 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
-
         val text = comment.text
+        checkForbiddenComment(text, comment)
+    }
 
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        file.collectDescendantsOfType<KDocSection>().forEach { comment ->
+            val text = comment.getContent()
+            checkForbiddenComment(text, comment)
+        }
+    }
+
+    private fun checkForbiddenComment(text: String, comment: PsiElement) {
         if (allowedPatterns.pattern.isNotEmpty() && allowedPatterns.containsMatchIn(text)) return
 
         values.forEach {
             if (text.contains(it, ignoreCase = true)) {
-                report(CodeSmell(issue, Entity.from(comment), "This comment contains text that has been " +
-                        "defined as forbidden in detekt."))
+                report(
+                    CodeSmell(
+                        issue, Entity.from(comment), "This comment contains text that has been " +
+                                "defined as forbidden in detekt."
+                    )
+                )
             }
         }
     }
