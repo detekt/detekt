@@ -28,7 +28,7 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
 
     // HACK! ImportOrderingRule.ktlintCustomImportsLayoutProperty is internal. Therefore we are using
     // ImportOrderingRule.editorConfigProperties.first() to access it.
-    // When FinalNewlineRule exits the alpha/beta state, hopefully we could remove this hack.
+    // When ImportOrderingRule exits the alpha/beta state, hopefully we could remove this hack.
     override fun overrideEditorConfigProperties() = mapOf(
         KOTLIN_IMPORTS_LAYOUT_KEY to
             Property.builder().type(wrapping.editorConfigProperties.first().type).value(layout).build()
