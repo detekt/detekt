@@ -47,17 +47,6 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
-    override fun visitFinallySection(finallySection: KtFinallySection) {
-        if (bindingContext == BindingContext.EMPTY) return
-
-        finallySection.finalExpression
-            .collectDescendantsOfType<KtReturnExpression> { expression ->
-                isReturnFromTargetFunction(finallySection.finalExpression, expression) &&
-                        canFilterLabeledExpression(expression)
-            }
-            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
-    }
-
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
@@ -76,6 +65,13 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
+
+        finallyBlock.finalExpression
+            .collectDescendantsOfType<KtReturnExpression> { returnExpression ->
+                isReturnFromTargetFunction(finallyBlock.finalExpression, returnExpression) &&
+                        canFilterLabeledExpression(returnExpression)
+            }
+            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun isReturnFromTargetFunction(
