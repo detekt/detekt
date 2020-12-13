@@ -254,6 +254,7 @@ Integrations:
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 - [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- [MuseDev](https://github.com/marketplace/muse-dev)
 
 Custom rules from 3rd parties:
 
