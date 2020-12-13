@@ -44,5 +44,19 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
 
             assertThat(findings).hasSize(1)
         }
+
+        it("does not report a return after a conditional jump") {
+            val findings = subject.lint("""
+                fun f(): Int {
+                    for (i in 0 until 10) {
+                      val a = i * i
+                      if (a < 27) continue
+                      return a
+                    }
+                }                
+            """.trimIndent())
+
+            assertThat(findings).isEmpty()
+        }
     }
 })
