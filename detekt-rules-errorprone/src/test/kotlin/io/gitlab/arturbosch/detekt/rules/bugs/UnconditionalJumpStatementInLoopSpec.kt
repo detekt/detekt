@@ -49,11 +49,23 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             val findings = subject.lint("""
                 fun f(): Int {
                     for (i in 0 until 10) {
-                      val a = i * i
-                      if (a < 27) continue
-                      return a
+                        val a = i * i
+                        if (a < 27) continue
+                        return a
                     }
-                }                
+                    return 0
+                }
+
+                fun g(): Int {
+                    for (i in 0 until 10) {
+                        val a = i * i
+                        when {
+                            a < 27 -> continue
+                        }
+                        return a
+                    }
+                    return 0
+                }
             """.trimIndent())
 
             assertThat(findings).isEmpty()
