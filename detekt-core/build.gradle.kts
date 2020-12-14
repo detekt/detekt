@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":detekt-report-html"))
     implementation(project(":detekt-report-txt"))
     implementation(project(":detekt-report-xml"))
+    implementation(project(":detekt-report-sarif"))
 
     testImplementation(project(":detekt-rules"))
     testImplementation(project(":detekt-test"))

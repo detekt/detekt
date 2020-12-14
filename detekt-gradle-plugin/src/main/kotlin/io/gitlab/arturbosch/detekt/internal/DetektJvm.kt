@@ -34,6 +34,7 @@ internal class DetektJvm(private val project: Project) {
             reports.xml.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".xml"))
             reports.html.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".html"))
             reports.txt.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".txt"))
+            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".sarif"))
             description = "EXPERIMENTAL: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }
