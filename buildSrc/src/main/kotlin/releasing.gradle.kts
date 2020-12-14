@@ -24,7 +24,8 @@ githubRelease {
         files(
             cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
             cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
-            cliBuildDir.resolve("run/detekt")
+            cliBuildDir.resolve("run/detekt"),
+            project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar")
         )
     )
 }
