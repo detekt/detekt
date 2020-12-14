@@ -13,8 +13,12 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
  * Reports loops which contain jump statements that jump regardless of any conditions.
@@ -50,11 +54,17 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
         body.isJumpStatement() || body?.children?.any { it.isJumpStatement() } == true
 
     private fun PsiElement?.isJumpStatement() =
-        this is KtReturnExpression && !containsElvisContinue() ||
+        this is KtReturnExpression && !containsElvisContinue() && !isAfterConditionalJumpStatement() ||
             this is KtBreakExpression || this is KtContinueExpression
 
     private fun KtReturnExpression.containsElvisContinue(): Boolean {
         val expr = this.returnedExpression
         return expr is KtBinaryExpression && expr.operationToken == KtTokens.ELVIS && expr.right is KtContinueExpression
     }
+
+    private fun PsiElement.isAfterConditionalJumpStatement(): Boolean =
+        siblings(forward = false, withItself = false).any { it.isConditionalJumpStatement() }
+
+    private fun PsiElement.isConditionalJumpStatement(): Boolean =
+        (this is KtIfExpression || this is KtWhenExpression) && anyDescendantOfType<PsiElement> { it.isJumpStatement() }
 }
