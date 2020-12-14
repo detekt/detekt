@@ -5,10 +5,13 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
-#### 1.15.0-RC1 - 2020-11-16
+#### 1.15.0-RC2 - 2020-12-14
 
 ##### Changelog
 
+- Fix ForbiddenComment rule not checking for KDoc - [#3275](https://github.com/detekt/detekt/pull/3275)
+- ForbiddenComments don't report TODO: in KDoc - [#3273](https://github.com/detekt/detekt/issues/3273)
+- Bundle new sarif output format by default - [#3268](https://github.com/detekt/detekt/pull/3268)
 - ThrowsCount rule: fix false positive with nested function - [#3223](https://github.com/detekt/detekt/pull/3223)
 - False positive in ThrowsCount rule - [#3222](https://github.com/detekt/detekt/issues/3222)
 - Refactor UnsafeCallOnNullableType rule - [#3221](https://github.com/detekt/detekt/pull/3221)
@@ -60,6 +63,14 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Reformat code indentation in ReturnFromFinallySpec.kt - [#3278](https://github.com/detekt/detekt/pull/3278)
+- Inline ReturnFromFinally report message text - [#3277](https://github.com/detekt/detekt/pull/3277)
+- Simplify ReturnFromFinally check for finally expressions - [#3276](https://github.com/detekt/detekt/pull/3276)
+- Enabled publishing of sha256 and sha512 signatures - [#3249](https://github.com/detekt/detekt/pull/3249)
+- Remove default config entries in detekt.yml - [#3239](https://github.com/detekt/detekt/pull/3239)
+- Fix grammar in configuration guide - [#3238](https://github.com/detekt/detekt/pull/3238)
+- Exclude detekt:LargeClass rule in test sources - [#3237](https://github.com/detekt/detekt/pull/3237)
+- Release 1.15.0 rc1 - [#3236](https://github.com/detekt/detekt/pull/3236)
 - Remove unused format function in RuleExtensions - [#3234](https://github.com/detekt/detekt/pull/3234)
 - Update spek to v2.0.14 - [#3231](https://github.com/detekt/detekt/pull/3231)
 - Remove already activated rules from detekt.yml - [#3230](https://github.com/detekt/detekt/pull/3230)
