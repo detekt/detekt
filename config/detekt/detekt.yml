@@ -84,6 +84,7 @@ style:
   ForbiddenComment:
     active: true
     values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author']
+    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**/*.kt']
