@@ -450,11 +450,14 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1150-rc1---2020-11-16">1.15.0-RC1 - 2020-11-16</h4>
+  <h4 id="1150-rc2---2020-12-14">1.15.0-RC2 - 2020-12-14</h4>
 
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>Fix ForbiddenComment rule not checking for KDoc - <a href="https://github.com/detekt/detekt/pull/3275">#3275</a></li>
+  <li>ForbiddenComments don’t report TODO: in KDoc - <a href="https://github.com/detekt/detekt/issues/3273">#3273</a></li>
+  <li>Bundle new sarif output format by default - <a href="https://github.com/detekt/detekt/pull/3268">#3268</a></li>
   <li>ThrowsCount rule: fix false positive with nested function - <a href="https://github.com/detekt/detekt/pull/3223">#3223</a></li>
   <li>False positive in ThrowsCount rule - <a href="https://github.com/detekt/detekt/issues/3222">#3222</a></li>
   <li>Refactor UnsafeCallOnNullableType rule - <a href="https://github.com/detekt/detekt/pull/3221">#3221</a></li>
@@ -508,6 +511,14 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Reformat code indentation in ReturnFromFinallySpec.kt - <a href="https://github.com/detekt/detekt/pull/3278">#3278</a></li>
+  <li>Inline ReturnFromFinally report message text - <a href="https://github.com/detekt/detekt/pull/3277">#3277</a></li>
+  <li>Simplify ReturnFromFinally check for finally expressions - <a href="https://github.com/detekt/detekt/pull/3276">#3276</a></li>
+  <li>Enabled publishing of sha256 and sha512 signatures - <a href="https://github.com/detekt/detekt/pull/3249">#3249</a></li>
+  <li>Remove default config entries in detekt.yml - <a href="https://github.com/detekt/detekt/pull/3239">#3239</a></li>
+  <li>Fix grammar in configuration guide - <a href="https://github.com/detekt/detekt/pull/3238">#3238</a></li>
+  <li>Exclude detekt:LargeClass rule in test sources - <a href="https://github.com/detekt/detekt/pull/3237">#3237</a></li>
+  <li>Release 1.15.0 rc1 - <a href="https://github.com/detekt/detekt/pull/3236">#3236</a></li>
   <li>Remove unused format function in RuleExtensions - <a href="https://github.com/detekt/detekt/pull/3234">#3234</a></li>
   <li>Update spek to v2.0.14 - <a href="https://github.com/detekt/detekt/pull/3231">#3231</a></li>
   <li>Remove already activated rules from detekt.yml - <a href="https://github.com/detekt/detekt/pull/3230">#3230</a></li>
