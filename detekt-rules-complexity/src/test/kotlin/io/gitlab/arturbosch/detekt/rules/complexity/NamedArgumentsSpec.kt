@@ -115,7 +115,7 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("java method invocation") {
+        it("java method invocation should not be flagged") {
             val code = """
             import java.time.LocalDateTime
             
