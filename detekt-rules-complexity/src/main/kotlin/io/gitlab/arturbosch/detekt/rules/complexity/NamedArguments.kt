@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
  * Reports function invocations which have more parameters than a certain threshold and are all not named.
@@ -25,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * </compliant>
  *
  * @configuration threshold - number of parameters that triggers this inspection (default: `3`)
+ * @requiresTypeResolution
  */
 class NamedArguments(
     config: Config = Config.empty,
@@ -38,8 +41,12 @@ class NamedArguments(
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
+        if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments
-        if (valueArguments.size > threshold && valueArguments.any { !it.isNamed() }) {
+        if (valueArguments.size > threshold &&
+            valueArguments.any { !it.isNamed() } &&
+            expression.getResolvedCall(bindingContext)?.candidateDescriptor?.hasStableParameterNames() == true
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         } else {
             super.visitCallExpression(expression)
