@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 fun Config.isActive(): Boolean =
-    valueOrDefault("active", true)
+    valueOrDefault(Config.ACTIVE_KEY, true)
 
 fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
     val filters = createPathFilters()
