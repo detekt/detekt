@@ -117,14 +117,38 @@ class NamedArgumentsSpec : Spek({
 
         it("java method invocation should not be flagged") {
             val code = """
-            import java.time.LocalDateTime
-            
-            fun test() {
-                LocalDateTime.of(2020, 3, 13, 14, 0, 0)
-            }
+                import java.time.LocalDateTime
+                
+                fun test() {
+                    LocalDateTime.of(2020, 3, 13, 14, 0, 0)
+                }
             """
             val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
+        }
+
+        it("invocation with varargs should not be flagged") {
+            val code = """
+                fun foo(vararg i: Int) {}
+                fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
+                fun test() {
+                    foo(1, 2, 3, 4, 5)
+                    bar(1, 2, 3, "a")
+                }
+            """
+            val findings = namedArguments.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("invocation with spread operator should be flagged") {
+            val code = """
+                fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
+                fun test() {
+                    bar(1, 2, 3, *arrayOf("a"))
+                }
+            """
+            val findings = namedArguments.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 })

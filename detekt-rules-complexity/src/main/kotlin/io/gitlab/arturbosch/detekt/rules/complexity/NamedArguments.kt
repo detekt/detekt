@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
@@ -43,13 +44,19 @@ class NamedArguments(
     override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments
-        if (valueArguments.size > threshold &&
-            valueArguments.any { !it.isNamed() } &&
-            expression.getResolvedCall(bindingContext)?.candidateDescriptor?.hasStableParameterNames() == true
-        ) {
+        if (valueArguments.size > threshold && expression.canNameArguments()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         } else {
             super.visitCallExpression(expression)
+        }
+    }
+
+    private fun KtCallExpression.canNameArguments(): Boolean {
+        val resolvedCall = getResolvedCall(bindingContext) ?: return false
+        if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
+        val unnamedArguments = valueArguments.filter { !it.isNamed() }
+        return unnamedArguments.isNotEmpty() && unnamedArguments.all {
+            resolvedCall.getParameterForArgument(it)?.varargElementType == null || it.getSpreadElement() != null
         }
     }
 
