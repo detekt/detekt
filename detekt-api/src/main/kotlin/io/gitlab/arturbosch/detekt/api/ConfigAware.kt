@@ -45,7 +45,7 @@ interface ConfigAware : Config {
      * Is this rule specified as active in configuration?
      * If an rule is not specified in the underlying configuration, we assume it should not be run.
      */
-    val active: Boolean get() = valueOrDefault("active", false)
+    val active: Boolean get() = valueOrDefault(Config.ACTIVE_KEY, false)
 
     /**
      * If your rule supports to automatically correct the misbehaviour of underlying smell,
