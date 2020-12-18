@@ -8,6 +8,8 @@ import java.nio.file.Path
 enum class Case(val file: String) {
     FunctionReturningConstantPositive("/FunctionReturningConstantPositive.kt"),
     FunctionReturningConstantNegative("/FunctionReturningConstantNegative.kt"),
+    LoopWithTooManyJumpStatementsNegative("LoopWithTooManyJumpStatementsNegative.kt"),
+    LoopWithTooManyJumpStatementsPositive("LoopWithTooManyJumpStatementsPositive.kt"),
     MaxLineLength("/MaxLineLength.kt"),
     MaxLineLengthSuppressed("/MaxLineLengthSuppressed.kt"),
     MaxLineLengthWithLongComments("/MaxLineLengthWithLongComments.kt"),
