@@ -55,6 +55,8 @@ interface Config {
         val empty: Config = EmptyConfig
 
         const val ACTIVE_KEY: String = "active"
+        const val AUTO_CORRECT_KEY: String = "autoCorrect"
+        const val MAX_ISSUES_KEY: String = "maxIssues"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
         const val CONFIG_SEPARATOR: String = ">"

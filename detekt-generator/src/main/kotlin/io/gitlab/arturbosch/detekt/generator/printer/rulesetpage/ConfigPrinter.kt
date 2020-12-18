@@ -48,9 +48,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             }
             rules.forEach { rule ->
                 node(rule.name) {
-                    keyValue { "active" to "${rule.active}" }
+                    keyValue { Config.ACTIVE_KEY to "${rule.active}" }
                     if (rule.autoCorrect) {
-                        keyValue { "autoCorrect" to "true" }
+                        keyValue { Config.AUTO_CORRECT_KEY to "true" }
                     }
                     if (rule.isExcludedInTests()) {
                         keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
