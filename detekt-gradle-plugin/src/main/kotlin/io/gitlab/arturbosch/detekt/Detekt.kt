@@ -19,9 +19,11 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import io.gitlab.arturbosch.detekt.invoke.WorkingDirArgument
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
@@ -136,6 +138,9 @@ open class Detekt @Inject constructor(
         set(value) = autoCorrectProp.set(value)
 
     @get:Internal
+    val workingDir: DirectoryProperty = project.objects.directoryProperty()
+
+    @get:Internal
     var reports = DetektReports()
 
     @get:Internal
@@ -207,6 +212,7 @@ open class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            WorkingDirArgument(workingDir.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(convertCustomReportsToArguments())

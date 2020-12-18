@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
@@ -58,12 +57,10 @@ abstract class Rule(
     }
 
     override fun visitCondition(root: KtFile): Boolean =
-        active &&
-            shouldRunOnGivenFile(root) &&
-            !root.isSuppressedBy(ruleId, aliases, ruleSetId)
+        active && shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
-        filters?.isIgnored(root.absolutePath())?.not() ?: true
+        filters?.isIgnored(root)?.not() ?: true
 
     /**
      * Compute severity in the priority order:

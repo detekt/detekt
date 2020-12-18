@@ -23,7 +23,7 @@ class KtCompilerTest : Spek({
 
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo(System.lineSeparator())
             assertThat(ktFile.getUserData(RELATIVE_PATH))
-                .isEqualTo(path.fileName.resolve("Default.kt").toString())
+                .isEqualTo("Default.kt")
         }
 
         it("throws an exception for an invalid sub path") {

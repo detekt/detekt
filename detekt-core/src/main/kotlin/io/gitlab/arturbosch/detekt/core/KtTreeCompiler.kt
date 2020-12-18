@@ -10,18 +10,18 @@ import java.util.stream.Collectors
 
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
-    spec: ProjectSpec,
+    projectSpec: ProjectSpec,
     private val compiler: KtCompiler = KtCompiler(settings.environment)
 ) {
 
-    private val basePath: Path? = spec.basePath
+    private val basePath: Path? = projectSpec.workingDir
     private val pathFilters: PathFilters? =
-        PathFilters.of(spec.includes.toList(), spec.excludes.toList())
+        PathFilters.of(projectSpec.includes.toList(), projectSpec.excludes.toList())
 
     fun compile(path: Path): List<KtFile> {
         require(Files.exists(path)) { "Given path $path does not exist!" }
         return when {
-            path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(basePath ?: path, path))
+            path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(basePath, path))
             path.isDirectory() -> compileProject(path)
             else -> {
                 settings.info("Ignoring a file detekt cannot handle: $path")
@@ -38,12 +38,12 @@ class KtTreeCompiler(
         return if (settings.spec.executionSpec.parallelParsing) {
             val service = settings.taskPool
             val tasks = kotlinFiles.map { path ->
-                service.task { compiler.compile(basePath ?: project, path) }
+                service.task { compiler.compile(basePath, path) }
                     .recover { settings.error("Could not compile '$path'.", it); null }
             }.collect(Collectors.toList())
             return awaitAll(tasks).filterNotNull()
         } else {
-            kotlinFiles.map { compiler.compile(basePath ?: project, it) }.collect(Collectors.toList())
+            kotlinFiles.map { compiler.compile(basePath, it) }.collect(Collectors.toList())
         }
     }
 

@@ -2,6 +2,7 @@ package io.github.detekt.report.txt
 
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createFindingFromRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -30,6 +31,21 @@ class TxtOutputReportSpec : Spek({
                 createFinding(ruleName = "TestSmellA"),
                 createFinding(ruleName = "TestSmellB"),
                 createFinding(ruleName = "TestSmellC"))
+            val renderedText = """
+                TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+                TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+                TestSmellC - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+
+            """.trimIndent()
+            assertThat(report.render(detektion)).isEqualTo(renderedText)
+        }
+
+        it("render from relative paths") {
+            val report = TxtOutputReport()
+            val detektion = TestDetektion(
+                createFindingFromRelativePath(ruleName = "TestSmellA"),
+                createFindingFromRelativePath(ruleName = "TestSmellB"),
+                createFindingFromRelativePath(ruleName = "TestSmellC"))
             val renderedText = """
                 TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
                 TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature

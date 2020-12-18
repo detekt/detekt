@@ -79,6 +79,14 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
+        it("renders the right file locations for relative paths") {
+            val result = htmlReport.render(createTestDetektionFromRelativePath())
+
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
+        }
+
         it("renders the right number of issues per rule") {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
@@ -157,15 +165,50 @@ class HtmlOutputReportSpec : Spek({
     }
 })
 
-private fun createTestDetektionWithMultipleSmells(): Detektion {
+private fun mockKtElement(): KtElement {
     val ktElementMock = mockk<KtElement>()
     val psiFileMock = mockk<PsiFile>()
     every { psiFileMock.text } returns "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
     every { ktElementMock.containingFile } returns psiFileMock
+    return ktElementMock
+}
 
-    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 1, 10..14, ktElementMock)
+private fun createTestDetektionWithMultipleSmells(): Detektion {
+
+    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 1, 10..14, mockKtElement())
     val entity2 = createEntity("src/main/com/sample/Sample2.kt", 22 to 2)
     val entity3 = createEntity("src/main/com/sample/Sample3.kt", 33 to 3)
+
+    val issueA = createIssue("id_a")
+    val issueB = createIssue("id_b")
+
+    return createHtmlDetektion(
+        "Section 1" to listOf(
+            createFinding(issueA, entity1, "Message finding 1"),
+            createFinding(issueA, entity2, "Message finding 2")
+        ),
+        "Section 2" to listOf(createFinding(issueB, entity3, ""))
+    )
+}
+
+private fun createTestDetektionFromRelativePath(): Detektion {
+    val entity1 = createEntity(
+        path = "src/main/com/sample/Sample1.kt",
+        position = 11 to 1,
+        text = 10..14,
+        ktElement = mockKtElement(),
+        baseDir = "/Users/tester/detekt/"
+    )
+    val entity2 = createEntity(
+        path = "src/main/com/sample/Sample2.kt",
+        position = 22 to 2,
+        baseDir = "/Users/tester/detekt/"
+    )
+    val entity3 = createEntity(
+        path = "src/main/com/sample/Sample3.kt",
+        position = 33 to 3,
+        baseDir = "/Users/tester/detekt/"
+    )
 
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")

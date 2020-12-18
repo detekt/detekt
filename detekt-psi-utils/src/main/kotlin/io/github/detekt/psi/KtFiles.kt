@@ -21,8 +21,30 @@ fun PsiFile.fileNameWithoutSuffix(): String {
 
 fun PsiFile.absolutePath(): Path = Paths.get(name)
 
-fun PsiFile.relativePath(): Path {
-    val value = getUserData(RELATIVE_PATH)
-    checkNotNull(value) { "KtFile '$name' expected to have an relative path." }
-    return Paths.get(value)
+/**
+ * A file path that represents both relative path or absolute path.
+ * If representing an absolute path, [basePath] is null and [path] represents the full path.
+ * If representing a relative path, [basePath] is the base path while [path] represents the path relative to [basePath].
+ */
+data class FilePath constructor(val path: String, val basePath: String? = null) {
+    companion object {
+        fun fromAbsolute(path: String) = FilePath(path)
+        fun fromRelative(basePath: String, path: String) = FilePath(path, basePath)
+    }
+}
+
+fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Paths.get(it) }
+
+fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Paths.get(it) }
+
+fun PsiFile.toFilePath(): FilePath {
+    val relativePath = relativePath()
+    val basePath = basePath()
+    return when {
+        relativePath != null && basePath != null ->
+            FilePath.fromRelative(basePath = basePath.toString(), path = relativePath.toString())
+        relativePath == null && basePath == null ->
+            FilePath.fromAbsolute(path = absolutePath().toString())
+        else -> error("Cannot build a FilePath from relative path = $relativePath and base path = $basePath")
+    }
 }

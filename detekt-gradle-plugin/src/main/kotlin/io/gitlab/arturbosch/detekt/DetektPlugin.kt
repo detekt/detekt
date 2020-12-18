@@ -63,6 +63,7 @@ class DetektPlugin : Plugin<Project> {
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
             it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
+            it.workingDir.set(extension.workingDir)
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {

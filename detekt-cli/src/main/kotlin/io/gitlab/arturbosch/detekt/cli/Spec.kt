@@ -15,6 +15,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
 
         project {
+            workingDir = args.workingDir
             inputPaths = args.inputPaths
             excludes = asPatterns(args.excludes)
             includes = asPatterns(args.includes)

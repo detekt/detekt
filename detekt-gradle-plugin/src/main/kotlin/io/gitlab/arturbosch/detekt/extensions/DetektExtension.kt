@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
@@ -40,6 +41,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
+
+    var workingDir: DirectoryProperty = objects.directoryProperty()
 
     /**
      * List of Android build variants for which no detekt task should be created.

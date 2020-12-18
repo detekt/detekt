@@ -497,6 +497,7 @@ internal object DetektTaskDslTest : Spek({
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
                         |    }
+                        |    workingDir = projectDir
                         |}
                         """
 
@@ -549,6 +550,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("sets working directory") {
+                    assertThat(result.output).contains("--working-dir")
                 }
             }
 
@@ -582,6 +587,7 @@ internal object DetektTaskDslTest : Spek({
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
                         |    }
+                        |    workingDir.set(projectDir)
                         |}
                         """
 
@@ -634,6 +640,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("sets working directory") {
+                    assertThat(result.output).contains("--working-dir")
                 }
             }
         }

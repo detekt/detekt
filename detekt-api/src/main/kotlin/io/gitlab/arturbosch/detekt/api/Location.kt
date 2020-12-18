@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.github.detekt.psi.FilePath
+import io.github.detekt.psi.toFilePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
@@ -14,8 +16,28 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 data class Location(
     val source: SourceLocation,
     val text: TextLocation,
-    val file: String
+    val filePath: FilePath
 ) : Compactable {
+
+    @Deprecated(
+        "Consider relative path, do not assume [file] is always absolute.",
+        ReplaceWith("filePath.path")
+    )
+    val file: String = filePath.path
+
+    @Deprecated(
+        "Consider relative path, do not assume [file] is always absolute.",
+        ReplaceWith(
+            "Location(source, text, FilePath.fromAbsolute(file))",
+            "io.gitlab.arturbosch.detekt.api.Location",
+            "io.gitlab.arturbosch.detekt.api.FilePath"
+        )
+    )
+    constructor(
+        source: SourceLocation,
+        text: TextLocation,
+        file: String
+    ) : this(source, text, FilePath.fromAbsolute(file))
 
     @Deprecated(
         """
@@ -34,7 +56,7 @@ data class Location(
         file: String
     ) : this(source, text, file)
 
-    override fun compact(): String = "$file:$source"
+    override fun compact(): String = "${filePath.path}:$source"
 
     companion object {
         /**
@@ -45,8 +67,7 @@ data class Location(
             val start = startLineAndColumn(element, offset)
             val sourceLocation = SourceLocation(start.line, start.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            val fileName = element.containingFile.name
-            return Location(sourceLocation, textLocation, fileName)
+            return Location(sourceLocation, textLocation, element.containingFile.toFilePath())
         }
 
         /**
