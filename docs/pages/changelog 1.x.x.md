@@ -20,8 +20,8 @@ In addition to many rule improvements, there are also new ones:
 - UseIfEmptyOrIfBlank
 
 We added documentation on how to configure [type resolution](https://detekt.github.io/detekt/type-resolution.html).  
-Only then rules marked with `Requires Type Resolution` are run (
-e.g. https://detekt.github.io/detekt/style.html#forbiddenmethodcall).
+Only then rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see
+for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).
 
 detekt now supports [SARIF](https://sarifweb.azurewebsites.net/) as an output format. In the future you will be able to
 upload this format to GitHub and see detekt issues right in your pull requests.
@@ -134,7 +134,7 @@ Rule authors can use `TestConfig(Map)` or `yamlConfig(String)` from `detekt-test
 - Simplify PreferToOverPairSyntax check - [#3180](https://github.com/detekt/detekt/pull/3180)
 - Improves in IgnoredReturnValue - [#3174](https://github.com/detekt/detekt/pull/3174)
 - Move KtFileContent to FileParsingRule - [#3173](https://github.com/detekt/detekt/pull/3173)
-- Don't use deprectad onStart - [#3172](https://github.com/detekt/detekt/pull/3172)
+- Don't use deprecated onStart - [#3172](https://github.com/detekt/detekt/pull/3172)
 
 See all issues at: [1.15.0](https://github.com/detekt/detekt/milestone/79)
 
