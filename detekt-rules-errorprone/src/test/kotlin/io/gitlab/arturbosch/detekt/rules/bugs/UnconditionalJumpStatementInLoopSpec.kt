@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -70,7 +69,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
         }
 
         it("does not report an conditional elvis continue") {
-            val findings = subject.lint("""
+            val findings = subject.compileAndLint("""
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
@@ -82,7 +81,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
         }
 
         it("reports conditional elvis return") {
-            val findings = subject.lint("""
+            val findings = subject.compileAndLint("""
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
@@ -94,7 +93,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
         }
 
         it("does not report a return after a conditional jump") {
-            val findings = subject.lint("""
+            val findings = subject.compileAndLint("""
                 fun f(): Int {
                     for (i in 0 until 10) {
                         val a = i * i
