@@ -75,7 +75,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
                     for (i in 1..5)  
                         return compute(i) ?: continue
                 }
-            """.trimIndent())
+            """)
 
             assertThat(findings).isEmpty()
         }
@@ -87,7 +87,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
                     for (i in 1..5)  
                         return compute(i) ?: return
                 }
-            """.trimIndent())
+            """)
 
             assertThat(findings).hasSize(1)
         }
@@ -113,7 +113,7 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
                     }
                     return 0
                 }
-            """.trimIndent())
+            """)
 
             assertThat(findings).isEmpty()
         }
