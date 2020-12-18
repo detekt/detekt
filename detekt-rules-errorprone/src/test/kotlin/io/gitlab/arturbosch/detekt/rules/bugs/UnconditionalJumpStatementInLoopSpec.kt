@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -12,13 +12,61 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
     describe("UnconditionalJumpStatementInLoop rule") {
 
         it("reports unconditional jumps") {
-            val path = resourceAsPath("UnconditionalJumpStatementInLoopPositive.kt")
-            assertThat(subject.lint(path)).hasSize(8)
+            val code = """
+                fun f() {
+                    for (i in 1..2) break
+                    for (i in 1..2) continue
+                    for (i in 1..2) return
+                    while (true) {
+                        println("")
+                        break
+                    }
+                    do {
+                        break
+                        println("")
+                    } while (true)
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(5)
         }
 
-        it("does not report conditional jumps") {
-            val path = resourceAsPath("UnconditionalJumpStatementInLoopNegative.kt")
-            assertThat(subject.lint(path)).isEmpty()
+        it("reports unconditional jump in nested loop") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        for (j in 1..2) {
+                            break
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("does not report a conditional jump in a nested block") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        try { 
+                            break
+                        } finally {
+                        }
+                    }
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional jump in if-else block") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        if (i > 1) {
+                            break
+                        }
+                        if (i > 1) println() else break
+                    }
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report an conditional elvis continue") {
