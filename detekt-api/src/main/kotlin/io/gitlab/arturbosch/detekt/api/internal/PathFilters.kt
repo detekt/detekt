@@ -10,6 +10,16 @@ class PathFilters internal constructor(
     private val excludes: Set<PathMatcher>?
 ) {
 
+    /**
+     * - If [includes] and [excludes] are not specified,
+     *   always return true.
+     * - If [includes] is specified but [excludes] is not,
+     *   return false iff [path] matches any [includes].
+     * - If [includes] is not specified but [excludes] is,
+     *   return true iff [path] matches any [excludes].
+     * - If [includes] and [excludes] are both specified,
+     *   return false iff [path] matches any [includes] and [path] does not match any [excludes].
+     */
     fun isIgnored(path: Path): Boolean {
 
         fun isIncluded() = includes?.any { it.matches(path) }
