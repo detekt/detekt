@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SetupContext
+import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import java.net.URI
@@ -33,9 +34,9 @@ class SarifOutputReport : OutputReport() {
     override fun render(detektion: Detektion): String {
         val report = sarif {
             withDetektRun(config) {
-                for ((ruleSetId, issues) in detektion.findings) {
-                    for (issue in issues) {
-                        results.add(issue.toIssue(ruleSetId))
+                for ((ruleSetId, findings) in detektion.findings) {
+                    for (finding in findings) {
+                        results.add(finding.toIssue(ruleSetId))
                     }
                 }
             }
@@ -44,9 +45,16 @@ class SarifOutputReport : OutputReport() {
     }
 }
 
-fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
+private fun SeverityLevel.toResultLevel() = when (this) {
+    SeverityLevel.ERROR -> Result.Level.ERROR
+    SeverityLevel.WARNING -> Result.Level.WARNING
+    SeverityLevel.INFO -> Result.Level.NOTE
+    SeverityLevel.IGNORE -> Result.Level.NONE
+}
+
+private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
     ruleId = "detekt.$ruleSetId.$id"
-    level = Result.Level.WARNING
+    level = severity.toResultLevel()
     for (location in listOf(location) + references.map { it.location }) {
         locations.add(Location().apply {
             physicalLocation = PhysicalLocation().apply {

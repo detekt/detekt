@@ -12,11 +12,17 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val issue: Issue
     val references: List<Entity>
     val message: String
+    val severity: SeverityLevel
 
     /**
      * Explanation why this finding was raised.
      */
     fun messageOrDescription(): String
+
+    /**
+     * Copy function to assign a new severity.
+     */
+    fun copyWithSeverity(severity: SeverityLevel): Finding
 }
 
 /**

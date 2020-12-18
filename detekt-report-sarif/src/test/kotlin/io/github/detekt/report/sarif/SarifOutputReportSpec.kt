@@ -2,6 +2,7 @@ package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
 import io.github.detekt.tooling.api.VersionProvider
+import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
@@ -19,9 +20,10 @@ class SarifOutputReportSpec : Spek({
 
         it("renders multiple issues") {
             val result = TestDetektion(
-                createFinding(ruleName = "TestSmellA"),
-                createFinding(ruleName = "TestSmellB"),
-                createFinding(ruleName = "TestSmellC")
+                createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
+                createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
+                createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO),
+                createFinding(ruleName = "TestSmellD", severity = SeverityLevel.IGNORE)
             )
 
             val report = SarifOutputReport().apply { init(EmptySetupContext()) }

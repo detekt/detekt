@@ -20,6 +20,7 @@
       "results": [
         {
           "ruleId": "detekt.TestSmellA.TestSmellA",
+          "level": "error",
           "message": {
             "text": "TestMessage"
           },
@@ -58,6 +59,27 @@
         },
         {
           "ruleId": "detekt.TestSmellC.TestSmellC",
+          "level": "note",
+          "message": {
+            "text": "TestMessage"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "TestFile.kt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "detekt.TestSmellD.TestSmellD",
+          "level": "none",
           "message": {
             "text": "TestMessage"
           },

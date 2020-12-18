@@ -120,33 +120,25 @@ class XmlOutputFormatSpec : Spek({
                 </checkstyle>""".trimIndent())
         }
 
-        describe("severities conversion") {
+        describe("severity level conversion") {
 
-            Severity.values().forEach { severity ->
+            SeverityLevel.values().forEach { severity ->
 
-                val severityLabel = when (severity) {
-                    Severity.CodeSmell,
-                    Severity.Style,
-                    Severity.Warning,
-                    Severity.Maintainability,
-                    Severity.Performance -> "warning"
-                    Severity.Defect -> "error"
-                    Severity.Minor -> "info"
-                    Severity.Security -> "fatal"
-                }
+                val xmlSeverity = severity.name.toLowerCase()
 
-                it("renders detektion with severity [${severity.name}] as XML with severity [$severityLabel]") {
+                it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
                     val finding = CodeSmell(
-                        issue = Issue("issue_id", severity, "issue description", Debt.FIVE_MINS),
+                        issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
                         message = "message",
-                        entity = entity1
+                        entity = entity1,
+                        severity = severity
                     )
 
                     val expected = """
                     <?xml version="1.0" encoding="utf-8"?>
                     <checkstyle version="4.3">
                     <file name="${finding.location.file}">
-                    ${"\t"}<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$severityLabel" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
+                    $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                     </file>
                     </checkstyle>
                     """

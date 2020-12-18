@@ -7,12 +7,16 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 
-fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
-    CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
+fun createFinding(
+    ruleName: String = "TestSmell",
+    fileName: String = "TestFile.kt",
+    severity: SeverityLevel = SeverityLevel.WARNING
+) = CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage", severity = severity)
 
 fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CorrectableCodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage", autoCorrectEnabled = true)
@@ -20,7 +24,7 @@ fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = 
 fun createFinding(
     issue: Issue,
     entity: Entity,
-    message: String = entity.signature
+    message: String = entity.signature,
 ) = CodeSmell(
     issue = issue,
     entity = entity,

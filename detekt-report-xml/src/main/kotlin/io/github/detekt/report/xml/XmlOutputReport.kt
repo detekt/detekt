@@ -3,7 +3,6 @@ package io.github.detekt.report.xml
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
@@ -16,16 +15,7 @@ class XmlOutputReport : OutputReport() {
     override val name = "Checkstyle XML report"
 
     private val Finding.severityLabel: String
-        get() = when (issue.severity) {
-            Severity.CodeSmell,
-            Severity.Style,
-            Severity.Warning,
-            Severity.Maintainability,
-            Severity.Performance -> "warning"
-            Severity.Defect -> "error"
-            Severity.Minor -> "info"
-            Severity.Security -> "fatal"
-        }
+        get() = severity.name.toLowerCase()
 
     override fun render(detektion: Detektion): String {
         val smells = detektion.findings.flatMap { it.value }

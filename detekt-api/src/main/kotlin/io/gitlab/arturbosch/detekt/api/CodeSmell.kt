@@ -15,7 +15,8 @@ open class CodeSmell(
     override val entity: Entity,
     override val message: String,
     override val metrics: List<Metric> = listOf(),
-    override val references: List<Entity> = listOf()
+    override val references: List<Entity> = listOf(),
+    override val severity: SeverityLevel = SeverityLevel.WARNING
 ) : Finding {
 
     override val id: String = issue.id
@@ -30,10 +31,25 @@ open class CodeSmell(
             "message=$message, " +
             "metrics=$metrics, " +
             "references=$references, " +
+            "severity=$severity, " +
             "id='$id')"
     }
 
     override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
+
+    /**
+     * Create a new copy of [CodeSmell] with specified [severity].
+     */
+    open override fun copyWithSeverity(severity: SeverityLevel): Finding {
+        return CodeSmell(
+            issue = this.issue,
+            entity = this.entity,
+            message = this.message,
+            metrics = this.metrics,
+            references = this.references,
+            severity = severity
+        )
+    }
 }
 
 /**
@@ -41,19 +57,22 @@ open class CodeSmell(
  *
  * @see CodeSmell
  */
+@Suppress("LongParameterList")
 open class CorrectableCodeSmell(
     issue: Issue,
     entity: Entity,
     message: String,
     metrics: List<Metric> = listOf(),
     references: List<Entity> = listOf(),
-    val autoCorrectEnabled: Boolean
+    val autoCorrectEnabled: Boolean,
+    severity: SeverityLevel = SeverityLevel.WARNING
 ) : CodeSmell(
-    issue,
-    entity,
-    message,
-    metrics,
-    references
+    issue = issue,
+    entity = entity,
+    message = message,
+    metrics = metrics,
+    references = references,
+    severity = severity
 ) {
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
@@ -63,7 +82,20 @@ open class CorrectableCodeSmell(
             "message=$message, " +
             "metrics=$metrics, " +
             "references=$references, " +
+            "severity=$severity, " +
             "id='$id')"
+    }
+
+    override fun copyWithSeverity(severity: SeverityLevel): Finding {
+        return CorrectableCodeSmell(
+            issue = this.issue,
+            entity = this.entity,
+            message = this.message,
+            metrics = this.metrics,
+            references = this.references,
+            autoCorrectEnabled = this.autoCorrectEnabled,
+            severity = severity
+        )
     }
 }
 
@@ -78,9 +110,15 @@ open class ThresholdedCodeSmell(
     entity: Entity,
     val metric: Metric,
     message: String,
-    references: List<Entity> = emptyList()
+    references: List<Entity> = emptyList(),
+    severity: SeverityLevel = SeverityLevel.WARNING
 ) : CodeSmell(
-    issue, entity, message, metrics = listOf(metric), references = references
+    issue = issue,
+    entity = entity,
+    message = message,
+    metrics = listOf(metric),
+    references = references,
+    severity = severity
 ) {
 
     val value: Int
@@ -91,4 +129,15 @@ open class ThresholdedCodeSmell(
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
     override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
+
+    override fun copyWithSeverity(severity: SeverityLevel): Finding {
+        return ThresholdedCodeSmell(
+            issue = this.issue,
+            entity = this.entity,
+            metric = this.metric,
+            message = this.message,
+            references = this.references,
+            severity = severity
+        )
+    }
 }

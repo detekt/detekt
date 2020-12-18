@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.psi.absolutePath
+import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
@@ -65,17 +66,33 @@ abstract class Rule(
         filters?.isIgnored(root.absolutePath())?.not() ?: true
 
     /**
+     * Compute severity in the priority order:
+     * - Severity of the rule
+     * - Severity of the parent ruleset
+     * - Default severity: Error
+     */
+    private fun computeSeverity(): SeverityLevel {
+        val configValue: String = valueOrNull(SEVERITY_KEY)
+            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "error")
+        return enumValueOf(configValue.toUpperCase())
+    }
+
+    /**
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(finding: Finding) {
-        report(finding, aliases, ruleSetId)
+        report(finding.copyWithSeverity(computeSeverity()), aliases, ruleSetId)
     }
 
     /**
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(findings: List<Finding>) {
-        report(findings, aliases, ruleSetId)
+        report(
+            findings.map { it.copyWithSeverity(computeSeverity()) },
+            aliases,
+            ruleSetId
+        )
     }
 }
 
