@@ -117,7 +117,7 @@ class ModifierOrderSpec : Spek({
                     private fun interface LoadMoreCallback {
                         fun loadMore(): Boolean
                     }
-                """.trimIndent()
+                """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }

@@ -101,7 +101,7 @@ class SpreadOperatorSpec : Spek({
                     fun a(vararg bla: Int) { 
                         b(*bla) 
                     }
-                """.trimIndent()
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -113,7 +113,7 @@ class SpreadOperatorSpec : Spek({
                         val bla = arrayOf("")
                         b(*bla)
                     }
-                """.trimIndent()
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
         }
@@ -203,7 +203,7 @@ class SpreadOperatorSpec : Spek({
                     fun a(vararg bla: Int) { 
                         b(*bla)
                     }
-                """.trimIndent()
+                """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
@@ -215,7 +215,7 @@ class SpreadOperatorSpec : Spek({
                         val bla = arrayOf("")
                         b(*bla)
                     }
-                """.trimIndent()
+                """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }

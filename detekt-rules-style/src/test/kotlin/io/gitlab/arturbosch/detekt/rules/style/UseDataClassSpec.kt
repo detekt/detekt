@@ -96,7 +96,7 @@ class UseDataClassSpec : Spek({
                     class NotDataClassBecauseItsImplementingInterfaceWithMethods(val i : Int): SomeInterface {
                         override fun foo() = i
                     }
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
@@ -108,7 +108,7 @@ class UseDataClassSpec : Spek({
                     }
                     
                     data class DataClass(override val i: Int): SimpleInterface
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
@@ -122,7 +122,7 @@ class UseDataClassSpec : Spek({
                     open class BaseClass(open val j: Int)
                     
                     class DataClass(override val i: Int, override val j: Int): SimpleInterface, BaseClass(j)
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
@@ -132,7 +132,7 @@ class UseDataClassSpec : Spek({
                     interface I
                     class B() : I
                     class A(val b: B) : I by b
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
@@ -195,7 +195,7 @@ class UseDataClassSpec : Spek({
                 val code = """
                     interface SimpleInterface
                     class DataClass(val i: Int): SimpleInterface
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
@@ -207,7 +207,7 @@ class UseDataClassSpec : Spek({
                     }
                     
                     class DataClass(override val i: Int): SimpleInterface
-                """.trimIndent()
+                """
 
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
