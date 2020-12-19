@@ -450,14 +450,54 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1150-rc2---2020-12-14">1.15.0-RC2 - 2020-12-14</h4>
+  <h4 id="1150---2020-12-18">1.15.0 - 2020-12-18</h4>
+
+<h5 id="notable-changes">Notable Changes</h5>
+
+<p>detekt 1.15.0 bundles Kotlin 1.4.10.<br />
+You may experience some known issues when your project already used 1.4.20</p>
+<ul>
+  <li><a href="https://github.com/detekt/detekt/issues/3248">#3248</a> and <a href="https://github.com/detekt/detekt/issues/3282">#3282</a>.</li>
+</ul>
+
+<p>In addition to many rule improvements, there are also new ones:</p>
+
+<ul>
+  <li>RedundantHigherOrderMapUsage</li>
+  <li>ListAllWhenCases</li>
+  <li>UseIfEmptyOrIfBlank</li>
+</ul>
+
+<p>We added documentation on how to configure <a href="https://detekt.github.io/detekt/type-resolution.html">type resolution</a>.<br />
+Only then rules marked with <code class="language-plaintext highlighter-rouge">Requires Type Resolution</code> (on the website documentation or <code class="language-plaintext highlighter-rouge">@requiresTypeResolution</code> in code) are executed (see
+for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).</p>
+
+<p>detekt now supports <a href="https://sarifweb.azurewebsites.net/">SARIF</a> as an output format. In the future you will be able to
+upload this format to GitHub and see detekt issues right in your pull requests.</p>
+
+<h5 id="migration">Migration</h5>
+
+<p>We removed implementations of the <code class="language-plaintext highlighter-rouge">Config</code> interface from the public api.<br />
+It was first deprecated and then moved to <code class="language-plaintext highlighter-rouge">internal</code> package earlier this year.<br />
+Rule authors can use <code class="language-plaintext highlighter-rouge">TestConfig(Map)</code> or <code class="language-plaintext highlighter-rouge">yamlConfig(String)</code> from <code class="language-plaintext highlighter-rouge">detekt-test</code> to test their rules.</p>
+
+<ul>
+  <li>Move internal config api to core module - <a href="https://github.com/detekt/detekt/pull/3163">#3163</a></li>
+</ul>
 
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>NamedArguments: fix false positive with java method call - <a href="https://github.com/detekt/detekt/pull/3290">#3290</a></li>
+  <li>Prepare 1.15.0 rc2 - <a href="https://github.com/detekt/detekt/pull/3286">#3286</a></li>
+  <li>UnconditionalJumpStatementInLoop: don’t report a return after a conditional jump - <a href="https://github.com/detekt/detekt/pull/3285">#3285</a></li>
+  <li>Add MuseDev to the list of integrations - <a href="https://github.com/detekt/detekt/pull/3284">#3284</a></li>
   <li>Fix ForbiddenComment rule not checking for KDoc - <a href="https://github.com/detekt/detekt/pull/3275">#3275</a></li>
   <li>ForbiddenComments don’t report TODO: in KDoc - <a href="https://github.com/detekt/detekt/issues/3273">#3273</a></li>
+  <li>Add IntelliJ platform plugin template integration to readme - <a href="https://github.com/detekt/detekt/pull/3270">#3270</a></li>
   <li>Bundle new sarif output format by default - <a href="https://github.com/detekt/detekt/pull/3268">#3268</a></li>
+  <li>Add a test for UnusedImports with annotations used as attributes #3246 - <a href="https://github.com/detekt/detekt/pull/3255">#3255</a></li>
+  <li>Add documentation page on type resolution - <a href="https://github.com/detekt/detekt/pull/3225">#3225</a></li>
   <li>ThrowsCount rule: fix false positive with nested function - <a href="https://github.com/detekt/detekt/pull/3223">#3223</a></li>
   <li>False positive in ThrowsCount rule - <a href="https://github.com/detekt/detekt/issues/3222">#3222</a></li>
   <li>Refactor UnsafeCallOnNullableType rule - <a href="https://github.com/detekt/detekt/pull/3221">#3221</a></li>
@@ -490,7 +530,6 @@ $('#toc').on('click', 'a', function() {
   <li>Introduce NamedArguments rule - <a href="https://github.com/detekt/detekt/pull/3167">#3167</a></li>
   <li>Add JSON Schema documentation - <a href="https://github.com/detekt/detekt/pull/3166">#3166</a></li>
   <li>Fix MaxLineLengthSuppressed ignoring @Suppress annotation on class - <a href="https://github.com/detekt/detekt/pull/3164">#3164</a></li>
-  <li>Move internal config api to core module - <a href="https://github.com/detekt/detekt/pull/3163">#3163</a></li>
   <li>Use the properties syntax in Gradle docs - #3158 - <a href="https://github.com/detekt/detekt/pull/3161">#3161</a></li>
   <li>Fix rule LibraryCodeMustSpecifyReturnType - <a href="https://github.com/detekt/detekt/pull/3155">#3155</a></li>
   <li>Update README to mention config auto-complete - <a href="https://github.com/detekt/detekt/issues/3143">#3143</a></li>
@@ -503,17 +542,22 @@ $('#toc').on('click', 'a', function() {
   <li>IgnoredReturnValue false positives - <a href="https://github.com/detekt/detekt/issues/3043">#3043</a></li>
   <li>Offset calculation in KtLint deprecated/made private - <a href="https://github.com/detekt/detekt/issues/3021">#3021</a></li>
   <li>Map { it } must return an error - <a href="https://github.com/detekt/detekt/issues/2975">#2975</a></li>
+  <li>Upload detekt-formatting plugin to Github releases next to precompiled cli binary - <a href="https://github.com/detekt/detekt/issues/2927">#2927</a></li>
   <li>Add a rule to flag places where <code class="language-plaintext highlighter-rouge">ifBlank</code> and <code class="language-plaintext highlighter-rouge">ifEmpty</code> can be used - <a href="https://github.com/detekt/detekt/issues/2840">#2840</a></li>
   <li>Remove hardcoded default values from rules - <a href="https://github.com/detekt/detekt/issues/2597">#2597</a></li>
+  <li>Doc: type and symbol solving - <a href="https://github.com/detekt/detekt/issues/2259">#2259</a></li>
   <li>Suggestion: LongParameterList rule but on method call if named argument is not used - <a href="https://github.com/detekt/detekt/issues/1007">#1007</a></li>
 </ul>
 
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Standardize “active” constant - <a href="https://github.com/detekt/detekt/pull/3292">#3292</a></li>
+  <li>Update Spek to v2.0.15 - <a href="https://github.com/detekt/detekt/pull/3287">#3287</a></li>
   <li>Reformat code indentation in ReturnFromFinallySpec.kt - <a href="https://github.com/detekt/detekt/pull/3278">#3278</a></li>
   <li>Inline ReturnFromFinally report message text - <a href="https://github.com/detekt/detekt/pull/3277">#3277</a></li>
   <li>Simplify ReturnFromFinally check for finally expressions - <a href="https://github.com/detekt/detekt/pull/3276">#3276</a></li>
+  <li>CI with Java 15 - <a href="https://github.com/detekt/detekt/pull/3262">#3262</a></li>
   <li>Enabled publishing of sha256 and sha512 signatures - <a href="https://github.com/detekt/detekt/pull/3249">#3249</a></li>
   <li>Remove default config entries in detekt.yml - <a href="https://github.com/detekt/detekt/pull/3239">#3239</a></li>
   <li>Fix grammar in configuration guide - <a href="https://github.com/detekt/detekt/pull/3238">#3238</a></li>
@@ -544,7 +588,7 @@ $('#toc').on('click', 'a', function() {
   <li>Simplify PreferToOverPairSyntax check - <a href="https://github.com/detekt/detekt/pull/3180">#3180</a></li>
   <li>Improves in IgnoredReturnValue - <a href="https://github.com/detekt/detekt/pull/3174">#3174</a></li>
   <li>Move KtFileContent to FileParsingRule - <a href="https://github.com/detekt/detekt/pull/3173">#3173</a></li>
-  <li>Don’t use deprectad onStart - <a href="https://github.com/detekt/detekt/pull/3172">#3172</a></li>
+  <li>Don’t use deprecated onStart - <a href="https://github.com/detekt/detekt/pull/3172">#3172</a></li>
 </ul>
 
 <p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/79">1.15.0</a></p>
@@ -605,7 +649,7 @@ $('#toc').on('click', 'a', function() {
 
 <h4 id="1140---2020-09-26">1.14.0 - 2020-09-26</h4>
 
-<h5 id="notable-changes">Notable Changes</h5>
+<h5 id="notable-changes-1">Notable Changes</h5>
 
 <ul>
   <li>New standard rules: <code class="language-plaintext highlighter-rouge">ReplaceSafeCallChainWithRun</code>, <code class="language-plaintext highlighter-rouge">ClassOrdering</code>, <code class="language-plaintext highlighter-rouge">SuspendFunWithFlowReturnType</code></li>
@@ -654,14 +698,14 @@ $('#toc').on('click', 'a', function() {
 
 <h4 id="1131---2020-09-13">1.13.1 - 2020-09-13</h4>
 
-<h5 id="notable-changes-1">Notable Changes</h5>
+<h5 id="notable-changes-2">Notable Changes</h5>
 
 <p>We now publish directly to maven central.
 The 1.13.0 release got corrupted and should not be used.</p>
 
 <h4 id="1130---2020-09-07">1.13.0 - 2020-09-07</h4>
 
-<h5 id="migration">Migration</h5>
+<h5 id="migration-1">Migration</h5>
 
 <ul>
   <li>This release drops several deprecations in <code class="language-plaintext highlighter-rouge">detekt-api</code>.</li>
@@ -707,7 +751,7 @@ The 1.13.0 release got corrupted and should not be used.</p>
 
 <h4 id="1120---2020-08-25">1.12.0 - 2020-08-25</h4>
 
-<h5 id="notable-changes-2">Notable Changes</h5>
+<h5 id="notable-changes-3">Notable Changes</h5>
 
 <ul>
   <li>Kotlin 1.4 support</li>
@@ -718,7 +762,7 @@ The 1.13.0 release got corrupted and should not be used.</p>
   <li>KtLint 0.38.1 support (via detekt-formatting)</li>
 </ul>
 
-<h5 id="migration-1">Migration</h5>
+<h5 id="migration-2">Migration</h5>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">ArrayPrimitive</code> rule is more precise but requires type resolution now.</li>
@@ -785,7 +829,7 @@ We will include test sources by default in detekt <code class="language-plaintex
 
 <h4 id="1120-rc1---2020-08-20">1.12.0-RC1 - 2020-08-20</h4>
 
-<h5 id="notable-changes-3">Notable Changes</h5>
+<h5 id="notable-changes-4">Notable Changes</h5>
 
 <p>The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin’s Gradle plugin.</p>
 
@@ -957,7 +1001,7 @@ See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.
 
 <h4 id="1100">1.10.0</h4>
 
-<h5 id="notable-changes-4">Notable Changes</h5>
+<h5 id="notable-changes-5">Notable Changes</h5>
 
 <ul>
   <li>New rules: <code class="language-plaintext highlighter-rouge">IgnoredReturnValue</code>, <code class="language-plaintext highlighter-rouge">ImplictUnitReturnType</code></li>
@@ -975,7 +1019,7 @@ See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.
 Please update your links if you used it for references.</li>
 </ul>
 
-<h5 id="migration-2">Migration</h5>
+<h5 id="migration-3">Migration</h5>
 
 <ul>
   <li>We fixed a regression in baseline signatures. This breaks baseline ids for reported issues at functions for some rules. You may need to regenerate the baseline file or manually change the ids. We are very sorry for this inconvenience.</li>
@@ -1151,7 +1195,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 <h4 id="180">1.8.0</h4>
 
-<h5 id="notable-changes-5">Notable Changes</h5>
+<h5 id="notable-changes-6">Notable Changes</h5>
 
 <ul>
   <li>Most rule properties now support yaml lists next to string’s with comma-separated-entries.</li>
@@ -1159,7 +1203,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
   <li>New rules: <code class="language-plaintext highlighter-rouge">UnnecessaryNotNullOperator</code> and <code class="language-plaintext highlighter-rouge">UnnecessarySafeCall</code></li>
 </ul>
 
-<h5 id="migration-3">Migration</h5>
+<h5 id="migration-4">Migration</h5>
 
 <ul>
   <li>Formatting rules get reported now on the correct lines. The baseline file may need to be adjusted/regenerated.</li>
@@ -1213,7 +1257,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 <h4 id="174">1.7.4</h4>
 
-<h5 id="notable-changes-6">Notable Changes</h5>
+<h5 id="notable-changes-7">Notable Changes</h5>
 
 <p>The last Gradle plugin version was referencing 1.7.2 instead of 1.7.3.
 This was fixed and specifying the <code class="language-plaintext highlighter-rouge">toolVersion</code> is not necessary anymore.</p>
@@ -1332,7 +1376,7 @@ This was fixed and specifying the <code class="language-plaintext highlighter-ro
 
 <h4 id="170">1.7.0</h4>
 
-<h5 id="notable-changes-7">Notable Changes</h5>
+<h5 id="notable-changes-8">Notable Changes</h5>
 
 <ul>
   <li>The Gradle plugin should be on par with the CLI performance-wise</li>
@@ -1432,7 +1476,7 @@ This was fixed and specifying the <code class="language-plaintext highlighter-ro
 
 <h4 id="160">1.6.0</h4>
 
-<h5 id="migration-4">Migration</h5>
+<h5 id="migration-5">Migration</h5>
 
 <p>Rule set authors do not need to exclude their rule set from config validation anymore.
 This will be done by default now.</p>
@@ -1499,7 +1543,7 @@ This will be done by default now.</p>
 
 <h4 id="150">1.5.0</h4>
 
-<h5 id="notable-changes-8">Notable Changes</h5>
+<h5 id="notable-changes-9">Notable Changes</h5>
 
 <ul>
   <li>detekt is now <em>silent</em> by default. It only prints something if issues are found.
@@ -1565,7 +1609,7 @@ Remove the following excludes if you want the old behavior back.</li>
 
 <h4 id="140">1.4.0</h4>
 
-<h5 id="notable-changes-9">Notable Changes</h5>
+<h5 id="notable-changes-10">Notable Changes</h5>
 
 <p>New rule set <code class="language-plaintext highlighter-rouge">coroutines</code> with two specialized rules was added.<br />
 As always new rules must be activated by the user until they get stable.</p>
@@ -1584,7 +1628,7 @@ As always new rules must be activated by the user until they get stable.</p>
   <li>NoEmptyFirstLineInMethodBlock</li>
 </ul>
 
-<h5 id="migration-5">Migration</h5>
+<h5 id="migration-6">Migration</h5>
 
 <p>The properties <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunction</code> and <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunctions</code> of some rules got deprecated and unified to a new property <code class="language-plaintext highlighter-rouge">ignoreOverridden</code>.</p>
 
@@ -1658,7 +1702,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="130">1.3.0</h4>
 
-<h5 id="notable-changes-10">Notable changes</h5>
+<h5 id="notable-changes-11">Notable changes</h5>
 
 <ul>
   <li>Minimal Gradle version increased to 5.0</li>
@@ -1697,7 +1741,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="122">1.2.2</h4>
 
-<h5 id="notable-changes-11">Notable Changes</h5>
+<h5 id="notable-changes-12">Notable Changes</h5>
 
 <ul>
   <li>1.2.1 introduced breaking changes for users of Gradle &lt; 5. This was reverted.</li>
@@ -1724,7 +1768,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="121">1.2.1</h4>
 
-<h5 id="notable-changes-12">Notable changes</h5>
+<h5 id="notable-changes-13">Notable changes</h5>
 
 <ul>
   <li>Supports Kotlin 1.3.60</li>
@@ -1763,7 +1807,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="120">1.2.0</h4>
 
-<h5 id="notable-changes-13">Notable changes</h5>
+<h5 id="notable-changes-14">Notable changes</h5>
 
 <ul>
   <li>The HTML report now includes the complexity metrics and previews of the code locations.</li>
@@ -1773,7 +1817,7 @@ As always new rules must be activated by the user until they get stable.</p>
   <li>detekt internally does not use the <code class="language-plaintext highlighter-rouge">ForkJoinPool.commonPool()</code> anymore. When embedding detekt feel free to pass your own <code class="language-plaintext highlighter-rouge">ExecutionService</code> to the <code class="language-plaintext highlighter-rouge">ProcessingSettings</code>.</li>
 </ul>
 
-<h5 id="migration-6">Migration</h5>
+<h5 id="migration-7">Migration</h5>
 
 <ul>
   <li>Some reported positions of rules have changed, see issues starting with “Improve text location: “.
@@ -1938,7 +1982,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
 
 <h4 id="101">1.0.1</h4>
 
-<h5 id="notable-changes-14">Notable changes</h5>
+<h5 id="notable-changes-15">Notable changes</h5>
 
 <ul>
   <li><a href="https://arturbosch.github.io/detekt/howto-silent-reports.html">detekt runs can be completely silent on absence of findings</a></li>
@@ -1969,7 +2013,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
 
 <h4 id="100">1.0.0</h4>
 
-<h5 id="migration-7">Migration</h5>
+<h5 id="migration-8">Migration</h5>
 
 <ul>
   <li>Gradle Plugin: removed report consolidation. It was flawed and some users were stuck with RC14. It will be replaced in a further version.</li>
