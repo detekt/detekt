@@ -12,7 +12,7 @@ internal class MaxIssueCheck(
     private val policy: RulesSpec.MaxIssuePolicy = run {
         if (rulesSpec.maxIssuePolicy == RulesSpec.MaxIssuePolicy.NonSpecified) {
             val configuredMaxIssues = config.subConfig(BUILD)
-                .valueOrNull<Int>(Config.MAX_ISSUES_KEY)
+                .valueOrNull<Int>(MAX_ISSUES_KEY)
 
             when (configuredMaxIssues) {
                 null -> rulesSpec.maxIssuePolicy
