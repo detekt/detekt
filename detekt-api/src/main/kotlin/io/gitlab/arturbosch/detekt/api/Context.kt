@@ -24,21 +24,20 @@ interface Context {
     fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null)
 
     /**
+     * Same as [report] but reports a list of [findings].
+     */
+    fun report(findings: List<Finding>,
+               aliases: Set<String> = emptySet(),
+               ruleSetId: RuleSetId? = null
+    ) {
+        findings.forEach { report(it, aliases, ruleSetId) }
+    }
+
+    /**
      * Clears previous findings.
      * Normally this is done on every new [KtFile] analyzed and should be called by clients.
      */
     fun clearFindings()
-}
-
-/**
- * Same as [report] but reports a list of [findings].
- */
-fun Context.report(
-    findings: List<Finding>,
-    aliases: Set<String> = emptySet(),
-    ruleSetId: RuleSetId? = null
-) {
-    findings.forEach { report(it, aliases, ruleSetId) }
 }
 
 /**
