@@ -399,6 +399,7 @@ naming:
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
+    excludes: ['*.kts']
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
