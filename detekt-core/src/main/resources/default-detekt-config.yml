@@ -398,8 +398,8 @@ naming:
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
-    rootPackage: ''
     excludes: ['*.kts']
+    rootPackage: ''
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
