@@ -175,7 +175,7 @@ class ReturnCountSpec : Spek({
 
                     return
                 }
-            """.trimIndent()
+            """
 
             it("should not count all four guard clauses") {
                 val findings = ReturnCount(TestConfig(

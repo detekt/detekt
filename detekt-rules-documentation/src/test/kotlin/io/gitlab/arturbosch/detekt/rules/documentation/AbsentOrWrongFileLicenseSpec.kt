@@ -26,7 +26,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 val findings = checkLicence("""
                     /* LICENSE */
                     package cases
-                """.trimIndent())
+                """)
 
                 assertThat(findings).isEmpty()
             }
@@ -38,7 +38,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 val findings = checkLicence("""
                     /* WRONG LICENSE */
                     package cases
-                """.trimIndent())
+                """)
 
                 assertThat(findings).hasSize(1)
             }
@@ -49,7 +49,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             it("reports missed license header") {
                 val findings = checkLicence("""
                     package cases
-                """.trimIndent())
+                """)
 
                 assertThat(findings).hasSize(1)
             }
@@ -59,7 +59,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
 
 @OptIn(UnstableApi::class)
 private fun checkLicence(content: String): List<Finding> {
-    val file = compileContentForTest(content)
+    val file = compileContentForTest(content.trimIndent())
 
     val resource = resourceAsPath("license-config.yml")
     val config = yamlConfig("license-config.yml")

@@ -40,7 +40,7 @@ class FunctionOnlyReturningConstantSpec : Spek({
                     return "I am a constant"
                 }
             }
-        """.trimIndent()
+        """
 
         listOf(
             TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")),

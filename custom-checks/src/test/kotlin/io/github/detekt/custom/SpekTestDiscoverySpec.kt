@@ -22,7 +22,7 @@ class SpekTestDiscoverySpec : Spek({
                     val s = "simple"
                     val p = Paths.get("")
                     val f = File("")
-                """.trimIndent())
+                """)
 
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -51,7 +51,7 @@ class SpekTestDiscoverySpec : Spek({
                             val f = File("")
                             val m by memoized { Any() }
                         }
-                    """.trimIndent())
+                    """)
 
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
@@ -63,7 +63,7 @@ class SpekTestDiscoverySpec : Spek({
                         $name("group") {
                             val complex = Any()
                         }
-                    """.trimIndent())
+                    """)
 
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                 }
@@ -83,4 +83,4 @@ class Test : Spek({
         $content
     }
 })
-""".trimIndent()
+"""
