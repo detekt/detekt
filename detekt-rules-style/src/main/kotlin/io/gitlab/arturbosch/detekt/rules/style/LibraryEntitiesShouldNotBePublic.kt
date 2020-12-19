@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeAlias
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
@@ -36,8 +35,6 @@ class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : R
         "Library class should not be public",
         Debt.FIVE_MINS
     )
-
-    override fun visitCondition(root: KtFile): Boolean = super.visitCondition(root) && filters != null
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInner()) {

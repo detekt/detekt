@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 /**
  * Holds a list of extra exclusions for rules and rule sets.
  */
-val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions)
+val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, LibraryExclusions)
 
 /**
  * Tracks rules and rule sets which needs an extra `excludes: $pattern` property
@@ -45,4 +45,14 @@ private object KotlinScriptExclusions : Exclusions() {
 
     override val pattern = "['*.kts']"
     override val rules = setOf("InvalidPackageDeclaration")
+}
+
+private object LibraryExclusions : Exclusions() {
+
+    override val pattern = "['**']"
+    override val rules = setOf(
+        "ForbiddenPublicDataClass",
+        "LibraryCodeMustSpecifyReturnType",
+        "LibraryEntitiesShouldNotBePublic",
+    )
 }
