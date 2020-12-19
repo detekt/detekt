@@ -20,7 +20,7 @@ In addition to many rule improvements, there are also new ones:
 - UseIfEmptyOrIfBlank
 
 We added documentation on how to configure [type resolution](https://detekt.github.io/detekt/type-resolution.html).  
-Only then rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see
+Only the rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see
 for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).
 
 detekt now supports [SARIF](https://sarifweb.azurewebsites.net/) as an output format. In the future you will be able to
