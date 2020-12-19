@@ -13,6 +13,9 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val references: List<Entity>
     val message: String
 
+    val severity: String
+        get() = issue.severity.toString().toLowerCase()
+
     /**
      * Explanation why this finding was raised.
      */

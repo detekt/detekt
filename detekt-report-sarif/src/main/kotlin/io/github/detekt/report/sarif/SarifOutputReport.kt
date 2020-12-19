@@ -46,7 +46,11 @@ class SarifOutputReport : OutputReport() {
 
 fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
     ruleId = "detekt.$ruleSetId.$id"
-    level = Result.Level.WARNING
+    level = when (severity) {
+        "info", "information", "note" -> Result.Level.NOTE
+        "error" -> Result.Level.ERROR
+        else -> Result.Level.WARNING
+    }
     for (location in listOf(location) + references.map { it.location }) {
         locations.add(Location().apply {
             physicalLocation = PhysicalLocation().apply {

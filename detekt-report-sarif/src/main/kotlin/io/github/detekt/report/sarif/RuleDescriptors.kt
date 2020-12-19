@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import java.net.URI
 import java.util.ServiceLoader
 
+// TODO print only ReportingDescriptor's for rules with "active: true"
 fun ruleDescriptors(config: Config): HashMap<String, ReportingDescriptor> {
     val sets = ServiceLoader.load(RuleSetProvider::class.java)
         .map { it.instance(config.subConfig(it.ruleSetId)) }

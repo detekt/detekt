@@ -37,6 +37,8 @@ abstract class Rule(
      */
     val aliases: Set<String> get() = valueOrDefault("aliases", defaultRuleIdAliases)
 
+    val overwrittenSeverity: String? get() = valueOrNull("severity")
+
     /**
      * The default names which can be used instead of this #ruleId to refer to this rule in suppression's.
      *
@@ -64,18 +66,26 @@ abstract class Rule(
     private fun shouldRunOnGivenFile(root: KtFile) =
         filters?.isIgnored(root.absolutePath())?.not() ?: true
 
+    internal class FindingWithSeverity(finding: Finding, private val newSeverity: String) : Finding by finding {
+        override val severity: String
+            get() = newSeverity
+    }
+
     /**
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(finding: Finding) {
-        report(finding, aliases, ruleSetId)
+        report(overwrittenSeverity?.let { FindingWithSeverity(finding, it) } ?: finding, aliases, ruleSetId)
     }
 
     /**
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(findings: List<Finding>) {
-        report(findings, aliases, ruleSetId)
+        val newFindings = overwrittenSeverity
+            ?.let { findings.map { finding -> FindingWithSeverity(finding, it) } }
+            ?: findings
+        report(newFindings, aliases, ruleSetId)
     }
 }
 

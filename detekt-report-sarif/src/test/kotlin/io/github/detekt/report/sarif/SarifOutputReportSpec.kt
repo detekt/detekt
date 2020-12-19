@@ -2,9 +2,12 @@ package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
 import io.github.detekt.tooling.api.VersionProvider
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -15,6 +18,21 @@ class SarifOutputReportSpec : Spek({
 
         val expectedReport by memoized {
             readResourceContent("expected.sarif.json").stripWhitespace()
+        }
+
+        it("test") {
+            val finding = object : CodeSmell(
+                createIssue("test"),
+                createEntity("filename"),
+                "TestMessage"
+            ) {
+                override val severity: String
+                    get() = "note"
+            }
+
+            val issue = finding.toIssue("test")
+
+            print(issue)
         }
 
         it("renders multiple issues") {
