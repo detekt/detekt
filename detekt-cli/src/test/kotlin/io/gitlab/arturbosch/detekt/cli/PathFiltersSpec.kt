@@ -48,7 +48,6 @@ class PathFiltersSpec : Spek({
             }
         }
 
-
         describe("parsing with different separators") {
 
             it("should load multiple comma-separated filters with no spaces around commas") {
