@@ -17,6 +17,38 @@ class PathFiltersSpec : Spek({
             assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
         }
 
+        describe("parsing with different nullability combinations of path filters") {
+            it("returns an empty path filter when includes are empty and excludes are empty") {
+                val pathFilter = PathFilters.of(emptyList(), emptyList())
+                assertThat(pathFilter).isNull()
+            }
+
+            it("parse includes correctly") {
+                val pathFilter = PathFilters.of(listOf("**/one/**", "**/two/**"), emptyList())
+                assertThat(pathFilter).isNotNull
+                assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
+                assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isFalse
+                assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
+            }
+
+            it("parse excludes correctly") {
+                val pathFilter = PathFilters.of(emptyList(), listOf("**/one/**", "**/two/**"))
+                assertThat(pathFilter).isNotNull
+                assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isTrue
+                assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
+                assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isFalse
+            }
+
+            it("parse both includes and excludes correctly") {
+                val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**"))
+                assertThat(pathFilter).isNotNull
+                assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
+                assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
+                assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
+            }
+        }
+
+
         describe("parsing with different separators") {
 
             it("should load multiple comma-separated filters with no spaces around commas") {
