@@ -23,7 +23,7 @@ class PathFiltersSpec : Spek({
                 assertThat(pathFilter).isNull()
             }
 
-            it("parse includes correctly") {
+            it("parses includes correctly") {
                 val pathFilter = PathFilters.of(listOf("**/one/**", "**/two/**"), emptyList())
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
@@ -31,7 +31,7 @@ class PathFiltersSpec : Spek({
                 assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
             }
 
-            it("parse excludes correctly") {
+            it("parses excludes correctly") {
                 val pathFilter = PathFilters.of(emptyList(), listOf("**/one/**", "**/two/**"))
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isTrue
@@ -39,7 +39,7 @@ class PathFiltersSpec : Spek({
                 assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isFalse
             }
 
-            it("parse both includes and excludes correctly") {
+            it("parses both includes and excludes correctly") {
                 val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**"))
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
