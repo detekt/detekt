@@ -19,6 +19,14 @@ open class CodeSmell(
     override val severity: SeverityLevel = SeverityLevel.WARNING
 ) : Finding {
 
+    constructor(
+        issue: Issue,
+        entity: Entity,
+        message: String,
+        metrics: List<Metric> = listOf(),
+        references: List<Entity> = listOf()
+    ) : this(issue, entity, message, metrics, references, SeverityLevel.WARNING)
+
     override val id: String = issue.id
 
     override fun compact(): String = "$id - ${entity.compact()}"
@@ -40,7 +48,7 @@ open class CodeSmell(
     /**
      * Create a new copy of [CodeSmell] with specified [severity].
      */
-    open override fun copyWithSeverity(severity: SeverityLevel): Finding {
+    override fun copyWithSeverity(severity: SeverityLevel): Finding {
         return CodeSmell(
             issue = this.issue,
             entity = this.entity,
@@ -74,6 +82,16 @@ open class CorrectableCodeSmell(
     references = references,
     severity = severity
 ) {
+
+    constructor(
+        issue: Issue,
+        entity: Entity,
+        message: String,
+        metrics: List<Metric> = listOf(),
+        references: List<Entity> = listOf(),
+        autoCorrectEnabled: Boolean
+    ) : this(issue, entity, message, metrics, references, autoCorrectEnabled, SeverityLevel.WARNING)
+
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
             "autoCorrectEnabled=$autoCorrectEnabled," +
@@ -120,6 +138,14 @@ open class ThresholdedCodeSmell(
     references = references,
     severity = severity
 ) {
+
+    constructor(
+        issue: Issue,
+        entity: Entity,
+        metric: Metric,
+        message: String,
+        references: List<Entity> = listOf()
+    ) : this(issue, entity, metric, message, references, SeverityLevel.WARNING)
 
     val value: Int
         get() = metric.value

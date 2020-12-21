@@ -13,6 +13,7 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val references: List<Entity>
     val message: String
     val severity: SeverityLevel
+        get() = SeverityLevel.WARNING
 
     /**
      * Explanation why this finding was raised.
