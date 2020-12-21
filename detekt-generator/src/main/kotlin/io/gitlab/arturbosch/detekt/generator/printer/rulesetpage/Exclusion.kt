@@ -3,15 +3,29 @@ package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 
 /**
+ * Holds a list of extra exclusions for rules and rule sets.
+ */
+val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions)
+
+/**
  * Tracks rules and rule sets which needs an extra `exclusions: $pattern` property
  * when printing the default detekt config yaml file.
  */
-object TestExclusions {
+abstract class Exclusions {
 
-    const val pattern =
+    abstract val pattern: String
+    open val ruleSets: Set<String> = setOf()
+    abstract val rules: Set<String>
+
+    fun isExcluded(rule: Rule) = rule.name in rules || rule.inMultiRule in rules
+}
+
+private object TestExclusions : Exclusions() {
+
+    override val pattern =
             "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
-    val ruleSets = setOf("comments")
-    val rules = setOf(
+    override val ruleSets = setOf("comments")
+    override val rules = setOf(
         "NamingRules",
         "WildcardImport",
         "MagicNumber",
@@ -25,6 +39,10 @@ object TestExclusions {
         "InstanceOfCheckForException",
         "ThrowingExceptionsWithoutMessageOrCause"
     )
+}
 
-    fun Rule.isExcludedInTests() = name in rules || inMultiRule in rules
+private object KotlinScriptExclusions : Exclusions() {
+
+    override val pattern = "['*.kts']"
+    override val rules = setOf("InvalidPackageDeclaration")
 }

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
 import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.TestExclusions.isExcludedInTests
 
 object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
@@ -35,8 +34,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
         node(ruleSet.name) {
             keyValue { "active" to "${ruleSet.active}" }
-            if (ruleSet.name in TestExclusions.ruleSets) {
-                keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
+            val ruleSetExclusion = exclusions.singleOrNull { ruleSet.name in it.ruleSets }
+            if (ruleSetExclusion != null) {
+                keyValue { Config.EXCLUDES_KEY to ruleSetExclusion.pattern }
             }
             ruleSet.configuration
                 .forEach { configuration ->
@@ -52,8 +52,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     if (rule.autoCorrect) {
                         keyValue { "autoCorrect" to "true" }
                     }
-                    if (rule.isExcludedInTests()) {
-                        keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
+                    val ruleExclusion = exclusions.singleOrNull { it.isExcluded(rule) }
+                    if (ruleExclusion != null) {
+                        keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
                     }
                     rule.configuration
                         .forEach { configuration ->
