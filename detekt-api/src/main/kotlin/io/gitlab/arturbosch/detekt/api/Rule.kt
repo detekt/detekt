@@ -81,15 +81,19 @@ abstract class Rule(
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(finding: Finding) {
-        report(finding.copyWithSeverity(computeSeverity()), aliases, ruleSetId)
+        (finding as? CodeSmell)?.internalSeverity = computeSeverity()
+        report(finding, aliases, ruleSetId)
     }
 
     /**
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(findings: List<Finding>) {
+        findings.forEach {
+            (it as? CodeSmell)?.internalSeverity = computeSeverity()
+        }
         report(
-            findings.map { it.copyWithSeverity(computeSeverity()) },
+            findings,
             aliases,
             ruleSetId
         )

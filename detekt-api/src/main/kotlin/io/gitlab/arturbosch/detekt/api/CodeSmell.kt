@@ -15,17 +15,12 @@ open class CodeSmell(
     override val entity: Entity,
     override val message: String,
     override val metrics: List<Metric> = listOf(),
-    override val references: List<Entity> = listOf(),
-    override val severity: SeverityLevel = SeverityLevel.WARNING
+    override val references: List<Entity> = listOf()
 ) : Finding {
 
-    constructor(
-        issue: Issue,
-        entity: Entity,
-        message: String,
-        metrics: List<Metric> = listOf(),
-        references: List<Entity> = listOf()
-    ) : this(issue, entity, message, metrics, references, SeverityLevel.WARNING)
+    internal var internalSeverity: SeverityLevel = SeverityLevel.WARNING
+    override val severity
+        get() = internalSeverity
 
     override val id: String = issue.id
 
@@ -44,20 +39,6 @@ open class CodeSmell(
     }
 
     override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
-
-    /**
-     * Create a new copy of [CodeSmell] with specified [severity].
-     */
-    override fun copyWithSeverity(severity: SeverityLevel): Finding {
-        return CodeSmell(
-            issue = this.issue,
-            entity = this.entity,
-            message = this.message,
-            metrics = this.metrics,
-            references = this.references,
-            severity = severity
-        )
-    }
 }
 
 /**
@@ -65,32 +46,20 @@ open class CodeSmell(
  *
  * @see CodeSmell
  */
-@Suppress("LongParameterList")
 open class CorrectableCodeSmell(
     issue: Issue,
     entity: Entity,
     message: String,
     metrics: List<Metric> = listOf(),
     references: List<Entity> = listOf(),
-    val autoCorrectEnabled: Boolean,
-    severity: SeverityLevel = SeverityLevel.WARNING
+    val autoCorrectEnabled: Boolean
 ) : CodeSmell(
     issue = issue,
     entity = entity,
     message = message,
     metrics = metrics,
-    references = references,
-    severity = severity
+    references = references
 ) {
-
-    constructor(
-        issue: Issue,
-        entity: Entity,
-        message: String,
-        metrics: List<Metric> = listOf(),
-        references: List<Entity> = listOf(),
-        autoCorrectEnabled: Boolean
-    ) : this(issue, entity, message, metrics, references, autoCorrectEnabled, SeverityLevel.WARNING)
 
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
@@ -102,18 +71,6 @@ open class CorrectableCodeSmell(
             "references=$references, " +
             "severity=$severity, " +
             "id='$id')"
-    }
-
-    override fun copyWithSeverity(severity: SeverityLevel): Finding {
-        return CorrectableCodeSmell(
-            issue = this.issue,
-            entity = this.entity,
-            message = this.message,
-            metrics = this.metrics,
-            references = this.references,
-            autoCorrectEnabled = this.autoCorrectEnabled,
-            severity = severity
-        )
     }
 }
 
@@ -129,23 +86,13 @@ open class ThresholdedCodeSmell(
     val metric: Metric,
     message: String,
     references: List<Entity> = emptyList(),
-    severity: SeverityLevel = SeverityLevel.WARNING
 ) : CodeSmell(
     issue = issue,
     entity = entity,
     message = message,
     metrics = listOf(metric),
     references = references,
-    severity = severity
 ) {
-
-    constructor(
-        issue: Issue,
-        entity: Entity,
-        metric: Metric,
-        message: String,
-        references: List<Entity> = listOf()
-    ) : this(issue, entity, metric, message, references, SeverityLevel.WARNING)
 
     val value: Int
         get() = metric.value
@@ -155,15 +102,4 @@ open class ThresholdedCodeSmell(
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
     override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
-
-    override fun copyWithSeverity(severity: SeverityLevel): Finding {
-        return ThresholdedCodeSmell(
-            issue = this.issue,
-            entity = this.entity,
-            metric = this.metric,
-            message = this.message,
-            references = this.references,
-            severity = severity
-        )
-    }
 }

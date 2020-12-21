@@ -19,11 +19,6 @@ interface Finding : Compactable, HasEntity, HasMetrics {
      * Explanation why this finding was raised.
      */
     fun messageOrDescription(): String
-
-    /**
-     * Copy function to assign a new severity.
-     */
-    fun copyWithSeverity(severity: SeverityLevel): Finding = this
 }
 
 /**

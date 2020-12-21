@@ -127,12 +127,14 @@ class XmlOutputFormatSpec : Spek({
                 val xmlSeverity = severity.name.toLowerCase()
 
                 it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
-                    val finding = CodeSmell(
+                    val finding = object : CodeSmell(
                         issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
-                        message = "message",
                         entity = entity1,
-                        severity = severity
-                    )
+                        message = "message"
+                    ) {
+                        override val severity: SeverityLevel
+                            get() = severity
+                    }
 
                     val expected = """
                     <?xml version="1.0" encoding="utf-8"?>
