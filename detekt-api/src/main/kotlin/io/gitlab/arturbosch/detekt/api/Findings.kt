@@ -22,7 +22,7 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     /**
      * Copy function to assign a new severity.
      */
-    fun copyWithSeverity(severity: SeverityLevel): Finding
+    fun copyWithSeverity(severity: SeverityLevel): Finding = this
 }
 
 /**

@@ -69,11 +69,11 @@ abstract class Rule(
      * Compute severity in the priority order:
      * - Severity of the rule
      * - Severity of the parent ruleset
-     * - Default severity: Error
+     * - Default severity: warning
      */
     private fun computeSeverity(): SeverityLevel {
         val configValue: String = valueOrNull(SEVERITY_KEY)
-            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "error")
+            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "warning")
         return enumValueOf(configValue.toUpperCase())
     }
 
