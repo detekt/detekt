@@ -19,7 +19,7 @@ open class CodeSmell(
 ) : Finding {
 
     internal var internalSeverity: SeverityLevel = SeverityLevel.WARNING
-    override val severity
+    override val severity: SeverityLevel
         get() = internalSeverity
 
     override val id: String = issue.id
