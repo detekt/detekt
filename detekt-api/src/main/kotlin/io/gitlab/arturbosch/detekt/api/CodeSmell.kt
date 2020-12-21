@@ -54,13 +54,12 @@ open class CorrectableCodeSmell(
     references: List<Entity> = listOf(),
     val autoCorrectEnabled: Boolean
 ) : CodeSmell(
-    issue = issue,
-    entity = entity,
-    message = message,
-    metrics = metrics,
-    references = references
+    issue,
+    entity,
+    message,
+    metrics,
+    references
 ) {
-
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
             "autoCorrectEnabled=$autoCorrectEnabled," +
@@ -85,13 +84,9 @@ open class ThresholdedCodeSmell(
     entity: Entity,
     val metric: Metric,
     message: String,
-    references: List<Entity> = emptyList(),
+    references: List<Entity> = emptyList()
 ) : CodeSmell(
-    issue = issue,
-    entity = entity,
-    message = message,
-    metrics = listOf(metric),
-    references = references,
+    issue, entity, message, metrics = listOf(metric), references = references
 ) {
 
     val value: Int
