@@ -28,11 +28,33 @@ object DetektPluginTest : Spek({
 
             assertThat(project.tasks.getAt("check").dependencies()).contains("detekt")
         }
+
+        it("configures detekt task correctly") {
+            val project = ProjectBuilder.builder().build()
+
+            with(project.pluginManager) {
+                apply(DetektPlugin::class.java)
+                apply(LifecycleBasePlugin::class.java)
+                apply("org.jetbrains.kotlin.jvm")
+            }
+
+            project.configureExtension<DetektExtension> {
+                reports {
+                    it.sarif {
+                        enabled = true
+                    }
+                }
+            }
+            project.evaluate()
+
+            assertThat((project.getTask("detekt") as Detekt).reports.sarif.enabled).isTrue
+            assertThat((project.getTask("detektMain") as Detekt).reports.sarif.enabled).isTrue
+        }
     }
 
     describe(
         "detekt plugin - Android",
-        skip = if (System.getenv("ANDROID_SDK_ROOT") != null) Skip.No else Skip.Yes("No android sdk.")
+        skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")
     ) {
         it("applies the base gradle plugin and creates a regular detekt task") {
             val project = ProjectBuilder.builder().build()
@@ -55,9 +77,15 @@ object DetektPluginTest : Spek({
 
             project.configureExtension<DetektExtension> {
                 parallel = true
+                reports {
+                    it.sarif {
+                        enabled = true
+                    }
+                }
             }
 
-            assertThat((project.getTask("detekt") as Detekt).parallel).isTrue()
+            assertThat((project.getTask("detekt") as Detekt).parallel).isTrue
+            assertThat((project.getTask("detekt") as Detekt).reports.sarif.enabled).isTrue
         }
 
         it("creates experimental tasks if the Android library plugin is present") {
@@ -66,6 +94,14 @@ object DetektPluginTest : Spek({
 
                 configureExtension<LibraryExtension> {
                     compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
+                }
+
+                configureExtension<DetektExtension> {
+                    reports {
+                        it.sarif {
+                            enabled = true
+                        }
+                    }
                 }
 
                 evaluate()
@@ -79,6 +115,8 @@ object DetektPluginTest : Spek({
                         "detektReleaseUnitTest",
                         "detektDebugAndroidTest"
                     )
+
+                assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
             }
         }
 
@@ -91,6 +129,14 @@ object DetektPluginTest : Spek({
                     compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
                 }
 
+                configureExtension<DetektExtension> {
+                    reports {
+                        it.sarif {
+                            enabled = true
+                        }
+                    }
+                }
+
                 evaluate()
 
                 assertThat(getTask("detektMain").dependencies())
@@ -102,6 +148,7 @@ object DetektPluginTest : Spek({
                         "detektReleaseUnitTest",
                         "detektDebugAndroidTest"
                     )
+                assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
             }
         }
 
@@ -116,11 +163,20 @@ object DetektPluginTest : Spek({
                     targetProjectPath("prod")
                 }
 
+                configureExtension<DetektExtension> {
+                    reports {
+                        it.sarif {
+                            enabled = true
+                        }
+                    }
+                }
+
                 evaluate()
 
                 // Test extensions by default have only the debug variant configured
                 assertThat(getTask("detektMain").dependencies())
                     .containsExactlyInAnyOrder("detektDebug")
+                assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
 
                 // There is no test code for test modules, so we don't create a task for that either
                 assertThat(tasks.findByName("detektTest")).isNull()
@@ -352,3 +408,10 @@ internal fun BaseExtension.flavorTestSetup() {
 internal inline fun <reified T : Any> Project.configureExtension(configuration: T.() -> Unit = {}) {
     project.extensions.findByType(T::class.java)?.apply(configuration)
 }
+
+/**
+ * ANDROID_SDK_ROOT is preferred over ANDROID_HOME, but the check here is more lenient.
+ * See [Android CLI Environment Variables](https://developer.android.com/studio/command-line/variables.html)
+ */
+private fun isAndroidSdkInstalled() =
+    System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
