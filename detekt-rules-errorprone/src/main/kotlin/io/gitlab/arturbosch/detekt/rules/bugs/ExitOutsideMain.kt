@@ -44,7 +44,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * @requiresTypeResolution
  */
-
 class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
@@ -54,17 +53,17 @@ class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+
         if (context == BindingContext.EMPTY) return
 
         if (expression.getStrictParentOfType<KtNamedFunction>()?.isMainFunction() == true) return
         val fqName = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return
 
-        when (fqName.asString()) {
-            "kotlin.system.exitProcess" -> { report(CodeSmell(issue, Entity.from(expression), issue.description)) }
-            "java.lang.System.exit" -> { report(CodeSmell(issue, Entity.from(expression), issue.description)) }
+        if (fqName.asString() in setOf("kotlin.system.exitProcess", "java.lang.System.exit")) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
-
-        super.visitCallExpression(expression)
     }
 }
