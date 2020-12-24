@@ -9,12 +9,12 @@ class DisabledAutoCorrectConfig(private val wrapped: Config) : Config, Validatab
     override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key))
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
-        "autoCorrect" -> false as T
+        Config.AUTO_CORRECT_KEY -> false as T
         else -> wrapped.valueOrDefault(key, default)
     }
 
     override fun <T : Any> valueOrNull(key: String): T? = when (key) {
-        "autoCorrect" -> false as T
+        Config.AUTO_CORRECT_KEY -> false as T
         else -> wrapped.valueOrNull(key)
     }
 

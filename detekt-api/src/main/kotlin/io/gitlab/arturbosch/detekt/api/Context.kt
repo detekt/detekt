@@ -21,15 +21,16 @@ interface Context {
      * An alias set can be given to additionally check if an alias was used when suppressing.
      * Additionally suppression by rule set id is supported.
      */
-    fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
-        report(finding, aliases, null)
-    }
+    fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null)
 
     /**
-     * Same as [report] but reports a list of findings.
+     * Same as [report] but reports a list of [findings].
      */
-    fun report(findings: List<Finding>, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
-        report(findings, aliases, null)
+    fun report(findings: List<Finding>,
+               aliases: Set<String> = emptySet(),
+               ruleSetId: RuleSetId? = null
+    ) {
+        findings.forEach { report(it, aliases, ruleSetId) }
     }
 
     /**
@@ -63,16 +64,6 @@ open class DefaultContext : Context {
         if (ktElement == null || !ktElement.isSuppressedBy(finding.id, aliases, ruleSetId)) {
             _findings.add(finding)
         }
-    }
-
-    /**
-     * Reports a list of code smell findings.
-     *
-     * Before adding a finding, it is checked if it is not suppressed
-     * by @Suppress or @SuppressWarnings annotations.
-     */
-    override fun report(findings: List<Finding>, aliases: Set<String>, ruleSetId: RuleSetId?) {
-        findings.forEach { report(it, aliases, ruleSetId) }
     }
 
     final override fun clearFindings() {
