@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.Rule.Modifier.Last
+import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
+import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -103,7 +106,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         }
     }
 
-    private fun getSortedRules(): List<FormattingRule> {
+    internal fun getSortedRules(): List<FormattingRule> {
         val runFirstOnRoot = mutableListOf<FormattingRule>()
         val other = mutableListOf<FormattingRule>()
         val runLastOnRoot = mutableListOf<FormattingRule>()
@@ -111,8 +114,9 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         for (rule in activeRules.filterIsInstance<FormattingRule>()) {
             when (rule.wrapping) {
                 is Last -> runLast.add(rule)
-                is RestrictToRoot -> runFirstOnRoot.add(rule)
+                // RestrictToRootLast implements RestrictToRoot, so we have to perform this check first
                 is RestrictToRootLast -> runLastOnRoot.add(rule)
+                is RestrictToRoot -> runFirstOnRoot.add(rule)
                 else -> other.add(rule)
             }
         }
@@ -136,7 +140,3 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         return parent !is JavaDummyHolder && parent !is JavaDummyElement
     }
 }
-
-typealias RestrictToRoot = com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
-typealias RestrictToRootLast = com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
-typealias Last = com.pinterest.ktlint.core.Rule.Modifier.Last
