@@ -13,7 +13,7 @@ class KtLintMultiRuleSpec : Spek({
 
     describe("KtLintMultiRule rule") {
 
-        it("sort rules correctly") {
+        it("sorts rules correctly") {
             val ktlintRule = KtLintMultiRule(Config.empty)
             ktlintRule.visitFile(compileContentForTest(""))
             val sortedRules = ktlintRule.getSortedRules()
