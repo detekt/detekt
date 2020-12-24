@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -26,7 +26,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(c)
                 }
             """.trimIndent()
-                assertThat(subject.lint(code)).isEmpty()
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("reports destructuring declarations with more than 3 entries") {
@@ -41,7 +41,38 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(d)
                 }
             """.trimIndent()
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report destructuring declarations in lambdas with 2 or 3 entries") {
+                val code = """
+                fun testFun() {
+                    val items = listOf(Pair(3, 4))
+
+                    items.forEach { (a, b) ->
+                        println(a)
+                        println(b)
+                    }
+                }
+            """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("reports destructuring declarations in lambdas with more than 3 entries") {
+                val code = """
+                fun testFun() {
+                    data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
+
+                    val items = listOf(ManyElements(1, 2, 3, 4))
+                    items.forEach { (a, b, c, d) ->
+                        println(a)
+                        println(b)
+                        println(c)
+                        println(d)
+                    }
+                }
+            """.trimIndent()
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
 
@@ -61,7 +92,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(y)
                 }
             """.trimIndent()
-                assertThat(configuredRule.lint(code)).isEmpty()
+                assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
 
             it("reports destructuring declarations with more than 2 entries") {
@@ -73,7 +104,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(c)
                 }
             """.trimIndent()
-                assertThat(configuredRule.lint(code)).hasSize(1)
+                assertThat(configuredRule.compileAndLint(code)).hasSize(1)
             }
         }
     }
