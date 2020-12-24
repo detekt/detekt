@@ -25,6 +25,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
         listOf(
             ClassOrdering(config),
             CollapsibleIfStatements(config),
+            DestructuringDeclarationWithTooManyEntries(config),
             ReturnCount(config),
             ThrowsCount(config),
             NewLineAtEndOfFile(config),
