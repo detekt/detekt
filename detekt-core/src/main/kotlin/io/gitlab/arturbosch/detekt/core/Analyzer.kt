@@ -124,8 +124,8 @@ internal class Analyzer(
             }
         }
 
-        executeRules(correctableRules)
         executeRules(otherRules)
+        executeRules(correctableRules)
 
         return result
     }
