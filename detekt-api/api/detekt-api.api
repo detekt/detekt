@@ -564,3 +564,4 @@ public class io/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell : io/gitlab/ar
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/UnstableApi : java/lang/annotation/Annotation {
 	public abstract fun reason ()Ljava/lang/String;
 }
+
