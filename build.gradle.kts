@@ -19,6 +19,7 @@ apiValidation {
     // We only need to perform api validation for :detekt-api.
     // There is also a temporary workaround to exclude api validation of rootProject, otherwise
     // api/detekt.api will be created with a blank line.
-    // https://github.com/Kotlin/binary-compatibility-validator/issues/32
+    // Related discussion in https://github.com/Kotlin/binary-compatibility-validator/issues/32
     ignoredProjects.addAll(subprojects.filter { it.name != "detekt-api" }.map { it.name } + rootProject.name)
+    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }
