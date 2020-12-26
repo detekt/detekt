@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     implementation("org.yaml:snakeyaml")
     implementation(project(":detekt-api"))
