@@ -123,6 +123,10 @@ Usage: detekt [options]
       Entry should consist of: [report-id:path]. Available 'report-id' values:
       'txt', 'xml', 'html'. These can also be used in combination with each
       other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
+    --working-dir, -wd
+      Specify a working directory as the base path for file paths in output
+      and reports. If not specified, all file paths in output and reports
+      will be absolute paths.
     --version
       Prints the detekt CLI version.
       Default: false
