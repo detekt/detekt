@@ -1,5 +1,16 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    application
+    id("com.github.johnrengelman.shadow")
+}
+
 application {
     mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
+}
+
+tasks.withType<ShadowJar>().configureEach {
+    mergeServiceFiles()
 }
 
 dependencies {

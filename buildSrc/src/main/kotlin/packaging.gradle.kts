@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     `java-library` apply false // is applied in commons; make configurations available in this script
     `maven-publish` apply false
@@ -19,17 +17,6 @@ nexusStaging {
     stagingProfileId = "1d8efc8232c5c"
     username = sonatypeUsername
     password = sonatypePassword
-}
-
-project(":detekt-cli") {
-    apply {
-        plugin("application")
-        plugin("com.github.johnrengelman.shadow")
-    }
-
-    tasks.withType<ShadowJar>().configureEach {
-        mergeServiceFiles()
-    }
 }
 
 subprojects {
