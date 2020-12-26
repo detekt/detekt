@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions)
 
 /**
- * Tracks rules and rule sets which needs an extra `exclusions: $pattern` property
+ * Tracks rules and rule sets which needs an extra `excludes: $pattern` property
  * when printing the default detekt config yaml file.
  */
 abstract class Exclusions {
