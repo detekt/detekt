@@ -33,6 +33,9 @@ class PathFilters internal constructor(
         return isIncluded()?.not() ?: isExcluded() ?: true
     }
 
+    /**
+     * Runs [isIgnored] against a [ktFile] based on its [absolutePath].
+     */
     fun isIgnored(ktFile: KtFile): Boolean = isIgnored(ktFile.absolutePath())
 
     companion object {

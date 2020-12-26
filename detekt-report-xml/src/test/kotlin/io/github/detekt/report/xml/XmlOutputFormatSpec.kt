@@ -93,7 +93,7 @@ class XmlOutputFormatSpec : Spek({
                 </checkstyle>""".trimIndent())
         }
 
-        it("renderRelativePaths") {
+        it("renders issues with relative path") {
             val findingA = createFindingFromRelativePath(
                 ruleName = "id_a",
                 baseDir = "/Users/tester/detekt/",
