@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
+    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
     implementation(kotlin("gradle-plugin-api"))
     compileOnly(androidGradlePlugin)
 
