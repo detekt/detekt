@@ -15,9 +15,9 @@ class KtTreeCompilerSpec : Spek({
 
         it("should compile all files") {
             val ktFiles = fixture { compile(path) }
-            assertThat(ktFiles.size)
+            assertThat(ktFiles)
                 .describedAs("It should compile at least three files, but did ${ktFiles.size}")
-                .isGreaterThanOrEqualTo(3)
+                .hasSizeGreaterThanOrEqualTo(3)
         }
 
         it("should filter the file 'Default.kt'") {
@@ -37,7 +37,7 @@ class KtTreeCompilerSpec : Spek({
         }
 
         it("should also compile regular files") {
-            assertThat(fixture { compile(path.resolve("Default.kt")) }.size).isEqualTo(1)
+            assertThat(fixture { compile(path.resolve("Default.kt")) }).hasSize(1)
         }
 
         it("throws an exception if given file does not exist") {
