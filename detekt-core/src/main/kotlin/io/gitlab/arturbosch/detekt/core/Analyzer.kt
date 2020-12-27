@@ -21,6 +21,13 @@ import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -47,12 +54,7 @@ internal class Analyzer(
         @Suppress("DEPRECATION")
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        val findingsPerFile: FindingsResult =
-            if (settings.spec.executionSpec.parallelAnalysis) {
-                runAsync(ktFiles, bindingContext, compilerResources)
-            } else {
-                runSync(ktFiles, bindingContext, compilerResources)
-            }
+        val findingsPerFile: FindingsResult = run(ktFiles, bindingContext, compilerResources)
 
         val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
         for (findings in findingsPerFile) {
@@ -61,35 +63,36 @@ internal class Analyzer(
         return findingsPerRuleSet
     }
 
-    private fun runSync(
-        ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext,
-        compilerResources: CompilerResources
-    ): FindingsResult =
-        ktFiles.map { file ->
-            processors.forEach { it.onProcess(file, bindingContext) }
-            val findings = runCatching { analyze(file, bindingContext, compilerResources) }
-                .onFailure { throwIllegalStateException(file, it) }
-                .getOrDefault(emptyMap())
-            processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
-            findings
-        }
-
-    private fun runAsync(
+    private fun run(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): FindingsResult {
-        val service = settings.taskPool
-        val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
-            service.task {
-                processors.forEach { it.onProcess(file, bindingContext) }
-                val findings = analyze(file, bindingContext, compilerResources)
-                processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
-                findings
-            }.recover { throwIllegalStateException(file, it) }
+        return runBlocking {
+            val coroutineContext = if (settings.spec.executionSpec.parallelAnalysis) {
+                settings.taskPool.asCoroutineDispatcher()
+            } else {
+                coroutineContext
+            }
+            ktFiles
+                .asFlow()
+                .map { file ->
+                    async(coroutineContext) {
+                        @Suppress("TooGenericExceptionCaught")
+                        try {
+                            processors.forEach { it.onProcess(file, bindingContext) }
+                            val findings = analyze(file, bindingContext, compilerResources)
+                            processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
+                            findings
+                        } catch (ex: Throwable) {
+                            throwIllegalStateException(file, ex)
+                        }
+                    }
+                }
+                .buffer()
+                .map { it.await() }
+                .toList()
         }
-        return awaitAll(tasks).filterNotNull()
     }
 
     private fun analyze(

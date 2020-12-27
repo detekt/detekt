@@ -1,20 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import java.io.Closeable
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.function.Supplier
-
-typealias Task<T> = CompletableFuture<T>
-typealias TaskList<T> = List<CompletableFuture<T>>
-
-fun <T> TaskPool.task(block: () -> T): Task<T> =
-    CompletableFuture.supplyAsync(Supplier { block() }, this)
-
-fun <T> Task<T>.recover(block: (Throwable) -> T?): Task<T?> = this.exceptionally(block)
-
-fun <T> awaitAll(tasks: TaskList<T>) = tasks.map { it.join() }
 
 /**
  * An [ExecutorService] with auto close capabilities for non user managed thread pools.

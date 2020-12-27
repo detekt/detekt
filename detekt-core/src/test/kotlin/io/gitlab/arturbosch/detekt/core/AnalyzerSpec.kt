@@ -16,7 +16,6 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.util.concurrent.CompletionException
 
 class AnalyzerSpec : Spek({
 
@@ -55,9 +54,7 @@ class AnalyzerSpec : Spek({
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
-                .isInstanceOf(CompletionException::class.java)
-                .hasCauseInstanceOf(IllegalStateException::class.java)
-                .getCause()
+                .isInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining("please feel free to create an issue on our GitHub page")
         }
     }
