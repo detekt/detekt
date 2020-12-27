@@ -15,8 +15,8 @@ class ReportsSpecBuilder : Builder<ReportsSpec>, ReportsSpec {
     override fun build(): ReportsSpec = ReportsModel(reports)
 }
 
-internal data class ReportsModel(override val reports: Collection<ReportsSpec.Report>) : ReportsSpec
+private data class ReportsModel(override val reports: Collection<ReportsSpec.Report>) : ReportsSpec
 
-internal data class Report(override val type: String, override val path: Path) : ReportsSpec.Report {
+private data class Report(override val type: String, override val path: Path) : ReportsSpec.Report {
     constructor(values: Pair<String, Path>) : this(values.first, values.second)
 }

@@ -12,7 +12,7 @@ class ExecutionSpecBuilder : Builder<ExecutionSpec>, ExecutionSpec {
     override fun build(): ExecutionSpec = ExecutionModel(executorService, parallelParsing, parallelAnalysis)
 }
 
-internal data class ExecutionModel(
+private data class ExecutionModel(
     override val executorService: ExecutorService?,
     override val parallelParsing: Boolean,
     override val parallelAnalysis: Boolean

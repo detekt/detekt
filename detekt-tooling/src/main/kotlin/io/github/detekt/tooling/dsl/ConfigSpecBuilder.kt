@@ -22,7 +22,7 @@ class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
     )
 }
 
-internal data class ConfigModel(
+private data class ConfigModel(
     override val shouldValidateBeforeAnalysis: Boolean,
     override val knownPatterns: Collection<String>,
     override val useDefaultConfig: Boolean,

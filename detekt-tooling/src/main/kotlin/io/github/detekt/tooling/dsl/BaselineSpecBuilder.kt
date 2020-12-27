@@ -12,7 +12,7 @@ class BaselineSpecBuilder : Builder<BaselineSpec>, BaselineSpec {
     override fun build(): BaselineSpec = BaselineModel(path, shouldCreateDuringAnalysis)
 }
 
-internal data class BaselineModel(
+private data class BaselineModel(
     override val path: Path?,
     override val shouldCreateDuringAnalysis: Boolean
 ) : BaselineSpec

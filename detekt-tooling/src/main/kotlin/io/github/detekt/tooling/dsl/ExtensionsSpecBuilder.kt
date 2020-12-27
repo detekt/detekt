@@ -33,7 +33,7 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec>, ExtensionsSpec {
     }
 }
 
-internal data class ExtensionsModel(
+private data class ExtensionsModel(
     override val disableDefaultRuleSets: Boolean,
     override val plugins: ExtensionsSpec.Plugins?,
     override val disabledExtensions: Set<ExtensionId>
