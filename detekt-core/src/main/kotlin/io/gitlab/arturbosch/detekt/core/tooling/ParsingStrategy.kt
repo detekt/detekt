@@ -3,6 +3,11 @@ package io.gitlab.arturbosch.detekt.core.tooling
 import io.github.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
@@ -22,7 +27,13 @@ fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
     )
 }
 
+@OptIn(FlowPreview::class)
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
     val compiler = KtTreeCompiler(settings, settings.spec.projectSpec)
-    settings.spec.projectSpec.inputPaths.flatMap(compiler::compile)
+    runBlocking {
+        settings.spec.projectSpec.inputPaths
+            .asFlow()
+            .flatMapMerge { path -> compiler.compile(path) }
+            .toList()
+    }
 }
