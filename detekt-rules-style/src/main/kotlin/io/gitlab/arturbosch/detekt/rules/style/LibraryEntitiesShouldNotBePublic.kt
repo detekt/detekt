@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  *
  * @since 1.11.0
+ * @active since v1.16.0
  */
 class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
