@@ -26,8 +26,7 @@ class SarifOutputReportSpec : Spek({
             val result = TestDetektion(
                 createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
                 createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
-                createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO),
-                createFinding(ruleName = "TestSmellD", severity = SeverityLevel.IGNORE)
+                createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
             )
 
             val report = SarifOutputReport().apply { init(EmptySetupContext()) }

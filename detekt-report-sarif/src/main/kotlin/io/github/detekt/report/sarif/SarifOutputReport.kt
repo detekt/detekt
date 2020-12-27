@@ -49,7 +49,6 @@ private fun SeverityLevel.toResultLevel() = when (this) {
     SeverityLevel.ERROR -> Result.Level.ERROR
     SeverityLevel.WARNING -> Result.Level.WARNING
     SeverityLevel.INFO -> Result.Level.NOTE
-    SeverityLevel.IGNORE -> Result.Level.NONE
 }
 
 private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {

@@ -76,26 +76,6 @@
               }
             }
           ]
-        },
-        {
-          "ruleId": "detekt.TestSmellD.TestSmellD",
-          "level": "none",
-          "message": {
-            "text": "TestMessage"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "TestFile.kt"
-                },
-                "region": {
-                  "startLine": 1,
-                  "startColumn": 1
-                }
-              }
-            }
-          ]
         }
       ]
     }

@@ -20,10 +20,5 @@ enum class SeverityLevel {
     /**
      * Report issue, does not contribute to the count.
      */
-    INFO,
-
-    /**
-     * Do not report issue.
-     */
-    IGNORE
+    INFO
 }
