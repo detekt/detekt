@@ -3,10 +3,22 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.parser.KtCompiler
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.stream.consumeAsFlow
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
 
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
@@ -31,19 +43,31 @@ class KtTreeCompiler(
     }
 
     private fun compileProject(project: Path): List<KtFile> {
-        val kotlinFiles = Files.walk(project)
-            .filter(Path::isFile)
-            .filter { it.isKotlinFile() }
-            .filter { !isIgnored(it) }
-        return if (settings.spec.executionSpec.parallelParsing) {
-            val service = settings.taskPool
-            val tasks = kotlinFiles.map { path ->
-                service.task { compiler.compile(basePath ?: project, path) }
-                    .recover { settings.error("Could not compile '$path'.", it); null }
-            }.collect(Collectors.toList())
-            return awaitAll(tasks).filterNotNull()
-        } else {
-            kotlinFiles.map { compiler.compile(basePath ?: project, it) }.collect(Collectors.toList())
+        return runBlocking {
+            val coroutineContext = if (settings.spec.executionSpec.parallelParsing) {
+                settings.taskPool.asCoroutineDispatcher()
+            } else {
+                coroutineContext
+            }
+            flow<Path> { emitAll(Files.walk(project).consumeAsFlow()) }
+                .filter { it.isFile() }
+                .flowOn(Dispatchers.IO)
+                .filter { it.isKotlinFile() }
+                .filter { !isIgnored(it) }
+                .map { path ->
+                    async(coroutineContext) {
+                        @Suppress("TooGenericExceptionCaught")
+                        try {
+                            compiler.compile(basePath ?: project, path)
+                        } catch (ex: Throwable) {
+                            settings.error("Could not compile '$path'.", ex)
+                            null
+                        }
+                    }
+                }
+                .buffer()
+                .mapNotNull { it.await() }
+                .toList()
         }
     }
 
