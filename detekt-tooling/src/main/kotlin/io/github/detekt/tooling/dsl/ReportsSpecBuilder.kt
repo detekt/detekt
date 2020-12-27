@@ -4,9 +4,9 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import java.nio.file.Path
 
 @ProcessingModelDsl
-class ReportsSpecBuilder : Builder<ReportsSpec>, ReportsSpec {
+class ReportsSpecBuilder : Builder<ReportsSpec> {
 
-    override var reports: MutableCollection<ReportsSpec.Report> = mutableListOf()
+    var reports: MutableCollection<ReportsSpec.Report> = mutableListOf()
 
     fun report(init: () -> Pair<String, Path>) {
         reports.add(Report(init()))

@@ -4,12 +4,12 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import java.nio.file.Path
 
 @ProcessingModelDsl
-class ProjectSpecBuilder : Builder<ProjectSpec>, ProjectSpec {
+class ProjectSpecBuilder : Builder<ProjectSpec> {
 
-    override var basePath: Path? = null
-    override var inputPaths: Collection<Path> = emptyList()
-    override var excludes: Collection<String> = emptyList()
-    override var includes: Collection<String> = emptyList()
+    var basePath: Path? = null
+    var inputPaths: Collection<Path> = emptyList()
+    var excludes: Collection<String> = emptyList()
+    var includes: Collection<String> = emptyList()
 
     override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, excludes, includes)
 }
