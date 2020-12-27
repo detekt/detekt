@@ -36,6 +36,6 @@ val moveJarForIntegrationTest by tasks.registering {
     outputs.file(rootProject.buildDir.resolve("detekt-formatting.jar"))
 
     doLast {
-        inputs.files.singleFile.copyTo(outputs.files.singleFile)
+        inputs.files.singleFile.copyTo(outputs.files.singleFile, overwrite = true)
     }
 }
