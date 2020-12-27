@@ -35,9 +35,9 @@ class AnalyzerSpec : Spek({
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-wrong.yml"))
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
-            assertThatThrownBy {
-                settings.use { analyzer.run(listOf(compileForTest(testFile))) }
-            }.isInstanceOf(IllegalStateException::class.java)
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .isInstanceOf(IllegalStateException::class.java)
+                .hasMessageContaining("please feel free to create an issue on our GitHub page")
         }
 
         it("throw error explicitly in parallel when config has wrong value in config") {
@@ -57,6 +57,8 @@ class AnalyzerSpec : Spek({
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(CompletionException::class.java)
                 .hasCauseInstanceOf(IllegalStateException::class.java)
+                .getCause()
+                .hasMessageContaining("please feel free to create an issue on our GitHub page")
         }
     }
 })
