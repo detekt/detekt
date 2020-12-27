@@ -84,7 +84,7 @@ import java.util.Locale
  * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: `false`)
  * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: `false`)
  * @configuration ignoreExtensionFunctions - whether magic numbers as subject of an extension function should be ignored
- * (default: `false`)
+ * (default: `true`)
  *
  * @active since v1.0.0
  */
@@ -111,7 +111,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private val ignoreCompanionObjectPropertyDeclaration =
             valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
     private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
-    private val ignoreExtensionFunctions = valueOrDefault(IGNORE_EXTENSION_FUNCTIONS, false)
+    private val ignoreExtensionFunctions = valueOrDefault(IGNORE_EXTENSION_FUNCTIONS, true)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val elementType = expression.elementType
