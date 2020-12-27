@@ -82,6 +82,8 @@ jobs:
         mkdir -p vendor/bundle/
         chmod -R 777 _site/
         chmod -R 777 vendor/
+        touch Gemfile.lock
+        chmod a+w Gemfile.lock
       working-directory: docs/
 
     - name: Install Ruby Dependencies
