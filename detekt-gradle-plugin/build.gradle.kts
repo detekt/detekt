@@ -15,6 +15,12 @@ dependencies {
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
     testImplementation(androidGradlePlugin)
+
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
+            because("com.android.tools.build:gradle:4.0.1 depends on Kotlin 1.3.72 and we should not mix 1.3 and 1.4")
+        }
+    }
 }
 
 gradlePlugin {
