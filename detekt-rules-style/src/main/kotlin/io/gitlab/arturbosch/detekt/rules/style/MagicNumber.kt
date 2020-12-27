@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -82,6 +83,8 @@ import java.util.Locale
  * (default: `true`)
  * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: `false`)
  * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: `false`)
+ * @configuration ignoreExtensionFunctions - whether magic numbers as subject of an extension function should be ignored
+ * (default: `true`)
  *
  * @active since v1.0.0
  */
@@ -108,6 +111,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private val ignoreCompanionObjectPropertyDeclaration =
             valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
     private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
+    private val ignoreExtensionFunctions = valueOrDefault(IGNORE_EXTENSION_FUNCTIONS, true)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val elementType = expression.elementType
@@ -142,6 +146,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         ignoreEnums && expression.isPartOf<KtEnumEntry>() -> true
         ignoreNamedArgument && expression.isNamedArgument() -> true
         ignoreRanges && expression.isPartOfRange() -> true
+        ignoreExtensionFunctions && expression.isSubjectOfExtensionFunction() -> true
         else -> false
     }
 
@@ -198,9 +203,16 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
         val rangeOperators = setOf("downTo", "until", "step")
-        return if (theParent is KtBinaryExpression) theParent.operationToken == KtTokens.RANGE ||
-                theParent.operationReference.getReferencedName() in rangeOperators
-        else false
+        return if (theParent is KtBinaryExpression) {
+            theParent.operationToken == KtTokens.RANGE ||
+                    theParent.operationReference.getReferencedName() in rangeOperators
+        } else {
+            false
+        }
+    }
+
+    private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean {
+        return parent is KtDotQualifiedExpression
     }
 
     private fun KtConstantExpression.isPartOfHashCode(): Boolean {
@@ -236,6 +248,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
         const val IGNORE_ENUMS = "ignoreEnums"
         const val IGNORE_RANGES = "ignoreRanges"
+        const val IGNORE_EXTENSION_FUNCTIONS = "ignoreExtensionFunctions"
 
         private const val HEX_RADIX = 16
         private const val BINARY_RADIX = 2
