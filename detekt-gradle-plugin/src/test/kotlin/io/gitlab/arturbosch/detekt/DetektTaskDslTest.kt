@@ -421,7 +421,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                             |dependencies {
-                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
                             |}
                             """
 
@@ -436,7 +436,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("adds the formatting lib to the project dependencies") {
-                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
                     }
                 }
 
@@ -639,5 +639,3 @@ internal object DetektTaskDslTest : Spek({
         }
     }
 })
-
-private const val VERSION_UNDER_TEST: String = "1.15.0"
