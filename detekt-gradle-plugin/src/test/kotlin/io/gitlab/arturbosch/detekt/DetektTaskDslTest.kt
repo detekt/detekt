@@ -640,4 +640,4 @@ internal object DetektTaskDslTest : Spek({
     }
 })
 
-const val VERSION_UNDER_TEST: String = "1.15.0"
+private const val VERSION_UNDER_TEST: String = "1.15.0"
