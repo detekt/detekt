@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek

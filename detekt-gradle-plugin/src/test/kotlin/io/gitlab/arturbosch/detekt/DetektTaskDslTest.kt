@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
@@ -419,7 +421,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                             |dependencies {
-                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
                             |}
                             """
 
@@ -434,7 +436,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("adds the formatting lib to the project dependencies") {
-                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
                     }
                 }
 
