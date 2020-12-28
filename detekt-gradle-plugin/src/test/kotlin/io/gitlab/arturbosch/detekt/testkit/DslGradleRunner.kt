@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt
+package io.gitlab.arturbosch.detekt.testkit
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner

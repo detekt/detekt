@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt
+package io.gitlab.arturbosch.detekt.testkit
 
 data class Submodule(
     val name: String,

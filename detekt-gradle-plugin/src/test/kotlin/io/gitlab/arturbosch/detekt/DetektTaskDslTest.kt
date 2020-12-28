@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
@@ -637,3 +639,5 @@ internal object DetektTaskDslTest : Spek({
         }
     }
 })
+
+const val VERSION_UNDER_TEST: String = "1.15.0"
