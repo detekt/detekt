@@ -14,6 +14,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
+import java.util.function.Predicate
 
 object DetektPluginTest : Spek({
     describe("detekt plugin - JVM") {
@@ -90,64 +91,44 @@ object DetektPluginTest : Spek({
 
         it("creates experimental tasks if the Android library plugin is present") {
             with(ProjectBuilder.builder().build()) {
-                androidPluginSetup("com.android.library")
-
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                }
-
-                configureExtension<DetektExtension> {
-                    reports {
-                        it.sarif {
-                            enabled = true
-                        }
-                    }
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder("detektDebug", "detektRelease")
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektDebugUnitTest",
-                        "detektReleaseUnitTest",
-                        "detektDebugAndroidTest"
-                    )
-
+                setupAndroidAndEvaluate<LibraryExtension>(
+                    androidPluginName = "com.android.library",
+                    configureBaseExtension = { compileSdkVersion(ANDROID_COMPILE_SDK_VERSION) },
+                    configureDetektExtension = { reports { it.sarif.enabled = true } }
+                )
+                assertThat(getTask("detektAll").dependencies()).containsExactlyInAnyOrder(
+                    "detektMain",
+                    "detektDebug",
+                    "detektRelease",
+                    "detektTest",
+                    "detektTestDebug",
+                    "detektTestRelease",
+                    "detektAndroidTest",
+                    "detektAndroidTestDebug",
+                    "detektAndroidTestRelease"
+                )
                 assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
             }
         }
 
         it("creates experimental tasks if the Android application plugin is present") {
             with(ProjectBuilder.builder().build()) {
-
-                androidPluginSetup("com.android.application")
-
-                configureExtension<AppExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                }
-
-                configureExtension<DetektExtension> {
-                    reports {
-                        it.sarif {
-                            enabled = true
-                        }
-                    }
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder("detektDebug", "detektRelease")
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektDebugUnitTest",
-                        "detektReleaseUnitTest",
-                        "detektDebugAndroidTest"
-                    )
+                setupAndroidAndEvaluate<AppExtension>(
+                    androidPluginName = "com.android.application",
+                    configureBaseExtension = { compileSdkVersion(ANDROID_COMPILE_SDK_VERSION) },
+                    configureDetektExtension = { reports { it.sarif.enabled = true } }
+                )
+                assertThat(getTask("detektAll").dependencies()).containsExactlyInAnyOrder(
+                    "detektMain",
+                    "detektDebug",
+                    "detektRelease",
+                    "detektTest",
+                    "detektTestDebug",
+                    "detektTestRelease",
+                    "detektAndroidTest",
+                    "detektAndroidTestDebug",
+                    "detektAndroidTestRelease"
+                )
                 assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
             }
         }
@@ -155,217 +136,124 @@ object DetektPluginTest : Spek({
         it("creates experimental tasks if the Android test plugin is present") {
             with(ProjectBuilder.builder().build()) {
                 ProjectBuilder.builder().withParent(this).withName("prod").build()
-
-                androidPluginSetup("com.android.test")
-
-                configureExtension<TestExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    targetProjectPath("prod")
-                }
-
-                configureExtension<DetektExtension> {
-                    reports {
-                        it.sarif {
-                            enabled = true
-                        }
-                    }
-                }
-
-                evaluate()
-
+                setupAndroidAndEvaluate<TestExtension>(
+                    androidPluginName = "com.android.test",
+                    configureBaseExtension = {
+                        compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
+                        targetProjectPath("prod")
+                    },
+                    configureDetektExtension = { reports { it.sarif.enabled = true } }
+                )
                 // Test extensions by default have only the debug variant configured
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder("detektDebug")
+                assertThat(getTask("detektAll").dependencies()).containsExactlyInAnyOrder(
+                    "detektMain",
+                    "detektDebug"
+                )
                 assertThat((getTask("detektDebug") as Detekt).reports.sarif.enabled).isTrue
-
-                // There is no test code for test modules, so we don't create a task for that either
-                assertThat(tasks.findByName("detektTest")).isNull()
             }
         }
 
         it("creates experimental tasks for different build variants") {
             with(ProjectBuilder.builder().build()) {
 
-                androidPluginSetup("com.android.library")
+                setupAndroidAndEvaluate<LibraryExtension>(
+                    androidPluginName = "com.android.library",
+                    configureBaseExtension = {
+                        compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
+                        setupFlavor()
+                    },
+                    configureDetektExtension = { }
+                )
 
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    flavorTestSetup()
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektYoungHarryDebug",
-                        "detektYoungHarryRelease",
-                        "detektOldHarryDebug",
-                        "detektOldHarryRelease",
-                        "detektYoungSallyDebug",
-                        "detektYoungSallyRelease",
-                        "detektOldSallyDebug",
-                        "detektOldSallyRelease"
-                    )
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        // unit tests
-                        "detektYoungHarryDebugUnitTest",
-                        "detektYoungHarryReleaseUnitTest",
-                        "detektOldHarryDebugUnitTest",
-                        "detektOldHarryReleaseUnitTest",
-                        "detektYoungSallyDebugUnitTest",
-                        "detektYoungSallyReleaseUnitTest",
-                        "detektOldSallyDebugUnitTest",
-                        "detektOldSallyReleaseUnitTest",
-                        // instrumentation tests
-                        "detektYoungHarryDebugAndroidTest",
-                        "detektOldHarryDebugAndroidTest",
-                        "detektYoungSallyDebugAndroidTest",
-                        "detektOldSallyDebugAndroidTest"
-                    )
+                assertThat(getTask("detektAll").dependencies()).containsExactlyInAnyOrder(
+                    "detektAndroidTest",
+                    "detektAndroidTestDebug",
+                    "detektAndroidTestHarry",
+                    "detektAndroidTestOld",
+                    "detektAndroidTestOldHarry",
+                    "detektAndroidTestOldHarryDebug",
+                    "detektAndroidTestYoung",
+                    "detektAndroidTestYoungHarry",
+                    "detektAndroidTestYoungHarryDebug",
+                    "detektDebug",
+                    "detektHarry",
+                    "detektMain",
+                    "detektOld",
+                    "detektOldHarry",
+                    "detektOldHarryDebug",
+                    "detektOldHarryRelease",
+                    "detektRelease",
+                    "detektTest",
+                    "detektTestDebug",
+                    "detektTestHarry",
+                    "detektTestOld",
+                    "detektTestOldHarry",
+                    "detektTestOldHarryDebug",
+                    "detektTestOldHarryRelease",
+                    "detektTestRelease",
+                    "detektTestYoung",
+                    "detektTestYoungHarry",
+                    "detektTestYoungHarryDebug",
+                    "detektTestYoungHarryRelease",
+                    "detektYoung",
+                    "detektYoungHarry",
+                    "detektYoungHarryDebug",
+                    "detektYoungHarryRelease",
+                    "detektAndroidTestRelease",
+                )
             }
         }
 
         it("creates experimental tasks for different build variants excluding ignored variants") {
             with(ProjectBuilder.builder().build()) {
 
-                androidPluginSetup("com.android.library")
+                setupAndroidAndEvaluate<LibraryExtension>(
+                    androidPluginName = "com.android.library",
+                    configureBaseExtension = {
+                        compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
+                        setupFlavor()
+                    },
+                    configureDetektExtension = {
+                        sourceSetFilter = Predicate { !it.contains("sally", ignoreCase = true) }
+                    }
+                )
 
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    flavorTestSetup()
-                }
-
-                configureExtension<DetektExtension> {
-                    ignoredVariants = listOf("youngHarryDebug", "oldSallyRelease")
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektYoungHarryRelease",
-                        "detektOldHarryDebug",
-                        "detektOldHarryRelease",
-                        "detektYoungSallyDebug",
-                        "detektYoungSallyRelease",
-                        "detektOldSallyDebug"
-                    )
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        // unit tests
-                        "detektYoungHarryReleaseUnitTest",
-                        "detektOldHarryDebugUnitTest",
-                        "detektOldHarryReleaseUnitTest",
-                        "detektYoungSallyDebugUnitTest",
-                        "detektYoungSallyReleaseUnitTest",
-                        "detektOldSallyDebugUnitTest",
-                        // instrumentation tests
-                        "detektOldHarryDebugAndroidTest",
-                        "detektYoungSallyDebugAndroidTest",
-                        "detektOldSallyDebugAndroidTest"
-                    )
-            }
-        }
-
-        it("creates experimental tasks for different build variants excluding ignored build types") {
-            with(ProjectBuilder.builder().build()) {
-
-                androidPluginSetup("com.android.library")
-
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    flavorTestSetup()
-                }
-
-                configureExtension<DetektExtension> {
-                    ignoredBuildTypes = listOf("release")
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektYoungHarryDebug",
-                        "detektOldHarryDebug",
-                        "detektYoungSallyDebug",
-                        "detektOldSallyDebug"
-                    )
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        // unit tests
-                        "detektYoungHarryDebugUnitTest",
-                        "detektOldHarryDebugUnitTest",
-                        "detektYoungSallyDebugUnitTest",
-                        "detektOldSallyDebugUnitTest",
-                        // instrumentation tests
-                        "detektYoungHarryDebugAndroidTest",
-                        "detektOldHarryDebugAndroidTest",
-                        "detektYoungSallyDebugAndroidTest",
-                        "detektOldSallyDebugAndroidTest"
-                    )
-            }
-        }
-
-        it("creates no tasks if all build types are ignored") {
-            with(ProjectBuilder.builder().build()) {
-
-                androidPluginSetup("com.android.library")
-
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    flavorTestSetup()
-                }
-
-                configureExtension<DetektExtension> {
-                    ignoredBuildTypes = listOf("debug", "release")
-                }
-
-                evaluate()
-
-                assertThat(tasks.findByName("detektMain")).isNull()
-                assertThat(tasks.findByName("detektTest")).isNull()
-            }
-        }
-
-        it("creates experimental tasks for different build variants excluding ignored flavors") {
-            with(ProjectBuilder.builder().build()) {
-
-                androidPluginSetup("com.android.library")
-
-                configureExtension<LibraryExtension> {
-                    compileSdkVersion(ANDROID_COMPILE_SDK_VERSION)
-                    flavorTestSetup()
-                }
-
-                configureExtension<DetektExtension> {
-                    ignoredFlavors = listOf("oldHarry", "youngSally")
-                }
-
-                evaluate()
-
-                assertThat(getTask("detektMain").dependencies())
-                    .containsExactlyInAnyOrder(
-                        "detektYoungHarryDebug",
-                        "detektYoungHarryRelease",
-                        "detektOldSallyDebug",
-                        "detektOldSallyRelease"
-                    )
-
-                assertThat(getTask("detektTest").dependencies())
-                    .containsExactlyInAnyOrder(
-                        // unit tests
-                        "detektYoungHarryDebugUnitTest",
-                        "detektYoungHarryReleaseUnitTest",
-                        "detektOldSallyDebugUnitTest",
-                        "detektOldSallyReleaseUnitTest",
-                        // instrumentation tests
-                        "detektYoungHarryDebugAndroidTest",
-                        "detektOldSallyDebugAndroidTest"
-                    )
+                assertThat(getTask("detektAll").dependencies()).containsExactlyInAnyOrder(
+                    "detektAndroidTest",
+                    "detektAndroidTestDebug",
+                    "detektAndroidTestHarry",
+                    "detektAndroidTestOld",
+                    "detektAndroidTestOldHarry",
+                    "detektAndroidTestOldHarryDebug",
+                    "detektAndroidTestRelease",
+                    "detektAndroidTestYoung",
+                    "detektAndroidTestYoungHarry",
+                    "detektAndroidTestYoungHarryDebug",
+                    "detektDebug",
+                    "detektMain",
+                    "detektOld",
+                    "detektOldHarry",
+                    "detektOldHarryDebug",
+                    "detektOldHarryRelease",
+                    "detektRelease",
+                    "detektTest",
+                    "detektTestDebug",
+                    "detektTestHarry",
+                    "detektTestOld",
+                    "detektTestOldHarry",
+                    "detektTestOldHarryDebug",
+                    "detektTestOldHarryRelease",
+                    "detektTestRelease",
+                    "detektTestYoung",
+                    "detektTestYoungHarry",
+                    "detektTestYoungHarryDebug",
+                    "detektTestYoungHarryRelease",
+                    "detektYoung",
+                    "detektYoungHarry",
+                    "detektYoungHarryDebug",
+                    "detektYoungHarryRelease",
+                    "detektHarry",
+                )
             }
         }
     }
@@ -375,25 +263,30 @@ internal const val ANDROID_COMPILE_SDK_VERSION = 29
 
 internal fun Task.dependencies() = taskDependencies.getDependencies(this).map { it.name }
 
-internal fun Project.androidPluginSetup(androidPlugin: String) {
+internal inline fun <reified T : BaseExtension> Project.setupAndroidAndEvaluate(
+    androidPluginName: String,
+    configureBaseExtension: T.() -> Unit,
+    configureDetektExtension: DetektExtension.() -> Unit,
+) {
     with(pluginManager) {
         apply(DetektPlugin::class.java)
-        apply(androidPlugin)
+        apply(androidPluginName)
         apply("kotlin-android")
     }
+
+    configureExtension(configureBaseExtension)
+    configureExtension(configureDetektExtension)
+    evaluate()
 }
 
 internal fun Project.getTask(name: String) = project.tasks.getAt(name)
 
 internal fun Project.evaluate() = (this as ProjectInternal).evaluate()
 
-internal fun BaseExtension.flavorTestSetup() {
+internal fun BaseExtension.setupFlavor() {
     flavorDimensions("age", "name")
     productFlavors {
         it.create("harry").apply {
-            dimension = "name"
-        }
-        it.create("sally").apply {
             dimension = "name"
         }
         it.create("young").apply {

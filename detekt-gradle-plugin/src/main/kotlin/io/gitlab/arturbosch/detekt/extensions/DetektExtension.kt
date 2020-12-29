@@ -5,6 +5,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
+import java.util.function.Predicate
 import javax.inject.Inject
 
 open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQualityExtension() {
@@ -42,21 +43,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
     /**
-     * List of Android build variants for which no detekt task should be created.
-     *
-     * This is a combination of build types and flavors, such as fooDebug or barRelease.
+     * A filter to specify if the detekt task of any [org.gradle.api.tasks.SourceSet] or
+     * [com.android.build.api.dsl.AndroidSourceSet] should be configured and executed given its name.
      */
-    var ignoredVariants: List<String> = emptyList()
-
-    /**
-     * List of Android build types for which no detekt task should be created.
-     */
-    var ignoredBuildTypes: List<String> = emptyList()
-
-    /**
-     * List of Android build flavors for which no detekt task should be created
-     */
-    var ignoredFlavors: List<String> = emptyList()
+    var sourceSetFilter: Predicate<String> = Predicate { true }
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 

@@ -8,13 +8,13 @@ repositories {
 }
 
 dependencies {
-    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
+    val agpVersion = "4.1.1"
     implementation(kotlin("gradle-plugin-api"))
-    compileOnly(androidGradlePlugin)
+    compileOnly("com.android.tools.build:gradle-api:$agpVersion")
 
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
-    testImplementation(androidGradlePlugin)
+    testImplementation("com.android.tools.build:gradle:$agpVersion")
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
