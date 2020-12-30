@@ -132,6 +132,8 @@ coroutines:
     active: false
   RedundantSuspendModifier:
     active: false
+  SleepInsteadOfDelay:
+    active: false
   SuspendFunWithFlowReturnType:
     active: false
 
