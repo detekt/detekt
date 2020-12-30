@@ -11,10 +11,11 @@ import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
- * Lambda expressions are are very useful in a lot of cases and they often include very small chunks of
+ * Lambda expressions are very useful in a lot of cases and they often include very small chunks of
  * code using only one parameter. In this cases Kotlin can supply the implicit `it` parameter
  * to make code more concise. However, when you are dealing with lambdas that contain multiple statements,
- * you might end up with a code that is hard to read if you don't specify the parameter name explicitly.
+ * you might end up with a code that is hard to read if you don't specify a readable, descriptive parameter name
+ * explicitly.
  *
  * <noncompliant>
  * val digits = 1234.let {
@@ -73,7 +74,7 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
                 CodeSmell(
                     issue, Entity.from(lambdaExpression),
                     "The parameter name in a multiline lambda should not be an implicit/explicit `it`. " +
-                            "Consider giving your parameter a name"
+                            "Consider giving your parameter a readable, descriptive name"
                 )
             )
         }
