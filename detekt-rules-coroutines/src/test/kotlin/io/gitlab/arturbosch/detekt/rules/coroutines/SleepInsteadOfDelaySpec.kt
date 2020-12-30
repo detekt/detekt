@@ -16,6 +16,17 @@ object SleepInsteadOfDelaySpec : Spek({
     val subject by memoized { SleepInsteadOfDelay(Config.empty) }
 
     describe("SleepInsteadOfDelay rule") {
+        it("should report no issue for delay() in suspend functions") {
+            val code = """
+                import kotlinx.coroutines.delay
+
+                suspend fun foo() {
+                    delay(1000L)
+                }
+            """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+
         it("should report Thread.sleep() in suspend functions") {
             val code = """
                 suspend fun foo() {
