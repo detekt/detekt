@@ -16,10 +16,10 @@ buildScan {
 }
 
 apiValidation {
-    // We only need to perform api validation for :detekt-api.
-    //
     // rootProject.name is a temporary workaround to exclude api validation of rootProject.
     // We should refactoring our gradle setup to not apply `JavaBasePlugin`
-    ignoredProjects.addAll(subprojects.filter { it.name != "detekt-api" }.map { it.name } + rootProject.name)
+    ignoredProjects.add(rootProject.name)
+    // We need to perform api validations for external APIs, for :detekt-api and :detekt-psi-utils
+    ignoredProjects.addAll(subprojects.filter { it.name !in listOf("detekt-api", "detekt-psi-utils") }.map { it.name })
     ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }
