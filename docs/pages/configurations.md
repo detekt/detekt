@@ -47,8 +47,6 @@ complexity:
 ```
 
 ## Build failure
-The JSON Schema is currently not automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).
-
 _detekt_ supports the option to fail your build if a threshold of code smell issues is met.
 
 For this the following code must be inside the detekt config:
@@ -159,4 +157,4 @@ More details on the IntelliJ support are available
 
 ![JSON Schema validator on IntelliJ](../images/json_schema_validator_intellij.png)
 
-The JSON Schema is currently not automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).	
+The JSON Schema is currently not automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).
