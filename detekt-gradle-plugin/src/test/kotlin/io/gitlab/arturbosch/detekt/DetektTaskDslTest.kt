@@ -236,7 +236,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("no report param is set") {
-                        assertThat(result.output).doesNotContain("--report")
+                        assertThat(result.output).doesNotContain("--report ")
                     }
                 }
 
@@ -496,8 +496,8 @@ internal object DetektTaskDslTest : Spek({
                         |            enabled = true
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
+                        |        basePath.set(projectDir)
                         |    }
-                        |    workingDir = projectDir
                         |}
                         """
 
@@ -533,6 +533,10 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
+                it("sets base path for reports") {
+                    assertThat(result.output).contains("--report-base-path")
+                }
+
                 it("sets absolute filename of both config file to detekt cli") {
                     val config = gradleRunner.projectFile("config.yml")
 
@@ -550,10 +554,6 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
-                }
-
-                it("sets working directory") {
-                    assertThat(result.output).contains("--working-dir")
                 }
             }
 
@@ -586,8 +586,8 @@ internal object DetektTaskDslTest : Spek({
                         |            enabled = true
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
+                        |        basePath.set(projectDir)
                         |    }
-                        |    workingDir.set(projectDir)
                         |}
                         """
 
@@ -623,6 +623,10 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
+                it("sets base path for reports") {
+                    assertThat(result.output).contains("--report-base-path")
+                }
+
                 it("sets absolute filename of both config file to detekt cli") {
                     val config = gradleRunner.projectFile("config.yml")
 
@@ -640,10 +644,6 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
-                }
-
-                it("sets working directory") {
-                    assertThat(result.output).contains("--working-dir")
                 }
             }
         }

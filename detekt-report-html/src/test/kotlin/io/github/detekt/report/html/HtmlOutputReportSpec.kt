@@ -197,17 +197,17 @@ private fun createTestDetektionFromRelativePath(): Detektion {
         position = 11 to 1,
         text = 10..14,
         ktElement = mockKtElement(),
-        baseDir = "/Users/tester/detekt/"
+        basePath = "/Users/tester/detekt/"
     )
     val entity2 = createEntity(
         path = "src/main/com/sample/Sample2.kt",
         position = 22 to 2,
-        baseDir = "/Users/tester/detekt/"
+        basePath = "/Users/tester/detekt/"
     )
     val entity3 = createEntity(
         path = "src/main/com/sample/Sample3.kt",
         position = 33 to 3,
-        baseDir = "/Users/tester/detekt/"
+        basePath = "/Users/tester/detekt/"
     )
 
     val issueA = createIssue("id_a")

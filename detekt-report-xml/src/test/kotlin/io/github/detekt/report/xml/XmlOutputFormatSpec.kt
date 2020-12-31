@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFindingFromRelativePath
+import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -94,15 +94,15 @@ class XmlOutputFormatSpec : Spek({
         }
 
         it("renders issues with relative path") {
-            val findingA = createFindingFromRelativePath(
+            val findingA = createFindingForRelativePath(
                 ruleName = "id_a",
-                baseDir = "/Users/tester/detekt/",
-                fileName = "Sample1.kt"
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample1.kt"
             )
-            val findingB = createFindingFromRelativePath(
+            val findingB = createFindingForRelativePath(
                 ruleName = "id_b",
-                baseDir = "/Users/tester/detekt/",
-                fileName = "Sample2.kt"
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample2.kt"
             )
 
             val result = outputFormat.render(TestDetektion(findingA, findingB))

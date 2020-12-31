@@ -22,29 +22,42 @@ fun PsiFile.fileNameWithoutSuffix(): String {
 fun PsiFile.absolutePath(): Path = Paths.get(name)
 
 /**
- * A file path that represents both relative path or absolute path.
- * If representing an absolute path, [basePath] is null and [path] represents the full path.
- * If representing a relative path, [basePath] is the base path while [path] represents the path relative to [basePath].
+ * A file path that represents absolute path and relative path if available.
  */
-data class FilePath constructor(val path: String, val basePath: String? = null) {
+data class FilePath constructor(
+    val absolutePath: Path,
+    val basePath: Path? = null,
+    val relativePath: Path? = null
+) {
+
+    init {
+        require(!hasRelativePath() || absolutePath == basePath!!.resolve(relativePath!!).normalize()) {
+            "Absolute path = $absolutePath much match base path = $basePath and relative path = $relativePath"
+        }
+    }
+
+    fun hasRelativePath() = basePath != null && relativePath != null
+
     companion object {
-        fun fromAbsolute(path: String) = FilePath(path)
-        fun fromRelative(basePath: String, path: String) = FilePath(path, basePath)
+        fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())
+        fun fromRelative(basePath: Path, relativePath: Path) = FilePath(
+            absolutePath = basePath.resolve(relativePath).normalize(),
+            basePath = basePath.normalize(),
+            relativePath = relativePath
+        )
     }
 }
 
-fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Paths.get(it) }
-
-fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Paths.get(it) }
-
 fun PsiFile.toFilePath(): FilePath {
-    val relativePath = relativePath()
-    val basePath = basePath()
+    val relativePath = getUserData(RELATIVE_PATH)
+    val basePath = getUserData(BASE_PATH)
     return when {
-        relativePath != null && basePath != null ->
-            FilePath.fromRelative(basePath = basePath.toString(), path = relativePath.toString())
-        relativePath == null && basePath == null ->
-            FilePath.fromAbsolute(path = absolutePath().toString())
-        else -> error("Cannot build a FilePath from relative path = $relativePath and base path = $basePath")
+        basePath != null && relativePath != null -> FilePath(
+            absolutePath = absolutePath(),
+            basePath = Paths.get(basePath),
+            relativePath = Paths.get(relativePath)
+        )
+        basePath == null && relativePath == null -> FilePath(absolutePath = absolutePath())
+        else -> error("Cannot build a FilePath from base path = $basePath and relative path = $relativePath")
     }
 }

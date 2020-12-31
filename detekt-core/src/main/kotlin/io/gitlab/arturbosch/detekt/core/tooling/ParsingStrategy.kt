@@ -10,13 +10,13 @@ typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
 fun contentToKtFile(content: String, path: Path): ParsingStrategy = { settings ->
     listOf(
-        KtCompiler(settings.environment).createKtFile(content, settings.spec.projectSpec.workingDir, path)
+        KtCompiler(settings.environment).createKtFile(content, settings.spec.projectSpec.reportBasePath, path)
     )
 }
 
 fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
     listOf(
-        KtCompiler(settings.environment).compile(settings.spec.projectSpec.workingDir, path)
+        KtCompiler(settings.environment).compile(settings.spec.projectSpec.reportBasePath, path)
     )
 }
 

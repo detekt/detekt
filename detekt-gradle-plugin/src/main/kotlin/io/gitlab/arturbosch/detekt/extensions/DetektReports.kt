@@ -2,13 +2,15 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
-import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.model.ObjectFactory
 import org.gradle.util.ConfigureUtil
 
 @Suppress("TooManyFunctions")
-class DetektReports {
+class DetektReports(objects: ObjectFactory) {
 
     val xml = DetektReport(XML)
 
@@ -19,6 +21,8 @@ class DetektReports {
     val sarif = DetektReport(SARIF)
 
     val custom = mutableListOf<CustomDetektReport>()
+
+    val basePath: DirectoryProperty = objects.directoryProperty()
 
     fun xml(configure: DetektReport.() -> Unit) = xml.configure()
     fun xml(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, xml)

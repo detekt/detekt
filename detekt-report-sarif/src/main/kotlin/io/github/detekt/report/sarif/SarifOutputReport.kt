@@ -1,6 +1,5 @@
 package io.github.detekt.report.sarif
 
-import io.github.detekt.psi.FilePath
 import io.github.detekt.sarif4j.ArtifactLocation
 import io.github.detekt.sarif4j.JacksonSarifWriter
 import io.github.detekt.sarif4j.Location
@@ -17,7 +16,6 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import java.io.File
 
 class SarifOutputReport : OutputReport() {
 
@@ -63,17 +61,15 @@ private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
                     startColumn = location.source.column
                 }
                 artifactLocation = ArtifactLocation().apply {
-                    uri = location.filePath.path
-                    uriBaseId = location.filePath.toUriBaseId()
+                    if (location.filePath.hasRelativePath()) {
+                        uri = location.filePath.relativePath.toString()
+                        uriBaseId = location.filePath.basePath?.toFile()?.toURI()?.toString()
+                    } else {
+                        uri = location.filePath.absolutePath.toString()
+                    }
                 }
             }
         })
     }
     message = Message().apply { text = messageOrDescription() }
-}
-
-private fun FilePath.toUriBaseId(): String? = basePath?.let { basePath ->
-    val uri = File(basePath, path).toURI().toString()
-    check(uri.endsWith(path)) { "$uri should end with $path" }
-    uri.substring(0, uri.length - this.path.length)
 }

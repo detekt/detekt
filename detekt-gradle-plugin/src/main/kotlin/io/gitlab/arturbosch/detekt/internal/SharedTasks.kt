@@ -22,7 +22,6 @@ internal fun Project.registerDetektTask(
         it.autoCorrectProp.set(provider { extension.autoCorrect })
         it.config.setFrom(provider { extension.config })
         it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-        it.workingDir.set(extension.workingDir)
         configuration(it)
     }
 
@@ -39,7 +38,7 @@ internal fun Project.registerCreateBaselineTask(
         it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
         it.failFast.set(project.provider { extension.failFast })
         it.autoCorrect.set(project.provider { extension.autoCorrect })
-        it.workingDir.set(extension.workingDir)
+        it.reportBasePath.set(extension.reports.basePath)
         configuration(it)
     }
 

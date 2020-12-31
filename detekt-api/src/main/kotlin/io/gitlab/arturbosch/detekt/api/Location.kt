@@ -9,35 +9,23 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import java.nio.file.Paths
 
 /**
  * Specifies a position within a source code fragment.
  */
-data class Location(
+data class Location @Deprecated("Consider relative path by passing a [FilePath]") @JvmOverloads constructor(
     val source: SourceLocation,
     val text: TextLocation,
-    val filePath: FilePath
+    val file: String,
+    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
 ) : Compactable {
 
-    @Deprecated(
-        "Consider relative path, do not assume [file] is always absolute.",
-        ReplaceWith("filePath.path")
-    )
-    val file: String = filePath.path
-
-    @Deprecated(
-        "Consider relative path, do not assume [file] is always absolute.",
-        ReplaceWith(
-            "Location(source, text, FilePath.fromAbsolute(file))",
-            "io.gitlab.arturbosch.detekt.api.Location",
-            "io.gitlab.arturbosch.detekt.api.FilePath"
-        )
-    )
     constructor(
         source: SourceLocation,
         text: TextLocation,
-        file: String
-    ) : this(source, text, FilePath.fromAbsolute(file))
+        filePath: FilePath
+    ) : this(source, text, filePath.absolutePath.toString(), filePath)
 
     @Deprecated(
         """
@@ -56,7 +44,7 @@ data class Location(
         file: String
     ) : this(source, text, file)
 
-    override fun compact(): String = "${filePath.path}:$source"
+    override fun compact(): String = "${filePath.absolutePath}:$source"
 
     companion object {
         /**

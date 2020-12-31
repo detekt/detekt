@@ -24,8 +24,9 @@ class XmlOutputReport : OutputReport() {
         lines += "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
-        smells.groupBy { it.location.file }.forEach { (fileName, findings) ->
-            lines += "<file name=\"${fileName.toXmlString()}\">"
+        smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
+            .forEach { (filePath, findings) ->
+            lines += "<file name=\"${filePath.toXmlString()}\">"
             findings.forEach {
                 lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",

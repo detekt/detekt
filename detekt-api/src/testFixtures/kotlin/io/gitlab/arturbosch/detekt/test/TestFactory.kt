@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
+import java.nio.file.Paths
 
 fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
@@ -28,6 +29,25 @@ fun createFinding(
     message = message
 )
 
+fun createFindingForRelativePath(
+    ruleName: String = "TestSmell",
+    basePath: String = "/Users/tester/detekt/",
+    relativePath: String = "TestFile.kt"
+) = CodeSmell(
+    issue = createIssue(ruleName),
+    entity = Entity(
+        name = "TestEntity",
+        signature = "TestEntitySignature",
+        location = Location(
+            source = SourceLocation(1, 1),
+            text = TextLocation(0, 0),
+            filePath = FilePath.fromRelative(Paths.get(basePath), Paths.get(relativePath))
+        ),
+        ktElement = null
+    ),
+    message = "TestMessage"
+)
+
 fun createIssue(id: String) = Issue(
     id = id,
     severity = Severity.CodeSmell,
@@ -40,33 +60,16 @@ fun createEntity(
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
     ktElement: KtElement? = null,
-    baseDir: String? = null
+    basePath: String? = null
 ) = Entity(
     name = "TestEntity",
     signature = "TestEntitySignature",
     location = Location(
         source = SourceLocation(position.first, position.second),
         text = TextLocation(text.first, text.last),
-        filePath = baseDir?.let { FilePath.fromRelative(it, path) } ?: FilePath.fromAbsolute(path)
+        filePath = basePath?.let { FilePath.fromRelative(Paths.get(it), Paths.get(path)) }
+            ?: FilePath.fromAbsolute(Paths.get(path))
     ),
     ktElement = ktElement
 )
 
-fun createFindingFromRelativePath(
-    ruleName: String = "TestSmell",
-    baseDir: String = "/Users/tester/detekt/",
-    fileName: String = "TestFile.kt"
-) = CodeSmell(
-    issue = createIssue(ruleName),
-    entity = Entity(
-        name = "TestEntity",
-        signature = "TestEntitySignature",
-        location = Location(
-            source = SourceLocation(1, 1),
-            text = TextLocation(0, 0),
-            filePath = FilePath.fromRelative(baseDir, fileName)
-        ),
-        ktElement = null
-    ),
-    message = "TestMessage"
-)

@@ -1,5 +1,6 @@
 package io.github.detekt.parser
 
+import io.github.detekt.psi.BASE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
 import io.github.detekt.test.utils.resourceAsPath
@@ -24,6 +25,16 @@ class KtCompilerTest : Spek({
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo(System.lineSeparator())
             assertThat(ktFile.getUserData(RELATIVE_PATH))
                 .isEqualTo("Default.kt")
+            assertThat(ktFile.getUserData(BASE_PATH))
+                .endsWith("/cases")
+        }
+
+        it("Kotlin file does not store extra data for relative path if not provided") {
+            val ktFile = ktCompiler.compile(null, path.resolve("Default.kt"))
+
+            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo(System.lineSeparator())
+            assertThat(ktFile.getUserData(RELATIVE_PATH)).isNull()
+            assertThat(ktFile.getUserData(BASE_PATH)).isNull()
         }
 
         it("throws an exception for an invalid sub path") {

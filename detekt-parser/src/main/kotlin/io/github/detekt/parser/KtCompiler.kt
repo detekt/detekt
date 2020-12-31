@@ -25,19 +25,20 @@ open class KtCompiler(
     fun createKtFile(content: String, basePath: Path?, path: Path): KtFile {
         require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
 
-        val absolutePath = path.toAbsolutePath().normalize()
+        val normalizedAbsolutePath = path.toAbsolutePath().normalize()
         val lineSeparator = content.determineLineSeparator()
 
         val psiFile = psiFileFactory.createPhysicalFile(
-            absolutePath.toString(),
+            normalizedAbsolutePath.toString(),
             StringUtilRt.convertLineSeparators(content)
         )
 
         return psiFile.apply {
             putUserData(LINE_SEPARATOR, lineSeparator)
-            basePath?.relativize(absolutePath)?.normalize()?.let {
-                putUserData(BASE_PATH, basePath.toAbsolutePath().toString())
-                putUserData(RELATIVE_PATH, it.toString())
+            val normalizedBasePath = basePath?.normalize()
+            normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
+                putUserData(BASE_PATH, normalizedBasePath.toAbsolutePath().toString())
+                putUserData(RELATIVE_PATH, relativePath.toString())
             }
         }
     }

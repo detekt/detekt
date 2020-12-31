@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createFindingFromRelativePath
+import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -36,9 +36,9 @@ class SarifOutputReportSpec : Spek({
 
         it("renders multiple issues with relative path") {
             val result = TestDetektion(
-                createFindingFromRelativePath(ruleName = "TestSmellA"),
-                createFindingFromRelativePath(ruleName = "TestSmellB"),
-                createFindingFromRelativePath(ruleName = "TestSmellC")
+                createFindingForRelativePath(ruleName = "TestSmellA"),
+                createFindingForRelativePath(ruleName = "TestSmellB"),
+                createFindingForRelativePath(ruleName = "TestSmellC")
             )
 
             val report = SarifOutputReport().apply { init(EmptySetupContext()) }
@@ -66,7 +66,7 @@ private fun createFinding(ruleName: String, severity: SeverityLevel): Finding {
     }
 }
 
-internal fun String.stripWhitespace() = replace(Regex("\\s"), "")
+private fun String.stripWhitespace() = replace(Regex("\\s"), "")
 
 internal class TestVersionProvider : VersionProvider {
 

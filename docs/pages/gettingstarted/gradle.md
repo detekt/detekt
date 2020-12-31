@@ -197,7 +197,6 @@ detekt {
     ignoredBuildTypes = ["release"]                       // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredFlavors = ["production"]                       // Android: Don't create tasks for the specified build flavor (e.g. "production")
     ignoredVariants = ["productionRelease"]               // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
-    workingDir = layout.projectDirectory                  // Specify a working directory as the base path for file paths in output and reports. If not, all file paths reported will be absolute file path.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -219,6 +218,7 @@ detekt {
             reportId = "CustomJsonReport"                   // The simple class name of your custom report.
             destination = file("build/reports/detekt.json") // Path where report will be stored
         }
+        basePath.set(projectDir)                            // Specify a base path If not, all file paths reported will be absolute file path.
     }
 }
 ```

@@ -86,11 +86,12 @@ class CliArgs {
     private var reports: List<String>? = null
 
     @Parameter(
-        names = ["--working-dir", "-wd"],
-        description = "Specify a working directory as the base path for file paths in output and reports.",
+        names = ["--report-base-path", "-rbp"],
+        description = "Specifies a directory as the base path for all file paths in the formatted reports. " +
+            "File paths in console output and txt report are not affected and remain as absolute paths.",
         converter = PathConverter::class
     )
-    var workingDir: Path? = null
+    var reportBasePath: Path? = null
 
     @Parameter(
         names = ["--disable-default-rulesets", "-dd"],

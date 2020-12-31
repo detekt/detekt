@@ -132,8 +132,9 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun FlowContent.renderFinding(finding: Finding) {
+        val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
         span("location") {
-            text("${finding.file}:${finding.location.source.line}:${finding.location.source.column}")
+            text("$filePath:${finding.location.source.line}:${finding.location.source.column}")
         }
 
         if (finding.message.isNotEmpty()) {

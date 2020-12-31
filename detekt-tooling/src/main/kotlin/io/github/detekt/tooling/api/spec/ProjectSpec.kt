@@ -10,7 +10,7 @@ interface ProjectSpec {
     /**
      * Working directory to relativize paths. Mostly used for generating path in the output or report.
      */
-    val workingDir: Path?
+    val reportBasePath: Path?
 
     /**
      * Paths to analyze. Works with files and directories.
