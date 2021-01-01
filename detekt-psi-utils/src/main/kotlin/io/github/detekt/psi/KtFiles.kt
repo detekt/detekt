@@ -22,7 +22,7 @@ fun PsiFile.fileNameWithoutSuffix(): String {
 fun PsiFile.absolutePath(): Path = Paths.get(name)
 
 /**
- * A file path that represents absolute path and relative path if available.
+ * Represents both absolute path and relative path if available.
  */
 data class FilePath constructor(
     val absolutePath: Path,
@@ -31,12 +31,13 @@ data class FilePath constructor(
 ) {
 
     init {
-        require(!hasRelativePath() || absolutePath == basePath!!.resolve(relativePath!!).normalize()) {
+        require(basePath == null ||
+            relativePath == null ||
+            absolutePath == basePath.resolve(relativePath).normalize()
+        ) {
             "Absolute path = $absolutePath much match base path = $basePath and relative path = $relativePath"
         }
     }
-
-    fun hasRelativePath() = basePath != null && relativePath != null
 
     companion object {
         fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())

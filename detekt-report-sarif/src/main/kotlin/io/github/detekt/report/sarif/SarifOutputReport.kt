@@ -61,7 +61,7 @@ private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
                     startColumn = location.source.column
                 }
                 artifactLocation = ArtifactLocation().apply {
-                    if (location.filePath.hasRelativePath()) {
+                    if (location.filePath.basePath != null && location.filePath.relativePath != null) {
                         uri = location.filePath.relativePath.toString()
                         uriBaseId = location.filePath.basePath?.toFile()?.toURI()?.toString()
                     } else {

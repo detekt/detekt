@@ -11,7 +11,6 @@ public final class io/github/detekt/psi/FilePath {
 	public final fun getAbsolutePath ()Ljava/nio/file/Path;
 	public final fun getBasePath ()Ljava/nio/file/Path;
 	public final fun getRelativePath ()Ljava/nio/file/Path;
-	public final fun hasRelativePath ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
