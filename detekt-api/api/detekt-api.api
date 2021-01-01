@@ -153,6 +153,7 @@ public final class io/gitlab/arturbosch/detekt/api/Debt$Companion {
 	public final fun getFIVE_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
 	public final fun getTEN_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
 	public final fun getTWENTY_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun getONE_MIN ()Lio/gitlab/arturbosch/detekt/api/Debt;
 }
 
 public class io/gitlab/arturbosch/detekt/api/DefaultContext : io/gitlab/arturbosch/detekt/api/Context {
