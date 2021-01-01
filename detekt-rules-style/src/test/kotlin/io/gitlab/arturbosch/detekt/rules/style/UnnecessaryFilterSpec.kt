@@ -36,6 +36,19 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
+        it("Sequence with count") {
+            val code = """
+                val x = listOf(1, 2, 3)
+                    .asSequence()
+                    .map { it * 2 }
+                    .filter { it > 1 }
+                    .count()
+            """
+
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
         it("None item") {
             val code = """
                 val x = listOf(1, 2, 3)
@@ -44,7 +57,18 @@ class UnnecessaryFilterSpec : Spek({
             """
 
             val findings = subject.compileAndLint(code)
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(1)
+        }
+
+        it("Any item") {
+            val code = """
+                val x = listOf(1, 2, 3)
+                    .filter { it > 2 }
+                    .isNotEmpty()
+            """
+
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
     }
 
@@ -63,6 +87,28 @@ class UnnecessaryFilterSpec : Spek({
             val code = """
                 val x = listOf(1, 2, 3)
                     .none { it > 2 }
+            """
+
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("Any item") {
+            val code = """
+                val x = listOf(1, 2, 3)
+                    .any{ it > 2 }
+            """
+
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("Sequence with count") {
+            val code = """
+                val x = listOf(1, 2, 3)
+                    .asSequence()
+                    .map { it * 2 }
+                    .count { it > 1 }
             """
 
             val findings = subject.compileAndLint(code)
