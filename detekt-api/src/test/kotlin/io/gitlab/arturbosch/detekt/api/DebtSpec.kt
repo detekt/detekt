@@ -15,7 +15,7 @@ class DebtSpec : Spek({
             assertThatIllegalArgumentException().isThrownBy { Debt(5, 5, -1) }
         }
 
-        it("should fail if all values are less than zero ") {
+        it("should fail if all values are less than zero") {
             assertThatIllegalArgumentException().isThrownBy { Debt(0, 0, 0) }
         }
 
@@ -23,6 +23,7 @@ class DebtSpec : Spek({
             assertThat(Debt.TWENTY_MINS.toString()).isEqualTo("20min")
             assertThat(Debt.TEN_MINS.toString()).isEqualTo("10min")
             assertThat(Debt.FIVE_MINS.toString()).isEqualTo("5min")
+            assertThat(Debt.ONE_MIN.toString()).isEqualTo("1min")
         }
 
         it("day, hours and min combinations should work") {
@@ -30,6 +31,7 @@ class DebtSpec : Spek({
             assertThat(Debt(1, 20, 0).toString()).isEqualTo("1d 20h")
             assertThat(Debt(0, 20, 0).toString()).isEqualTo("20h")
             assertThat(Debt(1, 0, 20).toString()).isEqualTo("1d 20min")
+            assertThat(Debt(0, 0, 1).toString()).isEqualTo("1min")
         }
     }
 
