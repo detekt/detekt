@@ -1,5 +1,6 @@
 package io.github.detekt.report.sarif
 
+import io.github.detekt.psi.toUnifiedString
 import io.github.detekt.sarif4j.ArtifactLocation
 import io.github.detekt.sarif4j.JacksonSarifWriter
 import io.github.detekt.sarif4j.Location
@@ -62,10 +63,10 @@ private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
                 }
                 artifactLocation = ArtifactLocation().apply {
                     if (location.filePath.basePath != null && location.filePath.relativePath != null) {
-                        uri = location.filePath.relativePath.toString()
+                        uri = location.filePath.relativePath?.toUnifiedString()
                         uriBaseId = location.filePath.basePath?.toFile()?.toURI()?.toString()
                     } else {
-                        uri = location.filePath.absolutePath.toString()
+                        uri = location.filePath.absolutePath.toUnifiedString()
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package io.github.detekt.report.xml
 
+import io.github.detekt.psi.toUnifiedString
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
@@ -26,7 +27,7 @@ class XmlOutputReport : OutputReport() {
 
         smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
             .forEach { (filePath, findings) ->
-            lines += "<file name=\"${filePath.toXmlString()}\">"
+            lines += "<file name=\"${filePath.toUnifiedString().toXmlString()}\">"
             findings.forEach {
                 lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",

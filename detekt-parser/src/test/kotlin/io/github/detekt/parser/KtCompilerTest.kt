@@ -26,7 +26,7 @@ class KtCompilerTest : Spek({
             assertThat(ktFile.getUserData(RELATIVE_PATH))
                 .isEqualTo("Default.kt")
             assertThat(ktFile.getUserData(BASE_PATH))
-                .endsWith("/cases")
+                .endsWith("cases")
         }
 
         it("Kotlin file does not store extra data for relative path if not provided") {

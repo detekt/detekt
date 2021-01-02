@@ -18,7 +18,6 @@ class DetektPlugin : Plugin<Project> {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
         val extension = project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
-        extension.reports.basePath.convention(project.rootProject.layout.projectDirectory)
 
         val defaultConfigFile =
             project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")

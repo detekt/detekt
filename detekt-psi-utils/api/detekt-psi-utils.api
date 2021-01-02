@@ -30,9 +30,12 @@ public final class io/github/detekt/psi/KtFilesKt {
 	public static final field KOTLIN_SCRIPT_SUFFIX Ljava/lang/String;
 	public static final field KOTLIN_SUFFIX Ljava/lang/String;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
+	public static final fun basePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun fileNameWithoutSuffix (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
 	public static final fun getFileName (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
+	public static final fun relativePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun toFilePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Lio/github/detekt/psi/FilePath;
+	public static final fun toUnifiedString (Ljava/nio/file/Path;)Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePatternKt {

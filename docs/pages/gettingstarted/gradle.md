@@ -218,7 +218,7 @@ detekt {
             reportId = "CustomJsonReport"                   // The simple class name of your custom report.
             destination = file("build/reports/detekt.json") // Path where report will be stored
         }
-        basePath.set(projectDir)                            // Specify a base path If not, all file paths reported will be absolute file path.
+        basePath.set(projectDir)                            // Specify a base path for relative paths in the reports, otherwise all file paths reported will be absolute file path.
     }
 }
 ```
@@ -256,6 +256,7 @@ detekt {
             reportId = "CustomJsonReport"                 // The simple class name of your custom report.
             destination = file("build/reports/detekt.json") // Path where report will be stored
         }
+        basePath.set(projectDir)                            // Specify a base path for relative paths in the reports, otherwise all file paths reported will be absolute file path.
     }
 }
 ```

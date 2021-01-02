@@ -1,6 +1,7 @@
 package io.github.detekt.report.html
 
 import io.github.detekt.metrics.ComplexityReportGenerator
+import io.github.detekt.psi.toUnifiedString
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
@@ -134,7 +135,7 @@ class HtmlOutputReport : OutputReport() {
     private fun FlowContent.renderFinding(finding: Finding) {
         val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
         span("location") {
-            text("$filePath:${finding.location.source.line}:${finding.location.source.column}")
+            text("${filePath.toUnifiedString()}:${finding.location.source.line}:${finding.location.source.column}")
         }
 
         if (finding.message.isNotEmpty()) {
