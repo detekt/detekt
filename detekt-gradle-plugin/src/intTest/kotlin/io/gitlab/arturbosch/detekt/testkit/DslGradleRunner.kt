@@ -6,6 +6,7 @@ import java.io.File
 import java.nio.file.Files
 import java.util.UUID
 
+@Suppress("TooManyFunctions")
 class DslGradleRunner @Suppress("LongParameterList") constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
