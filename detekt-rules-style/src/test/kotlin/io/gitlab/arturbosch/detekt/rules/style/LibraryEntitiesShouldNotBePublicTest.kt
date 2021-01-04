@@ -11,14 +11,15 @@ internal class LibraryEntitiesShouldNotBePublicTest : Spek({
 
     describe("Library class cannot be public") {
         it("should not report without explicit filters set") {
+            val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to "**"))
             assertThat(
-                LibraryEntitiesShouldNotBePublic().compileAndLint("""
+                subject.compileAndLint("""
                     class A 
             """)).isEmpty()
         }
 
         val subject by memoized {
-            LibraryEntitiesShouldNotBePublic(TestConfig(Config.INCLUDES_KEY to "*.kt"))
+            LibraryEntitiesShouldNotBePublic()
         }
 
         describe("positive cases") {
