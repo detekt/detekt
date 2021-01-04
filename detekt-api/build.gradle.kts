@@ -1,6 +1,7 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
+    module
     id("org.jetbrains.dokka")
     `java-test-fixtures`
 }

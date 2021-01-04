@@ -10,6 +10,10 @@ plugins {
     id("binary-compatibility-validator")
 }
 
+repositories {
+    jcenter()
+}
+
 buildScan {
     termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
