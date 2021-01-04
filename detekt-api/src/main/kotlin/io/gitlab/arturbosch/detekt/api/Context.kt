@@ -22,7 +22,7 @@ interface Context {
      * Additionally suppression by rule set id is supported.
      */
     fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
-        report(finding, aliases, null)
+        // no-op
     }
 
     /**
