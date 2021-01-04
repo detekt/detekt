@@ -20,6 +20,7 @@
       "results": [
         {
           "ruleId": "detekt.TestSmellA.TestSmellA",
+          "level": "error",
           "message": {
             "text": "TestMessage"
           },
@@ -58,6 +59,7 @@
         },
         {
           "ruleId": "detekt.TestSmellC.TestSmellC",
+          "level": "note",
           "message": {
             "text": "TestMessage"
           },
