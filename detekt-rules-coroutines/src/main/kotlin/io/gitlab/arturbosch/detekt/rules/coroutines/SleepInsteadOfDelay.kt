@@ -38,6 +38,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     delay(1_000L)
  * }
  * </compliant>
+ *
+ * @active since v1.16.0
+ * @requiresTypeResolution
  */
 class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     private var sleepImported = false
@@ -71,7 +74,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
             ?.resultingDescriptor
             ?.fqNameOrNull()
             ?.asString()
-        if (fqName == LAUNCH_COROUTINE_NAME) {
+        if (fqName in COROUTINE_NAMES) {
             expression.checkDescendants(COROUTINE_MESSAGE)
         }
         super.visitQualifiedExpression(expression)
@@ -103,6 +106,6 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         private const val THREAD_IMPORT_PATH = "java.lang.Thread"
         private const val FQ_NAME = "$THREAD_IMPORT_PATH.$SLEEP_CALL"
         private val IMPORT_PATHS = listOf(FQ_NAME, THREAD_IMPORT_PATH)
-        private const val LAUNCH_COROUTINE_NAME = "kotlinx.coroutines.launch"
+        private val COROUTINE_NAMES = listOf("kotlinx.coroutines.launch", "kotlinx.coroutines.async")
     }
 }
