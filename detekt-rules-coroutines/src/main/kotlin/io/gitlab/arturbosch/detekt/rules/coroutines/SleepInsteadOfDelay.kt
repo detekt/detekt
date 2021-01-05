@@ -39,7 +39,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  *
- * @active since v1.16.0
  * @requiresTypeResolution
  */
 class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
