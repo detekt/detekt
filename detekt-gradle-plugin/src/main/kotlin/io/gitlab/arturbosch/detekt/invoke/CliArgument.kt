@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
-import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import java.io.File
@@ -21,7 +20,7 @@ private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
-private const val REPORT_BASE_PATH_PARAMETER = "--report-base-path"
+private const val BASE_PATH_PARAMETER = "--base-path"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -66,8 +65,8 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
-internal data class ReportBaseDirArgument(val dir: Directory?) : CliArgument() {
-    override fun toArgument() = dir?.let { listOf(REPORT_BASE_PATH_PARAMETER, it.asFile.absolutePath) } ?: emptyList()
+internal data class BasePathArgument(val basePath: String?) : CliArgument() {
+    override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) } ?: emptyList()
 }
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {

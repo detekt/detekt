@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
@@ -236,7 +236,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("no report param is set") {
-                        assertThat(result.output).doesNotContain("--report ")
+                        assertThat(result.output).doesNotContain("--report")
                     }
                 }
 
@@ -496,8 +496,8 @@ internal object DetektTaskDslTest : Spek({
                         |            enabled = true
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
-                        |        basePath.set(projectDir)
                         |    }
+                        |    basePath = projectDir
                         |}
                         """
 
@@ -533,8 +533,8 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
-                it("sets base path for reports") {
-                    assertThat(result.output).contains("--report-base-path")
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
@@ -586,8 +586,8 @@ internal object DetektTaskDslTest : Spek({
                         |            enabled = true
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
-                        |        basePath.set(projectDir)
                         |    }
+                        |    basePath = projectDir.toString()
                         |}
                         """
 
@@ -623,8 +623,8 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
-                it("sets base path for reports") {
-                    assertThat(result.output).contains("--report-base-path")
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {

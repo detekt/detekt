@@ -20,12 +20,14 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val customReportsDir: File?
         get() = reportsDir
 
-    val reports = DetektReports(objects)
+    val reports = DetektReports()
 
     var input: ConfigurableFileCollection =
         objects.fileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
     var baseline: File? = null
+
+    var basePath: String? = null
 
     var config: ConfigurableFileCollection = objects.fileCollection()
 

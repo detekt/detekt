@@ -14,7 +14,7 @@ class KtTreeCompiler(
     private val compiler: KtCompiler = KtCompiler(settings.environment)
 ) {
 
-    private val basePath: Path? = projectSpec.reportBasePath
+    private val basePath: Path? = projectSpec.basePath
     private val pathFilters: PathFilters? =
         PathFilters.of(projectSpec.includes.toList(), projectSpec.excludes.toList())
 

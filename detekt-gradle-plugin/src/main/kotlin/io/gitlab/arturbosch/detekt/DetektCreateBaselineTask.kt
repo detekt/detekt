@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
+import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -13,9 +14,7 @@ import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import io.gitlab.arturbosch.detekt.invoke.ReportBaseDirArgument
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
@@ -84,8 +83,16 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @get:Internal
-    val reportBasePath: DirectoryProperty = project.objects.directoryProperty()
+    /**
+     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
+     */
+    @get:Input
+    @get:Optional
+    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    var basePath: String
+        @Internal
+        get() = basePathProp.get()
+        set(value) = basePathProp.set(value)
 
     @get:Input
     @get:Optional
@@ -111,7 +118,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
-            ReportBaseDirArgument(reportBasePath.orNull),
+            BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 

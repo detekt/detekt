@@ -8,9 +8,9 @@ import java.nio.file.Path
 interface ProjectSpec {
 
     /**
-     * Working directory to relativize paths. Mostly used for generating path in the output or report.
+     * A base path to relativize paths. Mostly used for generating path in the output or report.
      */
-    val reportBasePath: Path?
+    val basePath: Path?
 
     /**
      * Paths to analyze. Works with files and directories.
