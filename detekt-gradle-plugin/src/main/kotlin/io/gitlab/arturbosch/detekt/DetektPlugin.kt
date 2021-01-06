@@ -28,7 +28,7 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
-        project.registerOldDetektTask(extension)
+        project.registerDetektVanillaTask(extension)
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
         project.registerGenerateConfigTask(extension)
@@ -46,7 +46,7 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.registerOldDetektTask(extension: DetektExtension) {
+    private fun Project.registerDetektVanillaTask(extension: DetektExtension) {
         val detektTaskProvider = tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
             it.parallelProp.set(project.provider { extension.parallel })
