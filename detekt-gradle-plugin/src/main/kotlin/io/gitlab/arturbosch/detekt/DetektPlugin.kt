@@ -37,13 +37,13 @@ class DetektPlugin : Plugin<Project> {
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
-            DetektJvm(this).registerDetektJvmTasks(extension)
+            DetektJvm(this).registerTasks(extension)
         }
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
         plugins.withId("kotlin-android") {
-            DetektAndroid(this).registerDetektAndroidTasks(extension)
+            DetektAndroid(this).registerTasks(extension)
         }
     }
 

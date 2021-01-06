@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
 
 internal class DetektJvm(private val project: Project) {
-    fun registerDetektJvmTasks(extension: DetektExtension) {
+    fun registerTasks(extension: DetektExtension) {
         project.afterEvaluate {
             project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
                 project.registerJvmDetektTask(extension, sourceSet)
