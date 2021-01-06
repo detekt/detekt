@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
+import io.gitlab.arturbosch.detekt.internal.registerDetektTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
@@ -47,22 +48,13 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektVanillaTask(extension: DetektExtension) {
-        val detektTaskProvider = tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
-            it.debugProp.set(project.provider { extension.debug })
-            it.parallelProp.set(project.provider { extension.parallel })
-            it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-            it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
-            it.failFastProp.set(project.provider { extension.failFast })
-            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
-            it.config.setFrom(project.provider { extension.config })
-            it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-            it.reportsDir.set(project.provider { extension.customReportsDir })
-            it.reports = extension.reports
-            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-            it.basePathProp.set(extension.basePath)
+        val detektTaskProvider = registerDetektTask(DETEKT_TASK_NAME, extension) {
+            baseline.set(project.layout.file(project.provider { extension.baseline }))
+            setSource(existingInputDirectoriesProvider(project, extension))
+            setIncludes(defaultIncludes)
+            setExcludes(defaultExcludes)
+            reportsDir.set(project.provider { extension.customReportsDir })
+            reports = extension.reports
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
