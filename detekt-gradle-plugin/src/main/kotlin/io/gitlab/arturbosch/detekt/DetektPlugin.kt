@@ -3,15 +3,11 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
-import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
-import io.gitlab.arturbosch.detekt.internal.registerDetektTask
+import io.gitlab.arturbosch.detekt.internal.DetektVanilla
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.ReportingBasePlugin
-import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 class DetektPlugin : Plugin<Project> {
 
@@ -48,23 +44,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektVanillaTask(extension: DetektExtension) {
-        val detektTaskProvider = registerDetektTask(DETEKT_TASK_NAME, extension) {
-            baseline.set(project.layout.file(project.provider { extension.baseline }))
-            setSource(existingInputDirectoriesProvider(project, extension))
-            setIncludes(defaultIncludes)
-            setExcludes(defaultExcludes)
-            reportsDir.set(project.provider { extension.customReportsDir })
-            reports = extension.reports
-        }
-
-        tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-            it.dependsOn(detektTaskProvider)
-        }
-
-        registerCreateBaselineTask(BASELINE_TASK_NAME, extension) {
-            setSource(existingInputDirectoriesProvider(project, extension))
-            baseline.set(project.layout.file(project.provider { extension.baseline }))
-        }
+        DetektVanilla(this).registerTasks(extension)
     }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
@@ -72,11 +52,6 @@ class DetektPlugin : Plugin<Project> {
             it.config.setFrom(project.provider { extension.config })
         }
     }
-
-    private fun existingInputDirectoriesProvider(
-        project: Project,
-        extension: DetektExtension
-    ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
         project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
