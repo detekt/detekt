@@ -31,7 +31,6 @@ class DetektPlugin : Plugin<Project> {
         project.registerOldDetektTask(extension)
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
-        project.registerOldCreateBaselineTask(extension)
         project.registerGenerateConfigTask(extension)
     }
 
@@ -69,13 +68,12 @@ class DetektPlugin : Plugin<Project> {
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
             it.dependsOn(detektTaskProvider)
         }
-    }
 
-    private fun Project.registerOldCreateBaselineTask(extension: DetektExtension) =
         registerCreateBaselineTask(BASELINE_TASK_NAME, extension) {
             setSource(existingInputDirectoriesProvider(project, extension))
             baseline.set(project.layout.file(project.provider { extension.baseline }))
         }
+    }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
