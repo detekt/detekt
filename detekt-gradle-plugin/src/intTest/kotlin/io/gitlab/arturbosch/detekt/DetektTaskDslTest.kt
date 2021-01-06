@@ -99,6 +99,28 @@ internal object DetektTaskDslTest : Spek({
                     }
                 }
 
+                describe("with custom baseline file that doesn't exist") {
+                    val baselineFilename = "detekt-baseline-no-exist.xml"
+
+                    beforeGroup {
+
+                        val config = """
+                        |detekt {
+                        |   baseline = file("$baselineFilename")
+                        |}
+                        """
+
+                        gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+                        result = gradleRunner.runDetektTask()
+                    }
+
+                    it("doesn't set the baseline parameter") {
+                        assertThat(result.output).doesNotContain("--baseline")
+                    }
+                }
+
                 describe("with custom input directories") {
                     val customSrc1 = "gensrc/kotlin"
                     val customSrc2 = "src/main/kotlin"
