@@ -57,7 +57,12 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
-        sleepImported = importDirective.importedFqName?.asString() in IMPORT_PATHS
+        // If sleepImported has been set true for the file, it cannot be set
+        // false again until postVisit() resets the variable upon leaving
+        // the file.
+        if (!sleepImported) {
+            sleepImported = importDirective.importedFqName?.asString() in IMPORT_PATHS
+        }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

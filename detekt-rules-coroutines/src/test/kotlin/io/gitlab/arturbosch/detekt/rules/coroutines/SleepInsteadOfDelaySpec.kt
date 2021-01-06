@@ -88,5 +88,22 @@ object SleepInsteadOfDelaySpec : Spek({
             """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
+
+        it("should report an imported Thread.sleep() in a coroutine block") {
+            @Suppress("DeferredResultUnused")
+            val code = """
+                import java.lang.Thread.sleep
+                import kotlinx.coroutines.CoroutineScope
+                import kotlinx.coroutines.Dispatchers
+                import kotlinx.coroutines.async
+                
+                fun foo() {
+                    CoroutineScope(Dispatchers.IO).async {
+                        sleep(1000L)
+                    }
+                }
+            """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
     }
 })
