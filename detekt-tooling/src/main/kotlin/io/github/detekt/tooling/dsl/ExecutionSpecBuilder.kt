@@ -4,15 +4,15 @@ import io.github.detekt.tooling.api.spec.ExecutionSpec
 import java.util.concurrent.ExecutorService
 
 @ProcessingModelDsl
-class ExecutionSpecBuilder : Builder<ExecutionSpec>, ExecutionSpec {
+class ExecutionSpecBuilder : Builder<ExecutionSpec> {
 
-    override var executorService: ExecutorService? = null
-    override var parallelParsing: Boolean = false
-    override var parallelAnalysis: Boolean = false
+    var executorService: ExecutorService? = null
+    var parallelParsing: Boolean = false
+    var parallelAnalysis: Boolean = false
     override fun build(): ExecutionSpec = ExecutionModel(executorService, parallelParsing, parallelAnalysis)
 }
 
-internal data class ExecutionModel(
+private data class ExecutionModel(
     override val executorService: ExecutorService?,
     override val parallelParsing: Boolean,
     override val parallelAnalysis: Boolean
