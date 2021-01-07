@@ -34,12 +34,10 @@ tasks.withType<GithubReleaseTask>().configureEach {
     dependsOn(":detekt-cli:shadowJarExecutable")
 }
 
-val ln: String = System.lineSeparator()
-
 fun updateVersion(increment: (Semver) -> Semver) {
     val versionsFile = file("${rootProject.rootDir}/buildSrc/src/main/kotlin/Versions.kt")
     val newContent = versionsFile.readLines()
-        .joinToString(ln) {
+        .joinToString("\n") {
             if (it.contains("const val DETEKT: String")) {
                 val oldVersion = it.substringAfter("\"").substringBefore("\"")
                 val newVersion = Semver(oldVersion).let(increment)
@@ -49,7 +47,7 @@ fun updateVersion(increment: (Semver) -> Semver) {
                 it
             }
         }
-    versionsFile.writeText("$newContent$ln")
+    versionsFile.writeText("$newContent\n")
 }
 
 val incrementPatch by tasks.registering { doLast { updateVersion { it.nextPatch() } } }
