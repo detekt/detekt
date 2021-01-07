@@ -68,7 +68,11 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
      * In this mode, the visibility modifier should be defined explicitly even if it is public.
      * See: https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors
      */
-    private fun isExplicitApiModeActive() = AnalysisFlags.explicitApiMode.defaultValue == ExplicitApiMode.STRICT
+    private fun isExplicitApiModeActive(): Boolean {
+        val resources = compilerResources ?: return false
+        val flag = resources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+        return flag == ExplicitApiMode.STRICT
+    }
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
