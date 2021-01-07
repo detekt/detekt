@@ -634,6 +634,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     <span class="n">ignoredBuildTypes</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"release"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
     <span class="n">ignoredFlavors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"production"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
     <span class="n">ignoredVariants</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"productionRelease"</span><span class="o">]</span>               <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="n">basePath</span> <span class="o">=</span> <span class="n">projectDir</span>                                 <span class="c1">// Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.</span>
     <span class="n">reports</span> <span class="o">{</span>
         <span class="n">xml</span> <span class="o">{</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
@@ -673,6 +674,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     <span class="n">ignoredBuildTypes</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"release"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
     <span class="n">ignoredFlavors</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"production"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
     <span class="n">ignoredVariants</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"productionRelease"</span><span class="p">)</span>         <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="n">basePath</span> <span class="p">=</span> <span class="n">projectDir</span>                                 <span class="c1">// Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.</span>
     <span class="nf">reports</span> <span class="p">{</span>
         <span class="nf">xml</span> <span class="p">{</span>
             <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
