@@ -42,7 +42,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
 
@@ -55,7 +55,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
             it("does not report when parameter name is an explicit `it`") {
                 val code = """
@@ -65,7 +65,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
             it("does not report when parameter name is explicit and not `it`") {
                 val code = """
@@ -75,7 +75,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
 
@@ -86,7 +86,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { listOf(it) }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
             it("does not report when parameter name is an explicit `it`") {
                 val code = """
@@ -94,7 +94,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { it -> listOf(it) }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
             it("does not report when parameter name is explicit and not `it`") {
                 val code = """
@@ -102,7 +102,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { param -> listOf(param) }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
 
@@ -127,7 +127,7 @@ class MultilineLambdaItParameterSpec : Spek({
                     }
                 }"""
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
     }
