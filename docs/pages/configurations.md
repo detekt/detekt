@@ -47,7 +47,8 @@ complexity:
 ```
 
 ## Build failure
-_detekt_ supports the option to fail your build if a threshold of code smell issues is met.
+
+_Detekt_ supports the option to fail your build if a threshold of code smell issues is met.
 
 For this the following code must be inside the detekt config:
 
@@ -150,10 +151,10 @@ processors:
 
 A JSON Schema for the config file is available on: [json.schemastore.org/detekt](https://json.schemastore.org/detekt).
 
-You can configured your IDE (e.g. IntelliJ or Android Studio have built-in support)
+You can configure your IDE (e.g. IntelliJ or Android Studio have built-in support)
 to use that schema to give you **autocompletion** capabilities on your config file.
 More details on the IntelliJ support are available
-[at this page](https://www.jetbrains.com/help/ruby/yaml.html#remote_json).
+[on this page](https://www.jetbrains.com/help/ruby/yaml.html#remote_json).
 
 ![JSON Schema validator on IntelliJ](../images/json_schema_validator_intellij.png)
 
