@@ -28,7 +28,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,
@@ -48,7 +48,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,
@@ -68,7 +68,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,

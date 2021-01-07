@@ -35,7 +35,7 @@ open class KtCompiler(
 
         return psiFile.apply {
             putUserData(LINE_SEPARATOR, lineSeparator)
-            val normalizedBasePath = basePath?.normalize()
+            val normalizedBasePath = basePath?.toAbsolutePath()?.normalize()
             normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
                 putUserData(BASE_PATH, normalizedBasePath.toAbsolutePath().toString())
                 putUserData(RELATIVE_PATH, relativePath.toString())

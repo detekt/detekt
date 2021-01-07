@@ -5,12 +5,11 @@ import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
-import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -48,13 +47,7 @@ class SarifOutputReportSpec : Spek({
             val expectedReport = readResourceContent("relative_path.sarif.json")
                 .stripWhitespace()
 
-            // Note: On Github actions, windows file URI is on D: drive
-            val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
-                expectedReport.replace("file:/", "file:/D:/")
-            } else {
-                expectedReport
-            }
-            assertThat(report).isEqualTo(systemAwareExpectedReport)
+            assertThat(report).isEqualTo(expectedReport)
         }
     }
 })
