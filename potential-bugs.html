@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -458,8 +451,6 @@ $('#toc').on('click', 'a', function() {
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <p><strong>Aliases</strong>: DEPRECATION</p>
@@ -470,8 +461,6 @@ $('#toc').on('click', 'a', function() {
 
 <p>If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.</p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -500,8 +489,6 @@ easy to miss one of the cases when reading the code, leading to unwanted side ef
 See the Kotlin documentation for Any.equals(other: Any?):
 https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-1">Noncompliant Code:</h4>
@@ -525,8 +512,6 @@ https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 <p>All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the
 same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
 clarification.</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -562,8 +547,6 @@ almost all cases it is more appropriate to throw an exception.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Warning</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-3">Noncompliant Code:</h4>
@@ -596,8 +579,6 @@ almost all cases it is more appropriate to throw an exception.</p>
 Code should work independently of the garbage collector and should not require the GC to be triggered in certain
 points in time.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-4">Noncompliant Code:</h4>
@@ -612,8 +593,6 @@ points in time.</p>
 <p>Platform types must be declared explicitly in public APIs to prevent unexpected errors.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -641,8 +620,6 @@ normally so that’s the rationale behind this rule.</p>
 fun returnsNoValue() {}</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -682,8 +659,6 @@ For example, if locale with tag <code class="language-plaintext highlighter-roug
 will be evaluated to numbers consisting of Eastern-Arabic (non-ASCII) digits.
 [java.util.Locale.US] is recommended for machine-readable output.</p>
 
-<p><strong>Severity</strong>: CodeSmell</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-7">Noncompliant Code:</h4>
@@ -712,8 +687,6 @@ This may lead to backward incompatibility.
 Use a block statement to make clear this function will never return a value.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -748,8 +721,6 @@ fun safeUnitReturn(): Unit = println("Hello Unit")
 This might be a bug if it is used for instance as a loop condition. This loop will never be triggered then.
 This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-8">Noncompliant Code:</h4>
@@ -775,8 +746,6 @@ This might be due to invalid ranges like (10..9) which will cause the loop to ne
 The hasNext() method of an Iterator implementation should not have any side effects.
 This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-9">Noncompliant Code:</h4>
@@ -796,8 +765,6 @@ implementation of the next() method. When there are no more elements to return a
 NoSuchElementException.</p>
 
 <p>See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -830,8 +797,6 @@ NoSuchElementException.</p>
 
 <p>Using lateinit for property initialization can be error prone and the actual initialization is not
 guaranteed. Try using constructor injection or delegation to initialize properties.</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -866,8 +831,6 @@ This may result in a NullPointerException.
 Preferred access methods are <code class="language-plaintext highlighter-rouge">map[]</code> without <code class="language-plaintext highlighter-rouge">!!</code>, <code class="language-plaintext highlighter-rouge">map.getValue()</code>, <code class="language-plaintext highlighter-rouge">map.getOrDefault()</code> or <code class="language-plaintext highlighter-rouge">map.getOrElse()</code>.</p>
 
 <p>Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.</p>
-
-<p><strong>Severity</strong>: CodeSmell</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -904,8 +867,6 @@ or sealed class and the <code class="language-plaintext highlighter-rouge">when<
 either handle all cases or use a default <code class="language-plaintext highlighter-rouge">else</code> statement to cover the unhandled cases.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -965,8 +926,6 @@ either handle all cases or use a default <code class="language-plaintext highlig
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-14">Noncompliant Code:</h4>
@@ -997,8 +956,6 @@ either handle all cases or use a default <code class="language-plaintext highlig
 verified that all cases are already covered when checking cases on an enum or sealed class.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1051,8 +1008,6 @@ verified that all cases are already covered when checking cases on an enum or se
 This implies that the loop is only executed once and thus could be rewritten without a
 loop altogether.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-16">Noncompliant Code:</h4>
@@ -1073,8 +1028,6 @@ loop altogether.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-17">Noncompliant Code:</h4>
@@ -1094,8 +1047,6 @@ loop altogether.</p>
 <p>Reports unnecessary safe call operators (<code class="language-plaintext highlighter-rouge">.?</code>) that can be removed by the user.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1118,8 +1069,6 @@ Code can be unreachable because it is behind return, throw, continue or break ex
 This unreachable code should be removed as it serves no purpose.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1147,8 +1096,6 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-20">Noncompliant Code:</h4>
@@ -1170,8 +1117,6 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <p>Reports casts that will never succeed.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -1200,8 +1145,6 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <p>This rule reports postfix expressions (++, –) which are unused and thus unnecessary.
 This leads to confusion as a reader of the code might think the value will be incremented/decremented.
 However the value is replaced with the original value which might lead to bugs.</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -1239,8 +1182,6 @@ However the value is replaced with the original value which might lead to bugs.<
 <p>Reports equals() methods which take in a wrongly typed parameter.
 Correct implementations of the equals() method should only take in a parameter of type Any?
 See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 10min</p>
 

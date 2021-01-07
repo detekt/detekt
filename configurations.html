@@ -205,7 +205,7 @@
           
           
           
-          <li class="active"><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li class="active"><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -455,15 +448,17 @@ $('#toc').on('click', 'a', function() {
 <ul>
   <li>rule set and rule properties</li>
   <li>build failure</li>
-  <li>Kotlin file processors</li>
-  <li>console and output formats</li>
+  <li>console reports</li>
+  <li>output reports</li>
+  <li>processors</li>
 </ul>
 
-<p>See the <a href="https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml">default-detekt-config.yml</a> file for all defined configuration options and their default values.</p>
+<p>See the <a href="https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml">default-detekt-config.yml</a>
+file for all defined configuration options and their default values.</p>
 
 <p><em>Note:</em> When using a custom config file, the default values are ignored unless you also set the <code class="language-plaintext highlighter-rouge">--build-upon-default-config</code> flag.</p>
 
-<h4 id="rule-sets-and-rules">Rule sets and rules</h4>
+<h2 id="rule-sets-and-rules">Rule sets and rules</h2>
 
 <p><em>detekt</em> allows easily to just pick the rules you want and configure them the way you like.
 For example if you want to allow up to 20 functions inside a Kotlin file instead of the default threshold of 10, write:</p>
@@ -475,9 +470,11 @@ For example if you want to allow up to 20 functions inside a Kotlin file instead
 
 <p>To read about all supported rule sets and rules, use the side navigation <code class="language-plaintext highlighter-rouge">Rule Sets</code>.</p>
 
-<h4 id="path-filters--excludes--includes">Path Filters / Excludes / Includes</h4>
+<h3 id="path-filters--excludes--includes">Path Filters / Excludes / Includes</h3>
 
-<p>Starting with version <strong>RC15</strong> fine grained path filters can be defined for each rule or rule set:</p>
+<p>Fine grained path filters can be defined for each rule or rule set through globing patterns.
+This gives the user more freedom in analyzing only specific files
+and rule authors the ability to write <em>library only</em> rules.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">complexity</span><span class="pi">:</span>
   <span class="na">TooManyFunctions</span><span class="pi">:</span>
@@ -486,13 +483,32 @@ For example if you want to allow up to 20 functions inside a Kotlin file instead
     <span class="na">includes</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">**/internal/util/NeedsToBeChecked.kt'</span><span class="pi">]</span>
 </code></pre></div></div>
 
-<p>This gives the user more freedom in analyzing only specific files
-and rule authors the ability to write <em>library only</em> rules.
-This is the replacement for the <code class="language-plaintext highlighter-rouge">test-pattern</code> feature.</p>
+<h2 id="build-failure">Build failure</h2>
 
-<p>Be aware that detekt now expects globing patterns instead of regular expressions!</p>
+<p><em>Detekt</em> supports the option to fail your build if a threshold of code smell issues is met.</p>
 
-<h4 id="console-reports">Console Reports</h4>
+<p>For this the following code must be inside the detekt config:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">build</span><span class="pi">:</span>
+  <span class="na">maxIssues</span><span class="pi">:</span> <span class="m">10</span> <span class="c1"># break the build if ten weighted issues are found</span>
+  <span class="na">weights</span><span class="pi">:</span>
+    <span class="na">complexity</span><span class="pi">:</span> <span class="m">2</span> <span class="c1"># every rule of the complexity rule set should count as if two issues were found...</span>
+    <span class="na">LongParameterList</span><span class="pi">:</span> <span class="m">1</span> <span class="c1"># ...with the exception of the LongParameterList rule.</span>
+    <span class="na">comments</span><span class="pi">:</span> <span class="m">0</span> <span class="c1"># comment rules are just a nice to know?!</span>
+</code></pre></div></div>
+
+<p>Every rule and rule set can be attached with an integer value which is the weight of the finding.
+For example: If you have 5 findings of the category <em>complexity</em>, then your failThreshold of 10 is reached as
+5 x 2 = 10.</p>
+
+<p>Weights are respected in the following priority order:</p>
+<ul>
+  <li>The specified weight for a rule</li>
+  <li>The specified weight for a rule set</li>
+  <li>By default, the weight is 1.</li>
+</ul>
+
+<h2 id="console-reports">Console Reports</h2>
 
 <p>Uncomment the reports you don’t care about.</p>
 
@@ -519,7 +535,7 @@ It’s simply a way of alerting users to information that they have opted-in to.
 <p><strong>FileBasedFindingsReport</strong> is similar to the FindingsReport shown above. 
 The rule violations are grouped by file location.</p>
 
-<h4 id="output-reports">Output Reports</h4>
+<h2 id="output-reports">Output Reports</h2>
 
 <p>Uncomment the reports you don’t care about.</p>
 
@@ -544,7 +560,7 @@ The rule violations are grouped by file location.</p>
 The mentioned metrics show detailed statistics concerning the analyzed code.
 For instance the source lines of code and the McCabe complexity are calculated.</p>
 
-<h4 id="processors">Processors</h4>
+<h2 id="processors">Processors</h2>
 
 <p>Count processors are used to calculate project metrics.
 For example, when all count processors are enabled, a detekt html report might look like this:</p>
@@ -566,11 +582,14 @@ For example, when all count processors are enabled, a detekt html report might l
         <span class="c1"># - 'KtFileCountProcessor'</span>
 </code></pre></div></div>
 
-<h4 id="config-json-schema">Config JSON Schema</h4>
+<h2 id="config-json-schema">Config JSON Schema</h2>
 
 <p>A JSON Schema for the config file is available on: <a href="https://json.schemastore.org/detekt">json.schemastore.org/detekt</a>.</p>
 
-<p>You can configured your IDE (e.g. IntelliJ or Android Studio have built-in support) to use that schema to give you <strong>autocompletion</strong> capabilities on your config file. More details on the IntelliJ support are available <a href="https://www.jetbrains.com/help/ruby/yaml.html#remote_json">at this page</a>.</p>
+<p>You can configure your IDE (e.g. IntelliJ or Android Studio have built-in support)
+to use that schema to give you <strong>autocompletion</strong> capabilities on your config file.
+More details on the IntelliJ support are available
+<a href="https://www.jetbrains.com/help/ruby/yaml.html#remote_json">on this page</a>.</p>
 
 <p><img src="/detekt/images/json_schema_validator_intellij.png" alt="JSON Schema validator on IntelliJ" /></p>
 

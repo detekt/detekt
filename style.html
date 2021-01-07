@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -465,8 +458,6 @@ code style guidelines.</p>
   <li>Companion object</li>
 </ul>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code">Noncompliant Code:</h4>
@@ -506,8 +497,6 @@ code style guidelines.</p>
 <p>However it should be carefully considered if merging the if statements actually does improve readability or if it
 hides some edge-cases from the reader.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-1">Noncompliant Code:</h4>
@@ -536,8 +525,6 @@ hides some edge-cases from the reader.</p>
 aside functions that help with converting objects from/to one another.
 Data classes will automatically have a generated <code class="language-plaintext highlighter-rouge">equals</code>, <code class="language-plaintext highlighter-rouge">toString</code> and <code class="language-plaintext highlighter-rouge">hashCode</code> function by the compiler.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options">Configuration options:</h4>
@@ -564,8 +551,6 @@ Data classes will automatically have a generated <code class="language-plaintext
 <p>Data classes should mainly be used to store immutable data. This rule assumes that they should not contain any
 mutable properties.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-3">Noncompliant Code:</h4>
@@ -588,8 +573,6 @@ mutable properties.</p>
 <p>Destructuring declarations with too many entries are hard to read and understand.
 To increase readability they should be refactored to reduce the number of entries or avoid using a destructuring
 declaration.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -620,8 +603,6 @@ declaration.</p>
 <p>To compare an object with <code class="language-plaintext highlighter-rouge">null</code> prefer using <code class="language-plaintext highlighter-rouge">==</code>. This rule detects and reports instances in the code where the
 <code class="language-plaintext highlighter-rouge">equals()</code> method is used to compare a value with <code class="language-plaintext highlighter-rouge">null</code>.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-5">Noncompliant Code:</h4>
@@ -638,8 +619,6 @@ declaration.</p>
 
 <p>Requires that the equals sign, when used for an expression style function, is on the same line as the
 rest of the function signature.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -668,8 +647,6 @@ rest of the function signature.</p>
 see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
 Prefer the usage of the indexed access operator <code class="language-plaintext highlighter-rouge">[]</code> for map or list element access or insert methods.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-7">Noncompliant Code:</h4>
@@ -693,8 +670,6 @@ code using only one parameter. In this cases Kotlin can supply the implicit <cod
 to make code more concise. It fits most usecases, but when faced larger or nested chunks of code,
 you might want to add an explicit name for the parameter. Naming it just <code class="language-plaintext highlighter-rouge">it</code> is meaningless and only
 makes your code misleading, especially when dealing with nested functions.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -728,8 +703,6 @@ makes your code misleading, especially when dealing with nested functions.</p>
 
 <p>Functions which only contain a <code class="language-plaintext highlighter-rouge">return</code> statement can be collapsed to an expression body. This shortens and
 cleans up the code.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -767,8 +740,6 @@ cleans up the code.</p>
 <p>This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
 development. Offending code comments will then be reported.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="configuration-options-3">Configuration options:</h4>
@@ -799,8 +770,6 @@ For example <code class="language-plaintext highlighter-rouge">Ticket|Task</code
 
 <p>This rule allows to set a list of forbidden imports. This can be used to discourage the use of unstable, experimental
 or deprecated APIs. Detekt will then report all imports that are forbidden.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -835,8 +804,6 @@ Detekt will then report all methods invocation that are forbidden.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="configuration-options-5">Configuration options:</h4>
@@ -865,8 +832,6 @@ Detekt will then report all methods invocation that are forbidden.</p>
 this issue.</p>
 
 <p>More info: https://jakewharton.com/public-api-challenges-in-kotlin/</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -897,8 +862,6 @@ The Kotlin type <code class="language-plaintext highlighter-rouge">Unit</code> s
 and has only one value - the <code class="language-plaintext highlighter-rouge">Unit</code> object.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -933,8 +896,6 @@ and has only one value - the <code class="language-plaintext highlighter-rouge">
 
 <p>A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
 as a <code class="language-plaintext highlighter-rouge">const val</code>.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -977,8 +938,6 @@ Inferred return type can easily be changed by mistake which may lead to breaking
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-16">Noncompliant Code:</h4>
@@ -1006,8 +965,6 @@ Inferred return type can easily be changed by mistake which may lead to breaking
 
 <p>Library typealias and classes should be internal or private.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-17">Noncompliant Code:</h4>
@@ -1026,8 +983,6 @@ Inferred return type can easily be changed by mistake which may lead to breaking
 
 <p>Loops which contain multiple <code class="language-plaintext highlighter-rouge">break</code> or <code class="language-plaintext highlighter-rouge">continue</code> statements are hard to read and understand.
 To increase readability they should be refactored into simpler loops.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1057,8 +1012,6 @@ To increase readability they should be refactored into simpler loops.</p>
 
 <p>This rule detects and reports usages of magic numbers in the code. Prefer defining constants with clear names
 describing what the magic number means.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1159,8 +1112,6 @@ declarations should be ignored</p>
 <p>This rule detects multi-line <code class="language-plaintext highlighter-rouge">if</code> statements which do not have braces.
 Adding braces would improve readability and avoid possible errors.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-20">Noncompliant Code:</h4>
@@ -1179,8 +1130,6 @@ Adding braces would improve readability and avoid possible errors.</p>
 
 <p>This rule detects multi-line <code class="language-plaintext highlighter-rouge">for</code> and <code class="language-plaintext highlighter-rouge">while</code> loops which do not have braces.
 Adding braces would improve readability and avoid possible errors.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1225,8 +1174,6 @@ Adding braces would improve readability and avoid possible errors.</p>
 <p>Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
 in the codebase will help make the code more uniform.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="configuration-options-11">Configuration options:</h4>
@@ -1260,8 +1207,6 @@ in the codebase will help make the code more uniform.</p>
 Using <code class="language-plaintext highlighter-rouge">const val</code> can lead to better performance of the resulting bytecode as well as better interoperability with
 Java.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-22">Noncompliant Code:</h4>
@@ -1278,8 +1223,6 @@ Java.</p>
 
 <p>This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
 taken from: http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1301,8 +1244,6 @@ These nested classes can’t have a higher visibility than their parent.
 However, the visibility can be further restricted by using a private modifier for instance.
 In internal classes the <em>explicit</em> public modifier for nested classes is misleading and thus unnecessary,
 because the nested class still has an internal visibility.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1326,8 +1267,6 @@ because the nested class still has an internal visibility.</p>
 
 <p>This rule reports files which do not end with a line separator.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h3 id="notabs">NoTabs</h3>
@@ -1338,15 +1277,11 @@ According to
 the only whitespace chars that are allowed in a source file are the line terminator sequence
 and the ASCII horizontal space character (0x20). Strings containing tabs are allowed.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h3 id="optionalabstractkeyword">OptionalAbstractKeyword</h3>
 
 <p>This rule reports <code class="language-plaintext highlighter-rouge">abstract</code> modifiers which are unnecessary and can be removed.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1374,8 +1309,6 @@ and the ASCII horizontal space character (0x20). Strings containing tabs are all
 This rule detects and reports instances where the <code class="language-plaintext highlighter-rouge">Unit</code> return type is specified on functions and the occurrences
 of a lone Unit statement.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-26">Noncompliant Code:</h4>
@@ -1401,8 +1334,6 @@ of a lone Unit statement.</p>
 <h3 id="optionalwhenbraces">OptionalWhenBraces</h3>
 
 <p>This rule reports unnecessary braces in when expressions. These optional braces should be removed.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1432,8 +1363,6 @@ of a lone Unit statement.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-28">Noncompliant Code:</h4>
@@ -1450,8 +1379,6 @@ of a lone Unit statement.</p>
 
 <p>Kotlin classes are <code class="language-plaintext highlighter-rouge">final</code> by default. Thus classes which are not marked as <code class="language-plaintext highlighter-rouge">open</code> should not contain any <code class="language-plaintext highlighter-rouge">protected</code>
 members. Consider using <code class="language-plaintext highlighter-rouge">private</code> or <code class="language-plaintext highlighter-rouge">internal</code> modifiers instead.</p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1472,8 +1399,6 @@ members. Consider using <code class="language-plaintext highlighter-rouge">priva
 <h3 id="redundantexplicittype">RedundantExplicitType</h3>
 
 <p>Local properties do not need their type to be explicitly provided when the inferred type matches the explicit type.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1497,8 +1422,6 @@ members. Consider using <code class="language-plaintext highlighter-rouge">priva
 operator.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1553,8 +1476,6 @@ operator.</p>
 In this mode, the visibility modifier should be defined explicitly even if it is public.
 Hence, the rule ignores the visibility modifiers in explicit API mode.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <p><strong>Aliases</strong>: RedundantVisibilityModifier</p>
@@ -1581,8 +1502,6 @@ Hence, the rule ignores the visibility modifiers in explicit API mode.</p>
 
 <p>Having many exit points in a function can be confusing and impacts readability of the
 code.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1642,8 +1561,6 @@ code.</p>
 
 <p>This rule inspects casts and reports casts which could be replaced with safe casts instead.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-34">Noncompliant Code:</h4>
@@ -1666,8 +1583,6 @@ code.</p>
 
 <p>Classes which implement the <code class="language-plaintext highlighter-rouge">Serializable</code> interface should also correctly declare a <code class="language-plaintext highlighter-rouge">serialVersionUID</code>.
 This rule verifies that a <code class="language-plaintext highlighter-rouge">serialVersionUID</code> was correctly defined.</p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1696,8 +1611,6 @@ This rule verifies that a <code class="language-plaintext highlighter-rouge">ser
 <p>This rule verifies spacing between package and import statements as well as between import statements and class
 declarations.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-36">Noncompliant Code:</h4>
@@ -1720,8 +1633,6 @@ declarations.</p>
 
 <p>Functions should have clear <code class="language-plaintext highlighter-rouge">throw</code> statements. Functions with many <code class="language-plaintext highlighter-rouge">throw</code> statements can be harder to read and lead
 to confusion. Instead prefer to limit the amount of <code class="language-plaintext highlighter-rouge">throw</code> statements in a function.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1759,8 +1670,6 @@ to confusion. Instead prefer to limit the amount of <code class="language-plaint
 
 <p>This rule reports lines that end with a whitespace.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h3 id="underscoresinnumericliterals">UnderscoresInNumericLiterals</h3>
@@ -1769,8 +1678,6 @@ to confusion. Instead prefer to limit the amount of <code class="language-plaint
 separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
 under the <code class="language-plaintext highlighter-rouge">acceptableDecimalLength</code>. For <code class="language-plaintext highlighter-rouge">Serializable</code> classes or objects, the field <code class="language-plaintext highlighter-rouge">serialVersionUID</code> is
 explicitly ignored. For floats and doubles, anything to the right of the decimal is ignored.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1804,8 +1711,6 @@ underscores</p>
 <p>This rule inspects <code class="language-plaintext highlighter-rouge">abstract</code> classes. In case an <code class="language-plaintext highlighter-rouge">abstract class</code> does not have any concrete members it should be
 refactored into an interface. Abstract classes which do not define any <code class="language-plaintext highlighter-rouge">abstract</code> members should instead be
 refactored into concrete classes.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1841,8 +1746,6 @@ this check.</p>
 be removed. For more information check the kotlin documentation:
 https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-40">Noncompliant Code:</h4>
@@ -1863,8 +1766,6 @@ https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targe
 an ordinary method/extension function call to reduce visual complexity</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1888,8 +1789,6 @@ an ordinary method/extension function call to reduce visual complexity</p>
 <p>This rule reports unnecessary super types. Inheriting from <code class="language-plaintext highlighter-rouge">Any</code> or <code class="language-plaintext highlighter-rouge">Object</code> is unnecessary and should simply be
 removed.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-42">Noncompliant Code:</h4>
@@ -1905,8 +1804,6 @@ but sometimes their usage should be replaced with a ordinary method/extension fu
 to reduce visual complexity</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1934,8 +1831,6 @@ to reduce visual complexity</p>
 These unnecessary parentheses can safely be removed.</p>
 
 <p>Added in v1.0.0.RC4</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -1967,8 +1862,6 @@ These unnecessary parentheses can safely be removed.</p>
 ‘until’ is applicable in cases where the upper range value is described as
 some value subtracted by 1. ‘until’ helps to prevent off-by-one errors.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-45">Noncompliant Code:</h4>
@@ -1989,8 +1882,6 @@ some value subtracted by 1. ‘until’ helps to prevent off-by-one errors.</p>
 Exempt from this rule are imports resulting from references to elements within KDoc and
 from destructuring declarations (componentN imports).</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h3 id="unusedprivateclass">UnusedPrivateClass</h3>
@@ -1998,8 +1889,6 @@ from destructuring declarations (componentN imports).</p>
 <p>Reports unused private classes.
 If private classes are unused they should be removed. Otherwise this dead code
 can lead to confusion and potential bugs.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2010,8 +1899,6 @@ can lead to confusion and potential bugs.</p>
 <p>Reports unused private properties, function parameters and functions.
 If these private elements are unused they should be removed. Otherwise this dead code
 can lead to confusion and potential bugs.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2032,8 +1919,6 @@ can lead to confusion and potential bugs.</p>
 <p>This rule detects annotations which use the arrayOf(…) syntax instead of the array literal […] syntax.
 The latter should be preferred as it is more readable.</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-46">Noncompliant Code:</h4>
@@ -2052,8 +1937,6 @@ The latter should be preferred as it is more readable.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-47">Noncompliant Code:</h4>
@@ -2070,8 +1953,6 @@ The latter should be preferred as it is more readable.</p>
 
 <p>Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
 Prefer them instead of manually throwing an IllegalStateException.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2101,8 +1982,6 @@ Prefer them instead of manually throwing an IllegalStateException.</p>
 and generate <code class="language-plaintext highlighter-rouge">hashCode</code>, <code class="language-plaintext highlighter-rouge">equals</code> and <code class="language-plaintext highlighter-rouge">toString</code> implementations as well.</p>
 
 <p>Read more about <code class="language-plaintext highlighter-rouge">data class</code>: https://kotlinlang.org/docs/reference/data-classes.html</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2144,8 +2023,6 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-50">Noncompliant Code:</h4>
@@ -2172,8 +2049,6 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 <code class="language-plaintext highlighter-rouge">ifBlank</code> calls.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2203,8 +2078,6 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p>See https://kotlinlang.org/docs/reference/coding-conventions.html#if-versus-when</p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-52">Noncompliant Code:</h4>
@@ -2224,8 +2097,6 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p>Kotlin provides a much more concise way to check preconditions than to manually throw an
 IllegalArgumentException.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2247,8 +2118,6 @@ IllegalArgumentException.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Style</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-54">Noncompliant Code:</h4>
@@ -2269,8 +2138,6 @@ the calls are redundant in this case and can be removed or should be changed to 
 the value is null or not.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Performance</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2295,8 +2162,6 @@ the value is null or not.</p>
 <p>A class which only contains utility variables and functions with no concrete implementation can be refactored
 into an <code class="language-plaintext highlighter-rouge">object</code> or an class with a non-public constructor.
 Furthermore, this rule reports utility classes which are not final.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -2343,8 +2208,6 @@ Furthermore, this rule reports utility classes which are not final.</p>
 <p>Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
 Val declarations are assign-once (read-only), which makes understanding the current state easier.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <p><strong>Aliases</strong>: CanBeVal</p>
@@ -2374,8 +2237,6 @@ which classes are imported and helps prevent naming conflicts.</p>
 
 <p><strong>NOTE</strong>: This rule has a twin implementation NoWildcardImports in the formatting rule set (a wrapped KtLint rule).
 When suppressing an issue of WildcardImport in the baseline file, make sure to suppress the corresponding NoWildcardImports issue.</p>
-
-<p><strong>Severity</strong>: Style</p>
 
 <p><strong>Debt</strong>: 5min</p>
 

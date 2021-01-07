@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -459,8 +452,6 @@ of the code.</p>
 The rule checks each Kotlin source file whether the header starts with the read text from the passed file in the
 <code class="language-plaintext highlighter-rouge">licenseTemplateFile</code> configuration option.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="configuration-options">Configuration options:</h4>
@@ -484,8 +475,6 @@ place.</p>
 with better names if necessary. Giving the function a better, more descriptive name can also help in
 solving this issue.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h3 id="commentoverprivateproperty">CommentOverPrivateProperty</h3>
@@ -499,16 +488,12 @@ why the property exists and what purpose it solves without the comment.</p>
 name. If this property is inside a bigger class it could make senes to refactor and split up the class. This can
 increase readability and make the documentation obsolete.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h3 id="endofsentenceformat">EndOfSentenceFormat</h3>
 
 <p>This rule validates the end of the first sentence of a KDoc comment.
 It should end with proper punctuation or with a correct URL.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -529,8 +514,6 @@ Enable this rule if the codebase should have documentation on every public class
 
 <p>By default this rule also searches for nested and inner classes and objects. This default behavior can be changed
 with the configuration options of this rule.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -565,8 +548,6 @@ with the configuration options of this rule.</p>
 If the codebase should have documentation on all public functions enable this rule to enforce this.
 Overridden functions are excluded by this rule.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h3 id="undocumentedpublicproperty">UndocumentedPublicProperty</h3>
@@ -575,8 +556,6 @@ Overridden functions are excluded by this rule.</p>
 This also includes public properties defined in a primary constructor.
 If the codebase should have documentation on all public properties enable this rule to enforce this.
 Overridden properties are excluded by this rule.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 

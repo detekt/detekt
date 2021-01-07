@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -459,8 +452,6 @@ an exception it will be reported. By default this rule is checking for <code cla
 <code class="language-plaintext highlighter-rouge">finalize</code>. This rule is configurable via the <code class="language-plaintext highlighter-rouge">methodNames</code> configuration to change the list of functions which
 should not throw any exceptions.</p>
 
-<p><strong>Severity</strong>: CodeSmell</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options">Configuration options:</h4>
@@ -488,8 +479,6 @@ should not throw any exceptions.</p>
 <p>This rule reports <code class="language-plaintext highlighter-rouge">catch</code> blocks which check for the type of an exception via <code class="language-plaintext highlighter-rouge">is</code> checks or casts.
 Instead of catching generic exception types and then checking for specific exception types the code should
 use multiple catch blocks. These catch blocks should then catch the specific exceptions.</p>
-
-<p><strong>Severity</strong>: CodeSmell</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -521,8 +510,6 @@ functions.
 These indicate that functionality is still under development and will not work properly. Both of these should only
 serve as temporary declarations and should not be put into production environments.</p>
 
-<p><strong>Severity</strong>: CodeSmell</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-2">Noncompliant Code:</h4>
@@ -540,8 +527,6 @@ serve as temporary declarations and should not be put into production environmen
 
 <p>This rule reports code that tries to print the stacktrace of an exception. Instead of simply printing a stacktrace
 a better logging solution should be used.</p>
-
-<p><strong>Severity</strong>: CodeSmell</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -577,8 +562,6 @@ a better logging solution should be used.</p>
 
 <p>This rule reports all exceptions that are caught and then later re-thrown without modification.
 It ignores caught exceptions that are rethrown if there is work done before that.</p>
-
-<p><strong>Severity</strong>: CodeSmell</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -624,8 +607,6 @@ Furthermore, this rule reports values from <code class="language-plaintext highl
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-1">Configuration options:</h4>
@@ -655,8 +636,6 @@ Furthermore, this rule reports values from <code class="language-plaintext highl
 
 <p>Exceptions should not be swallowed. This rule reports all instances where exceptions are <code class="language-plaintext highlighter-rouge">caught</code> and not correctly
 passed into a newly thrown exception.</p>
-
-<p><strong>Severity</strong>: CodeSmell</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -721,8 +700,6 @@ passed into a newly thrown exception.</p>
 <p>This rule reports all cases where exceptions are thrown from a <code class="language-plaintext highlighter-rouge">finally</code> block. Throwing exceptions from a <code class="language-plaintext highlighter-rouge">finally</code>
 block should be avoided as it can lead to confusion and discarded exceptions.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-7">Noncompliant Code:</h4>
@@ -741,8 +718,6 @@ block should be avoided as it can lead to confusion and discarded exceptions.</p
 <p>This rule reports all exceptions that are thrown in a <code class="language-plaintext highlighter-rouge">main</code> method.
 An exception should only be thrown if it can be handled by a “higher” function.</p>
 
-<p><strong>Severity</strong>: CodeSmell</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-8">Noncompliant Code:</h4>
@@ -759,8 +734,6 @@ An exception should only be thrown if it can be handled by a “higher” functi
 Exceptions should always call one of the constructor overloads to provide a message or a cause.
 Exceptions should be meaningful and contain as much detail about the error case as possible. This will help to track
 down an underlying issue in a better way.</p>
-
-<p><strong>Severity</strong>: Warning</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -802,8 +775,6 @@ down an underlying issue in a better way.</p>
 <p>Exceptions should not be wrapped inside the same exception type and then rethrown. Prefer wrapping exceptions in more
 meaningful exception types.</p>
 
-<p><strong>Severity</strong>: Defect</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-10">Noncompliant Code:</h4>
@@ -833,8 +804,6 @@ meaningful exception types.</p>
 <p>This rule reports <code class="language-plaintext highlighter-rouge">catch</code> blocks for exceptions that have a type that is too generic.
 It should be preferred to catch specific exceptions to the case that is currently handled. If the scope of the caught
 exception is too broad it can lead to unintended exceptions being caught.</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -883,8 +852,6 @@ exception is too broad it can lead to unintended exceptions being caught.</p>
 
 <p>This rule reports thrown exceptions that have a type that is too generic. It should be preferred to throw specific
 exceptions to the case that has currently occurred.</p>
-
-<p><strong>Severity</strong>: Defect</p>
 
 <p><strong>Debt</strong>: 20min</p>
 

@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -458,8 +451,6 @@ $('#toc').on('click', 'a', function() {
 readability and understanding of complex conditions consider extracting them into well-named functions or variables
 and call those instead.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options">Configuration options:</h4>
@@ -498,8 +489,6 @@ of this interface to not handle too many things at once.</p>
 
 <p>Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
 to understand and implement.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -545,8 +534,6 @@ Each one of them adds one to the complexity count.</p>
 <a href="https://kotlinlang.org/docs/reference/scope-functions.html">Reference</a></li>
 </ul>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-2">Configuration options:</h4>
@@ -586,8 +573,6 @@ Each one of them adds one to the complexity count.</p>
 maintainability of the code. Refactor the violating code to not use labels instead.
 Labeled expressions referencing an outer class with a label from an inner class are allowed, because there is no
 way to get the instance of an outer class from an inner class in Kotlin.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -645,8 +630,6 @@ the class does instead handle multiple responsibilities. Instead of doing many t
 split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
 things.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-4">Configuration options:</h4>
@@ -666,8 +649,6 @@ Prefer smaller methods with clear names that describe their functionality clearl
 
 <p>Extract parts of the functionality of long methods into separate, smaller methods.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-5">Configuration options:</h4>
@@ -683,8 +664,6 @@ Prefer smaller methods with clear names that describe their functionality clearl
 <h3 id="longparameterlist">LongParameterList</h3>
 
 <p>Reports functions and constructors which have more parameters than a certain threshold.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -734,8 +713,6 @@ Method overloading tightly couples these methods together which might make the c
 
 <p>Refactor these methods and try to use optional parameters instead to prevent some of the overloading.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-7">Configuration options:</h4>
@@ -753,8 +730,6 @@ Method overloading tightly couples these methods together which might make the c
 <p>Reports function invocations which have more parameters than a certain threshold and are all not named.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -789,8 +764,6 @@ its hidden complexity. It might become harder to understand edge-cases of the fu
 
 <p>Prefer extracting the nested code into well-named functions to make it easier to understand.</p>
 
-<p><strong>Severity</strong>: Maintainability</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-9">Configuration options:</h4>
@@ -815,8 +788,6 @@ middle of a safe call chain as that is likely to make the code more difficult to
 only one, as that will still improve code coverage and reduce cyclomatic complexity.</p>
 
 <p><strong>Requires Type Resolution</strong></p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -843,8 +814,6 @@ only one, as that will still improve code coverage and reduce cyclomatic complex
 codebase makes it harder to change and maintain.</p>
 
 <p>Instead, prefer extracting the String literal into a property or constant.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -902,8 +871,6 @@ Each element can be configured with different thresholds.</p>
 
 <p>Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
 which clearly belongs together in separate parts of the code.</p>
-
-<p><strong>Severity</strong>: Maintainability</p>
 
 <p><strong>Debt</strong>: 20min</p>
 

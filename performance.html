@@ -205,7 +205,7 @@
           
           
           
-          <li><a href="/detekt/configurations.html">detekt Configuration File</a></li>
+          <li><a href="/detekt/configurations.html">Configuration File</a></li>
           
           
           
@@ -220,13 +220,6 @@
           
           
           <li><a href="/detekt/baseline.html">Suppressing Issues via Baseline File</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a href="/detekt/failonbuild.html">Configure Build Failure Thresholds</a></li>
           
           
           
@@ -462,8 +455,6 @@ specialized arrays to represent primitive types without boxing overhead, such as
 
 <p><strong>Requires Type Resolution</strong></p>
 
-<p><strong>Severity</strong>: Performance</p>
-
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code">Noncompliant Code:</h4>
@@ -488,8 +479,6 @@ specialized arrays to represent primitive types without boxing overhead, such as
 simple for loops. Hence in most contexts a simple for loop should be used instead.
 See more details here: https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.</p>
-
-<p><strong>Severity</strong>: Performance</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -523,8 +512,6 @@ https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts
 function is used to create the arguments that are passed to the vararg parameter. When type resolution is enabled in
 detekt this case will not be flagged by the rule since it doesn’t suffer the performance penalty of an array copy.</p>
 
-<p><strong>Severity</strong>: Performance</p>
-
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-2">Noncompliant Code:</h4>
@@ -555,8 +542,6 @@ detekt this case will not be flagged by the rule since it doesn’t suffer the p
 <p>Avoid temporary objects when converting primitive types to String. This has a performance penalty when compared
 to using primitive types directly.
 To solve this issue, remove the wrapping type.</p>
-
-<p><strong>Severity</strong>: Performance</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
