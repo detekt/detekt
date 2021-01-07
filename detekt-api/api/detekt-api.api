@@ -121,6 +121,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Context {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Context$DefaultImpls {
+	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
 	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
 	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
 	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V

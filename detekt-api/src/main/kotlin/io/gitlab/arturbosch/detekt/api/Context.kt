@@ -21,15 +21,14 @@ interface Context {
      * An alias set can be given to additionally check if an alias was used when suppressing.
      * Additionally suppression by rule set id is supported.
      */
-    fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null)
+    fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
+        // no-op
+    }
 
     /**
      * Same as [report] but reports a list of [findings].
      */
-    fun report(findings: List<Finding>,
-               aliases: Set<String> = emptySet(),
-               ruleSetId: RuleSetId? = null
-    ) {
+    fun report(findings: List<Finding>, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
         findings.forEach { report(it, aliases, ruleSetId) }
     }
 
