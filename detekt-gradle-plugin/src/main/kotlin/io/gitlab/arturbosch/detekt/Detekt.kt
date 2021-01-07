@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
+import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -135,6 +136,17 @@ open class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
+    /**
+     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
+     */
+    @get:Input
+    @get:Optional
+    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    var basePath: String
+        @Internal
+        get() = basePathProp.getOrElse("")
+        set(value) = basePathProp.set(value)
+
     @get:Internal
     var reports = DetektReports()
 
@@ -207,6 +219,7 @@ open class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(convertCustomReportsToArguments())

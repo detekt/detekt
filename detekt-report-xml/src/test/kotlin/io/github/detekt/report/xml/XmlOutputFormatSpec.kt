@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -88,6 +89,32 @@ class XmlOutputFormatSpec : Spek({
                 </file>
                 <file name="src/main/com/sample/Sample2.kt">
                 $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
+                </file>
+                </checkstyle>""".trimIndent())
+        }
+
+        it("renders issues with relative path") {
+            val findingA = createFindingForRelativePath(
+                ruleName = "id_a",
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample1.kt"
+            )
+            val findingB = createFindingForRelativePath(
+                ruleName = "id_b",
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample2.kt"
+            )
+
+            val result = outputFormat.render(TestDetektion(findingA, findingB))
+
+            assertThat(result).isEqualTo("""
+                <?xml version="1.0" encoding="utf-8"?>
+                <checkstyle version="4.3">
+                <file name="Sample1.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                </file>
+                <file name="Sample2.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
                 </file>
                 </checkstyle>""".trimIndent())
         }

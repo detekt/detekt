@@ -1,5 +1,6 @@
 package io.github.detekt.report.sarif
 
+import io.github.detekt.psi.toUnifiedString
 import io.github.detekt.sarif4j.ArtifactLocation
 import io.github.detekt.sarif4j.JacksonSarifWriter
 import io.github.detekt.sarif4j.Location
@@ -16,7 +17,6 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import java.net.URI
 
 class SarifOutputReport : OutputReport() {
 
@@ -62,7 +62,12 @@ private fun Finding.toIssue(ruleSetId: RuleSetId): SarifIssue = result {
                     startColumn = location.source.column
                 }
                 artifactLocation = ArtifactLocation().apply {
-                    uri = URI.create(location.file).toString()
+                    if (location.filePath.basePath != null && location.filePath.relativePath != null) {
+                        uri = location.filePath.relativePath?.toUnifiedString()
+                        uriBaseId = location.filePath.basePath?.toFile()?.toURI()?.toString()
+                    } else {
+                        uri = location.filePath.absolutePath.toUnifiedString()
+                    }
                 }
             }
         })

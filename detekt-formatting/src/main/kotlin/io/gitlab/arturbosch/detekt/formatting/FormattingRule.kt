@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.KtLint
-import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.fileName
+import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -74,7 +74,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val location = Location(
                 SourceLocation(line, column),
                 TextLocation(node.startOffset, node.psi.endOffset),
-                root.absolutePath().toString()
+                root.toFilePath()
             )
 
             // Nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have

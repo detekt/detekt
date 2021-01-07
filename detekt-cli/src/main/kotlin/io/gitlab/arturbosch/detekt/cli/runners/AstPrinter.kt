@@ -19,7 +19,7 @@ class AstPrinter(
             "Input path $input must be a kotlin file and not a directory."
         }
 
-        val ktFile = KtCompiler().compile(input, input)
+        val ktFile = KtCompiler().compile(null, input)
         outPrinter.appendLine(ElementPrinter.dump(ktFile))
     }
 }

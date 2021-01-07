@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
@@ -497,6 +497,7 @@ internal object DetektTaskDslTest : Spek({
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
                         |    }
+                        |    basePath = projectDir
                         |}
                         """
 
@@ -530,6 +531,10 @@ internal object DetektTaskDslTest : Spek({
                 it("enables sarif report to specified location") {
                     val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                }
+
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
@@ -582,6 +587,7 @@ internal object DetektTaskDslTest : Spek({
                         |            destination = file("build/reports/failfast.sarif")
                         |        }
                         |    }
+                        |    basePath = projectDir.toString()
                         |}
                         """
 
@@ -615,6 +621,10 @@ internal object DetektTaskDslTest : Spek({
                 it("enables sarif report to specified location") {
                     val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                }
+
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
