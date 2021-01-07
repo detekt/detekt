@@ -170,11 +170,14 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         describe("Explicit API mode") {
 
-            val code = compileContentForTest("""
-                public class A() {
-                    fun f()
-                }""")
-            val rule = RedundantVisibilityModifierRule()
+            val code by memoized {
+                compileContentForTest("""
+                    public class A() {
+                        fun f()
+                    }"""
+                )
+            }
+            val rule by memoized { RedundantVisibilityModifierRule() }
 
             fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
                 val languageVersionSettings = mockk<LanguageVersionSettings>()
