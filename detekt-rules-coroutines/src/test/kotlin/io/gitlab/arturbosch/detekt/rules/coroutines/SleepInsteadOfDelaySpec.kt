@@ -36,28 +36,6 @@ object SleepInsteadOfDelaySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report Thread.sleep() when Thread.sleep() is imported") {
-            val code = """
-                import java.lang.Thread.sleep
-
-                suspend fun foo() {
-                    sleep(1000L)
-                }
-            """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("should report Thread.sleep() when Thread.sleep() is imported using wildcard") {
-            val code = """
-                import java.lang.Thread.*
-
-                suspend fun foo() {
-                    sleep(1000L)
-                }
-            """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
         it("should report Thread.sleep() in CoroutineScope.launch()") {
             val code = """
                 import kotlinx.coroutines.CoroutineScope
@@ -83,23 +61,6 @@ object SleepInsteadOfDelaySpec : Spek({
                 fun foo() {
                     CoroutineScope(Dispatchers.IO).async {
                         Thread.sleep(1000L)
-                    }
-                }
-            """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("should report an imported Thread.sleep() in a coroutine block") {
-            @Suppress("DeferredResultUnused")
-            val code = """
-                import java.lang.Thread.sleep
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.Dispatchers
-                import kotlinx.coroutines.async
-                
-                fun foo() {
-                    CoroutineScope(Dispatchers.IO).async {
-                        sleep(1000L)
                     }
                 }
             """

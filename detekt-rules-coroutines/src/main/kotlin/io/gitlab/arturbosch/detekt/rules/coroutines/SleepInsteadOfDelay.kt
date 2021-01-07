@@ -9,10 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
@@ -42,28 +39,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * @requiresTypeResolution
  */
 class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
-    private var sleepImported = false
-
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
         "Usage of Thread.sleep() in coroutines can potentially halt multiple coroutines at once.",
         Debt.FIVE_MINS
     )
-
-    override fun postVisit(root: KtFile) {
-        super.postVisit(root)
-        sleepImported = false
-    }
-
-    override fun visitImportDirective(importDirective: KtImportDirective) {
-        // If sleepImported has been set true for the file, it cannot be set
-        // false again until postVisit() resets the variable upon leaving
-        // the file.
-        if (!sleepImported) {
-            sleepImported = importDirective.importedFqName?.asString() in IMPORT_PATHS
-        }
-    }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (bindingContext == BindingContext.EMPTY) return
@@ -85,10 +66,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun PsiElement.checkDescendants(message: String) {
-        if (sleepImported) {
-            forEachDescendantOfType<KtCallExpression> { it.verifyExpression(message) }
-        }
-        forEachDescendantOfType<KtDotQualifiedExpression> { it.verifyExpression(message) }
+        forEachDescendantOfType<KtCallExpression> { it.verifyExpression(message) }
     }
 
     private fun KtExpression.verifyExpression(message: String) {
@@ -106,10 +84,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
             "This use of Thread.sleep() inside a suspend function should be replaced by delay()."
         private const val COROUTINE_MESSAGE =
             "This use of Thread.sleep() inside a coroutine should be replaced by delay()."
-        private const val SLEEP_CALL = "sleep"
-        private const val THREAD_IMPORT_PATH = "java.lang.Thread"
-        private const val FQ_NAME = "$THREAD_IMPORT_PATH.$SLEEP_CALL"
-        private val IMPORT_PATHS = listOf(FQ_NAME, THREAD_IMPORT_PATH)
+        private const val FQ_NAME = "java.lang.Thread.sleep"
         private val COROUTINE_NAMES = listOf("kotlinx.coroutines.launch", "kotlinx.coroutines.async")
     }
 }
