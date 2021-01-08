@@ -8,6 +8,24 @@ repositories {
     google()
 }
 
+sourceSets {
+    main {
+        java.srcDir("$buildDir/generated/src")
+    }
+
+    create("intTest") {
+        java.srcDirs("src/intTest/kotlin", "$buildDir/generated/src")
+        compileClasspath += sourceSets.main.get().output + configurations["intTestCompileClasspath"]
+        runtimeClasspath += sourceSets.main.get().output + configurations["intTestRuntimeClasspath"]
+    }
+}
+
+val intTestImplementation: Configuration by configurations.getting {
+    extendsFrom(configurations.testImplementation.get())
+}
+
+configurations["intTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+
 dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
     implementation(kotlin("gradle-plugin-api"))
@@ -27,6 +45,16 @@ dependencies {
     }
 }
 
+val intTest by tasks.registering(Test::class) {
+    testClassesDirs = sourceSets["intTest"].output.classesDirs
+    classpath = sourceSets["intTest"].runtimeClasspath
+    shouldRunAfter(tasks.test)
+}
+
+tasks.check {
+    dependsOn(intTest)
+}
+
 gradlePlugin {
     // hack to prevent building two jar's overwriting each other and leading to invalid signatures
     // when publishing the Gradle plugin, this property must be present
@@ -37,6 +65,7 @@ gradlePlugin {
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
     }
+    testSourceSets(sourceSets["intTest"])
 }
 
 tasks.validatePlugins {
@@ -75,8 +104,6 @@ val generateDefaultDetektVersionFile by tasks.registering {
         )
     }
 }
-
-sourceSets.main.get().java.srcDir("$buildDir/generated/src")
 
 tasks.compileKotlin {
     dependsOn(generateDefaultDetektVersionFile)
