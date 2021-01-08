@@ -5,6 +5,7 @@ import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -13,6 +14,7 @@ import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class SarifOutputReportSpec : Spek({
 
@@ -25,7 +27,8 @@ class SarifOutputReportSpec : Spek({
                 createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
             )
 
-            val report = SarifOutputReport().apply { init(EmptySetupContext()) }
+            val report = SarifOutputReport()
+                .apply { init(EmptySetupContext()) }
                 .render(result)
                 .stripWhitespace()
 
@@ -34,20 +37,33 @@ class SarifOutputReportSpec : Spek({
         }
 
         it("renders multiple issues with relative path") {
+            val basePath = "/Users/tester/detekt/"
             val result = TestDetektion(
-                createFindingForRelativePath(ruleName = "TestSmellA"),
-                createFindingForRelativePath(ruleName = "TestSmellB"),
-                createFindingForRelativePath(ruleName = "TestSmellC")
+                createFindingForRelativePath(ruleName = "TestSmellA", basePath = basePath),
+                createFindingForRelativePath(ruleName = "TestSmellB", basePath = basePath),
+                createFindingForRelativePath(ruleName = "TestSmellC", basePath = basePath)
             )
 
-            val report = SarifOutputReport().apply { init(EmptySetupContext()) }
+            val report = SarifOutputReport()
+                .apply {
+                    init(EmptySetupContext().apply {
+                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
+                    })
+                }
                 .render(result)
                 .stripWhitespace()
 
             val expectedReport = readResourceContent("relative_path.sarif.json")
                 .stripWhitespace()
 
-            assertThat(report).isEqualTo(expectedReport)
+            // Note: On Github CI, windows file URI is on D: drive
+            val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
+                expectedReport.replace("file:///", "file://D:/")
+            } else {
+                expectedReport
+            }
+
+            assertThat(report).isEqualTo(systemAwareExpectedReport)
         }
     }
 })
