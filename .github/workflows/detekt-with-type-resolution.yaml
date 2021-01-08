@@ -33,11 +33,11 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build detekt and skip checks
-        run: ./gradlew build moveJarForIntegrationTest shadowJarExecutable -x check
+      - name: Package executable jar
+        run: ./gradlew jar moveJarForIntegrationTest shadowJarExecutable
 
       - name: Run detekt-cli with argsfile, override the exit code
-        run: java -jar ./detekt-cli/build/run/detekt "@./config/detekt/argsfile" || true
+        run: ./detekt-cli/build/run/detekt "@./config/detekt/argsfile" || true
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
