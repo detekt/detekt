@@ -1,7 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.mockk.every
+import io.mockk.mockk
+import org.jetbrains.kotlin.config.AnalysisFlags
+import org.jetbrains.kotlin.config.ExplicitApiMode
+import org.jetbrains.kotlin.config.LanguageVersionSettings
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -158,6 +166,40 @@ class RedundantVisibilityModifierRuleSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        describe("Explicit API mode") {
+
+            val code by memoized {
+                compileContentForTest("""
+                    public class A() {
+                        fun f()
+                    }"""
+                )
+            }
+            val rule by memoized { RedundantVisibilityModifierRule() }
+
+            fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
+                val languageVersionSettings = mockk<LanguageVersionSettings>()
+                every { languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode) } returns mode
+                @Suppress("DEPRECATION")
+                return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
+            }
+
+            it("does not report public function in class if explicit API mode is set to strict") {
+                rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.STRICT))
+                assertThat(rule.findings).isEmpty()
+            }
+
+            it("reports public function in class if explicit API mode is disabled") {
+                rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.DISABLED))
+                assertThat(rule.findings).hasSize(1)
+            }
+
+            it("reports public function in class if compiler resources are not available") {
+                rule.visitFile(code, compilerResources = null)
+                assertThat(rule.findings).hasSize(1)
+            }
         }
     }
 })
