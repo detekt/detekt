@@ -1,5 +1,6 @@
 package io.github.detekt.report.sarif
 
+import io.github.detekt.sarif4j.Result
 import io.github.detekt.sarif4j.Run
 import io.github.detekt.sarif4j.SarifSchema210
 import io.github.detekt.sarif4j.Tool
@@ -16,9 +17,7 @@ fun sarif(init: SarifSchema210.() -> Unit): SarifSchema210 = SarifSchema210()
     .withRuns(ArrayList())
     .apply(init)
 
-typealias SarifIssue = io.github.detekt.sarif4j.Result
-
-fun result(init: SarifIssue.() -> Unit): SarifIssue = SarifIssue().withLocations(ArrayList()).apply(init)
+fun result(init: Result.() -> Unit): Result = Result().withLocations(ArrayList()).apply(init)
 
 fun tool(init: Tool.() -> Unit): Tool = Tool().apply(init)
 

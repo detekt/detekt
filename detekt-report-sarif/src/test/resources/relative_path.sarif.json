@@ -17,6 +17,11 @@
           "language": "en"
         }
       },
+      "originalUriBaseIds": {
+        "%SRCROOT%": {
+          "uri": "file:///Users/tester/detekt"
+        }
+      },
       "results": [
         {
           "ruleId": "detekt.TestSmellA.TestSmellA",
@@ -28,7 +33,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,
@@ -48,7 +53,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,
@@ -68,7 +73,7 @@
               "physicalLocation": {
                 "artifactLocation": {
                   "uri": "TestFile.kt",
-                  "uriBaseId": "file:/Users/tester/detekt"
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 1,
