@@ -185,5 +185,20 @@ class UndocumentedPublicClassSpec : Spek({
         """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("should not report for fun interfaces") {
+            val code = """
+            /**
+             * This interface is an example
+             */
+            fun interface Example {
+                /**
+                 * Trigger when done
+                 */
+                fun onComplete()
+            }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
