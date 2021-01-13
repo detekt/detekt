@@ -8,23 +8,32 @@ repositories {
     google()
 }
 
+val generatedSrcDir = "$buildDir/generated/src"
+
 sourceSets {
     main {
-        java.srcDir("$buildDir/generated/src")
-    }
-
-    create("intTest") {
-        java.srcDirs("src/intTest/kotlin", "$buildDir/generated/src")
-        compileClasspath += sourceSets.main.get().output + configurations["intTestCompileClasspath"]
-        runtimeClasspath += sourceSets.main.get().output + configurations["intTestRuntimeClasspath"]
+        java.srcDir(generatedSrcDir)
     }
 }
 
-val intTestImplementation: Configuration by configurations.getting {
-    extendsFrom(configurations.testImplementation.get())
+val intTest: SourceSet by sourceSets.creating {
+    java.srcDir(generatedSrcDir)
+    compileClasspath += sourceSets.main.get().output + configurations["intTestCompileClasspath"]
+    runtimeClasspath += sourceSets.main.get().output + configurations["intTestRuntimeClasspath"]
 }
 
-configurations["intTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+configurations[intTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[intTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
+val intTestTask by tasks.register<Test>("intTest") {
+    testClassesDirs = intTest.output.classesDirs
+    classpath = intTest.runtimeClasspath
+    shouldRunAfter(tasks.test)
+}
+
+tasks.check {
+    dependsOn(intTestTask)
+}
 
 dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
@@ -45,16 +54,6 @@ dependencies {
     }
 }
 
-val intTest by tasks.registering(Test::class) {
-    testClassesDirs = sourceSets["intTest"].output.classesDirs
-    classpath = sourceSets["intTest"].runtimeClasspath
-    shouldRunAfter(tasks.test)
-}
-
-tasks.check {
-    dependsOn(intTest)
-}
-
 gradlePlugin {
     // hack to prevent building two jar's overwriting each other and leading to invalid signatures
     // when publishing the Gradle plugin, this property must be present
@@ -65,7 +64,7 @@ gradlePlugin {
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
     }
-    testSourceSets(sourceSets["intTest"])
+    testSourceSets(intTest)
 }
 
 tasks.validatePlugins {
@@ -88,7 +87,7 @@ pluginBundle {
 
 val generateDefaultDetektVersionFile by tasks.registering {
     val name = "PluginVersion.kt"
-    val defaultDetektVersionFile = File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", name)
+    val defaultDetektVersionFile = File("$generatedSrcDir/io/gitlab/arturbosch/detekt", name)
 
     inputs.property(name, project.version)
     outputs.file(defaultDetektVersionFile)
