@@ -425,7 +425,7 @@
 "title": "clearFindings -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/clear-findings.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html",
 "summary": ""
 }
 ,
@@ -436,7 +436,7 @@
 "title": "clearFindings -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/clear-findings.html",
 "summary": ""
 }
 ,
@@ -502,7 +502,7 @@
 "title": "compact -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/compact.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html",
 "summary": ""
 }
 ,
@@ -524,7 +524,7 @@
 "title": "compact -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/compact.html",
 "summary": ""
 }
 ,
@@ -568,7 +568,51 @@
 "title": "component1 -",
 "tags": "",
 "keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component1.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component1 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component1.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component1 -",
+"tags": "",
+"keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/component1.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component1 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component1.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component1 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component1.html",
 "summary": ""
 }
 ,
@@ -601,51 +645,7 @@
 "title": "component1 -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component1.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component1 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component1.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component1 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component1.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component1 -",
-"tags": "",
-"keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/component1.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component1 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component1.html",
 "summary": ""
 }
 ,
@@ -657,61 +657,6 @@
 "tags": "",
 "keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/component2.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component2 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component2.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component2 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component2.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component2 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/component2.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component2 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/component2.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component2 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component2.html",
 "summary": ""
 }
 ,
@@ -752,10 +697,54 @@
 
 
 {
-"title": "component3 -",
+"title": "component2 -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component3.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/component2.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component2 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/component2.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component2 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component2.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component2 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component2.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component2 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/component2.html",
 "summary": ""
 }
 ,
@@ -767,17 +756,6 @@
 "tags": "",
 "keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/component3.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "component3 -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/component3.html",
 "summary": ""
 }
 ,
@@ -807,10 +785,10 @@
 
 
 {
-"title": "component4 -",
+"title": "component3 -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component4.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/component3.html",
 "summary": ""
 }
 ,
@@ -818,10 +796,10 @@
 
 
 {
-"title": "component4 -",
+"title": "component3 -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component4.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component3.html",
 "summary": ""
 }
 ,
@@ -843,7 +821,29 @@
 "title": "component4 -",
 "tags": "",
 "keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/component4.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component4 -",
+"tags": "",
+"keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/component4.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "component4 -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/component4.html",
 "summary": ""
 }
 ,
@@ -887,73 +887,7 @@
 "title": "copy -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/copy.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "copy -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/copy.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/copy.html",
 "summary": ""
 }
 ,
@@ -975,7 +909,73 @@
 "title": "copy -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/copy.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/copy.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "copy -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/copy.html",
 "summary": ""
 }
 ,
@@ -1172,94 +1172,6 @@
 
 
 {
-"title": "HasEntity -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Warning -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "detekt",
-"tags": "",
-"keywords": "detekt static analysis code kotlin",
-"url": "/index.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Error -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-error/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "SourceLocation -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "PropertiesAware -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "BaseRule -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "CorrectableCodeSmell -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/",
-"summary": ""
-}
-,
-
-
-
-{
 "title": "Info -",
 "tags": "",
 "keywords": "",
@@ -1271,10 +1183,10 @@
 
 
 {
-"title": "RuleSet -",
+"title": "ConfigValidator -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/",
 "summary": ""
 }
 ,
@@ -1282,54 +1194,10 @@
 
 
 {
-"title": "Minor -",
+"title": "Debt -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-minor/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "RuleSetProvider -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Companion -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-companion/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "LazyRegex -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "InvalidConfigurationError -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/",
 "summary": ""
 }
 ,
@@ -1348,32 +1216,10 @@
 
 
 {
-"title": "DefaultRuleSetProvider -",
+"title": "Companion -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-default-rule-set-provider/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "detekt-api -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Config -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/-companion/",
 "summary": ""
 }
 ,
@@ -1392,241 +1238,10 @@
 
 
 {
-"title": "Level -",
+"title": "LazyRegex -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Maintainability -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-maintainability/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Extension -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "SetupContext -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "DefaultContext -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Companion -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "FileProcessListener -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Location -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Warning -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-warning/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "SplitPattern -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "CompilerResources -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Security -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-security/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ReportingExtension -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "io.gitlab.arturbosch.detekt.api -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Entity -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Notification -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ProjectMetric -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Issue -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ThresholdRule -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Companion -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Rule -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Detektion -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/",
 "summary": ""
 }
 ,
@@ -1645,10 +1260,10 @@
 
 
 {
-"title": "Compactable -",
+"title": "BaseRule -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/",
 "summary": ""
 }
 ,
@@ -1656,10 +1271,10 @@
 
 
 {
-"title": "ThresholdedCodeSmell -",
+"title": "TextLocation -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/",
 "summary": ""
 }
 ,
@@ -1667,10 +1282,10 @@
 
 
 {
-"title": "SeverityLevel -",
+"title": "HasEntity -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/",
 "summary": ""
 }
 ,
@@ -1678,10 +1293,10 @@
 
 
 {
-"title": "INFO -",
+"title": "SetupContext -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-i-n-f-o/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/",
 "summary": ""
 }
 ,
@@ -1689,10 +1304,10 @@
 
 
 {
-"title": "CodeSmell -",
+"title": "Issue -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-code-smell/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/",
 "summary": ""
 }
 ,
@@ -1700,54 +1315,10 @@
 
 
 {
-"title": "PathFilters -",
+"title": "DefaultRuleSetProvider -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "OutputReport -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "WARNING -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-w-a-r-n-i-n-g/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "CommaSeparatedPattern -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ERROR -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-e-r-r-o-r/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-default-rule-set-provider/",
 "summary": ""
 }
 ,
@@ -1766,10 +1337,10 @@
 
 
 {
-"title": "CodeSmell -",
+"title": "PropertiesAware -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/",
 "summary": ""
 }
 ,
@@ -1777,10 +1348,10 @@
 
 
 {
-"title": "HasMetrics -",
+"title": "SourceLocation -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/",
 "summary": ""
 }
 ,
@@ -1788,10 +1359,10 @@
 
 
 {
-"title": "SingleAssign -",
+"title": "CommaSeparatedPattern -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/",
 "summary": ""
 }
 ,
@@ -1799,10 +1370,10 @@
 
 
 {
-"title": "MultiRule -",
+"title": "io.gitlab.arturbosch.detekt.api.internal -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/",
 "summary": ""
 }
 ,
@@ -1810,32 +1381,10 @@
 
 
 {
-"title": "Defect -",
+"title": "Rule -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-defect/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Performance -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-performance/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Companion -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/-companion/",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/",
 "summary": ""
 }
 ,
@@ -1847,6 +1396,94 @@
 "tags": "",
 "keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Error -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-error/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Warning -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Level -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Notification -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "CodeSmell -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "detekt",
+"tags": "",
+"keywords": "detekt static analysis code kotlin",
+"url": "/index.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "OutputReport -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "PathFilters -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/",
 "summary": ""
 }
 ,
@@ -1868,6 +1505,39 @@
 "title": "Companion -",
 "tags": "",
 "keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "SplitPattern -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "SingleAssign -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Companion -",
+"tags": "",
+"keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/-companion/",
 "summary": ""
 }
@@ -1876,76 +1546,10 @@
 
 
 {
-"title": "TextLocation -",
+"title": "detekt-api -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ConfigValidator -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "ConfigAware -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Debt -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Finding -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "Style -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-style/",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "io.gitlab.arturbosch.detekt.api.internal -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/",
+"url": "/pages/kdoc/detekt-api/",
 "summary": ""
 }
 ,
@@ -1964,10 +1568,406 @@
 
 
 {
+"title": "CompilerResources -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ConfigAware -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Style -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-style/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Extension -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Finding -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Maintainability -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-maintainability/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Config -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "DefaultContext -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Warning -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-warning/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "HasMetrics -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Defect -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-defect/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "RuleSetProvider -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Security -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-security/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "io.gitlab.arturbosch.detekt.api -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "FileProcessListener -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Detektion -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Companion -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-companion/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "InvalidConfigurationError -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "CorrectableCodeSmell -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Compactable -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-compactable/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ProjectMetric -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ThresholdedCodeSmell -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/",
+"summary": ""
+}
+,
+
+
+
+{
 "title": "AnnotationExcluder -",
 "tags": "",
 "keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "SeverityLevel -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "WARNING -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-w-a-r-n-i-n-g/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Companion -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "INFO -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-i-n-f-o/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ERROR -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/-e-r-r-o-r/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Minor -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-minor/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ReportingExtension -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Location -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "ThresholdRule -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "MultiRule -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Entity -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "Performance -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-performance/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "CodeSmell -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-code-smell/",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "RuleSet -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/",
 "summary": ""
 }
 ,
@@ -2066,7 +2066,7 @@
 "title": "messageOrDescription -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/message-or-description.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html",
 "summary": ""
 }
 ,
@@ -2088,7 +2088,7 @@
 "title": "messageOrDescription -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/message-or-description.html",
 "summary": ""
 }
 ,
@@ -2472,7 +2472,7 @@
 "title": "toString -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/to-string.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html",
 "summary": ""
 }
 ,
@@ -2483,18 +2483,7 @@
 "title": "toString -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/to-string.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "toString -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/to-string.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/to-string.html",
 "summary": ""
 }
 ,
@@ -2516,29 +2505,7 @@
 "title": "toString -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "toString -",
-"tags": "",
-"keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/to-string.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "toString -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/to-string.html",
 "summary": ""
 }
 ,
@@ -2560,7 +2527,40 @@
 "title": "toString -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/to-string.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/to-string.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "toString -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/to-string.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "toString -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/to-string.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "toString -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/to-string.html",
 "summary": ""
 }
 ,
@@ -2615,7 +2615,7 @@
 "title": "valueOrDefault -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/value-or-default.html",
 "summary": ""
 }
 ,
@@ -2626,18 +2626,7 @@
 "title": "valueOrDefault -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/value-or-default.html",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "valueOrNull -",
-"tags": "",
-"keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html",
 "summary": ""
 }
 ,
@@ -2656,10 +2645,10 @@
 
 
 {
-"title": "visitCondition -",
+"title": "valueOrNull -",
 "tags": "",
 "keywords": "",
-"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/visit-condition.html",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html",
 "summary": ""
 }
 ,
@@ -2682,6 +2671,17 @@
 "tags": "",
 "keywords": "",
 "url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/visit-condition.html",
+"summary": ""
+}
+,
+
+
+
+{
+"title": "visitCondition -",
+"tags": "",
+"keywords": "",
+"url": "/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/visit-condition.html",
 "summary": ""
 }
 ,
