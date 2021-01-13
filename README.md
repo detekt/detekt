@@ -28,7 +28,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and [GitHub actions](https://github.com/marketplace/actions/detekt-all)
+- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and Github Actions ([Docker based](https://github.com/marketplace/actions/detekt-all) and [Javascript based](https://github.com/marketplace/actions/setup-detekt))
 
 ### Project Website
 
