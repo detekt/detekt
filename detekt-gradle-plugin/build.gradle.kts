@@ -1,10 +1,38 @@
 plugins {
+    module
     `java-gradle-plugin`
     id("com.gradle.plugin-publish") version "0.12.0"
 }
 
 repositories {
     google()
+}
+
+val generatedSrcDir = "$buildDir/generated/src"
+
+sourceSets {
+    main {
+        java.srcDir(generatedSrcDir)
+    }
+}
+
+val intTest: SourceSet by sourceSets.creating {
+    java.srcDir(generatedSrcDir)
+    compileClasspath += sourceSets.main.get().output + configurations["intTestCompileClasspath"]
+    runtimeClasspath += sourceSets.main.get().output + configurations["intTestRuntimeClasspath"]
+}
+
+configurations[intTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[intTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
+val intTestTask by tasks.register<Test>("intTest") {
+    testClassesDirs = intTest.output.classesDirs
+    classpath = intTest.runtimeClasspath
+    shouldRunAfter(tasks.test)
+}
+
+tasks.check {
+    dependsOn(intTestTask)
 }
 
 dependencies {
@@ -36,6 +64,7 @@ gradlePlugin {
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
     }
+    testSourceSets(intTest)
 }
 
 tasks.validatePlugins {
@@ -58,7 +87,7 @@ pluginBundle {
 
 val generateDefaultDetektVersionFile by tasks.registering {
     val name = "PluginVersion.kt"
-    val defaultDetektVersionFile = File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", name)
+    val defaultDetektVersionFile = File("$generatedSrcDir/io/gitlab/arturbosch/detekt", name)
 
     inputs.property(name, project.version)
     outputs.file(defaultDetektVersionFile)
@@ -74,8 +103,6 @@ val generateDefaultDetektVersionFile by tasks.registering {
         )
     }
 }
-
-sourceSets.main.get().java.srcDir("$buildDir/generated/src")
 
 tasks.compileKotlin {
     dependsOn(generateDefaultDetektVersionFile)

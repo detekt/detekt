@@ -4,8 +4,6 @@ style rule set
 
 a wildcard import
 
-**Severity**: Defect
-
 **Debt**: 10min
 
 **Aliases**: alias1, alias2

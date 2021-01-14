@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     implementation(project(":detekt-api"))
     implementation("com.pinterest.ktlint:ktlint-ruleset-standard") {
@@ -12,6 +16,8 @@ dependencies {
 
     testImplementation(project(":detekt-test"))
 }
+
+tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 
 val depsToPackage = setOf(
     "org.ec4j.core",

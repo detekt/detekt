@@ -197,6 +197,7 @@ detekt {
     ignoredBuildTypes = ["release"]                       // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredFlavors = ["production"]                       // Android: Don't create tasks for the specified build flavor (e.g. "production")
     ignoredVariants = ["productionRelease"]               // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    basePath = projectDir                                 // Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -237,6 +238,7 @@ detekt {
     ignoredBuildTypes = listOf("release")                 // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredFlavors = listOf("production")                 // Android: Don't create tasks for the specified build flavor (e.g. "production")
     ignoredVariants = listOf("productionRelease")         // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    basePath = projectDir                                 // Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)

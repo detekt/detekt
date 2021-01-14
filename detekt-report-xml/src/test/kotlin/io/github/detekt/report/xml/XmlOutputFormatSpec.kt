@@ -8,9 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -91,6 +93,32 @@ class XmlOutputFormatSpec : Spek({
                 </checkstyle>""".trimIndent())
         }
 
+        it("renders issues with relative path") {
+            val findingA = createFindingForRelativePath(
+                ruleName = "id_a",
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample1.kt"
+            )
+            val findingB = createFindingForRelativePath(
+                ruleName = "id_b",
+                basePath = "/Users/tester/detekt/",
+                relativePath = "Sample2.kt"
+            )
+
+            val result = outputFormat.render(TestDetektion(findingA, findingB))
+
+            assertThat(result).isEqualTo("""
+                <?xml version="1.0" encoding="utf-8"?>
+                <checkstyle version="4.3">
+                <file name="Sample1.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                </file>
+                <file name="Sample2.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                </file>
+                </checkstyle>""".trimIndent())
+        }
+
         it("renders two reported issues across multiple files") {
             val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
             val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
@@ -120,33 +148,27 @@ class XmlOutputFormatSpec : Spek({
                 </checkstyle>""".trimIndent())
         }
 
-        describe("severities conversion") {
+        describe("severity level conversion") {
 
-            Severity.values().forEach { severity ->
+            SeverityLevel.values().forEach { severity ->
 
-                val severityLabel = when (severity) {
-                    Severity.CodeSmell,
-                    Severity.Style,
-                    Severity.Warning,
-                    Severity.Maintainability,
-                    Severity.Performance -> "warning"
-                    Severity.Defect -> "error"
-                    Severity.Minor -> "info"
-                    Severity.Security -> "fatal"
-                }
+                val xmlSeverity = severity.name.toLowerCase()
 
-                it("renders detektion with severity [${severity.name}] as XML with severity [$severityLabel]") {
-                    val finding = CodeSmell(
-                        issue = Issue("issue_id", severity, "issue description", Debt.FIVE_MINS),
-                        message = "message",
-                        entity = entity1
-                    )
+                it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
+                    val finding = object : CodeSmell(
+                        issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
+                        entity = entity1,
+                        message = "message"
+                    ) {
+                        override val severity: SeverityLevel
+                            get() = severity
+                    }
 
                     val expected = """
                     <?xml version="1.0" encoding="utf-8"?>
                     <checkstyle version="4.3">
                     <file name="${finding.location.file}">
-                    ${"\t"}<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$severityLabel" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
+                    $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                     </file>
                     </checkstyle>
                     """

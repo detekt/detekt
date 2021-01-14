@@ -46,12 +46,6 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 }
             }
 
-            if (rule.severity.isNotEmpty()) {
-                paragraph {
-                    "${bold { "Severity" }}: ${rule.severity}"
-                }
-            }
-
             if (rule.debt.isNotEmpty()) {
                 paragraph {
                     "${bold { "Debt" }}: ${rule.debt}"

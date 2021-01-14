@@ -14,11 +14,11 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(ForbiddenPublicDataClass(TestConfig(Config.EXCLUDES_KEY to "**")).compileAndLint(code)).isEmpty()
         }
 
         val subject by memoized {
-            ForbiddenPublicDataClass(TestConfig(Config.INCLUDES_KEY to "*.kt"))
+            ForbiddenPublicDataClass()
         }
 
         it("public data class should fail") {
@@ -140,9 +140,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            val config = TestConfig(
-                "ignorePackages" to listOf("*.hello", "com.example"),
-                Config.INCLUDES_KEY to "*.kt")
+            val config = TestConfig("ignorePackages" to listOf("*.hello", "com.example"))
             assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
         }
 
@@ -153,7 +151,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            val config = TestConfig("ignorePackages" to "*.hello,org.example", Config.INCLUDES_KEY to "*.kt")
+            val config = TestConfig("ignorePackages" to "*.hello,org.example")
             assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
         }
     }

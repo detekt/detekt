@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -51,9 +50,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
             "Inferred return type can easily be changed by mistake which may lead to breaking changes.",
         Debt.FIVE_MINS
     )
-
-    override fun visitCondition(root: KtFile): Boolean =
-        super.visitCondition(root) && filters != null
 
     override fun visitProperty(property: KtProperty) {
         if (bindingContext == BindingContext.EMPTY) {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -10,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
+import java.nio.file.Paths
 
 fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
@@ -20,11 +22,30 @@ fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = 
 fun createFinding(
     issue: Issue,
     entity: Entity,
-    message: String = entity.signature
+    message: String = entity.signature,
 ) = CodeSmell(
     issue = issue,
     entity = entity,
     message = message
+)
+
+fun createFindingForRelativePath(
+    ruleName: String = "TestSmell",
+    basePath: String = "/Users/tester/detekt/",
+    relativePath: String = "TestFile.kt"
+) = CodeSmell(
+    issue = createIssue(ruleName),
+    entity = Entity(
+        name = "TestEntity",
+        signature = "TestEntitySignature",
+        location = Location(
+            source = SourceLocation(1, 1),
+            text = TextLocation(0, 0),
+            filePath = FilePath.fromRelative(Paths.get(basePath), Paths.get(relativePath))
+        ),
+        ktElement = null
+    ),
+    message = "TestMessage"
 )
 
 fun createIssue(id: String) = Issue(
@@ -35,27 +56,19 @@ fun createIssue(id: String) = Issue(
 )
 
 fun createEntity(
-    file: String,
+    path: String,
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
-    ktElement: KtElement? = null
+    ktElement: KtElement? = null,
+    basePath: String? = null
 ) = Entity(
     name = "TestEntity",
     signature = "TestEntitySignature",
-    location = createLocation(
-        file = file,
+    location = Location(
         source = SourceLocation(position.first, position.second),
-        text = TextLocation(text.first, text.last)
+        text = TextLocation(text.first, text.last),
+        filePath = basePath?.let { FilePath.fromRelative(Paths.get(it), Paths.get(path)) }
+            ?: FilePath.fromAbsolute(Paths.get(path))
     ),
     ktElement = ktElement
-)
-
-fun createLocation(
-    file: String,
-    source: SourceLocation = SourceLocation(1, 1),
-    text: TextLocation = TextLocation(0, 0),
-) = Location(
-    source = source,
-    text = text,
-    file = file
 )

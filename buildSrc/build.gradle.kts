@@ -22,6 +22,7 @@ object Plugins {
     const val DOKKA = "1.4.10"
     const val SEMVER4J = "3.1.0"
     const val NEXUS = "0.22.0"
+    const val KOTLIN_API_VALIDATOR = "0.3.0"
 }
 
 dependencies {
@@ -34,4 +35,5 @@ dependencies {
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${Plugins.DOKKA}")
     implementation("com.vdurmont:semver4j:${Plugins.SEMVER4J}")
     implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:${Plugins.NEXUS}")
+    implementation("org.jetbrains.kotlinx:binary-compatibility-validator:${Plugins.KOTLIN_API_VALIDATOR}")
 }

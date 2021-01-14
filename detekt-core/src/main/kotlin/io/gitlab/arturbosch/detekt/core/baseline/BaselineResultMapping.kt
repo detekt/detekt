@@ -21,6 +21,7 @@ class BaselineResultMapping : ReportingExtension {
     }
 
     override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
+        val baselineFile = baselineFile
         require(
             !createBaseline ||
                 (createBaseline && baselineFile != null)
@@ -28,14 +29,13 @@ class BaselineResultMapping : ReportingExtension {
 
         if (baselineFile != null) {
             val facade = BaselineFacade()
-            val baselinePath = checkNotNull(baselineFile)
 
             if (createBaseline) {
                 val flatten = findings.flatMap { it.value }
-                facade.createOrUpdate(baselinePath, flatten)
+                facade.createOrUpdate(baselineFile, flatten)
             }
 
-            return facade.transformResult(baselinePath, DetektResult(findings)).findings
+            return facade.transformResult(baselineFile, DetektResult(findings)).findings
         }
 
         return findings

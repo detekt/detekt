@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.internal
 
 import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 import org.gradle.api.file.FileCollection
+import java.io.File
 import java.net.URLClassLoader
 
 interface ClassLoaderCache {
@@ -9,37 +10,42 @@ interface ClassLoaderCache {
     fun getOrCreate(classpath: FileCollection): URLClassLoader
 }
 
-object GlobalClassLoaderCache : ClassLoaderCache {
+internal class DefaultClassLoaderCache : ClassLoaderCache {
 
-    private var loaderAndClasspath: Pair<URLClassLoader, FileCollection>? = null
+    private var loaderAndClasspathFiles: Pair<URLClassLoader, Set<File>>? = null
 
-    override fun getOrCreate(classpath: FileCollection): URLClassLoader = synchronized(this) {
-        val lastLoader = loaderAndClasspath?.first
-        val lastClasspath = loaderAndClasspath?.second
+    override fun getOrCreate(classpath: FileCollection): URLClassLoader {
+        val classpathFiles = classpath.files
+        synchronized(this) {
+            val lastLoader = loaderAndClasspathFiles?.first
+            val lastClasspathFiles = loaderAndClasspathFiles?.second
 
-        if (lastClasspath == null) {
-            cache(classpath)
-        } else if (hasClasspathChanged(lastClasspath, classpath)) {
-            DefaultGroovyMethodsSupport.closeQuietly(lastLoader)
-            cache(classpath)
+            if (lastClasspathFiles == null) {
+                cache(classpathFiles)
+            } else if (hasClasspathChanged(lastClasspathFiles, classpathFiles)) {
+                DefaultGroovyMethodsSupport.closeQuietly(lastLoader)
+                cache(classpathFiles)
+            }
+
+            return loaderAndClasspathFiles?.first ?: error("Cached or newly created detekt classloader expected.")
         }
-
-        return loaderAndClasspath?.first ?: error("Cached or newly created detekt classloader expected.")
     }
 
-    private fun cache(classpath: FileCollection) {
-        loaderAndClasspath = URLClassLoader(
-            classpath.map { it.toURI().toURL() }.toTypedArray(),
+    private fun cache(classpathFiles: Set<File>) {
+        loaderAndClasspathFiles = URLClassLoader(
+            classpathFiles.map { it.toURI().toURL() }.toTypedArray(),
             null /* isolate detekt environment */
-        ) to classpath
+        ) to classpathFiles
     }
 }
 
-internal fun hasClasspathChanged(lastClasspath: FileCollection, currentClasspath: FileCollection): Boolean {
-    if (lastClasspath.files.size != currentClasspath.files.size) {
+object GlobalClassLoaderCache : ClassLoaderCache by DefaultClassLoaderCache()
+
+internal fun hasClasspathChanged(lastClasspathFiles: Set<File>, currentClasspathFiles: Set<File>): Boolean {
+    if (lastClasspathFiles.size != currentClasspathFiles.size) {
         return true
     }
-    return lastClasspath.sorted()
-        .zip(currentClasspath.sorted())
+    return lastClasspathFiles.sorted()
+        .zip(currentClasspathFiles.sorted())
         .any { (last, current) -> last != current || last.lastModified() != current.lastModified() }
 }
