@@ -2,10 +2,6 @@ plugins {
     module
 }
 
-repositories {
-    mavenLocal()
-}
-
 dependencies {
     compileOnly(project(":detekt-api"))
     compileOnly(project(":detekt-tooling"))
