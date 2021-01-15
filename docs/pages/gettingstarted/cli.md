@@ -7,7 +7,7 @@ folder: gettingstarted
 summary:
 ---
 
-# Install the cli
+## Install the cli
 
 There are different ways to install the Command Line Interface (CLI):
 
@@ -31,7 +31,7 @@ curl -sSLO https://github.com/detekt/detekt/releases/download/v{{ site.detekt_ve
 ./bin/detekt [options]
 ```
 
-# Use the cli
+## Use the cli
 
 detekt will exit with one of the following exit codes:
 
