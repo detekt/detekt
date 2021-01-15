@@ -445,7 +445,7 @@ $('#toc').on('click', 'a', function() {
 
   <p>detekt requires Gradle 5.4 or higher.</p>
 
-<h4 id="available-plugin-tasks"><a name="tasks">Available plugin tasks</a></h4>
+<h2 id="available-plugin-tasks"><a name="tasks">Available plugin tasks</a></h2>
 
 <p>The detekt Gradle plugin will generate multiple tasks:</p>
 
@@ -494,11 +494,12 @@ and can safely be ignored.</p>
 <p>Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described <a href="#closure">here</a>.</p>
 
-<h5 id="configuration"><a name="gradle">Configuration</a></h5>
+<h3 id="configuration"><a name="gradle">Configuration</a></h3>
 
 <p>Using the plugins DSL:</p>
 
-<h6 id="groovy-dsl">Groovy DSL</h6>
+<h4 id="groovy-dsl">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plugins</span> <span class="o">{</span>
     <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.15.0"</span>
 <span class="o">}</span>
@@ -508,7 +509,8 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl">Kotlin DSL</h6>
+<h4 id="kotlin-dsl">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">plugins</span> <span class="p">{</span>
     <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">).</span><span class="nf">version</span><span class="p">(</span><span class="s">"1.15.0"</span><span class="p">)</span>
 <span class="p">}</span>
@@ -520,7 +522,8 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 
 <p>Using legacy plugin application (<code class="language-plaintext highlighter-rouge">buildscript{}</code>):</p>
 
-<h6 id="groovy-dsl-1">Groovy DSL</h6>
+<h4 id="groovy-dsl-1">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
     <span class="n">repositories</span> <span class="o">{</span>
         <span class="n">gradlePluginPortal</span><span class="o">()</span>
@@ -537,7 +540,8 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-1">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-1">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">buildscript</span> <span class="p">{</span>
     <span class="nf">repositories</span> <span class="p">{</span>
         <span class="nf">gradlePluginPortal</span><span class="p">()</span>
@@ -554,13 +558,14 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="configuration-for-android-projects"><a name="gradleandroid">Configuration for Android projects</a></h5>
+<h3 id="configuration-for-android-projects"><a name="gradleandroid">Configuration for Android projects</a></h3>
 
 <p>When using Android make sure to have detekt configured in the project level build.gradle file.</p>
 
 <p>You can configure the plugin in the same way as indicated above.</p>
 
-<h6 id="groovy-dsl-2">Groovy DSL</h6>
+<h4 id="groovy-dsl-2">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
     <span class="n">repositories</span> <span class="o">{</span>
         <span class="n">google</span><span class="o">()</span>
@@ -583,7 +588,8 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-2">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-2">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">buildscript</span> <span class="p">{</span>
     <span class="nf">repositories</span> <span class="p">{</span>
         <span class="nf">google</span><span class="p">()</span>
@@ -608,9 +614,10 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 
 <p>For more information about how to configure the repositories read <a href="#repositories">about the repositories</a></p>
 
-<h5 id="options-for-detekt-configuration-closure"><a name="closure">Options for detekt configuration closure</a></h5>
+<h3 id="options-for-detekt-configuration-closure"><a name="closure">Options for detekt configuration closure</a></h3>
 
-<h6 id="groovy-dsl-3">Groovy DSL</h6>
+<h4 id="groovy-dsl-3">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
     <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.15.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
     <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>                                        <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
@@ -653,7 +660,8 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-3">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-3">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
     <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.15.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
     <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
@@ -689,31 +697,34 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="using-type-resolution">Using Type Resolution</h5>
+<h3 id="using-type-resolution">Using Type Resolution</h3>
 
 <p>Type resolution is experimental and works only for <a href="#a-nametasksavailable-plugin-tasksa">predefined tasks listed above</a>
 or when implementing a custom detekt task with the <code class="language-plaintext highlighter-rouge">classpath</code> and <code class="language-plaintext highlighter-rouge">jvmTarget</code> properties present.</p>
 
 <p>More information on type resolution are available on the <a href="/detekt/type-resolution.html">type resolution</a> page.</p>
 
-<h6 id="groovy-dsl-4">Groovy DSL</h6>
+<h4 id="groovy-dsl-4">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-4">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-4">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
     <span class="c1">// Target version of the generated JVM bytecode. It is used for type resolution.</span>
     <span class="k">this</span><span class="p">.</span><span class="n">jvmTarget</span> <span class="p">=</span> <span class="s">"1.8"</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="leveraging-gradles-sourcetask---excluding-and-including-source-files"><a name="excluding">Leveraging Gradle’s SourceTask - Excluding and including source files</a></h5>
+<h3 id="leveraging-gradles-sourcetask---excluding-and-including-source-files"><a name="excluding">Leveraging Gradle’s SourceTask - Excluding and including source files</a></h3>
 
 <p>A detekt task extends the Gradle <code class="language-plaintext highlighter-rouge">SourceTask</code> to be only scheduled when watched source files are changed.
 It also allows to match files that should be excluded from the analysis.
 To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:</p>
 
-<h6 id="groovy-dsl-5">Groovy DSL</h6>
+<h4 id="groovy-dsl-5">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
     <span class="o">...</span>
 <span class="o">}</span>
@@ -724,7 +735,8 @@ To do this introduce a query on detekt tasks and define include and exclude patt
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-5">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-5">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
     <span class="o">..</span><span class="p">.</span>
 <span class="p">}</span>
@@ -735,12 +747,13 @@ To do this introduce a query on detekt tasks and define include and exclude patt
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="defining-custom-detekt-task"><a name="customdetekttask">Defining custom detekt task</a></h5>
+<h3 id="defining-custom-detekt-task"><a name="customdetekttask">Defining custom detekt task</a></h3>
 
 <p>Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
 uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.</p>
 
-<h6 id="groovy-dsl-6">Groovy DSL</h6>
+<h4 id="groovy-dsl-6">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="nl">name:</span> <span class="n">detektFailFast</span><span class="o">,</span> <span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">"Runs a failfast detekt build."</span>
     <span class="n">setSource</span><span class="o">(</span><span class="n">files</span><span class="o">(</span><span class="s2">"src/main/kotlin"</span><span class="o">,</span> <span class="s2">"src/test/kotlin"</span><span class="o">))</span>
@@ -759,7 +772,8 @@ uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.<
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-6">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-6">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;(</span><span class="s">"detektFailFast"</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">description</span> <span class="p">=</span> <span class="s">"Runs a failfast detekt build."</span>
     <span class="nf">setSource</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="s">"src/main/kotlin"</span><span class="p">,</span> <span class="s">"src/test/kotlin"</span><span class="p">))</span>
@@ -778,7 +792,7 @@ uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.<
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h5 id="disabling-detekt-from-the-check-task"><a name="check-lifecycle">Disabling detekt from the check task</a></h5>
+<h3 id="disabling-detekt-from-the-check-task"><a name="check-lifecycle">Disabling detekt from the check task</a></h3>
 
 <p>Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
 This aligns with the behavior of other code analysis plugins for Gradle.</p>
@@ -786,11 +800,13 @@ This aligns with the behavior of other code analysis plugins for Gradle.</p>
 <p>If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
 exclude detekt from the check task.</p>
 
-<h6 id="groovy-dsl-7">Groovy DSL</h6>
+<h4 id="groovy-dsl-7">Groovy DSL</h4>
+
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// TODO</span>
 </code></pre></div></div>
 
-<h6 id="kotlin-dsl-7">Kotlin DSL</h6>
+<h4 id="kotlin-dsl-7">Kotlin DSL</h4>
+
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="nf">named</span><span class="p">(</span><span class="s">"check"</span><span class="p">).</span><span class="nf">configure</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nf">setDependsOn</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">dependsOn</span><span class="p">.</span><span class="nf">filterNot</span> <span class="p">{</span>
         <span class="n">it</span> <span class="k">is</span> <span class="nc">TaskProvider</span><span class="p">&lt;</span><span class="err">*</span><span class="p">&gt;</span> <span class="p">&amp;&amp;</span> <span class="n">it</span><span class="p">.</span><span class="n">name</span> <span class="p">==</span> <span class="s">"detekt"</span>
@@ -800,13 +816,13 @@ exclude detekt from the check task.</p>
 
 <p>Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the <a href="/detekt/configurations.html">configuration file</a>.</p>
 
-<h5 id="integrating-detekt-inside-your-intellij-idea"><a name="idea">Integrating detekt inside your IntelliJ IDEA</a></h5>
+<h2 id="integrating-detekt-inside-your-intellij-idea"><a name="idea">Integrating detekt inside your IntelliJ IDEA</a></h2>
 
 <p>detekt comes with an <a href="https://plugins.jetbrains.com/plugin/10761-detekt">IntelliJ Plugin</a> that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.</p>
 
 <p>The source code of the plugin is available here: <a href="https://github.com/detekt/detekt-intellij-plugin">detekt/detekt-intellij-plugin</a></p>
 
-<h4 id="about-the-repositories"><a name="repositories">About the repositories</a></h4>
+<h2 id="about-the-repositories"><a name="repositories">About the repositories</a></h2>
 
 <p>If you prefer to use Maven Central instead of JCenter you can use this configuration:</p>
 
