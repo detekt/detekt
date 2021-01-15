@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -24,7 +24,7 @@ object SleepInsteadOfDelaySpec : Spek({
                     delay(1000L)
                 }
             """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
 
         it("should report Thread.sleep() in suspend functions") {
@@ -33,7 +33,7 @@ object SleepInsteadOfDelaySpec : Spek({
                     Thread.sleep(1000L)
                 }
             """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report Thread.sleep() in CoroutineScope.launch()") {
@@ -48,7 +48,7 @@ object SleepInsteadOfDelaySpec : Spek({
                     }
                 }
             """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report Thread.sleep() in CoroutineScope.async()") {
@@ -64,7 +64,7 @@ object SleepInsteadOfDelaySpec : Spek({
                     }
                 }
             """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 })
