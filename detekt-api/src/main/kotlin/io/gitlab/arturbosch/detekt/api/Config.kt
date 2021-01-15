@@ -50,7 +50,7 @@ interface Config {
         /**
          * An empty configuration with no properties.
          * This config should only be used in test cases.
-         * Always returns the default value except when 'active' is queried, it returns true .
+         * Always returns the default value except when 'active' is queried, it returns true.
          */
         val empty: Config = EmptyConfig
 

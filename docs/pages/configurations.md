@@ -140,11 +140,18 @@ processors:
     active: true
     exclude:
         - 'DetektProgressListener'
+        # - 'KtFileCountProcessor'
+        # - 'PackageCountProcessor'
+        # - 'ClassCountProcessor'
         # - 'FunctionCountProcessor'
         # - 'PropertyCountProcessor'
-        # - 'ClassCountProcessor'
-        # - 'PackageCountProcessor'
-        # - 'KtFileCountProcessor'
+        # - 'ProjectComplexityProcessor'
+        # - 'ProjectCognitiveComplexityProcessor'
+        # - 'ProjectLLOCProcessor'
+        # - 'ProjectCLOCProcessor'
+        # - 'ProjectLOCProcessor'
+        # - 'ProjectSLOCProcessor'
+        # - 'LicenseHeaderLoaderExtension'
 ```
 
 ## Config JSON Schema
