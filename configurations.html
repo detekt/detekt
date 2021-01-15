@@ -575,11 +575,18 @@ For example, when all count processors are enabled, a detekt html report might l
     <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
     <span class="na">exclude</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s1">'</span><span class="s">DetektProgressListener'</span>
+        <span class="c1"># - 'KtFileCountProcessor'</span>
+        <span class="c1"># - 'PackageCountProcessor'</span>
+        <span class="c1"># - 'ClassCountProcessor'</span>
         <span class="c1"># - 'FunctionCountProcessor'</span>
         <span class="c1"># - 'PropertyCountProcessor'</span>
-        <span class="c1"># - 'ClassCountProcessor'</span>
-        <span class="c1"># - 'PackageCountProcessor'</span>
-        <span class="c1"># - 'KtFileCountProcessor'</span>
+        <span class="c1"># - 'ProjectComplexityProcessor'</span>
+        <span class="c1"># - 'ProjectCognitiveComplexityProcessor'</span>
+        <span class="c1"># - 'ProjectLLOCProcessor'</span>
+        <span class="c1"># - 'ProjectCLOCProcessor'</span>
+        <span class="c1"># - 'ProjectLOCProcessor'</span>
+        <span class="c1"># - 'ProjectSLOCProcessor'</span>
+        <span class="c1"># - 'LicenseHeaderLoaderExtension'</span>
 </code></pre></div></div>
 
 <h2 id="config-json-schema">Config JSON Schema</h2>
@@ -611,7 +618,7 @@ More details on the IntelliJ support are available
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Jan 14, 2021 <br />
+ Site last generated: Jan 15, 2021 <br />
                 </div>
             </div>
 </footer>
