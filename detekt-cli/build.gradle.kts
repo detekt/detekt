@@ -26,7 +26,12 @@ dependencies {
     testImplementation(project(":detekt-rules"))
 }
 
-val moveJarForIntegrationTest by tasks.registering(MoveJarForIntegrationTestTask::class) {
-    inputs.files(tasks.named("shadowJar"))
-    outputs.file(rootProject.buildDir.resolve("detekt-cli-all.jar"))
+val moveJarForIntegrationTest by tasks.registering {
+    doLast {
+        copy {
+            from(tasks.named("shadowJar"))
+            into(rootProject.buildDir)
+            rename { "detekt-cli-all.jar" }
+        }
+    }
 }

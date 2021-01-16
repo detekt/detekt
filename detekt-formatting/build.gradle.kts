@@ -34,7 +34,12 @@ tasks.withType<Jar>().configureEach {
     })
 }
 
-val moveJarForIntegrationTest by tasks.registering(MoveJarForIntegrationTestTask::class) {
-    inputs.files(tasks.named("jar"))
-    outputs.file(rootProject.buildDir.resolve("detekt-formatting.jar"))
+val moveJarForIntegrationTest by tasks.registering {
+    doLast {
+        copy {
+            from(tasks.named("jar"))
+            into(rootProject.buildDir)
+            rename { "detekt-formatting.jar" }
+        }
+    }
 }
