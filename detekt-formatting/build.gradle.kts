@@ -34,14 +34,7 @@ tasks.withType<Jar>().configureEach {
     })
 }
 
-val moveJarForIntegrationTest by tasks.registering {
-    description = "Copies the jar to the build directory without version so intergration tests can find it easier."
-    group = "Check"
-
+val moveJarForIntegrationTest by tasks.registering(MoveJarForIntegrationTestTask::class) {
     inputs.files(tasks.named("jar"))
     outputs.file(rootProject.buildDir.resolve("detekt-formatting.jar"))
-
-    doLast {
-        inputs.files.singleFile.copyTo(outputs.files.singleFile, overwrite = true)
-    }
 }
