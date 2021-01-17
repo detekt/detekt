@@ -18,7 +18,7 @@ The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 `detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
- in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html, txt, and sarif format and can be 
+ in `src/main/java`, `src/main/kotlin`, `src/*Main/java` and `src/*Main/kotlin`. Reports are automatically generated in xml, html, txt, and sarif format and can be 
  found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively. Please note that the `detekt` task is automatically 
  run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
@@ -190,7 +190,7 @@ For more information about how to configure the repositories read [about the rep
 ```groovy
 detekt {
     toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    input = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    input = files(                                        // The directories where detekt looks for source files. Defaults to `files(fileTree("src").include("main/kotlin/", "*Main/kotlin/", "main/java/", "*Main/java/"))`.
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
@@ -235,7 +235,7 @@ detekt {
 ```kotlin
 detekt {
     toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    input = files("src/main/java", "src/main/kotlin")     // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    input = files("src/main/java", "src/main/kotlin")     // The directories where detekt looks for source files. Defaults to `files(fileTree("src").include("main/kotlin/", "*Main/kotlin/", "main/java/", "*Main/java/"))`.
     parallel = false                                      // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     buildUponDefaultConfig = false                        // Interpret config files as updates to the default config. `false` by default.
