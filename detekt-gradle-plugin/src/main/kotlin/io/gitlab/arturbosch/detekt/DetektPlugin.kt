@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
-import io.gitlab.arturbosch.detekt.internal.DetektVanilla
+import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
@@ -25,7 +25,7 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
-        project.registerDetektVanillaTask(extension)
+        project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
         project.registerGenerateConfigTask(extension)
@@ -43,8 +43,8 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.registerDetektVanillaTask(extension: DetektExtension) {
-        DetektVanilla(this).registerTasks(extension)
+    private fun Project.registerDetektPlainTask(extension: DetektExtension) {
+        DetektPlain(this).registerTasks(extension)
     }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {

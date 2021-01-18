@@ -7,7 +7,7 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Provider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-internal class DetektVanilla(private val project: Project) {
+internal class DetektPlain(private val project: Project) {
 
     fun registerTasks(extension: DetektExtension) {
         project.registerDetektTask(extension)
