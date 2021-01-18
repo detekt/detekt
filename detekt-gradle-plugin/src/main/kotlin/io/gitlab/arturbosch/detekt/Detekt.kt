@@ -200,7 +200,6 @@ open class Detekt @Inject constructor(
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-    @Suppress("DEPRECATION")
     @TaskAction
     fun check() {
         val arguments = mutableListOf(

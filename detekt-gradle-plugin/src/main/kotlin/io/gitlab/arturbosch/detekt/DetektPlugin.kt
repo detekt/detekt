@@ -3,14 +3,11 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
-import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
+import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.ReportingBasePlugin
-import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 class DetektPlugin : Plugin<Project> {
 
@@ -28,65 +25,33 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
-        project.registerOldDetektTask(extension)
+        project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
-        project.registerOldCreateBaselineTask(extension)
         project.registerGenerateConfigTask(extension)
     }
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
-            DetektJvm(this).registerDetektJvmTasks(extension)
+            DetektJvm(this).registerTasks(extension)
         }
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
         plugins.withId("kotlin-android") {
-            DetektAndroid(this).registerDetektAndroidTasks(extension)
+            DetektAndroid(this).registerTasks(extension)
         }
     }
 
-    private fun Project.registerOldDetektTask(extension: DetektExtension) {
-        val detektTaskProvider = tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
-            it.debugProp.set(project.provider { extension.debug })
-            it.parallelProp.set(project.provider { extension.parallel })
-            it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-            it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
-            it.failFastProp.set(project.provider { extension.failFast })
-            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
-            it.config.setFrom(project.provider { extension.config })
-            it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-            it.reportsDir.set(project.provider { extension.customReportsDir })
-            it.reports = extension.reports
-            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-            it.basePathProp.set(extension.basePath)
-        }
-
-        tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-            it.dependsOn(detektTaskProvider)
-        }
+    private fun Project.registerDetektPlainTask(extension: DetektExtension) {
+        DetektPlain(this).registerTasks(extension)
     }
-
-    private fun Project.registerOldCreateBaselineTask(extension: DetektExtension) =
-        registerCreateBaselineTask(BASELINE_TASK_NAME, extension) {
-            setSource(existingInputDirectoriesProvider(project, extension))
-            baseline.set(project.layout.file(project.provider { extension.baseline }))
-        }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.config.setFrom(project.provider { extension.config })
         }
     }
-
-    private fun existingInputDirectoriesProvider(
-        project: Project,
-        extension: DetektExtension
-    ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
         project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
