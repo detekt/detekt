@@ -4,6 +4,7 @@ import io.github.detekt.psi.toUnifiedString
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
+import java.util.Locale
 
 /**
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
@@ -16,7 +17,7 @@ class XmlOutputReport : OutputReport() {
     override val name = "Checkstyle XML report"
 
     private val Finding.severityLabel: String
-        get() = severity.name.toLowerCase()
+        get() = severity.name.toLowerCase(Locale.US)
 
     override fun render(detektion: Detektion): String {
         val smells = detektion.findings.flatMap { it.value }
