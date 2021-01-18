@@ -18,6 +18,16 @@ internal fun PsiElement.searchName(): String {
     return this.namedUnwrappedElement?.name?.formatElementName() ?: "<UnknownName>"
 }
 
+/*
+ * PsiElements of type KtFile use the absolute path as their names. This resulted in
+ * having two absolute paths being printed along with the output: one for the name
+ * and one for the location. Consequently, IntelliJ was not hyperlinking them because
+ * it only hyperlinks one path file per line.
+ *
+ * This gets the file name only, instead of the entire absolute path, and takes it as the element name.
+ *
+ * Example: KtFile with name /full/path/to/Test.kt will have its name formatted to be simply Test.kt
+ */
 private fun String.formatElementName(): String =
     if (contains(File.separatorChar)) substringAfterLast(File.separatorChar)
     else this
