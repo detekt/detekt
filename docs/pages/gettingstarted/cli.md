@@ -7,7 +7,7 @@ folder: gettingstarted
 summary:
 ---
 
-# Install the cli
+## Install the cli
 
 There are different ways to install the Command Line Interface (CLI):
 
@@ -31,7 +31,7 @@ curl -sSLO https://github.com/detekt/detekt/releases/download/v{{ site.detekt_ve
 ./bin/detekt [options]
 ```
 
-# Use the cli
+## Use the cli
 
 detekt will exit with one of the following exit codes:
 
@@ -123,6 +123,10 @@ Usage: detekt [options]
       Entry should consist of: [report-id:path]. Available 'report-id' values:
       'txt', 'xml', 'html'. These can also be used in combination with each
       other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
+    --base-path, -bp
+      Specifies a directory as the base path.
+      Currently it impacts all file paths in the formatted reports.
+      File paths in console output and txt report are not affected and remain as absolute paths.
     --version
       Prints the detekt CLI version.
       Default: false

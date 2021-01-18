@@ -26,7 +26,7 @@ class ComplexMethodSpec : Spek({
                         do {} while(true)
                         (1..10).forEach {}
                     }
-                """.trimIndent())
+                """)
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
@@ -36,7 +36,7 @@ class ComplexMethodSpec : Spek({
                     fun test() {
                         try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
                     }
-                """.trimIndent())
+                """)
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
             }
@@ -57,7 +57,7 @@ class ComplexMethodSpec : Spek({
                             // only catches count
                         }
                     }
-                """.trimIndent())
+                """)
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
@@ -70,7 +70,7 @@ class ComplexMethodSpec : Spek({
                         for (i in 1..10) {}
                         (1..10).forEach {}
                     }
-                """.trimIndent()
+                """
 
             it("counts three with nesting function 'forEach'") {
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "false"))

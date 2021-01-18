@@ -1,0 +1,586 @@
+public final class io/gitlab/arturbosch/detekt/api/AnnotationExcluder {
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/SplitPattern;)V
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public final fun shouldExclude (Ljava/util/List;)Z
+}
+
+public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun compact ()Ljava/lang/String;
+	public fun compactWithSignature ()Ljava/lang/String;
+	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public fun getFile ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
+	public fun getMessage ()Ljava/lang/String;
+	public fun getMetrics ()Ljava/util/List;
+	public fun getReferences ()Ljava/util/List;
+	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public fun getSignature ()Ljava/lang/String;
+	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public fun messageOrDescription ()Ljava/lang/String;
+	public fun metricByType (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Compactable {
+	public abstract fun compact ()Ljava/lang/String;
+	public abstract fun compactWithSignature ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Compactable$DefaultImpls {
+	public static fun compactWithSignature (Lio/gitlab/arturbosch/detekt/api/Compactable;)Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
+	public static final field ACTIVE_KEY Ljava/lang/String;
+	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
+	public static final field CONFIG_SEPARATOR Ljava/lang/String;
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Config$Companion;
+	public static final field EXCLUDES_KEY Ljava/lang/String;
+	public static final field INCLUDES_KEY Ljava/lang/String;
+	public static final field SEVERITY_KEY Ljava/lang/String;
+	public abstract fun getParentPath ()Ljava/lang/String;
+	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Config$Companion {
+	public static final field ACTIVE_KEY Ljava/lang/String;
+	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
+	public static final field CONFIG_SEPARATOR Ljava/lang/String;
+	public static final field EXCLUDES_KEY Ljava/lang/String;
+	public static final field INCLUDES_KEY Ljava/lang/String;
+	public static final field SEVERITY_KEY Ljava/lang/String;
+	public final fun getEmpty ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public final fun getPRIMITIVES ()Ljava/util/Set;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Config$DefaultImpls {
+	public static fun getParentPath (Lio/gitlab/arturbosch/detekt/api/Config;)Ljava/lang/String;
+	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Config$InvalidConfigurationError : java/lang/RuntimeException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware : io/gitlab/arturbosch/detekt/api/Config {
+	public abstract fun getActive ()Z
+	public abstract fun getAutoCorrect ()Z
+	public abstract fun getRuleId ()Ljava/lang/String;
+	public abstract fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public abstract fun withAutoCorrect (Lkotlin/jvm/functions/Function0;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
+	public static fun getActive (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
+	public static fun getAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
+	public static fun getParentPath (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Ljava/lang/String;
+	public static fun subConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public static fun valueOrNull (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Ljava/lang/Object;
+	public static fun withAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Lkotlin/jvm/functions/Function0;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigValidator : io/gitlab/arturbosch/detekt/api/Extension {
+	public abstract fun validate (Lio/gitlab/arturbosch/detekt/api/Config;)Ljava/util/Collection;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/ConfigValidator$DefaultImpls {
+	public static fun getId (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;)Ljava/lang/String;
+	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;)I
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+}
+
+public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/arturbosch/detekt/api/Extension {
+	public fun <init> ()V
+	public fun getId ()Ljava/lang/String;
+	public fun getPriority ()I
+	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+	public final fun print (Ljava/io/PrintStream;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Context {
+	public abstract fun clearFindings ()V
+	public abstract fun getFindings ()Ljava/util/List;
+	public abstract fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
+	public abstract fun report (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Context$DefaultImpls {
+	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
+	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
+	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAutoCorrectEnabled ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Debt {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Debt$Companion;
+	public fun <init> ()V
+	public fun <init> (III)V
+	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun copy (III)Lio/gitlab/arturbosch/detekt/api/Debt;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Debt;IIIILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Debt;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDays ()I
+	public final fun getHours ()I
+	public final fun getMins ()I
+	public fun hashCode ()I
+	public final fun plus (Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Debt;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Debt$Companion {
+	public final fun getFIVE_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun getTEN_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun getTWENTY_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
+}
+
+public class io/gitlab/arturbosch/detekt/api/DefaultContext : io/gitlab/arturbosch/detekt/api/Context {
+	public fun <init> ()V
+	public final fun clearFindings ()V
+	public fun getFindings ()Ljava/util/List;
+	public fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
+	public fun report (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
+}
+
+public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisitorVoid {
+	public fun <init> ()V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion {
+	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
+	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
+	public abstract fun addData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;Ljava/lang/Object;)V
+	public abstract fun getData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;)Ljava/lang/Object;
+	public abstract fun getFindings ()Ljava/util/Map;
+	public abstract fun getMetrics ()Ljava/util/Collection;
+	public abstract fun getNotifications ()Ljava/util/Collection;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Entity : io/gitlab/arturbosch/detekt/api/Compactable {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Entity$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun compact ()Ljava/lang/String;
+	public fun compactWithSignature ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/gitlab/arturbosch/detekt/api/Location;
+	public final fun component4 ()Lorg/jetbrains/kotlin/psi/KtElement;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
+	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
+	public final fun getSignature ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Entity$Companion {
+	public final fun atName (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun atPackageOrFirstDecl (Lorg/jetbrains/kotlin/psi/KtFile;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;Lio/gitlab/arturbosch/detekt/api/Location;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Entity$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Entity;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Extension {
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun getPriority ()I
+	public abstract fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public abstract fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
+	public static fun getId (Lio/gitlab/arturbosch/detekt/api/Extension;)Ljava/lang/String;
+	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/Extension;)I
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/Extension;Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/Extension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/FileProcessListener : io/gitlab/arturbosch/detekt/api/Extension {
+	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;)V
+	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public abstract fun onStart (Ljava/util/List;)V
+	public abstract fun onStart (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultImpls {
+	public static fun getId (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;)Ljava/lang/String;
+	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;)I
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+	public static fun onFinish (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public static fun onFinish (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public static fun onProcess (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public static fun onProcess (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;)V
+	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;)V
+	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/gitlab/arturbosch/detekt/api/Compactable, io/gitlab/arturbosch/detekt/api/HasEntity, io/gitlab/arturbosch/detekt/api/HasMetrics {
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public abstract fun getMessage ()Ljava/lang/String;
+	public abstract fun getReferences ()Ljava/util/List;
+	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public abstract fun messageOrDescription ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
+	public static fun compactWithSignature (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
+	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
+	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static fun getSeverity (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
+	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public static fun metricByType (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/HasEntity {
+	public abstract fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public abstract fun getFile ()Ljava/lang/String;
+	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
+	public abstract fun getSignature ()Ljava/lang/String;
+	public abstract fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
+	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
+	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
+	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/HasMetrics {
+	public abstract fun getMetrics ()Ljava/util/List;
+	public abstract fun metricByType (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/HasMetrics$DefaultImpls {
+	public static fun metricByType (Lio/gitlab/arturbosch/detekt/api/HasMetrics;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Issue {
+	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun copy (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Issue;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Issue;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Issue;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDebt ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/LazyRegex : kotlin/properties/ReadOnlyProperty {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun getValue (Lio/gitlab/arturbosch/detekt/api/Rule;Lkotlin/reflect/KProperty;)Lkotlin/text/Regex;
+	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Ljava/lang/String;)V
+	public fun compact ()Ljava/lang/String;
+	public fun compactWithSignature ()Ljava/lang/String;
+	public final fun component1 ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public final fun component2 ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/detekt/psi/FilePath;
+	public final fun copy (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Location;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFile ()Ljava/lang/String;
+	public final fun getFilePath ()Lio/github/detekt/psi/FilePath;
+	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public final fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Location$Companion {
+	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public final fun startLineAndColumn (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lorg/jetbrains/kotlin/diagnostics/PsiDiagnosticUtils$LineAndColumn;
+	public static synthetic fun startLineAndColumn$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lorg/jetbrains/kotlin/diagnostics/PsiDiagnosticUtils$LineAndColumn;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Metric {
+	public fun <init> (Ljava/lang/String;DDI)V
+	public synthetic fun <init> (Ljava/lang/String;DDIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;IIZI)V
+	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Z
+	public final fun component5 ()I
+	public final fun copy (Ljava/lang/String;IIZI)Lio/gitlab/arturbosch/detekt/api/Metric;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;IIZIILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Metric;
+	public final fun doubleThreshold ()D
+	public final fun doubleValue ()D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversionFactor ()I
+	public final fun getThreshold ()I
+	public final fun getType ()Ljava/lang/String;
+	public final fun getValue ()I
+	public fun hashCode ()I
+	public final fun isDouble ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/MetricKt {
+	public static final field DEFAULT_FLOAT_CONVERSION_FACTOR I
+}
+
+public abstract class io/gitlab/arturbosch/detekt/api/MultiRule : io/gitlab/arturbosch/detekt/api/internal/BaseRule {
+	public fun <init> ()V
+	public final fun getActiveRules ()Ljava/util/Set;
+	public abstract fun getRules ()Ljava/util/List;
+	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public final fun runIfActive (Lio/gitlab/arturbosch/detekt/api/Rule;Lkotlin/jvm/functions/Function1;)V
+	public final fun setActiveRules (Ljava/util/Set;)V
+	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
+	public abstract fun getLevel ()Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public abstract fun getMessage ()Ljava/lang/String;
+	public abstract fun isError ()Z
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Notification$DefaultImpls {
+	public static fun isError (Lio/gitlab/arturbosch/detekt/api/Notification;)Z
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Notification$Level : java/lang/Enum {
+	public static final field Error Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static final field Info Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+}
+
+public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/arturbosch/detekt/api/Extension {
+	public fun <init> ()V
+	public abstract fun getEnding ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public fun getName ()Ljava/lang/String;
+	public fun getPriority ()I
+	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
+	public final fun write (Ljava/nio/file/Path;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+}
+
+public class io/gitlab/arturbosch/detekt/api/ProjectMetric {
+	public fun <init> (Ljava/lang/String;IIZI)V
+	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getConversionFactor ()I
+	public final fun getPriority ()I
+	public final fun getType ()Ljava/lang/String;
+	public final fun getValue ()I
+	public final fun isDouble ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware {
+	public abstract fun getProperties ()Ljava/util/Map;
+	public abstract fun register (Ljava/lang/String;Ljava/lang/Object;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtension : io/gitlab/arturbosch/detekt/api/Extension {
+	public abstract fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public abstract fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public abstract fun transformFindings (Ljava/util/Map;)Ljava/util/Map;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImpls {
+	public static fun getId (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;)Ljava/lang/String;
+	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;)I
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+	public static fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public static fun onRawResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public static fun transformFindings (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/Map;)Ljava/util/Map;
+}
+
+public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/internal/BaseRule, io/gitlab/arturbosch/detekt/api/ConfigAware {
+	public fun <init> ()V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getActive ()Z
+	public final fun getAliases ()Ljava/util/Set;
+	public fun getAutoCorrect ()Z
+	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
+	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
+	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public fun getParentPath ()Ljava/lang/String;
+	public final fun getRuleId ()Ljava/lang/String;
+	public fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
+	public final fun report (Ljava/util/List;)V
+	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
+	public fun withAutoCorrect (Lkotlin/jvm/functions/Function0;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/RuleSet {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public final fun accept (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)Ljava/util/List;
+	public static synthetic fun accept$default (Lio/gitlab/arturbosch/detekt/api/RuleSet;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;ILjava/lang/Object;)Ljava/util/List;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getPathFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
+	public final fun getRules ()Ljava/util/List;
+	public final fun setPathFilters (Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;)V
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
+	public abstract fun getRuleSetId ()Ljava/lang/String;
+	public abstract fun instance (Lio/gitlab/arturbosch/detekt/api/Config;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : io/gitlab/arturbosch/detekt/api/PropertiesAware {
+	public abstract fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public abstract fun getConfigUris ()Ljava/util/Collection;
+	public abstract fun getErrorChannel ()Ljava/lang/Appendable;
+	public abstract fun getOutputChannel ()Ljava/lang/Appendable;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
+	public static final field CodeSmell Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Defect Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Maintainability Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Minor Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Performance Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Security Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Style Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enum {
+	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static final field INFO Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static final field WARNING Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/SingleAssign {
+	public fun <init> ()V
+	public final fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+	public final fun setValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;Ljava/lang/Object;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/api/SourceLocation {
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/SourceLocation;IIILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColumn ()I
+	public final fun getLine ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public class io/gitlab/arturbosch/detekt/api/SplitPattern {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun any (Ljava/lang/String;)Z
+	public final fun contains (Ljava/lang/String;)Z
+	public final fun mapAll (Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+	public final fun matches (Ljava/lang/String;)Ljava/util/List;
+	public final fun none (Ljava/lang/String;)Z
+	public final fun startWith (Ljava/lang/String;)Z
+}
+
+public final class io/gitlab/arturbosch/detekt/api/SplitPatternKt {
+	public static final fun commaSeparatedPattern (Ljava/lang/String;[Ljava/lang/String;)Lkotlin/sequences/Sequence;
+	public static synthetic fun commaSeparatedPattern$default (Ljava/lang/String;[Ljava/lang/String;ILjava/lang/Object;)Lkotlin/sequences/Sequence;
+	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/TextLocation {
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/TextLocation;IIILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEnd ()I
+	public final fun getStart ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class io/gitlab/arturbosch/detekt/api/ThresholdRule : io/gitlab/arturbosch/detekt/api/Rule {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;I)V
+	protected final fun getThreshold ()I
+}
+
+public class io/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun compact ()Ljava/lang/String;
+	public final fun getMetric ()Lio/gitlab/arturbosch/detekt/api/Metric;
+	public final fun getThreshold ()I
+	public final fun getValue ()I
+	public fun messageOrDescription ()Ljava/lang/String;
+}
+
+public abstract interface annotation class io/gitlab/arturbosch/detekt/api/UnstableApi : java/lang/annotation/Annotation {
+	public abstract fun reason ()Ljava/lang/String;
+}
+

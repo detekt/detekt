@@ -14,7 +14,7 @@ class FinalNewlineSpec : Spek({
 
         it("should report missing new line by default") {
             val findings = FinalNewline(Config.empty)
-                .lint("fun main() = Unit".trimIndent())
+                .lint("fun main() = Unit")
 
             assertThat(findings).hasSize(1)
         }
@@ -23,7 +23,7 @@ class FinalNewlineSpec : Spek({
             val findings = FinalNewline(Config.empty).lint("""
                     fun main() = Unit
 
-            """.trimIndent())
+            """)
 
             assertThat(findings).isEmpty()
         }
@@ -33,14 +33,14 @@ class FinalNewlineSpec : Spek({
                 .lint("""
                 fun main() = Unit
 
-            """.trimIndent())
+            """)
 
             assertThat(findings).hasSize(1)
         }
 
         it("should not report when no new line is configured and not present") {
             val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE to "false"))
-                .lint("fun main() = Unit".trimIndent())
+                .lint("fun main() = Unit")
 
             assertThat(findings).isEmpty()
         }

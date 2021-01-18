@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.sarif.SarifOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.api.Config
@@ -15,6 +16,7 @@ internal fun defaultReportMapping(reportId: String) = when (reportId) {
     TxtOutputReport::class.java.simpleName -> "txt"
     XmlOutputReport::class.java.simpleName -> "xml"
     HtmlOutputReport::class.java.simpleName -> "html"
+    SarifOutputReport::class.java.simpleName -> "sarif"
     else -> reportId
 }
 
@@ -43,6 +45,7 @@ const val BUILD = "build"
 const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
 const val DETEKT_OUTPUT_REPORT_PATHS_KEY = "detekt.output.report.paths.key"
+const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 

@@ -18,6 +18,10 @@ open class CodeSmell(
     override val references: List<Entity> = listOf()
 ) : Finding {
 
+    internal var internalSeverity: SeverityLevel = SeverityLevel.WARNING
+    override val severity: SeverityLevel
+        get() = internalSeverity
+
     override val id: String = issue.id
 
     override fun compact(): String = "$id - ${entity.compact()}"
@@ -30,6 +34,7 @@ open class CodeSmell(
             "message=$message, " +
             "metrics=$metrics, " +
             "references=$references, " +
+            "severity=$severity, " +
             "id='$id')"
     }
 
@@ -63,6 +68,7 @@ open class CorrectableCodeSmell(
             "message=$message, " +
             "metrics=$metrics, " +
             "references=$references, " +
+            "severity=$severity, " +
             "id='$id')"
     }
 }

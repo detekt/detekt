@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.EditorConfig
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.formatting.KOTLIN_IMPORTS_LAYOUT_KEY
-import io.gitlab.arturbosch.detekt.formatting.copy
+import org.ec4j.core.model.Property
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.formatting.copy
  *
  * @autoCorrect since v1.0.0
  */
+@OptIn(FeatureInAlphaState::class)
 class ImportOrdering(config: Config) : FormattingRule(config) {
 
     override val wrapping = ImportOrderingRule()
@@ -25,8 +26,13 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
 
     private fun chooseDefaultLayout() = if (isAndroid) ASCII else IDEA
 
-    override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? =
-        { it.copy(KOTLIN_IMPORTS_LAYOUT_KEY to layout) }
+    // HACK! ImportOrderingRule.ktlintCustomImportsLayoutProperty is internal. Therefore we are using
+    // ImportOrderingRule.editorConfigProperties.first() to access it.
+    // When ImportOrderingRule exits the alpha/beta state, hopefully we could remove this hack.
+    override fun overrideEditorConfigProperties() = mapOf(
+        KOTLIN_IMPORTS_LAYOUT_KEY to
+            Property.builder().type(wrapping.editorConfigProperties.first().type).value(layout).build()
+    )
 
     companion object {
         const val LAYOUT_PATTERN = "layout"

@@ -21,6 +21,8 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>includes",
     ".*>.*>active",
     ".*>.*>autoCorrect",
+    ".*>severity",
+    ".*>.*>severity",
     "build>weights.*"
 ).joinToString(",")
 

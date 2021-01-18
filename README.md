@@ -28,7 +28,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and [GitHub actions](https://github.com/marketplace/actions/detekt-all)
+- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and Github Actions ([Docker based](https://github.com/marketplace/actions/detekt-all) and [Javascript based](https://github.com/marketplace/actions/setup-detekt))
 
 ### Project Website
 
@@ -97,6 +97,7 @@ detekt {
         html.enabled = true // observe findings in your browser with structure and code snippets
         xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
         txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
+        sarif.enabled = true // SARIF integration (https://sarifweb.azurewebsites.net/) for integrations with Github
     }
 }
 
@@ -211,9 +212,12 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Zachary Moore](https://github.com/zsmoore) - Rule, cli, gradle plugin, and config improvements
 - [Veyndan Stuart](https://github.com/veyndan) - New rule: UseEmptyCounterpart; Rule improvement: UselessCallOnNotNull
 - [Parimatch Tech](https://github.com/parimatchtech) - New rule: LibraryEntitiesShouldNotBePublic
-- [Chao Zhang](https://github.com/chao2zhang) - Rule improvement: ImplicitDefaultLocale, ModifierOrder, and LibraryCodeMustReturnSpecifyReturnType
+- [Chao Zhang](https://github.com/chao2zhang) - SARIF report format; Rule improvements
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
+- [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
+- [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
+- [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
 
 ### Mentions
 
@@ -252,6 +256,8 @@ Integrations:
 - [Codefactor](http://codefactor.io/)
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
+- [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- [MuseDev](https://github.com/marketplace/muse-dev)
 
 Custom rules from 3rd parties:
 

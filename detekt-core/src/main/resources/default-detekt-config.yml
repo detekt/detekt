@@ -17,11 +17,18 @@ processors:
   active: true
   exclude:
     - 'DetektProgressListener'
+  # - 'KtFileCountProcessor'
+  # - 'PackageCountProcessor'
+  # - 'ClassCountProcessor'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'KtFileCountProcessor'
+  # - 'ProjectComplexityProcessor'
+  # - 'ProjectCognitiveComplexityProcessor'
+  # - 'ProjectLLOCProcessor'
+  # - 'ProjectCLOCProcessor'
+  # - 'ProjectLOCProcessor'
+  # - 'ProjectSLOCProcessor'
+  # - 'LicenseHeaderLoaderExtension'
 
 console-reports:
   active: true
@@ -131,6 +138,8 @@ coroutines:
   GlobalCoroutineUsage:
     active: false
   RedundantSuspendModifier:
+    active: false
+  SleepInsteadOfDelay:
     active: false
   SuspendFunWithFlowReturnType:
     active: false
@@ -398,6 +407,7 @@ naming:
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
+    excludes: ['*.kts']
     rootPackage: ''
   MatchingDeclarationName:
     active: true
@@ -463,6 +473,8 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  ExitOutsideMain:
+    active: false
   ExplicitGarbageCollectionCall:
     active: true
   HasPlatformType:
@@ -524,6 +536,9 @@ style:
     conversionFunctionPrefix: 'to'
   DataClassShouldBeImmutable:
     active: false
+  DestructuringDeclarationWithTooManyEntries:
+    active: false
+    maxDestructuringEntries: 3
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:
@@ -547,7 +562,8 @@ style:
     active: false
     methods: ['kotlin.io.println', 'kotlin.io.print']
   ForbiddenPublicDataClass:
-    active: false
+    active: true
+    excludes: ['**']
     ignorePackages: ['*.internal', '*.internal.*']
   ForbiddenVoid:
     active: false
@@ -560,8 +576,10 @@ style:
     excludeAnnotatedFunction: ['dagger.Provides']
   LibraryCodeMustSpecifyReturnType:
     active: true
+    excludes: ['**']
   LibraryEntitiesShouldNotBePublic:
-    active: false
+    active: true
+    excludes: ['**']
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -578,6 +596,7 @@ style:
     ignoreNamedArgument: true
     ignoreEnums: false
     ignoreRanges: false
+    ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:
     active: false
   MandatoryBracesLoops:
@@ -592,6 +611,8 @@ style:
     active: true
   ModifierOrder:
     active: true
+  MultilineLambdaItParameter:
+    active: false
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:

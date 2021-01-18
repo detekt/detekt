@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import org.intellij.lang.annotations.Language
@@ -38,11 +37,6 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
-/**
- * Compare with [compileAndLintWithContext], this does not use [KotlinScriptEngine]
- * to compile. Please use this sparingly: A typical usecase is when KotlinScript
- * failed to compile even when the Kotlin code in [content] is legal.
- */
 fun BaseRule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
@@ -61,14 +55,13 @@ fun BaseRule.lintWithContext(
 }
 
 fun BaseRule.compileAndLintWithContext(
-    environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String,
-    @Language("kotlin") vararg additionalContents: String,
+        environment: KotlinCoreEnvironment,
+        @Language("kotlin") content: String
 ): List<Finding> {
-    if (shouldCompileTestSnippets && additionalContents.isEmpty()) {
+    if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lintWithContext(environment, content, *additionalContents)
+    return lintWithContext(environment, content)
 }
 
 private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
@@ -86,19 +79,4 @@ private fun BaseRule.findingsAfterVisit(
 ): List<Finding> {
     this.visitFile(ktFile, bindingContext, compilerResources)
     return this.findings
-}
-
-fun Rule.format(@Language("kotlin") content: String): String {
-    val ktFile = compileContentForTest(content.trimIndent())
-    return contentAfterVisit(ktFile)
-}
-
-fun Rule.format(path: Path): String {
-    val ktFile = compileForTest(path)
-    return contentAfterVisit(ktFile)
-}
-
-private fun Rule.contentAfterVisit(ktFile: KtFile): String {
-    this.visit(ktFile)
-    return ktFile.text
 }

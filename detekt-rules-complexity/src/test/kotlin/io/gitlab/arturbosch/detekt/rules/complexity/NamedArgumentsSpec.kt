@@ -1,12 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class NamedArgumentsSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val defaultThreshold = 2
     val namedArguments by memoized { NamedArguments(threshold = defaultThreshold) }
 
@@ -22,7 +26,7 @@ class NamedArgumentsSpec : Spek({
                     sum(1, 2, 3)
                 }
                 """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(errorMessage)
         }
@@ -36,7 +40,7 @@ class NamedArgumentsSpec : Spek({
                     sum(a = 1, b = 2, c = 3)
                 }
                 """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -49,7 +53,7 @@ class NamedArgumentsSpec : Spek({
                     sum(1, b = 2, c = 3)
                 }
                 """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(errorMessage)
         }
@@ -63,7 +67,7 @@ class NamedArgumentsSpec : Spek({
                     sum(1, 2)
                 }
                 """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -76,7 +80,7 @@ class NamedArgumentsSpec : Spek({
                     sum(a = 1, b = 2)
                 }
                 """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -86,7 +90,7 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(1, 2, 3)
             """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(errorMessage)
         }
@@ -97,7 +101,7 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(a = 1, b = 2, c= 3)
             """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -107,8 +111,44 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(1, 2)
             """
-            val findings = namedArguments.compileAndLint(code)
+            val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
+        }
+
+        it("java method invocation should not be flagged") {
+            val code = """
+                import java.time.LocalDateTime
+                
+                fun test() {
+                    LocalDateTime.of(2020, 3, 13, 14, 0, 0)
+                }
+            """
+            val findings = namedArguments.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("invocation with varargs should not be flagged") {
+            val code = """
+                fun foo(vararg i: Int) {}
+                fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
+                fun test() {
+                    foo(1, 2, 3, 4, 5)
+                    bar(1, 2, 3, "a")
+                }
+            """
+            val findings = namedArguments.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("invocation with spread operator should be flagged") {
+            val code = """
+                fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
+                fun test() {
+                    bar(1, 2, 3, *arrayOf("a"))
+                }
+            """
+            val findings = namedArguments.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 })

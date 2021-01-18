@@ -11,7 +11,7 @@ internal object EmptyConfig : Config {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> valueOrNull(key: String): T? = when (key) {
-        "active" -> true as? T
+        Config.ACTIVE_KEY -> true as? T
         else -> null
     }
 }

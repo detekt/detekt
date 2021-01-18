@@ -28,7 +28,7 @@ class ClassOrderingSpec : Spek({
                         const val IMPORTANT_VALUE = 3
                     }
                 }
-            """.trimIndent()
+            """
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -50,7 +50,7 @@ class ClassOrderingSpec : Spek({
                         const val IMPORTANT_VALUE = 3
                     }
                 }
-            """.trimIndent()
+            """
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -72,7 +72,7 @@ class ClassOrderingSpec : Spek({
                         const val IMPORTANT_VALUE = 3
                     }
                 }
-            """.trimIndent()
+            """
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -97,7 +97,7 @@ class ClassOrderingSpec : Spek({
                         const val IMPORTANT_VALUE = 3
                     }
                 }
-            """.trimIndent()
+            """
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -122,7 +122,7 @@ class ClassOrderingSpec : Spek({
                         const val IMPORTANT_VALUE = 3
                     }
                 }
-            """.trimIndent()
+            """
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -146,7 +146,7 @@ class ClassOrderingSpec : Spek({
 
                     fun returnX() = x
                 }
-            """.trimIndent()
+            """
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -170,7 +170,7 @@ class ClassOrderingSpec : Spek({
 
                     fun returnX() = x
                 }
-            """.trimIndent()
+            """
 
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
@@ -192,7 +192,7 @@ class ClassOrderingSpec : Spek({
 
                     fun returnX() = x
                 }
-            """.trimIndent()
+            """
 
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
@@ -210,7 +210,7 @@ class ClassOrderingSpec : Spek({
                     
                     val y = x
                 }
-            """.trimIndent()
+            """
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(3)

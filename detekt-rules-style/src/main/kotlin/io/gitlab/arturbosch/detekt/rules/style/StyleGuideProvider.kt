@@ -25,6 +25,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
         listOf(
             ClassOrdering(config),
             CollapsibleIfStatements(config),
+            DestructuringDeclarationWithTooManyEntries(config),
             ReturnCount(config),
             ThrowsCount(config),
             NewLineAtEndOfFile(config),
@@ -85,7 +86,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseCheckNotNull(config),
             UseRequireNotNull(config),
             RedundantHigherOrderMapUsage(config),
-            UseIfEmptyOrIfBlank(config)
+            UseIfEmptyOrIfBlank(config),
+            MultilineLambdaItParameter(config)
         )
     )
 }

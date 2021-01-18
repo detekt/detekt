@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -699,7 +699,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            Assertions.assertThat(lint.first().message).startsWith("Function parameter")
+            assertThat(lint.first().message).startsWith("Function parameter")
         }
 
         it("are specific for local variables") {
@@ -709,7 +709,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            Assertions.assertThat(lint.first().message).startsWith("Private property")
+            assertThat(lint.first().message).startsWith("Private property")
         }
 
         it("are specific for private functions") {
@@ -723,7 +723,7 @@ class UnusedPrivateMemberSpec : Spek({
 
             val lint = subject.lint(code)
 
-            Assertions.assertThat(lint.first().message).startsWith("Private function")
+            assertThat(lint.first().message).startsWith("Private function")
         }
     }
 
@@ -744,7 +744,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
         }
 
         it("does not report parameters in annotated function") {
@@ -831,7 +831,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
         }
 
         it("does not report private constructor properties in annotated class") {
@@ -900,7 +900,7 @@ class UnusedPrivateMemberSpec : Spek({
             val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
-            Assertions.assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
         }
 
         it("does not report private properties in annotated class") {
@@ -967,7 +967,7 @@ class UnusedPrivateMemberSpec : Spek({
             val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
-            Assertions.assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
+            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
         }
 
         it("does not report private functions in annotated class") {

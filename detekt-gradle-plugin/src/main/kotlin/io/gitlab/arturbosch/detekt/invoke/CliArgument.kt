@@ -20,6 +20,7 @@ private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
+private const val BASE_PATH_PARAMETER = "--base-path"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -62,6 +63,10 @@ internal data class DefaultReportArgument(val type: DetektReportType, val file: 
 
 internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
+}
+
+internal data class BasePathArgument(val basePath: String?) : CliArgument() {
+    override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) } ?: emptyList()
 }
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {

@@ -5,13 +5,13 @@ import java.net.URL
 import java.nio.file.Path
 
 @ProcessingModelDsl
-class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
+class ConfigSpecBuilder : Builder<ConfigSpec> {
 
-    override var shouldValidateBeforeAnalysis: Boolean = true
-    override var knownPatterns: Collection<String> = emptyList()
-    override var useDefaultConfig: Boolean = false // false to be backwards compatible in 1.X
-    override var resources: Collection<URL> = emptyList()
-    override var configPaths: Collection<Path> = emptyList()
+    var shouldValidateBeforeAnalysis: Boolean = true
+    var knownPatterns: Collection<String> = emptyList()
+    var useDefaultConfig: Boolean = false // false to be backwards compatible in 1.X
+    var resources: Collection<URL> = emptyList()
+    var configPaths: Collection<Path> = emptyList()
 
     override fun build(): ConfigSpec = ConfigModel(
         shouldValidateBeforeAnalysis,
@@ -22,7 +22,7 @@ class ConfigSpecBuilder : Builder<ConfigSpec>, ConfigSpec {
     )
 }
 
-internal data class ConfigModel(
+private data class ConfigModel(
     override val shouldValidateBeforeAnalysis: Boolean,
     override val knownPatterns: Collection<String>,
     override val useDefaultConfig: Boolean,

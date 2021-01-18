@@ -12,14 +12,14 @@ summary:
 
 detekt requires Gradle 5.4 or higher.
 
-#### <a name="tasks">Available plugin tasks</a>
+## <a name="tasks">Available plugin tasks</a>
 
 The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 `detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
- in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html and txt format and can be 
- found in `build/reports/detekt/detekt.[xml|html|txt]` respectively. Please note that the `detekt` task is automatically 
+ in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html, txt, and sarif format and can be 
+ found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively. Please note that the `detekt` task is automatically 
  run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
@@ -57,11 +57,12 @@ and can safely be ignored.
 Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described [here](#closure).
 
-##### <a name="gradle">Configuration</a>
+### <a name="gradle">Configuration</a>
 
 Using the plugins DSL:
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 plugins {
     id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
@@ -72,7 +73,8 @@ repositories {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 plugins {
     id("io.gitlab.arturbosch.detekt").version("{{ site.detekt_version }}")
@@ -85,7 +87,8 @@ repositories {
 
 Using legacy plugin application (`buildscript{}`):
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 buildscript {
     repositories {
@@ -103,7 +106,8 @@ repositories {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 buildscript {
     repositories {
@@ -121,13 +125,14 @@ repositories {
 }
 ```
 
-##### <a name="gradleandroid">Configuration for Android projects</a>
+### <a name="gradleandroid">Configuration for Android projects</a>
 
 When using Android make sure to have detekt configured in the project level build.gradle file.
 
 You can configure the plugin in the same way as indicated above.
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 buildscript {
     repositories {
@@ -151,7 +156,8 @@ repositories {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 buildscript {
     repositories {
@@ -177,9 +183,10 @@ repositories {
 
 For more information about how to configure the repositories read [about the repositories](#repositories)
 
-##### <a name="closure">Options for detekt configuration closure</a>
+### <a name="closure">Options for detekt configuration closure</a>
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 detekt {
     toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
@@ -197,6 +204,7 @@ detekt {
     ignoredBuildTypes = ["release"]                       // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredFlavors = ["production"]                       // Android: Don't create tasks for the specified build flavor (e.g. "production")
     ignoredVariants = ["productionRelease"]               // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    basePath = projectDir                                 // Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -210,6 +218,10 @@ detekt {
             enabled = true                                // Enable/Disable TXT report (default: true)
             destination = file("build/reports/detekt.txt") // Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)
         }
+        sarif {
+            enabled = true                                // Enable/Disable SARIF report (default: false)
+            destination = file("build/reports/detekt.sarif") // Path where SARIF report will be stored (default: `build/reports/detekt/detekt.sarif`)
+        }
         custom {
             reportId = "CustomJsonReport"                   // The simple class name of your custom report.
             destination = file("build/reports/detekt.json") // Path where report will be stored
@@ -218,7 +230,8 @@ detekt {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 detekt {
     toolVersion = "{{ site.detekt_version }}"                                 // Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
@@ -233,6 +246,7 @@ detekt {
     ignoredBuildTypes = listOf("release")                 // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredFlavors = listOf("production")                 // Android: Don't create tasks for the specified build flavor (e.g. "production")
     ignoredVariants = listOf("productionRelease")         // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    basePath = projectDir                                 // Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -254,17 +268,21 @@ detekt {
 }
 ```
 
-##### Using Type Resolution
+### Using Type Resolution
 
 Type resolution is experimental and works only for [predefined tasks listed above](#a-nametasksavailable-plugin-tasksa)
 or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
 
-###### Groovy DSL
+More information on type resolution are available on the [type resolution](type-resolution.md) page.
+
+#### Groovy DSL
+
 ```groovy
 tasks.detekt.jvmTarget = "1.8"
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 tasks.withType<Detekt>().configureEach {
     // Target version of the generated JVM bytecode. It is used for type resolution.
@@ -272,13 +290,14 @@ tasks.withType<Detekt>().configureEach {
 }
 ```
 
-##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
+### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
 
 A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
 It also allows to match files that should be excluded from the analysis.
 To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 detekt {
     ...
@@ -290,7 +309,8 @@ tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 detekt {
     ...
@@ -302,12 +322,13 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 }
 ```
 
-##### <a name="customdetekttask">Defining custom detekt task</a>
+### <a name="customdetekttask">Defining custom detekt task</a>
 
 Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
 uses the type `Detekt`.
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
     description = "Runs a failfast detekt build."
@@ -327,7 +348,8 @@ tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
 }
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
     description = "Runs a failfast detekt build."
@@ -347,7 +369,7 @@ tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 }
 ```
 
-##### <a name="check-lifecycle">Disabling detekt from the check task</a>
+### <a name="check-lifecycle">Disabling detekt from the check task</a>
 
 Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
 This aligns with the behavior of other code analysis plugins for Gradle.
@@ -355,12 +377,14 @@ This aligns with the behavior of other code analysis plugins for Gradle.
 If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
 exclude detekt from the check task.
 
-###### Groovy DSL
+#### Groovy DSL
+
 ```groovy
 // TODO
 ```
 
-###### Kotlin DSL
+#### Kotlin DSL
+
 ```kotlin
 tasks.named("check").configure {
     this.setDependsOn(this.dependsOn.filterNot {
@@ -371,13 +395,13 @@ tasks.named("check").configure {
 
 Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the [configuration file](../configurations.md).
 
-##### <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
+## <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 
 detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
 
 The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)
 
-#### <a name="repositories">About the repositories</a>
+## <a name="repositories">About the repositories</a>
 
 If you prefer to use Maven Central instead of JCenter you can use this configuration:
 

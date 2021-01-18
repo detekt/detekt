@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.core.KtLint
-import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.fileName
+import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -15,6 +14,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
 import org.jetbrains.kotlin.psi.KtFile
@@ -45,14 +45,25 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
-        editorConfigUpdater()?.let { updateFunc ->
+        overrideEditorConfig()?.let { overrides ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
-            root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
+            root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, oldEditorConfig.copy(overrides))
+        }
+        overrideEditorConfigProperties()?.let { overrides ->
+            val oldUserData = root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY)
+            val newUserData = if (oldUserData != null) {
+                oldUserData + overrides
+            } else {
+                overrides
+            }
+            root.node.putUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY, newUserData)
         }
         root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
     }
 
-    open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null
+    open fun overrideEditorConfig(): Map<String, Any>? = null
+
+    open fun overrideEditorConfigProperties(): Map<String, Property>? = null
 
     fun apply(node: ASTNode) {
         if (ruleShouldOnlyRunOnFileNode(node)) {
@@ -63,7 +74,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val location = Location(
                 SourceLocation(line, column),
                 TextLocation(node.startOffset, node.psi.endOffset),
-                root.absolutePath().toString()
+                root.toFilePath()
             )
 
             // Nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have

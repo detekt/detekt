@@ -72,7 +72,7 @@ class YamlConfig internal constructor(
                 Yaml().loadAs(it, Map::class.java) as Map<*, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
             if (map == null) {
-                Config.empty
+                YamlConfig(emptyMap())
             } else {
                 YamlConfig(map as Map<String, Any>)
             }

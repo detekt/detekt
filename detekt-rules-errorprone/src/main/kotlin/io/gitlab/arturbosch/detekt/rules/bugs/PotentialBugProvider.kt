@@ -20,6 +20,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             DuplicateCaseInWhenExpression(config),
             EqualsAlwaysReturnsTrueOrFalse(config),
             EqualsWithHashCodeExist(config),
+            ExitOutsideMain(config),
             ExplicitGarbageCollectionCall(config),
             HasPlatformType(config),
             ImplicitDefaultLocale(config),

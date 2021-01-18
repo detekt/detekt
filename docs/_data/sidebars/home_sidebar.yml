@@ -17,7 +17,7 @@ entries:
     - title: Pre 1.0 Release Notes
       url: /changelog-rc.html
       output: web
-    - title: detekt Configuration File
+    - title: Configuration File
       url: /configurations.html
       output: web
     - title: Suppressing Issues in Code
@@ -25,9 +25,6 @@ entries:
       output: web
     - title: Suppressing Issues via Baseline File
       url: /baseline.html
-      output: web
-    - title: Configure Build Failure Thresholds
-      url: /failonbuild.html
       output: web
     - title: Extending detekt
       url: /extensions.html

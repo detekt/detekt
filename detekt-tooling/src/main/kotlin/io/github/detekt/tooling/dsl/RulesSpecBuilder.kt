@@ -19,7 +19,7 @@ class RulesSpecBuilder : Builder<RulesSpec> {
     )
 }
 
-internal data class RulesModel(
+private data class RulesModel(
     override val activateExperimentalRules: Boolean,
     override val maxIssuePolicy: RulesSpec.MaxIssuePolicy,
     override val excludeCorrectable: Boolean,

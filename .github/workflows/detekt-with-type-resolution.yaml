@@ -9,6 +9,42 @@ on:
       - '*'
 
 jobs:
+  without-type-resolution:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Cache Gradle Folders
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/
+            ~/.gradle/wrapper/
+          key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+          restore-keys: |
+            cache-gradle-
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Package executable jar
+        run: ./gradlew jar moveJarForIntegrationTest shadowJarExecutable
+
+      - name: Run detekt-cli with argsfile, override the exit code
+        run: ./detekt-cli/build/run/detekt "@./config/detekt/argsfile" || true
+
+      - name: Upload SARIF to Github using the upload-sarif action
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: build/detekt-report.sarif
+
+
   gradle:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}

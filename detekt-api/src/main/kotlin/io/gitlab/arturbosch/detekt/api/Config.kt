@@ -50,11 +50,13 @@ interface Config {
         /**
          * An empty configuration with no properties.
          * This config should only be used in test cases.
-         * Always returns the default value except when 'active' is queried, it returns true .
+         * Always returns the default value except when 'active' is queried, it returns true.
          */
         val empty: Config = EmptyConfig
 
         const val ACTIVE_KEY: String = "active"
+        const val AUTO_CORRECT_KEY: String = "autoCorrect"
+        const val SEVERITY_KEY: String = "severity"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
         const val CONFIG_SEPARATOR: String = ">"

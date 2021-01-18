@@ -5,6 +5,139 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.15.0 - 2020-12-18
+
+##### Notable Changes
+
+detekt 1.15.0 bundles Kotlin 1.4.10.  
+You may experience some known issues when your project already used 1.4.20
+- [#3248](https://github.com/detekt/detekt/issues/3248) and [#3282](https://github.com/detekt/detekt/issues/3282).
+
+In addition to many rule improvements, there are also new ones:
+
+- RedundantHigherOrderMapUsage
+- ListAllWhenCases
+- UseIfEmptyOrIfBlank
+
+We added documentation on how to configure [type resolution](https://detekt.github.io/detekt/type-resolution.html).  
+Only the rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see
+for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).
+
+detekt now supports [SARIF](https://sarifweb.azurewebsites.net/) as an output format. In the future you will be able to
+upload this format to GitHub and see detekt issues right in your pull requests.
+
+##### Migration
+
+We removed implementations of the `Config` interface from the public api.  
+It was first deprecated and then moved to `internal` package earlier this year.  
+Rule authors can use `TestConfig(Map)` or `yamlConfig(String)` from `detekt-test` to test their rules.
+
+- Move internal config api to core module - [#3163](https://github.com/detekt/detekt/pull/3163)
+
+##### Changelog
+
+- NamedArguments: fix false positive with java method call - [#3290](https://github.com/detekt/detekt/pull/3290)
+- Prepare 1.15.0 rc2 - [#3286](https://github.com/detekt/detekt/pull/3286)
+- UnconditionalJumpStatementInLoop: don't report a return after a conditional jump - [#3285](https://github.com/detekt/detekt/pull/3285)
+- Add MuseDev to the list of integrations - [#3284](https://github.com/detekt/detekt/pull/3284)
+- Fix ForbiddenComment rule not checking for KDoc - [#3275](https://github.com/detekt/detekt/pull/3275)
+- ForbiddenComments don't report TODO: in KDoc - [#3273](https://github.com/detekt/detekt/issues/3273)
+- Add IntelliJ platform plugin template integration to readme - [#3270](https://github.com/detekt/detekt/pull/3270)
+- Bundle new sarif output format by default - [#3268](https://github.com/detekt/detekt/pull/3268)
+- Add a test for UnusedImports with annotations used as attributes #3246 - [#3255](https://github.com/detekt/detekt/pull/3255)
+- Add documentation page on type resolution - [#3225](https://github.com/detekt/detekt/pull/3225)
+- ThrowsCount rule: fix false positive with nested function - [#3223](https://github.com/detekt/detekt/pull/3223)
+- False positive in ThrowsCount rule - [#3222](https://github.com/detekt/detekt/issues/3222)
+- Refactor UnsafeCallOnNullableType rule - [#3221](https://github.com/detekt/detekt/pull/3221)
+- Fix false negatives in UnreachableCode rule - [#3220](https://github.com/detekt/detekt/pull/3220)
+- False negatives in UnreachableCode rule - [#3219](https://github.com/detekt/detekt/issues/3219)
+- Refactor RedundantElseInWhen to use compiler warning - [#3214](https://github.com/detekt/detekt/pull/3214)
+- NullableToStringCall: fix false negative with safe qualified expression - [#3213](https://github.com/detekt/detekt/pull/3213)
+- False negative in NullableToStringCall - [#3211](https://github.com/detekt/detekt/issues/3211)
+- NullableToStringCall: fix false negatives with qualified expression - [#3198](https://github.com/detekt/detekt/pull/3198)
+- False negatives in NullableToStringCall - [#3196](https://github.com/detekt/detekt/issues/3196)
+- Check for presence of null case in MissingWhenCase rule - [#3194](https://github.com/detekt/detekt/pull/3194)
+- Throw error instead of logging as error in analysis phase - [#3193](https://github.com/detekt/detekt/pull/3193)
+- Make kotlinc adapted rule comments internal - [#3190](https://github.com/detekt/detekt/issues/3190)
+- MissingWhenCase false negative with nulls - [#3189](https://github.com/detekt/detekt/issues/3189)
+- Check for static imports in unused imports rule - [#3188](https://github.com/detekt/detekt/pull/3188)
+- Add allowElseExpression configuration for MissingWhenCase rule - [#3187](https://github.com/detekt/detekt/pull/3187)
+- Add UseIfEmptyOrIfBlank rule - [#3186](https://github.com/detekt/detekt/pull/3186)
+- Fix detektBaseline task filtering .java files - [#3185](https://github.com/detekt/detekt/pull/3185)
+- Internal exception should fail the gradle task - [#3183](https://github.com/detekt/detekt/issues/3183)
+- Add RedundantHigherOrderMapUsage rule - [#3182](https://github.com/detekt/detekt/pull/3182)
+- Fix false negative in IgnoredReturnValue - [#3179](https://github.com/detekt/detekt/pull/3179)
+- Fix false positive when `to` is used to create a pair within a function - [#3178](https://github.com/detekt/detekt/pull/3178)
+- False Positive PreferToOverPairSyntax - [#3177](https://github.com/detekt/detekt/issues/3177)
+- ListAllWhenCases new rule - [#3176](https://github.com/detekt/detekt/issues/3176)
+- Suppress RedundantVisibilityModifierRule if explicit API mode enabled - [#3175](https://github.com/detekt/detekt/pull/3175)
+- Hardcode default values - [#3171](https://github.com/detekt/detekt/pull/3171)
+- False negative in IgnoredReturnValue - [#3170](https://github.com/detekt/detekt/issues/3170)
+- Fix false positive in IgnoredReturnValue - [#3169](https://github.com/detekt/detekt/pull/3169)
+- Duplicate deprecated KtLint methods - [#3168](https://github.com/detekt/detekt/pull/3168)
+- Introduce NamedArguments rule - [#3167](https://github.com/detekt/detekt/pull/3167)
+- Add JSON Schema documentation - [#3166](https://github.com/detekt/detekt/pull/3166)
+- Fix MaxLineLengthSuppressed ignoring @Suppress annotation on class - [#3164](https://github.com/detekt/detekt/pull/3164)
+- Use the properties syntax in Gradle docs - #3158 - [#3161](https://github.com/detekt/detekt/pull/3161)
+- Fix rule LibraryCodeMustSpecifyReturnType - [#3155](https://github.com/detekt/detekt/pull/3155)
+- Update README to mention config auto-complete - [#3143](https://github.com/detekt/detekt/issues/3143)
+- @Suppress("MaxLineLength") not working for simple block comment inside class - [#3136](https://github.com/detekt/detekt/issues/3136)
+- Support sarif as a report type - #3045 - [#3132](https://github.com/detekt/detekt/pull/3132)
+- UnusedImports false positive for enums in annotation attributes (with type resolution) - [#3131](https://github.com/detekt/detekt/issues/3131)
+- Unable to generate detektMain baseline for UnsafeCallOnNullableType violations in Android (mixed Kotlin + Java) modules - [#3130](https://github.com/detekt/detekt/issues/3130)
+- Suppress RedundantVisibilityModifierRule if explicit API mode enabled - [#3125](https://github.com/detekt/detekt/issues/3125)
+- SARIF export support - [#3045](https://github.com/detekt/detekt/issues/3045)
+- IgnoredReturnValue false positives - [#3043](https://github.com/detekt/detekt/issues/3043)
+- Offset calculation in KtLint deprecated/made private - [#3021](https://github.com/detekt/detekt/issues/3021)
+- Map { it } must return an error - [#2975](https://github.com/detekt/detekt/issues/2975)
+- Upload detekt-formatting plugin to Github releases next to precompiled cli binary - [#2927](https://github.com/detekt/detekt/issues/2927)
+- Add a rule to flag places where `ifBlank` and `ifEmpty` can be used - [#2840](https://github.com/detekt/detekt/issues/2840)
+- Remove hardcoded default values from rules - [#2597](https://github.com/detekt/detekt/issues/2597)
+- Doc: type and symbol solving - [#2259](https://github.com/detekt/detekt/issues/2259)
+- Suggestion: LongParameterList rule but on method call if named argument is not used - [#1007](https://github.com/detekt/detekt/issues/1007)
+
+##### Housekeeping & Refactorings
+
+- Standardize "active" constant - [#3292](https://github.com/detekt/detekt/pull/3292)
+- Update Spek to v2.0.15 - [#3287](https://github.com/detekt/detekt/pull/3287)
+- Reformat code indentation in ReturnFromFinallySpec.kt - [#3278](https://github.com/detekt/detekt/pull/3278)
+- Inline ReturnFromFinally report message text - [#3277](https://github.com/detekt/detekt/pull/3277)
+- Simplify ReturnFromFinally check for finally expressions - [#3276](https://github.com/detekt/detekt/pull/3276)
+- CI with Java 15 - [#3262](https://github.com/detekt/detekt/pull/3262)
+- Enabled publishing of sha256 and sha512 signatures - [#3249](https://github.com/detekt/detekt/pull/3249)
+- Remove default config entries in detekt.yml - [#3239](https://github.com/detekt/detekt/pull/3239)
+- Fix grammar in configuration guide - [#3238](https://github.com/detekt/detekt/pull/3238)
+- Exclude detekt:LargeClass rule in test sources - [#3237](https://github.com/detekt/detekt/pull/3237)
+- Release 1.15.0 rc1 - [#3236](https://github.com/detekt/detekt/pull/3236)
+- Remove unused format function in RuleExtensions - [#3234](https://github.com/detekt/detekt/pull/3234)
+- Update spek to v2.0.14 - [#3231](https://github.com/detekt/detekt/pull/3231)
+- Remove already activated rules from detekt.yml - [#3230](https://github.com/detekt/detekt/pull/3230)
+- Fix broken website redirects - [#3227](https://github.com/detekt/detekt/pull/3227)
+- Remove unused resources from the website - [#3226](https://github.com/detekt/detekt/pull/3226)
+- Simplify EqualsOnSignatureLine rule - [#3224](https://github.com/detekt/detekt/pull/3224)
+- Remove unnecessary suppression in main - [#3217](https://github.com/detekt/detekt/pull/3217)
+- Simplify MissingWhenCase by removing an unnecessary alternative path - [#3216](https://github.com/detekt/detekt/pull/3216)
+- Refactor HasPlatformType rule - [#3210](https://github.com/detekt/detekt/pull/3210)
+- Remove Suppress annotation from ArrayPrimitive - [#3209](https://github.com/detekt/detekt/pull/3209)
+- Refactor UselessCallOnNotNull rule - [#3208](https://github.com/detekt/detekt/pull/3208)
+- Refactor MissingWhenCase - [#3207](https://github.com/detekt/detekt/pull/3207)
+- Refactor NullableToStringCall - [#3206](https://github.com/detekt/detekt/pull/3206)
+- Refactor RedundantElseInWhen - [#3205](https://github.com/detekt/detekt/pull/3205)
+- Refactor PreferToOverPairSyntax - [#3204](https://github.com/detekt/detekt/pull/3204)
+- Remove Suppress annotation from MagicNumber - [#3203](https://github.com/detekt/detekt/pull/3203)
+- Remove Suppress annotation from UnusedImports - [#3202](https://github.com/detekt/detekt/pull/3202)
+- Refactor FunctionNaming rule - [#3201](https://github.com/detekt/detekt/pull/3201)
+- Setup the website publishing pipeline - [#3199](https://github.com/detekt/detekt/pull/3199)
+- Improve code coverage for DefaultCliInvoker testing happy and error path - [#3195](https://github.com/detekt/detekt/pull/3195)
+- Make kotlinc adapted rule comments internal - [#3192](https://github.com/detekt/detekt/pull/3192)
+- Improve PreferToOverPairSyntax - [#3181](https://github.com/detekt/detekt/pull/3181)
+- Simplify PreferToOverPairSyntax check - [#3180](https://github.com/detekt/detekt/pull/3180)
+- Improves in IgnoredReturnValue - [#3174](https://github.com/detekt/detekt/pull/3174)
+- Move KtFileContent to FileParsingRule - [#3173](https://github.com/detekt/detekt/pull/3173)
+- Don't use deprecated onStart - [#3172](https://github.com/detekt/detekt/pull/3172)
+
+See all issues at: [1.15.0](https://github.com/detekt/detekt/milestone/79)
+
 #### 1.14.2 - 2020-10-20
 
 ##### Changelog

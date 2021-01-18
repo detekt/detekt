@@ -63,13 +63,17 @@ class ForbiddenCommentSpec : Spek({
 
             it("should report violation in KDoc") {
                 val code = """
-                    /*
+                    /**
                      * TODO: I need to fix this.
                      */
-                    class A
+                    class A {
+                        /**
+                         * TODO: I need to fix this.
+                         */
+                    }
                 """
                 val findings = ForbiddenComment().compileAndLint(code)
-                assertThat(findings).hasSize(1)
+                assertThat(findings).hasSize(2)
             }
         }
 

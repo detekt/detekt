@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 private val WEIGHTED_ISSUES_COUNT_KEY = Key.create<Int>("WEIGHTED_ISSUES_COUNT")
 private const val WEIGHTS = "weights"
-internal const val MAX_ISSUES = "maxIssues"
+internal const val MAX_ISSUES_KEY: String = "maxIssues"
 
 internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     val maybeAmount = this.getData(WEIGHTED_ISSUES_COUNT_KEY)

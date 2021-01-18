@@ -36,11 +36,7 @@ internal class InvalidPackageDeclarationSpec : Spek({
         }
 
         it("should report if package declaration does not match source location") {
-            val source = """
-                package foo
-
-                class C
-            """.trimIndent()
+            val source = "package foo\n\nclass C"
 
             val ktFile = compileContentForTest(source, createPath("project/src/bar/File.kt"))
             val findings = InvalidPackageDeclaration().lint(ktFile)

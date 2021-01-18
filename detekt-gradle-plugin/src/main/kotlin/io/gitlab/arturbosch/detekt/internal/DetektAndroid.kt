@@ -64,7 +64,7 @@ internal class DetektAndroid(private val project: Project) {
         get() = if (this is TestedVariant) listOfNotNull(testVariant, unitTestVariant)
         else emptyList()
 
-    fun registerDetektAndroidTasks(extension: DetektExtension) {
+    fun registerTasks(extension: DetektExtension) {
         // There is not a single Android plugin, but each registers an extension based on BaseExtension,
         // so we catch them all by looking for this one
         project.afterEvaluate {
@@ -116,9 +116,11 @@ internal class DetektAndroid(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
+            reports = extension.reports
             reports.xml.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".xml"))
             reports.html.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".html"))
             reports.txt.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".txt"))
+            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".sarif"))
             description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
         }
 

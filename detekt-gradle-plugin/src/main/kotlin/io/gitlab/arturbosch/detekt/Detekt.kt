@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
+import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -135,6 +136,17 @@ open class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
+    /**
+     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
+     */
+    @get:Input
+    @get:Optional
+    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    var basePath: String
+        @Internal
+        get() = basePathProp.getOrElse("")
+        set(value) = basePathProp.set(value)
+
     @get:Internal
     var reports = DetektReports()
 
@@ -155,6 +167,11 @@ open class Detekt @Inject constructor(
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.txt)
+
+    internal val sarifReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = getTargetFileProvider(report = reports.sarif, defaultEnabledValue = false)
 
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
@@ -183,7 +200,6 @@ open class Detekt @Inject constructor(
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-    @Suppress("DEPRECATION")
     @TaskAction
     fun check() {
         val arguments = mutableListOf(
@@ -196,11 +212,13 @@ open class Detekt @Inject constructor(
             DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
             DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
+            DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
             DebugArgument(debugProp.getOrElse(false)),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(convertCustomReportsToArguments())
@@ -227,8 +245,11 @@ open class Detekt @Inject constructor(
         CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
     }
 
-    private fun getTargetFileProvider(report: DetektReport): RegularFileProperty {
-        val isEnabled = report.enabled ?: DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+    private fun getTargetFileProvider(
+        report: DetektReport,
+        defaultEnabledValue: Boolean = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+    ): RegularFileProperty {
+        val isEnabled = report.enabled ?: defaultEnabledValue
         val provider = objects.fileProperty()
         if (isEnabled) {
             val destination = report.destination ?: reportsDir.getOrElse(defaultReportsDir.asFile)

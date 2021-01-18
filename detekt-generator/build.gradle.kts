@@ -1,5 +1,9 @@
 import java.io.ByteArrayOutputStream
 
+plugins {
+    module
+}
+
 dependencies {
     implementation(project(":detekt-parser"))
     implementation(project(":detekt-api"))

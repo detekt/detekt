@@ -11,16 +11,16 @@ data class FailFastConfig(private val originalConfig: Config, private val defaul
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         return when (key) {
-            "active" -> originalConfig.valueOrDefault(key, true) as T
-            "maxIssues" -> originalConfig.valueOrDefault(key, 0) as T
+            Config.ACTIVE_KEY -> originalConfig.valueOrDefault(key, true) as T
+            MAX_ISSUES_KEY -> originalConfig.valueOrDefault(key, 0) as T
             else -> originalConfig.valueOrDefault(key, defaultConfig.valueOrDefault(key, default))
         }
     }
 
     override fun <T : Any> valueOrNull(key: String): T? {
         return when (key) {
-            "active" -> originalConfig.valueOrNull(key) ?: true as? T
-            "maxIssues" -> originalConfig.valueOrNull(key) ?: 0 as? T
+            Config.ACTIVE_KEY -> originalConfig.valueOrNull(key) ?: true as? T
+            MAX_ISSUES_KEY -> originalConfig.valueOrNull(key) ?: 0 as? T
             else -> originalConfig.valueOrNull(key) ?: defaultConfig.valueOrNull(key)
         }
     }

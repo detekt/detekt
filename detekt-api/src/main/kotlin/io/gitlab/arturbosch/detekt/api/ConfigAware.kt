@@ -24,7 +24,7 @@ interface ConfigAware : Config {
 
     /**
      * Wrapped configuration of the ruleSet this rule is in.
-     * Use #valueOrDefault function to retrieve properties specified for the rule
+     * Use [valueOrDefault] function to retrieve properties specified for the rule
      * implementing this interface instead.
      * Only use this property directly if you need a specific rule set property.
      */
@@ -38,14 +38,14 @@ interface ConfigAware : Config {
      * For auto correction to work the rule set itself enable it.
      */
     val autoCorrect: Boolean
-        get() = valueOrDefault("autoCorrect", false) &&
-            ruleSetConfig.valueOrDefault("autoCorrect", true)
+        get() = valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
+            ruleSetConfig.valueOrDefault(Config.AUTO_CORRECT_KEY, true)
 
     /**
      * Is this rule specified as active in configuration?
-     * If an rule is not specified in the underlying configuration, we assume it should not be run.
+     * If a rule is not specified in the underlying configuration, we assume it should not be run.
      */
-    val active: Boolean get() = valueOrDefault("active", false)
+    val active: Boolean get() = valueOrDefault(Config.ACTIVE_KEY, false)
 
     /**
      * If your rule supports to automatically correct the misbehaviour of underlying smell,

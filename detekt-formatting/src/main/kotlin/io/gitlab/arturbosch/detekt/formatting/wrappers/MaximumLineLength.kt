@@ -1,13 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.ruleset.standard.MaxLineLengthRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.ANDROID_MAX_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_IDEA_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
-import io.gitlab.arturbosch.detekt.formatting.copy
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -30,9 +28,7 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
 
     private val maxLineLength: Int = valueOrDefault(MAX_LINE_LENGTH, defaultMaxLineLength)
 
-    override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        it.copy(MAX_LINE_LENGTH_KEY to maxLineLength)
-    }
+    override fun overrideEditorConfig() = mapOf(MAX_LINE_LENGTH_KEY to maxLineLength)
 
     companion object {
         const val MAX_LINE_LENGTH = "maxLineLength"
