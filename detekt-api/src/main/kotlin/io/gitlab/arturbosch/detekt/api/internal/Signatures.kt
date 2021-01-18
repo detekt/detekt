@@ -10,12 +10,17 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import java.io.File
 
 private val multipleWhitespaces = Regex("\\s{2,}")
 
 internal fun PsiElement.searchName(): String {
-    return this.namedUnwrappedElement?.name ?: "<UnknownName>"
+    return this.namedUnwrappedElement?.name?.formatElementName() ?: "<UnknownName>"
 }
+
+private fun String.formatElementName(): String =
+    if (contains(File.separatorChar)) substringAfterLast(File.separatorChar)
+    else this
 
 /*
  * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.
