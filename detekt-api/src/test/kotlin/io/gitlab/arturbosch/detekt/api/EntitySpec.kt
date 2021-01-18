@@ -16,8 +16,7 @@ class EntitySpec : Spek({
     describe("entity signatures") {
         val path = Paths.get("/full/path/to/Test.kt")
         val code by memoized(CachingMode.SCOPE) {
-            compileContentForTest(
-                """
+            compileContentForTest("""
             package test
 
             class C : Any() {
