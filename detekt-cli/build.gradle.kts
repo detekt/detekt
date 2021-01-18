@@ -27,6 +27,7 @@ dependencies {
 }
 
 val moveJarForIntegrationTest by tasks.registering {
+    dependsOn(tasks.named("shadowJar"))
     doLast {
         copy {
             from(tasks.named("shadowJar"))

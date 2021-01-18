@@ -35,6 +35,7 @@ tasks.withType<Jar>().configureEach {
 }
 
 val moveJarForIntegrationTest by tasks.registering {
+    dependsOn(tasks.named("jar"))
     doLast {
         copy {
             from(tasks.named("jar"))

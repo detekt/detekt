@@ -34,7 +34,7 @@ jobs:
           java-version: 11
 
       - name: Package executable jar
-        run: ./gradlew jar moveJarForIntegrationTest
+        run: ./gradlew jar shadowJar moveJarForIntegrationTest
 
       - name: Run detekt-cli with argsfile, override the exit code
         run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile" || true
