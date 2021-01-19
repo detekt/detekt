@@ -182,7 +182,7 @@ empty-blocks:
 exceptions:
   active: true
   ExceptionRaisedInUnexpectedLocation:
-    active: false
+    active: true
     methodNames: [toString, hashCode, equals, finalize]
   InstanceOfCheckForException:
     active: false
@@ -190,14 +190,14 @@ exceptions:
   NotImplementedDeclaration:
     active: false
   PrintStackTrace:
-    active: false
+    active: true
   RethrowCaughtException:
-    active: false
+    active: true
   ReturnFromFinally:
-    active: false
+    active: true
     ignoreLabeled: false
   SwallowedException:
-    active: false
+    active: true
     ignoredExceptionTypes:
      - InterruptedException
      - NumberFormatException
@@ -205,18 +205,18 @@ exceptions:
      - MalformedURLException
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   ThrowingExceptionFromFinally:
-    active: false
+    active: true
   ThrowingExceptionInMain:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
-    active: false
+    active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
      - IllegalArgumentException
      - IllegalStateException
      - IOException
   ThrowingNewInstanceOfSameException:
-    active: false
+    active: true
   TooGenericExceptionCaught:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -484,7 +484,7 @@ potential-bugs:
     restrictToAnnotatedMethods: true
     returnValueAnnotations: ['*.CheckReturnValue', '*.CheckResult']
   ImplicitDefaultLocale:
-    active: false
+    active: true
   ImplicitUnitReturnType:
     active: false
     allowExplicitReturnType: true
@@ -511,15 +511,15 @@ potential-bugs:
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:
-    active: false
+    active: true
   UnnecessarySafeCall:
-    active: false
+    active: true
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
     active: true
   UnsafeCast:
-    active: false
+    active: true
   UselessPostfixExpression:
     active: false
   WrongEqualsTypeParameter:
@@ -614,7 +614,7 @@ style:
   MultilineLambdaItParameter:
     active: false
   NestedClassesVisibility:
-    active: false
+    active: true
   NewLineAtEndOfFile:
     active: true
   NoTabs:
@@ -645,7 +645,7 @@ style:
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
-    active: false
+    active: true
   SpacingBetweenPackageAndImports:
     active: false
   ThrowsCount:
@@ -662,7 +662,7 @@ style:
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
-    active: false
+    active: true
   UnnecessaryInheritance:
     active: true
   UnnecessaryLet:
@@ -676,7 +676,7 @@ style:
   UnusedPrivateClass:
     active: true
   UnusedPrivateMember:
-    active: false
+    active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
   UseArrayLiteralsInAnnotations:
     active: false
@@ -703,7 +703,7 @@ style:
   UtilityClassWithPublicConstructor:
     active: true
   VarCouldBeVal:
-    active: false
+    active: true
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']

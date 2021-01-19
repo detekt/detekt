@@ -61,14 +61,14 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         /**
          * Determines the line and column of a [PsiElement] in the source file.
          */
-        @Suppress("TooGenericExceptionCaught")
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
         fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
             return try {
                 val range = element.textRange
                 DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
                     TextRange(range.startOffset + offset, range.endOffset + offset))
             } catch (e: IndexOutOfBoundsException) {
-                // #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
+                // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw exception.
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
             }
         }

@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *
  * @configuration methodNames - methods which should not throw exceptions
  * (default: `[toString, hashCode, equals, finalize]`)
+ * @active since v1.16.0
  */
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 

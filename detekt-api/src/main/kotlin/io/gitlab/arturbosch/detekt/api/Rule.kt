@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
+import java.util.Locale
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -71,7 +72,7 @@ abstract class Rule(
     private fun computeSeverity(): SeverityLevel {
         val configValue: String = valueOrNull(SEVERITY_KEY)
             ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "warning")
-        return enumValueOf(configValue.toUpperCase())
+        return enumValueOf(configValue.toUpperCase(Locale.US))
     }
 
     /**

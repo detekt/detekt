@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.util.Locale
 
 private const val TAB = "\t"
 
@@ -152,7 +153,7 @@ class XmlOutputFormatSpec : Spek({
 
             SeverityLevel.values().forEach { severity ->
 
-                val xmlSeverity = severity.name.toLowerCase()
+                val xmlSeverity = severity.name.toLowerCase(Locale.US)
 
                 it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
                     val finding = object : CodeSmell(
