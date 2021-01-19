@@ -85,6 +85,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 	public static final fun isAbstract (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
+	public static final fun isActual (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isConstant (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isExpect (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isExternal (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
