@@ -29,7 +29,7 @@ class FunctionOnlyReturningConstantSpec : Spek({
             actual class ActualFunctionReturningConstant {
                 actual fun f() = 1
             }
-        """.trimIndent()
+        """
 
         it("does not report actual functions which return constants") {
             assertThat(subject.lint(actualFunctionCode)).isEmpty()
