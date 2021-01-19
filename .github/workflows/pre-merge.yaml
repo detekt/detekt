@@ -53,11 +53,11 @@ jobs:
 
 
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest shadowJarExecutable --parallel -x detekt
+      run: ./gradlew build moveJarForIntegrationTest --parallel -x detekt
     - name: Run detekt-cli --help
-      run: java -jar ./detekt-cli/build/run/detekt --help
+      run: java -jar ./build/detekt-cli-all.jar --help
     - name: Run detekt-cli with argsfile
-      run: java -jar ./detekt-cli/build/run/detekt "@./config/detekt/argsfile"
+      run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
 
 
   verify-generated-config-file:

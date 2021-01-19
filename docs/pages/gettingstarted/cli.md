@@ -17,18 +17,11 @@ brew install detekt
 detekt [options]
 ```
 
-### Unix, with the stand-alone executable:
-```sh
-curl -sSLO https://github.com/detekt/detekt/releases/download/v{{ site.detekt_version }}/detekt && chmod a+x detekt
-./detekt [options]
-```
-You can add this file to your `PATH` so you can use it like `detekt [options]`.
-For example, like this: `mv detekt /var/local/bin`
-
 ### Any OS:
 ```sh
-curl -sSLO https://github.com/detekt/detekt/releases/download/v{{ site.detekt_version }}/detekt-cli-{{ site.detekt_version }}.zip && unzip detekt-cli-{{ site.detekt_version }}.zip
-./bin/detekt [options]
+curl -sSLO https://github.com/detekt/detekt/releases/download/v{{ site.detekt_version }}/detekt-cli-{{ site.detekt_version }}.zip
+unzip detekt-cli-{{ site.detekt_version }}.zip
+./detekt-cli-{{ site.detekt_version }}/bin/detekt-cli --help
 ```
 
 ## Use the cli

@@ -37,10 +37,8 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
     private fun KtFile.collectWhitespaces(): List<PsiWhiteSpace> {
         val list = mutableListOf<PsiWhiteSpace>()
         this.accept(object : DetektVisitor() {
-            override fun visitWhiteSpace(space: PsiWhiteSpace?) {
-                if (space != null) {
-                    list.add(space)
-                }
+            override fun visitWhiteSpace(space: PsiWhiteSpace) {
+                list.add(space)
                 super.visitWhiteSpace(space)
             }
         })

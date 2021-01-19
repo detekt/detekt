@@ -53,7 +53,10 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
     kotlinOptions.jvmTarget = Versions.JVM_TARGET
+    kotlinOptions.languageVersion = "1.4"
     kotlinOptions.freeCompilerArgs = listOf(
         "-progressive",
         "-Xopt-in=kotlin.RequiresOptIn"

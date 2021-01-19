@@ -42,7 +42,7 @@ private val result = object : Detektion {
     override fun <V> getData(key: Key<V>): V? = userData.get(key)
 
     override fun <V> addData(key: Key<V>, value: V) {
-        userData = userData.plus(key, value)
+        userData = userData.plus(key, requireNotNull(value))
     }
 
     override fun add(notification: Notification) {

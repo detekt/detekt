@@ -38,7 +38,7 @@ private class MetricResults : Detektion {
     override fun <V> getData(key: Key<V>): V? = data.get(key)
 
     override fun <V> addData(key: Key<V>, value: V) {
-        data = data.plus(key, value)
+        data = data.plus(key, requireNotNull(value))
     }
 
     override fun add(notification: Notification) {

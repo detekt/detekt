@@ -24,8 +24,8 @@ fun KtClassOrObject.hasCommentInside() = this.body?.hasCommentInside() ?: false
 fun PsiElement.hasCommentInside(): Boolean {
     val commentKey = Key<Boolean>("comment")
     this.acceptChildren(object : KtTreeVisitorVoid() {
-        override fun visitComment(comment: PsiComment?) {
-            if (comment != null) putUserData(commentKey, true)
+        override fun visitComment(comment: PsiComment) {
+            putUserData(commentKey, true)
         }
     })
     return getUserData(commentKey) == true
