@@ -452,16 +452,10 @@ $('#toc').on('click', 'a', function() {
 detekt <span class="o">[</span>options]
 </code></pre></div></div>
 
-<h3 id="unix-with-the-stand-alone-executable">Unix, with the stand-alone executable:</h3>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sSLO</span> https://github.com/detekt/detekt/releases/download/v1.15.0/detekt <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>a+x detekt
-./detekt <span class="o">[</span>options]
-</code></pre></div></div>
-<p>You can add this file to your <code class="language-plaintext highlighter-rouge">PATH</code> so you can use it like <code class="language-plaintext highlighter-rouge">detekt [options]</code>.
-For example, like this: <code class="language-plaintext highlighter-rouge">mv detekt /var/local/bin</code></p>
-
 <h3 id="any-os">Any OS:</h3>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sSLO</span> https://github.com/detekt/detekt/releases/download/v1.15.0/detekt-cli-1.15.0.zip <span class="o">&amp;&amp;</span> unzip detekt-cli-1.15.0.zip
-./bin/detekt <span class="o">[</span>options]
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sSLO</span> https://github.com/detekt/detekt/releases/download/v1.15.0/detekt-cli-1.15.0.zip
+unzip detekt-cli-1.15.0.zip
+./detekt-cli-1.15.0/bin/detekt-cli <span class="nt">--help</span>
 </code></pre></div></div>
 
 <h2 id="use-the-cli">Use the cli</h2>
