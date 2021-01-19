@@ -124,6 +124,13 @@ class CliArgs {
     var allRules: Boolean = false
 
     @Parameter(
+        names = ["--max-issues"],
+        description = "Return exit code 0 only when found issues count does not exceed specified issues count."
+    )
+    // nullable for 1.x.x to prefer maxIssues from config file
+    var maxIssues: Int? = null
+
+    @Parameter(
         names = ["--auto-correct", "-ac"],
         description = "Allow rules to auto correct code if they support it. " +
             "The default rule sets do NOT support auto correcting and won't change any line in the users code base. " +

@@ -7,6 +7,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.gitlab.arturbosch.detekt.cli.createRunner
+import io.gitlab.arturbosch.detekt.cli.executeDetekt
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -208,6 +209,29 @@ class RunnerSpec : Spek({
             assertThatThrownBy { createRunner(args).execute() }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
                 .withFailMessage("Unexpected empty 'runRule' argument.")
+        }
+    }
+
+    describe("runner with maxIssuePolicy") {
+
+        it("does fail via cli flag") {
+            assertThatThrownBy { executeDetekt("--input", inputPath.toString(), "--max-issues", "0") }
+                .isExactlyInstanceOf(MaxIssuesReached::class.java)
+                .withFailMessage("Build failed with 1 weighted issues.")
+        }
+
+        it("does fail via cli flag even if config>maxIssues is specified") {
+            assertThatThrownBy {
+                executeDetekt(
+                    "--input",
+                    inputPath.toString(),
+                    "--max-issues",
+                    "0",
+                    "--config-resource",
+                    "configs/max-issues--1.yml" // allow any
+                )
+            }.isExactlyInstanceOf(MaxIssuesReached::class.java)
+                .withFailMessage("Build failed with 1 weighted issues.")
         }
     }
 })
