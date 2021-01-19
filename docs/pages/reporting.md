@@ -71,6 +71,61 @@ detekt {
 Note that this option only affects file paths in those formats for machine consumers,
 namely XML and SARIF.
 
+## Merging reports
+
+The machine-readable report formats supports report merging.
+Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
+the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
+
+At the moment, only merging XML is supported. You can refer to the sample script below and 
+run `./gradlew detekt xmlReportMerge --continue` to execute detekt tasks and merge their reports.
+
+#### Groovy DSL
+
+```groovy
+task xmlReportMerge(type: io.gitlab.arturbosch.detekt.report.XmlReportMergeTask) {
+  output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+}
+
+subprojects {
+  detekt {
+    reports.xml.enabled = true
+  }
+  
+  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+       xmlReportMerge.configure { mergeTask ->
+         mergeTask.mustRunAfter(detektTask)
+         mergeTask.input.from(detektTask.xmlReportFile)
+       }
+    }
+  }
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlReportMergeTask::class) { 
+    output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+}
+
+subprojects {
+    detekt {
+      reports.xml.enabled = true
+    }
+    
+    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
+      tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
+         xmlReportMerge.configure {
+           this.mustRunAfter(this@detekt)
+           input.from(this@detekt.xmlReportFile)
+         }
+      }
+    }
+}
+```
+
 ## Integration with Github Code Scanning
 If your repository is hosted on Github, you can enable SARIF output in your repository.
 You can follow to the [official documentation](https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/uploading-a-sarif-file-to-github).
