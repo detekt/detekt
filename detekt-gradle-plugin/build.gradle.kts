@@ -43,6 +43,7 @@ dependencies {
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
     testImplementation(androidGradlePlugin)
+    testImplementation("org.assertj:assertj-core")
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
@@ -63,6 +64,10 @@ gradlePlugin {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
+        register("detektProjectPlugin") {
+            id = "io.gitlab.arturbosch.detekt.project"
+            implementationClass = "io.gitlab.arturbosch.detekt.DetektProjectPlugin"
+        }
     }
     testSourceSets(intTest)
 }
@@ -81,6 +86,10 @@ pluginBundle {
         "detektPlugin" {
             id = "io.gitlab.arturbosch.detekt"
             displayName = "Static code analysis for Kotlin"
+        }
+        "detektProjectPlugin" {
+            id = "io.gitlab.arturbosch.detekt.project"
+            displayName = "Root project plugin for detekt"
         }
     }
 }
