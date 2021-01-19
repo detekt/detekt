@@ -572,6 +572,7 @@ style:
   FunctionOnlyReturningConstant:
     active: true
     ignoreOverridableFunction: true
+    ignoreActualFunction: true
     excludedFunctions: 'describeContents'
     excludeAnnotatedFunction: ['dagger.Provides']
   LibraryCodeMustSpecifyReturnType:

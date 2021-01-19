@@ -218,6 +218,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
 - [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
 - [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
+- [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
 
 ### Mentions
 

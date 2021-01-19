@@ -25,6 +25,22 @@ class FunctionOnlyReturningConstantSpec : Spek({
             assertThat(rule.lint(path)).hasSize(9)
         }
 
+        val actualFunctionCode = """
+            actual class ActualFunctionReturningConstant {
+                actual fun f() = 1
+            }
+        """.trimIndent()
+
+        it("does not report actual functions which return constants") {
+            assertThat(subject.lint(actualFunctionCode)).isEmpty()
+        }
+
+        it("reports actual functions which return constants") {
+            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.IGNORE_ACTUAL_FUNCTION to "false"))
+            val rule = FunctionOnlyReturningConstant(config)
+            assertThat(rule.lint(actualFunctionCode)).hasSize(1)
+        }
+
         it("does not report excluded function which returns a constant") {
             val code = "fun f() = 1"
             val config = TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDED_FUNCTIONS to "f"))
