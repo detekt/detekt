@@ -5,6 +5,9 @@ import io.gitlab.arturbosch.detekt.report.XmlOutputMergeTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
+import io.gitlab.arturbosch.detekt.report.XmlOutputMergeTask
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 
