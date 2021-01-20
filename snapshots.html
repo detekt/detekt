@@ -4,9 +4,9 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>CorrectableCodeSmell - | A static code analyzer for Kotlin</title>
+<meta name="description" content="This page explains how you can setup snapshots for your Detekt build to test the latest unreleased features.">
+<meta name="keywords" content=" snapshot releases">
+<title>Using Snapshots | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="CorrectableCodeSmell -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Using Snapshots">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -233,7 +233,7 @@
           
           
           
-          <li><a href="/detekt/snapshots.html">Using snapshots</a></li>
+          <li class="active"><a href="/detekt/snapshots.html">Using snapshots</a></li>
           
           
           
@@ -406,13 +406,15 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">CorrectableCodeSmell -</h1>
+   <h1 class="post-title-main">Using Snapshots</h1>
 </div>
 
 
 
 <div class="post-content">
 
+   
+    <div class="summary">This page explains how you can setup snapshots for your Detekt build to test the latest unreleased features.</div>
    
 
     
@@ -443,20 +445,84 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//snapshots.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/">CorrectableCodeSmell</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.html">CorrectableCodeSmell</a></p>
+  <p>This page explains how you can use our <strong>latest snapshots</strong> to test upcoming unreleased features.</p>
 
-<h1 id="correctablecodesmell">CorrectableCodeSmell</h1>
-<p>[jvm]<br />
-Content<br />
-fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.html">CorrectableCodeSmell</a>(issue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, entity: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;, autoCorrectEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>)</p>
+<h2 id="where-to-download-snapshots">Where to download snapshots</h2>
 
+<p>You can find the latest snapshot on <a href="https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt">sonatype</a>. A new snapshot is published after every merge to <code class="language-plaintext highlighter-rouge">master</code> from the <a href="https://github.com/detekt/detekt/actions?query=workflow%3A%22Deploy+Snapshot%22">Deploy Snapshot</a> Github Action workflow.</p>
+
+<h2 id="gradle-setup-with-buildscript">Gradle setup with Buildscript</h2>
+
+<p>If you’re using Gradle with the <code class="language-plaintext highlighter-rouge">buildscript</code> block, you should update your top level <code class="language-plaintext highlighter-rouge">build.gradle</code> file with:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+  <span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">maven</span> <span class="o">{</span>
+      <span class="n">url</span> <span class="s2">"https://oss.sonatype.org/content/repositories/snapshots/"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">classpath</span> <span class="s2">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:master-SNAPSHOT"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span>
+
+<span class="n">allprojects</span> <span class="o">{</span>
+  <span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">maven</span> <span class="o">{</span>
+      <span class="n">url</span> <span class="s2">"https://oss.sonatype.org/content/repositories/snapshots/"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Make sure that you’re adding the sonatype maven repository to both the <code class="language-plaintext highlighter-rouge">repositories{}</code> block <strong>inside</strong> the <code class="language-plaintext highlighter-rouge">buildscript{}</code> block and outside it.</p>
+
+<h2 id="gradle-setup-with-plugin-block">Gradle setup with Plugin block</h2>
+
+<p>If you’re using the <code class="language-plaintext highlighter-rouge">plugins{}</code> block to apply detekt, you should update your <code class="language-plaintext highlighter-rouge">build.gradle</code> file to:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+  <span class="n">id</span><span class="o">(</span><span class="s2">"io.gitlab.arturbosch.detekt"</span><span class="o">)</span> <span class="n">version</span> <span class="s2">"master-SNAPSHOT"</span>
+<span class="o">}</span>
+
+<span class="n">allprojects</span> <span class="o">{</span>
+  <span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">maven</span> <span class="o">{</span>
+      <span class="n">url</span> <span class="s2">"https://oss.sonatype.org/content/repositories/snapshots/"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Plus you need to update the <code class="language-plaintext highlighter-rouge">settings.gradle</code> file as follows:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pluginManagement</span> <span class="o">{</span>
+    <span class="n">resolutionStrategy</span> <span class="o">{</span>
+        <span class="n">eachPlugin</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">requested</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">id</span> <span class="o">==</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">useModule</span><span class="o">(</span><span class="s2">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${requested.version}"</span><span class="o">)</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="c1">// Your other repos here.</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">uri</span><span class="o">(</span><span class="s2">"https://oss.sonatype.org/content/repositories/snapshots/"</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Please note that the extra <code class="language-plaintext highlighter-rouge">resolutionStrategy{}</code> block is needed as we don’t publish a Gradle Plugin marker for our snapshots.</p>
 
 
     <div class="tags">
