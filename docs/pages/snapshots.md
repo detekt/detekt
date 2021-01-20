@@ -3,10 +3,10 @@ title: "Using Snapshots"
 keywords: snapshot releases 
 sidebar: 
 permalink: snapshots.html
-summary: This page explains you how you can setup snapshots for your Detekt build to test the latest unreleased features. 
+summary: This page explains how you can setup snapshots for your Detekt build to test the latest unreleased features. 
 ---
 
-This page explains you how you can use our **latest snapshots**, to test upcoming unreleased features.
+This page explains how you can use our **latest snapshots** to test upcoming unreleased features.
 
 ## Where to download snapshots
 
