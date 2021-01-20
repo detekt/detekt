@@ -20,7 +20,7 @@ buildScan {
     termsOfServiceAgree = "yes"
 }
 
-subprojects {
+allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
 }

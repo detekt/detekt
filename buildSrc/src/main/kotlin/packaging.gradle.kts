@@ -46,9 +46,9 @@ subprojects {
             }
         }
         publications.register<MavenPublication>(DETEKT_PUBLICATION) {
-            groupId = project.group as? String
+            groupId = "io.gitlab.arturbosch.detekt"
             artifactId = project.name
-            version = project.version as? String
+            version = Versions.currentOrSnapshot()
             pom {
                 description.set("Static code analysis for Kotlin")
                 name.set("detekt")
