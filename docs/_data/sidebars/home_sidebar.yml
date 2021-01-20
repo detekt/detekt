@@ -29,6 +29,9 @@ entries:
     - title: Extending detekt
       url: /extensions.html
       output: web
+    - title: Using snapshots
+      url: /snapshots.html
+      output: web
   - title: Getting Started
     output: web
     folderitems:

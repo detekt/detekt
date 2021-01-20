@@ -116,7 +116,9 @@ tasks {
 }
 ```
 
-See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io.gitlab.arturbosch.detekt) for snapshots.
+See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
+
+If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
 
 ### Adding more rule sets
 
