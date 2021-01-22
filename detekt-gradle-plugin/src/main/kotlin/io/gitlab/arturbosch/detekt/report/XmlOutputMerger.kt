@@ -26,7 +26,7 @@ internal object XmlOutputMerger {
         }
         TransformerFactory.newInstance().newTransformer().run {
             setOutputProperty(OutputKeys.INDENT, "yes")
-            setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
 
             val streamResult = StreamResult(output.writer())
             transform(DOMSource(document), streamResult)
