@@ -9,9 +9,9 @@ private const val TAB = "\t"
 
 internal class XmlOutputMergerSpec : Spek({
 
-    describe("classpath changes") {
+    describe("merge xml output") {
 
-        it("passes for same files") {
+        it("merges two inputs") {
             val file1 = File.createTempFile("detekt1", "xml").apply {
                 writeText("""
                     <?xml version="1.0" encoding="utf-8"?>
@@ -36,14 +36,13 @@ internal class XmlOutputMergerSpec : Spek({
             XmlOutputMerger.merge(setOf(file1, file2), output)
 
             assertThat(output.readText()).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
-                </file>
-                <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
-                </file>
+                <?xml version="1.0" encoding="UTF-8"?><checkstyle>
+                  <file name="Sample1.kt">
+                    <error column="1" line="1" message="TestMessage" severity="warning" source="detekt.id_a"/>
+                  </file>
+                  <file name="Sample2.kt">
+                    <error column="1" line="1" message="TestMessage" severity="warning" source="detekt.id_b"/>
+                  </file>
                 </checkstyle>
             """.trimIndent() + System.lineSeparator())
         }
