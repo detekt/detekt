@@ -35,7 +35,8 @@ internal class XmlOutputMergerSpec : Spek({
             val output = File.createTempFile("output", "xml")
             XmlOutputMerger.merge(setOf(file1, file2), output)
 
-            assertThat(output.readText()).isEqualTo("""
+            val text = output.readText()
+            val expectedText = """
                 <?xml version="1.0" encoding="utf-8"?>
                 <checkstyle version="4.3">
                 <file name="Sample1.kt">
@@ -45,7 +46,9 @@ internal class XmlOutputMergerSpec : Spek({
                 $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
                 </file>
                 </checkstyle>
-            """.trimIndent() + System.lineSeparator())
+            """.trimIndent() + System.lineSeparator()
+            assertThat(text.length).isEqualTo(expectedText.length)
+            assertThat(text).isEqualTo(expectedText)
         }
     }
 })
