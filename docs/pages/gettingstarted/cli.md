@@ -82,6 +82,10 @@ Usage: detekt [options]
       Default: false
     --excludes, -ex
       Globing patterns describing paths to exclude from the analysis.
+    --max-issues
+      DEPRECATED: please use '--build-upon-default-config' together with '--all-rules'.
+      Return exit code 0 only when found issues count does not exceed specified issues count.
+      config>maxIssues will be ignored if this option is provided.
     --fail-fast
       Same as 'build-upon-default-config' but explicitly running all available
       rules. With this setting only exit code 0 is returned when the analysis
