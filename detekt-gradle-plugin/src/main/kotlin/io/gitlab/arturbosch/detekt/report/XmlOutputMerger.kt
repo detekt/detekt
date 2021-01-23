@@ -1,59 +1,40 @@
 package io.gitlab.arturbosch.detekt.report
 
-import com.android.utils.forEach
-import org.w3c.dom.Document
-import org.w3c.dom.Node
 import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.OutputKeys
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
 
 /**
  * A naive implementation to merge xml assuming all input xml are written by the standard xml format.
  */
 internal object XmlOutputMerger {
 
-    private val documentBuilder by lazy { DocumentBuilderFactory.newInstance().newDocumentBuilder() }
+    private const val XML_PROLOG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+    private const val CHECKSTYLE_OPEN_TAG = "<checkstyle version=\"4.3\">"
+    private const val CHECKSTYLE_CLOSE_TAG = "</checkstyle>"
+    private const val MIN_LINES = 3
 
     fun merge(inputs: Collection<File>, output: File) {
-        val document = documentBuilder.newDocument()
-        document.appendChild(document.createElement("checkstyle"))
-        document.xmlStandalone = true
-        inputs.forEach {
-            importNodesFromInput(it, document)
-        }
-        TransformerFactory.newInstance().newTransformer().run {
-            setOutputProperty(OutputKeys.INDENT, "yes")
-            setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
-
-            val streamResult = StreamResult(output.writer())
-            transform(DOMSource(document), streamResult)
-        }
-    }
-
-    private fun importNodesFromInput(input: File, document: Document) {
-        if (!input.exists()) {
-            return
-        }
-        removeWhitespaces(documentBuilder.parse(input).documentElement).childNodes.forEach { node ->
-            document.documentElement.appendChild(document.importNode(node, true))
-        }
-    }
-
-    // Checkstyle does not provide XSD schema https://github.com/checkstyle/checkstyle/issues/7517.
-    // Therefore we have to exclude whitespaces ourselves.
-    private fun removeWhitespaces(node: Node): Node {
-        val childNodes = node.childNodes
-        (childNodes.length - 1 downTo 0).forEach { idx ->
-            val childNode = childNodes.item(idx)
-            if (childNode.nodeType == Node.TEXT_NODE && childNode.textContent.isBlank()) {
-                node.removeChild(childNode)
-            } else {
-                removeWhitespaces(childNode)
+        output.printWriter().use { printWriter ->
+            printWriter.println(XML_PROLOG)
+            printWriter.println(CHECKSTYLE_OPEN_TAG)
+            inputs.forEach {
+                extractInputContent(it)?.let(printWriter::println)
             }
+            printWriter.println(CHECKSTYLE_CLOSE_TAG)
         }
-        return node
+    }
+
+    private fun extractInputContent(input: File): String? {
+        if (!input.exists()) {
+            return null
+        }
+        val lines = input.readLines()
+        if (lines.size < MIN_LINES) return null
+        return if (lines.first().trim() == XML_PROLOG &&
+            lines[1].trim() == CHECKSTYLE_OPEN_TAG &&
+            lines.last().trim() == CHECKSTYLE_CLOSE_TAG) {
+            lines.subList(2, lines.size - 1).joinToString(separator = System.lineSeparator())
+        } else {
+            null
+        }
     }
 }
