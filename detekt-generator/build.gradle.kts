@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-rules-empty"))
     implementation(project(":detekt-formatting"))
+    implementation(project(":detekt-cli"))
     implementation("com.beust:jcommander")
 
     testImplementation(project(":detekt-test-utils"))
@@ -17,6 +18,7 @@ dependencies {
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
+val cliOptionsDir = "${rootProject.rootDir}/docs/pages/cli"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 
 val ruleModules = rootProject.subprojects
@@ -38,7 +40,9 @@ val generateDocumentation by tasks.registering {
 
     outputs.files(
         fileTree(documentationDir),
-        file(defaultConfigFile))
+        file(defaultConfigFile),
+        fileTree(cliOptionsDir)
+    )
 
     doLast {
         javaexec {
@@ -54,7 +58,10 @@ val generateDocumentation by tasks.registering {
                 "--documentation",
                 documentationDir,
                 "--config",
-                configDir)
+                configDir,
+                "--cli-options",
+                cliOptionsDir
+            )
         }
     }
 }

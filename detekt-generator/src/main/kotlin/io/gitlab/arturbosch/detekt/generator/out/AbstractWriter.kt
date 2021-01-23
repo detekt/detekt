@@ -11,7 +11,7 @@ internal abstract class AbstractWriter {
         val filePath = path.resolve("$fileName.$ending")
         filePath.parent?.let { Files.createDirectories(it) }
         Files.write(filePath, content().toByteArray())
-        println("Wrote: $fileName.$ending")
+        println("Wrote: $filePath")
     }
 }
 

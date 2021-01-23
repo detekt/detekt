@@ -22,6 +22,11 @@ class GeneratorArgs {
         description = "Output path for generated detekt config.")
     private var config: String? = null
 
+    @Parameter(names = ["--cli-options"],
+        required = true,
+        description = "Output path for generated cli options page.")
+    private var cliOptions: String? = null
+
     @Parameter(names = ["--help", "-h"],
         help = true, description = "Shows the usage.")
     var help: Boolean = false
@@ -42,4 +47,9 @@ class GeneratorArgs {
 
     val configPath: Path
         get() = Paths.get(checkNotNull(config) { "Configuration output path was not initialized by jcommander!" })
+
+    val cliOptionsPath: Path
+        get() = Paths.get(checkNotNull(cliOptions) {
+            "Cli options output path was not initialized by jcommander!"
+        })
 }

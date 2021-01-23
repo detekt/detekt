@@ -167,4 +167,5 @@ target/
 # Avoid committing generated documentation to the repo
 /docs/pages/documentation
 /docs/pages/kdoc
+/docs/pages/cli
 /docs/vendor/
