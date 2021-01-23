@@ -1403,7 +1403,7 @@ See all issues at: [1.1.0](https://github.com/detekt/detekt/milestone/19)
 
 ##### Notable changes
 
-- [detekt runs can be completely silent on absence of findings](https://arturbosch.github.io/detekt/howto-silent-reports.html)
+- [detekt runs can be completely silent on absence of findings](https://detekt.github.io/detekt/howto-silent-reports.html)
 - All detekt's dependencies are now on MavenCentral. Bogus "*could not find JCommander dependency*" should be gone.
 
 ##### Changelog
