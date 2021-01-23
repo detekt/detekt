@@ -207,7 +207,7 @@ class RunnerSpec : Spek({
         it("should throw on non existing run-rule") {
             assertThatThrownBy { executeDetekt("--run-rule", "") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
-                .withFailMessage("Unexpected empty 'runRule' argument.")
+                .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
         }
     }
 
@@ -216,7 +216,7 @@ class RunnerSpec : Spek({
         it("does fail via cli flag") {
             assertThatThrownBy { executeDetekt("--input", inputPath.toString(), "--max-issues", "0") }
                 .isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .withFailMessage("Build failed with 1 weighted issues.")
+                .hasMessage("Build failed with 1 weighted issues.")
         }
 
         it("does fail via cli flag even if config>maxIssues is specified") {
@@ -227,7 +227,15 @@ class RunnerSpec : Spek({
                     "--config-resource", "configs/max-issues--1.yml" // allow any
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .withFailMessage("Build failed with 1 weighted issues.")
+                .hasMessage("Build failed with 1 weighted issues.")
+        }
+
+        it("does not fail when cli flag is negative") {
+            executeDetekt("--input", inputPath.toString(), "--max-issues", "-1")
+        }
+
+        it("does not fail when cli flag is positive") {
+            executeDetekt("--input", inputPath.toString(), "--max-issues", "2")
         }
     }
 })
