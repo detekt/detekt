@@ -95,6 +95,6 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
 
 {% include links.html %}
