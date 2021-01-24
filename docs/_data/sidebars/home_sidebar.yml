@@ -38,9 +38,6 @@ entries:
     - title: with the Command Line Interface
       url: /cli.html
       output: web
-    - title: Command Line Interface Options
-      url: /cli-options.html
-      output: web
     - title: with Gradle
       url: /gradle.html
       output: web

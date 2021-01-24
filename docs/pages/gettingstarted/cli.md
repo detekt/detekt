@@ -35,4 +35,7 @@ detekt will exit with one of the following exit codes:
 | 2         | MaxIssues count was reached in BuildFailureReport.                             |
 | 3         | Invalid detekt configuration file detected.                                    |
 
-Visit [cli-options](../cli/cli-options.md) for the list of options.
+The following parameters are shown when `--help` is entered.
+
+{% include_relative cli-options.md %}
+

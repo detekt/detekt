@@ -18,7 +18,7 @@ dependencies {
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
-val cliOptionsDir = "${rootProject.rootDir}/docs/pages/cli"
+val cliOptionsFile = "${rootProject.rootDir}/docs/pages/gettingstarted/cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 
 val ruleModules = rootProject.subprojects
@@ -41,7 +41,7 @@ val generateDocumentation by tasks.registering {
     outputs.files(
         fileTree(documentationDir),
         file(defaultConfigFile),
-        fileTree(cliOptionsDir)
+        file(cliOptionsFile)
     )
 
     doLast {
@@ -60,7 +60,7 @@ val generateDocumentation by tasks.registering {
                 "--config",
                 configDir,
                 "--cli-options",
-                cliOptionsDir
+                cliOptionsFile
             )
         }
     }
