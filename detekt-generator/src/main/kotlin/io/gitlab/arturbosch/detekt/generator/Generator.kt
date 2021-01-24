@@ -17,7 +17,7 @@ class Generator(
 ) {
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
-    private val cliOptionsPrinter = CliOptionsPrinter(arguments)
+    private val cliOptionsPrinter = CliOptionsPrinter()
 
     private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
         Files.walk(root)
@@ -35,7 +35,7 @@ class Generator(
 
             printer.print(collector.items)
 
-            cliOptionsPrinter.print()
+            cliOptionsPrinter.print(arguments.cliOptionsPath)
         }
 
         outPrinter.println("\nGenerated all detekt documentation in $time ms.")

@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.generator.printer
 
 import com.beust.jcommander.JCommander
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.generator.GeneratorArgs
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
+import java.nio.file.Path
 
-class CliOptionsPrinter(private val arguments: GeneratorArgs) {
+class CliOptionsPrinter {
 
     private val jCommander = JCommander(CliArgs()).apply {
         programName = "detekt"
@@ -22,8 +22,8 @@ class CliOptionsPrinter(private val arguments: GeneratorArgs) {
         ---
     """.trimIndent()
 
-    fun print() {
-        MarkdownWriter().write(arguments.cliOptionsPath, "cli-options") {
+    fun print(path: Path) {
+        MarkdownWriter().write(path, "cli-options") {
             buildString {
                 append(header)
                 appendLine()

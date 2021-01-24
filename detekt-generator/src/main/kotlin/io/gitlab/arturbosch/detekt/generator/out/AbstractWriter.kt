@@ -9,7 +9,11 @@ internal abstract class AbstractWriter {
 
     fun write(path: Path, fileName: String, content: () -> String) {
         val filePath = path.resolve("$fileName.$ending")
-        filePath.parent?.let { Files.createDirectories(it) }
+        filePath.parent?.let { parentPath ->
+            if (!Files.exists(parentPath)) {
+                Files.createDirectories(parentPath)
+            }
+        }
         Files.write(filePath, content().toByteArray())
         println("Wrote: $filePath")
     }
