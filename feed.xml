@@ -5,8 +5,8 @@
         <description>Meet detekt, a static code analysis tool for Kotlin.</description>
         <link>https://detekt.github.io/</link>
         <atom:link href="https://detekt.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Wed, 20 Jan 2021 17:10:27 -0600</pubDate>
-        <lastBuildDate>Wed, 20 Jan 2021 17:10:27 -0600</lastBuildDate>
+        <pubDate>Sat, 23 Jan 2021 18:25:07 -0600</pubDate>
+        <lastBuildDate>Sat, 23 Jan 2021 18:25:07 -0600</lastBuildDate>
         <generator>Jekyll v3.9.0</generator>
         
         <item>
@@ -54,7 +54,7 @@ val createDetektConfigForDiff by tasks.registering(DetektGenerateConfigTask::cla
         
         <item>
             <title>Howto: make detekt silent</title>
-            <description>&lt;p&gt;detekt’s reporting mechanism relies on implementations of &lt;a href=&quot;https://arturbosch.github.io/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html&quot;&gt;ConsoleReport&lt;/a&gt;’s.
+            <description>&lt;p&gt;detekt’s reporting mechanism relies on implementations of &lt;a href=&quot;https://detekt.github.io/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html&quot;&gt;ConsoleReport&lt;/a&gt;’s.
 The cli module and therefore the Gradle plugin implement a bunch of this reports.&lt;/p&gt;
 
 &lt;p&gt;A typical detekt report will look like following:&lt;/p&gt;
@@ -106,7 +106,7 @@ This can be achieved by implementing a custom &lt;code class=&quot;language-plai
 
 &lt;p&gt;&lt;img src=&quot;images/howto-silent-run/compact_report.png&quot; alt=&quot;report&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;See the &lt;a href=&quot;https://arturbosch.github.io/detekt/extensions.html&quot;&gt;extension&lt;/a&gt; documention on how to let detekt know about your custom report.&lt;/p&gt;
+&lt;p&gt;See the &lt;a href=&quot;https://detekt.github.io/detekt/extensions.html&quot;&gt;extension&lt;/a&gt; documention on how to let detekt know about your custom report.&lt;/p&gt;
 </description>
             <pubDate>Wed, 14 Aug 2019 00:00:00 -0500</pubDate>
             <link>https://detekt.github.io/howto-silent-reports.html</link>

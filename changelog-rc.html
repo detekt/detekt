@@ -512,9 +512,9 @@ $('#toc').on('click', 'a', function() {
 For example <code class="language-plaintext highlighter-rouge">--filters .*/resources/.*</code> becomes <code class="language-plaintext highlighter-rouge">--excludes **/resources/**</code>. <code class="language-plaintext highlighter-rouge">includes</code> also accepts <em>globing patterns</em>.
 <em>Globing patterns</em> allow us to reuse some common logic of the <code class="language-plaintext highlighter-rouge">java.nio.file</code> package which for example handle Windows specific paths for us.
 This change also allows to be more fine granular with analyzing files: <code class="language-plaintext highlighter-rouge">--excludes **/generated/** --includes **/generated/this-needs-to-be-checked</code>.
-The following <a href="https://arturbosch.github.io/detekt/howto-migratetestpattern.html">how-to guide</a> describes the migration process from the <strong>test-pattern</strong> functionality.</li>
+The following <a href="https://detekt.github.io/detekt/howto-migratetestpattern.html">how-to guide</a> describes the migration process from the <strong>test-pattern</strong> functionality.</li>
   <li><strong>Gradle Plugin</strong>: Including or excluding paths and files from detekt scanning is now done by setting <code class="language-plaintext highlighter-rouge">include</code> &amp; <code class="language-plaintext highlighter-rouge">exclude</code> on the
-detekt task which aligns with how other static analysis tools handle filters. Any use of <code class="language-plaintext highlighter-rouge">filters</code> will be ignored. See custom task examples for <a href="https://arturbosch.github.io/detekt/groovydsl.html#defining-custom-detekt-task">Groovy</a> and <a href="https://arturbosch.github.io/detekt/kotlindsl.html#defining-custom-detekt-task">Kotlin</a>.
+detekt task which aligns with how other static analysis tools handle filters. Any use of <code class="language-plaintext highlighter-rouge">filters</code> will be ignored. See custom task examples for <a href="https://detekt.github.io/detekt/groovydsl.html#defining-custom-detekt-task">Groovy</a> and <a href="https://detekt.github.io/detekt/kotlindsl.html#defining-custom-detekt-task">Kotlin</a>.
 For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html</li>
   <li><strong>Gradle Plugin</strong>: Adds support for TXT report.</li>
   <li><strong>Cli/Gradle Plugin</strong>: <code class="language-plaintext highlighter-rouge">autoCorrect</code> inside the yaml config was removed. Please use the <code class="language-plaintext highlighter-rouge">--auto-correct</code> cli flag or <code class="language-plaintext highlighter-rouge">autoCorrect</code> detekt extension property in the Gradle plugin.</li>
@@ -1035,7 +1035,7 @@ This was done to be inline with other static analysis tools.</p>
 <p>can be applied to the root build file.</p>
 
 <p>A full <code class="language-plaintext highlighter-rouge">detekt</code> configuration for multi-module gradle project could look like <code class="language-plaintext highlighter-rouge">detekt</code>’s own build file.
-Attention(!) this must be translated to <a href="https://arturbosch.github.io/detekt/groovydsl.html">groovy</a> if you do not use the <a href="https://arturbosch.github.io/detekt/kotlindsl.html">kotlin-dsl</a>.</p>
+Attention(!) this must be translated to <a href="https://detekt.github.io/detekt/groovydsl.html">groovy</a> if you do not use the <a href="https://detekt.github.io/detekt/kotlindsl.html">kotlin-dsl</a>.</p>
 <div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plugins</span> <span class="o">{</span>
 	<span class="n">id</span><span class="o">(</span><span class="s2">"io.gitlab.arturbosch.detekt"</span><span class="o">)</span> <span class="n">version</span> <span class="s2">"[1.0.0.RC9]"</span>
 <span class="o">}</span>
@@ -1083,7 +1083,7 @@ The <code class="language-plaintext highlighter-rouge">config</code> property no
 <p>There is also a breaking change for the <code class="language-plaintext highlighter-rouge">detekt-cli</code> module which will attack custom gradle task and cli users.
 The <code class="language-plaintext highlighter-rouge">output</code> and <code class="language-plaintext highlighter-rouge">reports</code> options are no longer. There is the new <code class="language-plaintext highlighter-rouge">--report</code> option which can be used multiple times to generate specific reports.
 The report pattern now is <code class="language-plaintext highlighter-rouge">--report [report-id:path-to-store-report]</code>.
-There are three provided output reports named: <code class="language-plaintext highlighter-rouge">plain</code>, <code class="language-plaintext highlighter-rouge">xml</code> and <code class="language-plaintext highlighter-rouge">html</code>. Custom reports can be added to leveraging the detekt extension mechanism as described on the <a href="https://arturbosch.github.io/detekt/extensions.html">website</a>.</p>
+There are three provided output reports named: <code class="language-plaintext highlighter-rouge">plain</code>, <code class="language-plaintext highlighter-rouge">xml</code> and <code class="language-plaintext highlighter-rouge">html</code>. Custom reports can be added to leveraging the detekt extension mechanism as described on the <a href="https://detekt.github.io/detekt/extensions.html">website</a>.</p>
 
 <h5 id="changes">Changes</h5>
 
@@ -2376,7 +2376,7 @@ All formatting rules are turned off except indentation with spaces if –useTabs
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Jan 20, 2021 <br />
+ Site last generated: Jan 23, 2021 <br />
                 </div>
             </div>
 </footer>
