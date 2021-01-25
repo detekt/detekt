@@ -664,6 +664,8 @@ style:
     active: false
   UnnecessaryApply:
     active: true
+  UnnecessaryFilter:
+    active: false
   UnnecessaryInheritance:
     active: true
   UnnecessaryLet:
