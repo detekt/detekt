@@ -211,7 +211,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Remco Mokveld](https://github.com/remcomokveld) - Rename Blacklist/Whitelist to more meaningful names
 - [Zachary Moore](https://github.com/zsmoore) - Rule, cli, gradle plugin, and config improvements
 - [Veyndan Stuart](https://github.com/veyndan) - New rule: UseEmptyCounterpart; Rule improvement: UselessCallOnNotNull
-- [Parimatch Tech](https://github.com/parimatchtech) - New rule: LibraryEntitiesShouldNotBePublic
+- [Parimatch Tech](https://github.com/parimatch-tech) - New rule: LibraryEntitiesShouldNotBePublic, UnnecessaryFilter
 - [Chao Zhang](https://github.com/chao2zhang) - SARIF report format; Rule improvements
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
