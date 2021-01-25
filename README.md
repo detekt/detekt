@@ -1,7 +1,7 @@
 # __detekt__
 
 [![Join the chat at https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/](https://img.shields.io/badge/chat-on_slack-red.svg?style=flat-square)](https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/)
-[![Visit the website at https://arturbosch.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?style=flat-square)](https://arturbosch.github.io/detekt/)
+[![Visit the website at https://detekt.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?style=flat-square)](https://detekt.github.io/detekt/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
@@ -28,7 +28,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and [GitHub actions](https://github.com/marketplace/actions/detekt-all)
+- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and Github Actions ([Docker based](https://github.com/marketplace/actions/detekt-all) and [Javascript based](https://github.com/marketplace/actions/setup-detekt))
 
 ### Project Website
 
@@ -116,7 +116,9 @@ tasks {
 }
 ```
 
-See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io.gitlab.arturbosch.detekt) for snapshots.
+See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
+
+If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
 
 ### Adding more rule sets
 
@@ -216,6 +218,9 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
 - [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
+- [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
+- [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
+- [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
 
 ### Mentions
 

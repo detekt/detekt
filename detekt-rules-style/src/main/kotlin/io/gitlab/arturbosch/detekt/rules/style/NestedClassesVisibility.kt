@@ -34,6 +34,8 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  *     internal class Nested2
  * }
  * </compliant>
+ *
+ * @active since v1.16.0
  */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 

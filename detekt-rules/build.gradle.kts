@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     compileOnly(project(":detekt-api"))
     implementation(project(":detekt-rules-complexity"))
@@ -14,3 +18,5 @@ dependencies {
     testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
 }
+
+tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }

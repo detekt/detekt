@@ -32,10 +32,8 @@ internal class CLOCCountVisitor : DetektVisitor() {
         count += value
     }
 
-    override fun visitComment(comment: PsiComment?) {
-        if (comment != null) {
-            increment(comment.text.split('\n').size)
-        }
+    override fun visitComment(comment: PsiComment) {
+        increment(comment.text.split('\n').size)
     }
 
     override fun visitDeclaration(dcl: KtDeclaration) {

@@ -1,5 +1,5 @@
-repositories {
-    mavenLocal()
+plugins {
+    module
 }
 
 dependencies {

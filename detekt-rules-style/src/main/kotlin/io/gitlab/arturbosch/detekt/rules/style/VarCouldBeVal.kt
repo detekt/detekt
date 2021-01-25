@@ -38,6 +38,8 @@ private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSP
  *     val j = i + 1
  * }
  * </compliant>
+ *
+ * @active since v1.16.0
  */
 class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 

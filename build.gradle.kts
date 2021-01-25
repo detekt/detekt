@@ -1,5 +1,6 @@
 plugins {
-    commons
+    kotlin("jvm") apply false
+    jacoco
     packaging
     releasing
     detekt
@@ -10,15 +11,48 @@ plugins {
     id("binary-compatibility-validator")
 }
 
+repositories {
+    jcenter()
+}
+
 buildScan {
     termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
 }
 
+allprojects {
+    group = "io.gitlab.arturbosch.detekt"
+    version = Versions.currentOrSnapshot()
+}
+
+jacoco.toolVersion = Versions.JACOCO
+
+val examplesOrTestUtils = setOf(
+    "detekt-bom",
+    "detekt-test",
+    "detekt-test-utils",
+    "detekt-sample-extensions"
+)
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in examplesOrTestUtils }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
+}
+
 apiValidation {
-    // rootProject.name is a temporary workaround to exclude api validation of rootProject.
-    // We should refactoring our gradle setup to not apply `JavaBasePlugin`
-    ignoredProjects.add(rootProject.name)
     // We need to perform api validations for external APIs, for :detekt-api and :detekt-psi-utils
     ignoredProjects.addAll(subprojects.filter { it.name !in listOf("detekt-api", "detekt-psi-utils") }.map { it.name })
     ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")

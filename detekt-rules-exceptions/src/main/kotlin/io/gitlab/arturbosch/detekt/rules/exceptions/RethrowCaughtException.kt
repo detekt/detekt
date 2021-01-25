@@ -45,6 +45,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     }
  * }
  * </compliant>
+ *
+ * @active since v1.16.0
  */
 class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 

@@ -70,6 +70,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *            - MalformedURLException`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
+ * @active since v1.16.0
  */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 

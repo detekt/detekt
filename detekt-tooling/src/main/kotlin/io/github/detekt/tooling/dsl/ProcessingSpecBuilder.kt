@@ -50,7 +50,7 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
     )
 }
 
-internal data class ProcessingModel(
+private data class ProcessingModel(
     override val baselineSpec: BaselineSpec,
     override val compilerSpec: CompilerSpec,
     override val configSpec: ConfigSpec,

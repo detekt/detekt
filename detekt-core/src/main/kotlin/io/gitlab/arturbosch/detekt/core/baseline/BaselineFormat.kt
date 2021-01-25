@@ -30,7 +30,7 @@ internal class BaselineFormat {
 
     fun write(baseline: Baseline, path: Path) {
         try {
-            Files.newBufferedWriter(path).use {
+            Files.newBufferedWriter(path).addFinalNewLine().use {
                 it.streamXml().prettyPrinter().save(baseline)
             }
         } catch (error: XMLStreamException) {

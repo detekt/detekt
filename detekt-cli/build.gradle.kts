@@ -1,5 +1,17 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id("com.github.johnrengelman.shadow")
+    module
+    application
+}
+
 application {
     mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
+}
+
+tasks.withType<ShadowJar>().configureEach {
+    mergeServiceFiles()
 }
 
 dependencies {
@@ -14,22 +26,13 @@ dependencies {
     testImplementation(project(":detekt-rules"))
 }
 
-// Implements https://github.com/brianm/really-executable-jars-maven-plugin maven plugin behaviour.
-// To check details how it works, see http://skife.org/java/unix/2011/06/20/really_executable_jars.html.
-// Extracted from https://github.com/pinterest/ktlint/blob/a86d1c76c44d0a1c1adc3f756f36d8b4cac15d32/ktlint/build.gradle#L40-L57
-val shadowJarExecutable by tasks.registering {
-    description = "Creates self-executable file, that runs generated shadow jar"
-    group = "Distribution"
-
-    inputs.files(tasks.named("shadowJar"))
-    outputs.file("$buildDir/run/detekt")
-
+val moveJarForIntegrationTest by tasks.registering {
+    dependsOn(tasks.named("shadowJar"))
     doLast {
-        val execFile = outputs.files.singleFile
-        execFile.outputStream().use {
-            it.write("#!/bin/sh\n\nexec java -Xmx512m -jar \"\$0\" \"\$@\"\n\n".toByteArray())
-            it.write(inputs.files.singleFile.readBytes())
+        copy {
+            from(tasks.named("shadowJar"))
+            into(rootProject.buildDir)
+            rename { "detekt-cli-all.jar" }
         }
-        execFile.setExecutable(true, false)
     }
 }

@@ -1,4 +1,27 @@
+public final class io/github/detekt/psi/FilePath {
+	public static final field Companion Lio/github/detekt/psi/FilePath$Companion;
+	public fun <init> (Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;)V
+	public synthetic fun <init> (Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/nio/file/Path;
+	public final fun component2 ()Ljava/nio/file/Path;
+	public final fun component3 ()Ljava/nio/file/Path;
+	public final fun copy (Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
+	public static synthetic fun copy$default (Lio/github/detekt/psi/FilePath;Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;ILjava/lang/Object;)Lio/github/detekt/psi/FilePath;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAbsolutePath ()Ljava/nio/file/Path;
+	public final fun getBasePath ()Ljava/nio/file/Path;
+	public final fun getRelativePath ()Ljava/nio/file/Path;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/detekt/psi/FilePath$Companion {
+	public final fun fromAbsolute (Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
+	public final fun fromRelative (Ljava/nio/file/Path;Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
+}
+
 public final class io/github/detekt/psi/KeysKt {
+	public static final fun getBASE_PATH ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
 	public static final fun getLINE_SEPARATOR ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
 	public static final fun getRELATIVE_PATH ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
 }
@@ -7,9 +30,12 @@ public final class io/github/detekt/psi/KtFilesKt {
 	public static final field KOTLIN_SCRIPT_SUFFIX Ljava/lang/String;
 	public static final field KOTLIN_SUFFIX Ljava/lang/String;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
+	public static final fun basePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun fileNameWithoutSuffix (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
 	public static final fun getFileName (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
 	public static final fun relativePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
+	public static final fun toFilePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Lio/github/detekt/psi/FilePath;
+	public static final fun toUnifiedString (Ljava/nio/file/Path;)Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePatternKt {
@@ -59,6 +85,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 	public static final fun isAbstract (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
+	public static final fun isActual (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isConstant (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isExpect (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isExternal (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z

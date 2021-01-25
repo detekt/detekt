@@ -18,7 +18,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
     describe("library code must have explicit return types") {
 
         it("should not report without explicit filters set") {
-            assertThat(LibraryCodeMustSpecifyReturnType().compileAndLintWithContext(env, """
+            val subject = LibraryCodeMustSpecifyReturnType(TestConfig(Config.EXCLUDES_KEY to "**"))
+            assertThat(subject.compileAndLintWithContext(env, """
                 fun foo() = 5
                 val bar = 5
                 class A {
@@ -29,7 +30,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
         }
 
         val subject by memoized {
-            LibraryCodeMustSpecifyReturnType(TestConfig(Config.INCLUDES_KEY to "*.kt"))
+            LibraryCodeMustSpecifyReturnType()
         }
 
         describe("positive cases") {

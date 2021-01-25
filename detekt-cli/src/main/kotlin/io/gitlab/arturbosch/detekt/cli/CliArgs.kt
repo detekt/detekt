@@ -86,6 +86,15 @@ class CliArgs {
     private var reports: List<String>? = null
 
     @Parameter(
+        names = ["--base-path", "-bp"],
+        description = "Specifies a directory as the base path." +
+            "Currently it impacts all file paths in the formatted reports. " +
+            "File paths in console output and txt report are not affected and remain as absolute paths.",
+        converter = PathConverter::class
+    )
+    var basePath: Path? = null
+
+    @Parameter(
         names = ["--disable-default-rulesets", "-dd"],
         description = "Disables default rule sets."
     )
@@ -100,11 +109,26 @@ class CliArgs {
 
     @Parameter(
         names = ["--fail-fast"],
-        description = "Same as 'build-upon-default-config' but explicitly running all available rules. " +
+        description = "DEPRECATED: please use '--build-upon-default-config' together with '--all-rules'. " +
+            "Same as 'build-upon-default-config' but explicitly running all available rules. " +
             "With this setting only exit code 0 is returned when the analysis does not find a single code smell. " +
             "Additional configuration files can override rule properties which includes turning off specific rules."
     )
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean = false
+
+    @Parameter(
+        names = ["--all-rules"],
+        description = "Activates all available (even unstable) rules."
+    )
+    var allRules: Boolean = false
+
+    @Parameter(
+        names = ["--max-issues"],
+        description = "Return exit code 0 only when found issues count does not exceed specified issues count."
+    )
+    // nullable for 1.x.x to prefer maxIssues from config file
+    var maxIssues: Int? = null
 
     @Parameter(
         names = ["--auto-correct", "-ac"],

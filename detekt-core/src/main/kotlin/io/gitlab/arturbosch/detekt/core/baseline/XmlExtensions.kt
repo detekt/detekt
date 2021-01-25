@@ -1,8 +1,17 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
+import java.io.BufferedWriter
 import java.io.Writer
 import javax.xml.stream.XMLOutputFactory
 import javax.xml.stream.XMLStreamWriter
+
+internal fun Writer.addFinalNewLine(): Writer =
+    object : BufferedWriter(this) {
+        override fun close() {
+            write("\n")
+            super.close()
+        }
+    }
 
 internal fun Writer.streamXml(): XMLStreamWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(this)
 

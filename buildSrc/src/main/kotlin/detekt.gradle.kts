@@ -42,9 +42,6 @@ subprojects {
             txt.enabled = true
         }
     }
-}
-
-allprojects {
 
     dependencies {
         detekt(project(":detekt-cli"))

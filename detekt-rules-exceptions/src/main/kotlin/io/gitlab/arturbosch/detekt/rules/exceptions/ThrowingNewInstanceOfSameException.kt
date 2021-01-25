@@ -36,6 +36,8 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  *     }
  * }
  * </compliant>
+ *
+ * @active since v1.16.0
  */
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 

@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * </noncompliant>
  *
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
+ * @active since v1.16.0
  * @requiresTypeResolution
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {

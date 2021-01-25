@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     implementation(project(":detekt-api"))
     implementation("com.pinterest.ktlint:ktlint-ruleset-standard") {
@@ -12,6 +16,8 @@ dependencies {
 
     testImplementation(project(":detekt-test"))
 }
+
+tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 
 val depsToPackage = setOf(
     "org.ec4j.core",
@@ -29,13 +35,12 @@ tasks.withType<Jar>().configureEach {
 }
 
 val moveJarForIntegrationTest by tasks.registering {
-    description = "Copies the jar to the build directory without version so intergration tests can find it easier."
-    group = "Check"
-
-    inputs.files(tasks.named("jar"))
-    outputs.file(rootProject.buildDir.resolve("detekt-formatting.jar"))
-
+    dependsOn(tasks.named("jar"))
     doLast {
-        inputs.files.singleFile.copyTo(outputs.files.singleFile, overwrite = true)
+        copy {
+            from(tasks.named("jar"))
+            into(rootProject.buildDir)
+            rename { "detekt-formatting.jar" }
+        }
     }
 }

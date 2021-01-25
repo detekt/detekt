@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  *
+ * @active since v1.16.0
  * @requiresTypeResolution
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {

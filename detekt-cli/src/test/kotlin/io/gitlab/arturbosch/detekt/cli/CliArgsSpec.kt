@@ -94,4 +94,14 @@ internal class CliArgsSpec : Spek({
                 .isThrownBy { parseArguments(arrayOf("--unknown-to-us-all")) }
         }
     }
+
+    describe("--all-rules and --fail-fast lead to all rules being activated") {
+
+        arrayOf("--all-rules", "--fail-fast").forEach { flag ->
+            it("is true for flag $flag") {
+                val spec = parseArguments(arrayOf(flag)).toSpec()
+                assertThat(spec.rulesSpec.activateAllRules).isTrue()
+            }
+        }
+    }
 })

@@ -28,3 +28,5 @@ fun KtModifierListOwner.isLateinit() = hasModifier(KtTokens.LATEINIT_KEYWORD)
 fun KtModifierListOwner.isInline() = hasModifier(KtTokens.INLINE_KEYWORD)
 
 fun KtModifierListOwner.isExpect() = hasModifier(KtTokens.EXPECT_KEYWORD)
+
+fun KtModifierListOwner.isActual() = hasModifier(KtTokens.ACTUAL_KEYWORD)

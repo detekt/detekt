@@ -102,22 +102,22 @@ fun createCompilerConfiguration(
     }
 }
 
-@Suppress("TooGenericExceptionCaught")
+/**
+ * Infer the language version from the files representing classpath.
+ */
 internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
     val urls = map { it.toURI().toURL() }
     if (urls.isEmpty()) {
         return null
     }
     return URLClassLoader(urls.toTypedArray()).use { classLoader ->
-        try {
+        runCatching {
             val clazz = classLoader.loadClass("kotlin.KotlinVersion")
             val field = clazz.getField("CURRENT")
             field.isAccessible = true
             val versionObj = field.get(null)
             val versionString = versionObj?.toString()
-            return@use versionString?.let { LanguageVersion.fromFullVersionString(it) }
-        } catch (e: Throwable) {
-            return@use null // do nothing
-        }
+            versionString?.let { LanguageVersion.fromFullVersionString(it) }
+        }.getOrNull()
     }
 }

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import java.net.URI
+import java.util.Locale
 import java.util.ServiceLoader
 
 fun ruleDescriptors(config: Config): HashMap<String, ReportingDescriptor> {
@@ -39,5 +40,7 @@ fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor = descriptor {
     id = "detekt.$ruleSetId.$ruleId"
     name = ruleId
     shortDescription = MultiformatMessageString().apply { text = issue.description }
-    helpUri = URI.create("https://detekt.github.io/detekt/${ruleSetId.toLowerCase()}.html#${ruleId.toLowerCase()}")
+    helpUri = URI.create(
+        "https://detekt.github.io/detekt/${ruleSetId.toLowerCase(Locale.US)}.html#${ruleId.toLowerCase(Locale.US)}"
+    )
 }

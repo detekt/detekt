@@ -27,6 +27,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var baseline: File? = null
 
+    var basePath: String? = null
+
     var config: ConfigurableFileCollection = objects.fileCollection()
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
