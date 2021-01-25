@@ -21,7 +21,7 @@ dependencies {
         api("com.pinterest.ktlint:ktlint-core:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
         api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
-        api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
+        api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
     }
 }
 
