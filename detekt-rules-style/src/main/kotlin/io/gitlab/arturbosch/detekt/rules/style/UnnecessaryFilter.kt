@@ -1,7 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.*
+import org.jetbrains.kotlin.fir.extensions.predicate.has
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespace
+import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
+import org.jetbrains.kotlin.psi.psiUtil.nextLeafs
+import org.jetbrains.kotlin.psi.psiUtil.nextSiblingOfSameType
+import org.jetbrains.kotlin.psi.unpackFunctionLiteral
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -33,9 +40,28 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val calleeExpression = expression.calleeExpression
         if (calleeExpression?.text != "filter") return
+
+        expression.checkNextLeaf("size")
+        expression.checkNextLeaf("count")
+        expression.checkNextLeaf("isEmpty", "any")
+        expression.checkNextLeaf("isNotEmpty", "none")
+    }
+
+    private fun KtCallExpression.checkNextLeaf(leafName: String, correctOperator: String = leafName) {
+        val hasNextLeaf = this.nextLeaf { it.text == leafName } != null
+
+        if (hasNextLeaf) {
+            report(CodeSmell(issue, Entity.from(this), "$this can be replace by $correctOperator { ${this.lambda()?.text}}"))
+        }
+    }
+
+    private fun KtCallExpression.lambda(): KtLambdaExpression? {
+        val argument = lambdaArguments.singleOrNull() ?: valueArguments.singleOrNull()
+        val lambda = argument?.getArgumentExpression()?.unpackFunctionLiteral() ?: return null
+        if (lambda.valueParameters.firstOrNull()?.destructuringDeclaration != null) return null
+        return lambda
     }
 }
