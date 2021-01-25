@@ -9,7 +9,7 @@ dependencies {
     }
 
     constraints {
-        api("org.assertj:assertj-core:3.18.1")
+        api("org.assertj:assertj-core:3.19.0")
         api("org.spekframework.spek2:spek-dsl-jvm:${version.spek}")
         api("org.spekframework.spek2:spek-runner-junit5:${version.spek}")
         api("org.reflections:reflections:0.9.12")
