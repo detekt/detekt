@@ -36,7 +36,7 @@ tasks.check {
 }
 
 dependencies {
-    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
+    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
     implementation(kotlin("gradle-plugin-api"))
     compileOnly(androidGradlePlugin)
 
