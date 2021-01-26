@@ -508,7 +508,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="groovy-dsl">Groovy DSL</h4>
 
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plugins</span> <span class="o">{</span>
-    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.15.0"</span>
+    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.16.0-RC1"</span>
 <span class="o">}</span>
 
 <span class="n">repositories</span> <span class="o">{</span>
@@ -519,7 +519,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="kotlin-dsl">Kotlin DSL</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">plugins</span> <span class="p">{</span>
-    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">).</span><span class="nf">version</span><span class="p">(</span><span class="s">"1.15.0"</span><span class="p">)</span>
+    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">).</span><span class="nf">version</span><span class="p">(</span><span class="s">"1.16.0-RC1"</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="nf">repositories</span> <span class="p">{</span>
@@ -536,7 +536,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
         <span class="n">gradlePluginPortal</span><span class="o">()</span>
     <span class="o">}</span>
     <span class="n">dependencies</span> <span class="o">{</span>
-        <span class="n">classpath</span> <span class="s2">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0"</span>
+        <span class="n">classpath</span> <span class="s2">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.16.0-RC1"</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
@@ -554,7 +554,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
         <span class="nf">gradlePluginPortal</span><span class="p">()</span>
     <span class="p">}</span>
     <span class="nf">dependencies</span> <span class="p">{</span>
-        <span class="nf">classpath</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0"</span><span class="p">)</span>
+        <span class="nf">classpath</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.16.0-RC1"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
@@ -587,7 +587,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="n">plugins</span> <span class="o">{</span>
     <span class="n">id</span> <span class="s2">"com.android.application"</span>
     <span class="n">id</span> <span class="s2">"org.jetbrains.kotlin.android"</span> <span class="n">version</span> <span class="s2">"1.4.0"</span>
-    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.15.0"</span>
+    <span class="n">id</span> <span class="s2">"io.gitlab.arturbosch.detekt"</span> <span class="n">version</span> <span class="s2">"1.16.0-RC1"</span>
 <span class="o">}</span>
 
 <span class="n">repositories</span> <span class="o">{</span>
@@ -611,7 +611,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <span class="nf">plugins</span> <span class="p">{</span>
     <span class="nf">id</span><span class="p">(</span><span class="s">"com.android.application"</span><span class="p">)</span>
     <span class="nf">kotlin</span><span class="p">(</span><span class="s">"android"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"1.4.0"</span>
-    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"1.15.0"</span>
+    <span class="nf">id</span><span class="p">(</span><span class="s">"io.gitlab.arturbosch.detekt"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"1.16.0-RC1"</span>
 <span class="p">}</span>
 
 <span class="nf">repositories</span> <span class="p">{</span>
@@ -626,7 +626,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="groovy-dsl-3">Groovy DSL</h4>
 
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
-    <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.15.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
+    <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.16.0-RC1"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
     <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>                                        <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
         <span class="s2">"src/main/kotlin"</span><span class="o">,</span>
         <span class="s2">"gensrc/main/kotlin"</span>
@@ -670,7 +670,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="kotlin-dsl-3">Kotlin DSL</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
-    <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.15.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
+    <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.16.0-RC1"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
     <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
     <span class="n">parallel</span> <span class="p">=</span> <span class="k">false</span>                                      <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.</span>
     <span class="n">config</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"path/to/config.yml"</span><span class="p">)</span>                  <span class="c1">// Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.</span>
