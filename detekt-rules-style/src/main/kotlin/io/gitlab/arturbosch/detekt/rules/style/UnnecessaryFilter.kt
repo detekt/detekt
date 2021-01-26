@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.unpackFunctionLiteral
  */
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("UnnecessaryFilter", Severity.Style,
-        "UnnecessaryFilter",
+        "filter() with other collection operations may be simplified.",
         Debt.FIVE_MINS)
 
     override fun visitCallExpression(expression: KtCallExpression) {
