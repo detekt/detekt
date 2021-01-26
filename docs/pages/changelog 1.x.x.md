@@ -5,12 +5,90 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.16.0 - 2021-01-26
+
+##### Changelog
+
+- Introduce --max-issues flag for cli - #2267 - [#3391](https://github.com/detekt/detekt/pull/3391)
+- Fix hyperlink for elements of the type 'KtFile' - [#3386](https://github.com/detekt/detekt/pull/3386)
+- Update gradle doc to show table of contents correctly - [#3383](https://github.com/detekt/detekt/pull/3383)
+- Update cli doc to show table of contents correctly - [#3382](https://github.com/detekt/detekt/pull/3382)
+- Fix EmptyConfig making all rules active in production - [#3380](https://github.com/detekt/detekt/pull/3380)
+- Empty custom config enables rules disabled by default - [#3379](https://github.com/detekt/detekt/issues/3379)
+- Add `setup-detekt` action to README - [#3373](https://github.com/detekt/detekt/pull/3373)
+- GlobalClassLoaderCache: move call to getFiles out of synchronized block - [#3370](https://github.com/detekt/detekt/pull/3370)
+- Check for === instead of == - [#3363](https://github.com/detekt/detekt/issues/3363)
+- Filter existing files in classpath - [#3361](https://github.com/detekt/detekt/pull/3361)
+- Suppress RedundantVisibilityModifierRule if explicit API mode enabled - [#3358](https://github.com/detekt/detekt/pull/3358)
+- Add the final new line in the baseline again - [#3351](https://github.com/detekt/detekt/pull/3351)
+- [Security] Bump nokogiri from 1.10.10 to 1.11.1 in /docs - [#3348](https://github.com/detekt/detekt/pull/3348)
+- Remove trailing newline after ending IndentingXMLStreamWriter - [#3347](https://github.com/detekt/detekt/pull/3347)
+- [Security] Bump nokogiri from 1.10.10 to 1.11.0 in /docs - [#3343](https://github.com/detekt/detekt/pull/3343)
+- Reorganize docs for the configuration file - [#3337](https://github.com/detekt/detekt/pull/3337)
+- Add new rule SleepInsteadOfDelay - [#3335](https://github.com/detekt/detekt/pull/3335)
+- Update Android Gradle Plugin to 4.1.1 - [#3328](https://github.com/detekt/detekt/pull/3328)
+- Support relative output paths - [#3319](https://github.com/detekt/detekt/pull/3319)
+- Fix `runLastOnRoot` being empty in KtLintMultiRule - [#3318](https://github.com/detekt/detekt/pull/3318)
+- Ensure binary-compatibility with previous versrions - [#3315](https://github.com/detekt/detekt/issues/3315)
+- Fix reports not propagated to detekt task with type resolution - [#3313](https://github.com/detekt/detekt/pull/3313)
+- Support configurable severity per ruleset/rule in XML and Sarif output - [#3310](https://github.com/detekt/detekt/pull/3310)
+- Configure default excludes for InvalidPackageDeclaration - [#3305](https://github.com/detekt/detekt/pull/3305)
+- Remove exceptions of Library rules - [#3304](https://github.com/detekt/detekt/pull/3304)
+- Move the questions to discussions - [#3300](https://github.com/detekt/detekt/pull/3300)
+- Magic number extension functions - [#3299](https://github.com/detekt/detekt/pull/3299)
+- NamedArguments: fix false positive with varargs - [#3294](https://github.com/detekt/detekt/pull/3294)
+- NamedArguments rule: false positive with varargs - [#3291](https://github.com/detekt/detekt/issues/3291)
+- NamedArguments with java code false positive - [#3289](https://github.com/detekt/detekt/issues/3289)
+- Upgrade ktlint to 0.40.0 - [#3281](https://github.com/detekt/detekt/pull/3281)
+- False positive "Unconditional loop jump" - [#3280](https://github.com/detekt/detekt/issues/3280)
+- ForbiddenComments don't report TODO: in KDoc - [#3273](https://github.com/detekt/detekt/issues/3273)
+- Add MultilineLambdaItParameter rule - [#3259](https://github.com/detekt/detekt/pull/3259)
+- Update Kotlin to 1.4.21 - [#3254](https://github.com/detekt/detekt/pull/3254)
+- Introduce --all-rules flag - [#3253](https://github.com/detekt/detekt/pull/3253)
+- Enable more rules by default - [#3229](https://github.com/detekt/detekt/pull/3229)
+- Running multiple Detekt tasks concurrently may cause deadlock - [#3047](https://github.com/detekt/detekt/issues/3047)
+- detektMain is noisy "Ignoring a file detekt cannot handle" - [#3019](https://github.com/detekt/detekt/issues/3019)
+- Configure default excludes for InvalidPackageDeclaration - [#2539](https://github.com/detekt/detekt/issues/2539)
+- Hyperlink to error inside Android studio - [#2340](https://github.com/detekt/detekt/issues/2340)
+- Align cli flags and defaults with other analysis tools - [#2267](https://github.com/detekt/detekt/issues/2267)
+
+##### Housekeeping & Refactorings
+
+- Disable parallel test discovery; we already use Grade workers for max parallelism - [#3387](https://github.com/detekt/detekt/pull/3387)
+- Use more fluent assertions - [#3381](https://github.com/detekt/detekt/pull/3381)
+- Refactor orders of repositories - [#3376](https://github.com/detekt/detekt/pull/3376)
+- Add a test for UndocumentedPublicClass and fun interfaces - [#3374](https://github.com/detekt/detekt/pull/3374)
+- Refactor build.gradle.kts in detekt-gradle-plugin - [#3371](https://github.com/detekt/detekt/pull/3371)
+- Gradle to 6.8 - [#3362](https://github.com/detekt/detekt/pull/3362)
+- Integrate SARIF report with Github code scanning - [#3359](https://github.com/detekt/detekt/pull/3359)
+- Refactor integration test for detekt-gradle-plugin - [#3356](https://github.com/detekt/detekt/pull/3356)
+- Improve gradle plugin - [#3354](https://github.com/detekt/detekt/pull/3354)
+- Remove checkNotNull - [#3352](https://github.com/detekt/detekt/pull/3352)
+- Generate API validation for  `detekt-psi-utils` - [#3338](https://github.com/detekt/detekt/pull/3338)
+- recover binary compatibility with 1.15.0 - [#3336](https://github.com/detekt/detekt/pull/3336)
+- Refactor tests in detekt-gradle-plugin - [#3333](https://github.com/detekt/detekt/pull/3333)
+- Fix failing website deployment on master - [#3332](https://github.com/detekt/detekt/pull/3332)
+- The output of updateVersion should not depend on the OS that executes it - [#3330](https://github.com/detekt/detekt/pull/3330)
+- Reduce visibility - [#3326](https://github.com/detekt/detekt/pull/3326)
+- Refactor XmlOutputFormatSpec - [#3325](https://github.com/detekt/detekt/pull/3325)
+- Simplify our buildSrc - [#3322](https://github.com/detekt/detekt/pull/3322)
+- Apply binary compatibility plugin to Detekt - [#3320](https://github.com/detekt/detekt/pull/3320)
+- Add KDoc for convoluted PathFilters.isIgnored - [#3312](https://github.com/detekt/detekt/pull/3312)
+- Don't mix kotlin 1.3 and 1.4 - [#3309](https://github.com/detekt/detekt/pull/3309)
+- Allow to overwrite in the task moveJarForIntegrationTest - [#3308](https://github.com/detekt/detekt/pull/3308)
+- Remove unnecessary .trimIndent() - housekeeping - [#3307](https://github.com/detekt/detekt/pull/3307)
+- Fix typo - [#3301](https://github.com/detekt/detekt/pull/3301)
+- General housekeeping - [#3298](https://github.com/detekt/detekt/pull/3298)
+- Inline UnconditionalJumpStatementInLoop case files - [#3296](https://github.com/detekt/detekt/pull/3296)
+
+See all issues at: [1.16.0](https://github.com/detekt/detekt/milestone/80)
+
 #### 1.15.0 - 2020-12-18
 
 ##### Notable Changes
 
 detekt 1.15.0 bundles Kotlin 1.4.10.  
-You may experience some known issues when your project already used 1.4.20
+You may experience some known issues when your project already uses 1.4.20
 - [#3248](https://github.com/detekt/detekt/issues/3248) and [#3282](https://github.com/detekt/detekt/issues/3282).
 
 In addition to many rule improvements, there are also new ones:
