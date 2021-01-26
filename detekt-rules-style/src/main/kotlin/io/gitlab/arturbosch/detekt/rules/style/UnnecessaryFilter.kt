@@ -34,8 +34,6 @@ import org.jetbrains.kotlin.psi.unpackFunctionLiteral
  *      .none { it > 1 }
  *
  * </compliant>
- *
- * @requiresTypeResolution
  */
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("UnnecessaryFilter", Severity.Style,
