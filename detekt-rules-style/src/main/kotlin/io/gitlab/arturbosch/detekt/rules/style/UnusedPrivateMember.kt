@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -199,10 +200,16 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
         }
     }
 
-    override fun visitClass(klass: KtClass) {
-        if (klass.isInterface() || klass.isExpect()) return
+    override fun visitClassOrObject(klassOrObject: KtClassOrObject) {
+        if (klassOrObject.isExpect()) return
 
-        super.visitClassOrObject(klass)
+        super.visitClassOrObject(klassOrObject)
+    }
+
+    override fun visitClass(klass: KtClass) {
+        if (klass.isInterface()) return
+
+        super.visitClass(klass)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
