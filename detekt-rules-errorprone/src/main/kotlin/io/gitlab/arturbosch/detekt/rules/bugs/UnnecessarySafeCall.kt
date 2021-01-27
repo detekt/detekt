@@ -19,12 +19,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * <noncompliant>
  * val a: String = ""
- * val b = someValue?.length
+ * val b = a?.length
  * </noncompliant>
  *
  * <compliant>
  * val a: String? = null
- * val b = someValue?.length
+ * val b = a?.length
  * </compliant>
  *
  * @active since v1.16.0
