@@ -138,7 +138,7 @@ class DontDowncastCollectionTypesSpec : Spek({
                 fun main() {
                     val myMap = mapOf(1 to 2)
                     if (myMap is MutableMap<Int, Int>) {
-                        myMap.add(3 to 4)
+                        myMap[3] = 4
                     }
                 }
                 """
