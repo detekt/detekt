@@ -1060,13 +1060,13 @@ loop altogether.</p>
 <h4 id="noncompliant-code-18">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="s">""</span>
-<span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">someValue</span><span class="o">?.</span><span class="n">length</span>
+<span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">?.</span><span class="n">length</span>
 </code></pre></div></div>
 
 <h4 id="compliant-code-15">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
-<span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">someValue</span><span class="o">?.</span><span class="n">length</span>
+<span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">?.</span><span class="n">length</span>
 </code></pre></div></div>
 
 <h3 id="unreachablecode">UnreachableCode</h3>
