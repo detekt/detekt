@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * Unnecessary filters add complexity to the code and accomplish noting. They should be removed.
+ * Unnecessary filters add complexity to the code and accomplish nothing. They should be removed.
  *
  * <noncompliant>
  * val x = listOf(1, 2, 3)
