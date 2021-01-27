@@ -467,6 +467,8 @@ potential-bugs:
   active: true
   Deprecation:
     active: false
+  DontDowncastCollectionTypes:
+    active: false
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
