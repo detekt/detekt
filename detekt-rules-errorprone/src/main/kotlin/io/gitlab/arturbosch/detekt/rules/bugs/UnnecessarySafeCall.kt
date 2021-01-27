@@ -8,11 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.diagnostics.DiagnosticWithParameters1
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.ErrorType
 
 /**
  * Reports unnecessary safe call operators (`?.`) that can be removed by the user.
@@ -39,6 +41,7 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
 
@@ -49,8 +52,18 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
             return
         }
 
-        val compilerReports = bindingContext.diagnostics.forElement(safeAccessElement)
-        if (compilerReports.any { it.factory == Errors.UNNECESSARY_SAFE_CALL }) {
+        val compilerReport = bindingContext
+            .diagnostics
+            .forElement(safeAccessElement)
+            .firstOrNull { it.factory == Errors.UNNECESSARY_SAFE_CALL }
+
+        if (compilerReport != null) {
+            // For external types, if they're not included in the classpath, we still get an Errors.UNNECESSARY_SAFE_CALL.
+            // This causes false positives if our users are misconfiguring detekt with Type Resolution.
+            // Here we try to check if the compiler reports failed to resolve the nullable type.
+            if (compilerReport is DiagnosticWithParameters1<*, *> && compilerReport.a is ErrorType) {
+                return
+            }
             report(
                 CodeSmell(
                     issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
