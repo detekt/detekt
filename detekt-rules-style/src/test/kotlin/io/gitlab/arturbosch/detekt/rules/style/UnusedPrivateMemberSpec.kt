@@ -67,6 +67,16 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
+        it("should not report parameters in expect object functions") {
+            val code = """
+                expect object Foo {
+                    fun bar(i: Int)
+                    fun baz(i: Int, s: String)
+                }
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
         it("should not report parameters in expect functions") {
             val code = """
                 expect fun bar(i: Int)
