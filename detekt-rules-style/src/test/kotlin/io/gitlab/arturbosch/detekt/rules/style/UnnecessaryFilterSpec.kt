@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnnecessaryFilterSpec : Spek({
-
+    setupKotlinEnvironment()
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { UnnecessaryFilter() }
 
     describe("UnnecessaryFilter") {
@@ -17,8 +20,9 @@ class UnnecessaryFilterSpec : Spek({
                     .size
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("filter { it > 1 } can be replaced by size { it > 1 }")
         }
 
         it("Filter with count") {
@@ -28,7 +32,7 @@ class UnnecessaryFilterSpec : Spek({
                     .count()
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -41,7 +45,7 @@ class UnnecessaryFilterSpec : Spek({
                     .count()
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -52,7 +56,7 @@ class UnnecessaryFilterSpec : Spek({
                     .isEmpty()
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -63,19 +67,32 @@ class UnnecessaryFilterSpec : Spek({
                     .isNotEmpty()
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
 
     describe("Correct filter") {
+        it("Not stdlib filter function") {
+            val code = """
+                fun filter() : List<Any>{
+                    return emptyList()
+                }
+                
+                val x = filter().size
+            """
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
         it("Filter with count") {
             val code = """
                 val x = listOf(1, 2, 3)
                     .count { it > 2 }
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -85,7 +102,7 @@ class UnnecessaryFilterSpec : Spek({
                     .none { it > 2 }
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -95,7 +112,7 @@ class UnnecessaryFilterSpec : Spek({
                     .any { it > 2 }
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -107,7 +124,7 @@ class UnnecessaryFilterSpec : Spek({
                     .count { it > 1 }
             """
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

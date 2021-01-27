@@ -7,13 +7,17 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * Unnecessary filter add complexity to the code and accomplish noting. They should be removed.
+ * Unnecessary filters add complexity to the code and accomplish noting. They should be removed.
  *
  * <noncompliant>
  * val x = listOf(1, 2, 3)
@@ -32,39 +36,53 @@ import org.jetbrains.kotlin.psi.unpackFunctionLiteral
  *
  * val x = listOf(1, 2, 3)
  *      .none { it > 1 }
- *
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("UnnecessaryFilter", Severity.Style,
+    override val issue: Issue = Issue(
+        "UnnecessaryFilter", Severity.Style,
         "UnnecessaryFilter",
-        Debt.FIVE_MINS)
+        Debt.FIVE_MINS
+    )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
+        if (bindingContext == BindingContext.EMPTY) return
 
         val calleeExpression = expression.calleeExpression
         if (calleeExpression?.text != "filter") return
 
+        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+        if (resolvedCall.resultingDescriptor.fqNameOrNull() !in filterFqNames) return
+
         expression.checkNextLeaf("size")
         expression.checkNextLeaf("count")
-        expression.checkNextLeaf(
-            "isEmpty", "any")
-        expression.checkNextLeaf(
-            "isNotEmpty", "none")
+        expression.checkNextLeaf("isEmpty", "any")
+        expression.checkNextLeaf("isNotEmpty", "none")
     }
 
     private fun KtCallExpression.checkNextLeaf(leafName: String, correctOperator: String = leafName) {
         val hasNextLeaf = this.nextLeaf { it.text == leafName } != null
 
         if (hasNextLeaf) {
-            report(CodeSmell(issue, Entity.from(this),
-                "$this can be replace by $correctOperator { ${this.lambda()?.text}}"))
+            report(
+                CodeSmell(
+                    issue, Entity.from(this),
+                    "${this.text} can be replaced by $correctOperator ${this.lambda()?.text}"
+                )
+            )
         }
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
         val argument = lambdaArguments.singleOrNull() ?: valueArguments.singleOrNull()
         return argument?.getArgumentExpression()?.unpackFunctionLiteral()
+    }
+
+    companion object {
+        private val filterFqNames = listOf(FqName("kotlin.collections.filter"), FqName("kotlin.sequences.filter"))
     }
 }
