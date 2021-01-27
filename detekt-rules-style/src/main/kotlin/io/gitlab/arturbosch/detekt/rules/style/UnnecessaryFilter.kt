@@ -41,11 +41,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * @requiresTypeResolution
  */
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue(
-        "UnnecessaryFilter", Severity.Style,
-        "UnnecessaryFilter",
-        Debt.FIVE_MINS
-    )
+
+    override val issue: Issue = Issue("UnnecessaryFilter", Severity.Style,
+        "filter() with other collection operations may be simplified.",
+        Debt.FIVE_MINS)
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
