@@ -78,7 +78,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         report(
             CodeSmell(
                 issue, Entity.from(this),
-                "${this.text} can be replaced by ${correctOperator ?: shortName} ${this.lambda()?.text}"
+                "'${this.text}' can be replaced by '${correctOperator ?: shortName} ${this.lambda()?.text}'"
             )
         )
     }
