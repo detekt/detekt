@@ -25,5 +25,6 @@ about: Help make detekt better by reporting bugs, false positives and other issu
 <!-- Include as many relevant details about the environment you experienced the bug in -->
 * Version of detekt used:
 * Version of Gradle used (if applicable):
+* Gradle scan link (add `--scan` option when running the gradle task):
 * Operating System and version:
 * Link to your project (if it's a public repository):
