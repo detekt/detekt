@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
@@ -42,9 +43,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UnnecessaryFilter", Severity.Style,
+    override val issue: Issue = Issue(
+        "UnnecessaryFilter", Severity.Style,
         "filter() with other collection operations may be simplified.",
-        Debt.FIVE_MINS)
+        Debt.FIVE_MINS
+    )
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -57,23 +60,26 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         if (resolvedCall.resultingDescriptor.fqNameOrNull() !in filterFqNames) return
 
-        expression.checkNextLeaf("size")
-        expression.checkNextLeaf("count")
-        expression.checkNextLeaf("isEmpty", "any")
-        expression.checkNextLeaf("isNotEmpty", "none")
+        expression.checkNextLeaf(sizeFqName)
+        expression.checkNextLeaf(collectionCountFqName)
+        expression.checkNextLeaf(sequencesCountFqName)
+        expression.checkNextLeaf(isEmptyFqName, "any")
+        expression.checkNextLeaf(isNotEmptyFqName, "none")
     }
 
-    private fun KtCallExpression.checkNextLeaf(leafName: String, correctOperator: String = leafName) {
-        val hasNextLeaf = this.nextLeaf { it.text == leafName } != null
+    private fun KtCallExpression.checkNextLeaf(leafName: FqName, correctOperator: String? = null) {
+        val shortName = leafName.shortName().toString()
+        val nextLeaf = this.nextLeaf { it.text == shortName }?.parent as? KtElement ?: return
+        val resolvedCall = nextLeaf.getResolvedCall(bindingContext) ?: return
 
-        if (hasNextLeaf) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(this),
-                    "${this.text} can be replaced by $correctOperator ${this.lambda()?.text}"
-                )
+        if (resolvedCall.resultingDescriptor.fqNameOrNull() != leafName) return
+
+        report(
+            CodeSmell(
+                issue, Entity.from(this),
+                "${this.text} can be replaced by ${correctOperator ?: shortName} ${this.lambda()?.text}"
             )
-        }
+        )
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
@@ -82,6 +88,11 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
+        private val sizeFqName = FqName("kotlin.collections.List.size")
+        private val isEmptyFqName = FqName("kotlin.collections.List.isEmpty")
+        private val isNotEmptyFqName = FqName("kotlin.collections.isNotEmpty")
+        private val collectionCountFqName = FqName("kotlin.collections.count")
+        private val sequencesCountFqName = FqName("kotlin.sequences.count")
         private val filterFqNames = listOf(FqName("kotlin.collections.filter"), FqName("kotlin.sequences.filter"))
     }
 }

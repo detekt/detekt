@@ -73,6 +73,34 @@ class UnnecessaryFilterSpec : Spek({
     }
 
     describe("Correct filter") {
+        it("Not stdlib count list function") {
+            val code = """
+                fun <T> List<T>.count() : Any{
+                    return Any()
+                }
+                
+                val x = listOf<Int>().count()
+                val y = listOf<Int>().filter { it > 0 }.count()
+            """
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("Not stdlib count sequences function") {
+            val code = """
+                fun <T> Sequence<T>.count() : Any{
+                    return Any()
+                }
+                
+                val x = listOf<Int>().asSequence().count()
+                val y = listOf<Int>().asSequence().filter { it > 0 }.count()
+            """
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
         it("Not stdlib filter function") {
             val code = """
                 fun filter() : List<Any>{
