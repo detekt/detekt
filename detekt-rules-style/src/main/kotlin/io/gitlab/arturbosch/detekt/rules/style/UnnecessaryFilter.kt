@@ -67,6 +67,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         expression.checkNextLeaf(isNotEmptyFqName, "none")
     }
 
+    @Suppress("ReturnCount")
     private fun KtCallExpression.checkNextLeaf(leafName: FqName, correctOperator: String? = null) {
         val shortName = leafName.shortName().toString()
         val nextLeaf = this.nextLeaf { it.text == shortName }?.parent as? KtElement ?: return
