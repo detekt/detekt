@@ -74,18 +74,28 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
             ?.referencedName
 
         if (lhsType in immutableTypes && rhsType in mutableTypes) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(parent),
-                    "Down-casting from type $lhsType to $rhsType is risky. Use `to$rhsType()` instead."
-                )
-            )
+            var message = "Down-casting from type $lhsType to $rhsType is risky."
+            if (rhsType != null && rhsType.startsWith("Mutable")) {
+                message += " Use `to$rhsType()` instead."
+            }
+            report(CodeSmell(issue, Entity.from(parent), message))
         }
     }
 
     companion object {
         val immutableTypes = listOf("List", "Map", "Set")
-        val mutableTypes = listOf("MutableList", "MutableMap", "MutableSet")
+
+        // Kotlin Stdlib Mutable types plus Type-aliases from:
+        // https://github.com/JetBrains/kotlin/blob/46b7a774b558001c136be225cf4367fa09ba1aee/libraries/stdlib/jvm/src/kotlin/collections/TypeAliases.kt#L13-L17
+        val mutableTypes = listOf(
+            "MutableList",
+            "MutableMap",
+            "MutableSet",
+            "ArrayList",
+            "LinkedHashSet",
+            "HashSet",
+            "LinkedHashMap",
+            "HashMap",
+        )
     }
 }

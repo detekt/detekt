@@ -185,5 +185,228 @@ class DontDowncastCollectionTypesSpec : Spek({
                 assertThat(result).isEmpty()
             }
         }
+
+        describe("type-aliases") {
+
+            it("detects ArrayList type casts") {
+                val code = """
+                fun main() {
+                    val myList = listOf(1,2,3)
+                    val mutList = myList as ArrayList<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type List to ArrayList is risky."
+                )
+            }
+
+            it("detects ArrayList type safe casts") {
+                val code = """
+                fun main() {
+                    val myList : List<Int>? = null
+                    val mutList = myList as? ArrayList<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type List to ArrayList is risky."
+                )
+            }
+
+            it("detects ArrayList type checks") {
+                val code = """
+                fun main() {
+                    val myList = listOf(1,2,3)
+                    if (myList is ArrayList<Int>) {
+                        myList.add(4)
+                    }
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type List to ArrayList is risky."
+                )
+            }
+
+            it("detects LinkedHashSet type casts") {
+                val code = """
+                fun main() {
+                    val mySet = setOf(1,2,3)
+                    val mutSet = mySet as LinkedHashSet<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to LinkedHashSet is risky."
+                )
+            }
+
+            it("detects LinkedHashSet type safe casts") {
+                val code = """
+                fun main() {
+                    val mySet : Set<Int>? = null
+                    val mutSet = mySet as? LinkedHashSet<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to LinkedHashSet is risky."
+                )
+            }
+
+            it("detects LinkedHashSet type checks") {
+                val code = """
+                fun main() {
+                    val mySet = setOf(1,2,3)
+                    if (mySet is LinkedHashSet<Int>) {
+                        mySet.add(4)
+                    }
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to LinkedHashSet is risky."
+                )
+            }
+
+            it("detects HashSet type casts") {
+                val code = """
+                fun main() {
+                    val mySet = setOf(1,2,3)
+                    val mutSet = mySet as HashSet<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to HashSet is risky."
+                )
+            }
+
+            it("detects HashSet type safe casts") {
+                val code = """
+                fun main() {
+                    val mySet : Set<Int>? = null
+                    val mutSet = mySet as? HashSet<Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to HashSet is risky."
+                )
+            }
+
+            it("detects HashSet type checks") {
+                val code = """
+                fun main() {
+                    val mySet = setOf(1,2,3)
+                    if (mySet is HashSet<Int>) {
+                        mySet.add(4)
+                    }
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Set to HashSet is risky."
+                )
+            }
+
+            it("detects HashMap type casts") {
+                val code = """
+                fun main() {
+                    val myMap = mapOf(1 to 2)
+                    val mutMap = myMap as HashMap<Int, Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to HashMap is risky."
+                )
+            }
+
+            it("detects HashMap type safe casts") {
+                val code = """
+                fun main() {
+                    val myMap : Map<Int, Int>? = null
+                    val mutMap = myMap as? HashMap<Int, Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to HashMap is risky."
+                )
+            }
+
+            it("detects HashMap type checks") {
+                val code = """
+                fun main() {
+                    val myMap = mapOf(1 to 2)
+                    if (myMap is HashMap<Int, Int>) {
+                        myMap[3] = 4
+                    }
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to HashMap is risky."
+                )
+            }
+
+            it("detects LinkedHashMap type casts") {
+                val code = """
+                fun main() {
+                    val myMap = mapOf(1 to 2)
+                    val mutMap = myMap as LinkedHashMap<Int, Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to LinkedHashMap is risky."
+                )
+            }
+
+            it("detects LinkedHashMap type safe casts") {
+                val code = """
+                fun main() {
+                    val myMap : Map<Int, Int>? = null
+                    val mutMap = myMap as? LinkedHashMap<Int, Int>
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to LinkedHashMap is risky."
+                )
+            }
+
+            it("detects LinkedHashMap type checks") {
+                val code = """
+                fun main() {
+                    val myMap = mapOf(1 to 2)
+                    if (myMap is LinkedHashMap<Int, Int>) {
+                        myMap[3] = 4
+                    }
+                }
+                """
+                val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).hasSize(1)
+                assertThat(result.first().message).isEqualTo(
+                    "Down-casting from type Map to LinkedHashMap is risky."
+                )
+            }
+        }
     }
 })
