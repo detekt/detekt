@@ -4,28 +4,30 @@ plugins {
     id("com.github.breadmoirai.github-release")
 }
 
-githubRelease {
-    token(project.findProperty("github.token") as? String ?: "")
-    owner.set("detekt")
-    repo.set("detekt")
-    overwrite.set(true)
-    dryRun.set(false)
-    body {
-        var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
-        val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
-        val sectionStart = "#### $nextNonBetaVersion"
-        changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
-        changelog = changelog.substring(0, changelog.indexOf("#### 1."))
-        changelog.trim()
-    }
-    val cliBuildDir = project(":detekt-cli").buildDir
-    releaseAssets.setFrom(
-        files(
-            cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
-            cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
-            project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar")
+project.afterEvaluate {
+    githubRelease {
+        token(project.findProperty("github.token") as? String ?: "")
+        owner.set("detekt")
+        repo.set("detekt")
+        overwrite.set(true)
+        dryRun.set(false)
+        body {
+            var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
+            val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
+            val sectionStart = "#### $nextNonBetaVersion"
+            changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
+            changelog = changelog.substring(0, changelog.indexOf("#### 1."))
+            changelog.trim()
+        }
+        val cliBuildDir = project(":detekt-cli").buildDir
+        releaseAssets.setFrom(
+            files(
+                cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
+                cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
+                project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar")
+            )
         )
-    )
+    }
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {
