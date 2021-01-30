@@ -17,6 +17,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
         ruleSetId,
         listOf(
             Deprecation(config),
+            DontDowncastCollectionTypes(config),
             DuplicateCaseInWhenExpression(config),
             EqualsAlwaysReturnsTrueOrFalse(config),
             EqualsWithHashCodeExist(config),
