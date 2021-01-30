@@ -33,6 +33,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundAngleBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundCurly
@@ -42,6 +43,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
@@ -84,6 +86,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         NoWildcardImports(config),
         PackageName(config),
         ParameterListWrapping(config),
+        SpacingAroundAngleBrackets(config),
         SpacingAroundColon(config),
         SpacingAroundComma(config),
         SpacingAroundCurly(config),
@@ -93,6 +96,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
+        SpacingAroundUnaryOperator(config),
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
         StringTemplate(config)
