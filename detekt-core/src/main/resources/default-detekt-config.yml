@@ -326,6 +326,9 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  SpacingAroundAngleBrackets:
+    active: false
+    autoCorrect: true
   SpacingAroundColon:
     active: true
     autoCorrect: true
@@ -352,6 +355,9 @@ formatting:
     autoCorrect: true
   SpacingAroundRangeOperator:
     active: true
+    autoCorrect: true
+  SpacingAroundUnaryOperator:
+    active: false
     autoCorrect: true
   SpacingBetweenDeclarationsWithAnnotations:
     active: false
