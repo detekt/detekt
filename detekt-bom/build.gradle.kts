@@ -2,13 +2,18 @@ plugins {
     `java-platform`
 }
 
+javaPlatform {
+    allowDependencies()
+}
+
 dependencies {
-    val version = object {
-        val spek = "2.0.15"
-        val ktlint = "0.40.0"
-    }
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.4.1")
 
     constraints {
+        val version = object {
+            val spek = "2.0.15"
+            val ktlint = "0.40.0"
+        }
         api("org.assertj:assertj-core:3.19.0")
         api("org.spekframework.spek2:spek-dsl-jvm:${version.spek}")
         api("org.spekframework.spek2:spek-runner-junit5:${version.spek}")
