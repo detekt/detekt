@@ -397,6 +397,10 @@ internal object DetektTaskDslTest : Spek({
                         |    debug = true
                         |    parallel = true
                         |    disableDefaultRuleSets = true
+<<<<<<< HEAD
+=======
+                        |    failFast = true
+>>>>>>> Add allRules and deprecate failFast in gradle tasks
                         |    allRules = true
                         |    autoCorrect = true
                         |    buildUponDefaultConfig = true
@@ -424,6 +428,10 @@ internal object DetektTaskDslTest : Spek({
 
                     it("ignores failures") {
                         assertThat(result.output).contains("Ignore failures: true")
+                    }
+
+                    it("enables all rules") {
+                        assertThat(result.output).contains("--all-rules")
                     }
 
                     it("enables all rules") {
