@@ -40,6 +40,7 @@ subprojects {
             xml.enabled = true
             html.enabled = true
             txt.enabled = true
+            sarif.enabled = true
         }
     }
 

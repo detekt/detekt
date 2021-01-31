@@ -32,6 +32,9 @@ entries:
     - title: Using snapshots
       url: /snapshots.html
       output: web
+    - title: Reporting
+      url: /reporting.html
+      output: web
   - title: Getting Started
     output: web
     folderitems:
