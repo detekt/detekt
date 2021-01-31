@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
@@ -81,6 +82,10 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
+    val allRules: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    @get:Input
+    @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     /**
@@ -106,6 +111,10 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
+        if (failFast.getOrElse(false)) {
+            project.logger.warn("'failFast' is deprecated. Please use 'buildOnDefaultConfig' together with 'allRules'.")
+        }
+
         val arguments = mutableListOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
@@ -118,6 +127,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
+            AllRulesArgument(allRules.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )

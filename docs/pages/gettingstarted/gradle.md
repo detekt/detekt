@@ -330,16 +330,16 @@ uses the type `Detekt`.
 #### Groovy DSL
 
 ```groovy
-tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
-    description = "Runs a failfast detekt build."
+tasks.register(name: myDetekt, type: io.gitlab.arturbosch.detekt.Detekt) {
+    description = "Runs a custom detekt build."
     setSource(files("src/main/kotlin", "src/test/kotlin"))
     config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
         xml {
-            destination = file("build/reports/failfast.xml")
+            destination = file("build/reports/mydetekt.xml")
         }
-        html.destination = file("build/reports/failfast.html")
+        html.destination = file("build/reports/mydetekt.html")
     }
     include '**/*.kt'
     include '**/*.kts'
@@ -351,16 +351,16 @@ tasks.register(name: detektFailFast, type: io.gitlab.arturbosch.detekt.Detekt) {
 #### Kotlin DSL
 
 ```kotlin
-tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
-    description = "Runs a failfast detekt build."
+tasks.register<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
+    description = "Runs a custom detekt build."
     setSource(files("src/main/kotlin", "src/test/kotlin"))
     config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
         xml {
-            destination = file("build/reports/failfast.xml")
+            destination = file("build/reports/mydetekt.xml")
         }
-        html.destination = file("build/reports/failfast.html")
+        html.destination = file("build/reports/mydetekt.html")
     }
     include("**/*.kt")
     include("**/*.kts")
