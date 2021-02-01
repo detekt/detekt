@@ -673,13 +673,13 @@ fun returnsNoValue() {}</p>
 
 <h4 id="noncompliant-code-7">Noncompliant Code:</h4>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">return</span><span class="nf">sValue</span><span class="p">()</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nf">returnsValue</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h4 id="compliant-code-6">Compliant Code:</h4>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">if</span> <span class="p">(</span><span class="mi">42</span> <span class="p">==</span> <span class="k">return</span><span class="nf">sValue</span><span class="p">())</span> <span class="p">{}</span>
-    <span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="k">return</span><span class="nf">sValue</span><span class="p">()</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">if</span> <span class="p">(</span><span class="mi">42</span> <span class="p">==</span> <span class="nf">returnsValue</span><span class="p">())</span> <span class="p">{}</span>
+    <span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="nf">returnsValue</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h3 id="implicitdefaultlocale">ImplicitDefaultLocale</h3>
