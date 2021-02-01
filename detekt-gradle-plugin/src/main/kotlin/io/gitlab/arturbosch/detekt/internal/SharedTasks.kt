@@ -23,6 +23,7 @@ internal fun Project.registerDetektTask(
         it.config.setFrom(provider { extension.config })
         it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         it.basePathProp.set(extension.basePath)
+        it.allRulesProp.set(provider { extension.allRules })
         configuration(it)
     }
 
@@ -40,6 +41,7 @@ internal fun Project.registerCreateBaselineTask(
         it.failFast.set(project.provider { extension.failFast })
         it.autoCorrect.set(project.provider { extension.autoCorrect })
         it.basePathProp.set(extension.basePath)
+        it.allRules.set(provider { extension.allRules })
         configuration(it)
     }
 
