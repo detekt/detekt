@@ -768,16 +768,16 @@ uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.<
 
 <h4 id="groovy-dsl-6">Groovy DSL</h4>
 
-<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="nl">name:</span> <span class="n">detektFailFast</span><span class="o">,</span> <span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s2">"Runs a failfast detekt build."</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="nl">name:</span> <span class="n">myDetekt</span><span class="o">,</span> <span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">"Runs a custom detekt build."</span>
     <span class="n">setSource</span><span class="o">(</span><span class="n">files</span><span class="o">(</span><span class="s2">"src/main/kotlin"</span><span class="o">,</span> <span class="s2">"src/test/kotlin"</span><span class="o">))</span>
     <span class="n">config</span><span class="o">.</span><span class="na">setFrom</span><span class="o">(</span><span class="n">files</span><span class="o">(</span><span class="s2">"$rootDir/config.yml"</span><span class="o">))</span>
     <span class="n">debug</span> <span class="o">=</span> <span class="kc">true</span>
     <span class="n">reports</span> <span class="o">{</span>
         <span class="n">xml</span> <span class="o">{</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/failfast.xml"</span><span class="o">)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/mydetekt.xml"</span><span class="o">)</span>
         <span class="o">}</span>
-        <span class="n">html</span><span class="o">.</span><span class="na">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/failfast.html"</span><span class="o">)</span>
+        <span class="n">html</span><span class="o">.</span><span class="na">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/mydetekt.html"</span><span class="o">)</span>
     <span class="o">}</span>
     <span class="n">include</span> <span class="s1">'**/*.kt'</span>
     <span class="n">include</span> <span class="s1">'**/*.kts'</span>
@@ -788,16 +788,16 @@ uses the type <code class="language-plaintext highlighter-rouge">Detekt</code>.<
 
 <h4 id="kotlin-dsl-6">Kotlin DSL</h4>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;(</span><span class="s">"detektFailFast"</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">description</span> <span class="p">=</span> <span class="s">"Runs a failfast detekt build."</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;(</span><span class="s">"myDetekt"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">description</span> <span class="p">=</span> <span class="s">"Runs a custom detekt build."</span>
     <span class="nf">setSource</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="s">"src/main/kotlin"</span><span class="p">,</span> <span class="s">"src/test/kotlin"</span><span class="p">))</span>
     <span class="n">config</span><span class="p">.</span><span class="nf">setFrom</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="s">"$rootDir/config.yml"</span><span class="p">))</span>
     <span class="n">debug</span> <span class="p">=</span> <span class="k">true</span>
     <span class="nf">reports</span> <span class="p">{</span>
         <span class="nf">xml</span> <span class="p">{</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/failfast.xml"</span><span class="p">)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/mydetekt.xml"</span><span class="p">)</span>
         <span class="p">}</span>
-        <span class="n">html</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/failfast.html"</span><span class="p">)</span>
+        <span class="n">html</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/mydetekt.html"</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="nf">include</span><span class="p">(</span><span class="s">"**/*.kt"</span><span class="p">)</span>
     <span class="nf">include</span><span class="p">(</span><span class="s">"**/*.kts"</span><span class="p">)</span>
