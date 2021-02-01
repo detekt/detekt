@@ -9,7 +9,7 @@ on:
       - '**'
 
 jobs:
-  without-type-resolution:
+  plain:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     env:
@@ -36,11 +36,12 @@ jobs:
       - name: Package executable jar
         run: ./gradlew jar shadowJar moveJarForIntegrationTest
 
-      - name: Run detekt-cli with argsfile, override the exit code
-        run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile" || true
+      - name: Run detekt-cli with argsfile
+        run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
+        if: ${{ always() }}
         with:
           sarif_file: build/detekt-report.sarif
 
