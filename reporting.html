@@ -4,9 +4,9 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>mapToRegex - | A static code analyzer for Kotlin</title>
+<meta name="description" content="This page describes each reporting format and explains how to leverage them.">
+<meta name="keywords" content=" reporting">
+<title>Reporting | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="mapToRegex -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Reporting">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -212,7 +212,7 @@
           
           
           
-          <li><a href="/detekt/reporting.html">Reporting</a></li>
+          <li class="active"><a href="/detekt/reporting.html">Reporting</a></li>
           
           
           
@@ -413,13 +413,15 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">mapToRegex -</h1>
+   <h1 class="post-title-main">Reporting</h1>
 </div>
 
 
 
 <div class="post-content">
 
+   
+    <div class="summary">This page describes each reporting format and explains how to leverage them.</div>
    
 
     
@@ -450,20 +452,107 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/map-to-regex.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/master/docs/pages//reporting.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/">io.gitlab.arturbosch.detekt.api.internal</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/">CommaSeparatedPattern</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/map-to-regex.html">mapToRegex</a></p>
+  <h2 id="formats">Formats</h2>
 
-<h1 id="maptoregex">mapToRegex</h1>
-<p>[jvm]<br />
-Content<br />
-fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/map-to-regex.html">mapToRegex</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a>&gt;</p>
+<p>In addition to the CLI output, Detekt supports 4 different types of output reporting formats.
+You can refer to <a href="/detekt/cli.html">CLI</a> or <a href="/detekt/gradle.html">Gradle</a> to find
+out how to configure these report formats.</p>
 
+<h3 id="txt">TXT</h3>
+<p>Similar to the console output, each line of the txt output represents a finding and contains
+finding signature to help edit <a href="/detekt/gradle.html">baseline files</a>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EmptyFunctionBlock - [apply] at /Users/cazhang/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:14:42 - Signature=DetektPlugin.kt$DetektPlugin${ }
+NoUnusedImports - [] at /Users/cazhang/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:9:1 - Signature=io.gitlab.arturbosch.detekt.DetektPlugin.kt:9
+NoUnusedImports - [] at /Users/cazhang/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:10:1 - Signature=io.gitlab.arturbosch.detekt.DetektPlugin.kt:10
+NoConsecutiveBlankLines - [] at /Users/cazhang/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:86:1 - Signature=io.gitlab.arturbosch.detekt.DetektPlugin.kt:86
+UnusedPrivateMember - [registerDetektJvmTasks] at /Users/cazhang/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:17:5 - Signature=DetektPlugin.kt$DetektPlugin$private fun Project.registerDetektJvmTasks(extension: DetektExtension)
+</code></pre></div></div>
+
+<h3 id="html">HTML</h3>
+<p>HTML is a human-readable format that can be open through browser. It includes different metrics
+and complexity reports of this run, in addition to the findings with detailed descriptions and
+report. Check out the example: <img src="images/reporting/html.png" alt="HTML report" />.</p>
+
+<h3 id="xml">XML</h3>
+<p>XML is a machine-readable format that can be integrated with CI tools. It is compatible with
+<a href="https://checkstyle.sourceforge.io/">Checkstyle</a> output.</p>
+
+<h3 id="sarif">SARIF</h3>
+<p><a href="https://sarifweb.azurewebsites.net/">SARIF</a> is a standard format for the output of 
+static analysis tools. It is a JSON format with a defined 
+<a href="https://docs.oasis-open.org/sarif/sarif/v2.0/csprd02/schemas/">schema</a>. It is currently supported
+by Github Code Scanning and we expect more consuming tools will be adopt this format in the future.</p>
+
+<h2 id="severity">Severity</h2>
+<p>For machine-readable format, it is possible to configure the severity of each finding to fit
+your CI policy with respects to errors. You may specify the severity level in the config file
+for rule, or ruleSets:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">empty-blocks</span><span class="pi">:</span>
+  <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">severity</span><span class="pi">:</span> <span class="s">error</span>
+  <span class="na">EmptyCatchBlock</span><span class="pi">:</span>
+    <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">severity</span><span class="pi">:</span> <span class="s">info</span>
+</code></pre></div></div>
+
+<p>The severity will be computed in the priority order:</p>
+<ul>
+  <li>Severity of the rule if exists</li>
+  <li>Severity of the parent ruleset if exists</li>
+  <li>Default severity: warning</li>
+</ul>
+
+<h2 id="relative-path">Relative path</h2>
+<p>In a shared codebase, it is often required to use relative path so that all developers and tooling
+have a consistent view. This can be enabled by CLI option <code class="language-plaintext highlighter-rouge">--base-path</code> or Gradle as the following:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
+    <span class="n">basePath</span> <span class="o">=</span> <span class="n">projectDir</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Note that this option only affects file paths in those formats for machine consumers,
+namely XML and SARIF.</p>
+
+<h2 id="integration-with-github-code-scanning">Integration with Github Code Scanning</h2>
+<p>If your repository is hosted on Github, you can enable SARIF output in your repository.
+You can follow to the <a href="https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/uploading-a-sarif-file-to-github">official documentation</a>.</p>
+
+<p>You can follow the example below as a quick start:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">without-type-resolution</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">env</span><span class="pi">:</span>
+      <span class="na">GRADLE_OPTS</span><span class="pi">:</span> <span class="s">-Dorg.gradle.daemon=false</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout Repo</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Setup Java</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-java@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">java-version</span><span class="pi">:</span> <span class="m">11</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run detekt</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">./gradlew detekt</span>
+
+      <span class="c1"># Make sure we always run this upload task, because the previous step fails if there are</span>
+      <span class="c1"># findings.</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Upload SARIF to Github using the upload-sarif action</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">github/codeql-action/upload-sarif@v1</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">sarif_file</span><span class="pi">:</span> <span class="s">build/detekt.sarif</span>
+</code></pre></div></div>
 
 
     <div class="tags">
