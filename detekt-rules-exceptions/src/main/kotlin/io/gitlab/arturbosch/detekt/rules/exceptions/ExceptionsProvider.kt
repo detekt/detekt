@@ -28,7 +28,8 @@ class ExceptionsProvider : DefaultRuleSetProvider {
             ThrowingExceptionInMain(config),
             RethrowCaughtException(config),
             ThrowingNewInstanceOfSameException(config),
-            SwallowedException(config)
+            SwallowedException(config),
+            ObjectExtendsThrowable(config)
         )
     )
 }

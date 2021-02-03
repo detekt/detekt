@@ -215,7 +215,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Veyndan Stuart](https://github.com/veyndan) - New rule: UseEmptyCounterpart; Rule improvement: UselessCallOnNotNull
 - [Parimatch Tech](https://github.com/parimatch-tech) - New rule: LibraryEntitiesShouldNotBePublic, UnnecessaryFilter
 - [Chao Zhang](https://github.com/chao2zhang) - SARIF report format; Rule improvements
-- [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType
+- [Marcelo Hernandez](https://github.com/mhernand40) - New rule: SuspendFunWithFlowReturnType, ObjectExtendsThrowable
 - [Harold Martin](https://github.com/hbmartin) - Rule improvement: ClassOrdering
 - [Roman Ivanov](https://github.com/rwqwr) - Rule improvement: ReturnFromFinally
 - [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
