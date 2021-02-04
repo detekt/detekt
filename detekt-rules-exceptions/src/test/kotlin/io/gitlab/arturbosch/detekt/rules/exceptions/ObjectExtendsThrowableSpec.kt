@@ -15,23 +15,34 @@ class ObjectExtendsThrowableSpec : Spek({
 
     describe("ObjectExtendsThrowable rule") {
 
-        it("reports objects that extend Throwable") {
+        it("reports top-level objects that extend Throwable") {
             val code = """
             object BanException : Throwable()
             object AuthException : RuntimeException()
             object ReportedException : Exception()
             object FatalException : Error()
-            object ObjectCustomException : CustomException("singleton custom exception")
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+        }
 
+        it("reports object subtype of sealed class that extends Throwable") {
+            val code = """
             sealed class DomainException : RuntimeException() {
                 data class Exception1(val prop1: String, val prop2: Boolean) : DomainException()
                 class Exception2 : DomainException()
                 object Exception3 : DomainException()
             }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("reports object that extends custom exception") {
+            val code = """
+            object ObjectCustomException : CustomException("singleton custom exception")
 
             open class CustomException(message: String) : RuntimeException(message)
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(6)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("reports companion objects that extend Throwable") {
