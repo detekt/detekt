@@ -537,6 +537,38 @@ serve as temporary declarations and should not be put into production environmen
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="objectextendsthrowable">ObjectExtendsThrowable</h3>
+
+<p>This rule reports all <code class="language-plaintext highlighter-rouge">objects</code> including <code class="language-plaintext highlighter-rouge">companion objects</code> that extend any type of
+<code class="language-plaintext highlighter-rouge">Throwable</code>. Throwable instances are not intended for reuse as they are stateful and contain
+mutable information about a specific exception or error. Hence, global singleton <code class="language-plaintext highlighter-rouge">Throwables</code>
+should be avoided.</p>
+
+<p>See https://kotlinlang.org/docs/reference/object-declarations.html#object-declarations
+See https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 10min</p>
+
+<h4 id="noncompliant-code-3">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">object</span> <span class="nc">InvalidCredentialsException</span> <span class="p">:</span> <span class="nc">Throwable</span><span class="p">()</span>
+
+<span class="kd">object</span> <span class="nc">BanException</span> <span class="p">:</span> <span class="nc">Exception</span><span class="p">()</span>
+
+<span class="kd">object</span> <span class="nc">AuthException</span> <span class="p">:</span> <span class="nc">RuntimeException</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-1">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">InvalidCredentialsException</span> <span class="p">:</span> <span class="nc">Throwable</span><span class="p">()</span>
+
+<span class="kd">class</span> <span class="nc">BanException</span> <span class="p">:</span> <span class="nc">Exception</span><span class="p">()</span>
+
+<span class="kd">class</span> <span class="nc">AuthException</span> <span class="p">:</span> <span class="nc">RuntimeException</span><span class="p">()</span>
+</code></pre></div></div>
+
 <h3 id="printstacktrace">PrintStackTrace</h3>
 
 <p>This rule reports code that tries to print the stacktrace of an exception. Instead of simply printing a stacktrace
@@ -544,7 +576,7 @@ a better logging solution should be used.</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-3">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-4">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="nc">Thread</span><span class="p">.</span><span class="nf">dumpStack</span><span class="p">()</span>
@@ -559,7 +591,7 @@ a better logging solution should be used.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-1">Compliant Code:</h4>
+<h4 id="compliant-code-2">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">LOGGER</span> <span class="p">=</span> <span class="nc">Logger</span><span class="p">.</span><span class="nf">getLogger</span><span class="p">()</span>
 
@@ -579,7 +611,7 @@ It ignores caught exceptions that are rethrown if there is work done before that
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-4">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-5">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -590,7 +622,7 @@ It ignores caught exceptions that are rethrown if there is work done before that
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-2">Compliant Code:</h4>
+<h4 id="compliant-code-3">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -633,7 +665,7 @@ Furthermore, this rule reports values from <code class="language-plaintext highl
   </li>
 </ul>
 
-<h4 id="noncompliant-code-5">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-6">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -672,7 +704,7 @@ passed into a newly thrown exception.</p>
   </li>
 </ul>
 
-<h4 id="noncompliant-code-6">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-7">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -693,7 +725,7 @@ passed into a newly thrown exception.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-3">Compliant Code:</h4>
+<h4 id="compliant-code-4">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -716,7 +748,7 @@ block should be avoided as it can lead to confusion and discarded exceptions.</p
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-7">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-8">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -734,7 +766,7 @@ An exception should only be thrown if it can be handled by a “higher” functi
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-8">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-9">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nc">Array</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;)</span> <span class="p">{</span>
     <span class="c1">// ...</span>
@@ -764,7 +796,7 @@ down an underlying issue in a better way.</p>
   </li>
 </ul>
 
-<h4 id="noncompliant-code-9">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-10">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">bar</span> <span class="p">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
@@ -774,7 +806,7 @@ down an underlying issue in a better way.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-4">Compliant Code:</h4>
+<h4 id="compliant-code-5">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">bar</span> <span class="p">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
@@ -791,7 +823,7 @@ meaningful exception types.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-10">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-11">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -802,7 +834,7 @@ meaningful exception types.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-5">Compliant Code:</h4>
+<h4 id="compliant-code-6">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -844,7 +876,7 @@ exception is too broad it can lead to unintended exceptions being caught.</p>
   </li>
 </ul>
 
-<h4 id="noncompliant-code-11">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-12">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -853,7 +885,7 @@ exception is too broad it can lead to unintended exceptions being caught.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-6">Compliant Code:</h4>
+<h4 id="compliant-code-7">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -883,7 +915,7 @@ exceptions to the case that has currently occurred.</p>
   </li>
 </ul>
 
-<h4 id="noncompliant-code-12">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-13">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">bar</span> <span class="p">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
@@ -893,7 +925,7 @@ exceptions to the case that has currently occurred.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-7">Compliant Code:</h4>
+<h4 id="compliant-code-8">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">bar</span> <span class="p">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
@@ -919,7 +951,7 @@ exceptions to the case that has currently occurred.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Feb 1, 2021 <br />
+ Site last generated: Feb 5, 2021 <br />
                 </div>
             </div>
 </footer>
