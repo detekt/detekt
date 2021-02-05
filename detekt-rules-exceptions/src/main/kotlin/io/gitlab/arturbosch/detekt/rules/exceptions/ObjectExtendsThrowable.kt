@@ -60,7 +60,8 @@ class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue = issue,
                     entity = Entity.from(element = declaration),
-                    message = issue.description
+                    message = "${declaration.nameAsSafeName} should be a class instead of an " +
+                        "object because it is a subtype of Throwable."
                 )
             )
         }
