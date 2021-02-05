@@ -45,7 +45,16 @@ fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
         .distinct()
         .count()
 
-fun ASTNode.line(inFile: KtFile) = DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
+fun ASTNode.line(inFile: KtFile): Int = try {
+    DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
+} catch (e: IndexOutOfBoundsException) {
+    // When auto-correctable rules performs actual mutation, KtFile.text is updated but
+    // KtFile.viewProvider.document is not updated. This will cause crash in subsequent rules
+    // if they are using any function relying on the KtFile.viewProvider.document.
+    // The exception is silenced to return -1 while we should seek long-term solution for execution
+    // order of rules (#3445)
+    -1
+}
 
 private val comments: Set<Class<out PsiElement>> = setOf(
     PsiWhiteSpace::class.java,
