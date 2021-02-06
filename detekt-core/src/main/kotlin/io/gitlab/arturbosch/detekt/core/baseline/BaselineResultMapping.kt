@@ -14,12 +14,10 @@ class BaselineResultMapping : ReportingExtension {
 
     private var baselineFile: Path? = null
     private var createBaseline: Boolean = false
-    private var output: Appendable? = null
 
     override fun init(context: SetupContext) {
         baselineFile = context.getOrNull(DETEKT_BASELINE_PATH_KEY)
         createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
-        output = context.outputChannel
     }
 
     override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
@@ -37,8 +35,6 @@ class BaselineResultMapping : ReportingExtension {
         val flatten = this.flatMap { it.value }
 
         if (flatten.isEmpty()) {
-            val action = if (facade.baselineExists(baselinePath)) "updated" else "created"
-            output?.appendLine("No issues found, baseline file will not be $action.")
             return this
         }
 
