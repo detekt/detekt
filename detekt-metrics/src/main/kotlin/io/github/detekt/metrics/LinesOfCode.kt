@@ -45,6 +45,7 @@ fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
         .distinct()
         .count()
 
+@Suppress("SwallowedException", "TooGenericExceptionCaught")
 fun ASTNode.line(inFile: KtFile): Int = try {
     DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
 } catch (e: IndexOutOfBoundsException) {
