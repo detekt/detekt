@@ -67,7 +67,7 @@ plugins {
 }
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 
@@ -79,7 +79,7 @@ plugins {
 }
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 
@@ -100,7 +100,7 @@ buildscript {
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 
@@ -119,7 +119,7 @@ buildscript {
 apply(plugin = "io.gitlab.arturbosch.detekt")
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 
@@ -135,7 +135,7 @@ You can configure the plugin in the same way as indicated above.
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
     dependencies {
@@ -150,7 +150,7 @@ plugins {
 }
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 
@@ -160,7 +160,7 @@ repositories {
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
     dependencies {
@@ -175,7 +175,7 @@ plugins {
 }
 
 repositories {
-    jcenter() // jcenter is needed https://github.com/Kotlin/kotlinx.html/issues/81
+    mavenCentral()
 }
 ```
 

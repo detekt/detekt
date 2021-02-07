@@ -460,7 +460,6 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = Ds
             repositories {
                 mavenCentral()
                 google()
-                jcenter()
                 mavenLocal()
             }
         }

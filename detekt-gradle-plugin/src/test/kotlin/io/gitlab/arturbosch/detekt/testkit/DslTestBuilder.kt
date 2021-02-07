@@ -10,7 +10,6 @@ abstract class DslTestBuilder {
         repositories {
             mavenLocal()
             mavenCentral()
-            jcenter()
         }
     """.trimIndent()
 

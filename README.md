@@ -67,25 +67,12 @@ You can find [other ways to install detekt here](https://detekt.github.io/detekt
 Gradle 5.4+ is required:
 
 ```kotlin
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    // or
-
-    mavenCentral()
-    jcenter {
-        content {
-            // Only download the 'kotlinx-html-jvm' module from JCenter, but nothing else.
-            // detekt needs 'kotlinx-html-jvm' for the HTML report.
-            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
-        }
-    }
-}
-
 plugins {
     id("io.gitlab.arturbosch.detekt").version("[version]")
+}
+
+repositories {
+    mavenCentral()
 }
 
 detekt {
