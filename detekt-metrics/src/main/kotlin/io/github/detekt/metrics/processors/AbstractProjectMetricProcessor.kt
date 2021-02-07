@@ -3,12 +3,13 @@ package io.github.detekt.metrics.processors
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 
 abstract class AbstractProjectMetricProcessor : AbstractProcessor() {
 
     val type: String get() = key.toString()
 
-    override fun onFinish(files: List<KtFile>, result: Detektion) {
+    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         val count = files
                 .mapNotNull { it.getUserData(key) }
                 .sum()
