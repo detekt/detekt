@@ -70,10 +70,9 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
+        if (bindingContext == BindingContext.EMPTY) return
         // If the lambda expression has <= 1 statements, skip check.
-        if (lambdaExpression.bodyExpression?.statements?.size ?: 0 <= 1) {
-            return
-        }
+        if (lambdaExpression.bodyExpression?.statements?.size ?: 0 <= 1) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
         when {
@@ -88,7 +87,7 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
                 )
             // Implicit `it`
             parameterNames.isEmpty() -> {
-                if (bindingContext != BindingContext.EMPTY && lambdaExpression.hasImplicitParameter(bindingContext)) {
+                if (lambdaExpression.hasImplicitParameter(bindingContext)) {
                     report(
                         CodeSmell(
                             issue, Entity.from(lambdaExpression),
