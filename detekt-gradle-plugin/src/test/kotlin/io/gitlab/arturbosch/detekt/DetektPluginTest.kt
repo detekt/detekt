@@ -413,5 +413,5 @@ internal inline fun <reified T : Any> Project.configureExtension(configuration: 
  * ANDROID_SDK_ROOT is preferred over ANDROID_HOME, but the check here is more lenient.
  * See [Android CLI Environment Variables](https://developer.android.com/studio/command-line/variables.html)
  */
-private fun isAndroidSdkInstalled() =
+internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null

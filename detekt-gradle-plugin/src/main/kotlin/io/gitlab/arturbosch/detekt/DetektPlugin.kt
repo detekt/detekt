@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
+import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -28,12 +29,19 @@ class DetektPlugin : Plugin<Project> {
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
         project.registerDetektAndroidTasks(extension)
+        project.registerDetektMultiplatformTasks(extension)
         project.registerGenerateConfigTask(extension)
     }
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
             DetektJvm(this).registerTasks(extension)
+        }
+    }
+
+    private fun Project.registerDetektMultiplatformTasks(extension: DetektExtension) {
+        plugins.withId("org.jetbrains.kotlin.multiplatform") {
+            DetektMultiplatform(this).registerTasks(extension)
         }
     }
 
