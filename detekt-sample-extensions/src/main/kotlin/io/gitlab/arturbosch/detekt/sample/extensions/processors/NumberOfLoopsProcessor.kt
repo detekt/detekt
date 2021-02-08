@@ -5,10 +5,11 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLoopExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 class NumberOfLoopsProcessor : FileProcessListener {
 
-    override fun onProcess(file: KtFile) {
+    override fun onProcess(file: KtFile, bindingContext: BindingContext) {
         val visitor = LoopVisitor()
         file.accept(visitor)
         file.putUserData(numberOfLoopsKey, visitor.numberOfLoops)

@@ -8,12 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Files
 import java.nio.file.Path
 
 class KtFileModifier : FileProcessListener {
 
-    override fun onFinish(files: List<KtFile>, result: Detektion) {
+    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         files.filter { it.modificationStamp > 0 }
             .map { it.absolutePath() to it.unnormalizeContent() }
             .forEach {
