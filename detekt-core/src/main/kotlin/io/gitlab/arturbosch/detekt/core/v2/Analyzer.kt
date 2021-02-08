@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.NewIssue
 import io.gitlab.arturbosch.detekt.api.v2.PlainFileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.PlainRule
+import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import io.gitlab.arturbosch.detekt.api.v2.TypeSolvingFileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.TypeSolvingRule
@@ -43,8 +44,8 @@ fun analyze(
                     rules.reusable(UNLIMITED),
                     files.reusable(UNLIMITED),
                     fileProcessListeners.reusable(UNLIMITED),
-                    async(start = CoroutineStart.LAZY) { bindingContextProvider(files) },
-                    async(start = CoroutineStart.LAZY) { compilerResourcesProvider() },
+                    bindingContextProvider,
+                    compilerResourcesProvider,
                 )
             )
         }
@@ -56,16 +57,18 @@ private fun myAnalyze(
     rules: Flow<Rule>,
     files: Flow<KtFile>,
     fileProcessListeners: Flow<FileProcessListener>,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>,
+    bindingContextProvider: suspend (files: Flow<KtFile>) -> BindingContext,
+    compilerResourcesProvider: suspend () -> CompilerResources,
 ): Flow<Finding> {
     return flow {
-        fileProcessListeners.collect { listener -> listener.onStart(files, bindingContext, compilerResources) }
+        val resolvedContext = buildResolvedContextAsync(files, bindingContextProvider, compilerResourcesProvider)
+
+        fileProcessListeners.collect { listener -> listener.onStart(files, resolvedContext) }
 
         val findings = files
             .onEach { file ->
                 fileProcessListeners.collect { listener ->
-                    listener.onProcess(file, bindingContext, compilerResources)
+                    listener.onProcess(file, resolvedContext)
                 }
             }
             .flatMapMerge { file ->
@@ -73,7 +76,7 @@ private fun myAnalyze(
                     val findings = rules
                         // TODO check if we should filter this rule on this file
                         .flatMapMerge { rule ->
-                            rule.invoke(file, bindingContext, compilerResources)
+                            rule.invoke(file, resolvedContext)
                                 .map<NewIssue, Finding> { CodeSmell(rule.issue, it.entity, it.message) }
                                 // TODO check if we should filter this issue (Suppress, ignore...)
                                 .asFlow()
@@ -85,7 +88,7 @@ private fun myAnalyze(
             }
             .onEach { (file, findings) ->
                 fileProcessListeners.collect { listener ->
-                    listener.onProcessComplete(file, findings, bindingContext, compilerResources)
+                    listener.onProcessComplete(file, findings, resolvedContext)
                 }
             }
             .flatMapMerge { (_, findings) -> findings.asFlow() }
@@ -93,20 +96,39 @@ private fun myAnalyze(
 
 
         fileProcessListeners.collect { listener ->
-            listener.onFinish(files, DetektResult(mapOf("a" to findings.toList())), bindingContext, compilerResources)
+            listener.onFinish(files, DetektResult(mapOf("a" to findings.toList())), resolvedContext)
         }
 
         emitAll(findings)
     }
 }
 
+private suspend fun buildResolvedContextAsync(
+    files: Flow<KtFile>,
+    bindingContextProvider: suspend (files: Flow<KtFile>) -> BindingContext,
+    compilerResourcesProvider: suspend () -> CompilerResources,
+): Deferred<ResolvedContext> {
+    class ResolvedContextImpl(
+        override val binding: BindingContext,
+        override val resources: CompilerResources
+    ) : ResolvedContext
+
+    return coroutineScope {
+        async(start = CoroutineStart.LAZY) {
+            ResolvedContextImpl(
+                binding = bindingContextProvider.invoke(files),
+                resources = compilerResourcesProvider.invoke()
+            )
+        }
+    }
+}
+
 private suspend fun Rule.invoke(
     file: KtFile,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>
+    resolvedContext: Deferred<ResolvedContext>
 ): List<NewIssue> {
     return when (this) {
-        is TypeSolvingRule -> invoke(file, bindingContext.await(), compilerResources.await())
+        is TypeSolvingRule -> invoke(file, resolvedContext.await())
         is PlainRule -> invoke(file)
         else -> error("")
     }
@@ -114,15 +136,13 @@ private suspend fun Rule.invoke(
 
 private suspend fun FileProcessListener.onStart(
     files: Flow<KtFile>,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>
+    resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {
         is PlainFileProcessListener -> onStart(files.toList())
         is TypeSolvingFileProcessListener -> onStart(
             files.toList(),
-            bindingContext.await(),
-            compilerResources.await()
+            resolvedContext.await(),
         )
         else -> error("")
     }
@@ -130,15 +150,13 @@ private suspend fun FileProcessListener.onStart(
 
 private suspend fun FileProcessListener.onProcess(
     file: KtFile,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>
+    resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {
         is PlainFileProcessListener -> onProcess(file)
         is TypeSolvingFileProcessListener -> onProcess(
             file,
-            bindingContext.await(),
-            compilerResources.await()
+            resolvedContext.await(),
         )
         else -> error("")
     }
@@ -147,16 +165,14 @@ private suspend fun FileProcessListener.onProcess(
 private suspend fun FileProcessListener.onProcessComplete(
     file: KtFile,
     findings: List<Finding>,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>
+    resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {
         is PlainFileProcessListener -> onProcessComplete(file, mapOf("a" to findings))
         is TypeSolvingFileProcessListener -> onProcessComplete(
             file,
             mapOf("a" to findings),
-            bindingContext.await(),
-            compilerResources.await()
+            resolvedContext.await(),
         )
         else -> error("")
     }
@@ -165,8 +181,7 @@ private suspend fun FileProcessListener.onProcessComplete(
 private suspend fun FileProcessListener.onFinish(
     files: Flow<KtFile>,
     findings: DetektResult,
-    bindingContext: Deferred<BindingContext>,
-    compilerResources: Deferred<CompilerResources>
+    resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {
         is PlainFileProcessListener -> onFinish(
@@ -176,8 +191,7 @@ private suspend fun FileProcessListener.onFinish(
         is TypeSolvingFileProcessListener -> onFinish(
             files.toList(),
             findings,
-            bindingContext.await(),
-            compilerResources.await()
+            resolvedContext.await(),
         )
         else -> error("")
     }
