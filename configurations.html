@@ -504,7 +504,7 @@ and rule authors the ability to write <em>library only</em> rules.</p>
 <p>For this the following code must be inside the detekt config:</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">build</span><span class="pi">:</span>
-  <span class="na">maxIssues</span><span class="pi">:</span> <span class="m">10</span> <span class="c1"># break the build if ten weighted issues are found</span>
+  <span class="na">maxIssues</span><span class="pi">:</span> <span class="m">10</span> <span class="c1"># break the build if more than ten weighted issues are found</span>
   <span class="na">weights</span><span class="pi">:</span>
     <span class="na">complexity</span><span class="pi">:</span> <span class="m">2</span> <span class="c1"># every rule of the complexity rule set should count as if two issues were found...</span>
     <span class="na">LongParameterList</span><span class="pi">:</span> <span class="m">1</span> <span class="c1"># ...with the exception of the LongParameterList rule.</span>
