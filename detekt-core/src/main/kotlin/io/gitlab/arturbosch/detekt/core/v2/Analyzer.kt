@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.v2
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +33,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 @FlowPreview
 fun analyze(
-    rules: Flow<Rule>,
+    rules: Flow<Pair<Rule, Filter>>,
     files: Flow<KtFile>,
     fileProcessListeners: Flow<FileProcessListener>,
     bindingContextProvider: suspend (files: Flow<KtFile>) -> BindingContext,
@@ -54,7 +56,7 @@ fun analyze(
 
 @FlowPreview
 private fun myAnalyze(
-    rules: Flow<Rule>,
+    rules: Flow<Pair<Rule, Filter>>,
     files: Flow<KtFile>,
     fileProcessListeners: Flow<FileProcessListener>,
     bindingContextProvider: suspend (files: Flow<KtFile>) -> BindingContext,
@@ -73,12 +75,13 @@ private fun myAnalyze(
             }
             .flatMapMerge { file ->
                 flow {
+                    val path = file.absolutePath()
                     val findings = rules
-                        // TODO check if we should filter this rule on this file
-                        .flatMapMerge { rule ->
+                        .filter { (_, filter) -> filter.filter(path) }
+                        .flatMapMerge { (rule, filter) ->
                             rule.invoke(file, resolvedContext)
+                                .filter { filter.filter(it) }
                                 .map<NewIssue, Finding> { CodeSmell(rule.issue, it.entity, it.message) }
-                                // TODO check if we should filter this issue (Suppress, ignore...)
                                 .asFlow()
                         }
                         .toList()
