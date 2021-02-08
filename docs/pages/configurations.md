@@ -54,7 +54,7 @@ For this the following code must be inside the detekt config:
 
 ```yaml
 build:
-  maxIssues: 10 # break the build if ten weighted issues are found
+  maxIssues: 10 # break the build if more than ten weighted issues are found
   weights:
     complexity: 2 # every rule of the complexity rule set should count as if two issues were found...
     LongParameterList: 1 # ...with the exception of the LongParameterList rule.
