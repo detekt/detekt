@@ -10,6 +10,72 @@ import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
 
 object DetektPluginOnMultiplatformTest : Spek({
+
+    describe("multiplatform projects - Common target") {
+
+        it("creates detekt tasks for the Common target") {
+            with(ProjectBuilder.builder().build()) {
+                with(pluginManager) {
+                    apply(DetektPlugin::class.java)
+                    apply("kotlin-multiplatform")
+                }
+
+                configureExtension<KotlinMultiplatformExtension> {
+                    // We need to provide at least one target
+                    jvm()
+                }
+
+                evaluate()
+
+                assertThat(getTask("check").dependencies())
+                    .contains("detektMetadataMain")
+
+                getTask("detektBaselineMetadataMain")
+            }
+        }
+
+        it("configures detekt correctly") {
+            with(ProjectBuilder.builder().build()) {
+                with(pluginManager) {
+                    apply(DetektPlugin::class.java)
+                    apply("kotlin-multiplatform")
+                }
+
+                configureExtension<KotlinMultiplatformExtension> {
+                    // We need to provide at least one target
+                    jvm()
+                }
+
+                configureExtension<DetektExtension> {
+                    reports.sarif.enabled = true
+                }
+
+                evaluate()
+
+                assertThat((getTask("detektMetadataMain") as Detekt).reports.sarif.enabled).isTrue
+            }
+        }
+
+        it("configures detekt without type resolution") {
+            with(ProjectBuilder.builder().build()) {
+                with(pluginManager) {
+                    apply(DetektPlugin::class.java)
+                    apply("kotlin-multiplatform")
+                }
+
+                configureExtension<KotlinMultiplatformExtension> {
+                    // We need to provide at least one target
+                    jvm()
+                }
+
+                evaluate()
+
+                assertThat((getTask("detektMetadataMain") as Detekt).classpath).isEmpty()
+            }
+        }
+    }
+
+
     describe("multiplatform projects - JVM target") {
 
         it("creates detekt tasks for the JVM target") {

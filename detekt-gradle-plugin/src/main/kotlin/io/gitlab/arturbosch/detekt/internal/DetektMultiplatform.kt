@@ -20,10 +20,12 @@ internal class DetektMultiplatform(private val project: Project) {
     }
 
     private fun Project.registerMultiplatformTasks(extension: DetektExtension) {
+        // We need another project.afterEvaluate as the Android target is attached on
+        // a project.afterEvaluate inside AGP. We should further investigate and potentially remove this.
         project.afterEvaluate {
             val kmpExtension = project.extensions.getByType(KotlinMultiplatformExtension::class.java)
 
-            kmpExtension.targets.filter { it.platformType != common }.forEach { target ->
+            kmpExtension.targets.all { target ->
                 target.compilations.forEach { compilation ->
                     val taskSuffix = target.name.capitalize() + compilation.name.capitalize()
 
@@ -35,7 +37,7 @@ internal class DetektMultiplatform(private val project: Project) {
                         else -> false
                     }
 
-                    val inputSource = compilation.allKotlinSourceSets.map {
+                    val inputSource = compilation.kotlinSourceSets.map {
                         it.kotlin.sourceDirectories
                     }.fold(project.files() as FileCollection) { collection, next ->
                         collection.plus(next)
