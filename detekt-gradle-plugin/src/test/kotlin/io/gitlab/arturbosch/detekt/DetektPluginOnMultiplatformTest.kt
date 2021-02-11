@@ -75,7 +75,6 @@ object DetektPluginOnMultiplatformTest : Spek({
         }
     }
 
-
     describe("multiplatform projects - JVM target") {
 
         it("creates detekt tasks for the JVM target") {
