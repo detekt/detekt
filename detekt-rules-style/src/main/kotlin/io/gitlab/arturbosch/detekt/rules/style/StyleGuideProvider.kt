@@ -88,7 +88,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseRequireNotNull(config),
             RedundantHigherOrderMapUsage(config),
             UseIfEmptyOrIfBlank(config),
-            MultilineLambdaItParameter(config)
+            MultilineLambdaItParameter(config),
+            UseOrEmpty(config)
         )
     )
 }
