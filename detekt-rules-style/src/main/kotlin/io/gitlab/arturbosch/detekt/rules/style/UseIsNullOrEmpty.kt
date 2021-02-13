@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 /**
- * This rule detects null or empty check can be replaced with `isNullOrEmpty()` call.
+ * This rule detects null or empty checks that can be replaced with `isNullOrEmpty()` call.
  *
  * <noncompliant>
  * fun foo(x: List<Int>?) {
