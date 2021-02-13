@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.v2
 
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.v2.Finding
 import io.gitlab.arturbosch.detekt.api.v2.NewIssue
 import io.gitlab.arturbosch.detekt.api.v2.PlainFileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.PlainRule
@@ -12,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import io.gitlab.arturbosch.detekt.api.v2.TypeSolvingFileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.TypeSolvingRule
-import io.gitlab.arturbosch.detekt.core.DetektResult
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.FlowPreview
@@ -81,7 +79,7 @@ private fun myAnalyze(
                         .flatMapMerge { (rule, filter) ->
                             rule.invoke(file, resolvedContext)
                                 .filter { filter.filter(it) }
-                                .map<NewIssue, Finding> { CodeSmell(rule.issue, it.entity, it.message) }
+                                .map { it.toFinding(rule) }
                                 .asFlow()
                         }
                         .toList()
@@ -99,7 +97,7 @@ private fun myAnalyze(
 
 
         fileProcessListeners.collect { listener ->
-            listener.onFinish(files, DetektResult(mapOf("a" to findings.toList())), resolvedContext)
+            listener.onFinish(files, findings.toList(), resolvedContext)
         }
 
         emitAll(findings)
@@ -171,10 +169,10 @@ private suspend fun FileProcessListener.onProcessComplete(
     resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {
-        is PlainFileProcessListener -> onProcessComplete(file, mapOf("a" to findings))
+        is PlainFileProcessListener -> onProcessComplete(file, findings)
         is TypeSolvingFileProcessListener -> onProcessComplete(
             file,
-            mapOf("a" to findings),
+            findings,
             resolvedContext.await(),
         )
         else -> error("")
@@ -183,7 +181,7 @@ private suspend fun FileProcessListener.onProcessComplete(
 
 private suspend fun FileProcessListener.onFinish(
     files: Flow<KtFile>,
-    findings: DetektResult,
+    findings: List<Finding>,
     resolvedContext: Deferred<ResolvedContext>
 ) {
     when (this) {

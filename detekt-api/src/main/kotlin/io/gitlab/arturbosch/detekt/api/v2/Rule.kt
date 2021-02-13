@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.api.v2
 
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import org.jetbrains.kotlin.psi.KtFile
 
 // This will be a sealed interface in 1.5
@@ -23,7 +25,7 @@ interface TypeSolvingRule : Rule, (KtFile, ResolvedContext) -> List<NewIssue> {
 interface NewIssue {
     val entity: Entity
     val message: String
-    // This should be here but the code is not ready yet
-    //val severity: SeverityLevel
-    //val debt: Debt
+    val severity: SeverityLevel
+    val debt: Debt
+    val autoCorrectable: Boolean
 }

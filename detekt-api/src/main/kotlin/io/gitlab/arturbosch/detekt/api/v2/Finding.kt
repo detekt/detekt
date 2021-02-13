@@ -4,7 +4,6 @@ import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import org.jetbrains.kotlin.psi.KtElement
-import java.nio.file.Path
 
 interface Finding {
     val id: String
@@ -12,14 +11,9 @@ interface Finding {
     val location: Location
     val severityLevel: SeverityLevel
     val debt: Debt
-    val entity: Entity
-    val correctable: Boolean
-    val rule: RuleInfo
-}
-
-interface Entity {
-    val id: String
     val ktElement: KtElement
+    val autoCorrectable: Boolean
+    val rule: RuleInfo
 }
 
 interface RuleInfo {
@@ -31,13 +25,7 @@ interface RuleInfo {
 interface Location {
     val source: SourceLocation
     val text: TextLocation
-    val filePath: FilePath
-}
-
-interface FilePath {
-    val absolute: Path
-    val relative: Path?
-    val base: Path?
+    val filePath: FilePath // TODO The api should not depend on io.github.detekt.psi.FilePath
 }
 
 interface SourceLocation {
