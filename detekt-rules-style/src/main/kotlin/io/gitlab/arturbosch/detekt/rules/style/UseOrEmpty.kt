@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 
 /**
- * This rule detects `?: emptyList()` can be replaced with `orEmpty()` call.
+ * This rule detects `?: emptyList()` that can be replaced with `orEmpty()` call.
  *
  * <noncompliant>
  * fun test(x: List<Int>?, s: String?) {
