@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Config
  */
 interface RuleCollectionProvider {
 
-    // TODO Can we remove this?
     val ruleSetId: String
 
     /**
