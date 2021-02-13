@@ -22,9 +22,9 @@ internal fun NewIssue.toFinding(rule: Rule): Finding {
         ktElement = entity.ktElement!!,
         autoCorrectable = this.autoCorrectable,
         rule = RuleInformation(
-            id = rule.issue.id,
+            id = rule.id,
             ruleSetId = "TODO", // TODO I need to figure out how to use this or if we need it at all
-            description = rule.issue.id,
+            description = rule.id,
         )
     )
 }
