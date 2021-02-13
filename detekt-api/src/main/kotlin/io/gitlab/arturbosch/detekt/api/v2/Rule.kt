@@ -22,7 +22,7 @@ interface TypeSolvingRule : Rule, (KtFile, ResolvedContext) -> List<Issue> {
 }
 
 interface Issue {
-    val entity: Entity
+    val entity: Entity // TODO We should rethink this class. I'm using the old because I don't want to address this yet
     val message: String
     val severity: SeverityLevel
     val debt: Debt
