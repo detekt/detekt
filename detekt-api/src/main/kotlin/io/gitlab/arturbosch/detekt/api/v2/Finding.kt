@@ -32,6 +32,9 @@ interface SourceLocation {
     val line: Int
     val column: Int
 
+    operator fun component1(): Int = line
+    operator fun component2(): Int = column
+
     companion object {
         operator fun invoke(line: Int, column: Int): SourceLocation {
             return Impl(line, column)
@@ -49,6 +52,9 @@ interface SourceLocation {
 interface TextLocation {
     val start: Int
     val end: Int
+
+    operator fun component1(): Int = start
+    operator fun component2(): Int = end
 
     companion object {
         operator fun invoke(start: Int, end: Int): TextLocation {
