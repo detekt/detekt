@@ -11,17 +11,17 @@ interface Rule {
     val description: String
 }
 
-interface PlainRule : Rule, (KtFile) -> List<NewIssue> {
+interface PlainRule : Rule, (KtFile) -> List<Issue> {
 
-    override fun invoke(file: KtFile): List<NewIssue>
+    override fun invoke(file: KtFile): List<Issue>
 }
 
-interface TypeSolvingRule : Rule, (KtFile, ResolvedContext) -> List<NewIssue> {
+interface TypeSolvingRule : Rule, (KtFile, ResolvedContext) -> List<Issue> {
 
-    override fun invoke(file: KtFile, resolvedContext: ResolvedContext): List<NewIssue>
+    override fun invoke(file: KtFile, resolvedContext: ResolvedContext): List<Issue>
 }
 
-interface NewIssue {
+interface Issue {
     val entity: Entity
     val message: String
     val severity: SeverityLevel

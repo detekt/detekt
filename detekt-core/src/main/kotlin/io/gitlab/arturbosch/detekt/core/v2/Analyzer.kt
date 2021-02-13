@@ -4,7 +4,7 @@ import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.Finding
-import io.gitlab.arturbosch.detekt.api.v2.NewIssue
+import io.gitlab.arturbosch.detekt.api.v2.Issue
 import io.gitlab.arturbosch.detekt.api.v2.PlainFileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.PlainRule
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
@@ -127,7 +127,7 @@ private suspend fun buildResolvedContextAsync(
 private suspend fun Rule.invoke(
     file: KtFile,
     resolvedContext: Deferred<ResolvedContext>
-): List<NewIssue> {
+): List<Issue> {
     return when (this) {
         is TypeSolvingRule -> invoke(file, resolvedContext.await())
         is PlainRule -> invoke(file)
