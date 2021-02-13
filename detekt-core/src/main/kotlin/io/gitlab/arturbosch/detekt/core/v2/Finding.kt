@@ -5,14 +5,14 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.v2.Finding
 import io.gitlab.arturbosch.detekt.api.v2.Location
-import io.gitlab.arturbosch.detekt.api.v2.NewIssue
+import io.gitlab.arturbosch.detekt.api.v2.Issue
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import io.gitlab.arturbosch.detekt.api.v2.RuleInfo
 import io.gitlab.arturbosch.detekt.api.v2.SourceLocation
 import io.gitlab.arturbosch.detekt.api.v2.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 
-internal fun NewIssue.toFinding(rule: Rule): Finding {
+internal fun Issue.toFinding(rule: Rule): Finding {
     return CodeSmell(
         id = entity.signature,
         message = this.message,
