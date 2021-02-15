@@ -93,31 +93,32 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
 
     private fun KtBinaryExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
         if (operationToken != KtTokens.EQEQ) return null
-        val (expression, isEmptyString) = when {
-            right.isEmptyString() -> left.safeAs<KtSimpleNameExpression>() to true
-            left.isEmptyString() -> right.safeAs<KtSimpleNameExpression>() to true
-            right.isZero() -> left.safeAs<KtDotQualifiedExpression>() to false
-            left.isZero() -> right.safeAs<KtDotQualifiedExpression>() to false
+        return when {
+            right.isEmptyString() -> left?.sizeCheckedEmptyString()
+            left.isEmptyString() -> right?.sizeCheckedEmptyString()
+            right.isZero() -> left?.sizeCheckedEqualToZero()
+            left.isZero() -> right?.sizeCheckedEqualToZero()
             else -> null
-        } ?: return null
-        when {
-            isEmptyString && expression is KtSimpleNameExpression ->
-                return if (expression.isString()) expression else null
-            !isEmptyString && expression is KtDotQualifiedExpression -> {
-                val receiver = expression.receiverExpression as? KtSimpleNameExpression ?: return null
-                val selector = expression.selectorExpression ?: return null
-                when {
-                    selector is KtCallExpression ->
-                        if (!receiver.isCollectionOrArrayOrString() || !selector.isCalling(countFunctions)) return null
-                    selector.text == "size" ->
-                        if (!receiver.isCollectionOrArray()) return null
-                    selector.text == "length" ->
-                        if (!receiver.isString()) return null
-                }
-                return receiver
-            }
-            else -> return null
         }
+    }
+
+    private fun KtExpression.sizeCheckedEmptyString(): KtSimpleNameExpression? {
+        return safeAs<KtSimpleNameExpression>()?.takeIf { it.isString() }
+    }
+
+    private fun KtExpression.sizeCheckedEqualToZero(): KtSimpleNameExpression? {
+        if (this !is KtDotQualifiedExpression) return null
+        val receiver = receiverExpression as? KtSimpleNameExpression ?: return null
+        val selector = selectorExpression ?: return null
+        when {
+            selector is KtCallExpression ->
+                if (!receiver.isCollectionOrArrayOrString() || !selector.isCalling(countFunctions)) return null
+            selector.text == "size" ->
+                if (!receiver.isCollectionOrArray()) return null
+            selector.text == "length" ->
+                if (!receiver.isString()) return null
+        }
+        return receiver
     }
 
     private fun KtExpression?.isNullKeyword() = this?.text == KtTokens.NULL_KEYWORD.value
