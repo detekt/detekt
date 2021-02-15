@@ -169,8 +169,18 @@ class UseOrEmptySpec : Spek({
 
         it("mutableListOf") {
             val code = """
-                fun test(x: List<Int>?) {
+                fun test(x: MutableList<Int>?) {
                     val a = x ?: mutableListOf()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("intArrayOf") {
+            val code = """
+                fun test(x: IntArray?) {
+                    val a = x ?: intArrayOf()
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)
