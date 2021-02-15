@@ -163,5 +163,16 @@ object UselessCallOnNotNullSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("reports when calling isNullOrEmpty on a list") {
+            val code = """
+                fun test(list: List<Int>) {
+                    list.isNullOrEmpty()
+                }                
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace isNullOrEmpty with isEmpty")
+        }
     }
 })
