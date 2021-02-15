@@ -40,7 +40,6 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  *
  * @requiresTypeResolution
  */
-@Suppress("ReturnCount")
 class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",
@@ -49,6 +48,7 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
