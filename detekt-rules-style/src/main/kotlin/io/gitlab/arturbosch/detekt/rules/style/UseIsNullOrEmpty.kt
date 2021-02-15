@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.safeAs
  *
  * @requiresTypeResolution
  */
-@Suppress("ReturnCount", "TooManyFunctions", "ComplexMethod")
+@Suppress("TooManyFunctions")
 class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIsNullOrEmpty",
@@ -53,6 +53,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
@@ -106,6 +107,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         return safeAs<KtSimpleNameExpression>()?.takeIf { it.isString() }
     }
 
+    @Suppress("ReturnCount")
     private fun KtExpression.sizeCheckedEqualToZero(): KtSimpleNameExpression? {
         if (this !is KtDotQualifiedExpression) return null
         val receiver = receiverExpression as? KtSimpleNameExpression ?: return null
