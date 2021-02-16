@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Disallows shadowing variable declarations.
+ * Shadowing makes it impossible to access a variable with the same name in the scope.
  *
  * <noncompliant>
  * fun test(i: Int, j: Int, k: Int) {
