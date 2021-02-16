@@ -42,7 +42,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             WrongEqualsTypeParameter(config),
             IgnoredReturnValue(config),
             ImplicitUnitReturnType(config),
-            NullableToStringCall(config)
+            NullableToStringCall(config),
+            UnreachableCatchBlock(config)
         )
     )
 }

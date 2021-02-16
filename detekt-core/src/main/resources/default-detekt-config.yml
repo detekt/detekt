@@ -524,6 +524,8 @@ potential-bugs:
     active: true
   UnnecessarySafeCall:
     active: true
+  UnreachableCatchBlock:
+    active: false
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
