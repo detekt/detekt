@@ -1,0 +1,69 @@
+package io.gitlab.arturbosch.detekt.rules.naming
+
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.resolve.BindingContext
+
+/**
+ * Disallows shadowing variable declarations.
+ *
+ * <noncompliant>
+ * fun test(i: Int, j: Int, k: Int) {
+ *     val i = 1
+ *     val (j, _) = 1 to 2
+ *     listOf(1).map { k -> println(k) }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun test(i: Int, j: Int, k: Int) {
+ *     val x = 1
+ *     val (y, _) = 1 to 2
+ *     listOf(1).map { z -> println(z) }
+ * }
+ * </compliant>
+ *
+ * @requiresTypeResolution
+ */
+class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "Disallows shadowing variable declarations.",
+        Debt.FIVE_MINS
+    )
+
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        report(property)
+    }
+
+    override fun visitDestructuringDeclarationEntry(multiDeclarationEntry: KtDestructuringDeclarationEntry) {
+        super.visitDestructuringDeclarationEntry(multiDeclarationEntry)
+        report(multiDeclarationEntry)
+    }
+
+    override fun visitParameter(parameter: KtParameter) {
+        super.visitParameter(parameter)
+        report(parameter)
+    }
+
+    private fun report(declaration: KtNamedDeclaration) {
+        val nameIdentifier = declaration.nameIdentifier ?: return
+        if (bindingContext != BindingContext.EMPTY &&
+            bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }
+        ) {
+            report(CodeSmell(issue, Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
+        }
+    }
+}
