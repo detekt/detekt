@@ -17,15 +17,32 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 
 /**
  * Reports unreachable catch blocks.
+ * Catch blocks can be unreachable if the exception has already been caught in the block above.
  *
  * <noncompliant>
  * fun test() {
  *     try {
+ *         foo()
  *     } catch (t: Throwable) {
- *     } catch (e: Exception) { // unreachable
+ *         bar()
+ *     } catch (e: Exception) {
+ *         // Unreachable
+ *         baz()
  *     }
  * }
  * </noncompliant>
+ *
+ * <compliant>
+ * fun test() {
+ *     try {
+ *         foo()
+ *     } catch (e: Exception) {
+ *         baz()
+ *     } catch (t: Throwable) {
+ *         bar()
+ *     }
+ * }
+ * </compliant>
  *
  * @requiresTypeResolution
  */
