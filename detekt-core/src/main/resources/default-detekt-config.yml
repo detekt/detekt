@@ -709,6 +709,8 @@ style:
     active: false
   UseIfInsteadOfWhen:
     active: false
+  UseIsNullOrEmpty:
+    active: false
   UseRequire:
     active: false
   UseRequireNotNull:
