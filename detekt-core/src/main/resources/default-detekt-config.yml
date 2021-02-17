@@ -524,6 +524,8 @@ potential-bugs:
     active: true
   UnnecessarySafeCall:
     active: true
+  UnreachableCatchBlock:
+    active: false
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
@@ -706,6 +708,8 @@ style:
   UseIfEmptyOrIfBlank:
     active: false
   UseIfInsteadOfWhen:
+    active: false
+  UseIsNullOrEmpty:
     active: false
   UseOrEmpty:
     active: false

@@ -55,14 +55,6 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val uselessFqNames = mapOf(
-        FqName("kotlin.collections.orEmpty") to Conversion(),
-        FqName("kotlin.sequences.orEmpty") to Conversion(),
-        FqName("kotlin.text.orEmpty") to Conversion(),
-        FqName("kotlin.text.isNullOrEmpty") to Conversion("isEmpty"),
-        FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank")
-    )
-
     @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
@@ -110,6 +102,15 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     private data class Conversion(val replacementName: String? = null)
 
     companion object {
+        private val uselessFqNames = mapOf(
+            FqName("kotlin.collections.orEmpty") to Conversion(),
+            FqName("kotlin.sequences.orEmpty") to Conversion(),
+            FqName("kotlin.text.orEmpty") to Conversion(),
+            FqName("kotlin.text.isNullOrEmpty") to Conversion("isEmpty"),
+            FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank"),
+            FqName("kotlin.collections.isNullOrEmpty") to Conversion("isEmpty")
+        )
+
         private val listOfNotNull = FqName("kotlin.collections.listOfNotNull")
     }
 }
