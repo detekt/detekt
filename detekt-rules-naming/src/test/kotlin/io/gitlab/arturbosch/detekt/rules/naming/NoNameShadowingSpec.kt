@@ -62,6 +62,20 @@ class NoNameShadowingSpec : Spek({
             assertThat(findings[0]).hasMessage("Name shadowed: it")
         }
 
+        it("report shadowing nested lambda implicit 'it' parameter") {
+            val code = """
+                fun test() {
+                    listOf(1).forEach {
+                        listOf(2).forEach {
+                        }
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("Name shadowed: it")
+        }
+
         it("does not report not shadowing variable") {
             val code = """
                 fun test(i: Int) {
