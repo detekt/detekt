@@ -2223,6 +2223,30 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">isNullOrEmpty</span><span class="p">())</span> <span class="k">return</span>
 </code></pre></div></div>
 
+<h3 id="useorempty">UseOrEmpty</h3>
+
+<p>This rule detects <code class="language-plaintext highlighter-rouge">?: emptyList()</code> that can be replaced with <code class="language-plaintext highlighter-rouge">orEmpty()</code> call.</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="noncompliant-code-56">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;?,</span> <span class="n">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="n">x</span> <span class="o">?:</span> <span class="nf">emptyList</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">s</span> <span class="o">?:</span> <span class="s">""</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-49">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;?,</span> <span class="n">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">orEmpty</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="nf">orEmpty</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="userequire">UseRequire</h3>
 
 <p>Kotlin provides a much more concise way to check preconditions than to manually throw an
@@ -2230,13 +2254,13 @@ IllegalArgumentException.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-56">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-57">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalArgumentException</span><span class="p">(</span><span class="s">"value should not be null"</span><span class="p">)</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalArgumentException</span><span class="p">(</span><span class="s">"value is $value but should be at least 0"</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-49">Compliant Code:</h4>
+<h4 id="compliant-code-50">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">requireNotNull</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span> <span class="s">"value should not be null"</span> <span class="p">}</span>
 <span class="nf">require</span><span class="p">(</span><span class="n">value</span> <span class="p">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="s">"value is $value but should be at least 0"</span> <span class="p">}</span>
@@ -2250,12 +2274,12 @@ IllegalArgumentException.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-57">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-58">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">require</span><span class="p">(</span><span class="n">x</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-50">Compliant Code:</h4>
+<h4 id="compliant-code-51">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">requireNotNull</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </code></pre></div></div>
@@ -2271,7 +2295,7 @@ the value is null or not.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-58">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-59">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">testList</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">).</span><span class="nf">orEmpty</span><span class="p">()</span>
 <span class="kd">val</span> <span class="py">testList2</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">).</span><span class="nf">orEmpty</span><span class="p">().</span><span class="nf">map</span> <span class="p">{</span> <span class="n">_</span> <span class="p">}</span>
@@ -2279,7 +2303,7 @@ the value is null or not.</p>
 <span class="kd">val</span> <span class="py">testString</span> <span class="p">=</span> <span class="s">""</span><span class="o">?.</span><span class="nf">isNullOrBlank</span><span class="p">()</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-51">Compliant Code:</h4>
+<h4 id="compliant-code-52">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">testList</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">)</span>
 <span class="kd">val</span> <span class="py">testList2</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">).</span><span class="nf">map</span> <span class="p">{</span> <span class="p">}</span>
@@ -2295,7 +2319,7 @@ Furthermore, this rule reports utility classes which are not final.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-59">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-60">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">UtilityClassViolation</span> <span class="p">{</span>
 
@@ -2315,7 +2339,7 @@ Furthermore, this rule reports utility classes which are not final.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-52">Compliant Code:</h4>
+<h4 id="compliant-code-53">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">UtilityClass</span> <span class="p">{</span>
 
@@ -2342,7 +2366,7 @@ Val declarations are assign-once (read-only), which makes understanding the curr
 
 <p><strong>Aliases</strong>: CanBeVal</p>
 
-<h4 id="noncompliant-code-60">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-61">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">example</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">1</span> <span class="c1">// violation: this variable is never re-assigned</span>
@@ -2350,7 +2374,7 @@ Val declarations are assign-once (read-only), which makes understanding the curr
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-53">Compliant Code:</h4>
+<h4 id="compliant-code-54">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">example</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">1</span>
@@ -2381,7 +2405,7 @@ with wildcard imports.</p>
   </li>
 </ul>
 
-<h4 id="noncompliant-code-61">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-62">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">io.gitlab.arturbosch.detekt.*</span>
 
@@ -2391,7 +2415,7 @@ with wildcard imports.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-54">Compliant Code:</h4>
+<h4 id="compliant-code-55">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">io.gitlab.arturbosch.detekt.DetektElement1</span>
 <span class="k">import</span> <span class="nn">io.gitlab.arturbosch.detekt.DetektElement2</span>
@@ -2418,7 +2442,7 @@ with wildcard imports.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Feb 17, 2021 <br />
+ Site last generated: Feb 18, 2021 <br />
                 </div>
             </div>
 </footer>
