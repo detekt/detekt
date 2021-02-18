@@ -56,20 +56,20 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        report(property)
+        checkNameShadowing(property)
     }
 
     override fun visitDestructuringDeclarationEntry(multiDeclarationEntry: KtDestructuringDeclarationEntry) {
         super.visitDestructuringDeclarationEntry(multiDeclarationEntry)
-        report(multiDeclarationEntry)
+        checkNameShadowing(multiDeclarationEntry)
     }
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
-        report(parameter)
+        checkNameShadowing(parameter)
     }
 
-    private fun report(declaration: KtNamedDeclaration) {
+    private fun checkNameShadowing(declaration: KtNamedDeclaration) {
         val nameIdentifier = declaration.nameIdentifier ?: return
         if (bindingContext != BindingContext.EMPTY &&
             bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }
