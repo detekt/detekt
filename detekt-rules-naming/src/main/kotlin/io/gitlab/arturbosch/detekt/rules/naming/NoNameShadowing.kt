@@ -9,9 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -23,6 +25,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     val i = 1
  *     val (j, _) = 1 to 2
  *     listOf(1).map { k -> println(k) }
+ *     listOf(1).forEach {
+ *         listOf(2).forEach {
+ *         }
+ *     }
  * }
  * </noncompliant>
  *
@@ -31,6 +37,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     val x = 1
  *     val (y, _) = 1 to 2
  *     listOf(1).map { z -> println(z) }
+ *     listOf(1).forEach {
+ *         listOf(2).forEach { x ->
+ *         }
+ *     }
  * }
  * </compliant>
  *
@@ -67,4 +77,24 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
             report(CodeSmell(issue, Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
         }
     }
+
+    override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
+        super.visitLambdaExpression(lambdaExpression)
+        if (bindingContext != BindingContext.EMPTY &&
+            lambdaExpression.hasImplicitParameter() &&
+            lambdaExpression.hasParentImplicitParameterLambda()) {
+            report(CodeSmell(
+                issue,
+                Entity.from(lambdaExpression),
+                "Name shadowed: implicit lambda parameter 'it'"
+            ))
+        }
+    }
+
+    private fun KtLambdaExpression.hasImplicitParameter(): Boolean =
+        valueParameters.isEmpty() &&
+                bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull() != null
+
+    private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
+        getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) { it.hasImplicitParameter() } != null
 }
