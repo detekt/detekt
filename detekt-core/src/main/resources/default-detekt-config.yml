@@ -711,6 +711,8 @@ style:
     active: false
   UseIsNullOrEmpty:
     active: false
+  UseOrEmpty:
+    active: false
   UseRequire:
     active: false
   UseRequireNotNull:
