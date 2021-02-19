@@ -5,11 +5,33 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
-#### 1.16.0 - 2021-01-26
+#### 1.16.0 - 2021-02-19
+
+##### Notable Changes
+
+##### Migration
 
 ##### Changelog
 
+- Add UnreachableCatchBlock rule - [#3478](https://github.com/detekt/detekt/pull/3478)
+- Fix false negative "UselessCallOnNotNull" with `list.isNullOrEmpty()` - [#3475](https://github.com/detekt/detekt/pull/3475)
+- Add UseOrEmpty rule - [#3470](https://github.com/detekt/detekt/pull/3470)
+- Add UseIsNullOrEmpty rule - [#3469](https://github.com/detekt/detekt/pull/3469)
+- Fix false positives for MultilineLambdaItParameter.kt - [#3451](https://github.com/detekt/detekt/pull/3451)
+- Dont generate baseline if empty - [#3450](https://github.com/detekt/detekt/pull/3450)
+- Silence IndexOutOfBoundsException in getLineAndColumnInPsiFile() - [#3446](https://github.com/detekt/detekt/pull/3446)
+- Add new ObjectExtendsThrowable rule - [#3443](https://github.com/detekt/detekt/pull/3443)
+- Add allRules and deprecate failFast in gradle tasks - [#3431](https://github.com/detekt/detekt/pull/3431)
+- Add two missing ktlint rules - [#3430](https://github.com/detekt/detekt/pull/3430)
+- Don't fail if baseline doesn't exist in PlainDetekt - [#3429](https://github.com/detekt/detekt/pull/3429)
+- Fix False Positive on `UnnecessarySafeCall` - [#3419](https://github.com/detekt/detekt/pull/3419)
+- Fix false positive for `UnusedPrivateMember` with expect on objects - [#3417](https://github.com/detekt/detekt/pull/3417)
+- Fix code samples for `UnnecessarySafeCall` - [#3416](https://github.com/detekt/detekt/pull/3416)
+- New rule: DontDowncastCollectionTypes - [#3413](https://github.com/detekt/detekt/pull/3413)
+- Fix documentation in UnnecessarySafeCall - [#3412](https://github.com/detekt/detekt/pull/3412)
+- Bump gradle from 4.1.1 to 4.1.2 - [#3405](https://github.com/detekt/detekt/pull/3405)
 - Introduce --max-issues flag for cli - #2267 - [#3391](https://github.com/detekt/detekt/pull/3391)
+- Ignore actual functions in FunctionOnlyReturningConstant (#3388) - [#3390](https://github.com/detekt/detekt/pull/3390)
 - Fix hyperlink for elements of the type 'KtFile' - [#3386](https://github.com/detekt/detekt/pull/3386)
 - Update gradle doc to show table of contents correctly - [#3383](https://github.com/detekt/detekt/pull/3383)
 - Update cli doc to show table of contents correctly - [#3382](https://github.com/detekt/detekt/pull/3382)
@@ -24,6 +46,7 @@ toc: true
 - [Security] Bump nokogiri from 1.10.10 to 1.11.1 in /docs - [#3348](https://github.com/detekt/detekt/pull/3348)
 - Remove trailing newline after ending IndentingXMLStreamWriter - [#3347](https://github.com/detekt/detekt/pull/3347)
 - [Security] Bump nokogiri from 1.10.10 to 1.11.0 in /docs - [#3343](https://github.com/detekt/detekt/pull/3343)
+- Add UnnecessaryFilter rule - [#3341](https://github.com/detekt/detekt/pull/3341)
 - Reorganize docs for the configuration file - [#3337](https://github.com/detekt/detekt/pull/3337)
 - Add new rule SleepInsteadOfDelay - [#3335](https://github.com/detekt/detekt/pull/3335)
 - Update Android Gradle Plugin to 4.1.1 - [#3328](https://github.com/detekt/detekt/pull/3328)
@@ -54,6 +77,29 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Bump mockk from 1.10.5 to 1.10.6 - [#3473](https://github.com/detekt/detekt/pull/3473)
+- Upgrade to Gradle 6.8.2 - [#3468](https://github.com/detekt/detekt/pull/3468)
+- Correct `maxIssues` documentation - [#3456](https://github.com/detekt/detekt/pull/3456)
+- Bump junit-platform-launcher from 1.7.0 to 1.7.1 - [#3454](https://github.com/detekt/detekt/pull/3454)
+- Don't use deprecated functions - [#3452](https://github.com/detekt/detekt/pull/3452)
+- Bump github-pages from 210 to 211 in /docs - [#3434](https://github.com/detekt/detekt/pull/3434)
+- Add documentation for SARIF, severity and relative path - [#3433](https://github.com/detekt/detekt/pull/3433)
+- Refactor uploading SARIF to report without overriding the previous step - [#3432](https://github.com/detekt/detekt/pull/3432)
+- Fix `githubRelease` skipping assets - [#3427](https://github.com/detekt/detekt/pull/3427)
+- Prompt bug reporters to attach gradle scan - [#3422](https://github.com/detekt/detekt/pull/3422)
+- Fix invalid link in detekt html report - [#3421](https://github.com/detekt/detekt/pull/3421)
+- Prepare 1.16.0-rc1 release - [#3411](https://github.com/detekt/detekt/pull/3411)
+- Add full qualified name in documentation - [#3410](https://github.com/detekt/detekt/pull/3410)
+- Bump kotlinx-coroutines-core from 1.3.8 to 1.4.1 - [#3407](https://github.com/detekt/detekt/pull/3407)
+- Fix deploy website on master - [#3406](https://github.com/detekt/detekt/pull/3406)
+- Bump mockk from 1.10.4 to 1.10.5 - [#3404](https://github.com/detekt/detekt/pull/3404)
+- Bump assertj-core from 3.18.1 to 3.19.0 - [#3403](https://github.com/detekt/detekt/pull/3403)
+- Bump github-pages from 209 to 210 in /docs - [#3401](https://github.com/detekt/detekt/pull/3401)
+- Update dangling URLs pointing to the old website - [#3400](https://github.com/detekt/detekt/pull/3400)
+- Auto generate CLI options in docs - [#3399](https://github.com/detekt/detekt/pull/3399)
+- Update documentations on snapshots - [#3393](https://github.com/detekt/detekt/pull/3393)
+- Fix maven publish - [#3392](https://github.com/detekt/detekt/pull/3392)
+- Fix build script to avoid jvm plugin applied - [#3389](https://github.com/detekt/detekt/pull/3389)
 - Disable parallel test discovery; we already use Grade workers for max parallelism - [#3387](https://github.com/detekt/detekt/pull/3387)
 - Use more fluent assertions - [#3381](https://github.com/detekt/detekt/pull/3381)
 - Refactor orders of repositories - [#3376](https://github.com/detekt/detekt/pull/3376)
