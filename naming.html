@@ -753,6 +753,41 @@ Factory functions that create an instance of the class are exempt from this rule
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="nonameshadowing">NoNameShadowing</h3>
+
+<p>Disallows shadowing variable declarations.
+Shadowing makes it impossible to access a variable with the same name in the scope.</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="noncompliant-code-2">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="kd">val</span> <span class="p">(</span><span class="py">j</span><span class="p">,</span> <span class="py">_</span><span class="p">)</span> <span class="p">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">2</span>
+    <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">map</span> <span class="p">{</span> <span class="n">k</span> <span class="p">-&gt;</span> <span class="nf">println</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">}</span>
+    <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">forEach</span> <span class="p">{</span>
+        <span class="nf">listOf</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nf">forEach</span> <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-2">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="kd">val</span> <span class="p">(</span><span class="py">y</span><span class="p">,</span> <span class="py">_</span><span class="p">)</span> <span class="p">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">2</span>
+    <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">map</span> <span class="p">{</span> <span class="n">z</span> <span class="p">-&gt;</span> <span class="nf">println</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="p">}</span>
+    <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">forEach</span> <span class="p">{</span>
+        <span class="nf">listOf</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nf">forEach</span> <span class="p">{</span> <span class="n">x</span> <span class="p">-&gt;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="nonbooleanpropertyprefixedwithis">NonBooleanPropertyPrefixedWithIs</h3>
 
 <p>Reports when property with ‘is’ prefix doesn’t have a boolean type.
@@ -762,12 +797,12 @@ Please check the <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-2">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-3">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">isEnabled</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">500</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-2">Compliant Code:</h4>
+<h4 id="compliant-code-3">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">isEnabled</span><span class="p">:</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="k">false</span>
 </code></pre></div></div>
@@ -921,7 +956,7 @@ Please check the <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Feb 18, 2021 <br />
+ Site last generated: Feb 20, 2021 <br />
                 </div>
             </div>
 </footer>
