@@ -11,11 +11,16 @@ import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * This rule will report every Kotlin source file which doesn't have the required license header.
- * The rule checks each Kotlin source file whether the header starts with the read text from the passed file in the
- * `licenseTemplateFile` configuration option.
+ * The rule validates each Kotlin source and operates in two modes: if `licenseTemplateIsRegex = false` (or missing)
+ * the rule checks whether the input file header starts with the read text from the passed file in the
+ * `licenseTemplateFile` configuration option. If `licenseTemplateIsRegex = true` the rule matches the header with
+ * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
+ * option).
  *
  * @configuration licenseTemplateFile - path to file with license header template resolved relatively to config file
  * (default: `'license.template'`)
+ * @configuration licenseTemplateIsRegex - whether or not the license header template is a regex template
+ * (default: `false`)
  */
 class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
@@ -27,7 +32,7 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitCondition(root: KtFile): Boolean =
-        super.visitCondition(root) && root.hasLicenseHeader()
+        super.visitCondition(root) && (root.hasLicenseHeader() || root.hasLicenseHeaderRegex())
 
     override fun visitKtFile(file: KtFile) {
         if (!file.hasValidLicense()) {
@@ -39,11 +44,16 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtFile.hasValidLicense(): Boolean = text.startsWith(getLicenseHeader())
+    private fun KtFile.hasValidLicense(): Boolean =
+        if (hasLicenseHeaderRegex()) getLicenseHeaderRegex().find(text)?.range?.start == 0 else text.startsWith(
+            getLicenseHeader()
+        )
 
     companion object {
         const val PARAM_LICENSE_TEMPLATE_FILE = "licenseTemplateFile"
         const val DEFAULT_LICENSE_TEMPLATE_FILE = "license.template"
+        const val PARAM_LICENSE_TEMPLATE_IS_REGEX = "licenseTemplateIsRegex"
+        const val DEFAULT_LICENSE_TEMPLATE_IS_REGEX = false
         val RULE_NAME: String = AbsentOrWrongFileLicense::class.java.simpleName
     }
 }
