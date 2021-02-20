@@ -4,15 +4,15 @@ abstract class DslTestBuilder {
 
     abstract val gradleBuildConfig: String
     abstract val gradleBuildName: String
-    abstract val gradlePluginsSection: String
-    val gradleRepositoriesSection = """
-    |repositories {
-    |   mavenLocal()
-    |   mavenCentral()
-    |   jcenter()
-    |}
-    |"""
-    abstract val gradleApplyPlugins: String
+    abstract val gradlePlugins: String
+    abstract val gradleSubprojectsApplyPlugins: String
+    val gradleRepositories = """
+        repositories {
+            mavenLocal()
+            mavenCentral()
+            jcenter()
+        }
+    """.trimIndent()
 
     private var detektConfig: String = ""
     private var projectLayout: ProjectLayout = ProjectLayout(1)
@@ -77,46 +77,49 @@ abstract class DslTestBuilder {
 
 private class GroovyBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle"
-    override val gradlePluginsSection = """
+    override val gradlePlugins = """
         |plugins {
-        |   id 'java-library'
-        |   id "io.gitlab.arturbosch.detekt"
+        |  id 'java-library'
+        |  id "io.gitlab.arturbosch.detekt"
         |}
-        |"""
-    override val gradleApplyPlugins = """
-        |apply plugin: "io.gitlab.arturbosch.detekt"
         |"""
 
     override val gradleBuildConfig: String = """
-        |$gradlePluginsSection
+        |$gradlePlugins
         |
-        |$gradleRepositoriesSection
+        |$gradleRepositories
         |
         |dependencies {
         |   implementation "org.jetbrains.kotlin:kotlin-stdlib"
         |}
         """.trimMargin()
+
+    override val gradleSubprojectsApplyPlugins = """
+        |apply plugin: "io.gitlab.arturbosch.detekt"
+        |"""
 }
 
 private class KotlinBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle.kts"
-    override val gradlePluginsSection = """
+
+    override val gradlePlugins = """
         |plugins {
         |   `java-library`
         |   id("io.gitlab.arturbosch.detekt")
         |}
         |"""
-    override val gradleApplyPlugins = """
-        |plugins.apply("io.gitlab.arturbosch.detekt")
-        |"""
 
     override val gradleBuildConfig: String = """
-        |$gradlePluginsSection
+        |$gradlePlugins
         |
-        |$gradleRepositoriesSection
+        |$gradleRepositories
         |
         |dependencies {
-        |   implementation(kotlin("stdlib-jdk8"))
+        |   implementation(kotlin("stdlib"))
         |}
         """.trimMargin()
+
+    override val gradleSubprojectsApplyPlugins = """
+        |plugins.apply("io.gitlab.arturbosch.detekt")
+        |"""
 }

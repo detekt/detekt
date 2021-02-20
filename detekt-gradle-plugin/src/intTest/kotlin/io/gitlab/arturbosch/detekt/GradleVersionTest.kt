@@ -7,7 +7,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-object MultiVersionTest : Spek({
+object GradleVersionTest : Spek({
 
     val testedGradleVersions = getGradleVersionsUnderTest()
 
