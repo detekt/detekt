@@ -142,8 +142,8 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("sets input parameter to absolute filenames of all source files") {
-                        val file1 = gradleRunner.projectFile("$customSrc1/MyRoot0Class.kt")
-                        val file2 = gradleRunner.projectFile("$customSrc2/MyRoot0Class.kt")
+                        val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
+                        val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
                         val expectedInputParam = "--input $file1,$file2"
                         assertThat(result.output).contains(expectedInputParam)
                     }

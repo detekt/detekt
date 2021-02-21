@@ -17,7 +17,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val dryRun: Boolean = false
 ) {
 
-    private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile()
+    private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
     private val randomString = UUID.randomUUID().toString()
 
     private val settingsContent = """
