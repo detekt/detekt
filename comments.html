@@ -463,8 +463,11 @@ of the code.</p>
 <h3 id="absentorwrongfilelicense">AbsentOrWrongFileLicense</h3>
 
 <p>This rule will report every Kotlin source file which doesn’t have the required license header.
-The rule checks each Kotlin source file whether the header starts with the read text from the passed file in the
-<code class="language-plaintext highlighter-rouge">licenseTemplateFile</code> configuration option.</p>
+The rule validates each Kotlin source and operates in two modes: if <code class="language-plaintext highlighter-rouge">licenseTemplateIsRegex = false</code> (or missing)
+the rule checks whether the input file header starts with the read text from the passed file in the
+<code class="language-plaintext highlighter-rouge">licenseTemplateFile</code> configuration option. If <code class="language-plaintext highlighter-rouge">licenseTemplateIsRegex = true</code> the rule matches the header with
+a regular expression produced from the passed template license file (defined via <code class="language-plaintext highlighter-rouge">licenseTemplateFile</code> configuration
+option).</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -475,6 +478,11 @@ The rule checks each Kotlin source file whether the header starts with the read 
     <p><code class="language-plaintext highlighter-rouge">licenseTemplateFile</code> (default: <code class="language-plaintext highlighter-rouge">'license.template'</code>)</p>
 
     <p>path to file with license header template resolved relatively to config file</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">licenseTemplateIsRegex</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
+
+    <p>whether or not the license header template is a regex template</p>
   </li>
 </ul>
 
