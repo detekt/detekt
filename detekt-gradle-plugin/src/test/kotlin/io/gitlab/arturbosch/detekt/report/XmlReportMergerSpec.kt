@@ -7,7 +7,7 @@ import java.io.File
 
 private const val TAB = "\t"
 
-internal class XmlOutputMergerSpec : Spek({
+internal class XmlReportMergerSpec : Spek({
 
     describe("classpath changes") {
 
@@ -35,7 +35,7 @@ internal class XmlOutputMergerSpec : Spek({
             val output = File.createTempFile("output", "xml")
             XmlReportMerger.merge(setOf(file1, file2), output)
 
-            val text = output.readText()
+            val text = output.readLines()
             val expectedText = """
                 <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
                   <file name="Sample1.kt">
@@ -45,8 +45,7 @@ internal class XmlOutputMergerSpec : Spek({
                     <error column="1" line="1" message="TestMessage" severity="warning" source="detekt.id_b"/>
                   </file>
                 </checkstyle>
-            """.trimIndent() + System.lineSeparator()
-            assertThat(text.length).isEqualTo(expectedText.length)
+            """.trimIndent().split("\n")
             assertThat(text).isEqualTo(expectedText)
         }
     }
