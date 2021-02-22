@@ -13,10 +13,10 @@ internal class DetektXmlReportMergeTest : Spek({
 
         val groovy = DslTestBuilder.groovy()
         val groovyBuildFileContent = """
-            |${groovy.gradlePluginsSection}
+            |${groovy.gradlePlugins}
             |
             |allprojects {
-            |  ${groovy.gradleRepositoriesSection}
+            |  ${groovy.gradleRepositories}
             |}
             |
             |task xmlReportMerge(type: io.gitlab.arturbosch.detekt.report.XmlReportMergeTask) {
@@ -24,7 +24,7 @@ internal class DetektXmlReportMergeTest : Spek({
             |}
             |
             |subprojects {
-            |  ${groovy.gradleApplyPlugins}
+            |  ${groovy.gradleSubprojectsApplyPlugins}
             |  
             |  detekt {
             |    reports.xml.enabled = true
@@ -42,10 +42,10 @@ internal class DetektXmlReportMergeTest : Spek({
             |""".trimMargin()
         val kotlin = DslTestBuilder.kotlin()
         val kotlinBuildFileContent = """
-            |${kotlin.gradlePluginsSection}
+            |${kotlin.gradlePlugins}
             |
             |allprojects {
-            |  ${kotlin.gradleRepositoriesSection}
+            |  ${kotlin.gradleRepositories}
             |}
             |
             |val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlReportMergeTask::class) {
@@ -53,7 +53,7 @@ internal class DetektXmlReportMergeTest : Spek({
             |}
             |
             |subprojects {
-            |  ${kotlin.gradleApplyPlugins}
+            |  ${kotlin.gradleSubprojectsApplyPlugins}
             |  
             |  detekt {
             |    reports.xml.enabled = true
@@ -75,17 +75,18 @@ internal class DetektXmlReportMergeTest : Spek({
             kotlin to kotlinBuildFileContent
         ).forEach { (builder, mainBuildFileContent) ->
             it("using ${builder.gradleBuildName}") {
-                val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0)
-                    .withSubmodule(
+                val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                    addSubmodule(
                         name = "child1",
                         numberOfSourceFilesPerSourceDir = 2,
                         numberOfCodeSmells = 2
                     )
-                    .withSubmodule(
+                    addSubmodule(
                         name = "child2",
                         numberOfSourceFilesPerSourceDir = 4,
                         numberOfCodeSmells = 4
                     )
+                }
 
                 val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
                 gradleRunner.setupProject()
