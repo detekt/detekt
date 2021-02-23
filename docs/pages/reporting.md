@@ -111,18 +111,18 @@ val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlRe
 }
 
 subprojects {
-    detekt {
-      reports.xml.enabled = true
-    }
-    
-    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-      tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-         xmlReportMerge.configure {
-           this.mustRunAfter(this@detekt)
-           input.from(this@detekt.xmlReportFile)
-         }
+  detekt {
+    reports.xml.enabled = true
+  }
+  
+  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
+      xmlReportMerge.configure {
+        this.mustRunAfter(this@detekt)
+        input.from(this@detekt.xmlReportFile)
       }
     }
+  }
 }
 ```
 
