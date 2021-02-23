@@ -1,7 +1,7 @@
 plugins {
     module
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.12.0"
+    id("com.gradle.plugin-publish") version "0.13.0"
 }
 
 repositories {
@@ -40,6 +40,7 @@ dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
     implementation(kotlin("gradle-plugin-api"))
     compileOnly(androidGradlePlugin)
+    compileOnly(kotlin("gradle-plugin"))
 
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
