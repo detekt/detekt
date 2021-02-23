@@ -39,6 +39,7 @@ dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
     implementation(kotlin("gradle-plugin-api"))
     compileOnly(androidGradlePlugin)
+    compileOnly(kotlin("gradle-plugin"))
 
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
