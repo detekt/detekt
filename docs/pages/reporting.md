@@ -94,10 +94,10 @@ subprojects {
   
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
     tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
-       xmlReportMerge.configure { mergeTask ->
-         mergeTask.mustRunAfter(detektTask)
-         mergeTask.input.from(detektTask.xmlReportFile)
-       }
+      xmlReportMerge.configure { mergeTask ->
+        mergeTask.mustRunAfter(detektTask)
+        mergeTask.input.from(detektTask.xmlReportFile)
+      }
     }
   }
 }
@@ -107,7 +107,7 @@ subprojects {
 
 ```kotlin
 val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlReportMergeTask::class) { 
-    output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+  output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
 }
 
 subprojects {
