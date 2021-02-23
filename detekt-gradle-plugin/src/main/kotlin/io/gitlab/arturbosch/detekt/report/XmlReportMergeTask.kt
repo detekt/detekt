@@ -22,7 +22,7 @@ abstract class XmlReportMergeTask : DefaultTask() {
 
     @TaskAction
     fun merge() {
-        logger.lifecycle(input.files.joinToString(separator = "\n") { it.absolutePath })
+        logger.info(input.files.joinToString(separator = "\n") { it.absolutePath })
         XmlReportMerger.merge(input.files, output.get().asFile)
         logger.lifecycle("Merged XML output to ${output.get().asFile.absolutePath}")
     }
