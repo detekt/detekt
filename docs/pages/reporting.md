@@ -73,7 +73,7 @@ namely XML and SARIF.
 
 ## Merging reports
 
-The machine-readable report formats supports report merging.
+The machine-readable report formats support report merging.
 Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
