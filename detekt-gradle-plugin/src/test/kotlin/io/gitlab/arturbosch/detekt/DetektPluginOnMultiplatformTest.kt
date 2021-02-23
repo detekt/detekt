@@ -424,14 +424,6 @@ internal const val ANDROID_COMPILE_SDK_VERSION = 29
 
 internal fun Task.dependencies() = taskDependencies.getDependencies(this).map { it.name }
 
-internal fun Project.androidPluginSetup(androidPlugin: String) {
-    with(pluginManager) {
-        apply(DetektPlugin::class.java)
-        apply(androidPlugin)
-        apply("kotlin-android")
-    }
-}
-
 internal fun Project.getTask(name: String) = project.tasks.getAt(name)
 
 internal fun Project.evaluate() = (this as ProjectInternal).evaluate()
