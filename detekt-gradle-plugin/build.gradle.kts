@@ -24,6 +24,7 @@ val intTest: SourceSet by sourceSets.creating {
 
 configurations[intTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
 configurations[intTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+val intTestOnly by configurations.creating
 
 val intTestTask by tasks.register<Test>("intTest") {
     testClassesDirs = intTest.output.classesDirs
@@ -44,6 +45,8 @@ dependencies {
     testImplementation(project(":detekt-test-utils"))
     testImplementation(kotlin("gradle-plugin"))
     testImplementation(androidGradlePlugin)
+    intTestOnly(androidGradlePlugin)
+    intTestOnly(kotlin("gradle-plugin"))
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
@@ -66,6 +69,11 @@ gradlePlugin {
         }
     }
     testSourceSets(intTest)
+}
+
+// Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
+tasks.pluginUnderTestMetadata {
+    pluginClasspath.from(intTestOnly)
 }
 
 tasks.validatePlugins {

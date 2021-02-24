@@ -3,6 +3,9 @@ package io.gitlab.arturbosch.detekt
 import com.android.build.gradle.AppExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.assertj.core.api.Assertions.assertThat
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.spekframework.spek2.Spek
@@ -416,3 +419,22 @@ object DetektPluginOnMultiplatformTest : Spek({
         }
     }
 })
+
+internal const val ANDROID_COMPILE_SDK_VERSION = 29
+
+internal fun Task.dependencies() = taskDependencies.getDependencies(this).map { it.name }
+
+internal fun Project.getTask(name: String) = project.tasks.getAt(name)
+
+internal fun Project.evaluate() = (this as ProjectInternal).evaluate()
+
+internal inline fun <reified T : Any> Project.configureExtension(configuration: T.() -> Unit = {}) {
+    project.extensions.findByType(T::class.java)?.apply(configuration)
+}
+
+/**
+ * ANDROID_SDK_ROOT is preferred over ANDROID_HOME, but the check here is more lenient.
+ * See [Android CLI Environment Variables](https://developer.android.com/studio/command-line/variables.html)
+ */
+internal fun isAndroidSdkInstalled() =
+    System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null

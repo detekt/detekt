@@ -58,11 +58,15 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
         baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
-            repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) {
+            repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) { srcFileIndex ->
                 val withCodeSmell =
                     srcDirIdx * projectLayout.numberOfSourceFilesInRootPerSourceDir +
-                        it < projectLayout.numberOfCodeSmellsInRootPerSourceDir
-                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class", withCodeSmell)
+                        srcFileIndex < projectLayout.numberOfCodeSmellsInRootPerSourceDir
+                writeKtFile(
+                    dir = File(rootDir, sourceDir),
+                    className = "My${srcDirIdx}Root${srcFileIndex}Class",
+                    withCodeSmell = withCodeSmell
+                )
             }
         }
 
@@ -74,11 +78,16 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
                 repeat(submodule.numberOfSourceFilesPerSourceDir) {
                     val withCodeSmell =
                         srcDirIdx * submodule.numberOfSourceFilesPerSourceDir + it < submodule.numberOfCodeSmells
-                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class", withCodeSmell)
+                    writeKtFile(
+                        dir = File(moduleRoot, moduleSourceDir),
+                        className = "My$srcDirIdx${submodule.name}${it}Class",
+                        withCodeSmell = withCodeSmell)
                 }
             }
         }
     }
+
+    fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     fun writeProjectFile(filename: String, content: String) {
         File(rootDir, filename).writeText(content)
@@ -109,8 +118,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
-        val result: BuildResult = runTasks(*tasks)
-        this.doAssert(result)
+        this.doAssert(runTasks(*tasks))
     }
 
     fun runTasks(vararg tasks: String): BuildResult = buildGradleRunner(tasks.toList()).build()
@@ -125,8 +133,6 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         val result = buildGradleRunner(listOf(DETEKT_TASK)).buildAndFail()
         this.doAssert(result)
     }
-
-    fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     companion object {
         const val SETTINGS_FILENAME = "settings.gradle"
