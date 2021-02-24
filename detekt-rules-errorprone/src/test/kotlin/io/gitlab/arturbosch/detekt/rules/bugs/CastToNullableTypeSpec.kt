@@ -21,7 +21,7 @@ class CastToNullableTypeSpec : Spek({
                 } 
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(2, 22)
             assertThat(findings[0]).hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
         }
