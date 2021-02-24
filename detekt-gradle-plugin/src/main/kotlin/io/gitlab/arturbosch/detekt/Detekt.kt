@@ -161,22 +161,22 @@ open class Detekt @Inject constructor(
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
 
-    internal val xmlReportFile: Provider<RegularFile>
+    val xmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.xml)
 
-    internal val htmlReportFile: Provider<RegularFile>
+    val htmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.html)
 
-    internal val txtReportFile: Provider<RegularFile>
+    val txtReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.txt)
 
-    internal val sarifReportFile: Provider<RegularFile>
+    val sarifReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(report = reports.sarif, defaultEnabledValue = false)

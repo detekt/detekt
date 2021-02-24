@@ -23,7 +23,7 @@ class XmlOutputReport : OutputReport() {
         val smells = detektion.findings.flatMap { it.value }
 
         val lines = ArrayList<String>()
-        lines += "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        lines += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
         smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }

@@ -41,7 +41,7 @@ class XmlOutputFormatSpec : Spek({
             val result = outputFormat.render(TestDetektion())
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 </checkstyle>""".trimIndent())
         }
@@ -52,7 +52,7 @@ class XmlOutputFormatSpec : Spek({
             val result = outputFormat.render(TestDetektion(smell))
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
@@ -67,7 +67,7 @@ class XmlOutputFormatSpec : Spek({
             val result = outputFormat.render(TestDetektion(smell1, smell2))
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
@@ -83,7 +83,7 @@ class XmlOutputFormatSpec : Spek({
             val result = outputFormat.render(TestDetektion(smell1, smell2))
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
@@ -109,7 +109,7 @@ class XmlOutputFormatSpec : Spek({
             val result = outputFormat.render(TestDetektion(findingA, findingB))
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="Sample1.kt">
                 $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
@@ -136,7 +136,7 @@ class XmlOutputFormatSpec : Spek({
             )
 
             assertThat(result).isEqualTo("""
-                <?xml version="1.0" encoding="utf-8"?>
+                <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
@@ -166,7 +166,7 @@ class XmlOutputFormatSpec : Spek({
                     }
 
                     val expected = """
-                    <?xml version="1.0" encoding="utf-8"?>
+                    <?xml version="1.0" encoding="UTF-8"?>
                     <checkstyle version="4.3">
                     <file name="${finding.location.file}">
                     $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
