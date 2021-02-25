@@ -43,7 +43,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             IgnoredReturnValue(config),
             ImplicitUnitReturnType(config),
             NullableToStringCall(config),
-            UnreachableCatchBlock(config)
+            UnreachableCatchBlock(config),
+            UnusedUnaryOperator(config)
         )
     )
 }
