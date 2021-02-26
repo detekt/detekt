@@ -100,7 +100,7 @@ class UnusedUnaryOperatorSpec : Spek({
                 val y = 2
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("overloaded unary operator") {
