@@ -42,7 +42,7 @@ class CastToNullableTypeSpec : Spek({
                 } 
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 })
