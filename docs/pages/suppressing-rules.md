@@ -39,6 +39,6 @@ object AClassWithLongLines {
 }
 ```
 
-Several rules in the [`formatting`](./formatting.html) rulesets also have a "first party" counterpart. For instance you can use the [`MaxLineLenght`](./style.html#maxlinelength) rule instead from the [`style`](./style.html) ruleset.
+Several rules in the [`formatting`](./formatting.html) rulesets also have a "first party" counterpart. For instance you can use the [`MaxLineLength`](./style.html#maxlinelength) rule instead from the [`style`](./style.html) ruleset.
 
 For those rules, you can suppress the inspection also locally (on top of an expression, function, class, etc.).
