@@ -268,10 +268,10 @@ object DetektAndroidTest : Spek({
  * ANDROID_SDK_ROOT is preferred over ANDROID_HOME, but the check here is more lenient.
  * See [Android CLI Environment Variables](https://developer.android.com/studio/command-line/variables.html)
  */
-private fun isAndroidSdkInstalled() =
+internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
 
-private val MANIFEST_CONTENT = """
+internal val MANIFEST_CONTENT = """
     <manifest package="io.gitlab.arturbosch.detekt.app"
         xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
