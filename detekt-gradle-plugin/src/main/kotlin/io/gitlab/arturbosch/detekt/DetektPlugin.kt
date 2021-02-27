@@ -9,6 +9,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import java.util.Properties
 
 class DetektPlugin : Plugin<Project> {
 
@@ -74,7 +75,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+                val version = extension.toolVersion ?: loadDetektVersion(DetektPlugin::class.java.classLoader)
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
@@ -110,3 +111,8 @@ class DetektPlugin : Plugin<Project> {
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+
+internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
+    load(classLoader.getResourceAsStream("versions.properties"))
+    getProperty("detektVersion")
+}
