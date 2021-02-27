@@ -474,6 +474,24 @@ The issue-id is also exactly the id of the reporting rule.</p>
 
 <p>Some rules like <code class="language-plaintext highlighter-rouge">TooManyFunctions</code> can be suppressed by using a file level annotation <code class="language-plaintext highlighter-rouge">@file:Suppress("TooManyFunctions")</code>.</p>
 
+<h2 id="formatting-rules-suppression">Formatting rules suppression</h2>
+
+<p>Please note that rules inside the <a href="./formatting.html"><code class="language-plaintext highlighter-rouge">formatting</code></a> ruleset can only be suppressed at <strong>the file level</strong>.</p>
+
+<p>Rules inside this ruleset are wrappers around KtLint rules, and we don’t have the same reporting capabilities that we offer for first party rules. For example, you can suppress the <a href="formatting.html#maximumlinelength">MaximumLineLenght</a> rule only in your entire file with:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">@</span><span class="n">file</span><span class="p">:</span><span class="nc">Suppress</span><span class="p">(</span><span class="s">"MaximumLineLenght"</span><span class="p">)</span>
+<span class="k">package</span> <span class="nn">com.example</span>
+
+<span class="kd">object</span> <span class="nc">AClassWithLongLines</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Several rules in the <a href="./formatting.html"><code class="language-plaintext highlighter-rouge">formatting</code></a> ruleset also have a “first party” counterpart. For instance you can use the <a href="./style.html#maxlinelength"><code class="language-plaintext highlighter-rouge">MaxLineLength</code></a> rule instead from the <a href="./style.html"><code class="language-plaintext highlighter-rouge">style</code></a> ruleset.</p>
+
+<p>For those rules, you can suppress the inspection also locally (on top of an expression, function, class, etc.).</p>
+
 
     <div class="tags">
         
