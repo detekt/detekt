@@ -31,7 +31,7 @@ Please note that rules inside the [`formatting`](./formatting.html) rulesets can
 Rules inside those ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLenght](formatting.html#maximumlinelength) rule only in your entire file with:
 
 ```kotlin
-@file:Suppress("MaxLineLength")
+@file:Suppress("MaximumLineLenght")
 package com.example
 
 object AClassWithLongLines {
