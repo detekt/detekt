@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.report
 
-import com.android.utils.forEach
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import java.io.File
@@ -36,7 +35,8 @@ object XmlReportMerger {
 
     private fun importNodesFromInput(input: File, document: Document) {
         val checkstyleNode = documentBuilder.parse(input.inputStream()).documentElement.also { removeWhitespaces(it) }
-        checkstyleNode.childNodes.forEach { node ->
+        (0 until checkstyleNode.childNodes.length).forEach {
+            val node = checkstyleNode.childNodes.item(it)
             document.documentElement.appendChild(document.importNode(node, true))
         }
     }
