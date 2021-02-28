@@ -16,6 +16,20 @@ fun KtFunction.hasCorrectEqualsParameter() =
 
 fun KtNamedFunction.isMainFunction() = hasMainSignature() && (this.isTopLevel || isMainInsideObject())
 
+fun extractMethodNameAndParams(methodSignature: String): Pair<String, List<String>?> {
+    val tokens = methodSignature.split("(", ")")
+        .map { it.trim() }
+
+    val methodName = tokens.first().replace("`", "")
+    val params = if (tokens.size > 1) {
+        tokens[1].split(",").map { it.trim() }.filter { it.isNotBlank() }
+    } else {
+        null
+    }
+
+    return methodName to params
+}
+
 private fun KtNamedFunction.hasMainSignature() =
     this.name == "main" && this.isPublicNotOverridden() && this.hasMainParameter()
 
