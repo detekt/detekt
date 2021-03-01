@@ -1,15 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class CastToNullableTypeSpec : Spek({
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { CastToNullableType() }
 
     describe("CastToNullableTypeSpec rule") {
@@ -19,7 +15,7 @@ class CastToNullableTypeSpec : Spek({
                     val x: String? = a as String?
                 } 
             """
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(2, 22)
             assertThat(findings[0]).hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
@@ -31,7 +27,7 @@ class CastToNullableTypeSpec : Spek({
                     val x: String? = a as? String
                 } 
             """
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -41,7 +37,7 @@ class CastToNullableTypeSpec : Spek({
                     val x = a is String?
                 } 
             """
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

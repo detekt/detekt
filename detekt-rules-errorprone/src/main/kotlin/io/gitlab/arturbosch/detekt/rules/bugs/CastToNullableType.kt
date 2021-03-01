@@ -9,8 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
+import org.jetbrains.kotlin.psi.KtNullableType
 
 /**
  * Disallow to cast to nullable types. There are cases where `as String?` is misused as the safe cast (`as? String`),
@@ -27,8 +26,6 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  *     val x: String? = a as? String
  * }
  * </compliant>
- *
- * @requiresTypeResolution
  */
 class CastToNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
@@ -41,16 +38,13 @@ class CastToNullableType(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val operationReference = expression.operationReference
         if (operationReference.getReferencedNameElementType() != KtTokens.AS_KEYWORD) return
+        val nullableTypeElement = expression.right?.typeElement as? KtNullableType ?: return
 
-        val typeReference = expression.right ?: return
-        val type = bindingContext[BindingContext.TYPE, expression.right] ?: return
-        if (!type.isMarkedNullable) return
-
-        val message = "Use the safe cast ('as? ${type.makeNotNullable()}') instead of 'as ${typeReference.text}'."
+        val message = "Use the safe cast ('as? ${nullableTypeElement.innerType?.text}')" +
+                " instead of 'as ${nullableTypeElement.text}'."
         report(CodeSmell(issue, Entity.from(expression), message))
     }
 }
