@@ -77,11 +77,13 @@ The machine-readable report formats support report merging.
 Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
-At the moment, only merging XML is supported. You can refer to the sample script below and 
-run `./gradlew detekt xmlReportMerge --continue` to execute detekt tasks and merge their reports.
+At the moment, merging XML and SARIF are supported. 
+
+### Merging XML reports
+You can refer to the sample build script below and 
+run `./gradlew detekt xmlReportMerge --continue` to execute detekt tasks and merge their XML reports.
 
 #### Groovy DSL
-
 ```groovy
 task xmlReportMerge(type: io.gitlab.arturbosch.detekt.report.XmlReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
@@ -121,6 +123,54 @@ subprojects {
         this.mustRunAfter(this@detekt)
         input.from(this@detekt.xmlReportFile)
       }
+    }
+  }
+}
+```
+
+### Merging SARIF reports
+You can refer to the sample build script below and
+run `./gradlew detekt sarifReportMerge --continue` to execute detekt tasks and merge their SARIF reports.
+
+#### Groovy DSL
+```groovy
+task sarifReportMerge(type: io.gitlab.arturbosch.detekt.report.SarifReportMergeTask) {
+  output = project.layout.buildDirectory.file("reports/detekt/merge.sarif")
+}
+
+subprojects {
+  detekt {
+    reports.sarif.enabled = true
+  }
+  
+  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+       sarifReportMerge.configure { mergeTask ->
+         mergeTask.mustRunAfter(detektTask)
+         mergeTask.input.from(detektTask.sarifReportFile)
+       }
+    }
+  }
+}
+```
+
+#### Kotlin DSL
+```kotlin
+val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.SarifReportMergeTask::class) {
+  output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+}
+
+subprojects {
+  detekt {
+    reports.sarif.enabled = true
+  }
+  
+  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
+       sarifReportMerge.configure {
+         this.mustRunAfter(this@detekt)
+         input.from(this@detekt.sarifReportFile)
+       }
     }
   }
 }
