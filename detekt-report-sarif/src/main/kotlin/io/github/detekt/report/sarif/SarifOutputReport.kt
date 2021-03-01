@@ -36,7 +36,12 @@ class SarifOutputReport : OutputReport() {
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
         this.config = context.config
-        this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)?.toAbsolutePath()?.toUnifiedString()
+        this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
+            ?.toAbsolutePath()
+            ?.toUnifiedString()
+            ?.let {
+                if (!it.endsWith("/")) "$it/" else it
+            }
     }
 
     override fun render(detektion: Detektion): String {
