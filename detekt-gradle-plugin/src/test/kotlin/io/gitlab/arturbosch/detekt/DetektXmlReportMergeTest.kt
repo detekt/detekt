@@ -90,8 +90,7 @@ internal class DetektXmlReportMergeTest : Spek({
 
                 val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
                 gradleRunner.setupProject()
-                gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
-                    println(result.output)
+                gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { _ ->
                     assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
                     assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
                     assertThat(projectFile("build/reports/detekt/merge.xml").readText())

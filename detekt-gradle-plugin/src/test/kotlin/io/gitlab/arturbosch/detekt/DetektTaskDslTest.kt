@@ -14,8 +14,10 @@ import org.spekframework.spek2.style.specification.describe
 internal object DetektTaskDslTest : Spek({
 
     describe("When applying the detekt gradle plugin") {
+
         lateinit var gradleRunner: DslGradleRunner
         lateinit var result: BuildResult
+        val defaultDetektVersion = loadDetektVersion(DetektTaskDslTest::class.java.classLoader)
 
         listOf(groovy().dryRun(), kotlin().dryRun()).forEach { builder ->
             context("using ${builder.gradleBuildName}") {
@@ -448,7 +450,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                             |dependencies {
-                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
+                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
                             |}
                             """
 
@@ -463,7 +465,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("adds the formatting lib to the project dependencies") {
-                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$DEFAULT_DETEKT_VERSION")
+                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
                     }
                 }
 
