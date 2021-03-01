@@ -19,7 +19,7 @@
       },
       "originalUriBaseIds": {
         "%SRCROOT%": {
-          "uri": "file:///Users/tester/detekt"
+          "uri": "file:///Users/tester/detekt/"
         }
       },
       "results": [
