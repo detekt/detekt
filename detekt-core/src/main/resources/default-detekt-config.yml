@@ -476,6 +476,8 @@ performance:
 
 potential-bugs:
   active: true
+  CastToNullableType:
+    active: false
   Deprecation:
     active: false
   DontDowncastCollectionTypes:

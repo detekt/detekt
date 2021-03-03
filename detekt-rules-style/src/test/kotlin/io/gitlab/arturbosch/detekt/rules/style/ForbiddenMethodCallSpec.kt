@@ -95,7 +95,14 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println", "java.lang.System.gc")))
+                TestConfig(
+                    mapOf(
+                        ForbiddenMethodCall.METHODS to listOf(
+                            "java.io.PrintStream.println",
+                            "java.lang.System.gc"
+                        )
+                    )
+                )
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
@@ -119,7 +126,7 @@ class ForbiddenMethodCallSpec : Spek({
         it("should report equals operator") {
             val code = """
                 fun main() {
-                    java.math.BigDecimal(5.5) == java.math.BigDecimal(5.5) 
+                    java.math.BigDecimal(5.5) == java.math.BigDecimal(5.5)
                 }
             """
             val findings = ForbiddenMethodCall(
@@ -152,6 +159,119 @@ class ForbiddenMethodCallSpec : Spek({
                 TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("kotlin.Int.dec")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+        }
+
+        it("should report both methods when using just method name without full signature") {
+            val code = """
+                import java.time.Clock
+                import java.time.LocalDate
+                fun test() {
+                    val clock = Clock.systemUTC()
+                    val date = LocalDate.now()
+                    val date2 = LocalDate.now(clock)
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        it("should report parameterless method when full signature matches") {
+            val code = """
+                import java.time.Clock
+                import java.time.LocalDate
+                fun test() {
+                    val clock = Clock.systemUTC()
+                    val date = LocalDate.now()
+                    val date2 = LocalDate.now(clock)
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now()")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(5, 26)
+        }
+
+        it("should report method with param when full signature matches") {
+            val code = """
+                import java.time.Clock
+                import java.time.LocalDate
+                fun test() {
+                    val clock = Clock.systemUTC()
+                    val date = LocalDate.now()
+                    val date2 = LocalDate.now(clock)
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now(java.time.Clock)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(6, 27)
+        }
+
+        it("should report method with multiple params when full signature matches") {
+            val code = """
+                import java.time.LocalDate
+                fun test() {
+                    val date = LocalDate.of(2020, 1, 1)
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(3, 26)
+        }
+
+        it("should report method with multiple params when full signature matches with additional spacing") {
+            val code = """
+                import java.time.LocalDate
+                fun test() {
+                    val date = LocalDate.of(2020, 1, 1)
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(3, 26)
+        }
+
+        it("should report method with multiple params when method has spaces and commas") {
+            val code = """
+                package io.gitlab.arturbosch.detekt.rules.style
+                
+                fun `some, test`() = "String"
+
+                fun test() {
+                    val s = `some, test`()
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(6, 13)
+        }
+
+        it("should report method with default params") {
+            val code = """
+                package io.gitlab.arturbosch.detekt.rules.style
+                
+                fun defaultParamsMethod(s:String, i:Int = 0) = s + i
+
+                fun test() {
+                    val s = defaultParamsMethod("test")
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to
+                        listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocation(6, 13)
         }
     }
 })

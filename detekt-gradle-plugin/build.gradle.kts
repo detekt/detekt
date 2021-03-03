@@ -8,33 +8,7 @@ repositories {
     google()
 }
 
-val generatedSrcDir = "$buildDir/generated/src"
-
-sourceSets {
-    main {
-        java.srcDir(generatedSrcDir)
-    }
-}
-
-val intTest: SourceSet by sourceSets.creating {
-    java.srcDir(generatedSrcDir)
-    compileClasspath += sourceSets.main.get().output + configurations["intTestCompileClasspath"]
-    runtimeClasspath += sourceSets.main.get().output + configurations["intTestRuntimeClasspath"]
-}
-
-configurations[intTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
-configurations[intTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
-val intTestOnly by configurations.creating
-
-val intTestTask by tasks.register<Test>("intTest") {
-    testClassesDirs = intTest.output.classesDirs
-    classpath = intTest.runtimeClasspath
-    shouldRunAfter(tasks.test)
-}
-
-tasks.check {
-    dependsOn(intTestTask)
-}
+val intTest: Configuration by configurations.creating
 
 dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
@@ -43,10 +17,8 @@ dependencies {
     compileOnly(kotlin("gradle-plugin"))
 
     testImplementation(project(":detekt-test-utils"))
-    testImplementation(kotlin("gradle-plugin"))
-    testImplementation(androidGradlePlugin)
-    intTestOnly(androidGradlePlugin)
-    intTestOnly(kotlin("gradle-plugin"))
+    intTest(kotlin("gradle-plugin"))
+    intTest(androidGradlePlugin)
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
@@ -68,12 +40,11 @@ gradlePlugin {
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
     }
-    testSourceSets(intTest)
 }
 
 // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
 tasks.pluginUnderTestMetadata {
-    pluginClasspath.from(intTestOnly)
+    pluginClasspath.from(intTest)
 }
 
 tasks.validatePlugins {
@@ -94,25 +65,14 @@ pluginBundle {
     }
 }
 
-val generateDefaultDetektVersionFile by tasks.registering {
-    val name = "PluginVersion.kt"
-    val defaultDetektVersionFile = File("$generatedSrcDir/io/gitlab/arturbosch/detekt", name)
-
-    inputs.property(name, project.version)
-    outputs.file(defaultDetektVersionFile)
-
-    doFirst {
-        defaultDetektVersionFile.parentFile.mkdirs()
-        defaultDetektVersionFile.writeText("""
-            package io.gitlab.arturbosch.detekt
-
-            internal const val DEFAULT_DETEKT_VERSION = "$version"
-
-            """.trimIndent()
-        )
-    }
+tasks.processResources {
+    filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf(
+        "detektVersion" to project.version as String
+    ))
 }
 
-tasks.compileKotlin {
-    dependsOn(generateDefaultDetektVersionFile)
+tasks.processTestResources {
+    filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf(
+        "detektVersion" to project.version as String
+    ))
 }

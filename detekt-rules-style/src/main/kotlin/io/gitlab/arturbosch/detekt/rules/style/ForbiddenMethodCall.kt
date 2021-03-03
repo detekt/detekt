@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -29,7 +31,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </noncompliant>
  *
- * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden
+ * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden.
+ * Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report calls of all methods
+ * with this name or with full signature (i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call
+ * with this concrete signature.
  *  (default: `['kotlin.io.println', 'kotlin.io.print']`)
  *
  * @requiresTypeResolution
@@ -45,6 +50,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     )
 
     private val forbiddenMethods = valueOrDefaultCommaSeparated(METHODS, DEFAULT_METHODS)
+        .map { extractMethodNameAndParams(it) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -70,14 +76,29 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
+        val methodName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
+        val encounteredParamTypes = resolvedCall.resultingDescriptor.valueParameters
+            .map { it.type.getJetTypeFqName(false) }
 
-        if (fqName != null && fqName in forbiddenMethods) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(expression), "The method $fqName has been forbidden in the Detekt config."
-                )
-            )
+        if (methodName != null) {
+            forbiddenMethods
+                .filter { methodName == it.first }
+                .forEach {
+                    val expectedParamTypes = it.second
+                    val noParamsProvided = expectedParamTypes == null
+                    val paramsMatch = expectedParamTypes == encounteredParamTypes
+
+                    if (noParamsProvided || paramsMatch) {
+                        report(
+                            CodeSmell(
+                                issue,
+                                Entity.from(expression),
+                                "The method ${it.first}(${expectedParamTypes?.joinToString() ?: ""}) " +
+                                        "has been forbidden in the Detekt config."
+                            )
+                        )
+                    }
+                }
         }
     }
 
