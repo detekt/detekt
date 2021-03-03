@@ -334,6 +334,7 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = Ds
                 mavenCentral()
                 google()
                 jcenter()
+                mavenLocal()
             }
         }
     """.trimIndent(),
