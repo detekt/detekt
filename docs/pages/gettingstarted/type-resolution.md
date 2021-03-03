@@ -73,7 +73,12 @@ Other than the aforementioned tasks for JVM projects, you can use the following 
 - `detekt<Variant>` - Runs detekt with type resolution on the specific build variant
 - `detektBaseline<Variant>` - Creates a detekt baselines starting from a run of Detekt with type resolution enabled on the specific build variant.
 
-Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly. Doing this on Android is more complicated due to build types/flavors (see [#2259](https://github.com/detekt/detekt/issues/2259) for further context). Therefore, we recommend using the `detekt<Variant>` tasks offered by the Gradle plugins.
+Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly.
+Doing this on Android is more complicated due to build types/flavors (see [#2259](https://github.com/detekt/detekt/issues/2259) for further context).
+Therefore, we recommend using the `detekt<Variant>` tasks offered by the Gradle plugins.
+
+In case of build related issues, you may try `detekt.android.disabled=true` in `gradle.properties` to prevent detekt
+Gradle plugins from configuring Android-specific gradle tasks.
 
 ## Enabling on Detekt CLI
 

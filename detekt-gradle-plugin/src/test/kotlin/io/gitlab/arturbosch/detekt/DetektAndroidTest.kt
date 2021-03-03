@@ -57,6 +57,30 @@ object DetektAndroidTest : Spek({
             }
         }
 
+        it("configures detekt plain only for android application if user opts out") {
+            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "app",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    numberOfCodeSmells = 1,
+                    buildFileContent = """
+                        $APP_PLUGIN_BLOCK
+                        $ANDROID_BLOCK
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
+                )
+            }
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
+            gradleRunner.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
+            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+
+            gradleRunner.runTasks(":app:detekt")
+            gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
+                assertThat(result.output).contains("Task 'detektMain' not found in project")
+            }
+        }
+
         it("configures detekt plain and detekt type resolution tasks for android library") {
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
