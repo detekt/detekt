@@ -457,7 +457,7 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1160---2021-02-19">1.16.0 - 2021-02-19</h4>
+  <h4 id="1160---2021-03-04">1.16.0 - 2021-03-04</h4>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
@@ -466,10 +466,20 @@ $('#toc').on('click', 'a', function() {
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>Gradle Plugin tests should access also Maven Local - <a href="https://github.com/detekt/detekt/pull/3510">#3510</a></li>
+  <li>Update Kotlin to version 1.4.31 - <a href="https://github.com/detekt/detekt/pull/3509">#3509</a></li>
+  <li>Fix SARIF validation failure - <a href="https://github.com/detekt/detekt/pull/3507">#3507</a></li>
+  <li>Remove off importing android util - <a href="https://github.com/detekt/detekt/pull/3506">#3506</a></li>
+  <li>Adding support for full method signatures in ForbiddenMethodCall - <a href="https://github.com/detekt/detekt/pull/3505">#3505</a></li>
+  <li>New rule: disallow to cast to nullable type - <a href="https://github.com/detekt/detekt/pull/3497">#3497</a></li>
+  <li>Merge XML report output - <a href="https://github.com/detekt/detekt/pull/3491">#3491</a></li>
+  <li>Allow using regular expressions when defining license header templates - <a href="https://github.com/detekt/detekt/pull/3486">#3486</a></li>
   <li>Add UnreachableCatchBlock rule - <a href="https://github.com/detekt/detekt/pull/3478">#3478</a></li>
+  <li>Add NoNameShadowing rule - <a href="https://github.com/detekt/detekt/pull/3477">#3477</a></li>
   <li>Fix false negative “UselessCallOnNotNull” with <code class="language-plaintext highlighter-rouge">list.isNullOrEmpty()</code> - <a href="https://github.com/detekt/detekt/pull/3475">#3475</a></li>
   <li>Add UseOrEmpty rule - <a href="https://github.com/detekt/detekt/pull/3470">#3470</a></li>
   <li>Add UseIsNullOrEmpty rule - <a href="https://github.com/detekt/detekt/pull/3469">#3469</a></li>
+  <li>Add support to Kotlin Multiplatform Projects - <a href="https://github.com/detekt/detekt/pull/3453">#3453</a></li>
   <li>Fix false positives for MultilineLambdaItParameter.kt - <a href="https://github.com/detekt/detekt/pull/3451">#3451</a></li>
   <li>Dont generate baseline if empty - <a href="https://github.com/detekt/detekt/pull/3450">#3450</a></li>
   <li>Silence IndexOutOfBoundsException in getLineAndColumnInPsiFile() - <a href="https://github.com/detekt/detekt/pull/3446">#3446</a></li>
@@ -532,6 +542,13 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Move gradle testkit test back to test/ - <a href="https://github.com/detekt/detekt/pull/3504">#3504</a></li>
+  <li>Add documentation on suppressing formatting rules - <a href="https://github.com/detekt/detekt/pull/3503">#3503</a></li>
+  <li>Change DetektMultiplatform from unit test to gradle testkit integrati… - <a href="https://github.com/detekt/detekt/pull/3500">#3500</a></li>
+  <li>Bump com.gradle.plugin-publish from 0.12.0 to 0.13.0 - <a href="https://github.com/detekt/detekt/pull/3494">#3494</a></li>
+  <li>Refactor Gradle integration tests - <a href="https://github.com/detekt/detekt/pull/3489">#3489</a></li>
+  <li>Refactor gradle integration test - <a href="https://github.com/detekt/detekt/pull/3487">#3487</a></li>
+  <li>Prepare Detekt 1.16.0-RC2 - <a href="https://github.com/detekt/detekt/pull/3485">#3485</a></li>
   <li>Bump mockk from 1.10.5 to 1.10.6 - <a href="https://github.com/detekt/detekt/pull/3473">#3473</a></li>
   <li>Upgrade to Gradle 6.8.2 - <a href="https://github.com/detekt/detekt/pull/3468">#3468</a></li>
   <li>Correct <code class="language-plaintext highlighter-rouge">maxIssues</code> documentation - <a href="https://github.com/detekt/detekt/pull/3456">#3456</a></li>
@@ -2212,7 +2229,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 3, 2021 <br />
+ Site last generated: Mar 4, 2021 <br />
                 </div>
             </div>
 </footer>
