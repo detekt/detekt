@@ -5,7 +5,7 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
-#### 1.16.0 - 2021-02-19
+#### 1.16.0 - 2021-03-04
 
 ##### Notable Changes
 
@@ -13,10 +13,20 @@ toc: true
 
 ##### Changelog
 
+- Gradle Plugin tests should access also Maven Local - [#3510](https://github.com/detekt/detekt/pull/3510)
+- Update Kotlin to version 1.4.31 - [#3509](https://github.com/detekt/detekt/pull/3509)
+- Fix SARIF validation failure - [#3507](https://github.com/detekt/detekt/pull/3507)
+- Remove off importing android util - [#3506](https://github.com/detekt/detekt/pull/3506)
+- Adding support for full method signatures in ForbiddenMethodCall - [#3505](https://github.com/detekt/detekt/pull/3505)
+- New rule: disallow to cast to nullable type - [#3497](https://github.com/detekt/detekt/pull/3497)
+- Merge XML report output - [#3491](https://github.com/detekt/detekt/pull/3491)
+- Allow using regular expressions when defining license header templates - [#3486](https://github.com/detekt/detekt/pull/3486)
 - Add UnreachableCatchBlock rule - [#3478](https://github.com/detekt/detekt/pull/3478)
+- Add NoNameShadowing rule - [#3477](https://github.com/detekt/detekt/pull/3477)
 - Fix false negative "UselessCallOnNotNull" with `list.isNullOrEmpty()` - [#3475](https://github.com/detekt/detekt/pull/3475)
 - Add UseOrEmpty rule - [#3470](https://github.com/detekt/detekt/pull/3470)
 - Add UseIsNullOrEmpty rule - [#3469](https://github.com/detekt/detekt/pull/3469)
+- Add support to Kotlin Multiplatform Projects - [#3453](https://github.com/detekt/detekt/pull/3453)
 - Fix false positives for MultilineLambdaItParameter.kt - [#3451](https://github.com/detekt/detekt/pull/3451)
 - Dont generate baseline if empty - [#3450](https://github.com/detekt/detekt/pull/3450)
 - Silence IndexOutOfBoundsException in getLineAndColumnInPsiFile() - [#3446](https://github.com/detekt/detekt/pull/3446)
@@ -77,6 +87,13 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Move gradle testkit test back to test/ - [#3504](https://github.com/detekt/detekt/pull/3504)
+- Add documentation on suppressing formatting rules - [#3503](https://github.com/detekt/detekt/pull/3503)
+- Change DetektMultiplatform from unit test to gradle testkit integrati… - [#3500](https://github.com/detekt/detekt/pull/3500)
+- Bump com.gradle.plugin-publish from 0.12.0 to 0.13.0 - [#3494](https://github.com/detekt/detekt/pull/3494)
+- Refactor Gradle integration tests - [#3489](https://github.com/detekt/detekt/pull/3489)
+- Refactor gradle integration test - [#3487](https://github.com/detekt/detekt/pull/3487)
+- Prepare Detekt 1.16.0-RC2 - [#3485](https://github.com/detekt/detekt/pull/3485)
 - Bump mockk from 1.10.5 to 1.10.6 - [#3473](https://github.com/detekt/detekt/pull/3473)
 - Upgrade to Gradle 6.8.2 - [#3468](https://github.com/detekt/detekt/pull/3468)
 - Correct `maxIssues` documentation - [#3456](https://github.com/detekt/detekt/pull/3456)

@@ -9,12 +9,13 @@ kotlinDslPluginOptions {
 repositories {
     mavenLocal() // used to publish and test local gradle plugin changes
     gradlePluginPortal()
+    mavenCentral()
     jcenter()
 }
 
 object Plugins {
     const val KOTLIN = "1.4.31"
-    const val DETEKT = "1.16.0-RC2"
+    const val DETEKT = "1.16.0-RC3"
     const val GITHUB_RELEASE = "2.2.12"
     const val SHADOW = "5.2.0"
     const val VERSIONS = "0.28.0"
