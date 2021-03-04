@@ -34,4 +34,4 @@ class FinalNewline(config: Config) : FormattingRule(config) {
     )
 }
 
-const val INSERT_FINAL_NEWLINE = "insertFinalNewline"
+const val INSERT_FINAL_NEWLINE = "insertFinalNewLine"
