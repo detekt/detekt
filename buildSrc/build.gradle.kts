@@ -9,6 +9,7 @@ kotlinDslPluginOptions {
 repositories {
     mavenLocal() // used to publish and test local gradle plugin changes
     gradlePluginPortal()
+    mavenCentral()
     jcenter()
 }
 
