@@ -42,6 +42,35 @@ class DetektMultiplatformTest : Spek({
         }
     }
 
+    describe("multiplatform projects - detekt plain only if user opts out") {
+
+        val gradleRunner = setupProject {
+            addSubmodule("shared", 1, 1,
+                buildFileContent = """
+                    $KMM_PLUGIN_BLOCK
+                    kotlin {
+                        jvm()
+                    }
+                    $DETEKT_BLOCK
+                """.trimIndent(),
+                srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
+            )
+        }
+        gradleRunner.writeProjectFile("gradle.properties", "detekt.multiplatform.disabled=true")
+
+        it("does not configure baseline task") {
+            gradleRunner.runTasksAndExpectFailure(":shared:detektBaselineMetadataMain") { result ->
+                assertThat(result.output).contains("Task 'detektBaselineMetadataMain' not found in project")
+            }
+        }
+
+        it("does not configure detekt task") {
+            gradleRunner.runTasksAndExpectFailure(":shared:detektMetadataMain") { result ->
+                assertThat(result.output).contains("Task 'detektMetadataMain' not found in project")
+            }
+        }
+    }
+
     describe("multiplatform projects - JVM target") {
         val gradleRunner = setupProject {
             addSubmodule("shared", 1, 1,

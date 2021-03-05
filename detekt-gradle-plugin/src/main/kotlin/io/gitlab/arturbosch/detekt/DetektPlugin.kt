@@ -29,8 +29,12 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        project.registerDetektAndroidTasks(extension)
-        project.registerDetektMultiplatformTasks(extension)
+        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+            project.registerDetektAndroidTasks(extension)
+        }
+        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+            project.registerDetektMultiplatformTasks(extension)
+        }
         project.registerGenerateConfigTask(extension)
     }
 
@@ -106,6 +110,9 @@ class DetektPlugin : Plugin<Project> {
         internal val defaultIncludes = listOf("**/*.kt", "**/*.kts")
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
+
+        internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
+        internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
     }
 }
 
