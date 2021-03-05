@@ -524,7 +524,12 @@ By enabling type resolution, you provide to Detekt all the information to unders
   <li><code class="language-plaintext highlighter-rouge">detektBaseline&lt;Variant&gt;</code> - Creates a detekt baselines starting from a run of Detekt with type resolution enabled on the specific build variant.</li>
 </ul>
 
-<p>Alternatively, you can create a <strong>custom detekt task</strong>, making sure to specify the <code class="language-plaintext highlighter-rouge">classpath</code> and <code class="language-plaintext highlighter-rouge">jvmTarget</code> properties correctly. Doing this on Android is more complicated due to build types/flavors (see <a href="https://github.com/detekt/detekt/issues/2259">#2259</a> for further context). Therefore, we recommend using the <code class="language-plaintext highlighter-rouge">detekt&lt;Variant&gt;</code> tasks offered by the Gradle plugins.</p>
+<p>Alternatively, you can create a <strong>custom detekt task</strong>, making sure to specify the <code class="language-plaintext highlighter-rouge">classpath</code> and <code class="language-plaintext highlighter-rouge">jvmTarget</code> properties correctly.
+Doing this on Android is more complicated due to build types/flavors (see <a href="https://github.com/detekt/detekt/issues/2259">#2259</a> for further context).
+Therefore, we recommend using the <code class="language-plaintext highlighter-rouge">detekt&lt;Variant&gt;</code> tasks offered by the Gradle plugins.</p>
+
+<p>In case of build related issues, you may try <code class="language-plaintext highlighter-rouge">detekt.android.disabled=true</code> in <code class="language-plaintext highlighter-rouge">gradle.properties</code> to prevent detekt
+Gradle plugins from configuring Android-specific gradle tasks.</p>
 
 <h2 id="enabling-on-detekt-cli">Enabling on Detekt CLI</h2>
 
@@ -598,7 +603,7 @@ By enabling type resolution, you provide to Detekt all the information to unders
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 4, 2021 <br />
+ Site last generated: Mar 5, 2021 <br />
                 </div>
             </div>
 </footer>
