@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
- * passed into a newly thrown exception.
+ * passed (e.g. as a cause) into a newly thrown exception.
  *
  * <noncompliant>
  * fun foo() {
@@ -63,7 +63,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * }
  * </compliant>
  *
- * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
+ * @configuration ignoredExceptionTypes - exception types which should be ignored (both in the catch clause and body)
  * (default: `- InterruptedException
  *            - NumberFormatException
  *            - ParseException
