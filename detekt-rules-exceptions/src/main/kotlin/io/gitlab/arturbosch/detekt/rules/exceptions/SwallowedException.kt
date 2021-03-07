@@ -98,7 +98,9 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
         val catchBody = catchClause.catchBody ?: return true
-        return !catchBody.anyDescendantOfType<KtNameReferenceExpression> { it.text == parameterName }
+        return !catchBody.anyDescendantOfType<KtNameReferenceExpression> {
+            it.text in ignoredExceptionTypes || it.text == parameterName
+        }
     }
 
     private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {

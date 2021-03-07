@@ -206,7 +206,7 @@ class SwallowedExceptionSpec : Spek({
         }
 
         SwallowedException.defaultIgnoredExceptions.forEach { exceptionName ->
-            it("ignores $exceptionName by default") {
+            it("ignores $exceptionName in the catch clause by default") {
                 val code = """
                 import java.net.MalformedURLException
                 import java.text.ParseException
@@ -215,6 +215,27 @@ class SwallowedExceptionSpec : Spek({
                     try {
                     } catch (e: $exceptionName) {
                         throw Exception()
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("ignores $exceptionName in the catch body by default") {
+                val exceptionInstantiation = if (exceptionName == "ParseException") {
+                    "$exceptionName(\"\", 0)"
+                } else {
+                    "$exceptionName(\"\")"
+                }
+
+                val code = """
+                import java.net.MalformedURLException
+                import java.text.ParseException
+
+                fun f() {
+                    try {
+                    } catch (e: Exception) {
+                        throw $exceptionInstantiation
                     }
                 }
             """
