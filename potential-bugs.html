@@ -1237,6 +1237,27 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="unusedunaryoperator">UnusedUnaryOperator</h3>
+
+<p>This rule detects unused unary operators.</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="noncompliant-code-25">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="mi">1</span> <span class="p">+</span> <span class="mi">2</span>
+    <span class="p">+</span> <span class="mi">3</span> <span class="p">+</span> <span class="mi">4</span>
+<span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// 3</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-21">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="mi">1</span> <span class="p">+</span> <span class="mi">2</span> <span class="p">+</span> <span class="mi">3</span> <span class="p">+</span> <span class="mi">4</span>
+<span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// 10</span>
+</code></pre></div></div>
+
 <h3 id="uselesspostfixexpression">UselessPostfixExpression</h3>
 
 <p>This rule reports postfix expressions (++, –) which are unused and thus unnecessary.
@@ -1245,7 +1266,7 @@ However the value is replaced with the original value which might lead to bugs.<
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-25">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-26">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">0</span>
 <span class="n">i</span> <span class="p">=</span> <span class="n">i--</span>
@@ -1259,7 +1280,7 @@ However the value is replaced with the original value which might lead to bugs.<
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-21">Compliant Code:</h4>
+<h4 id="compliant-code-22">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">0</span>
 <span class="n">i--</span>
@@ -1282,7 +1303,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-26">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-27">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
 
@@ -1292,7 +1313,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-22">Compliant Code:</h4>
+<h4 id="compliant-code-23">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
 
