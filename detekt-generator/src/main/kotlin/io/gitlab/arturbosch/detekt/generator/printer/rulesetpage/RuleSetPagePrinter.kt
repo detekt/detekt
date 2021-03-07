@@ -68,7 +68,11 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                             }
                             description { "${bold { "Deprecated" }}: ${it.deprecated}" }
                         } else {
-                            item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
+                            val defaultValues = it.defaultValue.lines()
+                            val defaultValuesString = defaultValues.joinToString {
+                                value -> value.trim().removePrefix("- ")
+                            }
+                            item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
                         }
                         description { it.description }
                     }
