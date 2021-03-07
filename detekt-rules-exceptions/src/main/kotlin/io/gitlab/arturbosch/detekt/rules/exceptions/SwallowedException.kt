@@ -78,12 +78,6 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         "The caught exception is swallowed. The original exception could be lost.",
         Debt.TWENTY_MINS)
 
-    private val defaultIgnoredExceptions = listOf(
-            "NumberFormatException",
-            "InterruptedException",
-            "ParseException",
-            "MalformedURLException"
-    )
     private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
             .map { it.removePrefix("*").removeSuffix("*") }
 
@@ -166,5 +160,12 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
         const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+
+        internal val defaultIgnoredExceptions = listOf(
+            "NumberFormatException",
+            "InterruptedException",
+            "ParseException",
+            "MalformedURLException"
+        )
     }
 }

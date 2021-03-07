@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.net.MalformedURLException
-import java.text.ParseException
 
 class SwallowedExceptionSpec : Spek({
     val subject by memoized { SwallowedException() }
@@ -207,12 +205,7 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        listOf(
-            InterruptedException::class.java.simpleName,
-            MalformedURLException::class.java.simpleName,
-            NumberFormatException::class.java.simpleName,
-            ParseException::class.java.simpleName
-        ).forEach { exceptionName ->
+        SwallowedException.defaultIgnoredExceptions.forEach { exceptionName ->
             it("ignores $exceptionName by default") {
                 val code = """
                 import java.net.MalformedURLException
