@@ -681,7 +681,7 @@ Furthermore, this rule reports values from <code class="language-plaintext highl
 <h3 id="swallowedexception">SwallowedException</h3>
 
 <p>Exceptions should not be swallowed. This rule reports all instances where exceptions are <code class="language-plaintext highlighter-rouge">caught</code> and not correctly
-passed into a newly thrown exception.</p>
+passed (e.g. as a cause) into a newly thrown exception.</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -691,7 +691,7 @@ passed into a newly thrown exception.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> (default: <code class="language-plaintext highlighter-rouge">InterruptedException, NumberFormatException, ParseException, MalformedURLException</code>)</p>
 
-    <p>exception types which should be ignored by this rule</p>
+    <p>exception types which should be ignored (both in the catch clause and body)</p>
   </li>
   <li>
     <p><code class="language-plaintext highlighter-rouge">allowedExceptionNameRegex</code> (default: <code class="language-plaintext highlighter-rouge">'_|(ignore|expected).*'</code>)</p>
