@@ -688,12 +688,8 @@ passed into a newly thrown exception.</p>
 <h4 id="configuration-options-2">Configuration options:</h4>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> (default: ``- InterruptedException
-    <ul>
-      <li>NumberFormatException</li>
-      <li>ParseException</li>
-      <li>MalformedURLException``)</li>
-    </ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> (default: <code class="language-plaintext highlighter-rouge">InterruptedException, NumberFormatException, ParseException, MalformedURLException</code>)</p>
 
     <p>exception types which should be ignored by this rule</p>
   </li>
@@ -786,11 +782,8 @@ down an underlying issue in a better way.</p>
 <h4 id="configuration-options-3">Configuration options:</h4>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">exceptions</code> (default: ``- IllegalArgumentException
-    <ul>
-      <li>IllegalStateException</li>
-      <li>IOException``)</li>
-    </ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">exceptions</code> (default: <code class="language-plaintext highlighter-rouge">IllegalArgumentException, IllegalStateException, IOException</code>)</p>
 
     <p>exceptions which should not be thrown without message or cause</p>
   </li>
@@ -856,16 +849,8 @@ exception is too broad it can lead to unintended exceptions being caught.</p>
 <h4 id="configuration-options-4">Configuration options:</h4>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: ``- ArrayIndexOutOfBoundsException
-    <ul>
-      <li>Error</li>
-      <li>Exception</li>
-      <li>IllegalMonitorStateException</li>
-      <li>NullPointerException</li>
-      <li>IndexOutOfBoundsException</li>
-      <li>RuntimeException</li>
-      <li>Throwable``)</li>
-    </ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">ArrayIndexOutOfBoundsException, Error, Exception, IllegalMonitorStateException, NullPointerException, IndexOutOfBoundsException, RuntimeException, Throwable</code>)</p>
 
     <p>exceptions which are too generic and should not be caught</p>
   </li>
@@ -904,12 +889,8 @@ exceptions to the case that has currently occurred.</p>
 <h4 id="configuration-options-5">Configuration options:</h4>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: ``- Error
-    <ul>
-      <li>Exception</li>
-      <li>Throwable</li>
-      <li>RuntimeException``)</li>
-    </ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">Error, Exception, Throwable, RuntimeException</code>)</p>
 
     <p>exceptions which are too generic and should not be thrown</p>
   </li>
