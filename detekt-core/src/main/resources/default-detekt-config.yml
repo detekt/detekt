@@ -537,6 +537,8 @@ potential-bugs:
     active: true
   UnsafeCast:
     active: true
+  UnusedUnaryOperator:
+    active: false
   UselessPostfixExpression:
     active: false
   WrongEqualsTypeParameter:
