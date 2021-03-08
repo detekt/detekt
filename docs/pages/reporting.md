@@ -105,7 +105,7 @@ subprojects {
 #### Kotlin DSL
 
 ```kotlin
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlReportMergeTask::class) { 
+val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
   output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml")) // or file("reports/detekt/merge.sarif")
 }
 
@@ -118,7 +118,7 @@ subprojects {
     tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
       reportMerge.configure {
         this.mustRunAfter(this@detekt)
-        input.from(this@detekt.sarifReportFile)
+        input.from(this@detekt.xmlReportFile) // or .sarifReportFile
       }
     }
   }
