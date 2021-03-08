@@ -16,7 +16,7 @@ dependencies {
         api("io.mockk:mockk:1.10.6")
         api("org.junit.platform:junit-platform-launcher:1.7.1")
         api("org.yaml:snakeyaml:1.28")
-        api("com.beust:jcommander:1.78")
+        api("com.beust:jcommander:1.81")
         api("com.pinterest.ktlint:ktlint-ruleset-standard:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-core:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
