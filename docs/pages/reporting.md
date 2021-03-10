@@ -77,26 +77,25 @@ The machine-readable report formats support report merging.
 Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
-At the moment, only merging XML is supported. You can refer to the sample script below and 
-run `./gradlew detekt xmlReportMerge --continue` to execute detekt tasks and merge their reports.
+At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
+run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
 #### Groovy DSL
-
 ```groovy
-task xmlReportMerge(type: io.gitlab.arturbosch.detekt.report.XmlReportMergeTask) {
-  output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+task reportMerge(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+  output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or file("reports/detekt/merge.sarif")
 }
 
 subprojects {
   detekt {
-    reports.xml.enabled = true
+    reports.xml.enabled = true // reports.sarif.enabled = true
   }
   
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
     tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
-      xmlReportMerge.configure { mergeTask ->
+        reportMerge.configure { mergeTask ->
         mergeTask.mustRunAfter(detektTask)
-        mergeTask.input.from(detektTask.xmlReportFile)
+        mergeTask.input.from(detektTask.xmlReportFile) // or detektTask.sarifReportFile
       }
     }
   }
@@ -106,20 +105,20 @@ subprojects {
 #### Kotlin DSL
 
 ```kotlin
-val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.XmlReportMergeTask::class) { 
-  output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
+  output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml")) // or file("reports/detekt/merge.sarif")
 }
 
 subprojects {
   detekt {
-    reports.xml.enabled = true
+    reports.xml.enabled = true // reports.sarif.enabled = true
   }
   
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
     tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-      xmlReportMerge.configure {
+      reportMerge.configure {
         this.mustRunAfter(this@detekt)
-        input.from(this@detekt.xmlReportFile)
+        input.from(this@detekt.xmlReportFile) // or .sarifReportFile
       }
     }
   }

@@ -102,12 +102,18 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
-        val args = mutableListOf("--stacktrace", "--info", "--build-cache")
-        if (dryRun) {
-            args.add("-Pdetekt-dry-run=true")
+        val args = buildList<String> {
+            add("--stacktrace")
+            add("--info")
+            add("--build-cache")
+            add("-Dorg.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m")
+            if (dryRun) {
+                add("-Pdetekt-dry-run=true")
+            }
+            addAll(tasks.toList())
         }
-        args.addAll(tasks.toList())
 
         return GradleRunner.create().apply {
             withProjectDir(rootDir)

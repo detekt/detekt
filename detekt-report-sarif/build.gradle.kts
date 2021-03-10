@@ -5,7 +5,7 @@ plugins {
 dependencies {
     compileOnly(project(":detekt-api"))
     compileOnly(project(":detekt-tooling"))
-    implementation("io.github.detekt.sarif4j:sarif4j:1.0.0")
+    implementation("io.github.detekt.sarif4j:sarif4j")
     testImplementation(project(":detekt-tooling"))
     testImplementation(project(":detekt-test-utils"))
     testImplementation(testFixtures(project(":detekt-api")))
