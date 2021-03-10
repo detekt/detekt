@@ -529,25 +529,24 @@ namely XML and SARIF.</p>
 Detekt Gradle plugin is not opinionated in how merging is set up and respects each project’s build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.</p>
 
-<p>At the moment, only merging XML is supported. You can refer to the sample script below and 
-run <code class="language-plaintext highlighter-rouge">./gradlew detekt xmlReportMerge --continue</code> to execute detekt tasks and merge their reports.</p>
+<p>At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
+run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMerge --continue</code> to execute detekt tasks and merge the corresponding reports.</p>
 
 <h4 id="groovy-dsl">Groovy DSL</h4>
-
-<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">task</span> <span class="nf">xmlReportMerge</span><span class="o">(</span><span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">report</span><span class="o">.</span><span class="na">XmlReportMergeTask</span><span class="o">)</span> <span class="o">{</span>
-  <span class="n">output</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">buildDirectory</span><span class="o">.</span><span class="na">file</span><span class="o">(</span><span class="s2">"reports/detekt/merge.xml"</span><span class="o">)</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">task</span> <span class="nf">reportMerge</span><span class="o">(</span><span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">report</span><span class="o">.</span><span class="na">ReportMergeTask</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">output</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">buildDirectory</span><span class="o">.</span><span class="na">file</span><span class="o">(</span><span class="s2">"reports/detekt/merge.xml"</span><span class="o">)</span> <span class="c1">// or file("reports/detekt/merge.sarif")</span>
 <span class="o">}</span>
 
 <span class="n">subprojects</span> <span class="o">{</span>
   <span class="n">detekt</span> <span class="o">{</span>
-    <span class="n">reports</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">enabled</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">reports</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">enabled</span> <span class="o">=</span> <span class="kc">true</span> <span class="c1">// reports.sarif.enabled = true</span>
   <span class="o">}</span>
   
   <span class="n">plugins</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">DetektPlugin</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span> <span class="n">detektTask</span> <span class="o">-&gt;</span>
-      <span class="n">xmlReportMerge</span><span class="o">.</span><span class="na">configure</span> <span class="o">{</span> <span class="n">mergeTask</span> <span class="o">-&gt;</span>
+        <span class="n">reportMerge</span><span class="o">.</span><span class="na">configure</span> <span class="o">{</span> <span class="n">mergeTask</span> <span class="o">-&gt;</span>
         <span class="n">mergeTask</span><span class="o">.</span><span class="na">mustRunAfter</span><span class="o">(</span><span class="n">detektTask</span><span class="o">)</span>
-        <span class="n">mergeTask</span><span class="o">.</span><span class="na">input</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">detektTask</span><span class="o">.</span><span class="na">xmlReportFile</span><span class="o">)</span>
+        <span class="n">mergeTask</span><span class="o">.</span><span class="na">input</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">detektTask</span><span class="o">.</span><span class="na">xmlReportFile</span><span class="o">)</span> <span class="c1">// or detektTask.sarifReportFile</span>
       <span class="o">}</span>
     <span class="o">}</span>
   <span class="o">}</span>
@@ -556,20 +555,20 @@ run <code class="language-plaintext highlighter-rouge">./gradlew detekt xmlRepor
 
 <h4 id="kotlin-dsl">Kotlin DSL</h4>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">xmlReportMerge</span> <span class="k">by</span> <span class="n">tasks</span><span class="p">.</span><span class="nf">registering</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="n">report</span><span class="p">.</span><span class="nc">XmlReportMergeTask</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span> 
-  <span class="n">output</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="n">project</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">buildDirectory</span><span class="p">.</span><span class="nf">file</span><span class="p">(</span><span class="s">"reports/detekt/merge.xml"</span><span class="p">))</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">reportMerge</span> <span class="k">by</span> <span class="n">tasks</span><span class="p">.</span><span class="nf">registering</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="n">report</span><span class="p">.</span><span class="nc">ReportMergeTask</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span> 
+  <span class="n">output</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="n">project</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">buildDirectory</span><span class="p">.</span><span class="nf">file</span><span class="p">(</span><span class="s">"reports/detekt/merge.xml"</span><span class="p">))</span> <span class="c1">// or file("reports/detekt/merge.sarif")</span>
 <span class="p">}</span>
 
 <span class="nf">subprojects</span> <span class="p">{</span>
   <span class="nf">detekt</span> <span class="p">{</span>
-    <span class="n">reports</span><span class="p">.</span><span class="n">xml</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+    <span class="n">reports</span><span class="p">.</span><span class="n">xml</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span> <span class="c1">// reports.sarif.enabled = true</span>
   <span class="p">}</span>
   
   <span class="n">plugins</span><span class="p">.</span><span class="nf">withType</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">DetektPlugin</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">tasks</span><span class="p">.</span><span class="nf">withType</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="nd">detekt@</span><span class="p">{</span>
-      <span class="n">xmlReportMerge</span><span class="p">.</span><span class="nf">configure</span> <span class="p">{</span>
+      <span class="n">reportMerge</span><span class="p">.</span><span class="nf">configure</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nf">mustRunAfter</span><span class="p">(</span><span class="k">this</span><span class="nd">@detekt</span><span class="p">)</span>
-        <span class="n">input</span><span class="p">.</span><span class="nf">from</span><span class="p">(</span><span class="k">this</span><span class="nd">@detekt</span><span class="p">.</span><span class="n">xmlReportFile</span><span class="p">)</span>
+        <span class="n">input</span><span class="p">.</span><span class="nf">from</span><span class="p">(</span><span class="k">this</span><span class="nd">@detekt</span><span class="p">.</span><span class="n">xmlReportFile</span><span class="p">)</span> <span class="c1">// or .sarifReportFile</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -623,7 +622,7 @@ You can follow to the <a href="https://docs.github.com/en/github/finding-securit
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 8, 2021 <br />
+ Site last generated: Mar 10, 2021 <br />
                 </div>
             </div>
 </footer>
