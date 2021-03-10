@@ -5,7 +5,7 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
-#### 1.16.0 - 2021-03-04
+#### 1.16.0 - 2021-03-10
 
 ##### Notable Changes
 
@@ -13,11 +13,18 @@ toc: true
 
 ##### Changelog
 
+- Bump jcommander from 1.78 to 1.81 - [#3530](https://github.com/detekt/detekt/pull/3530)
+- Swallow exception fixes - [#3525](https://github.com/detekt/detekt/pull/3525)
+- Merge SARIF reports - [#3522](https://github.com/detekt/detekt/pull/3522)
+- Revert Update Kotlin to version 1.4.31 - [#3521](https://github.com/detekt/detekt/pull/3521)
+- Fix not being able to override `insertFinalNewLine` - [#3515](https://github.com/detekt/detekt/pull/3515)
+- Allow opt-out configuring detekt android and multiplatform - [#3511](https://github.com/detekt/detekt/pull/3511)
 - Gradle Plugin tests should access also Maven Local - [#3510](https://github.com/detekt/detekt/pull/3510)
 - Update Kotlin to version 1.4.31 - [#3509](https://github.com/detekt/detekt/pull/3509)
 - Fix SARIF validation failure - [#3507](https://github.com/detekt/detekt/pull/3507)
 - Remove off importing android util - [#3506](https://github.com/detekt/detekt/pull/3506)
 - Adding support for full method signatures in ForbiddenMethodCall - [#3505](https://github.com/detekt/detekt/pull/3505)
+- Add UnusedUnaryOperator rule - [#3499](https://github.com/detekt/detekt/pull/3499)
 - New rule: disallow to cast to nullable type - [#3497](https://github.com/detekt/detekt/pull/3497)
 - Merge XML report output - [#3491](https://github.com/detekt/detekt/pull/3491)
 - Allow using regular expressions when defining license header templates - [#3486](https://github.com/detekt/detekt/pull/3486)
@@ -87,6 +94,8 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- SwallowedException: Slightly improve the documentation - [#3527](https://github.com/detekt/detekt/pull/3527)
+- Fix Markdown rendering of multiple default values - [#3526](https://github.com/detekt/detekt/pull/3526)
 - Move gradle testkit test back to test/ - [#3504](https://github.com/detekt/detekt/pull/3504)
 - Add documentation on suppressing formatting rules - [#3503](https://github.com/detekt/detekt/pull/3503)
 - Change DetektMultiplatform from unit test to gradle testkit integrati… - [#3500](https://github.com/detekt/detekt/pull/3500)
