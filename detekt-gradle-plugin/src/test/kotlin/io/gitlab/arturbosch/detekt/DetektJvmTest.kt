@@ -54,7 +54,6 @@ object DetektJvmTest : Spek({
 
                     detekt {
                         reports {
-                            sarif.enabled = true
                             txt.enabled = false
                         }
                     }

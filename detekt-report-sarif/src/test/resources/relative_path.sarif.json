@@ -9,9 +9,9 @@
           "name": "detekt",
           "organization": "detekt",
           "fullName": "detekt",
-          "version": "1.0.0",
-          "semanticVersion": "1.0.0",
-          "downloadUri": "https://github.com/detekt/detekt/releases/download/v1.0.0/detekt",
+          "version": "1.16.0",
+          "semanticVersion": "1.16.0",
+          "downloadUri": "https://github.com/detekt/detekt/releases/download/v1.16.0/detekt",
           "informationUri": "https://detekt.github.io/detekt",
           "rules": [],
           "language": "en"
