@@ -584,6 +584,8 @@ style:
     active: true
     excludes: ['**']
     ignorePackages: ['*.internal', '*.internal.*']
+  ForbiddenSingleExpressionFunction:
+    active: false
   ForbiddenVoid:
     active: false
     ignoreOverridden: false

@@ -90,7 +90,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIfEmptyOrIfBlank(config),
             MultilineLambdaItParameter(config),
             UseIsNullOrEmpty(config),
-            UseOrEmpty(config)
+            UseOrEmpty(config),
+            ForbiddenSingleExpressionFunction(config),
         )
     )
 }
