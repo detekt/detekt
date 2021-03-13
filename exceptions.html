@@ -683,6 +683,11 @@ Furthermore, this rule reports values from <code class="language-plaintext highl
 <p>Exceptions should not be swallowed. This rule reports all instances where exceptions are <code class="language-plaintext highlighter-rouge">caught</code> and not correctly
 passed (e.g. as a cause) into a newly thrown exception.</p>
 
+<p>The exception types configured in <code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> indicate nonexceptional outcomes.
+These by default configured exception types are part of Java.
+Therefore, Kotlin developers have to handle them by using the catch clause.
+For that reason, this rule ignores that these configured exception types are caught.</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-2">Configuration options:</h4>
@@ -932,7 +937,7 @@ exceptions to the case that has currently occurred.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 11, 2021 <br />
+ Site last generated: Mar 13, 2021 <br />
                 </div>
             </div>
 </footer>
