@@ -18,6 +18,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
         listOf(
             Deprecation(config),
             DontDowncastCollectionTypes(config),
+            DoubleMutabilityForCollection(config),
             DuplicateCaseInWhenExpression(config),
             EqualsAlwaysReturnsTrueOrFalse(config),
             EqualsWithHashCodeExist(config),
