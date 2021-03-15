@@ -94,7 +94,7 @@ internal class DetektReportMergeTest : Spek({
                     assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
                     assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
                     assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
-                        .contains("\"ruleId\" : \"detekt.style.MagicNumber\"")
+                        .contains("\"ruleId\": \"detekt.style.MagicNumber\"")
                     projectLayout.submodules.forEach {
                         assertThat(projectFile("${it.name}/build/reports/detekt/detekt.sarif")).exists()
                     }

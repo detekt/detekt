@@ -11,7 +11,7 @@ import java.util.Locale
 import java.util.ServiceLoader
 
 /**
- * Given the existing config, return a list of [ReportingDescriptor] for the active rules.
+ * Given the existing config, return a list of [ReportingDescriptor] for the rules.
  */
 fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
     val sets = ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
@@ -26,16 +26,15 @@ fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
         when (rule) {
             is MultiRule ->
                 descriptors.addAll(rule.toDescriptors(ruleSetId))
-            is Rule -> if (rule.active) {
+            is Rule ->
                 descriptors.add(rule.toDescriptor(ruleSetId))
-            }
         }
     }
     return descriptors
 }
 
 private fun MultiRule.toDescriptors(ruleSetId: RuleSetId): List<ReportingDescriptor> =
-    this.activeRules.map { it.toDescriptor(ruleSetId) }
+    this.rules.map { it.toDescriptor(ruleSetId) }
 
 private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor = ReportingDescriptor(
     id = "detekt.$ruleSetId.$ruleId",
