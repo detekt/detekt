@@ -109,7 +109,7 @@ private val KtDeclaration.printableDeclaration: String
 @Suppress("MagicNumber")
 private val KtDeclaration.priority: Int?
     get() = when (this) {
-        is KtProperty -> 0
+        is KtProperty -> if (receiverTypeReference == null) 0 else 2 // Treat extension property as function.
         is KtClassInitializer -> 0
         is KtSecondaryConstructor -> 1
         is KtNamedFunction -> 2

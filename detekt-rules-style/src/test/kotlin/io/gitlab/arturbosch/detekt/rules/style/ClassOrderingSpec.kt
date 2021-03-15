@@ -194,7 +194,7 @@ class ClassOrderingSpec : Spek({
                 }
             """
 
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does report all issues in a class with multiple misorderings") {
@@ -220,6 +220,62 @@ class ClassOrderingSpec : Spek({
                 .isEqualTo("returnX (function) should not come before MultipleMisorders (secondary constructor)")
             assertThat(findings[2].message)
                 .isEqualTo("MultipleMisorders (secondary constructor) should not come before y (property)")
+        }
+
+        it("does not report val property extensions not ordered as a property") {
+            val code = """
+                class InOrder(private val x: String) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    fun returnX() = x.value
+
+                    private val String?.value: String 
+                       get() = this ?: ""
+
+                    companion object {
+                        const val IMPORTANT_VALUE = 3
+                    }
+                }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report var property extensions not ordered as a property") {
+            val code = """
+                class InOrder(private var x: String?) {
+                    val y = x
+
+                    init {
+                        check(x == "yes")
+                    }
+
+                    constructor(z: Int): this(z.toString())
+
+                    fun returnX() = safeY
+
+                    var InOrder.safeY: String 
+                       get() = x.orEmpty()
+                       set(value) {
+                           x = if (value.isEmpty()) {
+                               null
+                           } else {
+                               value
+                           }
+                       }
+
+                    companion object {
+                        const val IMPORTANT_VALUE = 3
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
