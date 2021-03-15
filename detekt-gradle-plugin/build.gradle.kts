@@ -20,8 +20,7 @@ val intTest: Configuration by configurations.creating
 dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
     implementation(kotlin("gradle-plugin-api"))
-    implementation("io.github.detekt.sarif4j:sarif4j")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("io.github.detekt.sarif4k:sarif4k")
     compileOnly(androidGradlePlugin)
     compileOnly(kotlin("gradle-plugin"))
 
