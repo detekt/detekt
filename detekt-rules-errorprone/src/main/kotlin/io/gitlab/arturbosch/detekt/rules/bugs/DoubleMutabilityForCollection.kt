@@ -58,7 +58,7 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
             report(CodeSmell(
                 issue,
                 Entity.from(property),
-                "Property ${property.name} is declared as `var` with a mutable type $standardType. " +
+                "Variable ${property.name} is declared as `var` with a mutable type $standardType. " +
                         "Consider using `val` or an immutable collection type"
             ))
         }
