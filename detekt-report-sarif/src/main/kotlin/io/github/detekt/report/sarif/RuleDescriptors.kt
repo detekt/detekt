@@ -12,7 +12,7 @@ import java.util.Locale
 import java.util.ServiceLoader
 
 fun ruleDescriptors(config: Config): HashMap<String, ReportingDescriptor> {
-    val sets = ServiceLoader.load(RuleSetProvider::class.java)
+    val sets = ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
         .map { it.instance(config.subConfig(it.ruleSetId)) }
     val descriptors = HashMap<String, ReportingDescriptor>()
     for (ruleSet in sets) {
