@@ -666,6 +666,8 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: true
+  SingleAbstractMethod:
+    active: true
   SpacingBetweenPackageAndImports:
     active: false
   ThrowsCount:
