@@ -51,6 +51,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             OptionalUnit(config),
             ProtectedMemberInFinalClass(config),
             SerialVersionUIDInSerializableClass(config),
+            SingleAbstractMethod(config),
             MagicNumber(config),
             ModifierOrder(config),
             DataClassContainsFunctions(config),
