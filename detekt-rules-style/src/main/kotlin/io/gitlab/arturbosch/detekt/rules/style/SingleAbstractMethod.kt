@@ -16,6 +16,8 @@ import org.jetbrains.kotlin.psi.KtSuperTypeEntry
  * An anonymous object that does nothing other than the implementation of a single method
  * can be used as a Single Abstract Method.
  *
+ * See https://kotlinlang.org/docs/fun-interfaces.html
+ *
  * <noncompliant>
  * object : Foo {
  *     override fun bar() {
