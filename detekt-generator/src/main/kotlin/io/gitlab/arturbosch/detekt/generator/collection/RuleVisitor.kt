@@ -27,6 +27,7 @@ internal class RuleVisitor : DetektVisitor() {
     private var compliant = ""
     private var name = ""
     private var active = false
+    private var activeSince: String? = null
     private var autoCorrect = false
     private var requiresTypeResolution = false
     private var severity = ""
@@ -47,6 +48,7 @@ internal class RuleVisitor : DetektVisitor() {
             nonCompliantCodeExample = nonCompliant,
             compliantCodeExample = compliant,
             active = active,
+            activeSince = activeSince,
             severity = severity,
             debt = debt,
             aliases = aliases,
@@ -89,6 +91,15 @@ internal class RuleVisitor : DetektVisitor() {
         }
 
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
+        val activeTagContent = classOrObject.kDocSection()
+            ?.findTagByName(TAG_ACTIVE)
+            ?.getContent()
+            ?.split(" ")
+            .orEmpty()
+        if (SINCE_KEYWORD in activeTagContent) {
+            activeSince = activeTagContent.last()
+        }
+
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
         requiresTypeResolution = classOrObject.kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
 
@@ -184,6 +195,7 @@ internal class RuleVisitor : DetektVisitor() {
         )
 
         private const val TAG_ACTIVE = "active"
+        private const val SINCE_KEYWORD = "since"
         private const val TAG_AUTO_CORRECT = "autoCorrect"
         private const val TAG_REQUIRES_TYPE_RESOLUTION = "requiresTypeResolution"
         private const val TAG_NONCOMPLIANT = "<noncompliant>"

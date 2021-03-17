@@ -40,6 +40,11 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 paragraph { "TODO: Specify description" }
             }
 
+            paragraph {
+                "${bold { "Active" }}: ${if (rule.active) "Yes" else "No"}" +
+                        (rule.activeSince?.let { " - Since $it" } ?: "")
+            }
+
             if (rule.requiresTypeResolution) {
                 paragraph {
                     bold { "Requires Type Resolution" }

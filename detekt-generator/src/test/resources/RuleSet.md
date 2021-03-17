@@ -4,6 +4,8 @@ style rule set
 
 a wildcard import
 
+**Active**: Yes - Since v1.0.0
+
 **Debt**: 10min
 
 **Aliases**: alias1, alias2
@@ -36,9 +38,13 @@ import foo.bar
 
 equals null
 
+**Active**: No
+
 ### NoUnitKeyword
 
 removes :Unit
+
+**Active**: Yes - Since v1.16.0
 
 **Requires Type Resolution**
 

@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * requireNotNull(x)
  * </compliant>
  *
- * @since 1.12.0
  * @requiresTypeResolution
  */
 class UseRequireNotNull(config: Config = Config.empty) : Rule(config) {
