@@ -211,7 +211,7 @@ open class Detekt @Inject constructor(
     @TaskAction
     fun check() {
         if (failFastProp.getOrElse(false)) {
-            project.logger.warn("'failFast' is deprecated. Please use 'buildOnDefaultConfig' together with 'allRules'.")
+            project.logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
         }
 
         val arguments = mutableListOf(
