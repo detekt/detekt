@@ -33,22 +33,25 @@ fun RuleSet.visitFile(
         it.findings
     }
 
-fun associateRuleIdsToRuleSetIds(ruleSets: Sequence<RuleSet>): Map<RuleId, RuleSetId> {
+typealias IdMapping = Map<RuleId, RuleSetId>
+
+fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
     fun extractIds(rule: BaseRule) =
         if (rule is MultiRule) {
             rule.rules.asSequence().map(Rule::ruleId)
         } else {
             sequenceOf(rule.ruleId)
         }
-    return ruleSets.flatMap { ruleSet ->
-        ruleSet.rules
-            .asSequence()
-            .flatMap { rule ->
-                extractIds(rule).map { ruleId ->
-                    ruleId to ruleSet.id
-                }
-            }
-    }.toMap()
+    return rules
+        .asSequence()
+        .flatMap { (ruleSetId, baseRules) ->
+            baseRules
+                .asSequence()
+                .flatMap(::extractIds)
+                .distinct()
+                .map { ruleId -> ruleId to ruleSetId }
+        }
+        .toMap()
 }
 
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
