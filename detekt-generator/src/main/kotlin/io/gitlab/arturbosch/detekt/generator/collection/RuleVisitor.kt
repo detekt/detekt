@@ -113,8 +113,7 @@ internal class RuleVisitor : DetektVisitor() {
 
     private fun KtClassOrObject.hasKDocTag(tagName: String) = kDocSection()?.findTagByName(tagName) != null
 
-    private fun KtClassOrObject.requiresTypeResolution() =
-        isAnnotatedWith(RequiresTypeResolution::class) || hasKDocTag(TAG_REQUIRES_TYPE_RESOLUTION)
+    private fun KtClassOrObject.requiresTypeResolution() = isAnnotatedWith(RequiresTypeResolution::class)
 
     private fun KtClassOrObject.isAnnotatedWith(annotation: KClass<out Annotation>) =
         annotationEntries.any { it.shortName?.identifier == annotation.simpleName }
@@ -215,7 +214,6 @@ internal class RuleVisitor : DetektVisitor() {
         private const val TAG_ACTIVE = "active"
         private const val SINCE_KEYWORD = "since"
         private const val TAG_AUTO_CORRECT = "autoCorrect"
-        private const val TAG_REQUIRES_TYPE_RESOLUTION = "requiresTypeResolution"
         private const val TAG_NONCOMPLIANT = "<noncompliant>"
         private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
         private const val TAG_COMPLIANT = "<compliant>"

@@ -205,18 +205,6 @@ class RuleCollectorSpec : Spek({
 
         it("collects the flag that it requires type resolution") {
             val code = """
-                /**
-                 * description
-                 * @requiresTypeResolution
-                 */
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].requiresTypeResolution).isTrue()
-        }
-
-        it("collects the flag that it requires type resolution from annotation") {
-            val code = """
                 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
                 
                 /**
