@@ -11,11 +11,6 @@ plugins {
     id("binary-compatibility-validator")
 }
 
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
-}
-
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
