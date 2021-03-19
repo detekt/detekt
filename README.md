@@ -103,17 +103,17 @@ detekt {
 }
 
 
-// Groovy dsl
-tasks.detekt.jvmTarget = "1.8"
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 
 // or
 
-// Kotlin dsl
-tasks {
-    withType<Detekt> {
-        // Target version of the generated JVM bytecode. It is used for type resolution.
-        this.jvmTarget = "1.8"
-    }
+// Kotlin DSL
+tasks.withType<Detekt>.configureEach {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
 }
 ```
 
@@ -128,7 +128,7 @@ which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
 }
 ```
 
