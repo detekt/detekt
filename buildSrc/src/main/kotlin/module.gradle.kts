@@ -8,11 +8,6 @@ plugins {
     jacoco
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 // bundle detekt's version for all jars to use it at runtime
 tasks.withType<Jar>().configureEach {
     manifest {
