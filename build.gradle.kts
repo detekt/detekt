@@ -18,16 +18,16 @@ allprojects {
 
 jacoco.toolVersion = Versions.JACOCO
 
-val examplesOrTestUtils = setOf(
-    "detekt-bom",
-    "detekt-test",
-    "detekt-test-utils",
-    "detekt-sample-extensions"
-)
-
 tasks {
     jacocoTestReport {
         executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        val examplesOrTestUtils = setOf(
+            "detekt-bom",
+            "detekt-test",
+            "detekt-test-utils",
+            "detekt-sample-extensions"
+        )
 
         subprojects
             .filterNot { it.name in examplesOrTestUtils }
