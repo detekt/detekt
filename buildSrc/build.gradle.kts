@@ -22,7 +22,7 @@ object Plugins {
     const val DOKKA = "1.4.10"
     const val SEMVER4J = "3.1.0"
     const val NEXUS = "0.22.0"
-    const val KOTLIN_API_VALIDATOR = "0.3.0"
+    const val KOTLIN_API_VALIDATOR = "0.4.0"
 }
 
 dependencies {
