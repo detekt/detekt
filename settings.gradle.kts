@@ -31,14 +31,19 @@ include(
     "detekt-tooling"
 )
 
-pluginManagement {
-
-    repositories {
-        gradlePluginPortal()
-    }
-}
-
 // build scan plugin can only be applied in settings file
 plugins {
     id("com.gradle.enterprise") version "3.3.1"
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        jcenter {
+            content {
+                includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
+                includeGroup("org.jetbrains.dokka")
+            }
+        }
+    }
 }

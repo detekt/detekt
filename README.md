@@ -77,9 +77,9 @@ buildscript {
     mavenCentral()
     jcenter {
         content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
+            // Only download the 'kotlinx-html-jvm' module from JCenter, but nothing else.
+            // detekt needs 'kotlinx-html-jvm' for the HTML report.
+            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
         }
     }
 }
