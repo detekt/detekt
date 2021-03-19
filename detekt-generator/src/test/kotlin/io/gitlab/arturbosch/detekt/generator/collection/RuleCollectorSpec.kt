@@ -212,7 +212,32 @@ class RuleCollectorSpec : Spek({
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
-            assertThat(items).hasSize(1)
+            assertThat(items[0].requiresTypeResolution).isTrue()
+        }
+
+        it("collects the flag that it requires type resolution from annotation") {
+            val code = """
+                import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+                
+                /**
+                 * description
+                 */
+                @RequiresTypeResolution
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
+            assertThat(items[0].requiresTypeResolution).isTrue()
+        }
+
+        it("collects the flag that it requires type resolution from fully qualified annotation") {
+            val code = """
+                /**
+                 * description
+                 */
+                @io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isTrue()
         }
 

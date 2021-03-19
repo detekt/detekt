@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
@@ -17,7 +18,9 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
+import kotlin.reflect.KClass
 
+@Suppress("TooManyFunctions")
 internal class RuleVisitor : DetektVisitor() {
 
     val containsRule
@@ -90,7 +93,7 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
         }
 
-        active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
+        active = classOrObject.hasKDocTag(TAG_ACTIVE)
         val activeTagContent = classOrObject.kDocSection()
             ?.findTagByName(TAG_ACTIVE)
             ?.getContent()
@@ -100,7 +103,7 @@ internal class RuleVisitor : DetektVisitor() {
             activeSince = activeTagContent.last()
         }
 
-        autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
+        autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)
         requiresTypeResolution = classOrObject.requiresTypeResolution()
 
         val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
@@ -108,8 +111,13 @@ internal class RuleVisitor : DetektVisitor() {
         configuration.addAll(classOrObject.parseConfigurationTags())
     }
 
+    private fun KtClassOrObject.hasKDocTag(tagName: String) = kDocSection()?.findTagByName(tagName) != null
+
     private fun KtClassOrObject.requiresTypeResolution() =
-        kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
+        isAnnotatedWith(RequiresTypeResolution::class) || hasKDocTag(TAG_REQUIRES_TYPE_RESOLUTION)
+
+    private fun KtClassOrObject.isAnnotatedWith(annotation: KClass<out Annotation>) =
+        annotationEntries.any { it.shortName?.identifier == annotation.simpleName }
 
     private fun extractRuleDocumentation(comment: String) {
         val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
