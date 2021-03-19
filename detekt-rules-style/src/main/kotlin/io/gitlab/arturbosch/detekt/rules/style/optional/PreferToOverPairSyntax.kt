@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
@@ -28,8 +29,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * val pair = 1 to 2
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("PreferToOverPairSyntax", Severity.Style,
             "Pair was created using the Pair constructor, using the to syntax is preferred.",

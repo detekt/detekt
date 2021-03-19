@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -35,8 +36,8 @@ import org.jetbrains.kotlin.types.isFlexible
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class HasPlatformType(config: Config) : Rule(config) {
 
     override val issue = Issue(

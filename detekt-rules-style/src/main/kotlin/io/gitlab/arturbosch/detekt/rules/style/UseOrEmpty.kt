@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -38,8 +39,8 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",

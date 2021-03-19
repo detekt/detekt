@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
@@ -46,9 +47,8 @@ import org.jetbrains.kotlin.types.isNullable
  *     return "${a ?: "-"}"
  * }
  * </compliant>
- *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 @Suppress("ReturnCount")
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(

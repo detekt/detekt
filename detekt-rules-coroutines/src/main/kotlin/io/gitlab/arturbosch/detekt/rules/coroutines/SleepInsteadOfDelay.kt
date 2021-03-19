@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -36,8 +37,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,

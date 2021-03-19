@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
@@ -35,8 +36,8 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * @configuration restrictToAnnotatedMethods - if the rule should check only annotated methods. (default: `true`)
  * @configuration returnValueAnnotations - List of glob patterns to be used as inspection annotation (default: `['*.CheckReturnValue', '*.CheckResult']`)
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

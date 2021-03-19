@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -38,9 +39,9 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  * @active since v1.2.0
  */
+@RequiresTypeResolution
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

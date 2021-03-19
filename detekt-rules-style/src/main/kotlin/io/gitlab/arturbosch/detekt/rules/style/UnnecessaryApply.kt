@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
@@ -37,8 +38,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryApply(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,

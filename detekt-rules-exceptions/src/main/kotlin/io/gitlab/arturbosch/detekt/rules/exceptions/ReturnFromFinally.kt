@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -39,8 +40,8 @@ import org.jetbrains.kotlin.types.KotlinType
  *
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
  * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ReturnFromFinally", Severity.Defect,
