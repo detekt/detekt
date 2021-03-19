@@ -62,7 +62,6 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("detekt.ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (bindingContext == BindingContext.EMPTY) return
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
@@ -72,21 +71,20 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
         val descriptor = bindingContext[BindingContext.FUNCTION, function] ?: return
         if (descriptor.modality == Modality.OPEN) return
 
-        if (function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
-            return
-        } else {
+        if (!function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
             report(CodeSmell(issue, Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
         }
     }
 
-    @Suppress("detekt.ReturnCount")
     private fun KtExpression.isValidCandidateExpression(): Boolean {
-        if (this is KtOperationReferenceExpression || this is KtForExpression) return true
-        if (this is KtProperty || this is KtNameReferenceExpression) return true
-        val parent = parent
-        if (parent is KtCallExpression && parent.calleeExpression == this) return true
-        if (this is KtCallExpression && this.calleeExpression is KtCallExpression) return true
-        return false
+        return when (this) {
+            is KtOperationReferenceExpression, is KtForExpression, is KtProperty, is KtNameReferenceExpression -> true
+            else -> {
+                val parent = parent
+                if (parent is KtCallExpression && parent.calleeExpression == this) true
+                else this is KtCallExpression && this.calleeExpression is KtCallExpression
+            }
+        }
     }
 
     private fun KtExpression.hasSuspendCalls(): Boolean {
