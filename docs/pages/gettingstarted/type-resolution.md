@@ -44,7 +44,7 @@ With type resolution, Detekt has access to all the symbols and types of your cod
 
 If you're running Detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that require type resolution are annotated with [`@requiresTypeResolution`](https://github.com/detekt/detekt/search?q=%5C%40requiresTypeResolution) in the KDoc. 
+All the rules that require type resolution are annotated with [`@RequiresTypeResolution`](https://github.com/detekt/detekt/search?q=%40RequiresTypeResolution). 
 
 Moreover, their official documentation in the Detekt website will mention _Requires Type Resolution_ ([like here](./potential-bugs.html#unnecessarysafecall)).
 
