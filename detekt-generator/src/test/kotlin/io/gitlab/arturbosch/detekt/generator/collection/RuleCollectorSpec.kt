@@ -203,6 +203,19 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].configuration).hasSize(2)
         }
 
+        it("collects the flag that it requires type resolution") {
+            val code = """
+                /**
+                 * description
+                 * @requiresTypeResolution
+                 */
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
+            assertThat(items).hasSize(1)
+            assertThat(items[0].requiresTypeResolution).isTrue()
+        }
+
         it("config option doesn't have a default value") {
             val code = """
                 /**

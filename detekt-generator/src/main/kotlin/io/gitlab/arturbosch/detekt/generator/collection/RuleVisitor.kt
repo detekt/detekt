@@ -101,12 +101,15 @@ internal class RuleVisitor : DetektVisitor() {
         }
 
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
-        requiresTypeResolution = classOrObject.kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
+        requiresTypeResolution = classOrObject.requiresTypeResolution()
 
         val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
         configuration.addAll(classOrObject.parseConfigurationTags())
     }
+
+    private fun KtClassOrObject.requiresTypeResolution() =
+        kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
 
     private fun extractRuleDocumentation(comment: String) {
         val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
