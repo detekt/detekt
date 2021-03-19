@@ -17,6 +17,7 @@ import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
+import io.gitlab.arturbosch.detekt.core.rules.IdMapping
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
@@ -34,6 +35,8 @@ internal class Analyzer(
 ) {
 
     private val config: Config = settings.spec.workaroundConfiguration(settings.config)
+    private val idMapping: IdMapping =
+        associateRuleIdsToRuleSetIds(providers.associate { it.ruleSetId to it.instance(config).rules })
 
     fun run(
         ktFiles: Collection<KtFile>,
@@ -100,17 +103,11 @@ internal class Analyzer(
             else -> error("No other rule type expected.")
         }
 
-        val activeRuleSetsToRuleSetConfigs = providers.asSequence()
+        val (correctableRules, otherRules) = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
+            .mapLeft { provider, ruleSetConfig -> provider.instance(ruleSetConfig) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
-
-        val ruleIdsToRuleSetIds = associateRuleIdsToRuleSetIds(
-            activeRuleSetsToRuleSetConfigs.map { (ruleSet, _) -> ruleSet }
-        )
-
-        val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
             .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
             .partition { isCorrectable(it) }
 
@@ -120,9 +117,7 @@ internal class Analyzer(
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in rule.findings) {
-                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
-                        "Mapping for '${finding.id}' expected."
-                    }
+                    val mappedRuleSet = checkNotNull(idMapping[finding.id]) { "Mapping for '${finding.id}' expected." }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
                         .add(finding)
                 }
@@ -134,6 +129,10 @@ internal class Analyzer(
 
         return result
     }
+}
+
+private fun <T, U, R> Sequence<Pair<T, U>>.mapLeft(transform: (T, U) -> R): Sequence<Pair<R, U>> {
+    return this.map { (first, second) -> transform(first, second) to second }
 }
 
 private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
