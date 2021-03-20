@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.api.internal.SinceDetekt
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
@@ -32,6 +33,7 @@ internal class RuleVisitor : DetektVisitor() {
     private var severity = ""
     private var debt = ""
     private var aliases: String? = null
+    private var sinceDetektVersion: String? = null
     private var parent = ""
     private val configuration = mutableListOf<Configuration>()
     private val classesMap = mutableMapOf<String, Boolean>()
@@ -53,15 +55,16 @@ internal class RuleVisitor : DetektVisitor() {
             parent = parent,
             configuration = configuration,
             autoCorrect = autoCorrect,
-            requiresTypeResolution = requiresTypeResolution
+            requiresTypeResolution = requiresTypeResolution,
+            sinceDetektVersion = sinceDetektVersion
         )
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
         val isRule = list.entries
-                ?.asSequence()
-                ?.map { it.typeAsUserType?.referencedName }
-                ?.any { ruleClasses.contains(it) } ?: false
+            ?.asSequence()
+            ?.map { it.typeAsUserType?.referencedName }
+            ?.any { ruleClasses.contains(it) } ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name
@@ -88,6 +91,7 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
         }
 
+        sinceDetektVersion = classOrObject.firstAnnotationParameterOrNull(SinceDetekt::class)
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
         requiresTypeResolution = classOrObject.kDocSection()?.findTagByName(TAG_REQUIRES_TYPE_RESOLUTION) != null
@@ -106,7 +110,8 @@ internal class RuleVisitor : DetektVisitor() {
                 extractCompliantDocumentation(comment, compliantIndex)
             }
             compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains a compliant without a noncompliant code definition")
+                "Rule $name contains a compliant without a noncompliant code definition"
+            )
             else -> description = comment
         }
     }
@@ -115,12 +120,13 @@ internal class RuleVisitor : DetektVisitor() {
         val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
         if (nonCompliantEndIndex == -1) {
             throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains an incorrect noncompliant code definition")
+                "Rule $name contains an incorrect noncompliant code definition"
+            )
         }
         description = comment.substring(0, nonCompliantIndex).trim()
         nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
-                .trimStartingLineBreaks()
-                .trimEnd()
+            .trimStartingLineBreaks()
+            .trimEnd()
     }
 
     private fun extractCompliantDocumentation(comment: String, compliantIndex: Int) {
@@ -128,31 +134,33 @@ internal class RuleVisitor : DetektVisitor() {
         if (compliantIndex != -1) {
             if (compliantEndIndex == -1) {
                 throw InvalidCodeExampleDocumentationException(
-                        "Rule $name contains an incorrect compliant code definition")
+                    "Rule $name contains an incorrect compliant code definition"
+                )
             }
             compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
-                    .trimStartingLineBreaks()
-                    .trimEnd()
+                .trimStartingLineBreaks()
+                .trimEnd()
         }
     }
 
     private fun extractAliases(klass: KtClass) {
         val initializer = klass.getProperties()
-                .singleOrNull { it.name == "defaultRuleIdAliases" }
-                ?.initializer
+            .singleOrNull { it.name == "defaultRuleIdAliases" }
+            ?.initializer
         if (initializer != null) {
-            aliases = (initializer as? KtCallExpression
-                ?: throw InvalidAliasesDeclaration())
-                    .valueArguments
-                    .joinToString(", ") { it.text.replace("\"", "") }
+            aliases = (initializer as? KtCallExpression ?: throw InvalidAliasesDeclaration())
+                .valueArguments
+                .joinToString(", ") { it.text.replace("\"", "") }
         }
     }
 
     private fun extractIssueSeverityAndDebt(klass: KtClass) {
-        val arguments = (klass.getProperties()
+        val arguments = (
+            klass.getProperties()
                 .singleOrNull { it.name == "issue" }
-                ?.initializer as? KtCallExpression)
-                ?.valueArguments ?: emptyList()
+                ?.initializer as? KtCallExpression
+            )
+            ?.valueArguments ?: emptyList()
 
         if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
             severity = getArgument(arguments[1], "Severity")
@@ -177,10 +185,10 @@ internal class RuleVisitor : DetektVisitor() {
 
     companion object {
         private val ruleClasses = listOf(
-                io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-                FormattingRule::class.simpleName,
-                ThresholdRule::class.simpleName,
-                EmptyRule::class.simpleName
+            io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
+            FormattingRule::class.simpleName,
+            ThresholdRule::class.simpleName,
+            EmptyRule::class.simpleName
         )
 
         private const val TAG_ACTIVE = "active"

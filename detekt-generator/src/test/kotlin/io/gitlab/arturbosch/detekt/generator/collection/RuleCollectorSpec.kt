@@ -330,5 +330,40 @@ class RuleCollectorSpec : Spek({
             """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
+
+        context("handles SinceDetekt annotations") {
+            it("extracts the version with positional parameter") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    @SinceDetekt("1.2.3")
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].sinceDetektVersion).isEqualTo("1.2.3")
+            }
+            it("extracts the version with named parameter") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    @SinceDetekt(version = "1.2.3")
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].sinceDetektVersion).isEqualTo("1.2.3")
+            }
+            it("does not extract a version if annotation not present") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].sinceDetektVersion).isNull()
+            }
+        }
     }
 })
