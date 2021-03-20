@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.SinceDetekt
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -25,9 +26,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * internal class A
  * </compliant>
  *
- * @since 1.11.0
  * @active since v1.16.0
  */
+@SinceDetekt("1.11.0")
 class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override val issue: Issue = Issue(
@@ -49,17 +50,25 @@ class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : R
 
     override fun visitTypeAlias(typeAlias: KtTypeAlias) {
         if (typeAlias.isPublic) {
-            report(CodeSmell(issue,
-                Entity.from(typeAlias),
-                "TypeAlias ${typeAlias.nameAsSafeName} should not be public"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(typeAlias),
+                    "TypeAlias ${typeAlias.nameAsSafeName} should not be public"
+                )
+            )
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isTopLevel && function.isPublic) {
-            report(CodeSmell(issue,
-                Entity.from(function),
-                "Top level function ${function.nameAsSafeName} should not be public"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(function),
+                    "Top level function ${function.nameAsSafeName} should not be public"
+                )
+            )
         }
     }
 }

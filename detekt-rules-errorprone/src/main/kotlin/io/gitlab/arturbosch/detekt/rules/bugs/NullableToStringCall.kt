@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.SinceDetekt
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -47,10 +48,10 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  *
- * @since 1.11.0
  * @requiresTypeResolution
  */
 @Suppress("ReturnCount")
+@SinceDetekt("1.11.0")
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
@@ -67,7 +68,8 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         val targetExpression = simpleOrCallExpression.targetExpression() ?: return
 
         if (simpleOrCallExpression.safeAs<KtCallExpression>()?.calleeExpression?.text == "toString" &&
-            simpleOrCallExpression.descriptor()?.fqNameOrNull() == toString) {
+            simpleOrCallExpression.descriptor()?.fqNameOrNull() == toString
+        ) {
             report(targetExpression)
         } else if (targetExpression.parent is KtStringTemplateEntry && targetExpression.isNullable()) {
             report(targetExpression.parent)
