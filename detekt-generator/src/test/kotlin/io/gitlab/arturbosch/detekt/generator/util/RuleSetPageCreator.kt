@@ -21,6 +21,7 @@ internal fun createRules(): List<Rule> {
         severity = "Defect",
         debt = "10min",
         aliases = "alias1, alias2",
+        sinceDetektVersion = "1.2.3",
         parent = "",
         configuration = listOf(
             Configuration("conf1", "a config option", "foo", null),

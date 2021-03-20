@@ -8,17 +8,19 @@ a wildcard import
 
 **Aliases**: alias1, alias2
 
+**Since**: 1.2.3
+
 #### Configuration options:
 
 * `conf1` (default: `foo`)
 
-   a config option
+  a config option
 
 * ~~`conf2`~~ (default: `false`)
 
-   **Deprecated**: use conf1 instead
+  **Deprecated**: use conf1 instead
 
-   deprecated config
+  deprecated config
 
 #### Noncompliant Code:
 

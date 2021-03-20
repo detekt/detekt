@@ -54,4 +54,4 @@ inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
 }
 
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
-inline fun MarkdownList.description(description: () -> String) = append("   ${description()}\n")
+inline fun MarkdownList.description(description: () -> String) = append("  ${description()}\n")

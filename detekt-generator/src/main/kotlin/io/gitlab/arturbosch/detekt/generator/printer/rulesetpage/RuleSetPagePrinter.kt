@@ -58,6 +58,12 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 }
             }
 
+            if (!rule.sinceDetektVersion.isNullOrEmpty()) {
+                paragraph {
+                    "${bold { "Since" }}: ${rule.sinceDetektVersion}"
+                }
+            }
+
             if (rule.configuration.isNotEmpty()) {
                 h4 { "Configuration options:" }
                 list {
@@ -69,8 +75,8 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                             description { "${bold { "Deprecated" }}: ${it.deprecated}" }
                         } else {
                             val defaultValues = it.defaultValue.lines()
-                            val defaultValuesString = defaultValues.joinToString {
-                                value -> value.trim().removePrefix("- ")
+                            val defaultValuesString = defaultValues.joinToString { value ->
+                                value.trim().removePrefix("- ")
                             }
                             item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
                         }
