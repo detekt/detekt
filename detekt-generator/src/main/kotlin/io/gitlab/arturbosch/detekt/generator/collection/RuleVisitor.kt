@@ -18,9 +18,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
-import kotlin.reflect.KClass
 
-@Suppress("TooManyFunctions")
 internal class RuleVisitor : DetektVisitor() {
 
     val containsRule
@@ -104,19 +102,12 @@ internal class RuleVisitor : DetektVisitor() {
         }
 
         autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)
-        requiresTypeResolution = classOrObject.requiresTypeResolution()
+        requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
 
         val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
         configuration.addAll(classOrObject.parseConfigurationTags())
     }
-
-    private fun KtClassOrObject.hasKDocTag(tagName: String) = kDocSection()?.findTagByName(tagName) != null
-
-    private fun KtClassOrObject.requiresTypeResolution() = isAnnotatedWith(RequiresTypeResolution::class)
-
-    private fun KtClassOrObject.isAnnotatedWith(annotation: KClass<out Annotation>) =
-        annotationEntries.any { it.shortName?.identifier == annotation.simpleName }
 
     private fun extractRuleDocumentation(comment: String) {
         val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
