@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -135,7 +135,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression.safeAs<KtCallExpression>()
             ?: return false
         return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
-                callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
+            callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
     }
 
     private fun KtSimpleNameExpression.classFqName() =
@@ -170,7 +170,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         private val stringClass = StandardNames.FqNames.string.toSafe()
 
         private val isEmptyFunctions = collectionClasses.map { FqName("$it.isEmpty") } +
-                listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
+            listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
 
         private val countFunctions = listOf("kotlin.collections.count", "kotlin.text.count").map(::FqName)
     }

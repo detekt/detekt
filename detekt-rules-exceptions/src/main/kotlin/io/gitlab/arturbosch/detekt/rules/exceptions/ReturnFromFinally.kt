@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -44,8 +44,10 @@ import org.jetbrains.kotlin.types.KotlinType
 @RequiresTypeResolution
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ReturnFromFinally", Severity.Defect,
-        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ReturnFromFinally", Severity.Defect,
+        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS
+    )
 
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
@@ -63,7 +65,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
                     issue = issue,
                     entity = Entity.Companion.from(finallyBlock),
                     message = "Contents of the finally block do not affect " +
-                            "the result of the expression."
+                        "the result of the expression."
                 )
             )
         }
@@ -71,7 +73,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         finallyBlock.finalExpression
             .collectDescendantsOfType<KtReturnExpression> { returnExpression ->
                 isReturnFromTargetFunction(finallyBlock.finalExpression, returnExpression) &&
-                        canFilterLabeledExpression(returnExpression)
+                    canFilterLabeledExpression(returnExpression)
             }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }

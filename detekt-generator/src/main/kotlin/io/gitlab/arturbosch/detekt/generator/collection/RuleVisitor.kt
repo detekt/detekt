@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException

@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
@@ -46,7 +46,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Style,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-                "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
     )
 
@@ -95,7 +95,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                                 issue,
                                 Entity.from(expression),
                                 "The method ${it.first}(${expectedParamTypes?.joinToString() ?: ""}) " +
-                                        "has been forbidden in the Detekt config."
+                                    "has been forbidden in the Detekt config."
                             )
                         )
                     }

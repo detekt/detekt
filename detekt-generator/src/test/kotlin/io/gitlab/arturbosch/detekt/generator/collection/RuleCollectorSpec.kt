@@ -205,7 +205,7 @@ class RuleCollectorSpec : Spek({
 
         it("collects the flag that it requires type resolution") {
             val code = """
-                import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+                import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
                 
                 /**
                  * description
@@ -222,7 +222,7 @@ class RuleCollectorSpec : Spek({
                 /**
                  * description
                  */
-                @io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+                @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)

@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -68,7 +68,7 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
     private fun KtTypeReference.isPartOfOverriddenSignature() =
         (isPartOfReturnTypeOfFunction() || isParameterTypeOfFunction()) &&
-                getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
+            getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
 
     private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
         getStrictParentOfType<KtNamedFunction>()

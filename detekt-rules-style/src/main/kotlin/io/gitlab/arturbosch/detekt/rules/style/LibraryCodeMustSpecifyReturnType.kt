@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
@@ -57,11 +57,13 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
             return
         }
         if (property.explicitReturnTypeRequired()) {
-            report(CodeSmell(
-                issue,
-                Entity.atName(property),
-                "Library property '${property.nameAsSafeName}' without explicit return type."
-            ))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(property),
+                    "Library property '${property.nameAsSafeName}' without explicit return type."
+                )
+            )
         }
         super.visitProperty(property)
     }

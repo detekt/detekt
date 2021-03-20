@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.typeUtil.isNotNullThrowable
@@ -45,11 +45,11 @@ class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
         id = "ObjectExtendsThrowable",
         severity = Severity.CodeSmell,
         description = "An `object` should not extend and type of Throwable. Throwables are " +
-                "stateful and should be instantiated only when needed for when a specific error " +
-                "occurs. An `object`, being a singleton, that extends any type of Throwable " +
-                "consequently introduces a global singleton exception whose instance may be " +
-                "inadvertently reused from multiple places, thus introducing shared mutable " +
-                "state.",
+            "stateful and should be instantiated only when needed for when a specific error " +
+            "occurs. An `object`, being a singleton, that extends any type of Throwable " +
+            "consequently introduces a global singleton exception whose instance may be " +
+            "inadvertently reused from multiple places, thus introducing shared mutable " +
+            "state.",
         debt = Debt.TEN_MINS
     )
 

@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -41,18 +41,18 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-            "IgnoredReturnValue",
-            Severity.Defect,
-            "This call returns a value which is ignored",
-            Debt.TWENTY_MINS
+        "IgnoredReturnValue",
+        Severity.Defect,
+        "This call returns a value which is ignored",
+        Debt.TWENTY_MINS
     )
 
     private val annotationsRegexes = valueOrDefaultCommaSeparated(
-                RETURN_VALUE_ANNOTATIONS,
-                DEFAULT_RETURN_VALUE_ANNOTATIONS
-            )
-            .distinct()
-            .map { it.simplePatternToRegex() }
+        RETURN_VALUE_ANNOTATIONS,
+        DEFAULT_RETURN_VALUE_ANNOTATIONS
+    )
+        .distinct()
+        .map { it.simplePatternToRegex() }
 
     private val restrictToAnnotatedMethods: Boolean = valueOrDefault(
         RESTRICT_TO_ANNOTATED_METHODS,
