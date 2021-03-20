@@ -46,23 +46,11 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 }
             }
 
-            if (rule.debt.isNotEmpty()) {
-                paragraph {
-                    "${bold { "Debt" }}: ${rule.debt}"
-                }
-            }
+            printLabeledParagraph("Debt", rule.debt)
 
-            if (!rule.aliases.isNullOrEmpty()) {
-                paragraph {
-                    "${bold { "Aliases" }}: ${rule.aliases}"
-                }
-            }
+            printLabeledParagraph("Aliases", rule.aliases)
 
-            if (!rule.sinceDetektVersion.isNullOrEmpty()) {
-                paragraph {
-                    "${bold { "Since" }}: ${rule.sinceDetektVersion}"
-                }
-            }
+            printLabeledParagraph("Since", rule.sinceDetektVersion)
 
             if (rule.configuration.isNotEmpty()) {
                 h4 { "Configuration options:" }
@@ -86,6 +74,14 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
             }
 
             printRuleCodeExamples(rule)
+        }
+    }
+
+    private fun MarkdownContent.printLabeledParagraph(label: String, valueOrNull: String?) {
+        if (valueOrNull.isNullOrBlank()) return
+
+        paragraph {
+            "${bold { label }}: $valueOrNull"
         }
     }
 
