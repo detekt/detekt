@@ -4,6 +4,7 @@ plugins {
     module
     id("org.jetbrains.dokka")
     `java-test-fixtures`
+    id("binary-compatibility-validator")
 }
 
 dependencies {
@@ -29,4 +30,8 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 
 tasks.withType<DokkaTask>().configureEach {
     outputDirectory.set(rootDir.resolve("docs/pages/kdoc"))
+}
+
+apiValidation {
+    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }

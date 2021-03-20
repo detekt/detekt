@@ -45,19 +45,20 @@ fun updateVersion(increment: (Semver) -> Semver) {
         }
     versionsFile.writeText("$newContent\n")
 }
+tasks {
+    register("incrementPatch") { doLast { updateVersion { it.nextPatch() } } }
+    register("incrementMinor") { doLast { updateVersion { it.nextMinor() } } }
+    register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
-val incrementPatch by tasks.registering { doLast { updateVersion { it.nextPatch() } } }
-val incrementMinor by tasks.registering { doLast { updateVersion { it.nextMinor() } } }
-val incrementMajor by tasks.registering { doLast { updateVersion { it.nextMajor() } } }
+    register<UpdateVersionInFileTask>("applyDocVersion") {
+        fileToUpdate = file("${rootProject.rootDir}/docs/_config.yml")
+        linePartToFind = "detekt_version:"
+        lineTransformation = { "detekt_version: ${Versions.DETEKT}" }
+    }
 
-val applyDocVersion by tasks.registering(UpdateVersionInFileTask::class) {
-    fileToUpdate = file("${rootProject.rootDir}/docs/_config.yml")
-    linePartToFind = "detekt_version:"
-    lineTransformation = { "detekt_version: ${Versions.DETEKT}" }
-}
-
-val applySelfAnalysisVersion by tasks.registering(UpdateVersionInFileTask::class) {
-    fileToUpdate = file("${rootProject.rootDir}/buildSrc/build.gradle.kts")
-    linePartToFind = "const val DETEKT ="
-    lineTransformation = { """    const val DETEKT = "${Versions.DETEKT}"""" }
+    register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
+        fileToUpdate = file("${rootProject.rootDir}/buildSrc/build.gradle.kts")
+        linePartToFind = "const val DETEKT ="
+        lineTransformation = { """    const val DETEKT = "${Versions.DETEKT}"""" }
+    }
 }

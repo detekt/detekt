@@ -8,15 +8,6 @@ plugins {
     jacoco
 }
 
-repositories {
-    jcenter()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 // bundle detekt's version for all jars to use it at runtime
 tasks.withType<Jar>().configureEach {
     manifest {
@@ -55,14 +46,16 @@ tasks.withType<Test>().configureEach {
 tasks.withType<KotlinCompile>().configureEach {
     sourceCompatibility = JavaVersion.VERSION_1_8.toString()
     targetCompatibility = JavaVersion.VERSION_1_8.toString()
-    kotlinOptions.jvmTarget = Versions.JVM_TARGET
-    kotlinOptions.languageVersion = "1.4"
-    kotlinOptions.freeCompilerArgs = listOf(
-        "-progressive",
-        "-Xopt-in=kotlin.RequiresOptIn"
-    )
-    // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
-    kotlinOptions.allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
+    kotlinOptions {
+        jvmTarget = Versions.JVM_TARGET
+        languageVersion = "1.4"
+        freeCompilerArgs = listOf(
+            "-progressive",
+            "-Xopt-in=kotlin.RequiresOptIn"
+        )
+        // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
+        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
+    }
 }
 
 dependencies {

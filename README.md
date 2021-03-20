@@ -77,9 +77,9 @@ buildscript {
     mavenCentral()
     jcenter {
         content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
+            // Only download the 'kotlinx-html-jvm' module from JCenter, but nothing else.
+            // detekt needs 'kotlinx-html-jvm' for the HTML report.
+            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
         }
     }
 }
@@ -103,17 +103,17 @@ detekt {
 }
 
 
-// Groovy dsl
-tasks.detekt.jvmTarget = "1.8"
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 
 // or
 
-// Kotlin dsl
-tasks {
-    withType<Detekt> {
-        // Target version of the generated JVM bytecode. It is used for type resolution.
-        this.jvmTarget = "1.8"
-    }
+// Kotlin DSL
+tasks.withType<Detekt>.configureEach {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
 }
 ```
 
@@ -128,7 +128,7 @@ which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
 }
 ```
 
