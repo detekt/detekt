@@ -47,7 +47,6 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  *
- * @since 1.11.0
  * @requiresTypeResolution
  */
 @Suppress("ReturnCount")

@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val isEnabled: Boolean = false
  * </compliant>
  *
- * @since 1.12.0
  * @requiresTypeResolution
  */
 class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
