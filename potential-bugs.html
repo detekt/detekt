@@ -464,6 +464,8 @@ $('#toc').on('click', 'a', function() {
 <p>Disallow to cast to nullable types. There are cases where <code class="language-plaintext highlighter-rouge">as String?</code> is misused as the safe cast (<code class="language-plaintext highlighter-rouge">as? String</code>),
 so if you want to prevent those cases, turn on this rule.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code">Noncompliant Code:</h4>
@@ -484,6 +486,8 @@ so if you want to prevent those cases, turn on this rule.</p>
 
 <p>Deprecated elements are expected to be removed in future. Alternatives should be found if possible.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 20min</p>
@@ -495,6 +499,8 @@ so if you want to prevent those cases, turn on this rule.</p>
 <p>Down-casting immutable types from kotlin.collections should be discouraged.
 The result of the downcast is platform specific and can lead to unexpected crashes.
 Prefer to use instead the <code class="language-plaintext highlighter-rouge">toMutable&lt;Type&gt;()</code> functions.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -523,6 +529,8 @@ Prefer to use instead the <code class="language-plaintext highlighter-rouge">toM
 <p>If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-2">Noncompliant Code:</h4>
@@ -550,6 +558,8 @@ easy to miss one of the cases when reading the code, leading to unwanted side ef
 See the Kotlin documentation for Any.equals(other: Any?):
 https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-3">Noncompliant Code:</h4>
@@ -573,6 +583,8 @@ https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 <p>All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the
 same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
 clarification.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -605,6 +617,8 @@ clarification.</p>
 <p>Flags use of System.exit() and Kotlin’s exitProcess() when used outside of the <code class="language-plaintext highlighter-rouge">main</code> function. This makes code more
 difficult to test, causes unexpected behaviour on Android, and is a poor way to signal a failure in the program. In
 almost all cases it is more appropriate to throw an exception.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -640,6 +654,8 @@ almost all cases it is more appropriate to throw an exception.</p>
 Code should work independently of the garbage collector and should not require the GC to be triggered in certain
 points in time.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-6">Noncompliant Code:</h4>
@@ -652,6 +668,8 @@ points in time.</p>
 <h3 id="hasplatformtype">HasPlatformType</h3>
 
 <p>Platform types must be declared explicitly in public APIs to prevent unexpected errors.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -679,6 +697,8 @@ normally so that’s the rationale behind this rule.</p>
 
 <p>fun returnsValue() = 42
 fun returnsNoValue() {}</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -720,6 +740,8 @@ For example, if locale with tag <code class="language-plaintext highlighter-roug
 will be evaluated to numbers consisting of Eastern-Arabic (non-ASCII) digits.
 [java.util.Locale.US] is recommended for machine-readable output.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
+
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-9">Noncompliant Code:</h4>
@@ -746,6 +768,8 @@ will be evaluated to numbers consisting of Eastern-Arabic (non-ASCII) digits.
 Changing the type of the expression accidentally, changes the functions return type.
 This may lead to backward incompatibility.
 Use a block statement to make clear this function will never return a value.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -782,6 +806,8 @@ fun safeUnitReturn(): Unit = println("Hello Unit")
 This might be a bug if it is used for instance as a loop condition. This loop will never be triggered then.
 This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
+
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-10">Noncompliant Code:</h4>
@@ -807,6 +833,8 @@ This might be due to invalid ranges like (10..9) which will cause the loop to ne
 The hasNext() method of an Iterator implementation should not have any side effects.
 This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
+
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-11">Noncompliant Code:</h4>
@@ -826,6 +854,8 @@ implementation of the next() method. When there are no more elements to return a
 NoSuchElementException.</p>
 
 <p>See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -858,6 +888,8 @@ NoSuchElementException.</p>
 
 <p>Using lateinit for property initialization can be error prone and the actual initialization is not
 guaranteed. Try using constructor injection or delegation to initialize properties.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -893,6 +925,8 @@ Preferred access methods are <code class="language-plaintext highlighter-rouge">
 
 <p>Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-14">Noncompliant Code:</h4>
@@ -926,6 +960,8 @@ or sealed class and the <code class="language-plaintext highlighter-rouge">when<
 
 <p>When this happens it’s unclear what was intended when an unhandled case is reached. It is better to be explicit and
 either handle all cases or use a default <code class="language-plaintext highlighter-rouge">else</code> statement to cover the unhandled cases.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -985,6 +1021,8 @@ either handle all cases or use a default <code class="language-plaintext highlig
 
 <p>Turn on this rule to flag ‘toString’ calls with a nullable receiver that may return the string “null”.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
@@ -1015,6 +1053,8 @@ either handle all cases or use a default <code class="language-plaintext highlig
 
 <p>Turn on this rule to flag <code class="language-plaintext highlighter-rouge">when</code> expressions that contain a redundant <code class="language-plaintext highlighter-rouge">else</code> case. This occurs when it can be
 verified that all cases are already covered when checking cases on an enum or sealed class.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -1069,6 +1109,8 @@ verified that all cases are already covered when checking cases on an enum or se
 This implies that the loop is only executed once and thus could be rewritten without a
 loop altogether.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code-18">Noncompliant Code:</h4>
@@ -1086,6 +1128,8 @@ loop altogether.</p>
 <h3 id="unnecessarynotnulloperator">UnnecessaryNotNullOperator</h3>
 
 <p>Reports unnecessary not-null operator usage (!!) that can be removed by the user.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -1107,6 +1151,8 @@ loop altogether.</p>
 
 <p>Reports unnecessary safe call operators (<code class="language-plaintext highlighter-rouge">?.</code>) that can be removed by the user.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
@@ -1127,6 +1173,8 @@ loop altogether.</p>
 
 <p>Reports unreachable catch blocks.
 Catch blocks can be unreachable if the exception has already been caught in the block above.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -1165,6 +1213,8 @@ Catch blocks can be unreachable if the exception has already been caught in the 
 Code can be unreachable because it is behind return, throw, continue or break expressions.
 This unreachable code should be removed as it serves no purpose.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 10min</p>
@@ -1191,6 +1241,8 @@ This unreachable code should be removed as it serves no purpose.</p>
 the nullable value is null. Kotlin provides many ways to work with nullable types to increase
 null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 20min</p>
@@ -1212,6 +1264,8 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <h3 id="unsafecast">UnsafeCast</h3>
 
 <p>Reports casts that will never succeed.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -1241,6 +1295,8 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p>This rule detects unused unary operators.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
@@ -1263,6 +1319,8 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <p>This rule reports postfix expressions (++, –) which are unused and thus unnecessary.
 This leads to confusion as a reader of the code might think the value will be incremented/decremented.
 However the value is replaced with the original value which might lead to bugs.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -1300,6 +1358,8 @@ However the value is replaced with the original value which might lead to bugs.<
 <p>Reports equals() methods which take in a wrongly typed parameter.
 Correct implementations of the equals() method should only take in a parameter of type Any?
 See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
@@ -1339,7 +1399,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 20, 2021 <br />
+ Site last generated: Mar 21, 2021 <br />
                 </div>
             </div>
 </footer>

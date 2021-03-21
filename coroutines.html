@@ -475,6 +475,8 @@ of GlobalScope is highly discouraged.</p>
 
 <p>See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Debt</strong>: 10min</p>
 
 <h4 id="noncompliant-code">Noncompliant Code:</h4>
@@ -503,6 +505,8 @@ of GlobalScope is highly discouraged.</p>
 functions. This needlessly restricts use of the function and should be avoided by removing the <code class="language-plaintext highlighter-rouge">suspend</code> modifier
 where it’s not needed.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
@@ -527,6 +531,8 @@ where it’s not needed.</p>
 contain multiple coroutines at one time due to coroutines’ lightweight nature, so if one
 coroutine invokes <code class="language-plaintext highlighter-rouge">Thread.sleep</code>, it could potentially halt the execution of unrelated coroutines
 and cause unpredictable behavior.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -554,6 +560,8 @@ returns a <code class="language-plaintext highlighter-rouge">Flow</code>, should
 returned <code class="language-plaintext highlighter-rouge">Flow</code>, should work actually be done.</p>
 
 <p>See https://kotlinlang.org/docs/reference/coroutines/flow.html#flows-are-cold</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -611,7 +619,7 @@ returned <code class="language-plaintext highlighter-rouge">Flow</code>, should 
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 20, 2021 <br />
+ Site last generated: Mar 21, 2021 <br />
                 </div>
             </div>
 </footer>

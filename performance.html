@@ -467,6 +467,8 @@ Instances.</Primitive></p>
 <p>As stated in the Kotlin <a href="https://kotlinlang.org/docs/reference/basic-types.html#arrays">documentation</a> Kotlin has
 specialized arrays to represent primitive types without boxing overhead, such as <code class="language-plaintext highlighter-rouge">IntArray</code>, <code class="language-plaintext highlighter-rouge">ByteArray</code> and so on.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
+
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
@@ -493,6 +495,8 @@ specialized arrays to represent primitive types without boxing overhead, such as
 simple for loops. Hence in most contexts a simple for loop should be used instead.
 See more details here: https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -526,6 +530,8 @@ https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts
 function is used to create the arguments that are passed to the vararg parameter. When type resolution is enabled in
 detekt this case will not be flagged by the rule since it doesn’t suffer the performance penalty of an array copy.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="noncompliant-code-2">Noncompliant Code:</h4>
@@ -557,6 +563,8 @@ detekt this case will not be flagged by the rule since it doesn’t suffer the p
 to using primitive types directly.
 To solve this issue, remove the wrapping type.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 5min</p>
 
 <h4 id="noncompliant-code-3">Noncompliant Code:</h4>
@@ -585,7 +593,7 @@ To solve this issue, remove the wrapping type.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 20, 2021 <br />
+ Site last generated: Mar 21, 2021 <br />
                 </div>
             </div>
 </footer>

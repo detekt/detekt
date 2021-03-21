@@ -465,6 +465,8 @@ $('#toc').on('click', 'a', function() {
 readability and understanding of complex conditions consider extracting them into well-named functions or variables
 and call those instead.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options">Configuration options:</h4>
@@ -503,6 +505,8 @@ of this interface to not handle too many things at once.</p>
 
 <p>Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
 to understand and implement.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -548,6 +552,8 @@ Each one of them adds one to the complexity count.</p>
 <a href="https://kotlinlang.org/docs/reference/scope-functions.html">Reference</a></li>
 </ul>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-2">Configuration options:</h4>
@@ -587,6 +593,8 @@ Each one of them adds one to the complexity count.</p>
 maintainability of the code. Refactor the violating code to not use labels instead.
 Labeled expressions referencing an outer class with a label from an inner class are allowed, because there is no
 way to get the instance of an outer class from an inner class in Kotlin.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -644,6 +652,8 @@ the class does instead handle multiple responsibilities. Instead of doing many t
 split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
 things.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-4">Configuration options:</h4>
@@ -663,6 +673,8 @@ Prefer smaller methods with clear names that describe their functionality clearl
 
 <p>Extract parts of the functionality of long methods into separate, smaller methods.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-5">Configuration options:</h4>
@@ -678,6 +690,8 @@ Prefer smaller methods with clear names that describe their functionality clearl
 <h3 id="longparameterlist">LongParameterList</h3>
 
 <p>Reports functions and constructors which have more parameters than a certain threshold.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -727,6 +741,8 @@ Method overloading tightly couples these methods together which might make the c
 
 <p>Refactor these methods and try to use optional parameters instead to prevent some of the overloading.</p>
 
+<p><strong>Active by default</strong>: No</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-7">Configuration options:</h4>
@@ -742,6 +758,8 @@ Method overloading tightly couples these methods together which might make the c
 <h3 id="namedarguments">NamedArguments</h3>
 
 <p>Reports function invocations which have more parameters than a certain threshold and are all not named.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -778,6 +796,8 @@ its hidden complexity. It might become harder to understand edge-cases of the fu
 
 <p>Prefer extracting the nested code into well-named functions to make it easier to understand.</p>
 
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
 <p><strong>Debt</strong>: 20min</p>
 
 <h4 id="configuration-options-9">Configuration options:</h4>
@@ -800,6 +820,8 @@ middle of a safe call chain as that is likely to make the code more difficult to
 
 <p>The rule will check for every opportunity to replace a safe call when it sits at the end of a chain, even if there’s
 only one, as that will still improve code coverage and reduce cyclomatic complexity.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
@@ -828,6 +850,8 @@ only one, as that will still improve code coverage and reduce cyclomatic complex
 codebase makes it harder to change and maintain.</p>
 
 <p>Instead, prefer extracting the String literal into a property or constant.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
@@ -885,6 +909,8 @@ Each element can be configured with different thresholds.</p>
 
 <p>Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
 which clearly belongs together in separate parts of the code.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
@@ -949,7 +975,7 @@ which clearly belongs together in separate parts of the code.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 20, 2021 <br />
+ Site last generated: Mar 21, 2021 <br />
                 </div>
             </div>
 </footer>
