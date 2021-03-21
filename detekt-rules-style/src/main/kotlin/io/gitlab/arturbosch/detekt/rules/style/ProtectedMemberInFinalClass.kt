@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -30,9 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  *     private var i = 0
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault("v1.2.0")
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

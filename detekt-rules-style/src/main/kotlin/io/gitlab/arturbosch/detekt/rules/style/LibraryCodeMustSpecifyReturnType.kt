@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -39,8 +40,8 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * }
  * </compliant>
  *
- * @active since v1.2.0
  */
+@ActiveByDefault("v1.2.0")
 @RequiresTypeResolution
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
 
