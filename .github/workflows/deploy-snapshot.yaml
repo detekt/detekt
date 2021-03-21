@@ -3,7 +3,7 @@ name: Deploy Snapshot
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   gradle:

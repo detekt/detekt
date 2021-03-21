@@ -650,7 +650,7 @@ See all issues at: [1.11.0-RC1](https://github.com/detekt/detekt/milestone/69)
 - New rules: `IgnoredReturnValue`, `ImplictUnitReturnType`
 - The complexity report (console/html) now calculates the [cognitive complexity metric](https://www.sonarsource.com/docs/CognitiveComplexity.pdf) for your project.
 - Issues at functions and classes are now reported at the identifiers. This is especially helpful in the IntelliJ plugin.
-- Extension authors can now manipulate the findings with the new [ReportingExtension](https://github.com/detekt/detekt/blob/master/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/ReportingExtension.kt).
+- Extension authors can now manipulate the findings with the new [ReportingExtension](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/ReportingExtension.kt).
 - `detekt-formatting` was updated to use KtLint 0.37.2 which includes a lot of improvements and changes. Please see their [changelog](https://github.com/pinterest/ktlint/releases/tag/0.37.0).
     - New wrapper rules: `SpacingAroundDoubleColon`, `SpacingBetweenDeclarationsWithCommentsRule`, `SpacingBetweenDeclarationsWithAnnotationsRule`
     - You can configure the [layoutPattern](https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt#L18) for `ImportOrdering` in detekt's configuration file.

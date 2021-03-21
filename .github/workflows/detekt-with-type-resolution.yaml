@@ -3,7 +3,7 @@ name: detekt with type resolution
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
       - '**'
