@@ -56,7 +56,7 @@ class RuleSetProviderCollectorSpec : Spek({
         """
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -73,7 +73,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -87,8 +87,9 @@ class RuleSetProviderCollectorSpec : Spek({
             /**
              * $description
              *
-             * @active since v1.0.0
+             * 
              */
+            @ActiveByDefault("v1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 
@@ -179,7 +180,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -202,7 +203,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -222,7 +223,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -236,9 +237,8 @@ class RuleSetProviderCollectorSpec : Spek({
 
             /**
              * $description
-             *
-             * @active since v1.0.0
              */
+            @ActiveByDefault("v1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 

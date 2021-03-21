@@ -75,7 +75,7 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].description).contains("more...")
         }
 
-        it("is not active") {
+        it("is not active by default") {
             val code = """
                 /**
                  * description
@@ -86,24 +86,25 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].active).isFalse()
         }
 
-        it("is active tag present") {
+        it("is active by default") {
             val code = """
                 /**
                  * description
-                 * @active
                  */
+                @ActiveByDefault
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].active).isTrue()
+            assertThat(items[0].activeSince).isNull()
         }
 
-        it("is active tag present with since") {
+        it("is active by default with since") {
             val code = """
                 /**
                  * description
-                 * @active since v1.2.3
                  */
+                @ActiveByDefault("v1.2.3")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
@@ -111,17 +112,30 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].activeSince).isEqualTo("v1.2.3")
         }
 
-        it("is active tag present with since") {
+        it("is active by default with blank since") {
             val code = """
                 /**
                  * description
-                 * @active whatever
                  */
+                @ActiveByDefault("  ")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].active).isTrue
             assertThat(items[0].activeSince).isNull()
+        }
+
+        it("is active by default with named since") {
+            val code = """
+                /**
+                 * description
+                 */
+                @ActiveByDefault(since = "v1.2.3")
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
+            assertThat(items[0].active).isTrue
+            assertThat(items[0].activeSince).isEqualTo("v1.2.3")
         }
 
         it("is auto-correctable tag is present") {
@@ -134,18 +148,6 @@ class RuleCollectorSpec : Spek({
             """
             val items = subject.run(code)
             assertThat(items[0].autoCorrect).isTrue()
-        }
-
-        it("is active if the tag is there and has a description") {
-            val code = """
-                /**
-                 * description
-                 * @active description about the active tag
-                 */
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].active).isTrue()
         }
 
         it("collects the issue property") {

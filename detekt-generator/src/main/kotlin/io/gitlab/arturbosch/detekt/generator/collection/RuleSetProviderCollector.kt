@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -34,7 +35,6 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
     }
 }
 
-private const val TAG_ACTIVE = "active"
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
 private val SUPPORTED_PROVIDERS =
@@ -71,7 +71,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
-        active = classOrObject.docComment?.getDefaultSection()?.findTagByName(TAG_ACTIVE) != null
+        active = classOrObject.isAnnotatedWith(ActiveByDefault::class)
         configuration.addAll(classOrObject.parseConfigurationTags())
         super.visitClassOrObject(classOrObject)
     }
@@ -80,8 +80,10 @@ class RuleSetProviderVisitor : DetektVisitor() {
         super.visitProperty(property)
         if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
-                ?: throw InvalidDocumentationException("RuleSetProvider class " +
-                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
+                ?: throw InvalidDocumentationException(
+                    "RuleSetProvider class " +
+                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules."
+                )
         }
     }
 
@@ -90,14 +92,14 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
         if (expression.calleeExpression?.text == "RuleSet") {
             val ruleListExpression = expression.valueArguments
-                    .map { it.getArgumentExpression() }
-                    .firstOrNull { it?.referenceExpression()?.text == "listOf" }
+                .map { it.getArgumentExpression() }
+                .firstOrNull { it?.referenceExpression()?.text == "listOf" }
                 ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
-                    ?.valueArguments
-                    ?.map { it.getArgumentExpression() }
-                    ?.mapNotNull { it?.referenceExpression()?.text }
+                ?.valueArguments
+                ?.map { it.getArgumentExpression() }
+                ?.mapNotNull { it?.referenceExpression()?.text }
                 ?: emptyList()
 
             ruleNames.addAll(ruleArgumentNames)

@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
@@ -91,14 +92,10 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
         }
 
-        active = classOrObject.hasKDocTag(TAG_ACTIVE)
-        val activeTagContent = classOrObject.kDocSection()
-            ?.findTagByName(TAG_ACTIVE)
-            ?.getContent()
-            ?.split(" ")
-            .orEmpty()
-        if (SINCE_KEYWORD in activeTagContent) {
-            activeSince = activeTagContent.last()
+        active = classOrObject.isAnnotatedWith(ActiveByDefault::class)
+        val activeByDefaultSinceValue = classOrObject.firstAnnotationParameterOrNull(ActiveByDefault::class)
+        if (!activeByDefaultSinceValue.isNullOrBlank()) {
+            activeSince = activeByDefaultSinceValue
         }
 
         autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)
@@ -202,8 +199,6 @@ internal class RuleVisitor : DetektVisitor() {
             EmptyRule::class.simpleName
         )
 
-        private const val TAG_ACTIVE = "active"
-        private const val SINCE_KEYWORD = "since"
         private const val TAG_AUTO_CORRECT = "autoCorrect"
         private const val TAG_NONCOMPLIANT = "<noncompliant>"
         private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
