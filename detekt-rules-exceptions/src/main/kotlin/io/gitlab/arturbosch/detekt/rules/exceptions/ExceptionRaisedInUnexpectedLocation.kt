@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,8 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *
  * @configuration methodNames - methods which should not throw exceptions
  * (default: `[toString, hashCode, equals, finalize]`)
- * @active since v1.16.0
  */
+@ActiveByDefault("v1.16.0")
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,

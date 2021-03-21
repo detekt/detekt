@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -24,9 +25,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * // code from a library
  * internal class A
  * </compliant>
- *
- * @active since v1.16.0
  */
+@ActiveByDefault("v1.16.0")
 class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override val issue: Issue = Issue(

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -75,8 +76,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *            - MalformedURLException`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
- * @active since v1.16.0
  */
+@ActiveByDefault("v1.16.0")
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("SwallowedException", Severity.CodeSmell,
