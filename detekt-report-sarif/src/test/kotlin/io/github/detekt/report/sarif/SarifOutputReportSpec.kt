@@ -56,7 +56,7 @@ class SarifOutputReportSpec : Spek({
             val expectedReport = readResourceContent("relative_path.sarif.json")
                 .stripWhitespace()
 
-            // Note: On Github CI, windows file URI is on D: drive (during development it is usually on C: drive)
+            // Note: Github CI uses D: drive, but it could be any drive for local development
             val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
                 val winRoot = Paths.get("/").toAbsolutePath().toString().replace("\\", "/")
                 expectedReport.replace("file:///", "file://$winRoot")
