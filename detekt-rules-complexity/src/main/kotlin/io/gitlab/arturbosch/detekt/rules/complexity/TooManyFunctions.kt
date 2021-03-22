@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -32,9 +33,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration ignoreDeprecated - ignore deprecated functions (default: `false`)
  * @configuration ignorePrivate - ignore private functions (default: `false`)
  * @configuration ignoreOverridden - ignore overridden functions (default: `false`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("TooManyFunctions",

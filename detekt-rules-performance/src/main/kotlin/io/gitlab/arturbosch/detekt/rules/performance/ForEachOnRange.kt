@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -40,9 +41,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  *     println(i)
  * }
  * </compliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ForEachOnRange",

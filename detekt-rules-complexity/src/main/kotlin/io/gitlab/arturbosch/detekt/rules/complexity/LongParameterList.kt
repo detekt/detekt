@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -34,9 +35,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these
  * annotation class names (default: `[]`); (e.g. ['Inject', 'Module', 'Suppress']);
  * the most common case is for dependency injection where constructors are annotated with @Inject.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class LongParameterList(
     config: Config = Config.empty
 ) : Rule(config) {

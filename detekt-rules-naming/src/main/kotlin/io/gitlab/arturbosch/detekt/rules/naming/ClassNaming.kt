@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -15,8 +16,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * Reports when class or object names which do not follow the specified naming convention are used.
  *
  * @configuration classPattern - naming pattern (default: `'[A-Z][a-zA-Z0-9]*'`)
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ClassNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("ClassName")

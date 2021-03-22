@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
@@ -24,9 +25,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * @configuration ignoreOverridden - ignores functions that have the override modifier (default: `true`)
  * @configuration ignoreAnnotated - ignore naming for functions in the context of these
  * annotation class names (default: `['Composable']`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")

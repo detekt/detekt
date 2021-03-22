@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
@@ -11,9 +12,9 @@ import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
  *
  * @configuration indentSize - indentation size (default: `4`)
  *
- * @active since v1.0.0
  * @autoCorrect since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = ParameterListWrappingRule()

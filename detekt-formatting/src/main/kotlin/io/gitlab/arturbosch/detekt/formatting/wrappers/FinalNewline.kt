@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.ruleset.standard.FinalNewlineRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.formatting.INSERT_FINAL_NEWLINE_KEY
 import org.ec4j.core.model.Property
@@ -13,11 +14,10 @@ import org.ec4j.core.model.PropertyType
  *
  * @configuration insertFinalNewLine - report absence or presence of a newline (default: `true`)
  *
- * @active since v1.0.0
  * @autoCorrect since v1.0.0
- *
  */
 @OptIn(FeatureInAlphaState::class)
+@ActiveByDefault("v1.0.0")
 class FinalNewline(config: Config) : FormattingRule(config) {
 
     override val wrapping = FinalNewlineRule()

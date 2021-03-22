@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.MaxLineLengthRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.formatting.ANDROID_MAX_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_IDEA_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
@@ -11,9 +12,8 @@ import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
  * @configuration maxLineLength - maximum line length (default: `120`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class MaximumLineLength(config: Config) : FormattingRule(config) {
 
     override val wrapping = MaxLineLengthRule()

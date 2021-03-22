@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -22,9 +23,8 @@ import java.util.IdentityHashMap
  * things.
  *
  * @configuration threshold - the size of class required to trigger the rule (default: `600`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class LargeClass(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_CLASS_LENGTH

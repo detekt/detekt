@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.LazyRegex
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -13,8 +14,8 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class EmptyCatchBlock(config: Config) : EmptyRule(
     config = config,
     description =

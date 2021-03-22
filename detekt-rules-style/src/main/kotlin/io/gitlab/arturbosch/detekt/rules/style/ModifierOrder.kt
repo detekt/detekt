@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ACTUAL_KEYWORD
@@ -48,9 +49,8 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * <compliant>
  * private internal lateinit val str: String
  * </compliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -44,9 +45,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * `for` statement (default: `false`)
  * @configuration nestingFunctions - Comma separated list of function names which add complexity
  * (default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ComplexMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY

@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -13,9 +14,8 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
 /**
  * Reports empty default constructors. Empty blocks of code serve no purpose and should be removed.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {

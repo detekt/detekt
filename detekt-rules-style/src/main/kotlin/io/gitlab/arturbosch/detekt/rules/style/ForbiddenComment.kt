@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -29,8 +30,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * @configuration values - forbidden comment strings (default: `['TODO:', 'FIXME:', 'STOPSHIP:']`)
  * @configuration allowedPatterns - ignores comments which match the specified regular expression.
  * For example `Ticket|Task`. (default: `''`)
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

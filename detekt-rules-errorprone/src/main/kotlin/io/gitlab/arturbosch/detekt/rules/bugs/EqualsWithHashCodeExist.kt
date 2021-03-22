@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
@@ -43,9 +44,8 @@ import java.util.ArrayDeque
  *     }
  * }
  * </compliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("EqualsWithHashCodeExist",

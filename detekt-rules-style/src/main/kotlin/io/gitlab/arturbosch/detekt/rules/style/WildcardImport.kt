@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtImportDirective
 
@@ -40,9 +41,8 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * @configuration excludeImports - Define a list of package names that should be allowed to be imported
  * with wildcard imports. (default: `['java.util.*', 'kotlinx.android.synthetic.*']`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

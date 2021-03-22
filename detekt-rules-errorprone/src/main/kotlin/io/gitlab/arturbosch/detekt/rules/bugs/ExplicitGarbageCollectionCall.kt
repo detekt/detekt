@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
@@ -22,9 +23,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * Runtime.getRuntime().gc()
  * System.runFinalization()
  * </noncompliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 
     override val issue = Issue("ExplicitGarbageCollectionCall",

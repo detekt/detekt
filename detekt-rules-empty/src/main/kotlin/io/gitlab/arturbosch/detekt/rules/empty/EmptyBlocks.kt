@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -25,10 +26,9 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * fun unnecessaryFunction() {
  * }
  * </noncompliant>
- *
- * @active since v1.0.0
  */
 @Suppress("TooManyFunctions")
+@ActiveByDefault("v1.0.0")
 class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
     private val emptyCatchBlock = EmptyCatchBlock(config)

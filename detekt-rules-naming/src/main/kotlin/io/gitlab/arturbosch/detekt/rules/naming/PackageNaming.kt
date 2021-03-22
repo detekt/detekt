@@ -8,14 +8,15 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
 /**
  * Reports when package names which do not follow the specified naming convention are used.
  *
  * @configuration packagePattern - naming pattern (default: `'[a-z]+(\.[a-z][A-Za-z0-9]*)*'`)
- * @active since v1.0.0
  */
+@ActiveByDefault("v1.0.0")
 class PackageNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
