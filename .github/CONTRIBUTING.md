@@ -64,7 +64,7 @@ Kotlin files AST. This can be helpful when implementing and debugging rules.
 
 After some time and testing there is a chance this rule will become active on default.
 
-Rules that contain an `@active` tag in their KDoc will be marked as active in the `default-detekt-config.yml`.
+Rules annotated with `@ActiveByDefault` will be marked as active in the`default-detekt-config.yml`.
 
 ### When updating the website ...
 
