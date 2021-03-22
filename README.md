@@ -222,6 +222,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
 - [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
 - [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
+- [Ivo Smid](https://github.com/bedla) - Fix Local development on Windows
 
 ### Mentions
 
