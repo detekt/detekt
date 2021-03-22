@@ -237,6 +237,22 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
+            it("doesn't report a generic factory function") {
+                val code = """
+                    data class GenericClass<T>(val wrapped: T) {
+                        companion object {
+                            fun <T> genericClass(wrapped: T): GenericClass<T> {
+                                return GenericClass(wrapped)
+                            }
+                            fun genericClass(): GenericClass<String> {
+                                return GenericClass("wrapped")
+                            }
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+            }
+
             it("doesn't report a body-less factory function") {
                 val code = """
                     open class A {

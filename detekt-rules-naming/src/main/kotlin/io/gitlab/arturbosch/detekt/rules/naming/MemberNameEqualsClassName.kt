@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -101,7 +102,10 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
         val typeReference = function.typeReference
         return when {
-            typeReference != null -> typeReference.text == klass.name
+            typeReference != null -> {
+                val refName = (typeReference.typeElement as? KtUserType)?.referencedName ?: typeReference.text
+                refName == klass.name
+            }
             function.bodyExpression !is KtBlockExpression -> {
                 val functionDescriptor = function.descriptor() as? FunctionDescriptor
                 functionDescriptor?.returnType?.constructor?.declarationDescriptor == klass.descriptor()
