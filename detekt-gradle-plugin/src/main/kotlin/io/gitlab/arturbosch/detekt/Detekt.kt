@@ -122,6 +122,7 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean
         @Input
         get() = failFastProp.getOrElse(false)
