@@ -28,8 +28,7 @@ internal class RuleVisitor : DetektVisitor() {
     private var nonCompliant = ""
     private var compliant = ""
     private var name = ""
-    private var active = false
-    private var activeSince: String? = null
+    private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false
     private var severity = ""
@@ -49,8 +48,7 @@ internal class RuleVisitor : DetektVisitor() {
             description = description,
             nonCompliantCodeExample = nonCompliant,
             compliantCodeExample = compliant,
-            active = active,
-            activeSince = activeSince,
+            defaultActivationStatus = defaultActivationStatus,
             severity = severity,
             debt = debt,
             aliases = aliases,
@@ -92,10 +90,9 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
         }
 
-        active = classOrObject.isAnnotatedWith(ActiveByDefault::class)
-        val activeByDefaultSinceValue = classOrObject.firstAnnotationParameterOrNull(ActiveByDefault::class)
-        if (!activeByDefaultSinceValue.isNullOrBlank()) {
-            activeSince = activeByDefaultSinceValue
+        if (classOrObject.isAnnotatedWith(ActiveByDefault::class)) {
+            val activeByDefaultSinceValue = classOrObject.firstAnnotationParameter(ActiveByDefault::class)
+            defaultActivationStatus = Active(since = activeByDefaultSinceValue)
         }
 
         autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)

@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 data class RuleSetProvider(
     val name: String,
     val description: String,
-    val active: Boolean,
+    val defaultActivationStatus: DefaultActivationStatus,
     val rules: List<String> = listOf(),
     val configuration: List<Configuration> = listOf()
 )
@@ -44,7 +44,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
     private var name: String = ""
     private var description: String = ""
-    private var active: Boolean = false
+    private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private val ruleNames: MutableList<String> = mutableListOf()
     private val configuration = mutableListOf<Configuration>()
 
@@ -57,7 +57,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
             throw InvalidDocumentationException("Missing description for RuleSet $name.")
         }
 
-        return RuleSetProvider(name, description, active, ruleNames, configuration)
+        return RuleSetProvider(name, description, defaultActivationStatus, ruleNames, configuration)
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -71,7 +71,9 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
-        active = classOrObject.isAnnotatedWith(ActiveByDefault::class)
+        if (classOrObject.isAnnotatedWith(ActiveByDefault::class)) {
+            defaultActivationStatus = Active(since = classOrObject.firstAnnotationParameter(ActiveByDefault::class))
+        }
         configuration.addAll(classOrObject.parseConfigurationTags())
         super.visitClassOrObject(classOrObject)
     }

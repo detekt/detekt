@@ -7,6 +7,9 @@ import kotlin.reflect.KClass
 fun KtClassOrObject.isAnnotatedWith(annotation: KClass<out Annotation>): Boolean =
     annotationEntries.any { it.isOfType(annotation) }
 
+fun KtClassOrObject.firstAnnotationParameter(annotation: KClass<out Annotation>): String =
+    checkNotNull(firstAnnotationParameterOrNull(annotation))
+
 fun KtClassOrObject.firstAnnotationParameterOrNull(annotation: KClass<out Annotation>): String? =
     annotationEntries
         .firstOrNull { it.isOfType(annotation) }

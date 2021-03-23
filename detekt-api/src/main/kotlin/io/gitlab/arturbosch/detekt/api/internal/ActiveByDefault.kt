@@ -8,8 +8,8 @@ package io.gitlab.arturbosch.detekt.api.internal
 @Retention(AnnotationRetention.SOURCE)
 annotation class ActiveByDefault(
     /**
-     * The Detekt version since when the rule is active by default. This can be left blank
-     * if activation version is not known.
+     *  The Detekt version the rule was actived by default in the following format: <major>.<minor> or <major>.<minor>,
+     *  where major, minor and patch are non-negative integer numbers.
      */
-    val since: String = ""
+    val since: String
 )

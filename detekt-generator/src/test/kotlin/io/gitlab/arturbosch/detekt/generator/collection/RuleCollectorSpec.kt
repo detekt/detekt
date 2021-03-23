@@ -83,46 +83,20 @@ class RuleCollectorSpec : Spek({
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
-            assertThat(items[0].active).isFalse()
+            assertThat(items[0].defaultActivationStatus.active).isFalse()
         }
 
-        it("is active by default") {
+        it("is active by default with valid version") {
             val code = """
                 /**
                  * description
                  */
-                @ActiveByDefault
+                @ActiveByDefault("1.12.123")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
-            assertThat(items[0].active).isTrue()
-            assertThat(items[0].activeSince).isNull()
-        }
-
-        it("is active by default with since") {
-            val code = """
-                /**
-                 * description
-                 */
-                @ActiveByDefault("1.2.3")
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].active).isTrue
-            assertThat(items[0].activeSince).isEqualTo("1.2.3")
-        }
-
-        it("is active by default with blank since") {
-            val code = """
-                /**
-                 * description
-                 */
-                @ActiveByDefault("  ")
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].active).isTrue
-            assertThat(items[0].activeSince).isNull()
+            val defaultActivationStatus = items[0].defaultActivationStatus as Active
+            assertThat(defaultActivationStatus.since).isEqualTo("1.12.123")
         }
 
         it("is active by default with named since") {
@@ -130,12 +104,23 @@ class RuleCollectorSpec : Spek({
                 /**
                  * description
                  */
-                @ActiveByDefault(since = "v1.2.3")
+                @ActiveByDefault(since = "1.2.3")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
-            assertThat(items[0].active).isTrue
-            assertThat(items[0].activeSince).isEqualTo("v1.2.3")
+            val defaultActivationStatus = items[0].defaultActivationStatus as Active
+            assertThat(defaultActivationStatus.since).isEqualTo("1.2.3")
+        }
+
+        it("is active by default with invalid version") {
+            val code = """
+                /**
+                 * description
+                 */
+                @ActiveByDefault("1.2.x")
+                class SomeRandomClass : Rule
+            """
+            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
         it("is auto-correctable tag is present") {
