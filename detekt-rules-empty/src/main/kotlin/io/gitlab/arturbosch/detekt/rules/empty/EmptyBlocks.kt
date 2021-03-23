@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * </noncompliant>
  */
 @Suppress("TooManyFunctions")
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
     private val emptyCatchBlock = EmptyCatchBlock(config)

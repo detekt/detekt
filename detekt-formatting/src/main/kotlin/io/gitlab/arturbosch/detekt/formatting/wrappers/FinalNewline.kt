@@ -17,7 +17,7 @@ import org.ec4j.core.model.PropertyType
  * @autoCorrect since v1.0.0
  */
 @OptIn(FeatureInAlphaState::class)
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class FinalNewline(config: Config) : FormattingRule(config) {
 
     override val wrapping = FinalNewlineRule()

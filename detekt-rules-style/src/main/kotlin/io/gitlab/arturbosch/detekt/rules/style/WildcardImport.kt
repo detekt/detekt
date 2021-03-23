@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * @configuration excludeImports - Define a list of package names that should be allowed to be imported
  * with wildcard imports. (default: `['java.util.*', 'kotlinx.android.synthetic.*']`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

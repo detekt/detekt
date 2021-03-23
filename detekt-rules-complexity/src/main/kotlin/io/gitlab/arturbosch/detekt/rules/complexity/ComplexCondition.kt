@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * @configuration threshold - the number of conditions which will trigger the rule (default: `4`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class ComplexCondition(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_CONDITIONS_COUNT

@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * }
  * </compliant>
  */
-@ActiveByDefault("v1.16.0")
+@ActiveByDefault("1.16.0")
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Warning,

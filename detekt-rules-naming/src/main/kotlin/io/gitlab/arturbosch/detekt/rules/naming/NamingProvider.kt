@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 /**
  * The naming ruleset contains rules which assert the naming of different parts of the codebase.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class NamingProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "naming"

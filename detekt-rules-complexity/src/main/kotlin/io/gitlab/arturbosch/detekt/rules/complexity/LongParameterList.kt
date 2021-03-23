@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * annotation class names (default: `[]`); (e.g. ['Inject', 'Module', 'Suppress']);
  * the most common case is for dependency injection where constructors are annotated with @Inject.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class LongParameterList(
     config: Config = Config.empty
 ) : Rule(config) {

@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  *
  * @autoCorrect since v1.0.0
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class SpacingAroundOperators(config: Config) : FormattingRule(config) {
 
     override val wrapping = SpacingAroundOperatorsRule()

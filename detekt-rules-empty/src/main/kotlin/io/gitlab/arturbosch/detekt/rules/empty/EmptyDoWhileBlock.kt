@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtDoWhileExpression
 /**
  * Reports empty `do`/`while` loops. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EmptyDoWhileBlock(config: Config) : EmptyRule(config) {
 
     override fun visitDoWhileExpression(expression: KtDoWhileExpression) {

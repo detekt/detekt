@@ -21,7 +21,7 @@ import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
  * @configuration excludeImportStatements - if import statements should be ignored (default: `true`)
  * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

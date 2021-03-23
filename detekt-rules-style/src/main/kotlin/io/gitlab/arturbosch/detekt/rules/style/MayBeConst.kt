@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * const val MY_CONSTANT = "abc"
  * </compliant>
  */
-@ActiveByDefault("v1.2.0")
+@ActiveByDefault("1.2.0")
 class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

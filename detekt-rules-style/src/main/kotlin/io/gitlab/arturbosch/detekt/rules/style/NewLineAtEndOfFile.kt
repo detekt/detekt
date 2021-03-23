@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * This rule reports files which do not end with a line separator.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

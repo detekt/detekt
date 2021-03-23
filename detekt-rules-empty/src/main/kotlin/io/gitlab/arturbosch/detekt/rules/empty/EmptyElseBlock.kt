@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 /**
  * Reports empty `else` blocks. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EmptyElseBlock(config: Config) : EmptyRule(config) {
 
     override fun visitIfExpression(expression: KtIfExpression) {

@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
  * This rule set provides rules that address issues in comments and documentation
  * of the code.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class CommentSmellProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "comments"

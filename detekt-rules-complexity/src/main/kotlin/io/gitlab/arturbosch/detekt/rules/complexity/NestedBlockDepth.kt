@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *
  * @configuration threshold - the nested depth required to trigger rule (default: `4`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class NestedBlockDepth(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_NESTING

@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * val i = Integer.toString(1)
  * </compliant>
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue("UnnecessaryTemporaryInstantiation", Severity.Performance,

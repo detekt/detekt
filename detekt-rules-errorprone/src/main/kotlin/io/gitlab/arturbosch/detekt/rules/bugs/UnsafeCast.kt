@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -31,32 +30,27 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     println(s as Int)
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
-@ActiveByDefault("v1.16.0")
-@RequiresTypeResolution
+@ActiveByDefault("1.16.0")
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 
-    override val issue: Issue = Issue(
-        "UnsafeCast",
-        Severity.Defect,
-        "Cast operator throws an exception if the cast is not possible.",
-        Debt.TWENTY_MINS
-    )
+    override val issue: Issue = Issue("UnsafeCast",
+            Severity.Defect,
+            "Cast operator throws an exception if the cast is not possible.",
+            Debt.TWENTY_MINS)
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext == BindingContext.EMPTY) return
 
         if (bindingContext.diagnostics.forElement(expression.operationReference)
-            .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
+                .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
         ) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(expression),
-                    "${expression.left.text} cast to ${expression.right?.text ?: ""} cannot succeed."
-                )
-            )
+            report(CodeSmell(issue, Entity.from(expression),
+                    "${expression.left.text} cast to ${expression.right?.text ?: ""} cannot succeed."))
         }
 
         super.visitBinaryWithTypeRHSExpression(expression)

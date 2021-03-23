@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
  *
  * @autoCorrect since v1.0.0
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = ParameterListWrappingRule()

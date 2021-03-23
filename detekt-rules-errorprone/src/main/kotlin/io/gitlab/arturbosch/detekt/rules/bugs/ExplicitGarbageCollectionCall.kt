@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * System.runFinalization()
  * </noncompliant>
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 
     override val issue = Issue("ExplicitGarbageCollectionCall",

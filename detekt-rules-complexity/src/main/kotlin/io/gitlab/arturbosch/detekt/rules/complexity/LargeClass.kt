@@ -24,7 +24,7 @@ import java.util.IdentityHashMap
  *
  * @configuration threshold - the size of class required to trigger the rule (default: `600`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class LargeClass(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_CLASS_LENGTH

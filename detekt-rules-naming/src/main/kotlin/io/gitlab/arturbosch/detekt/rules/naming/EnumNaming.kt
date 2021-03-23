@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  *
  * @configuration enumEntryPattern - naming pattern (default: `'[A-Z][_a-zA-Z0-9]*'`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EnumNaming(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

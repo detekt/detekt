@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
  * }
  * </noncompliant>
  */
-@ActiveByDefault("v1.16.0")
+@ActiveByDefault("1.16.0")
 class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ThrowingExceptionFromFinally", Severity.Defect,

@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * internal class A
  * </compliant>
  */
-@ActiveByDefault("v1.16.0")
+@ActiveByDefault("1.16.0")
 class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override val issue: Issue = Issue(

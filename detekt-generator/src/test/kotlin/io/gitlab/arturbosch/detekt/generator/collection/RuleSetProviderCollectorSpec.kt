@@ -89,7 +89,7 @@ class RuleSetProviderCollectorSpec : Spek({
              *
              * 
              */
-            @ActiveByDefault("v1.0.0")
+            @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 
@@ -238,7 +238,7 @@ class RuleSetProviderCollectorSpec : Spek({
             /**
              * $description
              */
-            @ActiveByDefault("v1.0.0")
+            @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 

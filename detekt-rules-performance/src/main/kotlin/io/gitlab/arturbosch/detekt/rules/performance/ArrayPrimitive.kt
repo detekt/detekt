@@ -40,10 +40,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * fun returningFunction(): DoubleArray { }
  * </compliant>
- *
  */
-@ActiveByDefault("v1.2.0")
-@RequiresTypeResolution
+@ActiveByDefault("1.2.0")
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "ArrayPrimitive",

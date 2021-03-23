@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtForExpression
 /**
  * Reports empty `for` loops. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EmptyForBlock(config: Config) : EmptyRule(config) {
 
     override fun visitForExpression(expression: KtForExpression) {

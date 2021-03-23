@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * fun isNull(str: String) = str == null
  * </compliant>
  */
-@ActiveByDefault("v1.2.0")
+@ActiveByDefault("1.2.0")
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("EqualsNullCall", Severity.Style,

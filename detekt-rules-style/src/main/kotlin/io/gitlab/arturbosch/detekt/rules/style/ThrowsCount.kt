@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *
  * @configuration max - maximum amount of throw statements in a method (default: `2`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

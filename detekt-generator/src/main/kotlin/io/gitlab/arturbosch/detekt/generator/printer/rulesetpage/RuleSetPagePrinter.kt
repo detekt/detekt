@@ -42,7 +42,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             paragraph {
                 "${bold { "Active by default" }}: ${if (rule.active) "Yes" else "No"}" +
-                        (rule.activeSince?.let { " - Since $it" } ?: "")
+                        (rule.activeSince?.let { " - Since v$it" } ?: "")
             }
 
             if (rule.requiresTypeResolution) {

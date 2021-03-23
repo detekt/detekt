@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.resolve.calls.components.isVararg
  * }
  * </compliant>
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

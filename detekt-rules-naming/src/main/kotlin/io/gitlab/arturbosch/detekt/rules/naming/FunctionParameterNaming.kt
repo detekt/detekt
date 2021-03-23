@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtParameter
  * @configuration ignoreOverridden - ignores overridden functions with parameters not matching the pattern
  * (default: `true`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  *
  * @configuration packagePattern - naming pattern (default: `'[a-z]+(\.[a-z][A-Za-z0-9]*)*'`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class PackageNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")

@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  */
-@ActiveByDefault("v1.16.0")
+@ActiveByDefault("1.16.0")
 class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("RethrowCaughtException", Severity.CodeSmell,

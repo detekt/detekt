@@ -104,12 +104,12 @@ class RuleCollectorSpec : Spek({
                 /**
                  * description
                  */
-                @ActiveByDefault("v1.2.3")
+                @ActiveByDefault("1.2.3")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].active).isTrue
-            assertThat(items[0].activeSince).isEqualTo("v1.2.3")
+            assertThat(items[0].activeSince).isEqualTo("1.2.3")
         }
 
         it("is active by default with blank since") {

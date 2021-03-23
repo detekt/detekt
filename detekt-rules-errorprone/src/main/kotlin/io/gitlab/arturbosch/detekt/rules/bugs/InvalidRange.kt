@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  * val range = 2 until 3
  * </compliant>
  */
-@ActiveByDefault("v1.2.0")
+@ActiveByDefault("1.2.0")
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

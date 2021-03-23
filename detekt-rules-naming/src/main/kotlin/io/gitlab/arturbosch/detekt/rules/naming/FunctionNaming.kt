@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * @configuration ignoreAnnotated - ignore naming for functions in the context of these
  * annotation class names (default: `['Composable']`)
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")

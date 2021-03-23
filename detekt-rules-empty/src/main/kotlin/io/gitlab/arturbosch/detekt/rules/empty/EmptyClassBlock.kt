@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 /**
  * Reports empty classes. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {

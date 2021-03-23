@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * }
  * </compliant>
  */
-@ActiveByDefault("v1.0.0")
+@ActiveByDefault("1.0.0")
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
