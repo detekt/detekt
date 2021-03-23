@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assert
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -127,11 +128,55 @@ class ObjectLiteralToLambdaSpec : Spek({
         }
 
         context("is not correct implement") {
-            it("is unknown") {
+            it("without context") {
                 val code = """
+                fun interface Sam {
+                    fun foo()
+                }
                 val a = object : Sam {
                     override fun foo() {
                     }
+                }
+                """
+                subject.compileAndLint(code).assert().isEmpty()
+            }
+
+            it("is empty interface") {
+                val code = """
+                interface Sam
+                val a = object : Sam {}
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("is empty interface and has own function") {
+                val code = """
+                interface Sam
+                val a = object : Sam {
+                    fun foo() {
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("is single property interface") {
+                val code = """
+                interface Sam {
+                    val foo: Int
+                }
+                val a = object : Sam {
+                    override val foo = 1
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("is empty interface and has own property") {
+                val code = """
+                interface Sam
+                val a = object : Sam {
+                    val b = 1
                 }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
@@ -153,7 +198,7 @@ class ObjectLiteralToLambdaSpec : Spek({
             it("is not interface") {
                 val code = """
                 abstract class Something {
-                    fun foo()
+                    abstract fun foo()
                 }
                 val a = object : Something() {
                     override fun foo() {
@@ -170,7 +215,7 @@ class ObjectLiteralToLambdaSpec : Spek({
                 }
                 interface Second
 
-                val a = object : First, Second {
+                val a: First = object : First, Second {
                     override fun foo() {
                     }
                 }
@@ -181,13 +226,13 @@ class ObjectLiteralToLambdaSpec : Spek({
             it("has complex implement") {
                 val code = """
                 abstract class First {
-                    fun foo()
+                    abstract fun foo()
                 }
                 fun interface Second {
                     fun foo()
                 }
 
-                val a = object : First(), Second {
+                val a: First = object : First(), Second {
                     override fun foo() {
                     }
                 }
@@ -234,34 +279,6 @@ class ObjectLiteralToLambdaSpec : Spek({
                 val a = object : Sam {
                     init {
                     }
-                    override fun foo() {
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("has class") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    class B
-                    override fun foo() {
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("has object") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    object B
                     override fun foo() {
                     }
                 }
