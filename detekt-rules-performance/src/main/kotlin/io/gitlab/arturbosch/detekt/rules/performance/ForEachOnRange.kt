@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * }
  * </compliant>
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ForEachOnRange",

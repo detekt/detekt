@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * private internal lateinit val str: String
  * </compliant>
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

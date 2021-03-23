@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * @configuration ignorePackages - ignores classes in the specified packages.
  * (default: `['*.internal', '*.internal.*']`)
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

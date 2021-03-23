@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
  * this check. (default: `['dagger.Module']`)
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."

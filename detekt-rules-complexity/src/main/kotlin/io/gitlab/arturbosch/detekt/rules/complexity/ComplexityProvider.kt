@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 /**
  * This rule set contains rules that report complex code.
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class ComplexityProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "complexity"

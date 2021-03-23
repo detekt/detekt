@@ -18,7 +18,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
  * @configuration android - if android style guides should be preferred (default: `false`)
  * @configuration autoCorrect - if rules should auto correct style violation (default: `true`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class FormattingProvider : RuleSetProvider {
 
     override val ruleSetId: String = "formatting"

@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @requiresTypeResolution
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")

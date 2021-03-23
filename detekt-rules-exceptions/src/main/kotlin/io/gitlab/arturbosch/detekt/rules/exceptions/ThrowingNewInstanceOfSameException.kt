@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  * }
  * </compliant>
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ThrowingNewInstanceOfSameException", Severity.Defect,

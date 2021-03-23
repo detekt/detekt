@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtClassInitializer
 /**
  * Reports empty `init` expressions. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class EmptyInitBlock(config: Config) : EmptyRule(config) {
 
     override fun visitClassInitializer(initializer: KtClassInitializer) {

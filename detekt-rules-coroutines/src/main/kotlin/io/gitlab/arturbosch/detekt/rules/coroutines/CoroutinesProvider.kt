@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 /**
  * The coroutines rule set analyzes code for potential coroutines problems.
  */
-@ActiveByDefault("1.4.0")
+@ActiveByDefault(since = "1.4.0")
 class CoroutinesProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "coroutines"

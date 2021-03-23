@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check
  * (default: `['dagger.Provides']`)
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,

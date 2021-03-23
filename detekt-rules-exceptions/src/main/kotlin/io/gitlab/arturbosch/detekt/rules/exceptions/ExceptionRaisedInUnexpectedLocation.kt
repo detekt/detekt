@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * @configuration methodNames - methods which should not throw exceptions
  * (default: `[toString, hashCode, equals, finalize]`)
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,

@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
  * This will help keep code in line with the given
  * code style guidelines.
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class StyleGuideProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "style"

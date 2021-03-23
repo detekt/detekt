@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *
  * @configuration classPattern - naming pattern (default: `'[A-Z][a-zA-Z0-9]*'`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class ClassNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("ClassName")

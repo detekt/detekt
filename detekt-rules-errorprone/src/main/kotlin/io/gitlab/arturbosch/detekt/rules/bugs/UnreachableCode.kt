@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @requiresTypeResolution
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("UnreachableCode", Severity.Warning,

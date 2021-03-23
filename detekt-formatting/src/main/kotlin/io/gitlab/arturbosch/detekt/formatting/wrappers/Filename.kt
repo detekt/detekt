@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class Filename(config: Config) : FormattingRule(config) {
 
     override val wrapping = FilenameRule()

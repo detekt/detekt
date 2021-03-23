@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @requiresTypeResolution
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue("UnnecessaryNotNullOperator",

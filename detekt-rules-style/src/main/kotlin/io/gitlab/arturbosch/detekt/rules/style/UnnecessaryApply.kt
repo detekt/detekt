@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @requiresTypeResolution
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class UnnecessaryApply(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,

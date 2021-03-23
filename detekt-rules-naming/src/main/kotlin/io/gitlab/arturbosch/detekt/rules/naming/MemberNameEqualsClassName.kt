@@ -55,7 +55,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,

@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
  * @configuration privatePropertyPattern - naming pattern (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

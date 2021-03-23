@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * Reports empty `when` expressions. Empty blocks of code serve no purpose and should be removed.
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
     override fun visitWhenExpression(expression: KtWhenExpression) {

@@ -40,7 +40,7 @@ private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSP
  * }
  * </compliant>
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")

@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * }
  * </compliant>
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
     override val issue = Issue("DuplicateCaseInWhenExpression",

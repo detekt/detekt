@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * }
  * </compliant>
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

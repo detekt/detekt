@@ -24,7 +24,7 @@ import java.util.IdentityHashMap
  *
  * @configuration threshold - number of lines in a method to trigger the rule (default: `60`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class LongMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH

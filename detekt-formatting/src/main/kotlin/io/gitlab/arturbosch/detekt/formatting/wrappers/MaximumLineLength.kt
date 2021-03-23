@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
  *
  * @configuration maxLineLength - maximum line length (default: `120`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class MaximumLineLength(config: Config) : FormattingRule(config) {
 
     override val wrapping = MaxLineLengthRule()

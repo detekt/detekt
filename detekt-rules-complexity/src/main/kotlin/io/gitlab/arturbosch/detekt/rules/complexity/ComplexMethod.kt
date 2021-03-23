@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration nestingFunctions - Comma separated list of function names which add complexity
  * (default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class ComplexMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY

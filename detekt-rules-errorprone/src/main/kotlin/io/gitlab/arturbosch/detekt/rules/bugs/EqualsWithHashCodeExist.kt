@@ -45,7 +45,7 @@ import java.util.ArrayDeque
  * }
  * </compliant>
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("EqualsWithHashCodeExist",

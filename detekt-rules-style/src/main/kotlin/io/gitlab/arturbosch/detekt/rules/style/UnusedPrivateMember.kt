@@ -52,7 +52,7 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  * @configuration allowedNames - unused private member names matching this regex are ignored
  * (default: `'(_|ignored|expected|serialVersionUID)'`)
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")

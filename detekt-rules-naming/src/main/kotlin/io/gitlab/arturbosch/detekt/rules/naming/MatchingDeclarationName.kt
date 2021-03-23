@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * @configuration mustBeFirst - name should only be checked if the file starts with a class or object (default: `true`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

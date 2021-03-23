@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
  * @requiresTypeResolution
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ReturnFromFinally", Severity.Defect,

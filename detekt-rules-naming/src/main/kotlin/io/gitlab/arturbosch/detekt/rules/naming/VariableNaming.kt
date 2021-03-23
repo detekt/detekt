@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverridden - ignores member properties that have the override modifier (default: `true`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

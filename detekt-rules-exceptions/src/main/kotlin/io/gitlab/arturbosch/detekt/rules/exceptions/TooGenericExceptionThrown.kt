@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *            - Throwable
  *            - RuntimeException`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

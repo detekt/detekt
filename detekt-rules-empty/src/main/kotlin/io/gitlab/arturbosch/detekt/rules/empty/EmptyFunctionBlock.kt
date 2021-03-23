@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - Excludes all the overridden functions (default: `false`)
  */
-@ActiveByDefault("1.0.0")
+@ActiveByDefault(since = "1.0.0")
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     private val ignoreOverridden =

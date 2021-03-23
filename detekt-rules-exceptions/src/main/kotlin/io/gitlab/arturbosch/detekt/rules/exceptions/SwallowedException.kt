@@ -77,7 +77,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("SwallowedException", Severity.CodeSmell,

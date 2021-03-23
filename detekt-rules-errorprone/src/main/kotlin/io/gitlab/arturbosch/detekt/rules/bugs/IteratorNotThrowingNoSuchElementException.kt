@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * }
  * </compliant>
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("IteratorNotThrowingNoSuchElementException", Severity.Defect,

@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * class B : Object()
  * </noncompliant>
  */
-@ActiveByDefault("1.2.0")
+@ActiveByDefault(since = "1.2.0")
 class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,

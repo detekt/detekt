@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  *            - IllegalStateException
  *            - IOException`)
  */
-@ActiveByDefault("1.16.0")
+@ActiveByDefault(since = "1.16.0")
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
