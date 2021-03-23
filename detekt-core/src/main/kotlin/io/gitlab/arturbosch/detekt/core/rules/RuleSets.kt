@@ -35,25 +35,6 @@ fun RuleSet.visitFile(
 
 typealias IdMapping = Map<RuleId, RuleSetId>
 
-fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
-    fun extractIds(rule: BaseRule) =
-        if (rule is MultiRule) {
-            rule.rules.asSequence().map(Rule::ruleId)
-        } else {
-            sequenceOf(rule.ruleId)
-        }
-    return rules
-        .asSequence()
-        .flatMap { (ruleSetId, baseRules) ->
-            baseRules
-                .asSequence()
-                .flatMap(::extractIds)
-                .distinct()
-                .map { ruleId -> ruleId to ruleSetId }
-        }
-        .toMap()
-}
-
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
     RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()
     is RulesSpec.RunPolicy.RestrictToSingleRule -> {
