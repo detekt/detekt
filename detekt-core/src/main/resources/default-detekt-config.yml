@@ -639,6 +639,8 @@ style:
     active: true
   NoTabs:
     active: false
+  ObjectLiteralToLambda:
+    active: true
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
@@ -665,8 +667,6 @@ style:
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
-    active: true
-  SingleAbstractMethod:
     active: true
   SpacingBetweenPackageAndImports:
     active: false
