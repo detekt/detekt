@@ -43,8 +43,12 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
     )
 
     private val KotlinType.isSamInterface
-        get() = (constructor.declarationDescriptor as? ClassDescriptor)
-            ?.isDefinitelyNotSamInterface == false
+        get() = (constructor.declarationDescriptor as ClassDescriptor)
+            .isDefinitelyNotSamInterface
+            .not()
+
+    private fun KotlinType.firstSuperType(): KotlinType =
+        constructor.supertypes.first()
 
     private fun KtObjectDeclaration.hasSingleOverriddenMethod(): Boolean =
         name == null &&
@@ -56,14 +60,12 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
         declarations.size == 1 &&
             (declarations[0] as? KtNamedFunction)?.isOverride() == true
 
-    private fun KtObjectLiteralExpression.singleSuperType() =
-        bindingContext.getType(this)?.constructor?.supertypes?.firstOrNull()
-
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
         if (expression.objectDeclaration.hasSingleOverriddenMethod()) {
-            val superType = expression.singleSuperType() ?: return
+            val superType = bindingContext.getType(expression)?.firstSuperType() ?: return
+            superType.constructor.declarationDescriptor
             if (superType.isSamInterface) {
                 report(CodeSmell(issue, Entity.from(expression), issue.description))
             }
