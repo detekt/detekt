@@ -71,6 +71,40 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(6, 9))
             }
 
+            it("is generic") {
+                val code = """
+                fun interface Sam<T> {
+                    fun foo(): T
+                }
+                val a = object : Sam<Int> {
+                    override fun foo(): Int {
+                        return 1
+                    }
+                }   
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(4, 9))
+            }
+
+            it("has other default method") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                    fun bar() {}
+                }
+                val a = object : Sam {
+                    override fun foo() {
+                    }
+                }   
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(5, 9))
+            }
+
             it("nested declaration") {
                 val code = """
                 interface First {
@@ -229,6 +263,63 @@ class ObjectLiteralToLambdaSpec : Spek({
                 val a = object : Sam {
                     object B
                     override fun foo() {
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+        }
+
+        context("java interface") {
+            it("is convertible") {
+                val code = """
+                val a = object : Runnable { 
+                    override fun run(){
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(1, 9))
+            }
+
+            it("is convertible generic") {
+                val code = """
+                import java.util.concurrent.Callable
+                val a = object : Callable<Int> {
+                    override fun call(): Int {
+                        return 1
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(2, 9))
+            }
+
+            it("empty interface") {
+                val code = """
+                import java.util.EventListener
+                val a = object : EventListener {
+                    fun foo() {
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("is convertible generic") {
+                val code = """
+                import java.util.Enumeration
+                val a = object : Enumeration<Int> {
+                    override fun hasMoreElements(): Boolean {
+                        return true
+                    }
+
+                    override fun nextElement(): Int {
+                        return 1
                     }
                 }
                 """
