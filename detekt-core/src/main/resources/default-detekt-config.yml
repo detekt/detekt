@@ -640,7 +640,7 @@ style:
   NoTabs:
     active: false
   ObjectLiteralToLambda:
-    active: true
+    active: false
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
