@@ -633,42 +633,83 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="groovy-dsl-3">Groovy DSL</h4>
 
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detekt</span> <span class="o">{</span>
-    <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.16.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
-    <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>                                        <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
+    <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt</span>
+    <span class="c1">// version found will be used. Override to stay on the same version.</span>
+    <span class="n">toolVersion</span> <span class="o">=</span> <span class="s2">"1.16.0"</span>
+    
+    <span class="c1">// The directories where detekt looks for source files. </span>
+    <span class="c1">// Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
+    <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>
         <span class="s2">"src/main/kotlin"</span><span class="o">,</span>
         <span class="s2">"gensrc/main/kotlin"</span>
     <span class="o">)</span>
-    <span class="n">parallel</span> <span class="o">=</span> <span class="kc">false</span>                                      <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span><span class="s2">"path/to/config.yml"</span><span class="o">)</span>                  <span class="c1">// Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.</span>
-    <span class="n">buildUponDefaultConfig</span> <span class="o">=</span> <span class="kc">false</span>                        <span class="c1">// Interpret config files as updates to the default config. `false` by default.</span>
-    <span class="n">baseline</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"path/to/baseline.xml"</span><span class="o">)</span>               <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
-    <span class="n">disableDefaultRuleSets</span> <span class="o">=</span> <span class="kc">false</span>                        <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
-    <span class="n">debug</span> <span class="o">=</span> <span class="kc">false</span>                                         <span class="c1">// Adds debug output during task execution. `false` by default.</span>
-    <span class="n">ignoreFailures</span> <span class="o">=</span> <span class="kc">false</span>                                <span class="c1">// If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.</span>
-    <span class="n">ignoredBuildTypes</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"release"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
-    <span class="n">ignoredFlavors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"production"</span><span class="o">]</span>                       <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
-    <span class="n">ignoredVariants</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"productionRelease"</span><span class="o">]</span>               <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
-    <span class="n">basePath</span> <span class="o">=</span> <span class="n">projectDir</span>                                 <span class="c1">// Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.</span>
+    
+    <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. </span>
+    <span class="c1">// Can lead to speedups in larger projects. `false` by default.</span>
+    <span class="n">parallel</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="c1">// Define the detekt configuration(s) you want to use. </span>
+    <span class="c1">// Defaults to the default detekt configuration.</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span><span class="s2">"path/to/config.yml"</span><span class="o">)</span>
+    
+    <span class="c1">// Applies the config files on top of detekt's default config file. `false` by default.</span>
+    <span class="n">buildUponDefaultConfig</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="c1">// Turns on all the rules. `false` by default.</span>
+    <span class="n">allRules</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"path/to/baseline.xml"</span><span class="o">)</span>
+    
+    <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules</span>
+    <span class="c1">// defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
+    <span class="n">disableDefaultRuleSets</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="c1">// Adds debug output during task execution. `false` by default.</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">false</span>                                         
+    
+    <span class="c1">// If set to `true` the build does not fail when the</span>
+    <span class="c1">// maxIssues count was reached. Defaults to `false`.</span>
+    <span class="n">ignoreFailures</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
+    <span class="n">ignoredBuildTypes</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"release"</span><span class="o">]</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
+    <span class="n">ignoredFlavors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"production"</span><span class="o">]</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="n">ignoredVariants</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"productionRelease"</span><span class="o">]</span>
+    
+    <span class="c1">// Specify the base path for file paths in the formatted reports. </span>
+    <span class="c1">// If not set, all file paths reported will be absolute file path.</span>
+    <span class="n">basePath</span> <span class="o">=</span> <span class="n">projectDir</span>
+    
     <span class="n">reports</span> <span class="o">{</span>
+        <span class="c1">// Enable/Disable XML report (default: true)</span>
         <span class="n">xml</span> <span class="o">{</span>
-            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.xml"</span><span class="o">)</span> <span class="c1">// Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.xml"</span><span class="o">)</span>
         <span class="o">}</span>
+        <span class="c1">// Enable/Disable HTML report (default: true)</span>
         <span class="n">html</span> <span class="o">{</span>
-            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable HTML report (default: true)</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.html"</span><span class="o">)</span> <span class="c1">// Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.html"</span><span class="o">)</span>
         <span class="o">}</span>
+        <span class="c1">// Enable/Disable TXT report (default: true)</span>
         <span class="n">txt</span> <span class="o">{</span>
-            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable TXT report (default: true)</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.txt"</span><span class="o">)</span> <span class="c1">// Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.txt"</span><span class="o">)</span>
         <span class="o">}</span>
+        <span class="c1">// Enable/Disable SARIF report (default: false)</span>
         <span class="n">sarif</span> <span class="o">{</span>
-            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                <span class="c1">// Enable/Disable SARIF report (default: false)</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.sarif"</span><span class="o">)</span> <span class="c1">// Path where SARIF report will be stored (default: `build/reports/detekt/detekt.sarif`)</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.sarif"</span><span class="o">)</span>
         <span class="o">}</span>
         <span class="n">custom</span> <span class="o">{</span>
-            <span class="n">reportId</span> <span class="o">=</span> <span class="s2">"CustomJsonReport"</span>                   <span class="c1">// The simple class name of your custom report.</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.json"</span><span class="o">)</span> <span class="c1">// Path where report will be stored</span>
+            <span class="c1">// The simple class name of your custom report.</span>
+            <span class="n">reportId</span> <span class="o">=</span> <span class="s2">"CustomJsonReport"</span>                   
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.json"</span><span class="o">)</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
@@ -677,35 +718,80 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
 <h4 id="kotlin-dsl-3">Kotlin DSL</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
-    <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.16.0"</span>                                 <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.</span>
-    <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     <span class="c1">// The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
-    <span class="n">parallel</span> <span class="p">=</span> <span class="k">false</span>                                      <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.</span>
-    <span class="n">config</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"path/to/config.yml"</span><span class="p">)</span>                  <span class="c1">// Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.</span>
-    <span class="n">buildUponDefaultConfig</span> <span class="p">=</span> <span class="k">false</span>                        <span class="c1">// Interpret config files as updates to the default config. `false` by default.</span>
-    <span class="n">baseline</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/baseline.xml"</span><span class="p">)</span>               <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
-    <span class="n">disableDefaultRuleSets</span> <span class="p">=</span> <span class="k">false</span>                        <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
-    <span class="n">debug</span> <span class="p">=</span> <span class="k">false</span>                                         <span class="c1">// Adds debug output during task execution. `false` by default.</span>
-    <span class="n">ignoreFailures</span> <span class="p">=</span> <span class="k">false</span>                                <span class="c1">// If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.</span>
-    <span class="n">ignoredBuildTypes</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"release"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
-    <span class="n">ignoredFlavors</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"production"</span><span class="p">)</span>                 <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
-    <span class="n">ignoredVariants</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"productionRelease"</span><span class="p">)</span>         <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
-    <span class="n">basePath</span> <span class="p">=</span> <span class="n">projectDir</span>                                 <span class="c1">// Specify the base path for file paths in the formatted reports. If not set, all file paths reported will be absolute file path.</span>
+    <span class="c1">// Version of Detekt that will be used. When unspecified the latest detekt</span>
+    <span class="c1">// version found will be used. Override to stay on the same version.</span>
+    <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">"1.16.0"</span>
+    
+    <span class="c1">// The directories where detekt looks for source files. </span>
+    <span class="c1">// Defaults to `files("src/main/java", "src/main/kotlin")`.</span>
+    <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     
+    
+    <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. </span>
+    <span class="c1">// Can lead to speedups in larger projects. `false` by default.</span>
+    <span class="n">parallel</span> <span class="p">=</span> <span class="k">false</span>
+    
+    <span class="c1">// Define the detekt configuration(s) you want to use. </span>
+    <span class="c1">// Defaults to the default detekt configuration.</span>
+    <span class="n">config</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"path/to/config.yml"</span><span class="p">)</span>
+    
+    <span class="c1">// Applies the config files on top of detekt's default config file. `false` by default.</span>
+    <span class="n">buildUponDefaultConfig</span> <span class="p">=</span> <span class="k">false</span>
+    
+    <span class="c1">// Turns on all the rules. `false` by default.</span>
+    <span class="n">allRules</span> <span class="p">=</span> <span class="k">false</span>
+    
+    <span class="c1">// Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.</span>
+    <span class="n">baseline</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/baseline.xml"</span><span class="p">)</span>
+    
+    <span class="c1">// Disables all default detekt rulesets and will only run detekt with custom rules</span>
+    <span class="c1">// defined in plugins passed in with `detektPlugins` configuration. `false` by default.</span>
+    <span class="n">disableDefaultRuleSets</span> <span class="p">=</span> <span class="k">false</span>
+    
+    <span class="c1">// Adds debug output during task execution. `false` by default.</span>
+    <span class="n">debug</span> <span class="p">=</span> <span class="k">false</span>                                         
+    
+    <span class="c1">// If set to `true` the build does not fail when the</span>
+    <span class="c1">// maxIssues count was reached. Defaults to `false`.</span>
+    <span class="n">ignoreFailures</span> <span class="p">=</span> <span class="k">false</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build types (e.g. "release")</span>
+    <span class="n">ignoredBuildTypes</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"release"</span><span class="p">)</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build flavor (e.g. "production")</span>
+    <span class="n">ignoredFlavors</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"production"</span><span class="p">)</span>
+    
+    <span class="c1">// Android: Don't create tasks for the specified build variants (e.g. "productionRelease")</span>
+    <span class="n">ignoredVariants</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"productionRelease"</span><span class="p">)</span>
+    
+    <span class="c1">// Specify the base path for file paths in the formatted reports. </span>
+    <span class="c1">// If not set, all file paths reported will be absolute file path.</span>
+    <span class="n">basePath</span> <span class="p">=</span> <span class="n">projectDir</span>
+    
     <span class="nf">reports</span> <span class="p">{</span>
+        <span class="c1">// Enable/Disable XML report (default: true)</span>
         <span class="nf">xml</span> <span class="p">{</span>
-            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable XML report (default: true)</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.xml"</span><span class="p">)</span> <span class="c1">// Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.xml"</span><span class="p">)</span>
         <span class="p">}</span>
+        <span class="c1">// Enable/Disable HTML report (default: true)</span>
         <span class="nf">html</span> <span class="p">{</span>
-            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable HTML report (default: true)</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.html"</span><span class="p">)</span> <span class="c1">// Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.html"</span><span class="p">)</span>
         <span class="p">}</span>
+        <span class="c1">// Enable/Disable TXT report (default: true)</span>
         <span class="nf">txt</span> <span class="p">{</span>
-            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                <span class="c1">// Enable/Disable TXT report (default: true)</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.txt"</span><span class="p">)</span> <span class="c1">// Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.txt"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c1">// Enable/Disable SARIF report (default: false)</span>
+        <span class="nf">sarif</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.sarif"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="nf">custom</span> <span class="p">{</span>
-            <span class="n">reportId</span> <span class="p">=</span> <span class="s">"CustomJsonReport"</span>                 <span class="c1">// The simple class name of your custom report.</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.json"</span><span class="p">)</span> <span class="c1">// Path where report will be stored</span>
+            <span class="c1">// The simple class name of your custom report.</span>
+            <span class="n">reportId</span> <span class="p">=</span> <span class="s">"CustomJsonReport"</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.json"</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
