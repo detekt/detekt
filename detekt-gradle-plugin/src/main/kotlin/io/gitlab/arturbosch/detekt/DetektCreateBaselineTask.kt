@@ -74,6 +74,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     val failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input

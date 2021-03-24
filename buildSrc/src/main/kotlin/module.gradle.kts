@@ -93,8 +93,5 @@ publishing {
         from(components["java"])
         artifact(sourcesJar.get())
         artifact(javadocJar.get())
-        if (project.name == "detekt-cli") {
-            artifact(tasks.getByName("shadowJar"))
-        }
     }
 }
