@@ -33,6 +33,8 @@ import org.jetbrains.kotlin.types.KotlinType
  * Foo {
  * }
  * </compliant>
+ *
+ * @requiresTypeResolution
  */
 class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
