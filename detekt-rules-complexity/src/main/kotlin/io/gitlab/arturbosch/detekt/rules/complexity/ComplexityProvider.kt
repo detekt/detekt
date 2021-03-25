@@ -20,7 +20,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
             LongMethod(config),
             LargeClass(config),
             ComplexInterface(config),
-            ComplexMethod(config),
+            ComplexMethod.create(config),
             StringLiteralDuplication(config),
             MethodOverloading(config),
             NestedBlockDepth(config),
