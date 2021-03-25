@@ -281,5 +281,33 @@ class RuleSetProviderCollectorSpec : Spek({
                 assertThat(items[0].rules).containsExactly(ruleName, secondRuleName)
             }
         }
+        context("a correct RuleSetProvider class using a factory method") {
+            val description = "This is a description"
+            val ruleSetId = "test"
+            val ruleName = "TestRule"
+            val code = """
+            package foo
+
+            /**
+             * $description
+             *
+             * @active since v1.0.0
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName.create(config),
+                    ))
+                }
+            }
+        """
+
+            it("collects a rule") {
+                val items = subject.run(code)
+                assertThat(items[0].rules).containsExactly(ruleName)
+            }
+        }
     }
 })

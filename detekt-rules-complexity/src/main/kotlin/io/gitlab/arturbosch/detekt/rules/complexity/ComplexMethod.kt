@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -49,7 +50,27 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 @ActiveByDefault(since = "1.0.0")
 class ComplexMethod(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY
+
+    @Configuration("McCabe's Cyclomatic Complexity (MCC) number for a method. (default: `15`)")
+    threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY,
+
+    @Configuration("Ignores a complex method if it only contains a single when expression. (default: `false`)")
+    val ignoreSingleWhenExpression: Boolean = false,
+
+    @Configuration("Whether to ignore simple (braceless) when entries. (default: `false`)")
+    val ignoreSimpleWhenEntries: Boolean = false,
+
+    @Configuration(
+        "Whether to ignore functions which are often used instead of an `if` or `for` statement. " +
+            "(default: `false`)"
+    )
+    val ignoreNestingFunctions: Boolean = false,
+
+    @Configuration(
+        "Comma separated list of function names which add complexity. " +
+            "(default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)"
+    )
+    val nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue(
@@ -58,12 +79,6 @@ class ComplexMethod(
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
         Debt.TWENTY_MINS
     )
-
-    private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
-    private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
-    private val ignoreNestingFunctions = valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
-    private val nestingFunctions = valueOrDefaultCommaSeparated(NESTING_FUNCTIONS, DEFAULT_NESTING_FUNCTIONS.toList())
-        .toSet()
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
@@ -104,9 +119,30 @@ class ComplexMethod(
 
     companion object {
         const val DEFAULT_THRESHOLD_METHOD_COMPLEXITY = 15
+        // Still to do: Disable custom rule check for annotated rules
+        //  io.gitlab.arturbosch.detekt.core.ConfigAssert#checkOptions
         const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
         const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
         const val IGNORE_NESTING_FUNCTIONS = "ignoreNestingFunctions"
         const val NESTING_FUNCTIONS = "nestingFunctions"
+
+        // Code similar to this will be generated in the next iteration by an annotation processor
+        fun create(ruleSetConfig: Config): ComplexMethod {
+            val config = ruleSetConfig.subConfig("ComplexMethod")
+            val threshold = config.valueOrDefault("threshold", DEFAULT_THRESHOLD_METHOD_COMPLEXITY)
+            val ignoreSingleWhenExpression = config.valueOrDefault("ignoreSingleWhenExpression", false)
+            val ignoreSimpleWhenEntries = config.valueOrDefault("ignoreSimpleWhenEntries", false)
+            val ignoreNestingFunctions = config.valueOrDefault("ignoreNestingFunctions", false)
+            val nestingFunctions = config.valueOrDefaultCommaSeparated("nestingFunctions", DEFAULT_NESTING_FUNCTIONS)
+
+            return ComplexMethod(
+                config = ruleSetConfig,
+                threshold = threshold,
+                ignoreSingleWhenExpression = ignoreSingleWhenExpression,
+                ignoreSimpleWhenEntries = ignoreSimpleWhenEntries,
+                ignoreNestingFunctions = ignoreNestingFunctions,
+                nestingFunctions = nestingFunctions
+            )
+        }
     }
 }
