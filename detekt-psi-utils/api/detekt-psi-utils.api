@@ -126,3 +126,7 @@ public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
 	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Z
 }
 
+public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
+	public static final fun fqNameOrNull (Lorg/jetbrains/kotlin/types/KotlinType;)Lorg/jetbrains/kotlin/name/FqName;
+}
+
