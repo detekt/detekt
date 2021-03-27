@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * </compliant>
  *
  */
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
 

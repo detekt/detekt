@@ -67,6 +67,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
  */
 @ActiveByDefault(since = "1.2.0")
+@RequiresTypeResolution
 class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
