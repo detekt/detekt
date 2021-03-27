@@ -27,13 +27,8 @@ tasks.shadowJar {
     configurations = listOf(project.configurations.runtimeClasspath.get(), bundledRules)
 }
 
-val moveJarForIntegrationTest by tasks.registering {
-    dependsOn(tasks.named("shadowJar"))
-    doLast {
-        copy {
-            from(tasks.named("shadowJar"))
-            into(rootProject.buildDir)
-            rename { "detekt-cli-all.jar" }
-        }
-    }
+tasks.register<Copy>("moveJarForIntegrationTest") {
+    from(tasks.shadowJar)
+    into(rootProject.buildDir)
+    rename { "detekt-cli-all.jar" }
 }
