@@ -47,9 +47,11 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtFile.hasValidLicense(): Boolean =
-        if (hasLicenseHeaderRegex()) getLicenseHeaderRegex().find(text)?.range?.start == 0 else text.startsWith(
-            getLicenseHeader()
-        )
+        if (hasLicenseHeaderRegex()) {
+            getLicenseHeaderRegex().find(text)?.range?.start == 0
+        } else {
+            text.startsWith(getLicenseHeader())
+        }
 
     companion object {
         const val PARAM_LICENSE_TEMPLATE_FILE = "licenseTemplateFile"

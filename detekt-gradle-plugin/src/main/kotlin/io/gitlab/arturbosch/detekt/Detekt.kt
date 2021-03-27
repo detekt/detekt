@@ -214,8 +214,7 @@ open class Detekt @Inject constructor(
     fun check() {
         if (failFastProp.getOrElse(false)) {
             project.logger.warn(
-                "'failFast' is deprecated. Please use " +
-                    "'buildUponDefaultConfig' together with 'allRules'."
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
             )
         }
 

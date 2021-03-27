@@ -114,8 +114,7 @@ open class DetektCreateBaselineTask : SourceTask() {
     fun baseline() {
         if (failFast.getOrElse(false)) {
             project.logger.warn(
-                "'failFast' is deprecated. Please use " +
-                    "'buildUponDefaultConfig' together with 'allRules'."
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
             )
         }
 

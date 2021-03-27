@@ -67,8 +67,6 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
             receiver = receiver.receiverExpression
         }
 
-        if (counter >= 1) report(
-            CodeSmell(issue, Entity.from(expression), issue.description)
-        )
+        if (counter >= 1) report(CodeSmell(issue, Entity.from(expression), issue.description))
     }
 }
