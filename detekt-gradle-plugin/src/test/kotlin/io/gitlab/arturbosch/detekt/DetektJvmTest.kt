@@ -9,32 +9,33 @@ import org.spekframework.spek2.style.specification.describe
 object DetektJvmTest : Spek({
     describe("When applying detekt in a JVM project") {
 
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle",
+            mainBuildFileContent = """
+                plugins {
+                    id "org.jetbrains.kotlin.jvm"
+                    id "io.gitlab.arturbosch.detekt"
+                }
+
+                repositories {
+                    mavenCentral()
+                    jcenter()
+                    mavenLocal()
+                }
+
+                detekt {
+                    reports {
+                        sarif.enabled = true
+                        txt.enabled = false
+                    }
+                }
+            """.trimIndent(),
+            dryRun = true
+        )
+        gradleRunner.setupProject()
+
         it("configures detekt type resolution task") {
-            val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
-                mainBuildFileContent = """
-                    plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
-                    }
-
-                    repositories {
-                        mavenCentral()
-                        jcenter()
-                        mavenLocal()
-                    }
-
-                    detekt {
-                        reports {
-                            sarif.enabled = true
-                            txt.enabled = false
-                        }
-                    }
-                """.trimIndent(),
-                dryRun = true
-            )
-            gradleRunner.setupProject()
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
