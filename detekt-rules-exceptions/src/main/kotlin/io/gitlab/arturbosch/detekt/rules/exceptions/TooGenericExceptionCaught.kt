@@ -58,7 +58,8 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     )
 
     private val exceptions: Set<String> = valueOrDefault(
-        CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults
+        CAUGHT_EXCEPTIONS_PROPERTY,
+        caughtExceptionDefaults
     ).toHashSet()
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)

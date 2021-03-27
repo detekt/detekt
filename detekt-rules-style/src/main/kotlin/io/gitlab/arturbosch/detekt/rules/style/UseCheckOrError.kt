@@ -39,7 +39,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UseCheckOrError", Severity.Style,
+        "UseCheckOrError",
+        Severity.Style,
         "Use check() or error() instead of throwing an IllegalStateException.",
         Debt.FIVE_MINS
     )

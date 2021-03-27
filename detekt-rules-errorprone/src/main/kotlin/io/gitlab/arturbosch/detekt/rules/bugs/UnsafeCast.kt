@@ -53,7 +53,8 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
         ) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.left.text} cast to ${expression.right?.text ?: ""} cannot succeed."
                 )
             )

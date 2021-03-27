@@ -267,7 +267,8 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
             .filter { it.nameAsSafeName.identifier !in nameAccesses }
             .map {
                 CodeSmell(
-                    issue, Entity.from(it),
+                    issue,
+                    Entity.from(it),
                     "Private property ${it.nameAsSafeName.identifier} is unused."
                 )
             }

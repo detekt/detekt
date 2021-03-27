@@ -56,7 +56,8 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
     )
 
     private val excludedImports = valueOrDefaultCommaSeparated(
-        EXCLUDED_IMPORTS, listOf("java.util.*", "kotlinx.android.synthetic.*")
+        EXCLUDED_IMPORTS,
+        listOf("java.util.*", "kotlinx.android.synthetic.*")
     )
         .map { it.removePrefix("*").removeSuffix("*") }
 
@@ -72,7 +73,8 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
             }
             report(
                 CodeSmell(
-                    issue, Entity.from(importDirective),
+                    issue,
+                    Entity.from(importDirective),
                     "$import " +
                         "is a wildcard import. Replace it with fully qualified imports."
                 )

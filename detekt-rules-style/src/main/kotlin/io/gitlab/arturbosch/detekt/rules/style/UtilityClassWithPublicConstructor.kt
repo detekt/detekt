@@ -76,7 +76,8 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
                 if (utilityClassConstructor.hasPublicConstructorWithoutParameters()) {
                     report(
                         CodeSmell(
-                            issue, Entity.from(klass),
+                            issue,
+                            Entity.from(klass),
                             "The class ${klass.nameAsSafeName} only contains" +
                                 " utility functions. Consider defining it as an object."
                         )
@@ -84,7 +85,8 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
                 } else if (klass.isOpen() && utilityClassConstructor.hasNonPublicConstructorWithoutParameters()) {
                     report(
                         CodeSmell(
-                            issue, Entity.from(klass),
+                            issue,
+                            Entity.from(klass),
                             "The utility class ${klass.nameAsSafeName} should be final."
                         )
                     )

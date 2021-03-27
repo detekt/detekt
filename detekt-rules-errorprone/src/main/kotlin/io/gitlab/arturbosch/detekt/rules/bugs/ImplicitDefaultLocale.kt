@@ -46,7 +46,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ImplicitDefaultLocale", Severity.CodeSmell,
+        "ImplicitDefaultLocale",
+        Severity.CodeSmell,
         "Implicit default locale used for string processing. Consider using explicit locale.",
         Debt.FIVE_MINS
     )
@@ -70,7 +71,8 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
         ) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.text} uses implicitly default locale for string formatting."
                 )
             )

@@ -49,7 +49,8 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         if (forbiddenImports.any { it.matches(import) } || containsForbiddenPattern(import)) {
             report(
                 CodeSmell(
-                    issue, Entity.from(importDirective),
+                    issue,
+                    Entity.from(importDirective),
                     "The import " +
                         "$import has been forbidden in the Detekt config."
                 )

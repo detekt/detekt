@@ -43,7 +43,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Warning,
+        javaClass.simpleName,
+        Severity.Warning,
         "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
             "The serialVersionUID field should be a constant long value inside a companion object.",
         Debt.FIVE_MINS
@@ -57,7 +58,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
             if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(klass),
+                        issue,
+                        Entity.from(klass),
                         "The class ${klass.nameAsSafeName} implements" +
                             " the Serializable interface and should thus define a serialVersionUID."
                     )
@@ -74,7 +76,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue, Entity.from(declaration),
+                    issue,
+                    Entity.from(declaration),
                     "The object ${declaration.nameAsSafeName} " +
                         "implements the Serializable interface and should thus define a serialVersionUID."
                 )

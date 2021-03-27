@@ -37,8 +37,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "Unnecessary abstract modifier in interface", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "Unnecessary abstract modifier in interface",
+        Debt.FIVE_MINS
     )
 
     override fun visitClass(klass: KtClass) {

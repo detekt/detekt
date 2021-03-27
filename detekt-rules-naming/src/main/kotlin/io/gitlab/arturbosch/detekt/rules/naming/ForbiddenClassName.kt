@@ -20,7 +20,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Forbidden class name as per configuration detected.",
         Debt.FIVE_MINS
     )

@@ -43,7 +43,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Restrict the number of throw statements in methods.",
         Debt.TEN_MINS
     )

@@ -28,7 +28,8 @@ class TooManyFunctions : Rule() {
         if (amount > THRESHOLD) {
             report(
                 CodeSmell(
-                    issue, Entity.atPackageOrFirstDecl(file),
+                    issue,
+                    Entity.atPackageOrFirstDecl(file),
                     message = "The file ${file.name} has $amount function declarations. " +
                         "Threshold is specified with $THRESHOLD."
                 )

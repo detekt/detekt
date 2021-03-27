@@ -55,7 +55,8 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
             if (!endOfSentenceFormat.containsMatchIn(text) && !text.lastArgumentMatchesUrl()) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(declaration),
+                        issue,
+                        Entity.from(declaration),
                         "The first sentence of this KDoc does not end with the correct punctuation."
                     )
                 )

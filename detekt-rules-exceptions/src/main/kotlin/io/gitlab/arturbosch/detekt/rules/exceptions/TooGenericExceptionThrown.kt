@@ -56,7 +56,8 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
         expression.thrownExpression?.referenceExpression()?.text?.let {
             if (it in exceptions) report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "$it is a too generic " +
                         "Exception. Prefer throwing specific exceptions that indicate a specific error case."
                 )

@@ -50,7 +50,8 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
                 .map { entry -> entry.conditions.joinToString { it.text } }
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "When expression has multiple case statements for ${duplicateEntries.joinToString("; ")}."
                 )
             )

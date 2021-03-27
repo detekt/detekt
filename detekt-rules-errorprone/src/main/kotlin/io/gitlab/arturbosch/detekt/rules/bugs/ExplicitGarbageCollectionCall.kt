@@ -48,7 +48,8 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
                 when (it.text) {
                     "System", "Runtime.getRuntime()" -> report(
                         CodeSmell(
-                            issue, Entity.from(expression),
+                            issue,
+                            Entity.from(expression),
                             "An explicit call to the Garbage Collector as in ${it.text} should not be made."
                         )
                     )

@@ -77,7 +77,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
         if (queue.pop().violation()) {
             report(
                 CodeSmell(
-                    issue, Entity.atName(classOrObject),
+                    issue,
+                    Entity.atName(classOrObject),
                     "A class should always override hashCode " +
                         "when overriding equals and the other way around."
                 )

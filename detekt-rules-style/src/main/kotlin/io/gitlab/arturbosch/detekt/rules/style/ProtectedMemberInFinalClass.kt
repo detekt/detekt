@@ -36,7 +36,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Warning,
+        javaClass.simpleName,
+        Severity.Warning,
         "Member with protected visibility in final class is private. " +
             "Consider using private or internal as modifier.",
         Debt.FIVE_MINS

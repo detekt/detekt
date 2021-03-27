@@ -43,7 +43,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
+        "ThrowingExceptionsWithoutMessageOrCause",
+        Severity.Warning,
         "A call to the default constructor of an exception was detected. " +
             "Instead one of the constructor overloads should be called. " +
             "This allows to provide more meaningful exceptions.",

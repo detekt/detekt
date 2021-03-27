@@ -82,7 +82,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
             .onEach {
                 report(
                     CodeSmell(
-                        issue, Entity.from(expression),
+                        issue,
+                        Entity.from(expression),
                         "A single Unit expression is unnecessary and can safely be removed"
                     )
                 )

@@ -37,7 +37,8 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--help", "-h"],
-        help = true, description = "Shows the usage."
+        help = true,
+        description = "Shows the usage."
     )
     var help: Boolean = false
 

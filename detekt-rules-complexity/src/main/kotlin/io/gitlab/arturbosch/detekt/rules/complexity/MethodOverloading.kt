@@ -32,7 +32,8 @@ class MethodOverloading(
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue(
-        "MethodOverloading", Severity.Maintainability,
+        "MethodOverloading",
+        Severity.Maintainability,
         "Methods which are overloaded often might be harder to maintain. " +
             "Furthermore, these methods are tightly coupled. " +
             "Refactor these methods and try to use optional parameters.",

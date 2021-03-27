@@ -35,7 +35,8 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
+        "ExceptionRaisedInUnexpectedLocation",
+        Severity.CodeSmell,
         "This method is not expected to throw exceptions. This can cause weird behavior.",
         Debt.TWENTY_MINS
     )

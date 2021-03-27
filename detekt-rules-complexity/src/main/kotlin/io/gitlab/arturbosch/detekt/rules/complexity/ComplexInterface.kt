@@ -36,7 +36,8 @@ class ComplexInterface(
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Maintainability,
+        javaClass.simpleName,
+        Severity.Maintainability,
         "An interface contains too many functions and properties. " +
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +

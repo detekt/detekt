@@ -49,7 +49,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "PrintStackTrace", Severity.CodeSmell,
+        "PrintStackTrace",
+        Severity.CodeSmell,
         "Do not print an stack trace. " +
             "These debug statements should be replaced with a logger or removed.",
         Debt.TWENTY_MINS

@@ -45,7 +45,8 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.text} contains an unnecessary " +
                         "not-null (!!) operators"
                 )

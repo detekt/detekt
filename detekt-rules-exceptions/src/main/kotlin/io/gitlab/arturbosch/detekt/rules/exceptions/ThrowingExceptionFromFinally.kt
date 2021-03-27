@@ -29,7 +29,8 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ThrowingExceptionFromFinally", Severity.Defect,
+        "ThrowingExceptionFromFinally",
+        Severity.Defect,
         "Do not throw an exception within a finally statement. This can discard exceptions and is confusing.",
         Debt.TWENTY_MINS
     )

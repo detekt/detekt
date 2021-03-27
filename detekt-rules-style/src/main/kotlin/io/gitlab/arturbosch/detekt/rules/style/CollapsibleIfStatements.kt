@@ -38,7 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "CollapsibleIfStatements", Severity.Style,
+        "CollapsibleIfStatements",
+        Severity.Style,
         "Two if statements which could be collapsed were detected. " +
             "These statements can be merged to improve readability.",
         Debt.FIVE_MINS

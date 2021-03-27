@@ -38,7 +38,8 @@ import java.util.Locale
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
             "should be underscore separated to increase readability. Underscores that do not make groups of " +
             "3 digits are also reported.",
@@ -67,7 +68,8 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         if (!numberString.matches(underscoreNumberRegex)) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "This numeric literal should be separated " +
                         "by underscores in order to increase readability."
                 )

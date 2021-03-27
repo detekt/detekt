@@ -92,7 +92,8 @@ import java.util.Locale
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
             "and hence it's unclear what the purpose of this number is. " +
             "It's better to declare such numbers as constants and give them a proper name. " +
@@ -137,7 +138,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         if (number != null && !ignoredNumbers.contains(number)) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "This expression contains a magic number." +
                         " Consider defining it to a well named constant."
                 )

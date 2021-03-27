@@ -80,7 +80,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "SwallowedException", Severity.CodeSmell,
+        "SwallowedException",
+        Severity.CodeSmell,
         "The caught exception is swallowed. The original exception could be lost.",
         Debt.TWENTY_MINS
     )

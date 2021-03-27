@@ -14,7 +14,9 @@ class DetektMultiplatformTest : Spek({
 
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -47,7 +49,9 @@ class DetektMultiplatformTest : Spek({
 
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -76,7 +80,9 @@ class DetektMultiplatformTest : Spek({
     describe("multiplatform projects - JVM target") {
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -126,7 +132,9 @@ class DetektMultiplatformTest : Spek({
     ) {
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     plugins {
                         id "kotlin-multiplatform"
@@ -186,7 +194,9 @@ class DetektMultiplatformTest : Spek({
     describe("multiplatform projects - JS target") {
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -237,7 +247,9 @@ class DetektMultiplatformTest : Spek({
     ) {
         val gradleRunner = setupProject {
             addSubmodule(
-                "shared", 1, 1,
+                "shared",
+                1,
+                1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {

@@ -43,8 +43,10 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  */
 class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "Declaring lambda parameters as `it` is redundant.", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "Declaring lambda parameters as `it` is redundant.",
+        Debt.FIVE_MINS
     )
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
@@ -53,7 +55,8 @@ class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
         if (IT_LITERAL in parameterNames) {
             report(
                 CodeSmell(
-                    issue, Entity.from(lambdaExpression),
+                    issue,
+                    Entity.from(lambdaExpression),
                     "This explicit usage of `it` as the lambda parameter name can be omitted."
                 )
             )

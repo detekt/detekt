@@ -46,7 +46,8 @@ class ComplexCondition(
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue(
-        "ComplexCondition", Severity.Maintainability,
+        "ComplexCondition",
+        Severity.Maintainability,
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
         Debt.TWENTY_MINS
     )

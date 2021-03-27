@@ -81,7 +81,8 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
                 val entity = Entity.from(declaration).copy(ktElement = file)
                 report(
                     CodeSmell(
-                        issue, entity,
+                        issue,
+                        entity,
                         "The file name '$filename' " +
                             "does not match the name of the single top-level declaration '$declarationName'."
                     )

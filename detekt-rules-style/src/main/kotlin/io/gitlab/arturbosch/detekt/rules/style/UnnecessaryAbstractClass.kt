@@ -54,7 +54,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue =
         Issue(
-            "UnnecessaryAbstractClass", Severity.Style,
+            "UnnecessaryAbstractClass",
+            Severity.Style,
             "An abstract class is unnecessary and can be refactored. " +
                 "An abstract class should have both abstract and concrete properties or functions. " +
                 noConcreteMember + " " + noAbstractMember,
@@ -62,7 +63,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         )
 
     private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(
-        EXCLUDE_ANNOTATED_CLASSES, listOf("dagger.Module")
+        EXCLUDE_ANNOTATED_CLASSES,
+        listOf("dagger.Module")
     )
         .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder

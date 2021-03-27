@@ -38,7 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Violation of the package declaration style.",
         Debt.FIVE_MINS
     )

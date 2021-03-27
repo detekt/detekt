@@ -49,7 +49,8 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
         if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "This loop will never be executed due to its expression."
                 )
             )

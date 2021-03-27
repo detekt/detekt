@@ -29,7 +29,8 @@ import org.jetbrains.kotlin.psi.KtExpression
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "UnnecessaryTemporaryInstantiation", Severity.Performance,
+        "UnnecessaryTemporaryInstantiation",
+        Severity.Performance,
         "Avoid temporary objects when converting primitive types to String.",
         Debt.FIVE_MINS
     )

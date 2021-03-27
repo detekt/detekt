@@ -23,7 +23,8 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
             if (body.declarations.isEmpty()) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(body),
+                        issue,
+                        Entity.from(body),
                         "The class or object ${classOrObject.name} is empty."
                     )
                 )

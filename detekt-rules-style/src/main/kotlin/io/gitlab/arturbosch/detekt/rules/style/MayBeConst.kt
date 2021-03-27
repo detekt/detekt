@@ -46,8 +46,11 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     )
 
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
-        KtTokens.PLUS, KtTokens.MINUS, KtTokens.MUL,
-        KtTokens.DIV, KtTokens.PERC
+        KtTokens.PLUS,
+        KtTokens.MINUS,
+        KtTokens.MUL,
+        KtTokens.DIV,
+        KtTokens.PERC
     )
 
     private val topLevelConstants = HashSet<String?>()

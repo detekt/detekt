@@ -59,7 +59,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "A member should not be given the same name as its parent class or object.",
         Debt.FIVE_MINS
     )

@@ -24,18 +24,22 @@ class XmlOutputFormatSpec : Spek({
 
     val entity1 by memoized {
         Entity(
-            "Sample1", "",
+            "Sample1",
+            "",
             Location(
-                SourceLocation(11, 1), TextLocation(0, 10),
+                SourceLocation(11, 1),
+                TextLocation(0, 10),
                 "src/main/com/sample/Sample1.kt"
             )
         )
     }
     val entity2 by memoized {
         Entity(
-            "Sample2", "",
+            "Sample2",
+            "",
             Location(
-                SourceLocation(22, 2), TextLocation(0, 20),
+                SourceLocation(22, 2),
+                TextLocation(0, 20),
                 "src/main/com/sample/Sample2.kt"
             )
         )

@@ -56,7 +56,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "UselessPostfixExpression", Severity.Defect,
+        "UselessPostfixExpression",
+        Severity.Defect,
         "The incremented or decremented value is unused. This value is replaced with the original value.",
         Debt.TWENTY_MINS
     )
@@ -109,7 +110,8 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
     private fun report(postfixExpression: KtPostfixExpression) {
         report(
             CodeSmell(
-                issue, Entity.from(postfixExpression),
+                issue,
+                Entity.from(postfixExpression),
                 "The result of the postfix expression: " +
                     "${postfixExpression.text} will not be used and is therefore useless."
             )

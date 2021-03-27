@@ -28,7 +28,8 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
         if (text.isNotEmpty() && text.last() != '\n') {
             report(
                 CodeSmell(
-                    issue, Entity.atPackageOrFirstDecl(file),
+                    issue,
+                    Entity.atPackageOrFirstDecl(file),
                     "The file ${file.name} is not ending with a new line."
                 )
             )

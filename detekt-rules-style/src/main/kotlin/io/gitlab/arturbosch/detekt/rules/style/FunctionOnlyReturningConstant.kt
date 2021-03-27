@@ -44,7 +44,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "A function that only returns a constant is misleading. " +
             "Consider declaring a constant instead",
         Debt.TEN_MINS
@@ -54,7 +55,8 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private val ignoreActualFunction = valueOrDefault(IGNORE_ACTUAL_FUNCTION, true)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "describeContents"))
     private val excludeAnnotatedFunctions = valueOrDefaultCommaSeparated(
-        EXCLUDE_ANNOTATED_FUNCTION, listOf("dagger.Provides")
+        EXCLUDE_ANNOTATED_FUNCTION,
+        listOf("dagger.Provides")
     )
         .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder

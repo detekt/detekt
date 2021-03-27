@@ -65,7 +65,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             if (text.contains(it, ignoreCase = true)) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(comment),
+                        issue,
+                        Entity.from(comment),
                         "This comment contains '$it' that has been " +
                             "defined as forbidden in detekt."
                     )

@@ -39,7 +39,8 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UnnecessaryParentheses", Severity.Style,
+        "UnnecessaryParentheses",
+        Severity.Style,
         "Unnecessary parentheses don't add any value to the code and should be removed.",
         Debt.FIVE_MINS
     )
