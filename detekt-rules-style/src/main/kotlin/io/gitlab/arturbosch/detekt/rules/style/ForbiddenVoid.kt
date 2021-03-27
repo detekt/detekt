@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
@@ -17,7 +19,6 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * This rule detects usages of `Void` and reports them as forbidden.
@@ -53,7 +54,7 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
 
-        if (kotlinType.constructor.declarationDescriptor?.fqNameOrNull()?.asString() == VOID_CLASS_NAME) {
+        if (kotlinType.fqNameOrNull() == VOID_FQ_NAME) {
             if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && typeReference.isPartOfOverriddenSignature()) {
                 return
             }
@@ -84,6 +85,6 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
         const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
-        const val VOID_CLASS_NAME = "java.lang.Void"
+        val VOID_FQ_NAME = FqName("java.lang.Void")
     }
 }
