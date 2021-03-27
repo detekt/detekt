@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -32,13 +33,15 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  * </compliant>
  *
  * @active since v1.2.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("UnsafeCallOnNullableType",
-            Severity.Defect,
-            "It will throw a NullPointerException at runtime if your nullable value is null.",
-            Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(
+        "UnsafeCallOnNullableType",
+        Severity.Defect,
+        "It will throw a NullPointerException at runtime if your nullable value is null.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)
@@ -46,8 +49,13 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
         if (expression.operationToken == KtTokens.EXCLEXCL &&
             expression.baseExpression?.getType(bindingContext)?.nullability() == TypeNullability.NULLABLE
         ) {
-            report(CodeSmell(issue, Entity.from(expression), "Calling !! on a nullable type will throw a " +
-                    "NullPointerException at runtime in case the value is null. It should be avoided."))
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    "Calling !! on a nullable type will throw a " +
+                        "NullPointerException at runtime in case the value is null. It should be avoided."
+                )
+            )
         }
     }
 }

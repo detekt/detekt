@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -37,12 +38,14 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryApply(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "The `apply` usage is unnecessary", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Style,
+        "The `apply` usage is unnecessary", Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -50,8 +53,9 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isApplyExpr() &&
-                expression.hasOnlyOneMemberAccessStatement() &&
-                !expression.receiverIsUsed(bindingContext)) {
+            expression.hasOnlyOneMemberAccessStatement() &&
+            !expression.receiverIsUsed(bindingContext)
+        ) {
             val message = if (expression.parent is KtSafeQualifiedExpression) {
                 "apply can be replaced with let or an if"
             } else {
@@ -65,13 +69,13 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
 
     fun KtExpression.notAnAssignment() =
-            safeAs<KtBinaryExpression>()
-                    ?.operationToken != KtTokens.EQ
+        safeAs<KtBinaryExpression>()
+            ?.operationToken != KtTokens.EQ
 
     fun KtExpression.isMemberAccess() =
-            this is KtReferenceExpression ||
-                    this is KtCallExpression ||
-                    this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
+        this is KtReferenceExpression ||
+            this is KtCallExpression ||
+            this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
 
     val lambdaBody = firstLambdaArg?.bodyExpression
     if (lambdaBody?.children?.size == 1) {

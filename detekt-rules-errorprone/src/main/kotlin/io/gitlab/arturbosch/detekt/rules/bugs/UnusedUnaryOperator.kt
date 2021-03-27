@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -35,8 +36,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  * println(x) // 10
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,

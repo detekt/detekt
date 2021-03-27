@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
@@ -40,8 +41,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * val b = a?.let { 1.plus(1) }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryLet(config: Config) : Rule(config) {
 
     override val issue = Issue(

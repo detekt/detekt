@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -25,14 +26,16 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UnnecessaryNotNullOperator",
-            Severity.Defect,
-            "Unnecessary not-null unary operator (!!) detected.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UnnecessaryNotNullOperator",
+        Severity.Defect,
+        "Unnecessary not-null unary operator (!!) detected.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)
@@ -40,8 +43,13 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
         val compilerReports = bindingContext.diagnostics.forElement(expression.operationReference)
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {
-            report(CodeSmell(issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
-                    "not-null (!!) operators"))
+            report(
+                CodeSmell(
+                    issue, Entity.from(expression),
+                    "${expression.text} contains an unnecessary " +
+                        "not-null (!!) operators"
+                )
+            )
         }
     }
 }

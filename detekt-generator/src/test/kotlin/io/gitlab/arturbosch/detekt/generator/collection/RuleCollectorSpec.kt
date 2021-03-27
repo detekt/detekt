@@ -203,6 +203,32 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].configuration).hasSize(2)
         }
 
+        it("collects the flag that it requires type resolution") {
+            val code = """
+                import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+                
+                /**
+                 * description
+                 */
+                @RequiresTypeResolution
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
+            assertThat(items[0].requiresTypeResolution).isTrue()
+        }
+
+        it("collects the flag that it requires type resolution from fully qualified annotation") {
+            val code = """
+                /**
+                 * description
+                 */
+                @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+                class SomeRandomClass : Rule
+            """
+            val items = subject.run(code)
+            assertThat(items[0].requiresTypeResolution).isTrue()
+        }
+
         it("config option doesn't have a default value") {
             val code = """
                 /**

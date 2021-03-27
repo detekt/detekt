@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getParameterForArgument
@@ -28,8 +29,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  * </compliant>
  *
  * @configuration threshold - number of parameters that triggers this inspection (default: `3`)
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class NamedArguments(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_FUNCTION_THRESHOLD
