@@ -11,7 +11,6 @@ application {
 val bundledRules by configurations.creating
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation("com.beust:jcommander")
     implementation(project(":detekt-tooling"))
     implementation(project(":detekt-parser"))
