@@ -40,6 +40,7 @@ object DetektJvmTest : Spek({
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.output).contains("--classpath")
             }
         }
 
@@ -48,6 +49,7 @@ object DetektJvmTest : Spek({
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.output).contains("--classpath")
             }
         }
     }

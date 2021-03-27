@@ -66,6 +66,7 @@ object DetektPlainTest : Spek({
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.output).doesNotContain("--classpath")
             }
         }
     }
