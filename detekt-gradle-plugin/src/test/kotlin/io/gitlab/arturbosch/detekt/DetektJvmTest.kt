@@ -11,7 +11,7 @@ object DetektJvmTest : Spek({
 
         it("configures detekt type resolution task") {
             val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(1),
+                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
                 buildFileName = "build.gradle",
                 mainBuildFileContent = """
                     plugins {

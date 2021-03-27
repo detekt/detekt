@@ -11,7 +11,7 @@ object DetektPlainTest : Spek({
 
         it("lazily adds detekt as a dependency of the `check` task if applied before JVM plugin") {
             val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(1),
+                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
                 buildFileName = "build.gradle",
                 mainBuildFileContent = """
                     plugins {
@@ -38,7 +38,7 @@ object DetektPlainTest : Spek({
 
         it("configures detekt plain task") {
             val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(1),
+                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
                 buildFileName = "build.gradle",
                 mainBuildFileContent = """
                     plugins {
