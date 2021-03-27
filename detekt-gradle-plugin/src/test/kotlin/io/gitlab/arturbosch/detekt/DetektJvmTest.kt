@@ -35,8 +35,16 @@ object DetektJvmTest : Spek({
         )
         gradleRunner.setupProject()
 
-        it("configures detekt type resolution task") {
+        it("configures detekt type resolution task main") {
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+            }
+        }
+
+        it("configures detekt type resolution task test") {
+            gradleRunner.runTasksAndCheckResult(":detektTest") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
