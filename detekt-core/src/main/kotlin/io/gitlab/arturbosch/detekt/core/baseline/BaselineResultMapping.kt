@@ -24,7 +24,7 @@ class BaselineResultMapping : ReportingExtension {
         val baselineFile = baselineFile
         require(
             !createBaseline ||
-                    (createBaseline && baselineFile != null)
+                (createBaseline && baselineFile != null)
         ) { "Invalid baseline options invariant." }
 
         return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings

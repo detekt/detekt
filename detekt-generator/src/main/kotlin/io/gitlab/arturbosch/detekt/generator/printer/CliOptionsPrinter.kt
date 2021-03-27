@@ -12,7 +12,8 @@ class CliOptionsPrinter {
     }
 
     fun print(filePath: Path) {
-        Files.write(filePath,
+        Files.write(
+            filePath,
             buildString {
                 appendLine("```")
                 jCommander.usageFormatter.usage(this)

@@ -27,10 +27,12 @@ import org.jetbrains.kotlin.psi.KtParameter
  */
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Function parameter names should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Function parameter names should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
@@ -47,10 +49,13 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
         val identifier = parameter.identifierName()
         if (!identifier.matches(parameterPattern)) {
-            report(CodeSmell(
+            report(
+                CodeSmell(
                     issue,
                     Entity.from(parameter),
-                    message = "Function parameter names should match the pattern: $parameterPattern"))
+                    message = "Function parameter names should match the pattern: $parameterPattern"
+                )
+            )
         }
     }
 

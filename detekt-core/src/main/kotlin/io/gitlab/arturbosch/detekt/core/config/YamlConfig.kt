@@ -50,11 +50,13 @@ class YamlConfig internal constructor(
          * and point to a readable file.
          */
         fun load(path: Path): Config =
-            load(path.toFile().apply {
-                require(exists()) { "Configuration does not exist: $path" }
-                require(isFile) { "Configuration must be a file: $path" }
-                require(canRead()) { "Configuration must be readable: $path" }
-            }.reader())
+            load(
+                path.toFile().apply {
+                    require(exists()) { "Configuration does not exist: $path" }
+                    require(isFile) { "Configuration must be a file: $path" }
+                    require(canRead()) { "Configuration must be readable: $path" }
+                }.reader()
+            )
 
         /**
          * Factory method to load a yaml configuration from a URL.

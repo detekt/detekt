@@ -74,7 +74,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
                         issue,
                         Entity.atName(function),
                         "Too many throw statements in the function" +
-                                " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
+                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
                     )
                 )
             }

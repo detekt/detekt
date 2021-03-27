@@ -33,10 +33,12 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Optional braces in when expression",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Optional braces in when expression",
+        Debt.FIVE_MINS
+    )
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         for (entry in expression.entries) {

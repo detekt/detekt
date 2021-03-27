@@ -162,10 +162,12 @@ class ObjectPropertyNamingSpec : Spek({
     describe("variables and constants in objects with custom config") {
 
         val config by memoized {
-            TestConfig(mapOf(
-                ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
-                ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
-            ))
+            TestConfig(
+                mapOf(
+                    ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
+                    ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
+                )
+            )
         }
         val subject by memoized { ObjectPropertyNaming(config) }
 
@@ -192,9 +194,11 @@ class ObjectPropertyNamingSpec : Spek({
 
     describe("local properties") {
         it("should not detect local properties") {
-            val config = TestConfig(mapOf(
-                ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
-            ))
+            val config = TestConfig(
+                mapOf(
+                    ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
+                )
+            )
             val subject = ObjectPropertyNaming(config)
 
             val code = """

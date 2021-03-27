@@ -42,7 +42,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             paragraph {
                 "${bold { "Active by default" }}: ${if (rule.active) "Yes" else "No"}" +
-                        (rule.activeSince?.let { " - Since $it" } ?: "")
+                    (rule.activeSince?.let { " - Since $it" } ?: "")
             }
 
             if (rule.requiresTypeResolution) {
@@ -75,7 +75,8 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                         } else {
                             val defaultValues = it.defaultValue.lines()
                             val defaultValuesString = defaultValues.joinToString {
-                                value -> value.trim().removePrefix("- ")
+                                value ->
+                                value.trim().removePrefix("- ")
                             }
                             item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
                         }

@@ -31,10 +31,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 class UnusedImports(config: Config) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Unused Imports are dead code and should be removed.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "Unused Imports are dead code and should be removed.",
+        Debt.FIVE_MINS
+    )
 
     override fun visit(root: KtFile) {
         with(UnusedImportsVisitor(bindingContext)) {
@@ -55,7 +56,7 @@ class UnusedImports(config: Config) : Rule(config) {
 
         fun unusedImports(): List<KtImportDirective> {
             fun KtImportDirective.isFromSamePackage() =
-                    importedFqName?.parent() == currentPackage && alias == null
+                importedFqName?.parent() == currentPackage && alias == null
 
             @Suppress("ReturnCount")
             fun KtImportDirective.isNotUsed(): Boolean {
@@ -90,8 +91,8 @@ class UnusedImports(config: Config) : Rule(config) {
                 .filter {
                     val identifier = it.identifier()
                     identifier?.contains("*")?.not() == true &&
-                            !operatorSet.contains(identifier) &&
-                            !componentNRegex.matches(identifier)
+                        !operatorSet.contains(identifier) &&
+                        !componentNRegex.matches(identifier)
                 }
                 .toList()
             super.visitImportList(importList)
@@ -115,8 +116,8 @@ class UnusedImports(config: Config) : Rule(config) {
             val kdoc = dcl.docComment?.getDefaultSection()
 
             kdoc?.getChildrenOfType<KDocTag>()
-                    ?.map { it.text }
-                    ?.forEach { handleKDoc(it) }
+                ?.map { it.text }
+                ?.forEach { handleKDoc(it) }
 
             kdoc?.getContent()?.let {
                 handleKDoc(it)
@@ -126,8 +127,8 @@ class UnusedImports(config: Config) : Rule(config) {
 
         private fun handleKDoc(content: String) {
             kotlinDocReferencesRegExp.findAll(content, 0)
-                    .map { it.groupValues[1] }
-                    .forEach { namedReferencesInKDoc.add(it.split(".")[0]) }
+                .map { it.groupValues[1] }
+                .forEach { namedReferencesInKDoc.add(it.split(".")[0]) }
             kotlinDocBlockTagReferenceRegExp.find(content)?.let {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferencesInKDoc.add(str.split(".")[0])
@@ -136,9 +137,11 @@ class UnusedImports(config: Config) : Rule(config) {
     }
 
     companion object {
-        private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
+        private val operatorSet = setOf(
+            "unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
             "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
-            "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
+            "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate"
+        )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
         private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")

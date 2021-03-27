@@ -42,7 +42,8 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
     override fun toArgument() = if (!fileCollection.isEmpty) listOf(
         CLASSPATH_PARAMETER,
-        fileCollection.joinToString(File.pathSeparator) { it.absolutePath }) else emptyList()
+        fileCollection.joinToString(File.pathSeparator) { it.absolutePath }
+    ) else emptyList()
 }
 
 internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {

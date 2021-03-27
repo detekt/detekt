@@ -43,7 +43,8 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
         if (expression.isOnlyExpressionInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)) {
+            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

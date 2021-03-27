@@ -20,20 +20,24 @@ class FinalNewlineSpec : Spek({
         }
 
         it("should not report as new line is present") {
-            val findings = FinalNewline(Config.empty).lint("""
+            val findings = FinalNewline(Config.empty).lint(
+                """
                     fun main() = Unit
 
-            """)
+            """
+            )
 
             assertThat(findings).isEmpty()
         }
 
         it("should report new line when configured") {
             val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE to "false"))
-                .lint("""
+                .lint(
+                    """
                 fun main() = Unit
 
-            """)
+            """
+                )
 
             assertThat(findings).hasSize(1)
         }

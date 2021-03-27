@@ -67,7 +67,6 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 }
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
-
     fun KtExpression.notAnAssignment() =
         safeAs<KtBinaryExpression>()
             ?.operationToken != KtTokens.EQ

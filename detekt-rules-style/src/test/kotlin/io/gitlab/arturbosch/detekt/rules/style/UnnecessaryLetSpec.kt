@@ -17,154 +17,198 @@ class UnnecessaryLetSpec : Spek({
 
     describe("UnnecessaryLet rule") {
         it("reports unnecessary lets that can be changed to ordinary method call 1") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int = 1
                     a.let { it.plus(1) }
                     a.let { that -> that.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 2") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { it.plus(1) }
                     a?.let { that -> that.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 3") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> that.plus(1) }?.let { it.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 4") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int = 1
                     a.let { 1.plus(1) }
                     a.let { that -> 1.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 5") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int = 1
                     val x = a.let { 1.plus(1) }
                     val y = a.let { that -> 1.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be replaced with an if") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { 1.plus(1) }
                     a?.let { that -> 1.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 7") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a.let { print(it) }
                     a.let { that -> print(that) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 8") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { it?.plus(1) }
                     a?.let { that -> that?.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("reports use of let without the safe call operator when we use an argument") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
                     a.let(f)
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
         it("does not report lets used for function calls 1") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { print(it) }
                     a?.let { that -> 1.plus(that) }
-                }""")
+                }"""
+            )
             assertThat(findings).isEmpty()
         }
 
         it("does not report lets used for function calls 2") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> 1.plus(that) }?.let { print(it) }
-                }""")
+                }"""
+            )
             assertThat(findings).isEmpty()
         }
 
         it("does not report \"can be replaced by if\" because you will need an else too") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     val x = a?.let { 1.plus(1) }
                     val y = a?.let { that -> 1.plus(1) }
-                }""")
+                }"""
+            )
             assertThat(findings).isEmpty()
         }
 
         it("does not report a let where returned value is used - #2987") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a = listOf<List<String>?>(listOf(""))
                         .map { list -> list?.let { it + it } }
                 }
-                """)
+                """
+            )
             assertThat(findings).isEmpty()
         }
 
         it("does not report use of let with the safe call operator when we use an argument") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
                     a?.let(f)
-                }""")
+                }"""
+            )
             assertThat(findings).hasSize(0)
         }
 
         it("does not report lets with lambda body containing more than one statement") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     val b: Int = 1
@@ -191,12 +235,15 @@ class UnnecessaryLetSpec : Spek({
                         it.plus(1)
                         it.plus(2)
                     }
-                }""")
+                }"""
+            )
             assertThat(findings).isEmpty()
         }
 
         it("does not report lets where it is used multiple times") {
-            val findings = subject.compileAndLintWithContext(env, """
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
                 fun f() {
                     val a: Int? = null
                     val b: Int = 1
@@ -204,7 +251,8 @@ class UnnecessaryLetSpec : Spek({
                     b.let { it.plus(it) }
                     a?.let { foo -> foo.plus(foo) }
                     b.let { foo -> foo.plus(foo) }
-                }""")
+                }"""
+            )
             assertThat(findings).isEmpty()
         }
 

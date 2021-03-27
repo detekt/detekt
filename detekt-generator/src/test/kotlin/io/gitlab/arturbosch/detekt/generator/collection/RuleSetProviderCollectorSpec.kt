@@ -56,7 +56,7 @@ class RuleSetProviderCollectorSpec : Spek({
         """
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -73,7 +73,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -179,7 +179,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -202,7 +202,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -222,7 +222,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 

@@ -38,7 +38,7 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue(
         javaClass.simpleName, Severity.Warning,
         "Member with protected visibility in final class is private. " +
-                "Consider using private or internal as modifier.",
+            "Consider using private or internal as modifier.",
         Debt.FIVE_MINS
     )
 

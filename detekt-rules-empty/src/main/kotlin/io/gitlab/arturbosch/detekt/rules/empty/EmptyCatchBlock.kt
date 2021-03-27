@@ -18,10 +18,10 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 class EmptyCatchBlock(config: Config) : EmptyRule(
     config = config,
     description =
-        "Empty catch block detected. " +
+    "Empty catch block detected. " +
         "Empty catch blocks indicate that an exception is ignored and not handled.",
     codeSmellMessage =
-        "Empty catch block detected. If the exception can be safely ignored, " +
+    "Empty catch block detected. If the exception can be safely ignored, " +
         "name the exception according to one of the exemptions as per the configuration of this rule."
 ) {
 

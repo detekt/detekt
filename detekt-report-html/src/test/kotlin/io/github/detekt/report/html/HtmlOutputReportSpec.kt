@@ -174,7 +174,6 @@ private fun mockKtElement(): KtElement {
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
-
     val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 1, 10..14, mockKtElement())
     val entity2 = createEntity("src/main/com/sample/Sample2.kt", 22 to 2)
     val entity3 = createEntity("src/main/com/sample/Sample3.kt", 33 to 3)

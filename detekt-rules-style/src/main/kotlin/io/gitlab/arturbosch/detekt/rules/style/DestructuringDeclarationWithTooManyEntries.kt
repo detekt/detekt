@@ -30,7 +30,7 @@ class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) 
         javaClass.simpleName,
         Severity.Style,
         "The destructuring declaration contains too many entries, making it difficult to read. Consider refactoring " +
-                "to avoid using a destructuring declaration for this case.",
+            "to avoid using a destructuring declaration for this case.",
         Debt.TEN_MINS
     )
 

@@ -48,7 +48,7 @@ class MultiRuleVisitor : DetektVisitor() {
         val rules = mutableListOf<String>()
 
         val ruleProperties = rulesVisitor.ruleProperties
-                .mapNotNull { properties[it] }
+            .mapNotNull { properties[it] }
         rules.addAll(ruleProperties)
         rules.addAll(rulesVisitor.ruleNames)
 
@@ -63,8 +63,8 @@ class MultiRuleVisitor : DetektVisitor() {
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
         val isMultiRule = list.entries
-                ?.mapNotNull { it.typeAsUserType?.referencedName }
-                ?.any { it == multiRule } ?: false
+            ?.mapNotNull { it.typeAsUserType?.referencedName }
+            ?.any { it == multiRule } ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name
@@ -112,13 +112,17 @@ class RuleListVisitor : DetektVisitor() {
         val argumentExpressions = list.arguments.map { it.getArgumentExpression() }
 
         // Call Expression = Constructor of rule
-        ruleNames.addAll(argumentExpressions
+        ruleNames.addAll(
+            argumentExpressions
                 .filterIsInstance<KtCallExpression>()
-                .map { it.calleeExpression?.text ?: "" })
+                .map { it.calleeExpression?.text ?: "" }
+        )
 
         // Reference Expression = variable we need to search for
-        ruleProperties.addAll(argumentExpressions
+        ruleProperties.addAll(
+            argumentExpressions
                 .filterIsInstance<KtReferenceExpression>()
-                .map { it.text ?: "" })
+                .map { it.text ?: "" }
+        )
     }
 }

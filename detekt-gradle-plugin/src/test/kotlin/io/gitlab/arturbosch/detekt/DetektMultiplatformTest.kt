@@ -13,7 +13,8 @@ class DetektMultiplatformTest : Spek({
     describe("multiplatform projects - Common target") {
 
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -45,7 +46,8 @@ class DetektMultiplatformTest : Spek({
     describe("multiplatform projects - detekt plain only if user opts out") {
 
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -73,7 +75,8 @@ class DetektMultiplatformTest : Spek({
 
     describe("multiplatform projects - JVM target") {
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -119,9 +122,11 @@ class DetektMultiplatformTest : Spek({
 
     describe(
         "multiplatform projects - Android target",
-        skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")) {
+        skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")
+    ) {
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     plugins {
                         id "kotlin-multiplatform"
@@ -180,7 +185,8 @@ class DetektMultiplatformTest : Spek({
 
     describe("multiplatform projects - JS target") {
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
@@ -221,7 +227,8 @@ class DetektMultiplatformTest : Spek({
         }
     }
 
-    describe("multiplatform projects - iOS target",
+    describe(
+        "multiplatform projects - iOS target",
         skip = if (isMacOs()) {
             Skip.No
         } else {
@@ -229,7 +236,8 @@ class DetektMultiplatformTest : Spek({
         }
     ) {
         val gradleRunner = setupProject {
-            addSubmodule("shared", 1, 1,
+            addSubmodule(
+                "shared", 1, 1,
                 buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {

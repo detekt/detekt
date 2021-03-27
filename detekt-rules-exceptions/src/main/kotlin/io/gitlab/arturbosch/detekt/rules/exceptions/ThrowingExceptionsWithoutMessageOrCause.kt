@@ -42,18 +42,21 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
-            "A call to the default constructor of an exception was detected. " +
-                    "Instead one of the constructor overloads should be called. " +
-                    "This allows to provide more meaningful exceptions.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
+        "A call to the default constructor of an exception was detected. " +
+            "Instead one of the constructor overloads should be called. " +
+            "This allows to provide more meaningful exceptions.",
+        Debt.FIVE_MINS
+    )
 
     private val exceptions = valueOrDefaultCommaSeparated(EXCEPTIONS, exceptionsDefaults)
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val calleeExpressionText = expression.calleeExpression?.text
         if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
-            expression.valueArguments.isEmpty()) {
+            expression.valueArguments.isEmpty()
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
         super.visitCallExpression(expression)
