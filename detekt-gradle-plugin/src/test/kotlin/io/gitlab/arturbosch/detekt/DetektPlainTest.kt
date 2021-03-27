@@ -6,10 +6,37 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-object DetektJvmTest : Spek({
-    describe("When applying detekt in a JVM project") {
+object DetektPlainTest : Spek({
+    describe("When applying detekt in a project") {
 
-        it("configures detekt type resolution task") {
+        it("lazily adds detekt as a dependency of the `check` task if applied before JVM plugin") {
+            val gradleRunner = DslGradleRunner(
+                projectLayout = ProjectLayout(1),
+                buildFileName = "build.gradle",
+                mainBuildFileContent = """
+                    plugins {
+                        id "io.gitlab.arturbosch.detekt"
+                        id "org.jetbrains.kotlin.jvm"
+                    }
+
+                    repositories {
+                        mavenCentral()
+                        jcenter()
+                        mavenLocal()
+                    }
+                    
+                    detekt {
+                    }
+                """.trimIndent(),
+                dryRun = true
+            )
+            gradleRunner.setupProject()
+            gradleRunner.runTasksAndCheckResult("check") { buildResult ->
+                assertThat(buildResult.task(":detekt")).isNotNull
+            }
+        }
+
+        it("configures detekt plain task") {
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(1),
                 buildFileName = "build.gradle",
@@ -35,7 +62,7 @@ object DetektJvmTest : Spek({
                 dryRun = true
             )
             gradleRunner.setupProject()
-            gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
+            gradleRunner.runTasksAndCheckResult(":detekt") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
