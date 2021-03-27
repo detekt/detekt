@@ -173,6 +173,7 @@ class RuleCollectorSpec : Spek({
             """
             val items = subject.run(code)
             assertThat(items[0].configuration).isEmpty()
+            assertThat(items[0].requiresTypeResolution).isFalse()
         }
 
         it("contains one configuration option with correct formatting") {
