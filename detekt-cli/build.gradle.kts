@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     id("com.github.johnrengelman.shadow")
     module
@@ -10,9 +8,7 @@ application {
     mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
-tasks.withType<ShadowJar>().configureEach {
-    mergeServiceFiles()
-}
+val bundledRules by configurations.creating
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -20,10 +16,15 @@ dependencies {
     implementation(project(":detekt-tooling"))
     implementation(project(":detekt-parser"))
     runtimeOnly(project(":detekt-core"))
-    runtimeOnly(project(":detekt-rules"))
 
     testImplementation(project(":detekt-test"))
-    testImplementation(project(":detekt-rules"))
+
+    bundledRules(project(":detekt-rules"))
+}
+
+tasks.shadowJar {
+    mergeServiceFiles()
+    configurations = listOf(project.configurations.runtimeClasspath.get(), bundledRules)
 }
 
 val moveJarForIntegrationTest by tasks.registering {
