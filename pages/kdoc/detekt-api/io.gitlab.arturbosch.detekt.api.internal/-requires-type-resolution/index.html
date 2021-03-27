@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>InvalidConfigurationError - | A static code analyzer for Kotlin</title>
+<title>RequiresTypeResolution - | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="InvalidConfigurationError -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="RequiresTypeResolution -">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -413,7 +413,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">InvalidConfigurationError -</h1>
+   <h1 class="post-title-main">RequiresTypeResolution -</h1>
 </div>
 
 
@@ -450,19 +450,65 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/-invalid-configuration-error.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/">InvalidConfigurationError</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/-invalid-configuration-error.html">InvalidConfigurationError</a></p>
+  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/">io.gitlab.arturbosch.detekt.api.internal</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/">RequiresTypeResolution</a></p>
 
-<h1 id="invalidconfigurationerror">InvalidConfigurationError</h1>
-<p>[jvm]<br />
-Content<br />
-fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/-invalid-configuration-error/-invalid-configuration-error.html">InvalidConfigurationError</a>(throwable: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>?)</p>
+<h1 id="requirestyperesolution">RequiresTypeResolution</h1>
+<p>[jvm]</p>
+
+<p>Annotated <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">io.gitlab.arturbosch.detekt.api.Rule</a> requires type resolution to work.</p>
+
+<p>@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-target/index.html">Target</a>(allowedTargets = [<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-annotation-target/-c-l-a-s-s/index.html">AnnotationTarget.CLASS</a>])</p>
+
+<p>annotation class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/">RequiresTypeResolution</a></p>
+
+<h2 id="constructors">Constructors</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/-requires-type-resolution.html">RequiresTypeResolution</a></td>
+      <td>[jvm] fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/-requires-type-resolution.html">RequiresTypeResolution</a>()   <br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="functions">Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a></td>
+      <td>[jvm]  <br />Content  <br />open operator override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>  <br /><br /><br /></td>
+    </tr>
+    <tr>
+      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a></td>
+      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+    </tr>
+  </tbody>
+</table>
 
 
 
