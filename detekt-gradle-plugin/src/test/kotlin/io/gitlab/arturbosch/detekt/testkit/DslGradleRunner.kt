@@ -72,6 +72,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
 
         projectLayout.submodules.forEach { submodule ->
             submodule.writeModuleFile(buildFileName, submodule.buildFileContent ?: "")
+            submodule.baselineFiles.forEach { file -> submodule.writeModuleFile(file, baselineContent) }
             submodule.srcDirs.forEachIndexed { srcDirIdx, moduleSourceDir ->
                 repeat(submodule.numberOfSourceFilesPerSourceDir) {
                     val withCodeSmell =

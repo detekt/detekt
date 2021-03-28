@@ -10,20 +10,32 @@ class ProjectLayout(
     val submodules: List<Submodule>
         get() = mutableSubmodules
 
+    @Suppress("LongParameterList")
     fun addSubmodule(
         name: String,
         numberOfSourceFilesPerSourceDir: Int,
         numberOfCodeSmells: Int = 0,
         buildFileContent: String? = null,
-        srcDirs: List<String> = this.srcDirs
+        srcDirs: List<String> = this.srcDirs,
+        baselineFiles: List<String> = emptyList(),
     ) {
         val submodule = Submodule(
             name = name,
             numberOfSourceFilesPerSourceDir = numberOfSourceFilesPerSourceDir,
             numberOfCodeSmells = numberOfCodeSmells,
             buildFileContent = buildFileContent,
-            srcDirs = srcDirs
+            srcDirs = srcDirs,
+            baselineFiles = baselineFiles,
         )
         mutableSubmodules.add(submodule)
     }
 }
+
+data class Submodule(
+    val name: String,
+    val numberOfSourceFilesPerSourceDir: Int,
+    val numberOfCodeSmells: Int,
+    val buildFileContent: String?,
+    val srcDirs: List<String>,
+    val baselineFiles: List<String>,
+)
