@@ -45,7 +45,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "UnnecessaryFilter", Severity.Style,
+        "UnnecessaryFilter",
+        Severity.Style,
         "filter() with other collection operations may be simplified.",
         Debt.FIVE_MINS
     )
@@ -78,7 +79,8 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
         report(
             CodeSmell(
-                issue, Entity.from(this),
+                issue,
+                Entity.from(this),
                 "'${this.text}' can be replaced by '${correctOperator ?: shortName} ${this.lambda()?.text}'"
             )
         )

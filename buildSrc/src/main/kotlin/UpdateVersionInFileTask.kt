@@ -10,6 +10,7 @@ import java.io.File
 open class UpdateVersionInFileTask : DefaultTask(), Runnable {
 
     private val fileProp: RegularFileProperty = project.objects.fileProperty()
+
     @get:InputFile
     var fileToUpdate: File
         get() = fileProp.get().asFile

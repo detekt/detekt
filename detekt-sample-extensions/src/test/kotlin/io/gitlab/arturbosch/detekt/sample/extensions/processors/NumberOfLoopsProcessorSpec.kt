@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek

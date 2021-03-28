@@ -37,9 +37,12 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Violation of the package declaration style.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Violation of the package declaration style.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitKtFile(file: KtFile) {
         if (file.hasPackage() && file.anyDescendantOfType<KtClassOrObject>()) {
@@ -57,13 +60,16 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
     private fun checkPackageDeclaration(importList: KtImportList) {
         val prevSibling = importList.prevSibling
         if (isPackageDeclaration(prevSibling) || prevSibling is PsiWhiteSpace) {
-            checkLinebreakAfterElement(prevSibling, "There should be exactly one empty line in between the " +
-                    "package declaration and the list of imports.")
+            checkLinebreakAfterElement(
+                prevSibling,
+                "There should be exactly one empty line in between the " +
+                    "package declaration and the list of imports."
+            )
         }
     }
 
     private fun isPackageDeclaration(element: PsiElement?) =
-            element is KtPackageDirective && element.text.isNotEmpty()
+        element is KtPackageDirective && element.text.isNotEmpty()
 
     private fun checkKtElementsDeclaration(importList: KtImportList) {
         val ktElement = importList.siblings(withItself = false).filterIsInstance<KtElement>().firstOrNull() ?: return
@@ -71,8 +77,11 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
         if (nextSibling is PsiWhiteSpace || nextSibling is KtElement) {
             val name = (ktElement as? KtClassOrObject)?.name ?: "the class or object"
 
-            checkLinebreakAfterElement(nextSibling, "There should be exactly one empty line in between the " +
-                    "list of imports and the declaration of $name.")
+            checkLinebreakAfterElement(
+                nextSibling,
+                "There should be exactly one empty line in between the " +
+                    "list of imports and the declaration of $name."
+            )
         }
     }
 

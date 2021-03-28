@@ -12,6 +12,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
+
         @JvmName("ignoreFailures_")
         set(value) {
             isIgnoreFailures = value

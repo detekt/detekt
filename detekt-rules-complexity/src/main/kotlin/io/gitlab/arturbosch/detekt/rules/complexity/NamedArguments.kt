@@ -37,7 +37,8 @@ class NamedArguments(
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue(
-        "NamedArguments", Severity.Maintainability,
+        "NamedArguments",
+        Severity.Maintainability,
         "Function invocation with more than $threshold parameters must all be named",
         Debt.FIVE_MINS
     )

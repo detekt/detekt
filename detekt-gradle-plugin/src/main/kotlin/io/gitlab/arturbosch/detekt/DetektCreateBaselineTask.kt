@@ -113,8 +113,9 @@ open class DetektCreateBaselineTask : SourceTask() {
     @TaskAction
     fun baseline() {
         if (failFast.getOrElse(false)) {
-            project.logger.warn("'failFast' is deprecated. Please use " +
-                    "'buildUponDefaultConfig' together with 'allRules'.")
+            project.logger.warn(
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
+            )
         }
 
         val arguments = mutableListOf(

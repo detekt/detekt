@@ -19,9 +19,9 @@ class PackageCountProcessor : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         val count = files
-                .mapNotNull { it.getUserData(key) }
-                .distinct()
-                .size
+            .mapNotNull { it.getUserData(key) }
+            .distinct()
+            .size
         result.add(ProjectMetric(key.toString(), count))
     }
 }

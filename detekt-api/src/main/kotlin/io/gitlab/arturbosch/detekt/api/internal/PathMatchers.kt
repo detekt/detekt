@@ -10,7 +10,6 @@ import java.nio.file.PathMatcher
  * Internally a globbing pattern is transformed to a regex respecting the Windows file system.
  */
 fun pathMatcher(pattern: String): PathMatcher {
-
     val result = when (pattern.substringBefore(":")) {
         "glob" -> pattern
         "regex" -> throw IllegalArgumentException(USE_GLOB_MSG)

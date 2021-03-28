@@ -33,7 +33,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 @RequiresTypeResolution
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
-        "PreferToOverPairSyntax", Severity.Style,
+        "PreferToOverPairSyntax",
+        Severity.Style,
         "Pair was created using the Pair constructor, using the to syntax is preferred.",
         Debt.FIVE_MINS
     )
@@ -46,7 +47,8 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
             val arg = expression.valueArguments.joinToString(" to ") { it.text }
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     message = "Pair is created by using the pair constructor. " +
                         "This can replaced by `$arg`"
                 )

@@ -11,10 +11,12 @@ class PackageNamingSpec : Spek({
 
         it("should ignore the issue by alias suppression") {
             assertThat(
-                PackageNaming().compileAndLint("""
+                PackageNaming().compileAndLint(
+                    """
                     @file:Suppress("PackageDirectoryMismatch")
                     package FOO.BAR
-                """)
+                """
+                )
             ).isEmpty()
         }
 

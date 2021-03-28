@@ -48,15 +48,19 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  */
 class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("PrintStackTrace", Severity.CodeSmell,
-            "Do not print an stack trace. " +
-                    "These debug statements should be replaced with a logger or removed.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "PrintStackTrace",
+        Severity.CodeSmell,
+        "Do not print an stack trace. " +
+            "These debug statements should be replaced with a logger or removed.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val callNameExpression = expression.getCallNameExpression()
         if (callNameExpression?.text == "dumpStack" &&
-                callNameExpression.getReceiverExpression()?.text == "Thread") {
+            callNameExpression.getReceiverExpression()?.text == "Thread"
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

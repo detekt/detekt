@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
     return ProcessingSpec {
-
         logging {
             debug = args.debug
             outputChannel = output

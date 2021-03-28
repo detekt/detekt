@@ -36,11 +36,13 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods which do not exceed the threshold") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 class Test {
                     fun x() { }
                     fun x(i: Int) { }
-                }""")
+                }"""
+                )
                 assertThat(subject.findings.size).isZero()
             }
         }
@@ -48,18 +50,22 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded extensions methods") {
 
             it("does not report extension methods with a different receiver") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 fun Boolean.foo() {}
                 fun Int.foo() {}
-                fun Long.foo() {}""")
+                fun Long.foo() {}"""
+                )
                 assertThat(subject.findings.size).isZero()
             }
 
             it("reports extension methods with the same receiver") {
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                 fun Int.foo() {}
                 fun Int.foo(i: Int) {}
-                fun Int.foo(i: String) {}""")
+                fun Int.foo(i: String) {}"""
+                )
                 assertThat(subject.findings.size).isEqualTo(1)
             }
         }

@@ -13,9 +13,12 @@ internal class LibraryEntitiesShouldNotBePublicTest : Spek({
         it("should not report without explicit filters set") {
             val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to "**"))
             assertThat(
-                subject.compileAndLint("""
+                subject.compileAndLint(
+                    """
                     class A 
-            """)).isEmpty()
+            """
+                )
+            ).isEmpty()
         }
 
         val subject by memoized {
@@ -24,62 +27,94 @@ internal class LibraryEntitiesShouldNotBePublicTest : Spek({
 
         describe("positive cases") {
             it("should report a class") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     class A
-                """)).hasSize(1)
+                """
+                    )
+                ).hasSize(1)
             }
 
             it("should report a class with function") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     class A {
                         fun foo(): Int{
                             return 1
                         }
                     }
-                """)).hasSize(1)
+                """
+                    )
+                ).hasSize(1)
             }
 
             it("should report a typealias") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     typealias A = List<String>
-                """)).hasSize(1)
+                """
+                    )
+                ).hasSize(1)
             }
 
             it("should report a typealias and a function") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     typealias A = List<String>
                     fun foo() = Unit
-                """)).hasSize(2)
+                """
+                    )
+                ).hasSize(2)
             }
 
             it("should report a function") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     fun foo() = Unit
-                """)).hasSize(1)
+                """
+                    )
+                ).hasSize(1)
             }
         }
 
         describe("negative cases") {
             it("should not report a class") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     internal class A {
                         fun foo(): Int{
                             return 1
                         }
                     }
-                """)).isEmpty()
+                """
+                    )
+                ).isEmpty()
             }
 
             it("should not report a class with function") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     internal class A
-                """)).isEmpty()
+                """
+                    )
+                ).isEmpty()
             }
 
             it("should not report a typealias") {
-                assertThat(subject.compileAndLint("""
+                assertThat(
+                    subject.compileAndLint(
+                        """
                     internal typealias A = List<String>
-                """)).isEmpty()
+                """
+                    )
+                ).isEmpty()
             }
         }
     }

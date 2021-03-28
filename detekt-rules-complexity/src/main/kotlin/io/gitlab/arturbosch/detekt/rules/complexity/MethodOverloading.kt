@@ -31,11 +31,14 @@ class MethodOverloading(
     threshold: Int = DEFAULT_THRESHOLD_OVERLOAD_COUNT
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("MethodOverloading", Severity.Maintainability,
-            "Methods which are overloaded often might be harder to maintain. " +
-                    "Furthermore, these methods are tightly coupled. " +
-                    "Refactor these methods and try to use optional parameters.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "MethodOverloading",
+        Severity.Maintainability,
+        "Methods which are overloaded often might be harder to maintain. " +
+            "Furthermore, these methods are tightly coupled. " +
+            "Refactor these methods and try to use optional parameters.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()

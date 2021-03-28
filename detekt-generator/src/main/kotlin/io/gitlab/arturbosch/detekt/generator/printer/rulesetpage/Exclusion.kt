@@ -23,7 +23,7 @@ abstract class Exclusions {
 private object TestExclusions : Exclusions() {
 
     override val pattern =
-            "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
+        "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
     override val ruleSets = setOf("comments")
     override val rules = setOf(
         "NamingRules",

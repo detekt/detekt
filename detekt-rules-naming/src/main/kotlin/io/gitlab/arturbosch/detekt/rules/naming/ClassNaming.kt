@@ -32,10 +32,13 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (!classOrObject.identifierName().matches(classPattern)) {
-            report(CodeSmell(
-                issue,
-                Entity.atName(classOrObject),
-                message = "Class and Object names should match the pattern: $classPattern"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(classOrObject),
+                    message = "Class and Object names should match the pattern: $classPattern"
+                )
+            )
         }
     }
 

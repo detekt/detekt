@@ -65,8 +65,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 @RequiresTypeResolution
 class MultilineLambdaItParameter(val config: Config) : Rule(config) {
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "Multiline lambdas should not use `it` as a parameter name", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "Multiline lambdas should not use `it` as a parameter name",
+        Debt.FIVE_MINS
     )
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
@@ -81,7 +83,8 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
             IT_LITERAL in parameterNames ->
                 report(
                     CodeSmell(
-                        issue, Entity.from(lambdaExpression),
+                        issue,
+                        Entity.from(lambdaExpression),
                         "The parameter name in a multiline lambda should not be an explicit `it`. " +
                             "Consider giving your parameter a readable and descriptive name."
                     )
@@ -91,7 +94,8 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
                 if (lambdaExpression.hasImplicitParameter(bindingContext)) {
                     report(
                         CodeSmell(
-                            issue, Entity.from(lambdaExpression),
+                            issue,
+                            Entity.from(lambdaExpression),
                             "The implicit `it` should be used in a multiline lambda. " +
                                 "Consider giving your parameter a readable and descriptive name."
                         )

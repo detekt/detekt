@@ -19,9 +19,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  */
 class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
+    override val issue = Issue(
+        javaClass.simpleName,
         Severity.Maintainability,
-        "Public functions require documentation.", Debt.TWENTY_MINS)
+        "Public functions require documentation.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.funKeyword == null && function.isLocal) return

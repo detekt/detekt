@@ -39,9 +39,12 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("NestedClassesVisibility", Severity.Style,
-            "The explicit public modifier still results in an internal nested class.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "NestedClassesVisibility",
+        Severity.Style,
+        "The explicit public modifier still results in an internal nested class.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface() && klass.isTopLevel() && klass.isInternal()) {
@@ -51,9 +54,9 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
     private fun checkDeclarations(klass: KtClass) {
         klass.declarations
-                .filterIsInstance<KtClassOrObject>()
-                .filter { it.hasModifier(KtTokens.PUBLIC_KEYWORD) && it.isNoEnum() && it.isNoCompanionObj() }
-                .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+            .filterIsInstance<KtClassOrObject>()
+            .filter { it.hasModifier(KtTokens.PUBLIC_KEYWORD) && it.isNoEnum() && it.isNoCompanionObj() }
+            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun KtClassOrObject.isNoEnum() = !this.hasModifier(KtTokens.ENUM_KEYWORD) && this !is KtEnumEntry

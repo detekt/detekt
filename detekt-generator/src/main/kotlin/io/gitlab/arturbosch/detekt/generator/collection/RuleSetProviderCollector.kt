@@ -80,8 +80,10 @@ class RuleSetProviderVisitor : DetektVisitor() {
         super.visitProperty(property)
         if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
-                ?: throw InvalidDocumentationException("RuleSetProvider class " +
-                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
+                ?: throw InvalidDocumentationException(
+                    "RuleSetProvider class " +
+                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules."
+                )
         }
     }
 
@@ -90,14 +92,14 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
         if (expression.calleeExpression?.text == "RuleSet") {
             val ruleListExpression = expression.valueArguments
-                    .map { it.getArgumentExpression() }
-                    .firstOrNull { it?.referenceExpression()?.text == "listOf" }
+                .map { it.getArgumentExpression() }
+                .firstOrNull { it?.referenceExpression()?.text == "listOf" }
                 ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
-                    ?.valueArguments
-                    ?.map { it.getArgumentExpression() }
-                    ?.mapNotNull { it?.referenceExpression()?.text }
+                ?.valueArguments
+                ?.map { it.getArgumentExpression() }
+                ?.mapNotNull { it?.referenceExpression()?.text }
                 ?: emptyList()
 
             ruleNames.addAll(ruleArgumentNames)

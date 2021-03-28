@@ -28,18 +28,18 @@ class XmlOutputReport : OutputReport() {
 
         smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
             .forEach { (filePath, findings) ->
-            lines += "<file name=\"${filePath.toUnifiedString().toXmlString()}\">"
-            findings.forEach {
-                lines += arrayOf(
+                lines += "<file name=\"${filePath.toUnifiedString().toXmlString()}\">"
+                findings.forEach {
+                    lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.severityLabel.toXmlString()}\"",
                         "message=\"${it.messageOrDescription().toXmlString()}\"",
                         "source=\"${"detekt.${it.id.toXmlString()}"}\" />"
-                ).joinToString(separator = " ")
+                    ).joinToString(separator = " ")
+                }
+                lines += "</file>"
             }
-            lines += "</file>"
-        }
 
         lines += "</checkstyle>"
         return lines.joinToString(separator = "\n")

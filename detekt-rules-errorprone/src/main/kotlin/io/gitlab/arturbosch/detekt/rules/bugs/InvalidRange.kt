@@ -35,18 +35,25 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  */
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "If a for loops condition is false before the first iteration, the loop will never get executed.",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "If a for loops condition is false before the first iteration, the loop will never get executed.",
+        Debt.TEN_MINS
+    )
 
     private val minimumSize = 3
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         val range = expression.children
         if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
-            report(CodeSmell(issue, Entity.from(expression),
-                    "This loop will never be executed due to its expression."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "This loop will never be executed due to its expression."
+                )
+            )
         }
         super.visitBinaryExpression(expression)
     }

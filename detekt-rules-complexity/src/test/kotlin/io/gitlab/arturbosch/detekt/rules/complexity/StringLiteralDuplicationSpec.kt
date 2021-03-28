@@ -86,8 +86,8 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("should not fail with invalid regex when disabled") {
                 val configValues = mapOf(
-                        "active" to "false",
-                        StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
+                    "active" to "false",
+                    StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
                 )
                 val config = TestConfig(configValues)
                 assertFindingWithConfig(regexTestingCode, config, 0)

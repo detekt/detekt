@@ -7,28 +7,39 @@ import java.nio.file.Paths
 
 class GeneratorArgs {
 
-    @Parameter(names = ["--input", "-i"],
+    @Parameter(
+        names = ["--input", "-i"],
         required = true,
-        description = "Input paths to analyze.")
+        description = "Input paths to analyze."
+    )
     private var input: String? = null
 
-    @Parameter(names = ["--documentation", "-d"],
+    @Parameter(
+        names = ["--documentation", "-d"],
         required = true,
-        description = "Output path for generated documentation.")
+        description = "Output path for generated documentation."
+    )
     private var documentation: String? = null
 
-    @Parameter(names = ["--config", "-c"],
+    @Parameter(
+        names = ["--config", "-c"],
         required = true,
-        description = "Output path for generated detekt config.")
+        description = "Output path for generated detekt config."
+    )
     private var config: String? = null
 
-    @Parameter(names = ["--cli-options"],
+    @Parameter(
+        names = ["--cli-options"],
         required = true,
-        description = "Output path for generated cli options page.")
+        description = "Output path for generated cli options page."
+    )
     private var cliOptions: String? = null
 
-    @Parameter(names = ["--help", "-h"],
-        help = true, description = "Shows the usage.")
+    @Parameter(
+        names = ["--help", "-h"],
+        help = true,
+        description = "Shows the usage."
+    )
     var help: Boolean = false
 
     val inputPath: List<Path> by lazy {
@@ -41,15 +52,19 @@ class GeneratorArgs {
             .toList()
     }
     val documentationPath: Path
-        get() = Paths.get(checkNotNull(documentation) {
-            "Documentation output path was not initialized by jcommander!"
-        })
+        get() = Paths.get(
+            checkNotNull(documentation) {
+                "Documentation output path was not initialized by jcommander!"
+            }
+        )
 
     val configPath: Path
         get() = Paths.get(checkNotNull(config) { "Configuration output path was not initialized by jcommander!" })
 
     val cliOptionsPath: Path
-        get() = Paths.get(checkNotNull(cliOptions) {
-            "Cli options output path was not initialized by jcommander!"
-        })
+        get() = Paths.get(
+            checkNotNull(cliOptions) {
+                "Cli options output path was not initialized by jcommander!"
+            }
+        )
 }

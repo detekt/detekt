@@ -45,8 +45,10 @@ import org.jetbrains.kotlin.types.KotlinType
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ReturnFromFinally", Severity.Defect,
-        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS
+        "ReturnFromFinally",
+        Severity.Defect,
+        "Do not return within a finally statement. This can discard exceptions.",
+        Debt.TWENTY_MINS
     )
 
     private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)

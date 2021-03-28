@@ -79,12 +79,15 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("SwallowedException", Severity.CodeSmell,
+    override val issue = Issue(
+        "SwallowedException",
+        Severity.CodeSmell,
         "The caught exception is swallowed. The original exception could be lost.",
-        Debt.TWENTY_MINS)
+        Debt.TWENTY_MINS
+    )
 
     private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
-            .map { it.removePrefix("*").removeSuffix("*") }
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
@@ -92,7 +95,8 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
         if (!ignoredExceptionTypes.any { exceptionType?.contains(it, ignoreCase = true) == true } &&
             isExceptionSwallowedOrUnused(catchClause) &&
-            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
+            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
+        ) {
             report(CodeSmell(issue, Entity.from(catchClause), issue.description))
         }
     }

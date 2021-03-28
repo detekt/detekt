@@ -40,12 +40,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             }
             ruleSet.configuration
                 .forEach { configuration ->
-                if (configuration.defaultValue.isYamlList()) {
-                    list(configuration.name, configuration.defaultValue.toList())
-                } else {
-                    keyValue { configuration.name to configuration.defaultValue }
+                    if (configuration.defaultValue.isYamlList()) {
+                        list(configuration.name, configuration.defaultValue.toList())
+                    } else {
+                        keyValue { configuration.name to configuration.defaultValue }
+                    }
                 }
-            }
             rules.forEach { rule ->
                 node(rule.name) {
                     keyValue { Config.ACTIVE_KEY to "${rule.active}" }
@@ -58,12 +58,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     }
                     rule.configuration
                         .forEach { configuration ->
-                        if (configuration.defaultValue.isYamlList()) {
-                            list(configuration.name, configuration.defaultValue.toList())
-                        } else if (configuration.deprecated == null) {
-                            keyValue { configuration.name to configuration.defaultValue }
+                            if (configuration.defaultValue.isYamlList()) {
+                                list(configuration.name, configuration.defaultValue.toList())
+                            } else if (configuration.deprecated == null) {
+                                keyValue { configuration.name to configuration.defaultValue }
+                            }
                         }
-                    }
                 }
             }
             emptyLine()

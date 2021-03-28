@@ -34,11 +34,13 @@ class NestedBlockDepth(
     threshold: Int = DEFAULT_THRESHOLD_NESTING
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("NestedBlockDepth",
-            Severity.Maintainability,
-            "Excessive nesting leads to hidden complexity. " +
-                    "Prefer extracting code to make it easier to understand.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "NestedBlockDepth",
+        Severity.Maintainability,
+        "Excessive nesting leads to hidden complexity. " +
+            "Prefer extracting code to make it easier to understand.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val visitor = FunctionDepthVisitor(threshold)

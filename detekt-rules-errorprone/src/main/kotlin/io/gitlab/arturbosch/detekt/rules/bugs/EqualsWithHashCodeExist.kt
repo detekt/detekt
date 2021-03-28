@@ -48,13 +48,15 @@ import java.util.ArrayDeque
  */
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("EqualsWithHashCodeExist",
-            Severity.Defect,
-            "Always override hashCode when you override equals. " +
-                    "All hash-based collections depend on objects meeting the equals-contract. " +
-                    "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
-                    "override the inherited and call the super method for clarification.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "EqualsWithHashCodeExist",
+        Severity.Defect,
+        "Always override hashCode when you override equals. " +
+            "All hash-based collections depend on objects meeting the equals-contract. " +
+            "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
+            "override the inherited and call the super method for clarification.",
+        Debt.FIVE_MINS
+    )
 
     private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 
@@ -73,8 +75,14 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
         queue.push(ViolationHolder())
         super.visitClassOrObject(classOrObject)
         if (queue.pop().violation()) {
-            report(CodeSmell(issue, Entity.atName(classOrObject), "A class should always override hashCode " +
-                    "when overriding equals and the other way around."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(classOrObject),
+                    "A class should always override hashCode " +
+                        "when overriding equals and the other way around."
+                )
+            )
         }
     }
 

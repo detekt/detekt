@@ -198,7 +198,6 @@ private object Xml10EscapeSymbolsInitializer {
     }
 
     fun initializeXml10(): XmlEscapeSymbols {
-
         val xml10References = XmlEscapeSymbols.References()
 
         /*

@@ -32,10 +32,13 @@ class PackageNaming(config: Config = Config.empty) : Rule(config) {
     override fun visitPackageDirective(directive: KtPackageDirective) {
         val name = directive.qualifiedName
         if (name.isNotEmpty() && !name.matches(packagePattern)) {
-            report(CodeSmell(
-                issue,
-                Entity.from(directive),
-                message = "Package name should match the pattern: $packagePattern"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(directive),
+                    message = "Package name should match the pattern: $packagePattern"
+                )
+            )
         }
     }
 
