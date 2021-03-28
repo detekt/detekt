@@ -12,7 +12,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val buildFileName: String,
     val mainBuildFileContent: String,
     val configFileOrNone: String? = null,
-    val baselineFileOrNone: String? = null,
+    val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false
 ) {
@@ -56,7 +56,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         writeProjectFile(buildFileName, mainBuildFileContent)
         writeProjectFile(SETTINGS_FILENAME, settingsContent)
         configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
-        baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
+        baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
             repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) { srcFileIndex ->
                 val withCodeSmell =
