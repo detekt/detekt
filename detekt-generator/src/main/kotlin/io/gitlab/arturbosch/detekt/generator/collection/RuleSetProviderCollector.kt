@@ -102,7 +102,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
-                ?.map { it.getArgumentExpression() }
+                ?.mapNotNull { it.getArgumentExpression() }
                 ?.mapNotNull(this::guessRuleNameOrNull)
                 ?: emptyList()
 
@@ -110,15 +110,12 @@ class RuleSetProviderVisitor : DetektVisitor() {
         }
     }
 
-    private fun guessRuleNameOrNull(expressionOrNull: KtExpression?): String? {
-        return expressionOrNull?.let {
-            when (it) {
-                // constructor
-                is KtCallExpression -> it.referenceExpression()?.text
-                // factory method
-                is KtDotQualifiedExpression -> it.receiverExpression.text
-                else -> null
-            }
+    private fun guessRuleNameOrNull(expression: KtExpression): String? =
+        when (expression) {
+            // constructor
+            is KtCallExpression -> expression.referenceExpression()?.text
+            // factory method
+            is KtDotQualifiedExpression -> expression.receiverExpression.text
+            else -> null
         }
-    }
 }
