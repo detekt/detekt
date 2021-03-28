@@ -37,15 +37,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * - __Exceptions__ - `catch`, `use`
  * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
  *  [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
- *
- * @configuration threshold - McCabe's Cyclomatic Complexity (MCC) number for a method (default: `15`)
- * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
- * (default: `false`)
- * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
- * @configuration ignoreNestingFunctions - Whether to ignore functions which are often used instead of an `if` or
- * `for` statement (default: `false`)
- * @configuration nestingFunctions - Comma separated list of function names which add complexity
- * (default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ComplexMethod(

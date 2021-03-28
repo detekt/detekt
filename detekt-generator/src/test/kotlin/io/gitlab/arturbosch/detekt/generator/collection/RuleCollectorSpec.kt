@@ -152,6 +152,154 @@ class RuleCollectorSpec : Spek({
         }
 
         describe("collects configuration options") {
+            describe("using annotation") {
+                it("contains no configuration options by default") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).isEmpty()
+                }
+
+                it("contains one configuration option with correct formatting") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: `'[A-Z$]'`)  ")
+                            val config: String = "[A-Z$]",
+                        ) : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(1)
+                    assertThat(items[0].configuration[0].name).isEqualTo("config")
+                    assertThat(items[0].configuration[0].description).isEqualTo("description")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
+                    assertThat(items[0].configuration[0].deprecated).isNull()
+                }
+
+                it("contains one configuration option of type Int") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: `99`)")
+                            val config: Int = 99,
+                        ) : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(1)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("contains multiple configuration options") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: `''`)")
+                            val config: String = "",
+                            @Configuration("description (default: `''`)")
+                            val config2: String = "",
+                        ) : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(2)
+                }
+
+                it("has description that is concatenated") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration(
+                                "This is a " +
+                                "multi line " +
+                                "description " + 
+                                "(default: `'a'`)")
+                            val config: String = "",
+                        ) : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                }
+
+                it("is marked as deprecated as well") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Deprecated("use config1 instead")
+                            @Configuration("description (default: `''`)")
+                            val config: String = "",
+                        ) : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
+                }
+
+                it("fails if annotation and kdoc are used both to define configuration") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config1 - description (default: `''`)
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: `''`)")
+                            val config2: String = "",
+                        ) : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("config option doesn't have a default value") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description")
+                            val config: String = "",
+                        ) : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("has a blank default value") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: ``)")
+                            val config: String = "",
+                        ) : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("has an incorrectly delimited default value") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass(
+                            @Configuration("description (default: true)")
+                            val config: Boolean = true,
+                        ) : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+            }
             describe("as part of kdoc") {
                 it("contains no configuration options by default") {
                     val code = """
@@ -162,7 +310,6 @@ class RuleCollectorSpec : Spek({
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).isEmpty()
-                    assertThat(items[0].requiresTypeResolution).isFalse()
                 }
 
                 it("contains one configuration option with correct formatting") {

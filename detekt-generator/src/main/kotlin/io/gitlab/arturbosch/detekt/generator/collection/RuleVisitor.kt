@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -35,12 +36,19 @@ internal class RuleVisitor : DetektVisitor() {
     private var debt = ""
     private var aliases: String? = null
     private var parent = ""
-    private val configuration = mutableListOf<Configuration>()
+    private var configurationByKdoc = emptyList<Configuration>()
+    private var configurationByAnnotation = emptyList<Configuration>()
     private val classesMap = mutableMapOf<String, Boolean>()
 
     fun getRule(): Rule {
         if (description.isEmpty()) {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
+        }
+
+        if (configurationByAnnotation.isNotEmpty() && configurationByKdoc.isNotEmpty()) {
+            throw InvalidDocumentationException(
+                "Rule $name is using both annotations and kdoc to define configuration parameter."
+            )
         }
 
         return Rule(
@@ -53,7 +61,7 @@ internal class RuleVisitor : DetektVisitor() {
             debt = debt,
             aliases = aliases,
             parent = parent,
-            configuration = configuration,
+            configuration = configurationByAnnotation + configurationByKdoc,
             autoCorrect = autoCorrect,
             requiresTypeResolution = requiresTypeResolution
         )
@@ -100,7 +108,11 @@ internal class RuleVisitor : DetektVisitor() {
 
         val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
-        configuration.addAll(classOrObject.parseConfigurationTags())
+        configurationByKdoc = classOrObject.parseConfigurationTags()
+    }
+
+    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+        configurationByAnnotation = constructor.valueParameters.mapNotNull { it.parseConfigurationAnnotation() }
     }
 
     private fun extractRuleDocumentation(comment: String) {
