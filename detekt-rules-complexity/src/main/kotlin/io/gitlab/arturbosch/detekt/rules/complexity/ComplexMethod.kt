@@ -10,8 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -119,6 +119,7 @@ class ComplexMethod(
 
     companion object {
         const val DEFAULT_THRESHOLD_METHOD_COMPLEXITY = 15
+
         // Still to do: Disable custom rule check for annotated rules
         //  io.gitlab.arturbosch.detekt.core.ConfigAssert#checkOptions
         const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
