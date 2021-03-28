@@ -75,7 +75,7 @@ class EmptyFunctionBlockSpec : Spek({
             }
 
             it("should not flag overridden functions") {
-                val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
+                val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN to "true"))
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSourceLocation(1, 13)
             }
         }

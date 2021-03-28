@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
  *
  * @configuration indentSize - indentation size (default: `4`)
  * @configuration continuationIndentSize - continuation indentation size (default: `4`)
+ * (deprecated: "This property is useless, consider removing it.")
  *
  * @autoCorrect since v1.0.0
  */

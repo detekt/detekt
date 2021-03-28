@@ -15,8 +15,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * Set the [ignoreOverridden] parameter to `true` to exclude all functions which are overriding other
  * functions from the superclass or from an interface (i.e., functions declared with the override modifier).
  *
- * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
- * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - Excludes all the overridden functions (default: `false`)
  *
  * @active since v1.0.0
@@ -24,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     private val ignoreOverridden =
-        valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false))
+        valueOrDefault(IGNORE_OVERRIDDEN, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -47,7 +45,6 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
         getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
 
     companion object {
-        const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

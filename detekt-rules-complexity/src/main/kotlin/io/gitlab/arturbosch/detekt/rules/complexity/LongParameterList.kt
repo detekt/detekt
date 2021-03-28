@@ -25,8 +25,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
  *
- * @configuration threshold - number of parameters required to trigger the rule (default: `6`)
- * (deprecated: "Use `functionThreshold` and `constructorThreshold` instead")
  * @configuration functionThreshold - number of function parameters required to trigger the rule (default: `6`)
  * @configuration constructorThreshold - number of constructor parameters required to trigger the rule (default: `7`)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
@@ -49,10 +47,10 @@ class LongParameterList(
             Debt.TWENTY_MINS)
 
     private val functionThreshold: Int =
-        valueOrDefault(FUNCTION_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_FUNCTION_THRESHOLD))
+        valueOrDefault(FUNCTION_THRESHOLD, DEFAULT_FUNCTION_THRESHOLD)
 
     private val constructorThreshold: Int =
-        valueOrDefault(CONSTRUCTOR_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_CONSTRUCTOR_THRESHOLD))
+        valueOrDefault(CONSTRUCTOR_THRESHOLD, DEFAULT_CONSTRUCTOR_THRESHOLD)
 
     private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
 
@@ -125,7 +123,6 @@ class LongParameterList(
     }
 
     companion object {
-        const val THRESHOLD = "threshold"
         const val FUNCTION_THRESHOLD = "functionThreshold"
         const val CONSTRUCTOR_THRESHOLD = "constructorThreshold"
         const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"

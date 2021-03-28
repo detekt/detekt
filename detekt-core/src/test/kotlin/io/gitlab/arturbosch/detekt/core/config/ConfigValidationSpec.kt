@@ -189,17 +189,17 @@ internal class ConfigValidationSpec : Spek({
                     val config = yamlConfigFromContent("""
                     config:
                       warningsAsErrors: $warningsAsErrors
-                    naming:
-                      FunctionParameterNaming:
-                        ignoreOverriddenFunctions: ''
+                    formatting:
+                      Indentation:
+                        continuationIndentSize: 8
                 """.trimIndent())
 
                     val result = validateConfig(config, config)
 
                     assertThat(result).contains(
                         propertyIsDeprecated(
-                            "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
-                            "Use 'ignoreOverridden' instead",
+                            "formatting>Indentation>continuationIndentSize",
+                            "This property is useless, consider removing it.",
                             reportAsError = warningsAsErrors
                         )
                     )

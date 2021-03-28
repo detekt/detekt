@@ -50,8 +50,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  *
- * @configuration ignoreOverriddenFunction - if overridden functions and properties should be ignored (default: `true`)
- * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
  *
  * @active since v1.2.0
@@ -67,7 +65,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val objectMessage = "A member is named after the object. " +
             "This might result in confusion. Please rename the member."
 
-    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true))
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
@@ -123,7 +121,6 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

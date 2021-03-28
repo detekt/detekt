@@ -21,7 +21,7 @@ class MemberNameEqualsClassNameSpec : Spek({
         val noIgnoreOverridden by memoized {
             TestConfig(
                 mapOf(
-                    MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+                    MemberNameEqualsClassName.IGNORE_OVERRIDDEN to "false"
                 )
             )
         }

@@ -26,12 +26,15 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     "build>weights.*"
 ).joinToString(",")
 
-private val DEPRECATED_PROPERTIES = setOf(
-    "complexity>LongParameterList>threshold" to "Use 'functionThreshold' and 'constructorThreshold' instead",
-    "empty-blocks>EmptyFunctionBlock>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
-    "naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
-    "naming>MemberNameEqualsClassName>ignoreOverriddenFunction" to "Use 'ignoreOverridden' instead"
-).map { (first, second) -> first.toRegex() to second }
+/**
+ * Removing configuration properties are considered as backwards incompatible changes.
+ * The deprecation of the legacy properties should last at least 3 minor version, or 1 major version.
+ */
+val DEPRECATED_PROPERTIES = setOf(
+    "formatting>Indentation>continuationIndentSize" to "This property is useless, consider removing it."
+).map { (first, second) ->
+    first.toRegex() to second
+}
 
 fun validateConfig(
     config: Config,
