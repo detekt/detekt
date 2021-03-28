@@ -669,7 +669,7 @@ To enable it, we add the published dependency to <code class="language-plaintext
 <h5 id="pitfalls">Pitfalls</h5>
 
 <ul>
-  <li>By default all rules not marked with <code class="language-plaintext highlighter-rouge">@active</code> in their <code class="language-plaintext highlighter-rouge">KDoc</code> are disabled.
+  <li>By default all rules not annotated with <code class="language-plaintext highlighter-rouge">@ActiveByDefault</code> are disabled.
 That means your custom rules are also disabled if you have not explicitly enabled
 them in the <code class="language-plaintext highlighter-rouge">detekt</code> yaml configuration file.</li>
   <li>If your extension is part of your project and you integrate it like <code class="language-plaintext highlighter-rouge">detektPlugins project(":my-rules")</code> make sure that this
