@@ -1,3 +1,4 @@
+// Remove the suppression when https://github.com/pinterest/ktlint/issues/1125 is fixed
 @file:Suppress("SpacingBetweenDeclarationsWithAnnotations")
 
 package io.gitlab.arturbosch.detekt.rules

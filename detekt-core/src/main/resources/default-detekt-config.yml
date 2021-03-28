@@ -274,7 +274,7 @@ formatting:
   ImportOrdering:
     active: false
     autoCorrect: true
-    layout: 'idea'
+    layout: '*,java.**,javax.**,kotlin.**,^'
   Indentation:
     active: false
     autoCorrect: true
