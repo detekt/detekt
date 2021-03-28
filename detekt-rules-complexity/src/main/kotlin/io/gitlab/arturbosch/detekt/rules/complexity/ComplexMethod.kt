@@ -131,10 +131,10 @@ class ComplexMethod(
         fun create(ruleSetConfig: Config): ComplexMethod {
             val config = ruleSetConfig.subConfig("ComplexMethod")
             val threshold = config.valueOrDefault("threshold", DEFAULT_THRESHOLD_METHOD_COMPLEXITY)
-            val ignoreSingleWhenExpression = config.valueOrDefault("ignoreSingleWhenExpression", false)
-            val ignoreSimpleWhenEntries = config.valueOrDefault("ignoreSimpleWhenEntries", false)
-            val ignoreNestingFunctions = config.valueOrDefault("ignoreNestingFunctions", false)
-            val nestingFunctions = config.valueOrDefaultCommaSeparated("nestingFunctions", DEFAULT_NESTING_FUNCTIONS)
+            val ignoreSingleWhenExpression = config.valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
+            val ignoreSimpleWhenEntries = config.valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
+            val ignoreNestingFunctions = config.valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
+            val nestingFunctions = config.valueOrDefaultCommaSeparated(NESTING_FUNCTIONS, DEFAULT_NESTING_FUNCTIONS)
 
             return ComplexMethod(
                 config = ruleSetConfig,
