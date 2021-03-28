@@ -41,6 +41,7 @@ object DetektPlainTest : Spek({
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
             buildFileName = "build.gradle",
+            baselineFiles = listOf("baseline.xml"),
             mainBuildFileContent = """
                 plugins {
                     id "org.jetbrains.kotlin.jvm"
@@ -66,6 +67,7 @@ object DetektPlainTest : Spek({
 
         it("configures detekt plain task") {
             gradleRunner.runTasksAndCheckResult(":detekt") { buildResult ->
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")

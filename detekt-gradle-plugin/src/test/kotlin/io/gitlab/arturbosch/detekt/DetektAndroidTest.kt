@@ -13,7 +13,9 @@ object DetektAndroidTest : Spek({
         skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")
     ) {
         describe("configures android tasks for android application") {
-            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            val projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 0,
+            ).apply {
                 addSubmodule(
                     name = "app",
                     numberOfSourceFilesPerSourceDir = 1,
@@ -23,7 +25,15 @@ object DetektAndroidTest : Spek({
                         $ANDROID_BLOCK
                         $DETEKT_BLOCK
                     """.trimIndent(),
-                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
+                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                    baselineFiles = listOf(
+                        "baseline.xml",
+                        "baseline-release.xml",
+                        "baseline-debug.xml",
+                        "baseline-releaseUnitTest.xml",
+                        "baseline-debugUnitTest.xml",
+                        "baseline-debugAndroidTest.xml"
+                    )
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
@@ -31,6 +41,8 @@ object DetektAndroidTest : Spek({
 
             it("task :app:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-release.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debug.xml """)
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -45,6 +57,9 @@ object DetektAndroidTest : Spek({
 
             it("task :app:detektTest") {
                 gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-releaseUnitTest.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debugUnitTest.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debugAndroidTest.xml """)
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -59,6 +74,7 @@ object DetektAndroidTest : Spek({
 
             it("task :app:check") {
                 gradleRunner.runTasksAndCheckResult(":app:check") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                     assertThat(buildResult.task(":app:detekt")).isNotNull
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
@@ -113,7 +129,15 @@ object DetektAndroidTest : Spek({
                         $ANDROID_BLOCK
                         $DETEKT_BLOCK
                     """.trimIndent(),
-                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
+                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                    baselineFiles = listOf(
+                        "baseline.xml",
+                        "baseline-release.xml",
+                        "baseline-debug.xml",
+                        "baseline-releaseUnitTest.xml",
+                        "baseline-debugUnitTest.xml",
+                        "baseline-debugAndroidTest.xml"
+                    )
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
@@ -121,6 +145,8 @@ object DetektAndroidTest : Spek({
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-release.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debug.xml """)
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -135,6 +161,9 @@ object DetektAndroidTest : Spek({
 
             it("task :lib:detektTest") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-releaseUnitTest.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debugUnitTest.xml """)
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-debugAndroidTest.xml """)
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -149,6 +178,7 @@ object DetektAndroidTest : Spek({
 
             it(":lib:check") {
                 gradleRunner.runTasksAndCheckResult(":lib:check") { buildResult ->
+                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                     assertThat(buildResult.task(":lib:detekt")).isNotNull
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")

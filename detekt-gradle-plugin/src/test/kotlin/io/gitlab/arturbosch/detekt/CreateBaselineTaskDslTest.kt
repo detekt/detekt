@@ -35,7 +35,7 @@ internal class CreateBaselineTaskDslTest : Spek({
                     }
                 }
 
-                it("can not be executed when baseline file is not specified") {
+                it("can be executed when baseline file is not specified") {
                     val baselineFilename = "baseline.xml"
 
                     val detektConfig = """
@@ -52,9 +52,9 @@ internal class CreateBaselineTaskDslTest : Spek({
                         .withDetektConfig(detektConfig)
                         .build()
 
-                    gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
-                        assertThat(result.output).contains("No value has been specified for property 'baseline'")
-                        assertThat(projectFile(baselineFilename)).doesNotExist()
+                    gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
+                        assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                        assertThat(projectFile(baselineFilename)).exists()
                     }
                 }
 
