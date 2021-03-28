@@ -7,7 +7,6 @@ plugins {
 dependencies {
     implementation(project(":detekt-parser"))
     implementation(project(":detekt-api"))
-    implementation(project(":detekt-rules"))
     implementation(project(":detekt-rules-empty"))
     implementation(project(":detekt-formatting"))
     implementation(project(":detekt-cli"))
