@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -37,9 +38,8 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * Reports unused private classes.
  * If private classes are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("unused")

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -37,9 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  *
  * @configuration threshold - the number of conditions which will trigger the rule (default: `4`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ComplexCondition(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_CONDITIONS_COUNT

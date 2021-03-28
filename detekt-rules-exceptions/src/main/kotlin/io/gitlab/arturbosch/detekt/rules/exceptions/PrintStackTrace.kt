@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -43,9 +44,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  *     }
  * }
  * </compliant>
- *
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

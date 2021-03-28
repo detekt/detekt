@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -40,9 +41,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * str.toUpperCase(Locale.US)
  * str.toLowerCase(Locale.US)
  * </compliant>
- *
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

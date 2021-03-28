@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
@@ -85,10 +86,9 @@ import java.util.Locale
  * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: `false`)
  * @configuration ignoreExtensionFunctions - whether magic numbers as subject of an extension function should be ignored
  * (default: `true`)
- *
- * @active since v1.0.0
  */
 @Suppress("TooManyFunctions")
+@ActiveByDefault(since = "1.0.0")
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

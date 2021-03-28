@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 
 /**
@@ -19,9 +20,8 @@ import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
  * @configuration excludePackageStatements - if package statements should be ignored (default: `true`)
  * @configuration excludeImportStatements - if import statements should be ignored (default: `true`)
  * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

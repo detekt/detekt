@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -37,9 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *            - Exception
  *            - Throwable
  *            - RuntimeException`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
     override val issue = Issue(

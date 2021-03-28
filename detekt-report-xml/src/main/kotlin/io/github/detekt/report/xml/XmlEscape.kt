@@ -29,8 +29,6 @@ import java.util.Collections
  * Adapted from Unbescape - https://github.com/unbescape/unbescape/
  *
  * Utility class for performing XML escape/unescape operations.
- *
- * @active since v1.0.0
  */
 object XmlEscape {
 

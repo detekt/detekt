@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
@@ -39,9 +40,9 @@ import org.jetbrains.kotlin.types.KotlinType
  * </noncompliant>
  *
  * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
- * @active since v1.16.0
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

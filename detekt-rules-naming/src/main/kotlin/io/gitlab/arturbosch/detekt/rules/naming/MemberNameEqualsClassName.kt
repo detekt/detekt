@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -53,9 +54,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * @configuration ignoreOverriddenFunction - if overridden functions and properties should be ignored (default: `true`)
  * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

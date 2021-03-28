@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -42,9 +43,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  *     }
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

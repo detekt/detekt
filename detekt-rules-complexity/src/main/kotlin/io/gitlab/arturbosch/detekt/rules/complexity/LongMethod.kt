@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -22,9 +23,8 @@ import java.util.IdentityHashMap
  * Extract parts of the functionality of long methods into separate, smaller methods.
  *
  * @configuration threshold - number of lines in a method to trigger the rule (default: `60`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class LongMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH

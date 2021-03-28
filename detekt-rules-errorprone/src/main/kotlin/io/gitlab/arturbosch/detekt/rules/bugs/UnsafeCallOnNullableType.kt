@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPostfixExpression
@@ -31,10 +32,9 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  *     println(str?.length)
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.2.0")
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnsafeCallOnNullableType",

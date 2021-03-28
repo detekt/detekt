@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -44,9 +45,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
  * this check. (default: `['dagger.Module']`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."

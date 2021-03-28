@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isExternal
@@ -50,8 +51,8 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
  * (default: `'(_|ignored|expected|serialVersionUID)'`)
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")

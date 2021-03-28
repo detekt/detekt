@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -38,9 +39,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
  * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check
  * (default: `['dagger.Provides']`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
