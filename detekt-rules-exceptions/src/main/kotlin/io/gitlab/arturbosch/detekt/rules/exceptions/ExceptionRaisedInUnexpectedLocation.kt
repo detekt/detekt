@@ -35,13 +35,17 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 @ActiveByDefault(since = "1.16.0")
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
-            "This method is not expected to throw exceptions. This can cause weird behavior.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ExceptionRaisedInUnexpectedLocation",
+        Severity.CodeSmell,
+        "This method is not expected to throw exceptions. This can cause weird behavior.",
+        Debt.TWENTY_MINS
+    )
 
     private val methods = valueOrDefaultCommaSeparated(
         METHOD_NAMES,
-        listOf("toString", "hashCode", "equals", "finalize"))
+        listOf("toString", "hashCode", "equals", "finalize")
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
@@ -58,7 +62,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     private fun isPotentialMethod(function: KtNamedFunction) = methods.any { function.name == it }
 
     private fun hasThrowExpression(declaration: KtExpression?) =
-            declaration?.anyDescendantOfType<KtThrowExpression>() == true
+        declaration?.anyDescendantOfType<KtThrowExpression>() == true
 
     companion object {
         const val METHOD_NAMES = "methodNames"

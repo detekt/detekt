@@ -50,21 +50,26 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 @ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "Caught exception is too generic. " +
-                    "Prefer catching specific exceptions to the case that is currently handled.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "Caught exception is too generic. " +
+            "Prefer catching specific exceptions to the case that is currently handled.",
+        Debt.TWENTY_MINS
+    )
 
     private val exceptions: Set<String> = valueOrDefault(
-            CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
+        CAUGHT_EXCEPTIONS_PROPERTY,
+        caughtExceptionDefaults
+    ).toHashSet()
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchParameter?.let {
             if (isTooGenericException(it.typeReference) &&
-                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
+                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
+            ) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
@@ -82,12 +87,12 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 }
 
 val caughtExceptionDefaults = listOf(
-        "ArrayIndexOutOfBoundsException",
-        "Error",
-        "Exception",
-        "IllegalMonitorStateException",
-        "NullPointerException",
-        "IndexOutOfBoundsException",
-        "RuntimeException",
-        "Throwable"
+    "ArrayIndexOutOfBoundsException",
+    "Error",
+    "Exception",
+    "IllegalMonitorStateException",
+    "NullPointerException",
+    "IndexOutOfBoundsException",
+    "RuntimeException",
+    "Throwable"
 )

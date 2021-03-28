@@ -30,10 +30,12 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
  */
 class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "'..' call can be replaced with 'until'",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "'..' call can be replaced with 'until'",
+        Debt.FIVE_MINS
+    )
 
     private val minimumSize = 3
 

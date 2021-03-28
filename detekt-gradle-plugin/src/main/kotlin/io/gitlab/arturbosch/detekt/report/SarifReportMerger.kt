@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.report
 
-import io.github.detekt.sarif4j.SarifSchema210
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.github.detekt.sarif4j.SarifSchema210
 import java.io.File
 
 /**

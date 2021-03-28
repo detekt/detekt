@@ -52,10 +52,12 @@ class ComplexMethod(
     threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("ComplexMethod",
+    override val issue = Issue(
+        "ComplexMethod",
         Severity.Maintainability,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
-        Debt.TWENTY_MINS)
+        Debt.TWENTY_MINS
+    )
 
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
@@ -81,7 +83,7 @@ class ComplexMethod(
                     Entity.atName(function),
                     Metric("MCC", complexity, threshold),
                     "The function ${function.nameAsSafeName} appears to be too complex ($complexity). " +
-                            "Defined complexity threshold for methods is set to '$threshold'"
+                        "Defined complexity threshold for methods is set to '$threshold'"
                 )
             )
         }

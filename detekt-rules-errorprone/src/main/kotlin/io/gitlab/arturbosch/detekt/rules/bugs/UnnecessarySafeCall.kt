@@ -72,7 +72,8 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
             }
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.text} contains an unnecessary " +
                         "safe call operator"
                 )

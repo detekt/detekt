@@ -167,7 +167,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         describe("Explicit API mode") {
 
             val code by memoized {
-                compileContentForTest("""
+                compileContentForTest(
+                    """
                     public class A() {
                         fun f()
                     }"""

@@ -3,20 +3,27 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":detekt-api"))
-    implementation(project(":detekt-rules-complexity"))
-    implementation(project(":detekt-rules-coroutines"))
-    implementation(project(":detekt-rules-documentation"))
-    implementation(project(":detekt-rules-empty"))
-    implementation(project(":detekt-rules-errorprone"))
-    implementation(project(":detekt-rules-exceptions"))
-    implementation(project(":detekt-rules-naming"))
-    implementation(project(":detekt-rules-performance"))
-    implementation(project(":detekt-rules-style"))
+    runtimeOnly(project(":detekt-rules-complexity"))
+    runtimeOnly(project(":detekt-rules-coroutines"))
+    runtimeOnly(project(":detekt-rules-documentation"))
+    runtimeOnly(project(":detekt-rules-empty"))
+    runtimeOnly(project(":detekt-rules-errorprone"))
+    runtimeOnly(project(":detekt-rules-exceptions"))
+    runtimeOnly(project(":detekt-rules-naming"))
+    runtimeOnly(project(":detekt-rules-performance"))
+    runtimeOnly(project(":detekt-rules-style"))
 
     testImplementation(project(":detekt-core"))
-    testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
+    testImplementation(project(":detekt-rules-complexity"))
+    testImplementation(project(":detekt-rules-coroutines"))
+    testImplementation(project(":detekt-rules-documentation"))
+    testImplementation(project(":detekt-rules-empty"))
+    testImplementation(project(":detekt-rules-errorprone"))
+    testImplementation(project(":detekt-rules-exceptions"))
+    testImplementation(project(":detekt-rules-naming"))
+    testImplementation(project(":detekt-rules-performance"))
+    testImplementation(project(":detekt-rules-style"))
 }
 
 tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }

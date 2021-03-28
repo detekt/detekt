@@ -53,14 +53,19 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
     override val issue =
-            Issue("UnnecessaryAbstractClass", Severity.Style,
-                    "An abstract class is unnecessary and can be refactored. " +
-                            "An abstract class should have both abstract and concrete properties or functions. " +
-                            noConcreteMember + " " + noAbstractMember,
-                    Debt.FIVE_MINS)
+        Issue(
+            "UnnecessaryAbstractClass",
+            Severity.Style,
+            "An abstract class is unnecessary and can be refactored. " +
+                "An abstract class should have both abstract and concrete properties or functions. " +
+                noConcreteMember + " " + noAbstractMember,
+            Debt.FIVE_MINS
+        )
 
     private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(
-            EXCLUDE_ANNOTATED_CLASSES, listOf("dagger.Module"))
+        EXCLUDE_ANNOTATED_CLASSES,
+        listOf("dagger.Module")
+    )
         .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder
 
@@ -109,7 +114,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             members.indexOfFirst { it is KtNamedDeclaration && it.isAbstract() == isAbstract }
 
         private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int) =
-                indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
+            indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
 
         private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
 

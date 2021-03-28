@@ -7,11 +7,13 @@ import org.spekframework.spek2.Spek
 internal class SampleConfigValidatorSpec : Spek({
 
     test("warns if active property is not a boolean") {
-        val config = yamlConfigFromContent("""
+        val config = yamlConfigFromContent(
+            """
             sample:
               TooManyFunctions:
                 active: 1
-        """.trimIndent())
+            """.trimIndent()
+        )
 
         val warnings = SampleConfigValidator().validate(config)
 

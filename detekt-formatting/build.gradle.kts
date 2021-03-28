@@ -24,7 +24,7 @@ val depsToPackage = setOf(
     "com.pinterest.ktlint"
 )
 
-tasks.withType<Jar>().configureEach {
+tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     dependsOn(configurations.runtimeClasspath)
     from({
@@ -34,13 +34,8 @@ tasks.withType<Jar>().configureEach {
     })
 }
 
-val moveJarForIntegrationTest by tasks.registering {
-    dependsOn(tasks.named("jar"))
-    doLast {
-        copy {
-            from(tasks.named("jar"))
-            into(rootProject.buildDir)
-            rename { "detekt-formatting.jar" }
-        }
-    }
+tasks.register<Copy>("moveJarForIntegrationTest") {
+    from(tasks.jar)
+    into(rootProject.buildDir)
+    rename { "detekt-formatting.jar" }
 }

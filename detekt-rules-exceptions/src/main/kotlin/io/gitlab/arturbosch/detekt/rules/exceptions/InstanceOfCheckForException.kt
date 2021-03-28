@@ -45,10 +45,13 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("InstanceOfCheckForException", Severity.CodeSmell,
-            "Instead of checking for a general exception type and checking for a specific exception type " +
-                    "use multiple catch blocks.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "InstanceOfCheckForException",
+        Severity.CodeSmell,
+        "Instead of checking for a general exception type and checking for a specific exception type " +
+            "use multiple catch blocks.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val catchParameter = catchClause.catchParameter ?: return

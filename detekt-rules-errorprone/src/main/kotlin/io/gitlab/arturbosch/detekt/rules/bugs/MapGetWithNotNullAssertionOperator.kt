@@ -49,7 +49,7 @@ class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
             "MapGetWithNotNullAssertionOperator",
             Severity.CodeSmell,
             "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
-                    "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
+                "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
             Debt.FIVE_MINS
         )
 

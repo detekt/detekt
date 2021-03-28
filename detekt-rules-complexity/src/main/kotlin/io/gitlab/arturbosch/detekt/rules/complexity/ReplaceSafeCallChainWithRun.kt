@@ -43,7 +43,8 @@ import org.jetbrains.kotlin.types.isNullable
 class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Maintainability,
+        javaClass.simpleName,
+        Severity.Maintainability,
         "Chains of safe calls on non-nullable types can be surrounded with run {}",
         Debt.TEN_MINS
     )
@@ -66,8 +67,6 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
             receiver = receiver.receiverExpression
         }
 
-        if (counter >= 1) report(
-            CodeSmell(issue, Entity.from(expression), issue.description)
-        )
+        if (counter >= 1) report(CodeSmell(issue, Entity.from(expression), issue.description))
     }
 }

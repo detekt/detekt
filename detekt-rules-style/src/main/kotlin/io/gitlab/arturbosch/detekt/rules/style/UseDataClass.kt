@@ -53,10 +53,12 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UseDataClass",
-            Severity.Style,
-            "Classes that do nothing but hold data should be replaced with a data class.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "UseDataClass",
+        Severity.Style,
+        "Classes that do nothing but hold data should be replaced with a data class.",
+        Debt.FIVE_MINS
+    )
 
     private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_CLASSES, emptyList())
         .map { it.removePrefix("*").removeSuffix("*") }
@@ -75,7 +77,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             return
         }
         if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
-            !annotationExcluder.shouldExclude(klass.annotationEntries)) {
+            !annotationExcluder.shouldExclude(klass.annotationEntries)
+        ) {
             val declarations = klass.body?.declarations.orEmpty()
             val properties = declarations.filterIsInstance<KtProperty>()
             val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -83,7 +86,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             val propertyParameters = klass.extractConstructorPropertyParameters()
 
             val primaryConstructor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass.primaryConstructor]
-                    as? ClassConstructorDescriptor
+                as? ClassConstructorDescriptor
             val primaryConstructorParameterTypes = primaryConstructor?.valueParameters?.map { it.type }.orEmpty()
             val classType = primaryConstructor?.containingDeclaration?.defaultType
             val containsFunctions = functions.all { it.isDefaultFunction(classType, primaryConstructorParameterTypes) }
@@ -97,8 +100,10 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                 }
                 report(
                     CodeSmell(
-                        issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no " +
-                                "functionality and only holds data. Consider converting it to a data class."
+                        issue,
+                        Entity.from(klass),
+                        "The class ${klass.nameAsSafeName} defines no " +
+                            "functionality and only holds data. Consider converting it to a data class."
                     )
                 )
             }
@@ -117,23 +122,23 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isIncorrectClassType(klass: KtClass) =
-            klass.isData() ||
-                    klass.isEnum() ||
-                    klass.isAnnotation() ||
-                    klass.isSealed() ||
-                    klass.isInline()
+        klass.isData() ||
+            klass.isEnum() ||
+            klass.isAnnotation() ||
+            klass.isSealed() ||
+            klass.isInline()
 
     private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
         val primaryConstructor = klass.primaryConstructor
         return (primaryConstructor == null || primaryConstructor.isPrivate()) &&
-                klass.secondaryConstructors.all { it.isPrivate() }
+            klass.secondaryConstructors.all { it.isPrivate() }
     }
 
     private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
-            getPrimaryConstructorParameterList()
-                    ?.parameters
-                    ?.filter { it.isPropertyParameter() }
-                    .orEmpty()
+        getPrimaryConstructorParameterList()
+            ?.parameters
+            ?.filter { it.isPropertyParameter() }
+            .orEmpty()
 
     private fun KtNamedFunction.isDefaultFunction(
         classType: KotlinType?,
@@ -148,8 +153,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                     val returnType = descriptor?.returnType
                     val parameterTypes = descriptor?.valueParameters?.map { it.type }.orEmpty()
                     returnType == classType &&
-                            parameterTypes.size == primaryConstructorParameterTypes.size &&
-                            parameterTypes.zip(primaryConstructorParameterTypes).all { it.first == it.second }
+                        parameterTypes.size == primaryConstructorParameterTypes.size &&
+                        parameterTypes.zip(primaryConstructorParameterTypes).all { it.first == it.second }
                 } else {
                     true
                 }

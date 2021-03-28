@@ -36,10 +36,10 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 class SafeCast(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Safe cast instead of if-else-null",
-            Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "Safe cast instead of if-else-null",
+        Debt.FIVE_MINS
     )
 
     override fun visitIfExpression(expression: KtIfExpression) {

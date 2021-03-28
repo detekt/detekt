@@ -1,10 +1,10 @@
 package io.github.detekt.test.utils
 
-import java.io.File
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.psi.KtPsiFactory
+import java.io.File
 
 /**
  * Make sure to always call [dispose] or use a [use] block when working with [KotlinCoreEnvironment]s.

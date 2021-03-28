@@ -51,7 +51,8 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
         ) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "Calling !! on a nullable type will throw a " +
                         "NullPointerException at runtime in case the value is null. It should be avoided."
                 )

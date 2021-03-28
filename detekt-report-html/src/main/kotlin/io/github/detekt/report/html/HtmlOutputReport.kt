@@ -164,13 +164,13 @@ private class SUMMARY(
     initialAttributes: Map<String, String>,
     override val consumer: TagConsumer<*>
 ) : HTMLTag(
-    "summary",
-    consumer,
-    initialAttributes,
-    null,
-    false,
-    false
-),
+        "summary",
+        consumer,
+        initialAttributes,
+        null,
+        false,
+        false
+    ),
     CommonAttributeGroupFacadeFlowInteractiveContent
 
 private fun TextLocation.length(): Int = end - start

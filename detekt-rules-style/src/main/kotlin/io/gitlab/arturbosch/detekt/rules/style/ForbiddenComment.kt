@@ -34,10 +34,12 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 @ActiveByDefault(since = "1.0.0")
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Flags a forbidden comment.",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Flags a forbidden comment.",
+        Debt.TEN_MINS
+    )
 
     private val values: List<String> = valueOrDefaultCommaSeparated(VALUES, listOf("TODO:", "FIXME:", "STOPSHIP:"))
 
@@ -62,8 +64,14 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
         values.forEach {
             if (text.contains(it, ignoreCase = true)) {
-                report(CodeSmell(issue, Entity.from(comment), "This comment contains '$it' that has been " +
-                    "defined as forbidden in detekt."))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(comment),
+                        "This comment contains '$it' that has been " +
+                            "defined as forbidden in detekt."
+                    )
+                )
             }
         }
     }

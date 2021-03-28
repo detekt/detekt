@@ -45,16 +45,20 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 @ActiveByDefault(since = "1.0.0")
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Wildcard imports should be replaced with imports using fully qualified class names. " +
-                    "Wildcard imports can lead to naming conflicts. " +
-                    "A library update can introduce naming clashes with your classes which " +
-                    "results in compilation errors.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Wildcard imports should be replaced with imports using fully qualified class names. " +
+            "Wildcard imports can lead to naming conflicts. " +
+            "A library update can introduce naming clashes with your classes which " +
+            "results in compilation errors.",
+        Debt.FIVE_MINS
+    )
 
     private val excludedImports = valueOrDefaultCommaSeparated(
-            EXCLUDED_IMPORTS, listOf("java.util.*", "kotlinx.android.synthetic.*"))
+        EXCLUDED_IMPORTS,
+        listOf("java.util.*", "kotlinx.android.synthetic.*")
+    )
         .map { it.removePrefix("*").removeSuffix("*") }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
@@ -67,8 +71,14 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
             if (excludedImports.any { import.contains(it, ignoreCase = true) }) {
                 return
             }
-            report(CodeSmell(issue, Entity.from(importDirective), "$import " +
-                    "is a wildcard import. Replace it with fully qualified imports."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(importDirective),
+                    "$import " +
+                        "is a wildcard import. Replace it with fully qualified imports."
+                )
+            )
         }
     }
 

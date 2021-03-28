@@ -114,10 +114,12 @@ class YamlConfigSpec : Spek({
 
         it("throws InvalidConfigurationError on invalid structured yaml files") {
             assertThatCode {
-                yamlConfigFromContent("""
+                yamlConfigFromContent(
+                    """
                     map:
                           {}map
-                """.trimIndent())
+                    """.trimIndent()
+                )
             }.isInstanceOf(Config.InvalidConfigurationError::class.java)
                 .hasMessageContaining("Provided configuration file is invalid")
                 .hasCauseInstanceOf(ParserException::class.java)

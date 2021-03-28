@@ -76,8 +76,10 @@ class ClassOrderingSpec : Spek({
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("OutOfOrder (secondary constructor) " +
-                "should not come before class initializer")
+            assertThat(findings[0].message).isEqualTo(
+                "OutOfOrder (secondary constructor) " +
+                    "should not come before class initializer"
+            )
         }
 
         it("reports when secondary constructor is out of order") {
@@ -101,8 +103,10 @@ class ClassOrderingSpec : Spek({
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("OutOfOrder (secondary constructor) " +
-                "should not come before y (property)")
+            assertThat(findings[0].message).isEqualTo(
+                "OutOfOrder (secondary constructor) " +
+                    "should not come before y (property)"
+            )
         }
 
         it("reports when method is out of order") {

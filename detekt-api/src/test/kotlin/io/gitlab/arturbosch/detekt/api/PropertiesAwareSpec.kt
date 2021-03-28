@@ -25,10 +25,13 @@ class PropertiesAwareSpec : Spek({
                     register("string", "test")
                     register("number", 5)
                     register("set", setOf(1, 2, 3))
-                    register("any", object : Any() {
-                        override fun equals(other: Any?): Boolean = hashCode() == other.hashCode()
-                        override fun hashCode(): Int = hash
-                    })
+                    register(
+                        "any",
+                        object : Any() {
+                            override fun equals(other: Any?): Boolean = hashCode() == other.hashCode()
+                            override fun hashCode(): Int = hash
+                        }
+                    )
                 }
             }
 

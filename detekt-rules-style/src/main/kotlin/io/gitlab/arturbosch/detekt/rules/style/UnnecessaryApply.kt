@@ -43,8 +43,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class UnnecessaryApply(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "The `apply` usage is unnecessary", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "The `apply` usage is unnecessary",
+        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -67,7 +69,6 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 }
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
-
     fun KtExpression.notAnAssignment() =
         safeAs<KtBinaryExpression>()
             ?.operationToken != KtTokens.EQ

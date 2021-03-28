@@ -57,10 +57,12 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
-    override val issue: Issue = Issue("UnusedPrivateMember",
+    override val issue: Issue = Issue(
+        "UnusedPrivateMember",
         Severity.Maintainability,
         "Private member is unused.",
-        Debt.FIVE_MINS)
+        Debt.FIVE_MINS
+    )
 
     private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
 
@@ -265,8 +267,11 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
         return properties
             .filter { it.nameAsSafeName.identifier !in nameAccesses }
             .map {
-                CodeSmell(issue, Entity.from(it),
-                    "Private property ${it.nameAsSafeName.identifier} is unused.")
+                CodeSmell(
+                    issue,
+                    Entity.from(it),
+                    "Private property ${it.nameAsSafeName.identifier} is unused."
+                )
             }
     }
 

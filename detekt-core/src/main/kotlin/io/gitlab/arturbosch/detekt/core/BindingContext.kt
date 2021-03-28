@@ -28,8 +28,11 @@ internal fun generateBindingContext(
     )
     analyzer.analyzeAndReport(files) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            environment.project, files, NoScopeRecordCliBindingTrace(),
-            environment.configuration, environment::createPackagePartProvider,
+            environment.project,
+            files,
+            NoScopeRecordCliBindingTrace(),
+            environment.configuration,
+            environment::createPackagePartProvider,
             ::FileBasedDeclarationProviderFactory
         )
     }

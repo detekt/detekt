@@ -23,14 +23,26 @@ private const val TAB = "\t"
 class XmlOutputFormatSpec : Spek({
 
     val entity1 by memoized {
-        Entity("Sample1", "",
-            Location(SourceLocation(11, 1), TextLocation(0, 10),
-                "src/main/com/sample/Sample1.kt"))
+        Entity(
+            "Sample1",
+            "",
+            Location(
+                SourceLocation(11, 1),
+                TextLocation(0, 10),
+                "src/main/com/sample/Sample1.kt"
+            )
+        )
     }
     val entity2 by memoized {
-        Entity("Sample2", "",
-            Location(SourceLocation(22, 2), TextLocation(0, 20),
-                "src/main/com/sample/Sample2.kt"))
+        Entity(
+            "Sample2",
+            "",
+            Location(
+                SourceLocation(22, 2),
+                TextLocation(0, 20),
+                "src/main/com/sample/Sample2.kt"
+            )
+        )
     }
 
     val outputFormat by memoized { XmlOutputReport() }
@@ -40,10 +52,13 @@ class XmlOutputFormatSpec : Spek({
         it("renders empty report") {
             val result = outputFormat.render(TestDetektion())
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         it("renders one reported issue in single file") {
@@ -51,13 +66,16 @@ class XmlOutputFormatSpec : Spek({
 
             val result = outputFormat.render(TestDetektion(smell))
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
                 </file>
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         it("renders two reported issues in single file") {
@@ -66,14 +84,17 @@ class XmlOutputFormatSpec : Spek({
 
             val result = outputFormat.render(TestDetektion(smell1, smell2))
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
                 $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
                 </file>
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         it("renders one reported issue across multiple files") {
@@ -82,7 +103,8 @@ class XmlOutputFormatSpec : Spek({
 
             val result = outputFormat.render(TestDetektion(smell1, smell2))
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
@@ -91,7 +113,9 @@ class XmlOutputFormatSpec : Spek({
                 <file name="src/main/com/sample/Sample2.kt">
                 $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
                 </file>
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         it("renders issues with relative path") {
@@ -108,7 +132,8 @@ class XmlOutputFormatSpec : Spek({
 
             val result = outputFormat.render(TestDetektion(findingA, findingB))
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="Sample1.kt">
@@ -117,7 +142,9 @@ class XmlOutputFormatSpec : Spek({
                 <file name="Sample2.kt">
                 $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
                 </file>
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         it("renders two reported issues across multiple files") {
@@ -135,7 +162,8 @@ class XmlOutputFormatSpec : Spek({
                 )
             )
 
-            assertThat(result).isEqualTo("""
+            assertThat(result).isEqualTo(
+                """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
@@ -146,7 +174,9 @@ class XmlOutputFormatSpec : Spek({
                 $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
                 $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_b" />
                 </file>
-                </checkstyle>""".trimIndent())
+                </checkstyle>
+                """.trimIndent()
+            )
         }
 
         describe("severity level conversion") {

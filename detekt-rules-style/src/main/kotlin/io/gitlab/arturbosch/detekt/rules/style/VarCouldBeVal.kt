@@ -45,10 +45,12 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
 
-    override val issue: Issue = Issue("VarCouldBeVal",
-            Severity.Maintainability,
-            "Var declaration could be val.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        "VarCouldBeVal",
+        Severity.Maintainability,
+        "Var declaration could be val.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isSomehowNested()) {
@@ -65,11 +67,12 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtNamedFunction.isSomehowNested() =
-            getStrictParentOfType<KtNamedFunction>() != null
+        getStrictParentOfType<KtNamedFunction>() != null
 
     private class AssignmentVisitor : DetektVisitor() {
 
         private val declarations = mutableSetOf<KtNamedDeclaration>()
+
         // an easy way to find declarations when walking up the contexts of an assignment
         private val contextsByDeclarationName = mutableMapOf<String, MutableSet<PsiElement>>()
         private val assignments = mutableMapOf<String, MutableSet<PsiElement>>()
@@ -77,7 +80,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> {
             return declarations.filter { declaration ->
                 assignments[declaration.nameAsSafeName.identifier]
-                        ?.let { declaration.parent !in it }
+                    ?.let { declaration.parent !in it }
                     ?: true
             }
         }
@@ -114,7 +117,8 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         private fun extractAssignedName(expression: KtBinaryExpression): String? {
             val leftSide = expression.left
             if (leftSide is KtDotQualifiedExpression &&
-                    leftSide.receiverExpression is KtThisExpression) {
+                leftSide.receiverExpression is KtThisExpression
+            ) {
                 return leftSide.selectorExpression?.text
             }
             return leftSide?.text

@@ -26,11 +26,15 @@ fun Config.valueOrDefaultInternal(
             default
         }
     } catch (_: ClassCastException) {
-        error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-            " required type ${default::class.simpleName}.")
+        error(
+            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+                " required type ${default::class.simpleName}."
+        )
     } catch (_: NumberFormatException) {
-        error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-            " required type ${default::class.simpleName}.")
+        error(
+            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+                " required type ${default::class.simpleName}."
+        )
     }
 }
 

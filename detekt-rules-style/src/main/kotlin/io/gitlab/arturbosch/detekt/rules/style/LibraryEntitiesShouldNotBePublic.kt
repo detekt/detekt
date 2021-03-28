@@ -48,17 +48,25 @@ class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : R
 
     override fun visitTypeAlias(typeAlias: KtTypeAlias) {
         if (typeAlias.isPublic) {
-            report(CodeSmell(issue,
-                Entity.from(typeAlias),
-                "TypeAlias ${typeAlias.nameAsSafeName} should not be public"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(typeAlias),
+                    "TypeAlias ${typeAlias.nameAsSafeName} should not be public"
+                )
+            )
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isTopLevel && function.isPublic) {
-            report(CodeSmell(issue,
-                Entity.from(function),
-                "Top level function ${function.nameAsSafeName} should not be public"))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(function),
+                    "Top level function ${function.nameAsSafeName} should not be public"
+                )
+            )
         }
     }
 }

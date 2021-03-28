@@ -100,11 +100,13 @@ class SpekTestDiscovery(config: Config = Config.empty) : Rule(config) {
             val fqType = initExpr?.getType(bindingContext)
                 ?.getJetTypeFqName(false)
             if (fqType != null && fqType !in allowedTypes) {
-                report(CodeSmell(
-                    issue,
-                    Entity.atName(property),
-                    "Variable declarations which do not met the allowed types should be memoized."
-                ))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(property),
+                        "Variable declarations which do not met the allowed types should be memoized."
+                    )
+                )
             }
         }
     }
