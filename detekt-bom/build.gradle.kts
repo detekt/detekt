@@ -5,7 +5,7 @@ plugins {
 dependencies {
     val version = object {
         val spek = "2.0.15"
-        val ktlint = "0.40.0"
+        val ktlint = "0.41.0"
     }
 
     constraints {
