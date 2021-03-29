@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.safeAs
-import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
@@ -66,8 +66,9 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
     private fun checkForDowncast(parent: KtExpression, left: KtExpression, right: KtTypeReference?) {
         val lhsType = left
             .getType(bindingContext)
-            ?.nameIfStandardType
-            ?.identifier
+            ?.fqNameOrNull()
+            ?.shortName()
+            ?.asString()
 
         val rhsType = right
             ?.typeElement
