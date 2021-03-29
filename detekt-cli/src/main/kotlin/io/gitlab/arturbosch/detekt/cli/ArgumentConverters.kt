@@ -59,7 +59,7 @@ class JvmTargetConverter : IStringConverter<JvmTarget> {
 class ClasspathResourceConverter : IStringConverter<URL> {
     override fun convert(resource: String): URL {
         if (resource.startsWith("http://") || resource.startsWith("https://")) {
-            return URL(resource);
+            return URL(resource)
         } else {
             val relativeResource = if (resource.startsWith("/")) resource else "/$resource"
             return javaClass.getResource(relativeResource)
