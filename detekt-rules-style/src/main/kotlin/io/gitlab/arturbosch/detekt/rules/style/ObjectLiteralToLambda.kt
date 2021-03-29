@@ -7,19 +7,27 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
-import org.jetbrains.kotlin.psi.KtSuperTypeEntry
+import org.jetbrains.kotlin.psi.KtThisExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitClassReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * An anonymous object that does nothing other than the implementation of a single method
  * can be used as a lambda.
  *
+ * See https://kotlinlang.org/docs/java-interop.html#sam-conversions
  * See https://kotlinlang.org/docs/fun-interfaces.html
  *
  * <noncompliant>
@@ -33,9 +41,8 @@ import org.jetbrains.kotlin.types.KotlinType
  * Foo {
  * }
  * </compliant>
- *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
@@ -44,31 +51,51 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val KotlinType.isSamInterface
+    private val KotlinType.couldBeSamInterface
         get() = (constructor.declarationDescriptor as ClassDescriptor)
             .isDefinitelyNotSamInterface
             .not()
 
-    private fun KotlinType.firstSuperType(): KotlinType =
-        constructor.supertypes.first()
+    private fun KotlinType.singleSuperTypeOrNull(): KotlinType? =
+        constructor.supertypes.singleOrNull()
 
-    private fun KtObjectDeclaration.hasSingleOverriddenMethod(): Boolean =
-        name == null &&
-            superTypeListEntries.size == 1 &&
-            superTypeListEntries[0] is KtSuperTypeEntry &&
-            hasOneNamedOverriddenMethod()
+    private fun KtObjectDeclaration.singleNamedMethodOrNull(): KtNamedFunction? =
+        declarations.singleOrNull() as? KtNamedFunction
 
-    private fun KtObjectDeclaration.hasOneNamedOverriddenMethod(): Boolean =
-        declarations.size == 1 &&
-            (declarations[0] as? KtNamedFunction)?.isOverride() == true
+    private fun KtExpression.containsThisReference(descriptor: DeclarationDescriptor) =
+        anyDescendantOfType<KtThisExpression> { thisReference ->
+            bindingContext[BindingContext.REFERENCE_TARGET, thisReference.instanceReference] == descriptor
+        }
+
+    private fun KtExpression.containsOwnMethodCall(descriptor: DeclarationDescriptor) =
+        anyDescendantOfType<KtExpression> {
+            it.getResolvedCall(bindingContext)?.let { resolvedCall ->
+                resolvedCall.dispatchReceiver.isImplicitClassFor(descriptor) ||
+                    resolvedCall.extensionReceiver.isImplicitClassFor(descriptor)
+            } == true
+        }
+
+    private fun ReceiverValue?.isImplicitClassFor(descriptor: DeclarationDescriptor) =
+        this is ImplicitClassReceiver && classDescriptor == descriptor
 
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
-        if (expression.objectDeclaration.hasSingleOverriddenMethod()) {
-            val superType = bindingContext.getType(expression)?.firstSuperType() ?: return
-            superType.constructor.declarationDescriptor
-            if (superType.isSamInterface) {
+        val declaration = expression.objectDeclaration
+        val singleNamedMethod = declaration.singleNamedMethodOrNull()
+
+        if (
+            declaration.name == null &&
+            bindingContext.getType(expression)?.singleSuperTypeOrNull()?.couldBeSamInterface == true &&
+            singleNamedMethod?.isOverride() == true
+        ) {
+            val functionBody = singleNamedMethod.bodyExpression!!
+            val objectDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, declaration]!!
+
+            if (
+                !functionBody.containsThisReference(objectDescriptor) &&
+                !functionBody.containsOwnMethodCall(objectDescriptor)
+            ) {
                 report(CodeSmell(issue, Entity.from(expression), issue.description))
             }
         }

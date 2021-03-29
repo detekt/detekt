@@ -125,6 +125,21 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSize(1)
                     .hasSourceLocations(SourceLocation(7, 5))
             }
+
+            it("expression body syntax") {
+                val code = """
+                fun interface Sam {
+                    fun foo(): Int
+                }
+                val a = object : Sam {
+                    override fun foo() = 3
+                }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(4, 9))
+            }
         }
 
         context("is not correct implement") {
@@ -337,6 +352,124 @@ class ObjectLiteralToLambdaSpec : Spek({
 
                     override fun nextElement(): Int {
                         return 1
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+        }
+
+        context("object use itself") {
+            it("call `this`") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+            
+                fun aa() {
+                    object : Sam {
+                        override fun foo() {
+                            this
+                        }
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("use `this`") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+
+                fun Sam.bar() {}
+            
+                fun aa() {
+                    object : Sam {
+                        override fun foo() {
+                            bar()
+                        }
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("use class method") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+            
+                fun aa() {
+                    object : Sam {
+                        override fun foo() {
+                            hashCode()
+                        }
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("call `this` inside nested object") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+            
+                fun aa() {
+                    object : Sam {
+                        override fun foo() {
+                            object : Sam {
+                                override fun foo() {
+                                    this
+                                }
+                            }
+                        }
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(6, 5))
+            }
+
+            it("call labeled `this`") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+            
+                class Target {
+                    init {
+                        object : Sam {
+                            override fun foo() {
+                                this@Target
+                            }
+                        }
+                    }
+                }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(7, 9))
+            }
+
+            it("recursive call") {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+            
+                fun a() {
+                    object : Sam {
+                        override fun foo() {
+                            foo()
+                        }
                     }
                 }
                 """
