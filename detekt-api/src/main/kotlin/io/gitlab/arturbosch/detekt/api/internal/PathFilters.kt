@@ -79,10 +79,3 @@ fun Config.valueOrDefaultCommaSeparated(
         fallBack()
     }
 }
-
-fun Config.valueOrDefaultCommaSeparated(
-    key: String,
-    default: Set<String>
-): Set<String> {
-    return valueOrDefaultCommaSeparated(key, default.toList()).toSet()
-}

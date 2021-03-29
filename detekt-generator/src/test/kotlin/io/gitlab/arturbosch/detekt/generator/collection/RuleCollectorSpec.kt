@@ -169,10 +169,10 @@ class RuleCollectorSpec : Spek({
                         /**
                          * description
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: `'[A-Z$]'`)  ")
-                            val config: String = "[A-Z$]",
-                        ) : Rule
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config("[A-Z$]")
+                        }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(1)
@@ -187,14 +187,47 @@ class RuleCollectorSpec : Spek({
                         /**
                          * description
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: `99`)")
-                            val config: Int = 99,
-                        ) : Rule
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(99)
+                        }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(1)
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value when defined with named parameter") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(defaultValue = 99)
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value for list of strings") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<String> by config(
+                                listOf(
+                                    "a", 
+                                    "b"
+                                )
+                            )
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
                 }
 
                 it("contains multiple configuration options") {
@@ -202,12 +235,13 @@ class RuleCollectorSpec : Spek({
                         /**
                          * description
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: `''`)")
-                            val config: String = "",
-                            @Configuration("description (default: `''`)")
-                            val config2: String = "",
-                        ) : Rule
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config("")
+                            
+                            @Configuration("description")
+                            private val config2: String by config("")
+                        }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(2)
@@ -218,18 +252,105 @@ class RuleCollectorSpec : Spek({
                         /**
                          * description
                          */
-                        class SomeRandomClass(
+                        class SomeRandomClass() : Rule {
                             @Configuration(
                                 "This is a " +
                                 "multi line " +
-                                "description " + 
-                                "(default: `'a'`)")
-                            val config: String = "",
-                        ) : Rule
+                                "description")
+                            private val config: String by config("a")
+                        }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                }
+
+                it("extracts default value when it is an Int constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = 99
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value when it is an Int constant as named parameter") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(defaultValue = DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = 99
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+                it("extracts default value when it is a String constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config(DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                }
+                it("extracts default value for list of strings from constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<String> by config(DEFAULT_CONFIG_VALUE)
+
+                            companion object {
+                                private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
+                }
+
+                it("extracts default value for list of strings partially from constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
+
+                            companion object {
+                                private val DEFAULT_CONFIG_VALUE_A = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
                 }
 
                 it("is marked as deprecated as well") {
@@ -237,11 +358,11 @@ class RuleCollectorSpec : Spek({
                         /**
                          * description
                          */
-                        class SomeRandomClass(
+                        class SomeRandomClass() : Rule {
                             @Deprecated("use config1 instead")
-                            @Configuration("description (default: `''`)")
-                            val config: String = "",
-                        ) : Rule
+                            @Configuration("description")
+                            private val config: String by config("")
+                        }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
@@ -253,53 +374,66 @@ class RuleCollectorSpec : Spek({
                          * description
                          * @configuration config1 - description (default: `''`)
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: `''`)")
-                            val config2: String = "",
-                        ) : Rule
-                    """
-                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-                }
-
-                it("config option doesn't have a default value") {
-                    val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass(
+                        class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            val config: String = "",
-                        ) : Rule
+                            private val config: String by config("")
+                        }                        
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("has a blank default value") {
+                it("fails if not used in combination with delegate") {
                     val code = """
                         /**
                          * description
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: ``)")
-                            val config: String = "",
-                        ) : Rule
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String = "foo"
+                        }                        
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("has an incorrectly delimited default value") {
+                it("fails if not used in combination with config delegate") {
                     val code = """
                         /**
                          * description
                          */
-                        class SomeRandomClass(
-                            @Configuration("description (default: true)")
-                            val config: Boolean = true,
-                        ) : Rule
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by lazy { "foo" }
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if config delegate is used without annotation") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            private val config: String by config("")
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if config delegate is used with unsupported type") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<Int> by config(listOf(1, 2))
+                        }                        
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
             }
+
             describe("as part of kdoc") {
                 it("contains no configuration options by default") {
                     val code = """

@@ -25,7 +25,7 @@ private fun KtAnnotationEntry.firstParameterOrNull() =
         ?.text
         ?.withoutQuotes()
 
-private fun String.withoutQuotes() = removePrefix(QUOTES)
+internal fun String.withoutQuotes() = removePrefix(QUOTES)
     .removeSuffix(QUOTES)
     .replace(STRING_CONCAT_REGEX, "")
 

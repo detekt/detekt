@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-@Target(AnnotationTarget.VALUE_PARAMETER)
+@Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.SOURCE)
 annotation class Configuration(
     val description: String,
