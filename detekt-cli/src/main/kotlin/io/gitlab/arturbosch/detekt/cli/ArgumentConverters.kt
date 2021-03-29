@@ -58,8 +58,12 @@ class JvmTargetConverter : IStringConverter<JvmTarget> {
 
 class ClasspathResourceConverter : IStringConverter<URL> {
     override fun convert(resource: String): URL {
-        val relativeResource = if (resource.startsWith("/")) resource else "/$resource"
-        return javaClass.getResource(relativeResource)
-            ?: throw ParameterException("Classpath resource '$resource' does not exist!")
+        if (resource.startsWith("http://") || resource.startsWith("https://")) {
+            return URL(resource);
+        } else {
+            val relativeResource = if (resource.startsWith("/")) resource else "/$resource"
+            return javaClass.getResource(relativeResource)
+                ?: throw ParameterException("Classpath resource '$resource' does not exist!")
+        }
     }
 }
