@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -22,10 +23,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * <compliant>
  * requireNotNull(x)
  * </compliant>
- *
- * @since 1.12.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UseRequireNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "UseRequireNotNull",

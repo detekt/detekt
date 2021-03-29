@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -37,13 +38,16 @@ import org.jetbrains.kotlin.types.isNullable
  * } ?: emptyList()
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
         "Chains of safe calls on non-nullable types can be surrounded with run {}",
-            Debt.TEN_MINS)
+        Debt.TEN_MINS
+    )
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
@@ -63,8 +67,6 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
             receiver = receiver.receiverExpression
         }
 
-        if (counter >= 1) report(
-            CodeSmell(issue, Entity.from(expression), issue.description)
-        )
+        if (counter >= 1) report(CodeSmell(issue, Entity.from(expression), issue.description))
     }
 }

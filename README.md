@@ -6,7 +6,7 @@
 [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?event=push)
-[![codecov](https://codecov.io/gh/detekt/detekt/branch/master/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
+[![codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
 [![CodeFactor](https://www.codefactor.io/repository/github/detekt/detekt/badge)](https://www.codefactor.io/repository/github/detekt/detekt)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt-intellij-plugin.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt?ref=badge_shield)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
@@ -45,9 +45,9 @@ Visit [the project website](https://detekt.github.io/detekt/) for installation g
 - [Suppressing issues via baseline file](https://detekt.github.io/detekt/baseline.html)
 - [Configuring detekt](https://detekt.github.io/detekt/configurations.html)
 - Sample Gradle integrations examples:
-    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/master/buildSrc/src/main/kotlin/detekt.gradle.kts)
-    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
-    - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/master/pom.xml)
+    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/buildSrc/src/main/kotlin/detekt.gradle.kts)
+    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/main/build.gradle)
+    - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/main/pom.xml)
     - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
     - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
 
@@ -77,9 +77,9 @@ buildscript {
     mavenCentral()
     jcenter {
         content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup "org.jetbrains.kotlinx"
+            // Only download the 'kotlinx-html-jvm' module from JCenter, but nothing else.
+            // detekt needs 'kotlinx-html-jvm' for the HTML report.
+            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
         }
     }
 }
@@ -103,17 +103,17 @@ detekt {
 }
 
 
-// Groovy dsl
-tasks.detekt.jvmTarget = "1.8"
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 
 // or
 
-// Kotlin dsl
-tasks {
-    withType<Detekt> {
-        // Target version of the generated JVM bytecode. It is used for type resolution.
-        this.jvmTarget = "1.8"
-    }
+// Kotlin DSL
+tasks.withType<Detekt>.configureEach {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
 }
 ```
 
@@ -128,7 +128,7 @@ which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
 }
 ```
 
@@ -222,6 +222,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Severn Everett](https://github.com/severn-everett) - New rule: SleepInsteadOfDelay
 - [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
 - [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
+- [Ivo Smid](https://github.com/bedla) - Fix Local development on Windows
 
 ### Mentions
 

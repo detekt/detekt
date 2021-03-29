@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.companionObject
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtClass
@@ -37,15 +38,17 @@ import org.jetbrains.kotlin.psi.KtProperty
  *     }
  * }
  * </compliant>
- *
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Warning,
-            "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
-                    "The serialVersionUID field should be a constant long value inside a companion object.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Warning,
+        "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
+            "The serialVersionUID field should be a constant long value inside a companion object.",
+        Debt.FIVE_MINS
+    )
 
     private val versionUID = "serialVersionUID"
 
@@ -53,8 +56,14 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         if (!klass.isInterface() && isImplementingSerializable(klass)) {
             val companionObject = klass.companionObject()
             if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
-                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} implements" +
-                        " the Serializable interface and should thus define a serialVersionUID."))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(klass),
+                        "The class ${klass.nameAsSafeName} implements" +
+                            " the Serializable interface and should thus define a serialVersionUID."
+                    )
+                )
             }
         }
         super.visitClass(klass)
@@ -62,16 +71,23 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (!declaration.isCompanion() &&
-                isImplementingSerializable(declaration) &&
-                !hasCorrectSerialVersionUUID(declaration)) {
-            report(CodeSmell(issue, Entity.from(declaration), "The object ${declaration.nameAsSafeName} " +
-                    "implements the Serializable interface and should thus define a serialVersionUID."))
+            isImplementingSerializable(declaration) &&
+            !hasCorrectSerialVersionUUID(declaration)
+        ) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(declaration),
+                    "The object ${declaration.nameAsSafeName} " +
+                        "implements the Serializable interface and should thus define a serialVersionUID."
+                )
+            )
         }
         super.visitObjectDeclaration(declaration)
     }
 
     private fun isImplementingSerializable(classOrObject: KtClassOrObject) =
-            classOrObject.superTypeListEntries.any { it.text == "Serializable" }
+        classOrObject.superTypeListEntries.any { it.text == "Serializable" }
 
     private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
         val property = declaration.body?.properties?.firstOrNull { it.name == versionUID }
@@ -84,8 +100,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 
     private fun hasLongAssignment(property: KtProperty): Boolean {
         val assignmentText = property.children
-                .singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
+            .singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
         return assignmentText != null && assignmentText.last() == 'L' &&
-                assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
+            assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
     }
 }

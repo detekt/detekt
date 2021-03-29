@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.cfg.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -63,11 +65,9 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * }
  * </compliant>
  * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
- *
- * @active since v1.2.0
- *
- * @requiresTypeResolution
  */
+@ActiveByDefault(since = "1.2.0")
+@RequiresTypeResolution
 class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

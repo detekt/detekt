@@ -22,10 +22,9 @@ class BaselineResultMapping : ReportingExtension {
 
     override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
         val baselineFile = baselineFile
-        require(
-            !createBaseline ||
-                    (createBaseline && baselineFile != null)
-        ) { "Invalid baseline options invariant." }
+        require(!createBaseline || (createBaseline && baselineFile != null)) {
+            "Invalid baseline options invariant."
+        }
 
         return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings
     }

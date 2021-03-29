@@ -17,10 +17,12 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
 
             describe("using ${builder.gradleBuildName}") {
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to all subprojects individually
                     |without sources in root project using the subprojects block
-                """.trimMargin()) {
+                """.trimMargin()
+                ) {
                     val projectLayout = ProjectLayout(0).apply {
                         addSubmodule("child1", 2)
                         addSubmodule("child2", 4)
@@ -57,10 +59,12 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                     }
                 }
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to main project
                     |and subprojects individually using the allprojects block
-                """.trimMargin()) {
+                """.trimMargin()
+                ) {
                     val projectLayout = ProjectLayout(1).apply {
                         addSubmodule("child1", 2)
                         addSubmodule("child2", 4)

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -38,22 +39,26 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * (default: `- IllegalArgumentException
  *            - IllegalStateException
  *            - IOException`)
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
-            "A call to the default constructor of an exception was detected. " +
-                    "Instead one of the constructor overloads should be called. " +
-                    "This allows to provide more meaningful exceptions.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "ThrowingExceptionsWithoutMessageOrCause",
+        Severity.Warning,
+        "A call to the default constructor of an exception was detected. " +
+            "Instead one of the constructor overloads should be called. " +
+            "This allows to provide more meaningful exceptions.",
+        Debt.FIVE_MINS
+    )
 
     private val exceptions = valueOrDefaultCommaSeparated(EXCEPTIONS, exceptionsDefaults)
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val calleeExpressionText = expression.calleeExpression?.text
         if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
-            expression.valueArguments.isEmpty()) {
+            expression.valueArguments.isEmpty()
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
         super.visitCallExpression(expression)

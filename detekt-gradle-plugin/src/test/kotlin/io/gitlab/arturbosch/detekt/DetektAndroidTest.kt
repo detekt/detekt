@@ -33,20 +33,24 @@ object DetektAndroidTest : Spek({
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":app:detektMain",
-                    ":app:detektDebug"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":app:detektMain",
+                        ":app:detektDebug"
+                    )
+                )
             }
 
             gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":app:detektDebugUnitTest",
-                    ":app:detektDebugAndroidTest"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":app:detektDebugUnitTest",
+                        ":app:detektDebugAndroidTest"
+                    )
+                )
             }
 
             gradleRunner.runTasksAndCheckResult(":app:check") { buildResult ->
@@ -102,20 +106,24 @@ object DetektAndroidTest : Spek({
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektMain",
-                    ":lib:detektDebug"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektMain",
+                        ":lib:detektDebug"
+                    )
+                )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektDebugUnitTest",
-                    ":lib:detektDebugAndroidTest"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektDebugUnitTest",
+                        ":lib:detektDebugAndroidTest"
+                    )
+                )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:check") { buildResult ->
@@ -145,21 +153,25 @@ object DetektAndroidTest : Spek({
             gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
 
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektYoungHarryDebug",
-                    ":lib:detektOldHarryDebug",
-                    ":lib:detektOldHarryRelease"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektYoungHarryDebug",
+                        ":lib:detektOldHarryDebug",
+                        ":lib:detektOldHarryRelease"
+                    )
+                )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektYoungHarryDebugUnitTest",
-                    ":lib:detektOldHarryDebugUnitTest",
-                    ":lib:detektOldHarryReleaseUnitTest",
-                    ":lib:detektYoungHarryDebugAndroidTest",
-                    ":lib:detektOldHarryDebugAndroidTest"
-                ))
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektYoungHarryDebugUnitTest",
+                        ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektOldHarryReleaseUnitTest",
+                        ":lib:detektYoungHarryDebugAndroidTest",
+                        ":lib:detektOldHarryDebugAndroidTest"
+                    )
+                )
             }
         }
 
@@ -184,21 +196,25 @@ object DetektAndroidTest : Spek({
             gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
 
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektYoungHarryDebug",
-                    ":lib:detektOldHarryDebug"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektYoungHarryDebug",
+                        ":lib:detektOldHarryDebug"
+                    )
+                ).doesNotContain(
                     ":lib:detektOldHarryRelease"
                 )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektYoungHarryDebugUnitTest",
-                    ":lib:detektOldHarryDebugUnitTest",
-                    ":lib:detektYoungHarryDebugAndroidTest",
-                    ":lib:detektOldHarryDebugAndroidTest"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektYoungHarryDebugUnitTest",
+                        ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektYoungHarryDebugAndroidTest",
+                        ":lib:detektOldHarryDebugAndroidTest"
+                    )
+                ).doesNotContain(
                     ":lib:detektOldHarryReleaseUnitTest"
                 )
             }
@@ -225,19 +241,23 @@ object DetektAndroidTest : Spek({
             gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
 
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektOldHarryDebug"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektOldHarryDebug"
+                    )
+                ).doesNotContain(
                     ":lib:detektYoungHarryDebug",
                     ":lib:detektOldHarryRelease"
                 )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektOldHarryDebugUnitTest",
-                    ":lib:detektOldHarryDebugAndroidTest"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektOldHarryDebugAndroidTest"
+                    )
+                ).doesNotContain(
                     ":lib:detektYoungHarryDebugUnitTest",
                     ":lib:detektYoungHarryDebugAndroidTest",
                     ":lib:detektOldHarryReleaseUnitTest"
@@ -266,20 +286,24 @@ object DetektAndroidTest : Spek({
             gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
 
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektOldHarryDebug",
-                    ":lib:detektOldHarryRelease"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektOldHarryDebug",
+                        ":lib:detektOldHarryRelease"
+                    )
+                ).doesNotContain(
                     ":lib:detektYoungHarryDebug"
                 )
             }
 
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(listOf(
-                    ":lib:detektOldHarryDebugUnitTest",
-                    ":lib:detektOldHarryDebugAndroidTest",
-                    ":lib:detektOldHarryReleaseUnitTest"
-                )).doesNotContain(
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektOldHarryDebugAndroidTest",
+                        ":lib:detektOldHarryReleaseUnitTest"
+                    )
+                ).doesNotContain(
                     ":lib:detektYoungHarryDebugUnitTest",
                     ":lib:detektYoungHarryDebugAndroidTest"
                 )

@@ -32,12 +32,15 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (amount > threshold) {
-            report(ThresholdedCodeSmell(issue,
-                entity = Entity.from(file),
-                metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
-                message = "The file ${file.name} has $amount function declarations. " +
-                    "Threshold is specified with $THRESHOLD.",
-                references = emptyList())
+            report(
+                ThresholdedCodeSmell(
+                    issue,
+                    entity = Entity.from(file),
+                    metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+                    message = "The file ${file.name} has $amount function declarations. " +
+                        "Threshold is specified with $THRESHOLD.",
+                    references = emptyList()
+                )
             )
         }
         amount = 0

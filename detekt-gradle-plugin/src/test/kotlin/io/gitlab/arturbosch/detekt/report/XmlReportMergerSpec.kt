@@ -13,24 +13,28 @@ internal class XmlReportMergerSpec : Spek({
 
         it("passes for same files") {
             val file1 = File.createTempFile("detekt1", "xml").apply {
-                writeText("""
+                writeText(
+                    """
                     <?xml version="1.0" encoding="utf-8"?>
                     <checkstyle version="4.3">
                     <file name="Sample1.kt">
                     $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
                     </file>
                     </checkstyle>
-                """.trimIndent())
+                    """.trimIndent()
+                )
             }
             val file2 = File.createTempFile("detekt2", "xml").apply {
-                writeText("""
+                writeText(
+                    """
                     <?xml version="1.0" encoding="utf-8"?>
                     <checkstyle version="4.3">
                     <file name="Sample2.kt">
                     $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
                     </file>
                     </checkstyle>
-                """.trimIndent())
+                    """.trimIndent()
+                )
             }
             val output = File.createTempFile("output", "xml")
             XmlReportMerger.merge(setOf(file1, file2), output)

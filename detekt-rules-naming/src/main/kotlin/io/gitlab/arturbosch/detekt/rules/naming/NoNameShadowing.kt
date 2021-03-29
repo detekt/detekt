@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -44,8 +45,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
@@ -82,18 +83,21 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
         super.visitLambdaExpression(lambdaExpression)
         if (bindingContext != BindingContext.EMPTY &&
             lambdaExpression.hasImplicitParameter() &&
-            lambdaExpression.hasParentImplicitParameterLambda()) {
-            report(CodeSmell(
-                issue,
-                Entity.from(lambdaExpression),
-                "Name shadowed: implicit lambda parameter 'it'"
-            ))
+            lambdaExpression.hasParentImplicitParameterLambda()
+        ) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(lambdaExpression),
+                    "Name shadowed: implicit lambda parameter 'it'"
+                )
+            )
         }
     }
 
     private fun KtLambdaExpression.hasImplicitParameter(): Boolean =
         valueParameters.isEmpty() &&
-                bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull() != null
+            bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull() != null
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
         getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) { it.hasImplicitParameter() } != null

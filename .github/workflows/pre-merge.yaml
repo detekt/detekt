@@ -3,7 +3,7 @@ name: Pre Merge Checks
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
       - '**'
@@ -53,7 +53,7 @@ jobs:
 
 
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest --parallel -x detekt
+      run: ./gradlew build moveJarForIntegrationTest -x detekt --stacktrace
     - name: Run detekt-cli --help
       run: java -jar ./build/detekt-cli-all.jar --help
     - name: Run detekt-cli with argsfile
@@ -85,7 +85,7 @@ jobs:
       with:
         java-version: 14
     - name: Verify Generated Detekt Config File
-      run: ./gradlew verifyGeneratorOutput
+      run: ./gradlew verifyGeneratorOutput --stacktrace
 
 
   compile-test-snippets:
@@ -113,4 +113,4 @@ jobs:
         with:
           java-version: 15
       - name: Build and compile test snippets
-        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true --parallel
+        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true --stacktrace

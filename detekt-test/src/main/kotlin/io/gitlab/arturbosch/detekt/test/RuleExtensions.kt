@@ -48,6 +48,7 @@ fun BaseRule.lintWithContext(
     }
     val bindingContext = getContextForPaths(environment, listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
+
     @Suppress("DEPRECATION")
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
@@ -55,8 +56,8 @@ fun BaseRule.lintWithContext(
 }
 
 fun BaseRule.compileAndLintWithContext(
-        environment: KotlinCoreEnvironment,
-        @Language("kotlin") content: String
+    environment: KotlinCoreEnvironment,
+    @Language("kotlin") content: String
 ): List<Finding> {
     if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
@@ -66,8 +67,12 @@ fun BaseRule.compileAndLintWithContext(
 
 private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
     TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-        environment.project, paths, NoScopeRecordCliBindingTrace(),
-        environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
+        environment.project,
+        paths,
+        NoScopeRecordCliBindingTrace(),
+        environment.configuration,
+        environment::createPackagePartProvider,
+        ::FileBasedDeclarationProviderFactory
     ).bindingContext
 
 fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)

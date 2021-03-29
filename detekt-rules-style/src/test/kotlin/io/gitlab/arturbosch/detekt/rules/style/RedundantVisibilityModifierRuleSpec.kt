@@ -20,11 +20,11 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         it("does not report overridden function of abstract class w/ public modifier") {
             val code = """
                 abstract class A {
-                    abstract protected fun A()
+                    abstract protected fun f()
                 }
 
                 class Test : A() {
-                    override public fun A() {}
+                    override public fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -33,11 +33,11 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         it("does not report overridden function of abstract class w/o public modifier") {
             val code = """
                 abstract class A {
-                    abstract protected fun A()
+                    abstract protected fun f()
                 }
 
                 class Test : A() {
-                    override fun A() {}
+                    override fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -46,11 +46,11 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         it("does not report overridden function of interface") {
             val code = """
                 interface A {
-                    fun A()
+                    fun f()
                 }
 
                 class Test : A {
-                    override public fun A() {}
+                    override public fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -58,9 +58,9 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("should ignore the issue by alias suppression") {
             val code = """
-                class Test{
+                class Test {
                     @Suppress("RedundantVisibilityModifier")
-                    public fun A() {}
+                    public fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -68,8 +68,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports public function in class") {
             val code = """
-                class Test{
-                    public fun A() {}
+                class Test {
+                    public fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -77,8 +77,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("does not report function in class w/o modifier") {
             val code = """
-                class Test{
-                    fun A() {}
+                class Test {
+                    fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -86,8 +86,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports public class") {
             val code = """
-                public class Test(){
-                    fun test(){}
+                public class Test {
+                    fun f() {}
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -95,8 +95,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports interface w/ public modifier") {
             val code = """
-                public interface Test{
-                    public fun test()
+                public interface Test {
+                    public fun f()
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(2)
@@ -104,7 +104,7 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("reports field w/ public modifier") {
             val code = """
-                class Test{
+                class Test {
                     public val str : String = "test"
                 }
             """
@@ -113,7 +113,7 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
         it("does not report field w/o public modifier") {
             val code = """
-                class Test{
+                class Test {
                     val str : String = "test"
                 }
             """
@@ -149,9 +149,7 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         it("reports internal modifier on nested class in private object") {
             val code = """
                 private object A {
-
                     internal class InternalClass
-
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -160,9 +158,7 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         it("reports internal modifier on function declaration in private object") {
             val code = """
                 private object A {
-
                     internal fun internalFunction() {}
-
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -171,7 +167,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
         describe("Explicit API mode") {
 
             val code by memoized {
-                compileContentForTest("""
+                compileContentForTest(
+                    """
                     public class A() {
                         fun f()
                     }"""

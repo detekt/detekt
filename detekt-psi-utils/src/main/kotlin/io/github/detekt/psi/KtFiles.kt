@@ -35,9 +35,10 @@ data class FilePath constructor(
 ) {
 
     init {
-        require(basePath == null ||
-            relativePath == null ||
-            absolutePath == basePath.resolve(relativePath).normalize()
+        require(
+            basePath == null ||
+                relativePath == null ||
+                absolutePath == basePath.resolve(relativePath).normalize()
         ) {
             "Absolute path = $absolutePath much match base path = $basePath and relative path = $relativePath"
         }

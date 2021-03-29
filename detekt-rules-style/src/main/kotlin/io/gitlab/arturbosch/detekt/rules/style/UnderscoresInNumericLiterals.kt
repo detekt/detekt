@@ -37,10 +37,14 @@ import java.util.Locale
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
-                    "should be underscore separated to increase readability. Underscores that do not make groups of " +
-                    "3 digits are also reported.", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
+            "should be underscore separated to increase readability. Underscores that do not make groups of " +
+            "3 digits are also reported.",
+        Debt.FIVE_MINS
+    )
 
     private val underscoreNumberRegex = Regex("[0-9]{1,3}(_[0-9]{3})*")
 
@@ -62,14 +66,20 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberString: String) {
         if (!numberString.matches(underscoreNumberRegex)) {
-            report(CodeSmell(issue, Entity.from(expression), "This numeric literal should be separated " +
-                    "by underscores in order to increase readability."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "This numeric literal should be separated " +
+                        "by underscores in order to increase readability."
+                )
+            )
         }
     }
 
     private fun isNotDecimalNumber(rawText: String): Boolean {
         return rawText.replace("_", "").toDoubleOrNull() == null || rawText.startsWith(HEX_PREFIX) ||
-                rawText.startsWith(BIN_PREFIX)
+            rawText.startsWith(BIN_PREFIX)
     }
 
     private fun KtConstantExpression.isSerialUidProperty(): Boolean {
@@ -90,10 +100,10 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
-                .toLowerCase(Locale.US)
-                .removeSuffix("l")
-                .removeSuffix("d")
-                .removeSuffix("f")
+            .toLowerCase(Locale.US)
+            .removeSuffix("l")
+            .removeSuffix("d")
+            .removeSuffix("f")
     }
 
     companion object {

@@ -3,7 +3,7 @@ name: Deploy Snapshot
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   gradle:
@@ -31,7 +31,7 @@ jobs:
         java-version: 8
 
     - name: Build detekt
-      run: ./gradlew build --build-cache --parallel
+      run: ./gradlew build --build-cache --stacktrace
 
     - name: Deploy Snapshot
       env:

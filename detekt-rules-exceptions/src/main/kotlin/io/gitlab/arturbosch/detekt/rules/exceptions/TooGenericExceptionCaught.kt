@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -45,25 +46,30 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *            - Throwable`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "Caught exception is too generic. " +
-                    "Prefer catching specific exceptions to the case that is currently handled.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "Caught exception is too generic. " +
+            "Prefer catching specific exceptions to the case that is currently handled.",
+        Debt.TWENTY_MINS
+    )
 
     private val exceptions: Set<String> = valueOrDefault(
-            CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
+        CAUGHT_EXCEPTIONS_PROPERTY,
+        caughtExceptionDefaults
+    ).toHashSet()
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchParameter?.let {
             if (isTooGenericException(it.typeReference) &&
-                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
+                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
+            ) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
@@ -81,12 +87,12 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 }
 
 val caughtExceptionDefaults = listOf(
-        "ArrayIndexOutOfBoundsException",
-        "Error",
-        "Exception",
-        "IllegalMonitorStateException",
-        "NullPointerException",
-        "IndexOutOfBoundsException",
-        "RuntimeException",
-        "Throwable"
+    "ArrayIndexOutOfBoundsException",
+    "Error",
+    "Exception",
+    "IllegalMonitorStateException",
+    "NullPointerException",
+    "IndexOutOfBoundsException",
+    "RuntimeException",
+    "Throwable"
 )

@@ -1,23 +1,14 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 plugins {
     kotlin("jvm") apply false
     jacoco
     packaging
     releasing
     detekt
-    id("org.jetbrains.dokka") apply false
-    id("com.github.johnrengelman.shadow") apply false
     id("com.github.ben-manes.versions")
     id("org.sonarqube")
-    id("binary-compatibility-validator")
-}
-
-repositories {
-    jcenter()
-}
-
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
 }
 
 allprojects {
@@ -27,16 +18,16 @@ allprojects {
 
 jacoco.toolVersion = Versions.JACOCO
 
-val examplesOrTestUtils = setOf(
-    "detekt-bom",
-    "detekt-test",
-    "detekt-test-utils",
-    "detekt-sample-extensions"
-)
-
 tasks {
     jacocoTestReport {
         executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        val examplesOrTestUtils = setOf(
+            "detekt-bom",
+            "detekt-test",
+            "detekt-test-utils",
+            "detekt-sample-extensions"
+        )
 
         subprojects
             .filterNot { it.name in examplesOrTestUtils }
@@ -52,8 +43,64 @@ tasks {
     }
 }
 
-apiValidation {
-    // We need to perform api validations for external APIs, for :detekt-api and :detekt-psi-utils
-    ignoredProjects.addAll(subprojects.filter { it.name !in listOf("detekt-api", "detekt-psi-utils") }.map { it.name })
-    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
+val analysisDir = file(projectDir)
+val baselineFile = file("$rootDir/config/detekt/baseline.xml")
+val configFile = file("$rootDir/config/detekt/detekt.yml")
+val statisticsConfigFile = file("$rootDir/config/detekt/statistics.yml")
+
+val kotlinFiles = "**/*.kt"
+val kotlinScriptFiles = "**/*.kts"
+val resourceFiles = "**/resources/**"
+val buildFiles = "**/build/**"
+
+val detektFormat by tasks.registering(Detekt::class) {
+    description = "Formats whole project."
+    parallel = true
+    disableDefaultRuleSets = true
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, configFile))
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
+    reports {
+        xml.enabled = false
+        html.enabled = false
+        txt.enabled = false
+    }
+}
+
+val detektAll by tasks.registering(Detekt::class) {
+    description = "Runs the whole project at once."
+    parallel = true
+    buildUponDefaultConfig = true
+    setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, configFile))
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
+    reports {
+        xml.enabled = false
+        html.enabled = false
+        txt.enabled = false
+    }
+}
+
+val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
+    description = "Overrides current baseline."
+    buildUponDefaultConfig.set(true)
+    ignoreFailures.set(true)
+    parallel.set(true)
+    setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, configFile))
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
 }

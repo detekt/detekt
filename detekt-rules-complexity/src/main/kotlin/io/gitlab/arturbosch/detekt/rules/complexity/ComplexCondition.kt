@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -37,17 +38,19 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  *
  * @configuration threshold - the number of conditions which will trigger the rule (default: `4`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ComplexCondition(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_CONDITIONS_COUNT
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("ComplexCondition", Severity.Maintainability,
-            "Complex conditions should be simplified and extracted into well-named methods if necessary.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ComplexCondition",
+        Severity.Maintainability,
+        "Complex conditions should be simplified and extracted into well-named methods if necessary.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -77,17 +80,20 @@ class ComplexCondition(
             val conditionString = longestBinExpr.text
             val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
             if (count >= threshold) {
-                report(ThresholdedCodeSmell(issue,
+                report(
+                    ThresholdedCodeSmell(
+                        issue,
                         Entity.from(condition),
                         Metric("SIZE", count, threshold),
                         "This condition is too complex ($count). " +
-                                "Defined complexity threshold for conditions is set to '$threshold'"))
+                            "Defined complexity threshold for conditions is set to '$threshold'"
+                    )
+                )
             }
         }
     }
 
     private fun frequency(source: String, part: String): Int {
-
         if (source.isEmpty() || part.isEmpty()) {
             return 0
         }

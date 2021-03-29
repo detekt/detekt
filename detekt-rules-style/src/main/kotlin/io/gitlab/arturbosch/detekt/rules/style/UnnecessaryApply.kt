@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -37,14 +39,17 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     environment = "test"
  * }
  * </compliant>
- *
- * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
 class UnnecessaryApply(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "The `apply` usage is unnecessary", Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "The `apply` usage is unnecessary",
+        Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -52,8 +57,9 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isApplyExpr() &&
-                expression.hasOnlyOneMemberAccessStatement() &&
-                !expression.receiverIsUsed(bindingContext)) {
+            expression.hasOnlyOneMemberAccessStatement() &&
+            !expression.receiverIsUsed(bindingContext)
+        ) {
             val message = if (expression.parent is KtSafeQualifiedExpression) {
                 "apply can be replaced with let or an if"
             } else {
@@ -64,7 +70,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
     }
 
     private fun KtCallExpression.isApplyExpr() = calleeExpression?.textMatches(APPLY_LITERAL) == true &&
-            getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() == APPLY_FQ_NAME
+        getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() == APPLY_FQ_NAME
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {

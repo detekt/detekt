@@ -49,11 +49,11 @@ class DetektCollector : Collector<RuleSetPage> {
 
     private fun List<Rule>.resolveParentRule(rules: List<Rule>) {
         this.filter { it.debt.isEmpty() && it.severity.isEmpty() }
-                .forEach {
-                    val parentRule = rules.findRuleByName(it.parent)
-                    it.debt = parentRule.debt
-                    it.severity = parentRule.severity
-                }
+            .forEach {
+                val parentRule = rules.findRuleByName(it.parent)
+                it.debt = parentRule.debt
+                it.severity = parentRule.severity
+            }
     }
 
     override fun visit(file: KtFile) {

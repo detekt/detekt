@@ -38,9 +38,12 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  */
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("UnnecessaryParentheses", Severity.Style,
-            "Unnecessary parentheses don't add any value to the code and should be removed.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "UnnecessaryParentheses",
+        Severity.Style,
+        "Unnecessary parentheses don't add any value to the code and should be removed.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
         super.visitParenthesizedExpression(expression)
@@ -49,7 +52,7 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
         if (KtPsiUtil.areParenthesesUseless(expression)) {
             val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
-                    "${KtPsiUtil.deparenthesize(expression)?.text}"
+                "${KtPsiUtil.deparenthesize(expression)?.text}"
             report(CodeSmell(issue, Entity.from(expression), message))
         }
     }

@@ -33,7 +33,7 @@ class MethodSignatureSpec : Spek({
             ),
             TestCase(
                 testDescription = "should return method name and params list for full signature method with multiple params " +
-                        "where method name has spaces and special characters",
+                    "where method name has spaces and special characters",
                 methodSignature = "io.gitlab.arturbosch.detekt.SomeClass.`some , method`(kotlin.String)",
                 expectedMethodName = "io.gitlab.arturbosch.detekt.SomeClass.some , method",
                 expectedParams = listOf("kotlin.String")

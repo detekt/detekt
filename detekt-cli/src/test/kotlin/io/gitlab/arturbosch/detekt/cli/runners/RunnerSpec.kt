@@ -25,9 +25,12 @@ class RunnerSpec : Spek({
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
-                "--input", inputPath.toString(),
-                "--report", "txt:$tmpReport",
-                "--config-resource", "/configs/max-issues-2.yml"
+                "--input",
+                inputPath.toString(),
+                "--report",
+                "txt:$tmpReport",
+                "--config-resource",
+                "/configs/max-issues-2.yml"
             )
 
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
@@ -36,8 +39,10 @@ class RunnerSpec : Spek({
         it("should throw on maxIssues=0") {
             assertThatThrownBy {
                 executeDetekt(
-                    "--input", inputPath.toString(),
-                    "--config-resource", "/configs/max-issues-0.yml"
+                    "--input",
+                    inputPath.toString(),
+                    "--config-resource",
+                    "/configs/max-issues-0.yml"
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
         }
@@ -46,9 +51,12 @@ class RunnerSpec : Spek({
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
-                "--input", inputPath.toString(),
-                "--report", "txt:$tmpReport",
-                "--config-resource", "/configs/max-issues--1.yml"
+                "--input",
+                inputPath.toString(),
+                "--report",
+                "txt:$tmpReport",
+                "--config-resource",
+                "/configs/max-issues--1.yml"
             )
 
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
@@ -60,10 +68,14 @@ class RunnerSpec : Spek({
                 val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
                 executeDetekt(
-                    "--input", inputPath.toString(),
-                    "--report", "txt:$tmpReport",
-                    "--config-resource", "/configs/max-issues-0.yml",
-                    "--baseline", resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
+                    "--input",
+                    inputPath.toString(),
+                    "--report",
+                    "txt:$tmpReport",
+                    "--config-resource",
+                    "/configs/max-issues-0.yml",
+                    "--baseline",
+                    resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
                 )
 
                 assertThat(Files.readAllLines(tmpReport)).isEmpty()
@@ -117,8 +129,10 @@ class RunnerSpec : Spek({
             beforeEachTest {
                 val args = parseArguments(
                     arrayOf(
-                        "--input", inputPath.toString(),
-                        "--config-resource", "/configs/max-issues-0.yml"
+                        "--input",
+                        inputPath.toString(),
+                        "--config-resource",
+                        "/configs/max-issues-0.yml"
                     )
                 )
 
@@ -143,8 +157,10 @@ class RunnerSpec : Spek({
         it("should throw on invalid config property when validation=true") {
             assertThatThrownBy {
                 executeDetekt(
-                    "--input", path.toString(),
-                    "--config-resource", "/configs/invalid-config.yml"
+                    "--input",
+                    path.toString(),
+                    "--config-resource",
+                    "/configs/invalid-config.yml"
                 )
             }.isExactlyInstanceOf(InvalidConfig::class.java)
                 .hasMessageContaining("property")
@@ -153,8 +169,10 @@ class RunnerSpec : Spek({
         it("should throw on invalid config properties when validation=true") {
             assertThatThrownBy {
                 executeDetekt(
-                    "--input", path.toString(),
-                    "--config-resource", "/configs/invalid-configs.yml"
+                    "--input",
+                    path.toString(),
+                    "--config-resource",
+                    "/configs/invalid-configs.yml"
                 )
             }.isExactlyInstanceOf(InvalidConfig::class.java)
                 .hasMessageContaining("properties")
@@ -163,8 +181,10 @@ class RunnerSpec : Spek({
         it("should not throw on invalid config property when validation=false") {
             assertThatCode {
                 executeDetekt(
-                    "--input", path.toString(),
-                    "--config-resource", "/configs/invalid-config_no-validation.yml"
+                    "--input",
+                    path.toString(),
+                    "--config-resource",
+                    "/configs/invalid-config_no-validation.yml"
                 )
             }.doesNotThrowAnyException()
         }
@@ -172,8 +192,10 @@ class RunnerSpec : Spek({
         it("should not throw on deprecation warnings") {
             assertThatCode {
                 executeDetekt(
-                    "--input", path.toString(),
-                    "--config-resource", "/configs/deprecated-property.yml"
+                    "--input",
+                    path.toString(),
+                    "--config-resource",
+                    "/configs/deprecated-property.yml"
                 )
             }.doesNotThrowAnyException()
         }
@@ -186,9 +208,12 @@ class RunnerSpec : Spek({
 
             assertThatThrownBy {
                 executeDetekt(
-                    "--input", inputPath.toString(),
-                    "--report", "txt:$tmp",
-                    "--run-rule", "test:test"
+                    "--input",
+                    inputPath.toString(),
+                    "--report",
+                    "txt:$tmp",
+                    "--run-rule",
+                    "test:test"
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
             assertThat(Files.readAllLines(tmp)).hasSize(1)
@@ -222,9 +247,12 @@ class RunnerSpec : Spek({
         it("does fail via cli flag even if config>maxIssues is specified") {
             assertThatThrownBy {
                 executeDetekt(
-                    "--input", inputPath.toString(),
-                    "--max-issues", "0",
-                    "--config-resource", "configs/max-issues--1.yml" // allow any
+                    "--input",
+                    inputPath.toString(),
+                    "--max-issues",
+                    "0",
+                    "--config-resource",
+                    "configs/max-issues--1.yml" // allow any
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
                 .hasMessage("Build failed with 1 weighted issues.")

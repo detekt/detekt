@@ -4,13 +4,13 @@ plugins {
     module
     id("org.jetbrains.dokka")
     `java-test-fixtures`
+    id("binary-compatibility-validator")
 }
 
 dependencies {
     api(kotlin("compiler-embeddable"))
     api(project(":detekt-psi-utils"))
 
-    testImplementation(project(":detekt-parser"))
     testImplementation(project(":detekt-test"))
 
     testFixturesApi(kotlin("stdlib-jdk8"))
@@ -29,4 +29,8 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 
 tasks.withType<DokkaTask>().configureEach {
     outputDirectory.set(rootDir.resolve("docs/pages/kdoc"))
+}
+
+apiValidation {
+    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }

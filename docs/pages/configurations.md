@@ -14,7 +14,7 @@ _detekt_ uses a yaml style configuration file for various things:
 - output reports
 - processors
 
-See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml)
+See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml)
 file for all defined configuration options and their default values. 
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.

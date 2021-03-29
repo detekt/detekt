@@ -28,10 +28,12 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  */
 class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Maintainability,
-            "Public classes, interfaces and objects require documentation.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
+        "Public classes, interfaces and objects require documentation.",
+        Debt.TWENTY_MINS
+    )
 
     private val searchInNestedClass = valueOrDefault(SEARCH_IN_NESTED_CLASS, true)
     private val searchInInnerClass = valueOrDefault(SEARCH_IN_INNER_CLASS, true)
@@ -62,7 +64,8 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     private fun reportIfUndocumented(element: KtClassOrObject) {
         if (isPublicAndPublicInherited(element) &&
             element.notEnumEntry() &&
-            element.docComment == null) {
+            element.docComment == null
+        ) {
             report(
                 CodeSmell(
                     issue,
@@ -77,7 +80,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
         element.isPublicInherited() && element.isPublicNotOverridden()
 
     private fun KtObjectDeclaration.isCompanionWithoutName() =
-            isCompanion() && nameAsSafeName.asString() == "Companion"
+        isCompanion() && nameAsSafeName.asString() == "Companion"
 
     private fun KtClass.isNestedClass() = !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
 

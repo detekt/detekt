@@ -9,68 +9,47 @@ import org.spekframework.spek2.style.specification.describe
 object DetektJvmTest : Spek({
     describe("When applying detekt in a JVM project") {
 
-        it("lazily adds detekt as a dependency of the `check` task if applied before JVM plugin") {
-            val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(1),
-                buildFileName = "build.gradle",
-                mainBuildFileContent = """
-                    plugins {
-                        id "io.gitlab.arturbosch.detekt"
-                        id "org.jetbrains.kotlin.jvm"
-                    }
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle",
+            mainBuildFileContent = """
+                plugins {
+                    id "org.jetbrains.kotlin.jvm"
+                    id "io.gitlab.arturbosch.detekt"
+                }
 
-                    repositories {
-                        mavenCentral()
-                        jcenter()
-                        mavenLocal()
-                    }
-                    
-                    detekt {
-                    }
-                """.trimIndent(),
-                dryRun = true
-            )
-            gradleRunner.setupProject()
-            gradleRunner.runTasksAndCheckResult("check") { buildResult ->
-                assertThat(buildResult.task(":detekt")).isNotNull
-            }
-        }
+                repositories {
+                    mavenCentral()
+                    jcenter()
+                    mavenLocal()
+                }
 
-        it("configures detekt plain task and type resolution task") {
-            val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(1),
-                buildFileName = "build.gradle",
-                mainBuildFileContent = """
-                    plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
+                detekt {
+                    reports {
+                        sarif.enabled = true
+                        txt.enabled = false
                     }
+                }
+            """.trimIndent(),
+            dryRun = true
+        )
+        gradleRunner.setupProject()
 
-                    repositories {
-                        mavenCentral()
-                        jcenter()
-                        mavenLocal()
-                    }
-
-                    detekt {
-                        reports {
-                            sarif.enabled = true
-                            txt.enabled = false
-                        }
-                    }
-                """.trimIndent(),
-                dryRun = true
-            )
-            gradleRunner.setupProject()
-            gradleRunner.runTasksAndCheckResult(":detekt") { buildResult ->
-                assertThat(buildResult.output).contains("--report xml:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report txt:")
-            }
+        it("configures detekt type resolution task main") {
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.output).contains("--classpath")
+            }
+        }
+
+        it("configures detekt type resolution task test") {
+            gradleRunner.runTasksAndCheckResult(":detektTest") { buildResult ->
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.output).contains("--classpath")
             }
         }
     }

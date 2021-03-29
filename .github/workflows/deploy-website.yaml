@@ -3,7 +3,7 @@ name: Deploy Website
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-detekt-docs:
@@ -31,7 +31,7 @@ jobs:
           java-version: 11
 
       - name: Build Detekt Documentation
-        run: ./gradlew :detekt-generator:generateDocumentation --build-cache --parallel
+        run: ./gradlew :detekt-generator:generateDocumentation --build-cache --stacktrace
 
       - name: Upload Generated Rules documentation
         uses: actions/upload-artifact@v2

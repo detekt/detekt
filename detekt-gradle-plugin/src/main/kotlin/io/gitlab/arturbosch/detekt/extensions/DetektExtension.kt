@@ -12,6 +12,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
+
         @JvmName("ignoreFailures_")
         set(value) {
             isIgnoreFailures = value
@@ -35,6 +36,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean = DEFAULT_FAIL_FAST_VALUE
 
     var allRules: Boolean = DEFAULT_ALL_RULES_VALUE

@@ -13,7 +13,9 @@ fun FindingAssert.isThresholded(): ThresholdedCodeSmellAssert {
 
 class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
     AbstractAssert<ThresholdedCodeSmellAssert, ThresholdedCodeSmell>(
-        actual, ThresholdedCodeSmellAssert::class.java) {
+        actual,
+        ThresholdedCodeSmellAssert::class.java
+    ) {
 
     fun withValue(expected: Int) = hasValue(expected).let { this }
 

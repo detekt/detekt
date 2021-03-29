@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -26,10 +27,8 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * <compliant>
  * val isEnabled: Boolean = false
  * </compliant>
- *
- * @since 1.12.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
 
     private val kotlinBooleanTypeName = "kotlin.Boolean"

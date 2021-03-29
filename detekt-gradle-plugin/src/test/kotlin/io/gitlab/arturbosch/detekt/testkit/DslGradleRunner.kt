@@ -81,7 +81,8 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
                     writeKtFile(
                         dir = File(moduleRoot, moduleSourceDir),
                         className = "My$srcDirIdx${submodule.name}${it}Class",
-                        withCodeSmell = withCodeSmell)
+                        withCodeSmell = withCodeSmell
+                    )
                 }
             }
         }
