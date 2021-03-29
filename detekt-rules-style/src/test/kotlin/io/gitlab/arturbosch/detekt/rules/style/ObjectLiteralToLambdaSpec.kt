@@ -476,5 +476,34 @@ class ObjectLiteralToLambdaSpec : Spek({
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
+
+        context("Edge case") {
+            // https://github.com/detekt/detekt/pull/3599#issuecomment-806389701
+            it(
+                """Anonymous objects are always newly created, 
+                |but lambdas are singletons, 
+                |so they have the same reference.""".trimMargin()
+            ) {
+                val code = """
+                fun interface Sam {
+                    fun foo()
+                }
+    
+                fun newObject() = object : Sam {
+                    override fun foo() {
+                    }
+                }
+    
+                fun lambda() = Sam {}
+
+                val a = newObject() === newObject() // false
+                val b = lambda() === lambda() // true
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(5, 19))
+            }
+        }
     }
 })
