@@ -12,11 +12,11 @@ a wildcard import
 
 #### Configuration options:
 
-* `conf1` (default: `foo`)
+* ``conf1`` (default: ``foo``)
 
    a config option
 
-* ~~`conf2`~~ (default: `false`)
+* ~~``conf2``~~ (default: ``false``)
 
    **Deprecated**: use conf1 instead
 
