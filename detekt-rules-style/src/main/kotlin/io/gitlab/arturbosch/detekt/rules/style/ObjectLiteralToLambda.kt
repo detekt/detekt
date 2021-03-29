@@ -78,26 +78,34 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
     private fun ReceiverValue?.isImplicitClassFor(descriptor: DeclarationDescriptor) =
         this is ImplicitClassReceiver && classDescriptor == descriptor
 
+    private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
+        val objectDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, declaration]
+            ?: return false
+
+        return containsThisReference(objectDescriptor) ||
+            containsOwnMethodCall(objectDescriptor)
+    }
+
+    private fun KtObjectDeclaration.hasConvertibleMethod(): Boolean {
+        val singleNamedMethod = singleNamedMethodOrNull()
+        val functionBody = singleNamedMethod?.bodyExpression ?: return false
+
+        return singleNamedMethod.isOverride() &&
+            !functionBody.containsMethodOf(this)
+    }
+
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
         val declaration = expression.objectDeclaration
-        val singleNamedMethod = declaration.singleNamedMethodOrNull()
 
         if (
             declaration.name == null &&
-            bindingContext.getType(expression)?.singleSuperTypeOrNull()?.couldBeSamInterface == true &&
-            singleNamedMethod?.isOverride() == true
+            bindingContext.getType(expression)
+                ?.singleSuperTypeOrNull()?.couldBeSamInterface == true &&
+            declaration.hasConvertibleMethod()
         ) {
-            val functionBody = singleNamedMethod.bodyExpression!!
-            val objectDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, declaration]!!
-
-            if (
-                !functionBody.containsThisReference(objectDescriptor) &&
-                !functionBody.containsOwnMethodCall(objectDescriptor)
-            ) {
-                report(CodeSmell(issue, Entity.from(expression), issue.description))
-            }
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 }
