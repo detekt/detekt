@@ -31,7 +31,7 @@ dependencies {
     intTest(androidGradlePlugin)
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32") {
             because(
                 """Android Gradle Plugin 4.1.1 depends on Kotlin 1.3.72 but we should not mix 1.3 and 1.4.
                 This constraint should be lifted on Android Gradle Plugin 4.2.0. See
