@@ -33,7 +33,8 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.atName(function),
-                    message = "Function names should be at least $minimumFunctionNameLength characters long.")
+                    message = "Function names should be at least $minimumFunctionNameLength characters long."
+                )
             )
         }
     }

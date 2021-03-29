@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
@@ -24,17 +25,18 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * @configuration ignoreOverridden - ignores functions that have the override modifier (default: `true`)
  * @configuration ignoreAnnotated - ignore naming for functions in the context of these
  * annotation class names (default: `['Composable']`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Function names should follow the naming convention set in the configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Function names should follow the naming convention set in the configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val functionPattern by LazyRegex(FUNCTION_PATTERN, "([a-z][a-zA-Z0-9]*)|(`.*`)")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
@@ -51,12 +53,14 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         val functionName = function.nameIdentifier?.text ?: return
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !functionName.matches(functionPattern) &&
-            functionName != function.typeReference?.name) {
+            functionName != function.typeReference?.name
+        ) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atName(function),
-                    message = "Function names should match the pattern: $functionPattern")
+                    message = "Function names should match the pattern: $functionPattern"
+                )
             )
         }
     }

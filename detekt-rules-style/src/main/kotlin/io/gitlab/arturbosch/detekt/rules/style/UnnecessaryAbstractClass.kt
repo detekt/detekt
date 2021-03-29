@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -44,23 +45,27 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
  * this check. (default: `['dagger.Module']`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
     override val issue =
-            Issue("UnnecessaryAbstractClass", Severity.Style,
-                    "An abstract class is unnecessary and can be refactored. " +
-                            "An abstract class should have both abstract and concrete properties or functions. " +
-                            noConcreteMember + " " + noAbstractMember,
-                    Debt.FIVE_MINS)
+        Issue(
+            "UnnecessaryAbstractClass",
+            Severity.Style,
+            "An abstract class is unnecessary and can be refactored. " +
+                "An abstract class should have both abstract and concrete properties or functions. " +
+                noConcreteMember + " " + noAbstractMember,
+            Debt.FIVE_MINS
+        )
 
     private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(
-            EXCLUDE_ANNOTATED_CLASSES, listOf("dagger.Module"))
+        EXCLUDE_ANNOTATED_CLASSES,
+        listOf("dagger.Module")
+    )
         .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder
 
@@ -109,7 +114,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             members.indexOfFirst { it is KtNamedDeclaration && it.isAbstract() == isAbstract }
 
         private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int) =
-                indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
+            indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
 
         private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
 

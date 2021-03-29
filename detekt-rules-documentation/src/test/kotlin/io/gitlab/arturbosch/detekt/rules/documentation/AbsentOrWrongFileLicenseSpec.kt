@@ -23,10 +23,12 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         context("file with correct license header") {
 
             it("reports nothing") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     /* LICENSE */
                     package cases
-                """)
+                """
+                )
 
                 assertThat(findings).isEmpty()
             }
@@ -35,10 +37,12 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         context("file with incorrect license header") {
 
             it("reports missed license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     /* WRONG LICENSE */
                     package cases
-                """)
+                """
+                )
 
                 assertThat(findings).hasSize(1)
             }
@@ -47,9 +51,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         context("file with absent license header") {
 
             it("reports missed license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     package cases
-                """)
+                """
+                )
 
                 assertThat(findings).hasSize(1)
             }
@@ -58,7 +64,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         context("file with correct license header using regex matching") {
 
             it("reports nothing for 2016") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     //
                     // Copyright 2016 Artur Bosch & Contributors
                     //     http://www.apache.org/licenses/LICENSE-2.0
@@ -66,13 +73,16 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                     // limitations under the License.
                     //
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).isEmpty()
             }
 
             it("reports nothing for 2021") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     //
                     // Copyright 2021 Artur Bosch & Contributors
                     //     http://www.apache.org/licenses/LICENSE-2.0
@@ -80,7 +90,9 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                     // limitations under the License.
                     //
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).isEmpty()
             }
@@ -89,15 +101,19 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
         context("file with incorrect license header using regex matching") {
 
             it("file with missing license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).hasSize(1)
             }
 
             it("file with license header not on the first line") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     package cases
                     //
                     // Copyright 2021 Artur Bosch & Contributors
@@ -105,24 +121,30 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                     // See the License for the specific language governing permissions and
                     // limitations under the License.
                     //
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).hasSize(1)
             }
 
             it("file with incomplete license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     //
                     // Copyright 2021 Artur Bosch & Contributors
                     //
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).hasSize(1)
             }
 
             it("file with too many empty likes in license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     //
                     //
                     // Copyright 2021 Artur Bosch & Contributors
@@ -131,13 +153,16 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                     // limitations under the License.
                     //
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).hasSize(1)
             }
 
             it("file with incorrect year in license header") {
-                val findings = checkLicence("""
+                val findings = checkLicence(
+                    """
                     //
                     // Copyright 202 Artur Bosch & Contributors
                     //     http://www.apache.org/licenses/LICENSE-2.0
@@ -145,7 +170,9 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                     // limitations under the License.
                     //
                     package cases
-                """.trimIndent(), isRegexLicense = true)
+                    """.trimIndent(),
+                    isRegexLicense = true
+                )
 
                 assertThat(findings).hasSize(1)
             }

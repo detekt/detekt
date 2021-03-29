@@ -30,7 +30,8 @@ internal object KtTestCompiler : KtCompiler() {
     fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile =
         psiFileFactory.createPhysicalFile(
             filename,
-            StringUtilRt.convertLineSeparators(content))
+            StringUtilRt.convertLineSeparators(content)
+        )
 
     /**
      * Not sure why but this function only works from this context.

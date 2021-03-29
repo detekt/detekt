@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -35,8 +36,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  * fun safeUnitReturn(): Unit = println("Hello Unit")
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class ImplicitUnitReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(

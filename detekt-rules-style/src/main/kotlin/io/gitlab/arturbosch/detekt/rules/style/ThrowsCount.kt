@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -37,13 +38,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  *
  * @configuration max - maximum amount of throw statements in a method (default: `2`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Restrict the number of throw statements in methods.",
         Debt.TEN_MINS
     )
@@ -74,7 +75,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
                         issue,
                         Entity.atName(function),
                         "Too many throw statements in the function" +
-                                " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
+                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
                     )
                 )
             }

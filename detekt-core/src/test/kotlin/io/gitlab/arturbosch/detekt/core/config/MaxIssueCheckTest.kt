@@ -60,10 +60,12 @@ internal class MaxIssueCheckTest : Spek({
     describe("based on config") {
 
         val config by memoized {
-            yamlConfigFromContent("""
+            yamlConfigFromContent(
+                """
                 build:
                     maxIssues: 1
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         it("uses the config for max issues when MaxIssuePolicy == NonSpecified") {

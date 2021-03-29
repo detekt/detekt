@@ -69,7 +69,9 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("should use custom name for method and class") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 fun `name with back ticks`(){
                   val `123var` = ""
@@ -79,29 +81,39 @@ class NamingConventionCustomPatternTest : Spek({
                   const val lowerCaseConst = ""
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for constant") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 companion object {
                   const val lowerCaseConst = ""
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for enum") {
             val rule = NamingRules(testConfig)
-            assertThat(rule.compileAndLint("""
+            assertThat(
+                rule.compileAndLint(
+                    """
             class aBbD{
                 enum class aBbD {
                     enum1, enum2
                 }
             }
-        """)).isEmpty()
+        """
+                )
+            ).isEmpty()
         }
 
         it("should use custom name for package") {

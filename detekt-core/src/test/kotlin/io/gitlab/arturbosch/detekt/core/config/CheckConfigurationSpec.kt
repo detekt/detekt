@@ -21,7 +21,8 @@ class SupportConfigValidationSpec : Spek({
         val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
 
         it("fails when unknown properties are found") {
-            val config = yamlConfigFromContent("""
+            val config = yamlConfigFromContent(
+                """
                 # Properties of custom rule sets get excluded by default.
                 sample-rule-set:
                   TooManyFunctions:
@@ -31,7 +32,8 @@ class SupportConfigValidationSpec : Spek({
                 my_additional_properties:
                   magic_number: 7
                   magic_string: 'Hello World'
-            """)
+            """
+            )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it) }
                     .isInstanceOf(InvalidConfig::class.java)
@@ -41,13 +43,15 @@ class SupportConfigValidationSpec : Spek({
         }
 
         it("fails due to custom config validator want active to be booleans") {
-            val config = yamlConfigFromContent("""
+            val config = yamlConfigFromContent(
+                """
                 # Properties of custom rule sets get excluded by default.
                 sample-rule-set:
                   TooManyFunctions:
                     # This property is tested via the SampleConfigValidator
                     active: 1 # should be true
-            """)
+            """
+            )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it) }
                     .isInstanceOf(InvalidConfig::class.java)
@@ -56,7 +60,8 @@ class SupportConfigValidationSpec : Spek({
         }
 
         it("passes with excluded new properties") {
-            val config = yamlConfigFromContent("""
+            val config = yamlConfigFromContent(
+                """
                config:
                  validation: true
                  # Additional properties can be useful when writing custom extensions.
@@ -74,7 +79,8 @@ class SupportConfigValidationSpec : Spek({
                my_additional_properties:
                  magic_number: 7
                  magic_string: 'Hello World'
-            """)
+            """
+            )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it) }.doesNotThrowAnyException()
             }

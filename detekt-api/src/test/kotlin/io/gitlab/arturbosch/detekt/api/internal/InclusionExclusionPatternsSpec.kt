@@ -70,9 +70,12 @@ class InclusionExclusionPatternsSpec : Spek({
     describe("rule should only run on included files") {
 
         it("should only run on dummies") {
-            val config = TestConfig(mapOf(
-                Config.INCLUDES_KEY to "**Dummy*.kt",
-                Config.EXCLUDES_KEY to "**/library/**"))
+            val config = TestConfig(
+                mapOf(
+                    Config.INCLUDES_KEY to "**Dummy*.kt",
+                    Config.EXCLUDES_KEY to "**/library/**"
+                )
+            )
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)
@@ -84,9 +87,12 @@ class InclusionExclusionPatternsSpec : Spek({
         }
 
         it("should only run on library file") {
-            val config = TestConfig(mapOf(
-                Config.INCLUDES_KEY to "**Library.kt",
-                Config.EXCLUDES_KEY to "**/library/**"))
+            val config = TestConfig(
+                mapOf(
+                    Config.INCLUDES_KEY to "**Library.kt",
+                    Config.EXCLUDES_KEY to "**/library/**"
+                )
+            )
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)

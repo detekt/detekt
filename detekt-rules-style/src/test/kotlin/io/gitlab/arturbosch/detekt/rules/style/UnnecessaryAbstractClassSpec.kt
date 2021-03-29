@@ -14,9 +14,13 @@ class UnnecessaryAbstractClassSpec : Spek({
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized {
-        UnnecessaryAbstractClass(TestConfig(mapOf(
-            UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
-        )))
+        UnnecessaryAbstractClass(
+            TestConfig(
+                mapOf(
+                    UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
+                )
+            )
+        )
     }
 
     describe("UnnecessaryAbstractClass rule") {

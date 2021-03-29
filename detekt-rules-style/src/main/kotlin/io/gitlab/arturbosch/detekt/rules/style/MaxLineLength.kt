@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 
 /**
@@ -19,24 +20,25 @@ import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
  * @configuration excludePackageStatements - if package statements should be ignored (default: `true`)
  * @configuration excludeImportStatements - if import statements should be ignored (default: `true`)
  * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Line detected that is longer than the defined maximum line length in the code style.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Line detected that is longer than the defined maximum line length in the code style.",
+        Debt.FIVE_MINS
+    )
 
     private val lengthThreshold: Int =
-            valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
+        valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
     private val excludePackageStatements: Boolean =
-            valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
+        valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
     private val excludeImportStatements: Boolean =
-            valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, true)
+        valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, true)
     private val excludeCommentStatements: Boolean =
-            valueOrDefault(EXCLUDE_COMMENT_STATEMENTS, false)
+        valueOrDefault(EXCLUDE_COMMENT_STATEMENTS, false)
 
     fun visit(element: KtFileContent) {
         var offset = 0
@@ -65,8 +67,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isIgnoredStatement(line: String): Boolean {
         return containsIgnoredPackageStatement(line) ||
-                containsIgnoredImportStatement(line) ||
-                containsIgnoredCommentStatement(line)
+            containsIgnoredImportStatement(line) ||
+            containsIgnoredCommentStatement(line)
     }
 
     private fun containsIgnoredPackageStatement(line: String): Boolean {
@@ -85,8 +87,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         if (!excludeCommentStatements) return false
 
         return line.trimStart().startsWith("//") ||
-                line.trimStart().startsWith("/*") ||
-                line.trimStart().startsWith("*")
+            line.trimStart().startsWith("/*") ||
+            line.trimStart().startsWith("*")
     }
 
     companion object {

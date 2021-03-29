@@ -121,7 +121,8 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
             super.visitNamedFunction(function)
             if (function.isExplicitlyPublicNotOverridden()) {
                 report(
-                    CodeSmell(issue,
+                    CodeSmell(
+                        issue,
                         Entity.atName(function),
                         message = "${function.name} is explicitly marked as public. " +
                             "Functions are public by default so this modifier is redundant."

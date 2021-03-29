@@ -48,10 +48,11 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Return type of 'Unit' is unnecessary and can be safely removed.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "Return type of 'Unit' is unnecessary and can be safely removed.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.hasDeclaredReturnType()) {
@@ -66,22 +67,27 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         val statements = expression.statements
         val lastStatement = statements.lastOrNull() ?: return
         statements
-                .filter {
-                    when {
-                        it !is KtNameReferenceExpression || it.text != UNIT -> false
-                        it != lastStatement || bindingContext == BindingContext.EMPTY -> true
-                        !it.isUsedAsExpression(bindingContext) -> true
-                        else -> {
-                            val prev =
-                                it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
-                            prev?.getType(bindingContext)?.isUnit() == true && prev.canBeUsedAsValue()
-                        }
+            .filter {
+                when {
+                    it !is KtNameReferenceExpression || it.text != UNIT -> false
+                    it != lastStatement || bindingContext == BindingContext.EMPTY -> true
+                    !it.isUsedAsExpression(bindingContext) -> true
+                    else -> {
+                        val prev =
+                            it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
+                        prev?.getType(bindingContext)?.isUnit() == true && prev.canBeUsedAsValue()
                     }
                 }
-                .onEach {
-                    report(CodeSmell(issue, Entity.from(expression),
-                            "A single Unit expression is unnecessary and can safely be removed"))
-                }
+            }
+            .onEach {
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(expression),
+                        "A single Unit expression is unnecessary and can safely be removed"
+                    )
+                )
+            }
         super.visitBlockExpression(expression)
     }
 
@@ -114,7 +120,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
-            "defines a return type of Unit. This is unnecessary and can safely be removed."
+        "defines a return type of Unit. This is unnecessary and can safely be removed."
 
     companion object {
         private const val UNIT = "Unit"

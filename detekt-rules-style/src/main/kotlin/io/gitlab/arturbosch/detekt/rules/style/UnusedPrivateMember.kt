@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isExternal
@@ -50,16 +51,18 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
  * (default: `'(_|ignored|expected|serialVersionUID)'`)
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
-    override val issue: Issue = Issue("UnusedPrivateMember",
+    override val issue: Issue = Issue(
+        "UnusedPrivateMember",
         Severity.Maintainability,
         "Private member is unused.",
-        Debt.FIVE_MINS)
+        Debt.FIVE_MINS
+    )
 
     private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
 
@@ -264,8 +267,11 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
         return properties
             .filter { it.nameAsSafeName.identifier !in nameAccesses }
             .map {
-                CodeSmell(issue, Entity.from(it),
-                    "Private property ${it.nameAsSafeName.identifier} is unused.")
+                CodeSmell(
+                    issue,
+                    Entity.from(it),
+                    "Private property ${it.nameAsSafeName.identifier} is unused."
+                )
             }
     }
 

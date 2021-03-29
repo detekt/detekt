@@ -35,7 +35,7 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
         "DataClassShouldBeImmutable",
         Severity.Style,
         "Data classes should mainly be immutable and should not have any side effects. " +
-                "(To copy an object altering some of its properties use the copy function)",
+            "(To copy an object altering some of its properties use the copy function)",
         Debt.TWENTY_MINS
     )
 
@@ -58,7 +58,7 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
                 issue,
                 Entity.from(element),
                 "The data class $className contains a mutable property. " +
-                        "The offending property is called $propertyName"
+                    "The offending property is called $propertyName"
             )
         )
     }

@@ -5,11 +5,11 @@ import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ExecutionSpec
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.LoggingSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
+import io.github.detekt.tooling.api.spec.RulesSpec
 
 internal fun processingSpec(init: ProcessingSpecBuilder.() -> Unit): ProcessingSpec =
     ProcessingSpecBuilder().apply(init).build()

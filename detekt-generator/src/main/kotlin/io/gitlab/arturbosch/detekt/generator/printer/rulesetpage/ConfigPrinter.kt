@@ -33,22 +33,22 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     @Suppress("ComplexMethod") // preserving the declarative structure while building the dsl
     private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
         node(ruleSet.name) {
-            keyValue { "active" to "${ruleSet.active}" }
+            keyValue { "active" to "${ruleSet.defaultActivationStatus.active}" }
             val ruleSetExclusion = exclusions.singleOrNull { ruleSet.name in it.ruleSets }
             if (ruleSetExclusion != null) {
                 keyValue { Config.EXCLUDES_KEY to ruleSetExclusion.pattern }
             }
             ruleSet.configuration
                 .forEach { configuration ->
-                if (configuration.defaultValue.isYamlList()) {
-                    list(configuration.name, configuration.defaultValue.toList())
-                } else {
-                    keyValue { configuration.name to configuration.defaultValue }
+                    if (configuration.defaultValue.isYamlList()) {
+                        list(configuration.name, configuration.defaultValue.toList())
+                    } else {
+                        keyValue { configuration.name to configuration.defaultValue }
+                    }
                 }
-            }
             rules.forEach { rule ->
                 node(rule.name) {
-                    keyValue { Config.ACTIVE_KEY to "${rule.active}" }
+                    keyValue { Config.ACTIVE_KEY to "${rule.defaultActivationStatus.active}" }
                     if (rule.autoCorrect) {
                         keyValue { Config.AUTO_CORRECT_KEY to "true" }
                     }
@@ -58,12 +58,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     }
                     rule.configuration
                         .forEach { configuration ->
-                        if (configuration.defaultValue.isYamlList()) {
-                            list(configuration.name, configuration.defaultValue.toList())
-                        } else if (configuration.deprecated == null) {
-                            keyValue { configuration.name to configuration.defaultValue }
+                            if (configuration.defaultValue.isYamlList()) {
+                                list(configuration.name, configuration.defaultValue.toList())
+                            } else if (configuration.deprecated == null) {
+                                keyValue { configuration.name to configuration.defaultValue }
+                            }
                         }
-                    }
                 }
             }
             emptyLine()

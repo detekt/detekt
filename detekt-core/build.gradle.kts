@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":detekt-report-xml"))
     implementation(project(":detekt-report-sarif"))
 
-    testImplementation(project(":detekt-rules"))
+    testRuntimeOnly(project(":detekt-rules"))
     testImplementation(project(":detekt-test"))
     testImplementation(testFixtures(project(":detekt-api")))
 }

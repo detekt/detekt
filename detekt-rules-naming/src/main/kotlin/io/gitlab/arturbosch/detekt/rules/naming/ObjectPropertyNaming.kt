@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtProperty
@@ -19,8 +20,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration constantPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
  * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
  * @configuration privatePropertyPattern - naming pattern (default: `'(_)?[A-Za-z][_A-Za-z0-9]*'`)
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

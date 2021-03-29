@@ -267,8 +267,12 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to
-                        listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")))
+                TestConfig(
+                    mapOf(
+                        ForbiddenMethodCall.METHODS to
+                            listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")
+                    )
+                )
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(6, 13)

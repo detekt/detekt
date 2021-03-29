@@ -28,10 +28,10 @@ Some rules like `TooManyFunctions` can be suppressed by using a file level annot
 
 Please note that rules inside the [`formatting`](./formatting.html) ruleset can only be suppressed at **the file level**.
 
-Rules inside this ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLenght](formatting.html#maximumlinelength) rule only in your entire file with:
+Rules inside this ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLength](formatting.html#maximumlinelength) rule only in your entire file with:
 
 ```kotlin
-@file:Suppress("MaximumLineLenght")
+@file:Suppress("MaximumLineLength")
 package com.example
 
 object AClassWithLongLines {

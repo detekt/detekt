@@ -223,7 +223,7 @@ dependencies {
 
 ##### Pitfalls
 
-- By default all rules not marked with `@active` in their `KDoc` are disabled.
+- By default all rules not annotated with `@ActiveByDefault` are disabled.
 That means your custom rules are also disabled if you have not explicitly enabled
 them in the `detekt` yaml configuration file.
 - If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this

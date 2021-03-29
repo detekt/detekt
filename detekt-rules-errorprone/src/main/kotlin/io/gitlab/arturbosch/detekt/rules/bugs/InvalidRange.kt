@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -30,23 +31,29 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  *
  * val range = 2 until 3
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "If a for loops condition is false before the first iteration, the loop will never get executed.",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "If a for loops condition is false before the first iteration, the loop will never get executed.",
+        Debt.TEN_MINS
+    )
 
     private val minimumSize = 3
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         val range = expression.children
         if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
-            report(CodeSmell(issue, Entity.from(expression),
-                    "This loop will never be executed due to its expression."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "This loop will never be executed due to its expression."
+                )
+            )
         }
         super.visitBinaryExpression(expression)
     }

@@ -47,7 +47,8 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
 class RedundantExplicitType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RedundantExplicitType", Severity.Style,
+        "RedundantExplicitType",
+        Severity.Style,
         "Type does not need to be stated explicitly and can be removed.",
         Debt.FIVE_MINS
     )
