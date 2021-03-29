@@ -78,7 +78,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         val methodName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
-        val encounteredParamTypes = resolvedCall.resultingDescriptor.valueParameters
+        val encounteredParamTypes = resolvedCall.candidateDescriptor.valueParameters
             .map { it.type.fqNameOrNull()?.asString() }
 
         if (methodName != null) {
