@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -115,8 +114,6 @@ class ComplexMethodSpec : Spek({
                 val config = TestConfig(
                     mapOf(
                         "threshold" to "4",
-                        // Still to do: Disable custom rule check for annotated rules
-                        //  io.gitlab.arturbosch.detekt.core.ConfigAssert#checkOptions
                         "ignoreSingleWhenExpression" to "true"
                     )
                 )
@@ -216,7 +213,7 @@ class ComplexMethodSpec : Spek({
             """
 
             it("should not count these overridden functions to base functions complexity") {
-                assertThat(ComplexMethod(Config.empty).compileAndLint(code)).isEmpty()
+                assertThat(ComplexMethod().compileAndLint(code)).isEmpty()
             }
         }
     }
