@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -103,19 +101,10 @@ class RuleSetProviderVisitor : DetektVisitor() {
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
                 ?.mapNotNull { it.getArgumentExpression() }
-                ?.mapNotNull(this::guessRuleNameOrNull)
+                ?.mapNotNull { it.referenceExpression()?.text }
                 ?: emptyList()
 
             ruleNames.addAll(ruleArgumentNames)
         }
     }
-
-    private fun guessRuleNameOrNull(expression: KtExpression): String? =
-        when (expression) {
-            // constructor
-            is KtCallExpression -> expression.referenceExpression()?.text
-            // factory method
-            is KtDotQualifiedExpression -> expression.receiverExpression.text
-            else -> null
-        }
 }
