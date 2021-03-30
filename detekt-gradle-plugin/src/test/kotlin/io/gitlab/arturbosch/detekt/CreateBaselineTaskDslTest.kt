@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
+import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
@@ -19,8 +20,13 @@ internal class CreateBaselineTaskDslTest : Spek({
                         |}
                         """
                     val gradleRunner = builder
+                        .withProjectLayout(
+                            ProjectLayout(
+                                numberOfSourceFilesInRootPerSourceDir = 1,
+                                numberOfCodeSmellsInRootPerSourceDir = 1,
+                            )
+                        )
                         .withDetektConfig(detektConfig)
-                        .withBaseline(baselineFilename)
                         .build()
 
                     gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
