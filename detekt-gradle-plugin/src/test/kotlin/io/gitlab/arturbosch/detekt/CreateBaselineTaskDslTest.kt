@@ -34,6 +34,53 @@ internal class CreateBaselineTaskDslTest : Spek({
                         assertThat(projectFile(baselineFilename)).exists()
                     }
                 }
+
+                it("can not be executed when baseline file is not specified") {
+                    val baselineFilename = "baseline.xml"
+
+                    val detektConfig = """
+                        |detekt {
+                        |}
+                        """
+                    val gradleRunner = builder
+                        .withProjectLayout(
+                            ProjectLayout(
+                                numberOfSourceFilesInRootPerSourceDir = 1,
+                                numberOfCodeSmellsInRootPerSourceDir = 1,
+                            )
+                        )
+                        .withDetektConfig(detektConfig)
+                        .build()
+
+                    gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
+                        assertThat(result.output).contains("No value has been specified for property 'baseline'")
+                        assertThat(projectFile(baselineFilename)).doesNotExist()
+                    }
+                }
+
+                it("can not be executed when baseline file is specified null") {
+                    val baselineFilename = "baseline.xml"
+
+                    val detektConfig = """
+                        |detekt {
+                        |   baseline = null
+                        |}
+                        """
+                    val gradleRunner = builder
+                        .withProjectLayout(
+                            ProjectLayout(
+                                numberOfSourceFilesInRootPerSourceDir = 1,
+                                numberOfCodeSmellsInRootPerSourceDir = 1,
+                            )
+                        )
+                        .withDetektConfig(detektConfig)
+                        .build()
+
+                    gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
+                        assertThat(result.output).contains("No value has been specified for property 'baseline'")
+                        assertThat(projectFile(baselineFilename)).doesNotExist()
+                    }
+                }
             }
         }
     }
