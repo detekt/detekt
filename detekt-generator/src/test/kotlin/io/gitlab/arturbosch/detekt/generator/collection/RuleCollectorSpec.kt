@@ -324,33 +324,21 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: List<String> by config(DEFAULT_CONFIG_VALUE)
+                            private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
+
+                            @Configuration("description")
+                            private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
 
                             companion object {
                                 private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
-                            }
-                        }                        
-                    """
-                    val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
-                }
-
-                it("extracts default value for list of strings partially from constant") {
-                    val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
-
-                            companion object {
                                 private val DEFAULT_CONFIG_VALUE_A = "a"
                             }
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
+                    val expected = "['a', 'b']"
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
                 it("extracts emptyList default value") {
