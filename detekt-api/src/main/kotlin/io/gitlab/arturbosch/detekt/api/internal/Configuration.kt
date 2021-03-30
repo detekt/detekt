@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 @Target(AnnotationTarget.PROPERTY)
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class Configuration(
     val description: String,
 )
