@@ -53,18 +53,11 @@ class ConfigurationCollector {
             ?: findDescendantOfType<KtStringTemplateExpression>()?.text?.withoutQuotes()
     }
 
-    private fun KtProperty.hasListDeclaration(): Boolean =
-        anyDescendantOfType(::isListDeclaration)
-
     private fun KtProperty.getListDeclarationAsConfigString(): String {
-        val listDeclaration = checkNotNull(findDescendantOfType(::isListDeclaration))
         return listDeclaration
             .valueArguments
             .map { "'${it.text.withoutQuotes()}'" }.toString()
     }
-
-    private fun isListDeclaration(expression: KtCallExpression) =
-        expression.referenceExpression()?.text in LIST_CREATORS
 
     private fun KtProperty.parseConfigurationAnnotation(): Configuration? {
         if (isAnnotatedWith(ConfigAnnotation::class)) return toConfiguration()
@@ -105,9 +98,9 @@ class ConfigurationCollector {
         val delegateArgument = checkNotNull(
             (expression as KtCallExpression).valueArguments[0].getArgumentExpression()
         )
-        val listDeclaration = delegateArgument.findDescendantOfType(::isListDeclaration)
-        if (listDeclaration != null) {
-            return listDeclaration.valueArguments.map {
+        val listDeclarationForDefault = delegateArgument.listDeclarationOrNull
+        if (listDeclarationForDefault != null) {
+            return listDeclarationForDefault.valueArguments.map {
                 val value = constantsByName[it.text] ?: it.text
                 "'${value.withoutQuotes()}'"
             }.toString()
@@ -118,35 +111,6 @@ class ConfigurationCollector {
         )
         val defaultValue = constantsByName[defaultValueOrConstantName] ?: defaultValueOrConstantName
         return property.formatDefaultValueAccordingToType(defaultValue)
-    }
-
-    private val KtProperty.declaredTypeOrNull: String?
-        get() = typeReference?.text
-
-    private fun KtProperty.hasSupportedType(): Boolean {
-        return declaredTypeOrNull in SUPPORTED_TYPES
-    }
-
-    private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
-        delegate?.expression?.referenceExpression()?.text == DELEGATE_NAME
-
-    private fun KtProperty.formatDefaultValueAccordingToType(value: String): String {
-        val defaultValue = value.withoutQuotes()
-        return when (declaredTypeOrNull) {
-            TYPE_STRING -> "'$defaultValue'"
-            TYPE_BOOLEAN, TYPE_INT, TYPE_LONG, TYPE_STRING_LIST -> defaultValue
-            else -> error("Unable to format unexpected type '$declaredTypeOrNull'")
-        }
-    }
-
-    private val KtPropertyDelegate.property: KtProperty
-        get() = parent as KtProperty
-
-    private val KtPropertyDelegate.propertyName: String
-        get() = checkNotNull(property.name)
-
-    private fun KtElement.invalidDocumentation(message: () -> String): Nothing {
-        throw InvalidDocumentationException("[${containingFile.name}] ${message.invoke()}")
     }
 
     companion object {
@@ -161,5 +125,41 @@ class ConfigurationCollector {
         private const val TYPE_LONG = "Long"
         private const val TYPE_STRING_LIST = "List<String>"
         private val SUPPORTED_TYPES = listOf(TYPE_STRING, TYPE_BOOLEAN, TYPE_INT, TYPE_LONG, TYPE_STRING_LIST)
+
+        private val KtPropertyDelegate.property: KtProperty
+            get() = parent as KtProperty
+
+        private val KtProperty.declaredTypeOrNull: String?
+            get() = typeReference?.text
+
+        private val KtElement.listDeclarationOrNull: KtCallExpression?
+            get() = findDescendantOfType { it.isListDeclaration() }
+
+        private val KtElement.listDeclaration: KtCallExpression
+            get() = checkNotNull(listDeclarationOrNull)
+
+        private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
+            delegate?.expression?.referenceExpression()?.text == DELEGATE_NAME
+
+        private fun KtProperty.hasSupportedType(): Boolean =
+            declaredTypeOrNull in SUPPORTED_TYPES
+
+        private fun KtProperty.formatDefaultValueAccordingToType(value: String): String {
+            val defaultValue = value.withoutQuotes()
+            return when (declaredTypeOrNull) {
+                TYPE_STRING -> "'$defaultValue'"
+                TYPE_BOOLEAN, TYPE_INT, TYPE_LONG, TYPE_STRING_LIST -> defaultValue
+                else -> error("Unable to format unexpected type '$declaredTypeOrNull'")
+            }
+        }
+
+        private fun KtProperty.hasListDeclaration(): Boolean =
+            anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
+
+        private fun KtCallExpression.isListDeclaration() = referenceExpression()?.text in LIST_CREATORS
+
+        private fun KtElement.invalidDocumentation(message: () -> String): Nothing {
+            throw InvalidDocumentationException("[${containingFile.name}] ${message.invoke()}")
+        }
     }
 }

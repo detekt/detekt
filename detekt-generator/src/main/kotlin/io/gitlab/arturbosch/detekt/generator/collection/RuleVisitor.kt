@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
-import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
@@ -25,10 +24,8 @@ internal class RuleVisitor : DetektVisitor() {
 
     val containsRule
         get() = classesMap.any { it.value }
-    private var description = ""
-    private var nonCompliant = ""
-    private var compliant = ""
     private var name = ""
+    private val documentationCollector = DocumentationCollector()
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false
@@ -37,11 +34,11 @@ internal class RuleVisitor : DetektVisitor() {
     private var aliases: String? = null
     private var parent = ""
     private var configurationByKdoc = emptyList<Configuration>()
-    private val classesMap = mutableMapOf<String, Boolean>()
     private val configurationCollector = ConfigurationCollector()
+    private val classesMap = mutableMapOf<String, Boolean>()
 
     fun getRule(): Rule {
-        if (description.isEmpty()) {
+        if (documentationCollector.description.isEmpty()) {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
         }
 
@@ -54,9 +51,9 @@ internal class RuleVisitor : DetektVisitor() {
 
         return Rule(
             name = name,
-            description = description,
-            nonCompliantCodeExample = nonCompliant,
-            compliantCodeExample = compliant,
+            description = documentationCollector.description,
+            nonCompliantCodeExample = documentationCollector.nonCompliant,
+            compliantCodeExample = documentationCollector.compliant,
             defaultActivationStatus = defaultActivationStatus,
             severity = severity,
             debt = debt,
@@ -106,10 +103,9 @@ internal class RuleVisitor : DetektVisitor() {
 
         autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)
         requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
-
-        val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
-        extractRuleDocumentation(comment)
         configurationByKdoc = classOrObject.parseConfigurationTags()
+
+        documentationCollector.setClass(classOrObject)
     }
 
     override fun visitProperty(property: KtProperty) {
@@ -120,48 +116,6 @@ internal class RuleVisitor : DetektVisitor() {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         klass.companionObjects.forEach(configurationCollector::addCompanion)
-    }
-
-    private fun extractRuleDocumentation(comment: String) {
-        val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
-        val compliantIndex = comment.indexOf(TAG_COMPLIANT)
-        when {
-            nonCompliantIndex != -1 -> {
-                extractNonCompliantDocumentation(comment, nonCompliantIndex)
-                extractCompliantDocumentation(comment, compliantIndex)
-            }
-            compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
-                "Rule $name contains a compliant without a noncompliant code definition"
-            )
-            else -> description = comment
-        }
-    }
-
-    private fun extractNonCompliantDocumentation(comment: String, nonCompliantIndex: Int) {
-        val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
-        if (nonCompliantEndIndex == -1) {
-            throw InvalidCodeExampleDocumentationException(
-                "Rule $name contains an incorrect noncompliant code definition"
-            )
-        }
-        description = comment.substring(0, nonCompliantIndex).trim()
-        nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
-            .trimStartingLineBreaks()
-            .trimEnd()
-    }
-
-    private fun extractCompliantDocumentation(comment: String, compliantIndex: Int) {
-        val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
-        if (compliantIndex != -1) {
-            if (compliantEndIndex == -1) {
-                throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains an incorrect compliant code definition"
-                )
-            }
-            compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
-                .trimStartingLineBreaks()
-                .trimEnd()
-        }
     }
 
     private fun extractAliases(klass: KtClass) {
@@ -216,20 +170,8 @@ internal class RuleVisitor : DetektVisitor() {
         )
 
         private const val TAG_AUTO_CORRECT = "autoCorrect"
-        private const val TAG_NONCOMPLIANT = "<noncompliant>"
-        private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
-        private const val TAG_COMPLIANT = "<compliant>"
-        private const val ENDTAG_COMPLIANT = "</compliant>"
 
         private const val ISSUE_ARGUMENT_SIZE = 4
         private const val DEBT_ARGUMENT_INDEX = 3
     }
-}
-
-private fun String.trimStartingLineBreaks(): String {
-    var i = 0
-    while (i < this.length && (this[i] == '\n' || this[i] == '\r')) {
-        i++
-    }
-    return this.substring(i)
 }
