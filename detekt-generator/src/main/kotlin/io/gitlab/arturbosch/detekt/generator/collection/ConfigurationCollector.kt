@@ -64,7 +64,7 @@ class ConfigurationCollector {
     }
 
     private fun isListDeclaration(expression: KtCallExpression) =
-        expression.referenceExpression()?.text == LIST_OF
+        expression.referenceExpression()?.text in LIST_CREATORS
 
     private fun KtProperty.parseConfigurationAnnotation(): Configuration? {
         if (isAnnotatedWith(ConfigAnnotation::class)) return toConfiguration()
@@ -152,6 +152,9 @@ class ConfigurationCollector {
     companion object {
         private const val DELEGATE_NAME = "config"
         private const val LIST_OF = "listOf"
+        private const val EMPTY_LIST = "emptyList"
+        private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
+
         private const val TYPE_STRING = "String"
         private const val TYPE_BOOLEAN = "Boolean"
         private const val TYPE_INT = "Int"

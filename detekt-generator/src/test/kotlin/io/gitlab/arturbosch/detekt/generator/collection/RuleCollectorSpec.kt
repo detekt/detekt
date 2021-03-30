@@ -353,6 +353,28 @@ class RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
                 }
 
+                it("extracts emptyList default value") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: List<String> by config(listOf())
+
+                            @Configuration("description")
+                            private val config2: List<String> by config(emptyList())
+
+                            companion object {
+                                private val DEFAULT_CONFIG_VALUE_A = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                }
+
                 it("is marked as deprecated as well") {
                     val code = """
                         /**
