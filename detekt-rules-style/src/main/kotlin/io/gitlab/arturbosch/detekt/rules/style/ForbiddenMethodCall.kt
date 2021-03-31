@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -78,8 +78,8 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         val methodName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
-        val encounteredParamTypes = resolvedCall.resultingDescriptor.valueParameters
-            .map { it.type.getJetTypeFqName(false) }
+        val encounteredParamTypes = resolvedCall.candidateDescriptor.valueParameters
+            .map { it.type.fqNameOrNull()?.asString() }
 
         if (methodName != null) {
             forbiddenMethods

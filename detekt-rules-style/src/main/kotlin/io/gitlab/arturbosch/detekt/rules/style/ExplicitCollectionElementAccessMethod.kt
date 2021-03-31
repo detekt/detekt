@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -34,7 +34,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  */
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
 
-    private val ktCollections = setOf("Map", "MutableMap", "List", "MutableList")
+    private val ktCollections = setOf(
+        "kotlin.collections.Map",
+        "kotlin.collections.MutableMap",
+        "kotlin.collections.List",
+        "kotlin.collections.MutableList"
+    )
 
     private val mapAccessMethods = setOf("get", "put")
 
@@ -72,23 +77,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     }
 
     private fun KotlinType?.isEligibleCollection(): Boolean {
-        this?.nameIfStandardType?.let {
-            return it.toString() in ktCollections
-        }
-        return this?.collectTypes()?.any { it.constructor.toString() in ktAndJavaCollections } == true
-    }
-
-    private fun KotlinType.collectTypes(): Set<KotlinType> {
-        val result = mutableSetOf<KotlinType>()
-        this
-            .constructor
-            .supertypes
-            .forEach { type ->
-                result.add(type)
-                type.supertypes().forEach {
-                    result.addAll(it.collectTypes())
-                }
-            }
-        return result
+        if (this?.fqNameOrNull()?.asString() in ktCollections) return true
+        return this?.supertypes()?.any { it.constructor.toString() in ktAndJavaCollections } == true
     }
 }

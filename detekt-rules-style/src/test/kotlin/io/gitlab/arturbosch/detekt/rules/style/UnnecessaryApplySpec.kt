@@ -171,6 +171,60 @@ class UnnecessaryApplySpec : Spek({
                     )
                 ).isEmpty()
             }
+
+            it("reports when lambda has a dot qualified expression") {
+                val findings = subject.compileAndLintWithContext(
+                    env,
+                    """
+                    fun test(foo: Foo) {
+                        foo.apply {
+                            bar.bar()
+                        }
+                    }
+                    
+                    class Foo(val bar: Bar)
+                    
+                    class Bar {
+                        fun bar() {}
+                    }
+                    """
+                )
+                assertThat(findings).hasSize(1)
+            }
+
+            it("reports when lambda has a dot qualified expression which has 'this' receiver") {
+                val findings = subject.compileAndLintWithContext(
+                    env,
+                    """
+                    fun test(foo: Foo) {
+                        foo.apply {
+                            this.bar.bar()
+                        }
+                    }
+                    
+                    class Foo(val bar: Bar)
+                    
+                    class Bar {
+                        fun bar() {}
+                    }
+                    """
+                )
+                assertThat(findings).hasSize(1)
+            }
+
+            it("reports when lambda has a 'this' expression") {
+                val findings = subject.compileAndLintWithContext(
+                    env,
+                    """
+                    fun test() {
+                        "foo".apply {
+                            this
+                        }
+                    }
+                    """
+                )
+                assertThat(findings).hasSize(1)
+            }
         }
 
         context("reported false positives - #1305") {
@@ -338,6 +392,33 @@ class UnnecessaryApplySpec : Spek({
                         }
                     }
                 """
+                    )
+                ).isEmpty()
+            }
+        }
+
+        context("false positive when lambda has multiple member references - #3561") {
+
+            it("do not report when lambda has multiple member references") {
+                assertThat(
+                    subject.compileAndLintWithContext(
+                        env,
+                        """
+                        fun test(foo: Foo) {
+                            foo.apply {
+                                bar {
+                                    baz = 2
+                                }
+                            }
+                        }
+                        
+                        class Foo {
+                            fun bar(f: () -> Unit) {
+                            }
+                            var baz = 1
+                        }
+    
+                        """
                     )
                 ).isEmpty()
             }

@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.builtins.StandardNames
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -138,8 +138,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
     }
 
-    private fun KtSimpleNameExpression.classFqName() =
-        getType(bindingContext)?.constructor?.declarationDescriptor.safeAs<ClassDescriptor>()?.fqNameOrNull()
+    private fun KtSimpleNameExpression.classFqName() = getType(bindingContext)?.fqNameOrNull()
 
     private fun KtSimpleNameExpression.isCollectionOrArrayOrString(): Boolean {
         val classFqName = classFqName() ?: return false

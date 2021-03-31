@@ -8,22 +8,18 @@ application {
     mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
-val bundledRules by configurations.creating
-
 dependencies {
     implementation("com.beust:jcommander")
     implementation(project(":detekt-tooling"))
     implementation(project(":detekt-parser"))
     runtimeOnly(project(":detekt-core"))
+    runtimeOnly(project(":detekt-rules"))
 
     testImplementation(project(":detekt-test"))
-
-    bundledRules(project(":detekt-rules"))
 }
 
 tasks.shadowJar {
     mergeServiceFiles()
-    configurations = listOf(project.configurations.runtimeClasspath.get(), bundledRules)
 }
 
 tasks.register<Copy>("moveJarForIntegrationTest") {
