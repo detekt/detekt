@@ -17,7 +17,6 @@ summary:
 - Specify code smell thresholds to break your build or print a warning
 - Code Smell baseline and ignore lists for legacy projects
 - [Gradle plugin](pages/gettingstarted/gradle.md) for code analysis via Gradle builds
-- Optionally configure detekt for each sub module by using profiles (gradle-plugin)
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensible by own rule sets and `FileProcessListener's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
