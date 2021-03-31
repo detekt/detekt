@@ -34,9 +34,9 @@ private fun KtNamedFunction.hasMainSignature() =
     this.name == "main" && this.isPublicNotOverridden() && this.hasMainParameter()
 
 private fun KtNamedFunction.hasMainParameter() =
-    valueParameters.isEmpty()
-        || valueParameters.size == 1 && valueParameters[0].typeReference?.text == "Array<String>"
-        || (valueParameters.size == 1 && valueParameters[0].isVarArg && valueParameters[0].typeReference?.text == "String")
+    valueParameters.isEmpty() ||
+        (valueParameters.size == 1 && valueParameters[0].typeReference?.text == "Array<String>") ||
+        (valueParameters.size == 1 && valueParameters[0].isVarArg && valueParameters[0].typeReference?.text == "String")
 
 private fun KtNamedFunction.isMainInsideObject() =
     this.name == "main" &&
