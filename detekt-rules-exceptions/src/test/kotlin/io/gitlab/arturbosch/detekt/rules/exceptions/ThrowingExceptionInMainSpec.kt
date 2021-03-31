@@ -14,9 +14,10 @@ class ThrowingExceptionInMainSpec : Spek({
         it("reports a runnable main function which throws an exception") {
             val code = """
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
+                fun main(vararg args: String) { throw IllegalArgumentException() }
                 fun main() { throw IllegalArgumentException() }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
         it("reports runnable main functions with @JvmStatic annotation which throw an exception") {
