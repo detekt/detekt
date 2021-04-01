@@ -239,7 +239,7 @@ class DetektMultiplatformTest : Spek({
 
     describe(
         "multiplatform projects - iOS target",
-        skip = if (isMacOs()) {
+        skip = if (isMacOs() && isCI()) {
             Skip.No
         } else {
             Skip.Yes("Not on MacOS.")
@@ -349,4 +349,6 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
-fun isMacOs() = System.getProperty("os.name").contains("mac", ignoreCase = true)
+private fun isMacOs() = System.getProperty("os.name").contains("mac", ignoreCase = true)
+
+private fun isCI() = System.getProperty("CI").toBoolean()

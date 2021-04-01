@@ -23,8 +23,6 @@ The detekt Gradle plugin will generate multiple tasks:
  run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
-- `detektIdeaFormat` - Uses a local `idea` installation to format your Kotlin (and other) code according to the specified `code-style.xml`.
-- `detektIdeaInspect` - Uses a local `idea` installation to run inspections on your Kotlin (and other) code according to the specified `inspections.xml` profile.
 
 In addition to these standard tasks, the plugin will also generate a set of experimental tasks that have
 [type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
