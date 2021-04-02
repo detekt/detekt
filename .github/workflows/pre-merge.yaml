@@ -53,7 +53,7 @@ jobs:
 
 
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest -x detekt --stacktrace
+      run: ./gradlew build moveJarForIntegrationTest -x detekt -PwarningsAsErrors=true --stacktrace
     - name: Run detekt-cli --help
       run: java -jar ./build/detekt-cli-all.jar --help
     - name: Run detekt-cli with argsfile
