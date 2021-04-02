@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.KtLint
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
+import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.Config
@@ -23,6 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 /**
  * Rule to detect formatting violations.
  */
+@OptIn(FeatureInAlphaState::class)
 abstract class FormattingRule(config: Config) : Rule(config) {
 
     abstract val wrapping: com.pinterest.ktlint.core.Rule
@@ -49,21 +52,26 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, oldEditorConfig.copy(overrides))
         }
-        overrideEditorConfigProperties()?.let { overrides ->
-            val oldUserData = root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY)
-            val newUserData = if (oldUserData != null) {
-                oldUserData + overrides
-            } else {
-                overrides
+        val editorConfigProperties = overrideEditorConfigProperties()
+
+        if (!editorConfigProperties.isNullOrEmpty()) {
+            val userData = (root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY) ?: emptyMap())
+                .toMutableMap()
+            editorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
+                userData[editorConfigProperty.type.name] = Property.builder()
+                    .name(editorConfigProperty.type.name)
+                    .type(editorConfigProperty.type)
+                    .value(defaultValue)
+                    .build()
             }
-            root.node.putUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY, newUserData)
+            root.node.putUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY, userData)
         }
         root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
     }
 
     open fun overrideEditorConfig(): Map<String, Any>? = null
 
-    open fun overrideEditorConfigProperties(): Map<String, Property>? = null
+    open fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String>? = null
 
     fun apply(node: ASTNode) {
         if (ruleShouldOnlyRunOnFileNode(node)) {
