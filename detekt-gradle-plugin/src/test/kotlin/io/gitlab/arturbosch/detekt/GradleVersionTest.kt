@@ -29,9 +29,9 @@ object GradleVersionTest : Spek({
 
 private fun getGradleVersionsUnderTest() =
     if (getJdkVersion() < 13) {
-        listOf("5.4", "6.7")
+        listOf("6.0", "6.8")
     } else {
-        listOf("6.7")
+        listOf("6.7", "6.8")
     }
 
 private fun getJdkVersion(): Int {

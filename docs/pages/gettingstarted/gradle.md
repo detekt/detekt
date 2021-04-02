@@ -10,7 +10,7 @@ redirect_from:
 summary:
 ---
 
-detekt requires Gradle 5.4 or higher.
+detekt requires Gradle 6.0 or higher.
 
 ## <a name="tasks">Available plugin tasks</a>
 
