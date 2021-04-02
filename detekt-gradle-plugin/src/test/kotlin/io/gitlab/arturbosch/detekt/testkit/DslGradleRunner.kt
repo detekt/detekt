@@ -113,6 +113,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
+            add("--warning-mode=fail")
             addAll(tasks.toList())
         }
 
