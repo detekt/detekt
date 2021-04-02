@@ -46,7 +46,6 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
         languageVersion = "1.4"
         freeCompilerArgs = listOf(
             "-progressive",
