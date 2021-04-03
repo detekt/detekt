@@ -51,6 +51,12 @@ internal object DetektTaskDslTest : Spek({
                         val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
                         assertThat(result.output).doesNotContain("--report sarif:$sarifReportFile")
                     }
+
+                    it("set as input all the kotlin files in src/main/java and src/main/kotlin") {
+                        val file1 = gradleRunner.projectFile("src/main/java/My0Root0Class.kt")
+                        val file2 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
+                        assertThat(result.output).contains("--input $file1,$file2 ")
+                    }
                 }
 
                 describe("without multiple detekt configs") {
