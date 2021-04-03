@@ -23,8 +23,13 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     val reports = DetektReports()
 
-    var input: ConfigurableFileCollection =
-        objects.fileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
+    var input: ConfigurableFileCollection = objects.fileCollection()
+        .from(
+            DEFAULT_SRC_DIR_JAVA,
+            DEFAULT_TEST_SRC_DIR_JAVA,
+            DEFAULT_SRC_DIR_KOTLIN,
+            DEFAULT_TEST_SRC_DIR_KOTLIN,
+        )
 
     var baseline: File? = null
 
@@ -68,7 +73,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+        const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+        const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         const val DEFAULT_DEBUG_VALUE = false
         const val DEFAULT_PARALLEL_VALUE = false
         const val DEFAULT_AUTO_CORRECT_VALUE = false

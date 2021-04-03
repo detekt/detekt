@@ -54,8 +54,10 @@ internal object DetektTaskDslTest : Spek({
 
                     it("set as input all the kotlin files in src/main/java and src/main/kotlin") {
                         val file1 = gradleRunner.projectFile("src/main/java/My0Root0Class.kt")
-                        val file2 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
-                        assertThat(result.output).contains("--input $file1,$file2 ")
+                        val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
+                        val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
+                        val file4 = gradleRunner.projectFile("src/test/kotlin/My3Root0Class.kt")
+                        assertThat(result.output).contains("--input $file1,$file2,$file3,$file4 ")
                     }
                 }
 
