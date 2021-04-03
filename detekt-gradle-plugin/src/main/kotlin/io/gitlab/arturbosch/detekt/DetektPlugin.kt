@@ -106,8 +106,6 @@ class DetektPlugin : Plugin<Project> {
         const val BASELINE_TASK_NAME = "detektBaseline"
         const val DETEKT_EXTENSION = "detekt"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
-        internal val DEFAULT_EXCLUDES = listOf("build/")
-        internal val DEFAULT_INCLUDES = listOf("**/*.kt", "**/*.kts")
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.createJavaClass
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.dsl.Skip
@@ -28,12 +29,14 @@ object DetektAndroidTest : Spek({
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
             gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.createJavaClassAtSubmodule("AJavaClass")
 
             it("task :app:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClass.java")
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
                             ":app:detektMain",
@@ -48,6 +51,7 @@ object DetektAndroidTest : Spek({
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClassTest.java")
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
                             ":app:detektDebugUnitTest",
@@ -63,6 +67,8 @@ object DetektAndroidTest : Spek({
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClass.java")
+                    assertThat(buildResult.output).doesNotContain("AJavaClassTest.java")
                 }
             }
         }
@@ -118,12 +124,14 @@ object DetektAndroidTest : Spek({
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
             gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.createJavaClassAtSubmodule("AJavaClass")
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClass.java")
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
                             ":lib:detektMain",
@@ -138,6 +146,7 @@ object DetektAndroidTest : Spek({
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClassTest.java")
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
                             ":lib:detektDebugUnitTest",
@@ -153,6 +162,8 @@ object DetektAndroidTest : Spek({
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
+                    assertThat(buildResult.output).doesNotContain("AJavaClass.java")
+                    assertThat(buildResult.output).doesNotContain("AJavaClassTest.java")
                 }
             }
         }
@@ -427,3 +438,7 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = Ds
     """.trimIndent(),
     dryRun = true
 ).also { it.setupProject() }
+
+private fun DslGradleRunner.createJavaClassAtSubmodule(name: String) {
+    createJavaClass(projectLayout.submodules.first(), name)
+}
