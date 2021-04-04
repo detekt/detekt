@@ -5,20 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import org.jetbrains.kotlin.psi.KtFile
 
-// This will be a sealed interface in 1.5
-interface Rule {
+interface Rule : (KtFile) -> List<Issue>{
     val id: String
     val description: String
-}
-
-interface PlainRule : Rule, (KtFile) -> List<Issue> {
 
     override fun invoke(file: KtFile): List<Issue>
-}
-
-interface TypeSolvingRule : Rule, (KtFile, ResolvedContext) -> List<Issue> {
-
-    override fun invoke(file: KtFile, resolvedContext: ResolvedContext): List<Issue>
 }
 
 interface Issue {
