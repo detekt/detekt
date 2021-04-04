@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
+    api(libs.kotlinx.coroutines.core)
     api(projects.detektPsiUtils)
 
     testImplementation(projects.detektTest)
