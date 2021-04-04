@@ -223,6 +223,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Adam Kobor](https://github.com/adamkobor) - New rule: MultilineLambdaItParameter
 - [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
 - [Ivo Smid](https://github.com/bedla) - Fix Local development on Windows
+- [Krzysztof Kruczynski](https://github.com/krzykrucz) - Rule fix: ThrowingExceptionInMain, ExitOutsideMain
 
 ### Mentions
 
