@@ -5,8 +5,8 @@
         <description>Meet detekt, a static code analysis tool for Kotlin.</description>
         <link>https://detekt.github.io/</link>
         <atom:link href="https://detekt.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Tue, 30 Mar 2021 12:09:10 -0500</pubDate>
-        <lastBuildDate>Tue, 30 Mar 2021 12:09:10 -0500</lastBuildDate>
+        <pubDate>Mon, 05 Apr 2021 05:20:31 -0500</pubDate>
+        <lastBuildDate>Mon, 05 Apr 2021 05:20:31 -0500</lastBuildDate>
         <generator>Jekyll v3.9.0</generator>
         
         <item>
@@ -333,14 +333,6 @@ All &lt;em&gt;exclude-rules&lt;/em&gt; and &lt;em&gt;exclude-rule-sets&lt;/em&gt
         &lt;span class=&quot;n&quot;&gt;reports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-        &lt;span class=&quot;n&quot;&gt;idea&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$userHome/.idea&quot;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;codeStyleScheme&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$userHome/.idea/idea-code-style.xml&quot;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;inspectionsProfile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$userHome/.idea/inspect.xml&quot;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;project.projectDir/reports&quot;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;mask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;*.kt&quot;&lt;/span&gt;
         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;

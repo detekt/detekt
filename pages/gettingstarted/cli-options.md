@@ -73,7 +73,7 @@ Usage: detekt [options]
       EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, 
       reports errors for all language features that came out later (1.0, 1.1, 
       1.2, 1.3, 1.4)
-      Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4, 1.5]
+      Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
     --max-issues
       Return exit code 0 only when found issues count does not exceed 
       specified issues count.

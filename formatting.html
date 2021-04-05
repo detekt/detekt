@@ -484,6 +484,21 @@ in the command line interface.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
+<h4 id="configuration-options">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">indentSize</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
+
+    <p>indentation size</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">maxLineLength</code> (default: <code class="language-plaintext highlighter-rouge">120</code>)</p>
+
+    <p>maximum line length</p>
+  </li>
+</ul>
+
 <h3 id="chainwrapping">ChainWrapping</h3>
 
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
@@ -514,7 +529,7 @@ in the command line interface.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options">Configuration options:</h4>
+<h4 id="configuration-options-1">Configuration options:</h4>
 
 <ul>
   <li>
@@ -528,17 +543,18 @@ in the command line interface.</p>
 
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
 
-<p>For defining custom import layout patterns see: https://github.com/pinterest/ktlint/blob/cdf871b6f015359f9a6f02e15ef1b85a6c442437/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt</p>
+<p>For defining import layout patterns see:
+https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3ce/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt</p>
 
 <p><strong>Active by default</strong>: No</p>
 
-<h4 id="configuration-options-1">Configuration options:</h4>
+<h4 id="configuration-options-2">Configuration options:</h4>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">layout</code> (default: <code class="language-plaintext highlighter-rouge">'idea'</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">layout</code> (default: <code class="language-plaintext highlighter-rouge">'*,java.**,javax.**,kotlin.**,^'</code>)</p>
 
-    <p>the import ordering layout; use ‘ascii’, ‘idea’ or define a custom one</p>
+    <p>the import ordering layout;</p>
   </li>
 </ul>
 
@@ -548,7 +564,7 @@ in the command line interface.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
-<h4 id="configuration-options-2">Configuration options:</h4>
+<h4 id="configuration-options-3">Configuration options:</h4>
 
 <ul>
   <li>
@@ -569,13 +585,18 @@ in the command line interface.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options-3">Configuration options:</h4>
+<h4 id="configuration-options-4">Configuration options:</h4>
 
 <ul>
   <li>
     <p><code class="language-plaintext highlighter-rouge">maxLineLength</code> (default: <code class="language-plaintext highlighter-rouge">120</code>)</p>
 
     <p>maximum line length</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ignoreBackTickedIdentifier</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
+
+    <p>ignore back ticked identifier</p>
   </li>
 </ul>
 
@@ -675,13 +696,18 @@ in the command line interface.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options-4">Configuration options:</h4>
+<h4 id="configuration-options-5">Configuration options:</h4>
 
 <ul>
   <li>
     <p><code class="language-plaintext highlighter-rouge">indentSize</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
 
     <p>indentation size</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">maxLineLength</code> (default: <code class="language-plaintext highlighter-rouge">120</code>)</p>
+
+    <p>maximum line length</p>
   </li>
 </ul>
 
@@ -785,7 +811,7 @@ in the command line interface.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 30, 2021 <br />
+ Site last generated: Apr 5, 2021 <br />
                 </div>
             </div>
 </footer>
