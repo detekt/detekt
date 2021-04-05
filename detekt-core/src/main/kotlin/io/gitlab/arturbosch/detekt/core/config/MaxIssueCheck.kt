@@ -4,6 +4,7 @@ import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.reporting.BUILD
 
 internal class MaxIssueCheck(
@@ -37,10 +38,23 @@ internal class MaxIssueCheck(
         if (!meetsPolicy(numberOfIssues)) {
             val smellsWithWeights = result.getIssuesWithWeights(config)
             val topSmellsToPrint = 5
-            val topSmells = smellsWithWeights.sortedBy { it.second }.take(topSmellsToPrint)
+            val topSmells = smellsWithWeights.sortedByDescending { it.second }.take(topSmellsToPrint)
             throw MaxIssuesReached("Build failed with $numberOfIssues weighted issues. Top $topSmellsToPrint:\n" + topSmells.prettyPrint()
 //                    topSmells.joinToString ("\n  ") { it.first }
             )
         }
+    }
+}
+
+private fun Collection<Pair<Finding, Int>>.prettyPrint(): String {
+    if (isEmpty()) return ""
+
+    val maxScore = this.first().second
+    val scoreWidth = maxScore.toString().length + 1
+    val issueWidth = this.map { it.first.issue.id.length }.maxOrNull()!! + 1
+    return joinToString( prefix = "\n  ", separator = "\n  ", postfix = "\n"){ (finding, score) ->
+        val location = finding.references.first().location
+        val locationString = location.file + ":" + location.source.line
+        score.toString().padStart(scoreWidth) + finding.issue.id.padEnd(issueWidth) + locationString
     }
 }
