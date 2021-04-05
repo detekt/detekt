@@ -1,18 +1,12 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
-import io.github.detekt.tooling.api.AnalysisResult
-import io.github.detekt.tooling.api.Detekt
-import io.github.detekt.tooling.api.DetektError
-import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.MaxIssuesReached
-import io.github.detekt.tooling.api.UnexpectedError
+import io.github.detekt.tooling.api.*
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.internal.DefaultAnalysisResult
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.MaxIssueCheck
-import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
@@ -57,8 +51,7 @@ class AnalysisFacade(
         }
 
         val error = runCatching {
-            val amount = result.getOrComputeWeightedAmountOfIssues(config)
-            MaxIssueCheck(spec.rulesSpec, config).check(amount)
+            MaxIssueCheck(spec.rulesSpec, config).check(result)
         }.exceptionOrNull()
 
         return when {

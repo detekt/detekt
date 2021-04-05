@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RuleId
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.core.reporting.BUILD
 import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -18,8 +14,13 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     if (maybeAmount != null) {
         return maybeAmount
     }
+    val smellsWithWeights = getIssuesWithWeights(config)
+    val amount = smellsWithWeights.sumBy { it.second }
+    this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
+    return amount
+}
 
-    val smells = filterAutoCorrectedIssues(config).flatMap { it.value }
+internal fun Detektion.getIssuesWithWeights(config: Config): List<Pair<Finding, Int>> {
     val ruleToRuleSetId = extractRuleToRuleSetIdMap(this)
     val weightsConfig = config.subConfig(BUILD).subConfig(WEIGHTS)
 
@@ -31,9 +32,8 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
         )
     }
 
-    val amount = smells.sumBy { it.weighted() }
-    this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
-    return amount
+    val smells = filterAutoCorrectedIssues(config).flatMap { it.value }
+    return smells.map { it to it.weighted() }
 }
 
 private fun extractRuleToRuleSetIdMap(result: Detektion): Map<RuleId, RuleSetId> =

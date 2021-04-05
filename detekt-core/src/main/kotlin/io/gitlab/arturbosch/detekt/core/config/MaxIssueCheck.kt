@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.reporting.BUILD
 
 internal class MaxIssueCheck(
@@ -31,9 +32,15 @@ internal class MaxIssueCheck(
         is RulesSpec.MaxIssuePolicy.AllowAmount -> numberOfIssues <= policy.amount
     }
 
-    fun check(numberOfIssues: Int) {
+    fun check(result: Detektion) {
+        val numberOfIssues = result.getOrComputeWeightedAmountOfIssues(config)
         if (!meetsPolicy(numberOfIssues)) {
-            throw MaxIssuesReached("Build failed with $numberOfIssues weighted issues.")
+            val smellsWithWeights = result.getIssuesWithWeights(config)
+            val topSmellsToPrint = 5
+            val topSmells = smellsWithWeights.sortedBy { it.second }.take(topSmellsToPrint)
+            throw MaxIssuesReached("Build failed with $numberOfIssues weighted issues. Top $topSmellsToPrint:\n" + topSmells.prettyPrint()
+//                    topSmells.joinToString ("\n  ") { it.first }
+            )
         }
     }
 }
