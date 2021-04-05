@@ -198,7 +198,7 @@ class XmlOutputFormatSpec : Spek({
                     val expected = """
                     <?xml version="1.0" encoding="UTF-8"?>
                     <checkstyle version="4.3">
-                    <file name="${finding.location.file}">
+                    <file name="src/main/com/sample/Sample1.kt">
                     $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                     </file>
                     </checkstyle>

@@ -33,7 +33,7 @@ interface HasEntity {
     val charPosition: TextLocation
         get() = location.text
     val file: String
-        get() = location.file
+        get() = location.filePath.absolutePath.toString()
     val signature: String
         get() = entity.signature
 }

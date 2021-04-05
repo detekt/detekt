@@ -17,16 +17,24 @@ import java.nio.file.Paths
 data class Location @Deprecated("Consider relative path by passing a [FilePath]") @JvmOverloads constructor(
     val source: SourceLocation,
     val text: TextLocation,
+    @Deprecated(
+        "Use filePath instead",
+        ReplaceWith(
+            "filePath.absolutePath.toString()"
+        )
+    )
     val file: String,
     val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
 ) : Compactable {
 
+    @Suppress("DEPRECATION")
     constructor(
         source: SourceLocation,
         text: TextLocation,
         filePath: FilePath
     ) : this(source, text, filePath.absolutePath.toString(), filePath)
 
+    @Suppress("DEPRECATION")
     @Deprecated(
         """
         locationString was removed and won't get passed to the main constructor.

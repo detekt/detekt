@@ -29,7 +29,7 @@ class FileBasedFindingsReport : ConsoleReport() {
 
         val findingsPerFile = findings.values
             .flatten()
-            .groupBy { it.entity.location.file }
+            .groupBy { it.entity.location.filePath.absolutePath.toString() }
         return printFindings(findingsPerFile)
     }
 }
