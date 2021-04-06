@@ -363,7 +363,6 @@ private val KMM_PLUGIN_BLOCK = """
 private val DETEKT_BLOCK = """
     detekt {
         baseline = file("${"$"}projectDir/baseline.xml")
-        reports.sarif.enabled = true
         reports.txt.enabled = false
     }
 """.trimIndent()

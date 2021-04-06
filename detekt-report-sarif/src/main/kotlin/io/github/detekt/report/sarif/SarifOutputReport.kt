@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
 
 const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
@@ -42,7 +43,7 @@ class SarifOutputReport : OutputReport() {
     }
 
     override fun render(detektion: Detektion): String {
-        val version = VersionProvider.load().current()
+        val version = whichDetekt()
         val sarifSchema210 = SarifSchema210(
             schema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
             version = Version.The210,

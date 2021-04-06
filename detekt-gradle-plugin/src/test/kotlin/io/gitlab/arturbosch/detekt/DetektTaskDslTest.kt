@@ -47,9 +47,9 @@ internal object DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--report txt:$textReportFile")
                     }
 
-                    it("disables sarif report to default location") {
+                    it("enables sarif report to default location") {
                         val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
-                        assertThat(result.output).doesNotContain("--report sarif:$sarifReportFile")
+                        assertThat(result.output).contains("--report sarif:$sarifReportFile")
                     }
                 }
 

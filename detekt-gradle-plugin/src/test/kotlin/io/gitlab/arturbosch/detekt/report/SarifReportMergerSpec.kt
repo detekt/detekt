@@ -15,8 +15,7 @@ internal class SarifReportMergerSpec : Spek({
             SarifReportMerger.merge(listOf(input1, input2), output)
 
             val expectedOutput = resourceAsFile("output.sarif.json")
-            assertThat(output.readText().replace("\\s".toRegex(), ""))
-                .isEqualTo(expectedOutput.readText().replace("\\s".toRegex(), ""))
+            assertThat(output.readText()).isEqualToNormalizingNewlines(expectedOutput.readText())
         }
     }
 })

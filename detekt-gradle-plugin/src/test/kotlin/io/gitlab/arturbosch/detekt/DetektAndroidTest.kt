@@ -436,7 +436,6 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 private val DETEKT_BLOCK = """
     detekt {
         reports {
-            sarif.enabled = true
             txt.enabled = false
         }
     }

@@ -30,11 +30,8 @@ class SarifOutputReportSpec : Spek({
             val report = SarifOutputReport()
                 .apply { init(EmptySetupContext()) }
                 .render(result)
-                .stripWhitespace()
 
-            assertThat(report).isEqualTo(
-                readResourceContent("vanilla.sarif.json").stripWhitespace()
-            )
+            assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
         }
 
         it("renders multiple issues with relative path") {
@@ -57,7 +54,6 @@ class SarifOutputReportSpec : Spek({
                 .stripWhitespace()
 
             val expectedReport = readResourceContent("relative_path.sarif.json")
-                .stripWhitespace()
 
             // Note: Github CI uses D: drive, but it could be any drive for local development
             val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
@@ -67,7 +63,7 @@ class SarifOutputReportSpec : Spek({
                 expectedReport
             }
 
-            assertThat(report).isEqualTo(systemAwareExpectedReport)
+            assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
         }
     }
 })
