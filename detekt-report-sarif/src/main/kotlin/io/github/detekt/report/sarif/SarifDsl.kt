@@ -5,8 +5,8 @@ import io.github.detekt.sarif4j.Run
 import io.github.detekt.sarif4j.SarifSchema210
 import io.github.detekt.sarif4j.Tool
 import io.github.detekt.sarif4j.ToolComponent
-import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.net.URI
 
 const val SCHEMA_URL = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
@@ -35,7 +35,7 @@ fun SarifSchema210.withDetektRun(config: Config, init: Run.() -> Unit) {
                         fullName = name
                         organization = name
                         language = "en"
-                        version = VersionProvider.load().current()
+                        version = whichDetekt()
                         semanticVersion = version
                         downloadUri = URI.create("https://github.com/detekt/detekt/releases/download/v$version/detekt")
                         informationUri = URI.create("https://detekt.github.io/detekt")
