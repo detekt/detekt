@@ -90,8 +90,7 @@ class DeprecatedBlockTagSpec : Spek({
                          *
                          * @deprecated Do not use that
                          */
-                        constructor(something: String) {
-                        }
+                        constructor(something: String)
                     }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -107,7 +106,7 @@ class DeprecatedBlockTagSpec : Spek({
                              * 
                              * @deprecated Do not use it
                              */
-                            set(value) = { println(value) }
+                            set(value) { println(value) }
                     }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -123,7 +122,7 @@ class DeprecatedBlockTagSpec : Spek({
                              * @deprecated Do not use it
                              */
                             get() = 10
-                            set(value) = { println(value) }
+                            set(value) { println(value) }
                     }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
