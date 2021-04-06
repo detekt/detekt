@@ -150,5 +150,43 @@ class NamedArgumentsSpec : Spek({
             val findings = namedArguments.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        context("lambda argument") {
+            it("inner lambda argument") {
+                val code = """
+                fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
+                
+                fun test() {
+                    foo(a = 1, b = 2, c = 3, { it })
+                }
+            """
+                val findings = namedArguments.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("outer lambda argument") {
+                val code = """
+                fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
+                
+                fun test() {
+                    foo(a = 1, b = 2, c = 3) { it }
+                }
+            """
+                val findings = namedArguments.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(0)
+            }
+
+            it("unnamed argument and outer argument") {
+                val code = """
+                fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
+                
+                fun test() {
+                    foo(a = 1, b = 2, 3) { it }
+                }
+            """
+                val findings = namedArguments.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+        }
     }
 })
