@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
@@ -22,25 +21,21 @@ class DeprecatedBlockTagSpec : Spek({
         }
 
         describe("reporting deprecation tag on kdoc block") {
-            var result = listOf<Finding>()
-            beforeEachTest {
-                val code = """
+            val code = """
                 /**
                  * I am a KDoc block
                  * 
                  * @deprecated oh no, this should not be here
                  */
                 fun ohNo() { }
-                """
-                result = subject.compileAndLint(code)
-            }
+            """
 
             it("has found something") {
-                assertThat(result).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("correct message") {
-                assertThat(result[0]).hasMessage(
+                assertThat(subject.compileAndLint(code)[0]).hasMessage(
                     "@deprecated tag block does not properly report " +
                         "deprecation in Kotlin, use @Deprecated annotation instead"
                 )
