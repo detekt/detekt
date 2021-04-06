@@ -22,8 +22,7 @@ dependencies {
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
         api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
         api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
-        api("io.github.detekt.sarif4j:sarif4j:1.0.0")
-        api("com.fasterxml.jackson.core:jackson-databind:2.12.2")
+        api("io.github.detekt.sarif4k:sarif4k:0.0.1")
     }
 }
 
