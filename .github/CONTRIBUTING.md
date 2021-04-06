@@ -51,12 +51,11 @@ automatically. The format of the KDoc should be as follows:
        active: false
        name: whatever should be the default
     ```
-
-- ... do not forget to test the new rule and/or add tests for any changes made to a rule.
-Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
-Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
-- ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
-as well as add the new/changed rules to the documentation.
+- ... run `./gradlew generateDocumentation` to add your rule and its config options to the `default-detekt-config.yml`.
+- ... do not forget to run `./gradlew build`. This will execute tests locally.
+- ... do not forget to test the new rule and/or add tests for any changes made to a rule. Run detekt on itself and other
+  kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation. Make use of
+  the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
 - To print the AST of sources you can pass the `--print-ast` flag to the CLI which will print each
 Kotlin files AST. This can be helpful when implementing and debugging rules.
 - To view the AST (PSI) of your source code you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
