@@ -32,7 +32,6 @@ class GithubMilestoneReport : CliktCommand() {
     private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
 
     override fun run() {
-
         // connect to GitHub
         val github: GitHub = GitHub.connectAnonymously()
         val ghRepository: GHRepository = github.getUser(user).getRepository(project)

@@ -3,15 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
  * Reports empty `if` blocks. Empty blocks of code serve no purpose and should be removed.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class EmptyIfBlock(config: Config) : EmptyRule(config) {
 
     override fun visitIfExpression(expression: KtIfExpression) {

@@ -46,8 +46,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class UnnecessaryLet(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "The `let` usage is unnecessary", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "The `let` usage is unnecessary",
+        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -70,7 +72,8 @@ class UnnecessaryLet(config: Config) : Rule(config) {
             if (lambdaReferenceCount == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(expression),
+                        issue,
+                        Entity.from(expression),
                         "let expression can be replaces with a simple if"
                     )
                 )

@@ -86,7 +86,11 @@ open class ThresholdedCodeSmell(
     message: String,
     references: List<Entity> = emptyList()
 ) : CodeSmell(
-    issue, entity, message, metrics = listOf(metric), references = references
+    issue,
+    entity,
+    message,
+    metrics = listOf(metric),
+    references = references
 ) {
 
     val value: Int

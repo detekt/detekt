@@ -36,7 +36,8 @@ class HtmlUtilsSpec : Spek({
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 1), 34)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment
@@ -57,7 +58,8 @@ class HtmlUtilsSpec : Spek({
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 26)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment
@@ -78,7 +80,8 @@ class HtmlUtilsSpec : Spek({
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 66)
             }
 
-            assertThat(snippet).isEqualTo("""
+            assertThat(snippet).isEqualTo(
+                """
                 <div>
                   <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
                 <span class="lineno">   5 </span>// A comment

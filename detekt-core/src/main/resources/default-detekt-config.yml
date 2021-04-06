@@ -254,6 +254,8 @@ formatting:
   ArgumentListWrapping:
     active: false
     autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -272,7 +274,7 @@ formatting:
   ImportOrdering:
     active: false
     autoCorrect: true
-    layout: 'idea'
+    layout: '*,java.**,javax.**,kotlin.**,^'
   Indentation:
     active: false
     autoCorrect: true
@@ -280,6 +282,7 @@ formatting:
   MaximumLineLength:
     active: true
     maxLineLength: 120
+    ignoreBackTickedIdentifier: false
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -328,6 +331,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+    maxLineLength: 120
   SpacingAroundAngleBrackets:
     active: false
     autoCorrect: true

@@ -187,12 +187,11 @@ internal class ConfigValidationSpec : Spek({
 
                 it(testName) {
                     val config = yamlConfigFromContent("""
-                    config:
-                      warningsAsErrors: $warningsAsErrors
-                    formatting:
-                      Indentation:
-                        continuationIndentSize: 8
-                """.trimIndent())
+                        config:
+                          warningsAsErrors: $warningsAsErrors
+                        formatting:
+                          Indentation:
+                            continuationIndentSize: 8""".trimIndent())
 
                     val result = validateConfig(config, config)
 

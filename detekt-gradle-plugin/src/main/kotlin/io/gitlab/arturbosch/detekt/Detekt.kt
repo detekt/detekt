@@ -122,6 +122,7 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
     @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean
         @Input
@@ -212,8 +213,9 @@ open class Detekt @Inject constructor(
     @TaskAction
     fun check() {
         if (failFastProp.getOrElse(false)) {
-            project.logger.warn("'failFast' is deprecated. Please use " +
-                    "'buildUponDefaultConfig' together with 'allRules'.")
+            project.logger.warn(
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
+            )
         }
 
         val arguments = mutableListOf(

@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -22,19 +23,20 @@ import java.util.IdentityHashMap
  * things.
  *
  * @configuration threshold - the size of class required to trigger the rule (default: `600`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class LargeClass(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_CLASS_LENGTH
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("LargeClass",
-            Severity.Maintainability,
-            "One class should have one responsibility. Large classes tend to handle many things at once. " +
-                    "Split up large classes into smaller classes that are easier to understand.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "LargeClass",
+        Severity.Maintainability,
+        "One class should have one responsibility. Large classes tend to handle many things at once. " +
+            "Split up large classes into smaller classes that are easier to understand.",
+        Debt.TWENTY_MINS
+    )
 
     private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
     private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
@@ -52,7 +54,8 @@ class LargeClass(
                         issue,
                         Entity.atName(clazz),
                         Metric("SIZE", lines, threshold),
-                        "Class ${clazz.name} is too large. Consider splitting it into smaller pieces.")
+                        "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."
+                    )
                 )
             }
         }
@@ -62,12 +65,12 @@ class LargeClass(
         val lines = classOrObject.linesOfCode()
         classToLinesCache[classOrObject] = lines
         classOrObject.getStrictParentOfType<KtClassOrObject>()
-                ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
+            ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
         super.visitClassOrObject(classOrObject)
         findAllNestedClasses(classOrObject)
-                .fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
-                .takeIf { it > 0 }
-                ?.let { classToLinesCache[classOrObject] = lines - it }
+            .fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
+            .takeIf { it > 0 }
+            ?.let { classToLinesCache[classOrObject] = lines - it }
     }
 
     private fun findAllNestedClasses(startClass: KtClassOrObject): Sequence<KtClassOrObject> = sequence {

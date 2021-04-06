@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -20,14 +21,16 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * <compliant>
  * fun isNull(str: String) = str == null
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("EqualsNullCall", Severity.Style,
-            "Equals() method is called with null as parameter. Consider using == to compare to null.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "EqualsNullCall",
+        Severity.Style,
+        "Equals() method is called with null as parameter. Consider using == to compare to null.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (expression.calleeExpression?.text == "equals" && hasNullParameter(expression)) {

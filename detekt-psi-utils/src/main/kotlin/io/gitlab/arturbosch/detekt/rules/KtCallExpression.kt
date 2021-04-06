@@ -9,8 +9,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 fun KtCallExpression.isCalling(fqName: FqName, bindingContext: BindingContext): Boolean {
     return bindingContext != BindingContext.EMPTY &&
-            calleeExpression?.text == fqName.shortName().asString() &&
-            getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe == fqName
+        calleeExpression?.text == fqName.shortName().asString() &&
+        getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe == fqName
 }
 
 fun KtCallExpression.isCallingWithNonNullCheckArgument(

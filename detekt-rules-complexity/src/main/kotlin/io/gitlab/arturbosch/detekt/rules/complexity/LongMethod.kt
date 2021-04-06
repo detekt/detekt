@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -22,19 +23,20 @@ import java.util.IdentityHashMap
  * Extract parts of the functionality of long methods into separate, smaller methods.
  *
  * @configuration threshold - number of lines in a method to trigger the rule (default: `60`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class LongMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("LongMethod",
-            Severity.Maintainability,
-            "One method should have one responsibility. Long methods tend to handle many things at once. " +
-                    "Prefer smaller methods to make them easier to understand.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "LongMethod",
+        Severity.Maintainability,
+        "One method should have one responsibility. Long methods tend to handle many things at once. " +
+            "Prefer smaller methods to make them easier to understand.",
+        Debt.TWENTY_MINS
+    )
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
@@ -77,9 +79,9 @@ class LongMethod(
         parentMethods?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
         super.visitNamedFunction(function)
         findAllNestedFunctions(function)
-                .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
-                .takeIf { it > 0 }
-                ?.let { functionToLinesCache[function] = lines - it }
+            .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
+            .takeIf { it > 0 }
+            ?.let { functionToLinesCache[function] = lines - it }
     }
 
     private fun findAllNestedFunctions(startFunction: KtNamedFunction): Sequence<KtNamedFunction> = sequence {

@@ -57,5 +57,20 @@ class MaximumLineLengthSpec : Spek({
             assertThat(findings[0].entity.location.source.line).isEqualTo(8)
             assertThat(findings[1].entity.location.source.line).isEqualTo(14)
         }
+
+        it("does not report back ticked line which exceeds the threshold") {
+            val code = """
+                package home.test
+                fun `this is a test method that has more than 30 characters inside the back ticks`() {
+                }
+            """.trimIndent()
+            val findings = MaximumLineLength(
+                TestConfig(
+                    MaximumLineLength.MAX_LINE_LENGTH to "30",
+                    MaximumLineLength.IGNORE_BACK_TICKED_IDENTIFIER to "true"
+                )
+            ).lint(code)
+            assertThat(findings).isEmpty()
+        }
     }
 })

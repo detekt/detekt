@@ -123,11 +123,11 @@ class CliArgs {
     )
     var allRules: Boolean = false
 
+    // nullable for 1.x.x to prefer maxIssues from config file
     @Parameter(
         names = ["--max-issues"],
         description = "Return exit code 0 only when found issues count does not exceed specified issues count."
     )
-    // nullable for 1.x.x to prefer maxIssues from config file
     var maxIssues: Int? = null
 
     @Parameter(
@@ -147,7 +147,8 @@ class CliArgs {
 
     @Parameter(
         names = ["--help", "-h"],
-        help = true, description = "Shows the usage."
+        help = true,
+        description = "Shows the usage."
     )
     var help: Boolean = false
 

@@ -19,30 +19,35 @@ class ComplexMethodSpec : Spek({
         context("different complex constructs") {
 
             it("counts different loops") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         for (i in 1..10) {}
                         while (true) {}
                         do {} while(true)
                         (1..10).forEach {}
                     }
-                """)
+                """
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
 
             it("counts catch blocks") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
                     }
-                """)
+                """
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
             }
 
             it("counts nested conditional statements") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                    """
                     fun test() {
                         try {
                             while (true) {
@@ -57,7 +62,8 @@ class ComplexMethodSpec : Spek({
                             // only catches count
                         }
                     }
-                """)
+                """
+                )
 
                 assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
             }
@@ -103,8 +109,11 @@ class ComplexMethodSpec : Spek({
             val path = resourceAsPath("ComplexMethods.kt")
 
             it("does not report complex methods with a single when expression") {
-                val config = TestConfig(mapOf(
-                    ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
+                val config = TestConfig(
+                    mapOf(
+                        ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"
+                    )
+                )
                 val subject = ComplexMethod(config, threshold = 4)
 
                 assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(43, 5))

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
@@ -20,15 +21,16 @@ import org.jetbrains.kotlin.psi.KtParameter
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverridden - ignores overridden functions with parameters not matching the pattern
  * (default: `true`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Function parameter names should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Function parameter names should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
@@ -45,10 +47,13 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
         val identifier = parameter.identifierName()
         if (!identifier.matches(parameterPattern)) {
-            report(CodeSmell(
+            report(
+                CodeSmell(
                     issue,
                     Entity.from(parameter),
-                    message = "Function parameter names should match the pattern: $parameterPattern"))
+                    message = "Function parameter names should match the pattern: $parameterPattern"
+                )
+            )
         }
     }
 

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -42,10 +43,9 @@ import org.jetbrains.kotlin.types.isNullable
  * val testList3 = listOf("string")
  * val testString = ""?.isBlank()
  * </compliant>
- *
- * @active since v1.2.0
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.2.0")
 class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UselessCallOnNotNull",

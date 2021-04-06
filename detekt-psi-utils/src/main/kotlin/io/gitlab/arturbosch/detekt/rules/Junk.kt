@@ -42,6 +42,8 @@ inline fun <reified T : Any> Any.safeAs(): T? = this as? T
 fun KtCallExpression.receiverIsUsed(context: BindingContext): Boolean =
     (parent as? KtQualifiedExpression)?.let {
         val scopeOfApplyCall = parent.parent
-        !((scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
-            (context == BindingContext.EMPTY || !it.isUsedAsExpression(context)))
+        !(
+            (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
+                (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
+            )
     } ?: true

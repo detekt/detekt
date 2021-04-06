@@ -1,7 +1,7 @@
 plugins {
     module
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.13.0"
+    id("com.gradle.plugin-publish") version "0.14.0"
 }
 
 repositories {
@@ -31,11 +31,13 @@ dependencies {
     intTest(androidGradlePlugin)
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
-            because("""Android Gradle Plugin 4.1.1 depends on Kotlin 1.3.72 but we should not mix 1.3 and 1.4.
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32") {
+            because(
+                """Android Gradle Plugin 4.1.1 depends on Kotlin 1.3.72 but we should not mix 1.3 and 1.4.
                 This constraint should be lifted on Android Gradle Plugin 4.2.0. See
                 https://dl.google.com/android/maven2/com/android/tools/build/gradle/4.2.0-beta02/gradle-4.2.0-beta02.pom
-            """)
+            """
+            )
         }
     }
 }
@@ -76,13 +78,17 @@ pluginBundle {
 }
 
 tasks.processResources {
-    filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf(
-        "detektVersion" to project.version as String
-    ))
+    filter<org.apache.tools.ant.filters.ReplaceTokens>(
+        "tokens" to mapOf(
+            "detektVersion" to project.version as String
+        )
+    )
 }
 
 tasks.processTestResources {
-    filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf(
-        "detektVersion" to project.version as String
-    ))
+    filter<org.apache.tools.ant.filters.ReplaceTokens>(
+        "tokens" to mapOf(
+            "detektVersion" to project.version as String
+        )
+    )
 }

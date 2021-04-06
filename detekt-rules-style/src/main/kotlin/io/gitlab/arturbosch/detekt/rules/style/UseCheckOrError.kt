@@ -39,7 +39,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UseCheckOrError", Severity.Style,
+        "UseCheckOrError",
+        Severity.Style,
         "Use check() or error() instead of throwing an IllegalStateException.",
         Debt.FIVE_MINS
     )
@@ -48,7 +49,8 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
         if (expression.isOnlyExpressionInLambda()) return
 
         if (expression.isIllegalStateException() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)) {
+            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
@@ -30,10 +31,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     println(s as Int)
  * }
  * </compliant>
- *
- * @active since v1.16.0
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
@@ -53,7 +53,8 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
         ) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.left.text} cast to ${expression.right?.text ?: ""} cannot succeed."
                 )
             )

@@ -14,23 +14,23 @@ fun assertThat(finding: Finding) = FindingAssert(finding)
 fun List<Finding>.assert() = FindingsAssert(this)
 
 class FindingsAssert(actual: List<Finding>) :
-        AbstractListAssert<FindingsAssert, List<Finding>,
-                Finding, FindingAssert>(actual, FindingsAssert::class.java) {
+    AbstractListAssert<FindingsAssert, List<Finding>,
+        Finding, FindingAssert>(actual, FindingsAssert::class.java) {
 
     override fun newAbstractIterableAssert(iterable: MutableIterable<Finding>): FindingsAssert {
         throw UnsupportedOperationException("not implemented")
     }
 
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
-            FindingAssert(value).`as`(description)
+        FindingAssert(value).`as`(description)
 
     fun hasSourceLocations(vararg expected: SourceLocation) = apply {
         val actualSources = actual.asSequence()
-                .map { it.location.source }
-                .sortedWith(compareBy({ it.line }, { it.column }))
+            .map { it.location.source }
+            .sortedWith(compareBy({ it.line }, { it.column }))
 
         val expectedSources = expected.asSequence()
-                .sortedWith(compareBy({ it.line }, { it.column }))
+            .sortedWith(compareBy({ it.line }, { it.column }))
 
         if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
             failWithMessage(
@@ -45,12 +45,12 @@ class FindingsAssert(actual: List<Finding>) :
 
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
-                .map { it.location.text }
-                .sortedWith(compareBy({ it.start }, { it.end }))
+            .map { it.location.text }
+            .sortedWith(compareBy({ it.start }, { it.end }))
 
         val expectedSources = expected.asSequence()
-                .map { (start, end) -> TextLocation(start, end) }
-                .sortedWith(compareBy({ it.start }, { it.end }))
+            .map { (start, end) -> TextLocation(start, end) }
+            .sortedWith(compareBy({ it.start }, { it.end }))
 
         if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
             failWithMessage(

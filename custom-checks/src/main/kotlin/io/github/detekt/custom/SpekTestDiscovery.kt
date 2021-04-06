@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -98,13 +98,16 @@ class SpekTestDiscovery(config: Config = Config.empty) : Rule(config) {
         if (!property.hasDelegate()) {
             val initExpr = property.initializer
             val fqType = initExpr?.getType(bindingContext)
-                ?.getJetTypeFqName(false)
+                ?.fqNameOrNull()
+                ?.asString()
             if (fqType != null && fqType !in allowedTypes) {
-                report(CodeSmell(
-                    issue,
-                    Entity.atName(property),
-                    "Variable declarations which do not met the allowed types should be memoized."
-                ))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(property),
+                        "Variable declarations which do not meet the allowed types should be memoized."
+                    )
+                )
             }
         }
     }

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -53,8 +54,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * (default: `true`)
  * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
  * (default: `false`)
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

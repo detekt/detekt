@@ -25,7 +25,6 @@ object LLOC {
         @Suppress("LoopWithTooManyJumpStatements")
         fun run(): Int {
             for (line in lines) {
-
                 val trimmed = line.trim()
 
                 if (trimmed.isEmpty()) {
@@ -83,7 +82,6 @@ object LLOC {
         }
 
         private fun frequency(source: String, part: String): Int {
-
             if (source.isEmpty() || part.isEmpty()) {
                 return 0
             }

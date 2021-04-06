@@ -54,9 +54,10 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 class ClassOrdering(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
+        javaClass.simpleName,
+        Severity.Style,
         "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
-                "method declarations then companion objects.",
+            "method declarations then companion objects.",
         Debt.FIVE_MINS
     )
 

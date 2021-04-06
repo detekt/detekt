@@ -68,7 +68,6 @@ fun createCompilerConfiguration(
     languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget
 ): CompilerConfiguration {
-
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
             .filter { it.isFile && it.extension.equals("java", true) }

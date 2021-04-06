@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtUnaryExpression
@@ -24,10 +25,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * val a = 1
  * val b = a
  * </compliant>
- *
- * @active since v1.16.0
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
 class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -45,7 +45,8 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {
             report(
                 CodeSmell(
-                    issue, Entity.from(expression),
+                    issue,
+                    Entity.from(expression),
                     "${expression.text} contains an unnecessary " +
                         "not-null (!!) operators"
                 )

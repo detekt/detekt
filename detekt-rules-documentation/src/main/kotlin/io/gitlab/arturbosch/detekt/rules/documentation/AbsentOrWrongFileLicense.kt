@@ -36,18 +36,22 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (!file.hasValidLicense()) {
-            report(CodeSmell(
-                issue,
-                Entity.atPackageOrFirstDecl(file),
-                "Expected license not found or incorrect in the file: ${file.name}."
-            ))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atPackageOrFirstDecl(file),
+                    "Expected license not found or incorrect in the file: ${file.name}."
+                )
+            )
         }
     }
 
     private fun KtFile.hasValidLicense(): Boolean =
-        if (hasLicenseHeaderRegex()) getLicenseHeaderRegex().find(text)?.range?.start == 0 else text.startsWith(
-            getLicenseHeader()
-        )
+        if (hasLicenseHeaderRegex()) {
+            getLicenseHeaderRegex().find(text)?.range?.start == 0
+        } else {
+            text.startsWith(getLicenseHeader())
+        }
 
     companion object {
         const val PARAM_LICENSE_TEMPLATE_FILE = "licenseTemplateFile"

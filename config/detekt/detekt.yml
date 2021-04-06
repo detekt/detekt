@@ -64,10 +64,30 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  AnnotationSpacing:
+    active: true
+  EnumEntryNameCase:
+    active: true
+  ImportOrdering:
+    active: true
+  Indentation:
+    active: true
   MaximumLineLength:
     active: false
+  NoEmptyFirstLineInMethodBlock:
+    active: true
   ParameterListWrapping:
     active: false
+  SpacingAroundAngleBrackets:
+    active: true
+  SpacingAroundDoubleColon:
+    active: true
+  SpacingAroundUnaryOperator:
+    active: true
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: true
+  SpacingBetweenDeclarationsWithComments:
+    active: true
 
 potential-bugs:
   UnsafeCast:

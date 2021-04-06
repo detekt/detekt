@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
@@ -88,6 +88,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
     private fun getTypeName(parameter: KtCallableDeclaration): String? {
         return parameter.createTypeBindingForReturnType(bindingContext)
             ?.type
-            ?.getJetTypeFqName(false)
+            ?.fqNameOrNull()
+            ?.asString()
     }
 }
