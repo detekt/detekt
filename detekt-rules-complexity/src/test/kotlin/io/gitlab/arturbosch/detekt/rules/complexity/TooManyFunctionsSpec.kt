@@ -11,13 +11,17 @@ class TooManyFunctionsSpec : Spek({
     describe("different declarations with one function as threshold") {
 
         val rule by memoized {
-            TooManyFunctions(TestConfig(mapOf(
-                TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                TooManyFunctions.THRESHOLD_IN_ENUMS to "1",
-                TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                TooManyFunctions.THRESHOLD_IN_INTERFACES to "1",
-                TooManyFunctions.THRESHOLD_IN_OBJECTS to "1"
-            )))
+            TooManyFunctions(
+                TestConfig(
+                    mapOf(
+                        TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                        TooManyFunctions.THRESHOLD_IN_ENUMS to "1",
+                        TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                        TooManyFunctions.THRESHOLD_IN_INTERFACES to "1",
+                        TooManyFunctions.THRESHOLD_IN_OBJECTS to "1"
+                    )
+                )
+            )
         }
 
         it("finds one function in class") {
@@ -121,11 +125,15 @@ class TooManyFunctionsSpec : Spek({
             }
 
             it("finds no deprecated functions") {
-                val configuredRule = TooManyFunctions(TestConfig(mapOf(
-                    TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                    TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                    TooManyFunctions.IGNORE_DEPRECATED to "true"
-                )))
+                val configuredRule = TooManyFunctions(
+                    TestConfig(
+                        mapOf(
+                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                            TooManyFunctions.IGNORE_DEPRECATED to "true"
+                        )
+                    )
+                )
                 assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
@@ -143,11 +151,15 @@ class TooManyFunctionsSpec : Spek({
             }
 
             it("finds no private functions") {
-                val configuredRule = TooManyFunctions(TestConfig(mapOf(
-                    TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                    TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                    TooManyFunctions.IGNORE_PRIVATE to "true"
-                )))
+                val configuredRule = TooManyFunctions(
+                    TestConfig(
+                        mapOf(
+                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                            TooManyFunctions.IGNORE_PRIVATE to "true"
+                        )
+                    )
+                )
                 assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
@@ -173,13 +185,17 @@ class TooManyFunctionsSpec : Spek({
                         override fun b() = Unit
                     }
                 """
-                val configuredRule = TooManyFunctions(TestConfig(mapOf(
-                    TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                    TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                    TooManyFunctions.IGNORE_PRIVATE to "true",
-                    TooManyFunctions.IGNORE_DEPRECATED to "true",
-                    TooManyFunctions.IGNORE_OVERRIDDEN to "true"
-                )))
+                val configuredRule = TooManyFunctions(
+                    TestConfig(
+                        mapOf(
+                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                            TooManyFunctions.IGNORE_PRIVATE to "true",
+                            TooManyFunctions.IGNORE_DEPRECATED to "true",
+                            TooManyFunctions.IGNORE_OVERRIDDEN to "true"
+                        )
+                    )
+                )
                 assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
@@ -199,20 +215,28 @@ class TooManyFunctionsSpec : Spek({
                 """
 
             it("should not report class with overridden functions, if ignoreOverridden is enabled") {
-                val configuredRule = TooManyFunctions(TestConfig(mapOf(
-                    TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                    TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                    TooManyFunctions.IGNORE_OVERRIDDEN to "true"
-                )))
+                val configuredRule = TooManyFunctions(
+                    TestConfig(
+                        mapOf(
+                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                            TooManyFunctions.IGNORE_OVERRIDDEN to "true"
+                        )
+                    )
+                )
                 assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
 
             it("should count overridden functions, if ignoreOverridden is disabled") {
-                val configuredRule = TooManyFunctions(TestConfig(mapOf(
-                    TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                    TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                    TooManyFunctions.IGNORE_OVERRIDDEN to "false"
-                )))
+                val configuredRule = TooManyFunctions(
+                    TestConfig(
+                        mapOf(
+                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                            TooManyFunctions.IGNORE_OVERRIDDEN to "false"
+                        )
+                    )
+                )
                 assertThat(configuredRule.compileAndLint(code)).hasSize(1)
             }
         }

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek

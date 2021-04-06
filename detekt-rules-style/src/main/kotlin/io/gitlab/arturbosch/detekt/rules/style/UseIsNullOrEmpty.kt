@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.builtins.StandardNames
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -42,8 +43,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.safeAs
  * if (x.isNullOrEmpty()) return
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 @Suppress("TooManyFunctions")
 class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
@@ -134,11 +135,10 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression.safeAs<KtCallExpression>()
             ?: return false
         return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
-                callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
+            callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
     }
 
-    private fun KtSimpleNameExpression.classFqName() =
-        getType(bindingContext)?.constructor?.declarationDescriptor.safeAs<ClassDescriptor>()?.fqNameOrNull()
+    private fun KtSimpleNameExpression.classFqName() = getType(bindingContext)?.fqNameOrNull()
 
     private fun KtSimpleNameExpression.isCollectionOrArrayOrString(): Boolean {
         val classFqName = classFqName() ?: return false
@@ -169,7 +169,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         private val stringClass = StandardNames.FqNames.string.toSafe()
 
         private val isEmptyFunctions = collectionClasses.map { FqName("$it.isEmpty") } +
-                listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
+            listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
 
         private val countFunctions = listOf("kotlin.collections.count", "kotlin.text.count").map(::FqName)
     }

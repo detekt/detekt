@@ -13,27 +13,32 @@ class EqualsOnSignatureLineSpec : Spek({
 
         context("with expression syntax and without a return type") {
             it("reports when the equals is on a new line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                     fun foo()
                         = 1
-                """)
+                """
+                )
                 assertThat(findings).hasSize(1)
             }
 
             it("does not report when the equals is on the same line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                 fun foo() = 1
 
                 fun bar() =
                     2
-                """)
+                """
+                )
                 assertThat(findings).isEmpty()
             }
         }
 
         context("with expression syntax and with a return type") {
             it("reports when the equals is on a new line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                 fun one(): Int
                     = 1
 
@@ -46,12 +51,14 @@ class EqualsOnSignatureLineSpec : Spek({
                     foo: String
                 ): Int
                     = 3
-                """)
+                """
+                )
                 assertThat(findings).hasSize(3)
             }
 
             it("does not report when the equals is on the same line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                 fun one(): Int =
                     1
 
@@ -80,14 +87,16 @@ class EqualsOnSignatureLineSpec : Spek({
                 :
                 Int =
                     6
-                """)
+                """
+                )
                 assertThat(findings).isEmpty()
             }
         }
 
         context("with expression syntax and with a where clause") {
             it("reports when the equals is on a new line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                 fun <V> one(): Int where V : Number
                     = 1
 
@@ -101,12 +110,14 @@ class EqualsOnSignatureLineSpec : Spek({
                 ): Int
                     where V : Number
                     = 3
-                """)
+                """
+                )
                 assertThat(findings).hasSize(3)
             }
 
             it("does not report when the equals is on the same line") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                 fun <V> one(): Int where V : Number =
                     1
 
@@ -114,13 +125,15 @@ class EqualsOnSignatureLineSpec : Spek({
                     where V : Number =
                     2
 
-                """)
+                """
+                )
                 assertThat(findings).isEmpty()
             }
         }
 
         it("does not report non-expression functions") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLint(
+                """
             fun foo() {
             }
 
@@ -133,7 +146,8 @@ class EqualsOnSignatureLineSpec : Spek({
             Unit
             {
             }
-            """)
+            """
+            )
             assertThat(findings).isEmpty()
         }
     }

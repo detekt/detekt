@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -15,8 +16,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 /**
  * Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class Deprecation(config: Config) : Rule(config) {
 
     override val issue = Issue(

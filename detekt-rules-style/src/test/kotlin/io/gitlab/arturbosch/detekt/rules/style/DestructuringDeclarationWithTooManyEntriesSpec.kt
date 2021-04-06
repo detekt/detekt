@@ -25,7 +25,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(b)
                     println(c)
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
@@ -40,7 +40,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(c)
                     println(d)
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
@@ -54,7 +54,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                         println(b)
                     }
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
@@ -71,7 +71,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                         println(d)
                     }
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
@@ -91,7 +91,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(x)
                     println(y)
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
 
@@ -103,7 +103,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
                     println(b)
                     println(c)
                 }
-            """.trimIndent()
+                """.trimIndent()
                 assertThat(configuredRule.compileAndLint(code)).hasSize(1)
             }
         }

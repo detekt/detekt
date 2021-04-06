@@ -33,7 +33,8 @@ class SarifOutputReportSpec : Spek({
                 .stripWhitespace()
 
             assertThat(report).isEqualTo(
-                readResourceContent("vanilla.sarif.json").stripWhitespace())
+                readResourceContent("vanilla.sarif.json").stripWhitespace()
+            )
         }
 
         it("renders multiple issues with relative path") {
@@ -46,9 +47,11 @@ class SarifOutputReportSpec : Spek({
 
             val report = SarifOutputReport()
                 .apply {
-                    init(EmptySetupContext().apply {
-                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
-                    })
+                    init(
+                        EmptySetupContext().apply {
+                            register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
+                        }
+                    )
                 }
                 .render(result)
                 .stripWhitespace()

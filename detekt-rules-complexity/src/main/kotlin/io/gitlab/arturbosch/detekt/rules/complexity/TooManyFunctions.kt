@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -32,17 +33,18 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration ignoreDeprecated - ignore deprecated functions (default: `false`)
  * @configuration ignorePrivate - ignore private functions (default: `false`)
  * @configuration ignoreOverridden - ignore overridden functions (default: `false`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("TooManyFunctions",
-            Severity.Maintainability,
-            "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
-                    "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
-                    "many things at once. Extract functionality which clearly belongs together.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "TooManyFunctions",
+        Severity.Maintainability,
+        "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
+            "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
+            "many things at once. Extract functionality which clearly belongs together.",
+        Debt.TWENTY_MINS
+    )
 
     private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
     private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)
@@ -58,11 +60,15 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (amountOfTopLevelFunctions >= thresholdInFiles) {
-            report(ThresholdedCodeSmell(issue,
+            report(
+                ThresholdedCodeSmell(
+                    issue,
                     Entity.atPackageOrFirstDecl(file),
                     Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-                            "Defined threshold inside files is set to '$thresholdInFiles'"))
+                        "Defined threshold inside files is set to '$thresholdInFiles'"
+                )
+            )
         }
         amountOfTopLevelFunctions = 0
     }
@@ -78,31 +84,43 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         when {
             klass.isInterface() -> {
                 if (amount >= thresholdInInterfaces) {
-                    report(ThresholdedCodeSmell(issue,
-                        Entity.atName(klass),
-                        Metric("SIZE", amount, thresholdInInterfaces),
-                        "Interface '${klass.name}' with '$amount' functions detected. " +
+                    report(
+                        ThresholdedCodeSmell(
+                            issue,
+                            Entity.atName(klass),
+                            Metric("SIZE", amount, thresholdInInterfaces),
+                            "Interface '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside interfaces is set to " +
-                                "'$thresholdInInterfaces'"))
+                                "'$thresholdInInterfaces'"
+                        )
+                    )
                 }
             }
             klass.isEnum() -> {
                 if (amount >= thresholdInEnums) {
-                    report(ThresholdedCodeSmell(issue,
-                        Entity.atName(klass),
-                        Metric("SIZE", amount, thresholdInEnums),
-                        "Enum class '${klass.name}' with '$amount' functions detected. " +
+                    report(
+                        ThresholdedCodeSmell(
+                            issue,
+                            Entity.atName(klass),
+                            Metric("SIZE", amount, thresholdInEnums),
+                            "Enum class '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside enum classes is set to " +
-                                "'$thresholdInEnums'"))
+                                "'$thresholdInEnums'"
+                        )
+                    )
                 }
             }
             else -> {
                 if (amount >= thresholdInClasses) {
-                    report(ThresholdedCodeSmell(issue,
+                    report(
+                        ThresholdedCodeSmell(
+                            issue,
                             Entity.atName(klass),
                             Metric("SIZE", amount, thresholdInClasses),
                             "Class '${klass.name}' with '$amount' functions detected. " +
-                                    "Defined threshold inside classes is set to '$thresholdInClasses'"))
+                                "Defined threshold inside classes is set to '$thresholdInClasses'"
+                        )
+                    )
                 }
             }
         }
@@ -112,11 +130,15 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val amount = calcFunctions(declaration)
         if (amount >= thresholdInObjects) {
-            report(ThresholdedCodeSmell(issue,
+            report(
+                ThresholdedCodeSmell(
+                    issue,
                     Entity.from(declaration.nameIdentifier ?: declaration),
                     Metric("SIZE", amount, thresholdInObjects),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
-                            "Defined threshold inside objects is set to '$thresholdInObjects'"))
+                        "Defined threshold inside objects is set to '$thresholdInObjects'"
+                )
+            )
         }
         super.visitObjectDeclaration(declaration)
     }

@@ -18,11 +18,13 @@ class AnnotationExcluderSpec : Spek({
         val sinceKotlinAnnotation by memoized { psiFactory.createAnnotationEntry("@SinceKotlin") }
 
         val file by memoized {
-            compileContentForTest("""
+            compileContentForTest(
+                """
                 package foo
 
                 import kotlin.jvm.JvmField
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         it("should exclude when the annotation was found") {

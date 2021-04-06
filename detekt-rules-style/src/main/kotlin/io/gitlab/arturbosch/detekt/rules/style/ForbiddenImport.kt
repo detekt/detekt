@@ -32,7 +32,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Style,
         "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
-                "and hence you might want to mark it as forbidden in order to get warned about the usage.",
+            "and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
     )
 
@@ -49,8 +49,10 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         if (forbiddenImports.any { it.matches(import) } || containsForbiddenPattern(import)) {
             report(
                 CodeSmell(
-                    issue, Entity.from(importDirective), "The import " +
-                            "$import has been forbidden in the Detekt config."
+                    issue,
+                    Entity.from(importDirective),
+                    "The import " +
+                        "$import has been forbidden in the Detekt config."
                 )
             )
         }

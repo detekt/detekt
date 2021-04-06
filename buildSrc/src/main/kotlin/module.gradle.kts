@@ -45,8 +45,6 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-    targetCompatibility = JavaVersion.VERSION_1_8.toString()
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
         languageVersion = "1.4"
@@ -72,29 +70,13 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5")
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    dependsOn(tasks.classes)
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
-}
-
-val javadocJar by tasks.registering(Jar::class) {
-    from(tasks.javadoc)
-    archiveClassifier.set("javadoc")
-}
-
-artifacts {
-    archives(sourcesJar)
-    archives(javadocJar)
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
     publications.named<MavenPublication>(DETEKT_PUBLICATION) {
         from(components["java"])
-        artifact(sourcesJar.get())
-        artifact(javadocJar.get())
-        if (project.name == "detekt-cli") {
-            artifact(tasks.getByName("shadowJar"))
-        }
     }
 }

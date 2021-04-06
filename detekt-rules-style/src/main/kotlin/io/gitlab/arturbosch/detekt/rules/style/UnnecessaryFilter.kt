@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -39,12 +40,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *      .none { it > 1 }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "UnnecessaryFilter", Severity.Style,
+        "UnnecessaryFilter",
+        Severity.Style,
         "filter() with other collection operations may be simplified.",
         Debt.FIVE_MINS
     )
@@ -77,7 +79,8 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
         report(
             CodeSmell(
-                issue, Entity.from(this),
+                issue,
+                Entity.from(this),
                 "'${this.text}' can be replaced by '${correctOperator ?: shortName} ${this.lambda()?.text}'"
             )
         )

@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -41,17 +43,16 @@ import org.jetbrains.kotlin.types.isNullable
  * val testList3 = listOf("string")
  * val testString = ""?.isBlank()
  * </compliant>
- *
- * @active since v1.2.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
+@ActiveByDefault(since = "1.2.0")
 class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UselessCallOnNotNull",
         Severity.Performance,
         "This call on non-null reference may be reduced or removed. Some calls are intended to be called on nullable " +
-                "collection or text types (e.g. String?). When this call is used on a reference to a non-null type " +
-                "(e.g. String) it is redundant and will have no effect, so it can be removed.",
+            "collection or text types (e.g. String?). When this call is used on a reference to a non-null type " +
+            "(e.g. String) it is redundant and will have no effect, so it can be removed.",
         Debt.FIVE_MINS
     )
 

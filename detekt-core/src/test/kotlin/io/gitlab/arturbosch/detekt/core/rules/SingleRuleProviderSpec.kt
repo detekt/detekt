@@ -40,11 +40,13 @@ internal class SingleRuleProviderSpec : Spek({
 
             arrayOf("true", "false").forEach { value ->
                 it("configures rule with active=$value") {
-                    val config = yamlConfigFromContent("""
+                    val config = yamlConfigFromContent(
+                        """
                     style:
                       MagicNumber:
                         active: $value
-                """.trimIndent())
+                        """.trimIndent()
+                    )
 
                     assertThat(produceRule(provider, config).active).isEqualTo(value.toBoolean())
                 }

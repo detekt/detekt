@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -44,18 +45,19 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * `for` statement (default: `false`)
  * @configuration nestingFunctions - Comma separated list of function names which add complexity
  * (default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ComplexMethod(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("ComplexMethod",
+    override val issue = Issue(
+        "ComplexMethod",
         Severity.Maintainability,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
-        Debt.TWENTY_MINS)
+        Debt.TWENTY_MINS
+    )
 
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
@@ -81,7 +83,7 @@ class ComplexMethod(
                     Entity.atName(function),
                     Metric("MCC", complexity, threshold),
                     "The function ${function.nameAsSafeName} appears to be too complex ($complexity). " +
-                            "Defined complexity threshold for methods is set to '$threshold'"
+                        "Defined complexity threshold for methods is set to '$threshold'"
                 )
             )
         }

@@ -11,7 +11,7 @@ class EnumNamingSpec : Spek({
 
         it("should detect no violation") {
             val findings = EnumNaming().compileAndLint(
-                    """
+                """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
                 }

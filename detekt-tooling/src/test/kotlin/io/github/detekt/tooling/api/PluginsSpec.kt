@@ -3,7 +3,6 @@ package io.github.detekt.tooling.api
 import io.github.detekt.tooling.dsl.ExtensionsSpecBuilder
 import io.github.detekt.tooling.internal.PluginsHolder
 import org.assertj.core.api.Assertions.assertThatCode
-
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths

@@ -44,7 +44,8 @@ class OptionalUnitSpec : Spek({
             it("should report the correct violation message") {
                 findings.forEach {
                     assertThat(it.message).endsWith(
-                        " defines a return type of Unit. This is unnecessary and can safely be removed.")
+                        " defines a return type of Unit. This is unnecessary and can safely be removed."
+                    )
                 }
             }
         }
@@ -102,7 +103,8 @@ class OptionalUnitSpec : Spek({
         context("several Unit references") {
 
             it("should not report Unit reference") {
-                val findings = subject.compileAndLint("""
+                val findings = subject.compileAndLint(
+                    """
                     fun returnsNothing(u: Unit, us: () -> String) {
                         val u1 = u is Unit
                         val u2: Unit = Unit
@@ -110,7 +112,8 @@ class OptionalUnitSpec : Spek({
                         Unit.equals(null)
                         val i: (Int) -> Unit = { _ -> }
                     }
-                """)
+                """
+                )
                 assertThat(findings).isEmpty()
             }
         }

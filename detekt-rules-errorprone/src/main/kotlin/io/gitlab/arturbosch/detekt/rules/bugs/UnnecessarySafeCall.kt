@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticWithParameters1
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -28,10 +30,9 @@ import org.jetbrains.kotlin.types.ErrorType
  * val a: String? = null
  * val b = a?.length
  * </compliant>
- *
- * @active since v1.16.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
 class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -71,8 +72,10 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
             }
             report(
                 CodeSmell(
-                    issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
-                            "safe call operator"
+                    issue,
+                    Entity.from(expression),
+                    "${expression.text} contains an unnecessary " +
+                        "safe call operator"
                 )
             )
         }

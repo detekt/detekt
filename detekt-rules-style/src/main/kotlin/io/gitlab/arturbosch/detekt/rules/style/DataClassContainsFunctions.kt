@@ -29,19 +29,21 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("DataClassContainsFunctions",
-            Severity.Style,
-            "Data classes should mainly be used to store data and should not have any extra functions. " +
-                    "(Compiler will automatically generate equals, toString and hashCode functions)",
-            Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(
+        "DataClassContainsFunctions",
+        Severity.Style,
+        "Data classes should mainly be used to store data and should not have any extra functions. " +
+            "(Compiler will automatically generate equals, toString and hashCode functions)",
+        Debt.TWENTY_MINS
+    )
 
     private val conversionFunctionPrefix = SplitPattern(valueOrDefault(CONVERSION_FUNCTION_PREFIX, "to"))
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
             klass.body?.declarations
-                    ?.filterIsInstance<KtNamedFunction>()
-                    ?.forEach { checkFunction(klass, it) }
+                ?.filterIsInstance<KtNamedFunction>()
+                ?.forEach { checkFunction(klass, it) }
         }
         super.visitClass(klass)
     }

@@ -5,7 +5,8 @@ import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.api.Config
 
 @NotApiButProbablyUsedByUsers
-@Deprecated("""
+@Deprecated(
+    """
     Exposes internal resource name. There should not be a case were just the resource name is needed.
     Please use the DefaultConfigurationProvider to get a default config instance.
 """

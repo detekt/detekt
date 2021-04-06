@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 private const val DESCRIPTION = "Multi-line if statement was found that does not have braces. " +
-        "These should be added to improve readability."
+    "These should be added to improve readability."
 
 /**
  * This rule detects multi-line `if` statements which do not have braces.
@@ -46,15 +46,15 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     }
 
     private fun hasNewLine(element: PsiElement?): Boolean =
-            element
-                    ?.siblings(forward = true, withItself = false)
-                    ?.takeWhile { it.text != "else" }
-                    ?.firstOrNull { it.textContains('\n') } != null
+        element
+            ?.siblings(forward = true, withItself = false)
+            ?.takeWhile { it.text != "else" }
+            ?.firstOrNull { it.textContains('\n') } != null
 
     private fun KtIfExpression.isNotBlockExpression(): Boolean = this.then !is KtBlockExpression
 
     private fun KtIfExpression.isNotBlockOrIfExpression(): Boolean =
-            this.`else` != null &&
-                    this.`else` !is KtIfExpression &&
-                    this.`else` !is KtBlockExpression
+        this.`else` != null &&
+            this.`else` !is KtIfExpression &&
+            this.`else` !is KtBlockExpression
 }

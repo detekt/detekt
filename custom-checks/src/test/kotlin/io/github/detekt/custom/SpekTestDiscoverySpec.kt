@@ -18,11 +18,13 @@ class SpekTestDiscoverySpec : Spek({
         context("top level scope") {
 
             it("allows strings, paths and files by default") {
-                val code = createSpekCode("""
+                val code = createSpekCode(
+                    """
                     val s = "simple"
                     val p = Paths.get("")
                     val f = File("")
-                """)
+                """
+                )
 
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -44,14 +46,16 @@ class SpekTestDiscoverySpec : Spek({
 
             setOf("describe", "context").forEach { name ->
                 it("allows strings, files and paths by default") {
-                    val code = createSpekCode("""
+                    val code = createSpekCode(
+                        """
                         $name("group") {
                             val s = "simple"
                             val p = Paths.get("")
                             val f = File("")
                             val m by memoized { Any() }
                         }
-                    """)
+                    """
+                    )
 
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
@@ -59,11 +63,13 @@ class SpekTestDiscoverySpec : Spek({
 
             setOf("describe", "context").forEach { name ->
                 it("disallows non memoized declarations") {
-                    val code = createSpekCode("""
+                    val code = createSpekCode(
+                        """
                         $name("group") {
                             val complex = Any()
                         }
-                    """)
+                    """
+                    )
 
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                 }

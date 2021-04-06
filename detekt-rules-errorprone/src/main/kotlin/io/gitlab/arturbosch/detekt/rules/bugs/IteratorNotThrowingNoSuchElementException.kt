@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -42,23 +43,30 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  *     }
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("IteratorNotThrowingNoSuchElementException", Severity.Defect,
-            "The next() method of an Iterator implementation should throw a NoSuchElementException " +
-                    "when there are no more elements to return",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        "IteratorNotThrowingNoSuchElementException",
+        Severity.Defect,
+        "The next() method of an Iterator implementation should throw a NoSuchElementException " +
+            "when there are no more elements to return",
+        Debt.TEN_MINS
+    )
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject.getSuperNames().contains("Iterator")) {
             val nextMethod = classOrObject.findFunctionByName("next")
             if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
-                report(CodeSmell(issue, Entity.atName(classOrObject),
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(classOrObject),
                         "This implementation of Iterator does not correctly implement the next() method as " +
-                                "it doesn't throw a NoSuchElementException when no elements remain in the Iterator."))
+                            "it doesn't throw a NoSuchElementException when no elements remain in the Iterator."
+                    )
+                )
             }
         }
         super.visitClassOrObject(classOrObject)

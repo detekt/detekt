@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -60,12 +61,14 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class MultilineLambdaItParameter(val config: Config) : Rule(config) {
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "Multiline lambdas should not use `it` as a parameter name", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "Multiline lambdas should not use `it` as a parameter name",
+        Debt.FIVE_MINS
     )
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
@@ -80,7 +83,8 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
             IT_LITERAL in parameterNames ->
                 report(
                     CodeSmell(
-                        issue, Entity.from(lambdaExpression),
+                        issue,
+                        Entity.from(lambdaExpression),
                         "The parameter name in a multiline lambda should not be an explicit `it`. " +
                             "Consider giving your parameter a readable and descriptive name."
                     )
@@ -90,7 +94,8 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
                 if (lambdaExpression.hasImplicitParameter(bindingContext)) {
                     report(
                         CodeSmell(
-                            issue, Entity.from(lambdaExpression),
+                            issue,
+                            Entity.from(lambdaExpression),
                             "The implicit `it` should be used in a multiline lambda. " +
                                 "Consider giving your parameter a readable and descriptive name."
                         )

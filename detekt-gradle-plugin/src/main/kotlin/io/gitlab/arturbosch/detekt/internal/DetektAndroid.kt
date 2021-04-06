@@ -24,7 +24,7 @@ internal class DetektAndroid(private val project: Project) {
         project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Main") {
             it.group = "verification"
             it.description = "EXPERIMENTAL: Run detekt analysis for production classes across " +
-                    "all variants with type resolution"
+                "all variants with type resolution"
         }
     }
 
@@ -32,7 +32,7 @@ internal class DetektAndroid(private val project: Project) {
         project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Test") {
             it.group = "verification"
             it.description = "EXPERIMENTAL: Run detekt analysis for test classes across " +
-                    "all variants with type resolution"
+                "all variants with type resolution"
         }
     }
 
@@ -40,7 +40,7 @@ internal class DetektAndroid(private val project: Project) {
         project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Main") {
             it.group = "verification"
             it.description = "EXPERIMENTAL: Creates detekt baseline files for production classes across " +
-                    "all variants with type resolution"
+                "all variants with type resolution"
         }
     }
 
@@ -48,7 +48,7 @@ internal class DetektAndroid(private val project: Project) {
         project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Test") {
             it.group = "verification"
             it.description = "EXPERIMENTAL: Creates detekt baseline files for test classes across " +
-                    "all variants with type resolution"
+                "all variants with type resolution"
         }
     }
 
@@ -100,8 +100,8 @@ internal class DetektAndroid(private val project: Project) {
 
     private fun DetektExtension.matchesIgnoredConfiguration(variant: BaseVariant): Boolean =
         ignoredVariants.contains(variant.name) ||
-                ignoredBuildTypes.contains(variant.buildType.name) ||
-                ignoredFlavors.contains(variant.flavorName)
+            ignoredBuildTypes.contains(variant.buildType.name) ||
+            ignoredFlavors.contains(variant.flavorName)
 
     private fun Project.registerAndroidDetektTask(
         bootClasspath: FileCollection,
