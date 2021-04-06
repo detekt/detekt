@@ -81,7 +81,8 @@ class ForbiddenCommentSpec : Spek({
 
             listOf(
                 TestConfig(mapOf(ForbiddenComment.VALUES to "Banana")),
-                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana"))))
+                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana")))
+            )
                 .forEach { config ->
                     val banana = "// Banana."
 

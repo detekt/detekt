@@ -24,11 +24,13 @@ class GenerateConfigTaskTest : Spek({
                 }
 
                 it("chooses the last config file when configured") {
-                    val gradleRunner = builder.withDetektConfig("""
+                    val gradleRunner = builder.withDetektConfig(
+                        """
                         |detekt {
                         |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
                         |}
-                    """).build()
+                    """
+                    ).build()
 
                     gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
                         assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

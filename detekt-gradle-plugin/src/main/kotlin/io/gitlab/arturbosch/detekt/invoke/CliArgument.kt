@@ -40,9 +40,14 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
-    override fun toArgument() = if (!fileCollection.isEmpty) listOf(
-        CLASSPATH_PARAMETER,
-        fileCollection.joinToString(File.pathSeparator) { it.absolutePath }) else emptyList()
+    override fun toArgument() = if (!fileCollection.isEmpty) {
+        listOf(
+            CLASSPATH_PARAMETER,
+            fileCollection.joinToString(File.pathSeparator) { it.absolutePath }
+        )
+    } else {
+        emptyList()
+    }
 }
 
 internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {
@@ -89,11 +94,14 @@ internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch:
 internal data class DebugArgument(override val value: Boolean) : BoolCliArgument(value, DEBUG_PARAMETER)
 
 internal data class ParallelArgument(override val value: Boolean) : BoolCliArgument(value, PARALLEL_PARAMETER)
-internal data class DisableDefaultRuleSetArgument(override val value: Boolean) :
-    BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
 
-internal data class BuildUponDefaultConfigArgument(override val value: Boolean) :
-    BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+internal data class DisableDefaultRuleSetArgument(
+    override val value: Boolean
+) : BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+
+internal data class BuildUponDefaultConfigArgument(
+    override val value: Boolean
+) : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
 internal data class FailFastArgument(override val value: Boolean) : BoolCliArgument(value, FAIL_FAST_PARAMETER)
 

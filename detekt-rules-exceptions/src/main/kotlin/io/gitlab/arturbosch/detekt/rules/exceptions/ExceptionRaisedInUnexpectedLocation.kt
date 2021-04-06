@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,17 +31,21 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *
  * @configuration methodNames - methods which should not throw exceptions
  * (default: `[toString, hashCode, equals, finalize]`)
- * @active since v1.16.0
  */
+@ActiveByDefault(since = "1.16.0")
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
-            "This method is not expected to throw exceptions. This can cause weird behavior.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "ExceptionRaisedInUnexpectedLocation",
+        Severity.CodeSmell,
+        "This method is not expected to throw exceptions. This can cause weird behavior.",
+        Debt.TWENTY_MINS
+    )
 
     private val methods = valueOrDefaultCommaSeparated(
         METHOD_NAMES,
-        listOf("toString", "hashCode", "equals", "finalize"))
+        listOf("toString", "hashCode", "equals", "finalize")
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
@@ -57,7 +62,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     private fun isPotentialMethod(function: KtNamedFunction) = methods.any { function.name == it }
 
     private fun hasThrowExpression(declaration: KtExpression?) =
-            declaration?.anyDescendantOfType<KtThrowExpression>() == true
+        declaration?.anyDescendantOfType<KtThrowExpression>() == true
 
     companion object {
         const val METHOD_NAMES = "methodNames"

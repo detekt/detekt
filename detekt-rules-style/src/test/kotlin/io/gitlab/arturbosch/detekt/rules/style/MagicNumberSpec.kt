@@ -385,13 +385,13 @@ class MagicNumberSpec : Spek({
 
             it("should report all without ignore flags") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
-                                MagicNumber.IGNORE_ANNOTATION to "false",
-                                MagicNumber.IGNORE_HASH_CODE to "false",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+                        MagicNumber.IGNORE_ANNOTATION to "false",
+                        MagicNumber.IGNORE_HASH_CODE to "false",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -408,13 +408,13 @@ class MagicNumberSpec : Spek({
 
             it("should not report any issues with all ignore flags") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
-                                MagicNumber.IGNORE_ANNOTATION to "true",
-                                MagicNumber.IGNORE_HASH_CODE to "true",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+                        MagicNumber.IGNORE_ANNOTATION to "true",
+                        MagicNumber.IGNORE_HASH_CODE to "true",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -440,11 +440,11 @@ class MagicNumberSpec : Spek({
 
             it("should not report any issues when ignoring properties but not constants nor companion objects") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -453,11 +453,11 @@ class MagicNumberSpec : Spek({
 
             it("should not report any issues when ignoring properties and constants but not companion objects") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -466,11 +466,11 @@ class MagicNumberSpec : Spek({
 
             it("should not report any issues when ignoring properties, constants and companion objects") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -479,11 +479,11 @@ class MagicNumberSpec : Spek({
 
             it("should not report any issues when ignoring companion objects but not properties and constants") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -492,11 +492,11 @@ class MagicNumberSpec : Spek({
 
             it("should report property when ignoring constants but not properties and companion objects") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -505,11 +505,11 @@ class MagicNumberSpec : Spek({
 
             it("should report property and constant when not ignoring properties, constants nor companion objects") {
                 val config = TestConfig(
-                        mapOf(
-                                MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
-                                MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
-                                MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
-                        )
+                    mapOf(
+                        MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+                        MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+                        MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+                    )
                 )
 
                 val findings = MagicNumber(config).lint(code)
@@ -579,11 +579,11 @@ class MagicNumberSpec : Spek({
 
                 it("should ignore named arguments in parameter annotations - #1115") {
                     val code =
-                            "@JvmStatic fun setCustomDimension(@IntRange(from = 0, to = 19) index: Int, value: String?) {}"
+                        "@JvmStatic fun setCustomDimension(@IntRange(from = 0, to = 19) index: Int, value: String?) {}"
                     MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
-                            .lint(code)
-                            .assert()
-                            .isEmpty()
+                        .lint(code)
+                        .assert()
+                        .isEmpty()
                 }
             }
 
@@ -710,13 +710,13 @@ class MagicNumberSpec : Spek({
         context("a number as part of a range") {
 
             listOf(
-                    "val range = 1..27",
-                    "val range = (1..27)",
-                    "val range = 27 downTo 1",
-                    "val range = 1 until 27 step 1",
-                    "val inRange = 1 in 1..27",
-                    "val inRange = (1 in 27 downTo 0 step 1)",
-                    "val inRange = (1..27 step 1).last"
+                "val range = 1..27",
+                "val range = (1..27)",
+                "val range = 27 downTo 1",
+                "val range = 1 until 27 step 1",
+                "val inRange = 1 in 1..27",
+                "val inRange = (1 in 27 downTo 0 step 1)",
+                "val inRange = (1..27 step 1).last"
             ).forEach { codeWithMagicNumberInRange ->
                 it("'$codeWithMagicNumberInRange' reports a code smell by default") {
                     val code = codeWithMagicNumberInRange
@@ -725,12 +725,12 @@ class MagicNumberSpec : Spek({
                 it("'$codeWithMagicNumberInRange' reports a code smell if ranges are not ignored") {
                     val code = codeWithMagicNumberInRange
                     assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "false"))).lint(code))
-                            .hasSize(1)
+                        .hasSize(1)
                 }
                 it("'$codeWithMagicNumberInRange' reports no finding if ranges are ignored") {
                     val code = codeWithMagicNumberInRange
                     assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code))
-                            .isEmpty()
+                        .isEmpty()
                 }
             }
 
@@ -762,9 +762,14 @@ class MagicNumberSpec : Spek({
         context("meaningful variables - #1536") {
 
             val rule by memoized {
-                MagicNumber(TestConfig(mapOf(
-                    MagicNumber.IGNORE_LOCAL_VARIABLES to "true",
-                    MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
+                MagicNumber(
+                    TestConfig(
+                        mapOf(
+                            MagicNumber.IGNORE_LOCAL_VARIABLES to "true",
+                            MagicNumber.IGNORE_NAMED_ARGUMENT to "true"
+                        )
+                    )
+                )
             }
 
             it("should report 3") {

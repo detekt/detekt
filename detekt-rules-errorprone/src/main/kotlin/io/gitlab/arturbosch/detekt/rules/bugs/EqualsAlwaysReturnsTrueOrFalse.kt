@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -35,18 +36,19 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *     return this === other
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("EqualsAlwaysReturnsTrueOrFalse",
-            Severity.Defect,
-            "Having an equals method which always returns true or false is not a good idea. " +
-                    "It does not follow the contract of this method. " +
-                    "Consider a good default implementation. " +
-                    "For example this == other",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "EqualsAlwaysReturnsTrueOrFalse",
+        Severity.Defect,
+        "Having an equals method which always returns true or false is not a good idea. " +
+            "It does not follow the contract of this method. " +
+            "Consider a good default implementation. " +
+            "For example this == other",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {
@@ -56,7 +58,8 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
                     Entity.atName(function),
                     "This equals function always returns the same " +
                         "result regardless of the input parameters."
-                ))
+                )
+            )
         }
     }
 
@@ -77,8 +80,10 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
         val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
         return lastValidReturnExpression?.isBooleanConstant() == true &&
-                (hasNoNestedReturnExpression ||
-                        allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
+            (
+                hasNoNestedReturnExpression ||
+                    allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text }
+                )
     }
 
     private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT

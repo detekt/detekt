@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
@@ -22,15 +23,16 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * @configuration privateVariablePattern - naming pattern (default: `'(_)?[a-z][A-Za-z0-9]*'`)
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverridden - ignores member properties that have the override modifier (default: `true`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Variable names should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Variable names should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
     private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
@@ -59,10 +61,13 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(property: KtProperty, message: String) {
-        report(CodeSmell(
-            issue,
-            Entity.atName(property),
-            message = message))
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(property),
+                message = message
+            )
+        )
     }
 
     companion object {

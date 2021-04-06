@@ -54,7 +54,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
                 """
                 Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
                 Create file license header file or check your running path.
-            """.trimIndent()
+                """.trimIndent()
             }
 
             return Files.newBufferedReader(templateFile)

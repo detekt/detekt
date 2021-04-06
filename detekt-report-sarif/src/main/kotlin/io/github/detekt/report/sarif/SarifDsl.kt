@@ -27,20 +27,22 @@ fun SarifSchema210.withDetektRun(config: Config, init: Run.() -> Unit) {
     runs.add(
         Run()
             .withResults(ArrayList())
-            .withTool(tool {
-                driver = component {
-                    guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3"
-                    name = "detekt"
-                    fullName = name
-                    organization = name
-                    language = "en"
-                    version = whichDetekt()
-                    semanticVersion = version
-                    downloadUri = URI.create("https://github.com/detekt/detekt/releases/download/v$version/detekt")
-                    informationUri = URI.create("https://detekt.github.io/detekt")
-                    rules = ruleDescriptors(config).values.toSet()
+            .withTool(
+                tool {
+                    driver = component {
+                        guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3"
+                        name = "detekt"
+                        fullName = name
+                        organization = name
+                        language = "en"
+                        version = whichDetekt()
+                        semanticVersion = version
+                        downloadUri = URI.create("https://github.com/detekt/detekt/releases/download/v$version/detekt")
+                        informationUri = URI.create("https://detekt.github.io/detekt")
+                        rules = ruleDescriptors(config).values.toSet()
+                    }
                 }
-            })
+            )
             .apply(init)
     )
 }

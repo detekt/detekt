@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
@@ -40,13 +41,15 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * val b = a?.let { 1.plus(1) }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class UnnecessaryLet(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.Style,
-        "The `let` usage is unnecessary", Debt.FIVE_MINS
+        javaClass.simpleName,
+        Severity.Style,
+        "The `let` usage is unnecessary",
+        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -69,7 +72,8 @@ class UnnecessaryLet(config: Config) : Rule(config) {
             if (lambdaReferenceCount == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
                 report(
                     CodeSmell(
-                        issue, Entity.from(expression),
+                        issue,
+                        Entity.from(expression),
                         "let expression can be replaces with a simple if"
                     )
                 )

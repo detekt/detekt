@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -29,15 +30,16 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *     else -> println("else")
  * }
  * </compliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
-    override val issue = Issue("DuplicateCaseInWhenExpression",
-            Severity.Warning,
-            "Duplicated case statements in when expression. Both cases should be merged.",
-            Debt.TEN_MINS)
+    override val issue = Issue(
+        "DuplicateCaseInWhenExpression",
+        Severity.Warning,
+        "Duplicated case statements in when expression. Both cases should be merged.",
+        Debt.TEN_MINS
+    )
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         val distinctEntries = expression.entries.distinctBy { entry -> entry.conditions.joinToString { it.text } }
@@ -46,8 +48,13 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
             val duplicateEntries = expression.entries
                 .subtract(distinctEntries)
                 .map { entry -> entry.conditions.joinToString { it.text } }
-            report(CodeSmell(issue, Entity.from(expression),
-                "When expression has multiple case statements for ${duplicateEntries.joinToString("; ")}."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "When expression has multiple case statements for ${duplicateEntries.joinToString("; ")}."
+                )
+            )
         }
     }
 }

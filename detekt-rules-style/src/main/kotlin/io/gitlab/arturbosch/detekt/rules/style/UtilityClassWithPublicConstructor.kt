@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
@@ -55,16 +56,17 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  *     val i = 0
  * }
  * </compliant>
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "The class declaration is unnecessary because it only contains utility functions. " +
-                    "An object declaration should be used instead.",
-            Debt.FIVE_MINS)
+    override val issue: Issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "The class declaration is unnecessary because it only contains utility functions. " +
+            "An object declaration should be used instead.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitClass(klass: KtClass) {
         if (canBeCheckedForUtilityClass(klass)) {
@@ -72,12 +74,22 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
             val declarations = klass.body?.declarations
             if (hasOnlyUtilityClassMembers(declarations)) {
                 if (utilityClassConstructor.hasPublicConstructorWithoutParameters()) {
-                    report(CodeSmell(issue, Entity.from(klass),
+                    report(
+                        CodeSmell(
+                            issue,
+                            Entity.from(klass),
                             "The class ${klass.nameAsSafeName} only contains" +
-                                    " utility functions. Consider defining it as an object."))
+                                " utility functions. Consider defining it as an object."
+                        )
+                    )
                 } else if (klass.isOpen() && utilityClassConstructor.hasNonPublicConstructorWithoutParameters()) {
-                    report(CodeSmell(issue, Entity.from(klass),
-                            "The utility class ${klass.nameAsSafeName} should be final."))
+                    report(
+                        CodeSmell(
+                            issue,
+                            Entity.from(klass),
+                            "The utility class ${klass.nameAsSafeName} should be final."
+                        )
+                    )
                 }
             }
         }
@@ -86,9 +98,9 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 
     private fun canBeCheckedForUtilityClass(klass: KtClass): Boolean {
         return !klass.isInterface() &&
-                !klass.superTypeListEntries.any() &&
-                !klass.isAnnotation() &&
-                !klass.isSealed()
+            !klass.superTypeListEntries.any() &&
+            !klass.isAnnotation() &&
+            !klass.isSealed()
     }
 
     private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
@@ -108,7 +120,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
     }
 
     private fun isCompanionObject(declaration: KtDeclaration) =
-            (declaration as? KtObjectDeclaration)?.isCompanion() == true
+        (declaration as? KtObjectDeclaration)?.isCompanion() == true
 
     internal class UtilityClassConstructor(private val klass: KtClass) {
 
@@ -123,7 +135,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
             }
             val secondaryConstructors = klass.secondaryConstructors
             return secondaryConstructors.isEmpty() ||
-                    secondaryConstructors.any { it.isPublic == publicModifier && it.valueParameters.isEmpty() }
+                secondaryConstructors.any { it.isPublic == publicModifier && it.valueParameters.isEmpty() }
         }
     }
 }

@@ -29,7 +29,8 @@ class TxtOutputReportSpec : Spek({
             val detektion = TestDetektion(
                 createFinding(ruleName = "TestSmellA"),
                 createFinding(ruleName = "TestSmellB"),
-                createFinding(ruleName = "TestSmellC"))
+                createFinding(ruleName = "TestSmellC")
+            )
             val renderedText = """
                 TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
                 TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature

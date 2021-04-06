@@ -75,22 +75,24 @@ private fun Finding.toResult(ruleSetId: RuleSetId): Result = result {
     ruleId = "detekt.$ruleSetId.$id"
     level = severity.toResultLevel()
     for (location in listOf(location) + references.map { it.location }) {
-        locations.add(Location().apply {
-            physicalLocation = PhysicalLocation().apply {
-                region = Region().apply {
-                    startLine = location.source.line
-                    startColumn = location.source.column
-                }
-                artifactLocation = ArtifactLocation().apply {
-                    if (location.filePath.relativePath != null) {
-                        uri = location.filePath.relativePath?.toUnifiedString()
-                        uriBaseId = SARIF_SRCROOT_PROPERTY
-                    } else {
-                        uri = location.filePath.absolutePath.toUnifiedString()
+        locations.add(
+            Location().apply {
+                physicalLocation = PhysicalLocation().apply {
+                    region = Region().apply {
+                        startLine = location.source.line
+                        startColumn = location.source.column
+                    }
+                    artifactLocation = ArtifactLocation().apply {
+                        if (location.filePath.relativePath != null) {
+                            uri = location.filePath.relativePath?.toUnifiedString()
+                            uriBaseId = SARIF_SRCROOT_PROPERTY
+                        } else {
+                            uri = location.filePath.absolutePath.toUnifiedString()
+                        }
                     }
                 }
             }
-        })
+        )
     }
     message = Message().apply { text = messageOrDescription() }
 }

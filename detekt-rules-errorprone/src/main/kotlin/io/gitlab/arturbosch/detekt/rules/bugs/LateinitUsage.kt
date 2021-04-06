@@ -34,11 +34,13 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "Usage of lateinit detected. Using lateinit for property initialization " +
-                    "is error prone, try using constructor injection or delegation.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "Usage of lateinit detected. Using lateinit for property initialization " +
+            "is error prone, try using constructor injection or delegation.",
+        Debt.TWENTY_MINS
+    )
 
     private val excludeAnnotatedProperties = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_PROPERTIES, emptyList())
         .map { it.removePrefix("*").removeSuffix("*") }
@@ -61,10 +63,10 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
 
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
-                .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
-                .forEach {
-                    report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
-                }
+            .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
+            .forEach {
+                report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
+            }
     }
 
     companion object {

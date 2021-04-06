@@ -4,21 +4,27 @@ style rule set
 
 a wildcard import
 
+**Active by default**: Yes - Since v1.0.0
+
 **Debt**: 10min
 
 **Aliases**: alias1, alias2
 
 #### Configuration options:
 
-* `conf1` (default: `foo`)
+* ``conf1`` (default: ``foo``)
 
-   a config option
+  a config option
 
-* ~~`conf2`~~ (default: `false`)
+* ~~``conf2``~~ (default: ``false``)
 
-   **Deprecated**: use conf1 instead
+  **Deprecated**: use conf1 instead
 
-   deprecated config
+  deprecated config
+
+* ``conf3`` (default: ``['a', 'b']``)
+
+  list config
 
 #### Noncompliant Code:
 
@@ -36,9 +42,13 @@ import foo.bar
 
 equals null
 
+**Active by default**: No
+
 ### NoUnitKeyword
 
 removes :Unit
+
+**Active by default**: Yes - Since v1.16.0
 
 **Requires Type Resolution**
 

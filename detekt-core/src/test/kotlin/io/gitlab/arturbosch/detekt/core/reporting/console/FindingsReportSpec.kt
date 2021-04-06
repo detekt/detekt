@@ -52,7 +52,8 @@ class FindingsReportSpec : Spek({
         it("reports no findings with rule set containing no smells") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("Ruleset", emptyList()))
+                    Pair("Ruleset", emptyList())
+                )
             }
             assertThat(subject.render(detektion)).isNull()
         }

@@ -3,7 +3,7 @@ name: detekt with type resolution
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
       - '**'
@@ -34,7 +34,7 @@ jobs:
           java-version: 11
 
       - name: Package executable jar
-        run: ./gradlew jar shadowJar moveJarForIntegrationTest
+        run: ./gradlew jar shadowJar moveJarForIntegrationTest --stacktrace
 
       - name: Run detekt-cli with argsfile
         run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
@@ -71,4 +71,4 @@ jobs:
         java-version: 11
 
     - name: Run analysis
-      run: ./gradlew detektMain detektTest --build-cache --parallel
+      run: ./gradlew detektMain detektTest --build-cache --stacktrace

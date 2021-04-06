@@ -33,7 +33,8 @@ class SarifOutputReportSpec : Spek({
                 .stripWhitespace()
 
             assertThat(report).isEqualTo(
-                readResourceContent("vanilla.sarif.json").stripWhitespace())
+                readResourceContent("vanilla.sarif.json").stripWhitespace()
+            )
         }
 
         it("renders multiple issues with relative path") {
@@ -46,9 +47,11 @@ class SarifOutputReportSpec : Spek({
 
             val report = SarifOutputReport()
                 .apply {
-                    init(EmptySetupContext().apply {
-                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
-                    })
+                    init(
+                        EmptySetupContext().apply {
+                            register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
+                        }
+                    )
                 }
                 .render(result)
                 .stripWhitespace()
@@ -56,9 +59,10 @@ class SarifOutputReportSpec : Spek({
             val expectedReport = readResourceContent("relative_path.sarif.json")
                 .stripWhitespace()
 
-            // Note: On Github CI, windows file URI is on D: drive
+            // Note: Github CI uses D: drive, but it could be any drive for local development
             val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
-                expectedReport.replace("file:///", "file://D:/")
+                val winRoot = Paths.get("/").toAbsolutePath().toString().replace("\\", "/")
+                expectedReport.replace("file:///", "file://$winRoot")
             } else {
                 expectedReport
             }

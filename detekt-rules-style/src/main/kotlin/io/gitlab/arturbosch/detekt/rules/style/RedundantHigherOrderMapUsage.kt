@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -21,8 +23,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
 
 /**
  * Redundant maps add complexity to the code and accomplish nothing. They should be removed or replaced with the proper
@@ -68,12 +70,12 @@ import org.jetbrains.kotlin.types.KotlinType
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 @Suppress("ReturnCount")
 class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
-        "RedundantHigherOrderMapUsage",
+        javaClass.simpleName,
         Severity.Style,
         "Checks for Redundant 'map' calls.",
         Debt.FIVE_MINS
@@ -114,13 +116,8 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
         return lambda
     }
 
-    private fun KotlinType.isInheritorOf(fqName: FqName): Boolean {
-        return isTypeOf(fqName) || constructor.supertypes.any { it.isTypeOf(fqName) }
-    }
-
-    private fun KotlinType.isTypeOf(fqName: FqName): Boolean {
-        return constructor.declarationDescriptor?.fqNameSafe == fqName
-    }
+    private fun KotlinType.isInheritorOf(fqName: FqName): Boolean =
+        fqNameOrNull() == fqName || immediateSupertypes().any { it.fqNameOrNull() == fqName }
 
     private fun KtFunctionLiteral.isRedundant(lambdaStatements: List<KtExpression>): Boolean {
         val lambdaDescriptor = bindingContext[BindingContext.FUNCTION, this] ?: return false

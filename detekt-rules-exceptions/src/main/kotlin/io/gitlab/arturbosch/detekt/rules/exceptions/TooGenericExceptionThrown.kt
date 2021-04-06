@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -37,23 +38,32 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *            - Exception
  *            - Throwable
  *            - RuntimeException`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Defect,
-            "Thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Defect,
+        "Thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
+        Debt.TWENTY_MINS
+    )
 
     private val exceptions: Set<String> =
         valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         expression.thrownExpression?.referenceExpression()?.text?.let {
-            if (it in exceptions) report(CodeSmell(issue, Entity.from(expression), "$it is a too generic " +
-                    "Exception. Prefer throwing specific exceptions that indicate a specific error case."))
+            if (it in exceptions) {
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(expression),
+                        "$it is a too generic Exception. " +
+                            "Prefer throwing specific exceptions that indicate a specific error case."
+                    )
+                )
+            }
         }
         super.visitThrowExpression(expression)
     }
@@ -64,8 +74,8 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 }
 
 val thrownExceptionDefaults = listOf(
-        "Error",
-        "Exception",
-        "Throwable",
-        "RuntimeException"
+    "Error",
+    "Exception",
+    "Throwable",
+    "RuntimeException"
 )

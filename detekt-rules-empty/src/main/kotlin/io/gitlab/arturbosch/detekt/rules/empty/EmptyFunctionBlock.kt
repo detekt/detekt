@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -18,9 +19,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
  * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - Excludes all the overridden functions (default: `false`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     private val ignoreOverridden =

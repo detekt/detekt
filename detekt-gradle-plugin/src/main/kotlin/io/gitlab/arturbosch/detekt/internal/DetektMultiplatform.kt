@@ -7,7 +7,11 @@ import org.gradle.api.file.FileCollection
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.js
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
+import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import java.io.File
 
 internal class DetektMultiplatform(private val project: Project) {
@@ -28,19 +32,11 @@ internal class DetektMultiplatform(private val project: Project) {
                 target.compilations.forEach { compilation ->
                     val taskSuffix = target.name.capitalize() + compilation.name.capitalize()
 
-                    // We currently run type resolution only for Jvm & Android targets as
-                    // native/js targets needs a different compiler classpath.
-                    val runWithTypeResolution = when (target.platformType) {
-                        jvm -> true
-                        androidJvm -> true
-                        else -> false
-                    }
+                    val runWithTypeResolution = target.runWithTypeResolution
 
-                    val inputSource = compilation.kotlinSourceSets.map {
-                        it.kotlin.sourceDirectories
-                    }.fold(project.files() as FileCollection) { collection, next ->
-                        collection.plus(next)
-                    }
+                    val inputSource = compilation.kotlinSourceSets
+                        .map { it.kotlin.sourceDirectories }
+                        .fold(project.files() as FileCollection) { collection, next -> collection.plus(next) }
 
                     val detektTaskProvider = project.registerDetektTask(
                         DetektPlugin.DETEKT_TASK_NAME + taskSuffix,
@@ -52,7 +48,11 @@ internal class DetektMultiplatform(private val project: Project) {
                         }
                         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
                         // We try to find the configured baseline or alternatively a specific variant matching this task.
-                        extension.baseline?.existingVariantOrBaseFile(taskSuffix)?.let { baselineFile ->
+                        if (runWithTypeResolution) {
+                            extension.baseline?.existingVariantOrBaseFile(compilation.name)
+                        } else {
+                            extension.baseline?.takeIf { it.exists() }
+                        }?.let { baselineFile ->
                             baseline.set(layout.file(project.provider { baselineFile }))
                         }
                         reports = extension.reports
@@ -66,16 +66,19 @@ internal class DetektMultiplatform(private val project: Project) {
                         }
                     }
 
-                    tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-                        it.dependsOn(detektTaskProvider)
-                    }
+                    tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }
+                        .configureEach { it.dependsOn(detektTaskProvider) }
 
                     project.registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension) {
                         setSource(inputSource)
                         if (runWithTypeResolution) {
                             classpath.setFrom(inputSource, compilation.compileDependencyFiles)
                         }
-                        val variantBaselineFile = extension.baseline?.addVariantName(taskSuffix)
+                        val variantBaselineFile = if (runWithTypeResolution) {
+                            extension.baseline?.addVariantName(compilation.name)
+                        } else {
+                            extension.baseline
+                        }
                         baseline.set(project.layout.file(project.provider { variantBaselineFile }))
 
                         description = "Creates detekt baseline for ${target.name} and source set ${compilation.name}"
@@ -88,3 +91,11 @@ internal class DetektMultiplatform(private val project: Project) {
         }
     }
 }
+
+// We currently run type resolution only for Jvm & Android targets as
+// native/js targets needs a different compiler classpath.
+private val KotlinTarget.runWithTypeResolution: Boolean
+    get() = when (platformType) {
+        jvm, androidJvm -> true
+        common, js, native -> false
+    }

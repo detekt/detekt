@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -52,26 +54,28 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * @configuration ignoreOverriddenFunction - if overridden functions and properties should be ignored (default: `true`)
  * (deprecated: "Use `ignoreOverridden` instead")
  * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "A member should not be given the same name as its parent class or object.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "A member should not be given the same name as its parent class or object.",
+        Debt.FIVE_MINS
+    )
 
     private val classMessage = "A member is named after the class. This might result in confusion. " +
-            "Either rename the member or change it to a constructor."
+        "Either rename the member or change it to a constructor."
     private val objectMessage = "A member is named after the object. " +
-            "This might result in confusion. Please rename the member."
+        "This might result in confusion. Please rename the member."
 
     private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true))
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
             (getMisnamedMembers(klass, klass.name) + getMisnamedCompanionObjectMembers(klass))
-                    .forEach { report(CodeSmell(issue, Entity.from(it), classMessage)) }
+                .forEach { report(CodeSmell(issue, Entity.from(it), classMessage)) }
         }
         super.visitClass(klass)
     }
@@ -79,7 +83,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (!declaration.isCompanion()) {
             getMisnamedMembers(declaration, declaration.name)
-                    .forEach { report(CodeSmell(issue, Entity.from(it), objectMessage)) }
+                .forEach { report(CodeSmell(issue, Entity.from(it), objectMessage)) }
         }
         super.visitObjectDeclaration(declaration)
     }
@@ -93,15 +97,18 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> {
         return klass.companionObjects
-                .asSequence()
-                .flatMap { getMisnamedMembers(it, klass.name) }
-                .filterNot { it is KtNamedFunction && isFactoryMethod(it, klass) }
+            .asSequence()
+            .flatMap { getMisnamedMembers(it, klass.name) }
+            .filterNot { it is KtNamedFunction && isFactoryMethod(it, klass) }
     }
 
     private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
         val typeReference = function.typeReference
         return when {
-            typeReference != null -> typeReference.text == klass.name
+            typeReference != null -> {
+                val refName = (typeReference.typeElement as? KtUserType)?.referencedName ?: typeReference.text
+                refName == klass.name
+            }
             function.bodyExpression !is KtBlockExpression -> {
                 val functionDescriptor = function.descriptor() as? FunctionDescriptor
                 functionDescriptor?.returnType?.constructor?.declarationDescriptor == klass.descriptor()

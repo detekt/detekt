@@ -8,22 +8,21 @@ kotlinDslPluginOptions {
 
 repositories {
     mavenLocal() // used to publish and test local gradle plugin changes
-    gradlePluginPortal()
     mavenCentral()
-    jcenter()
+    gradlePluginPortal()
 }
 
 object Plugins {
-    const val KOTLIN = "1.4.21"
+    const val KOTLIN = "1.4.32"
     const val DETEKT = "1.16.0"
     const val GITHUB_RELEASE = "2.2.12"
-    const val SHADOW = "5.2.0"
+    const val SHADOW = "6.1.0"
     const val VERSIONS = "0.28.0"
     const val SONAR = "2.8"
     const val DOKKA = "1.4.10"
     const val SEMVER4J = "3.1.0"
     const val NEXUS = "0.22.0"
-    const val KOTLIN_API_VALIDATOR = "0.3.0"
+    const val KOTLIN_API_VALIDATOR = "0.4.0"
 }
 
 dependencies {

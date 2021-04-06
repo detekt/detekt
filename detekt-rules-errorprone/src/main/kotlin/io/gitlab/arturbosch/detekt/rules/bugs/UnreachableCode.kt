@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -30,14 +32,17 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     println() // unreachable
  * }
  * </noncompliant>
- *
- * @active since v1.0.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
+@ActiveByDefault(since = "1.0.0")
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("UnreachableCode", Severity.Warning,
-            "Unreachable code detected. This code should be removed", Debt.TEN_MINS)
+    override val issue = Issue(
+        "UnreachableCode",
+        Severity.Warning,
+        "Unreachable code detected. This code should be removed",
+        Debt.TEN_MINS
+    )
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)

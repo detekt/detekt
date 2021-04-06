@@ -7,9 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -37,15 +38,15 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * with this concrete signature.
  *  (default: `['kotlin.io.println', 'kotlin.io.print']`)
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-                "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
     )
 
@@ -77,8 +78,8 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
         val methodName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
-        val encounteredParamTypes = resolvedCall.resultingDescriptor.valueParameters
-            .map { it.type.getJetTypeFqName(false) }
+        val encounteredParamTypes = resolvedCall.candidateDescriptor.valueParameters
+            .map { it.type.fqNameOrNull()?.asString() }
 
         if (methodName != null) {
             forbiddenMethods
@@ -94,7 +95,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                                 issue,
                                 Entity.from(expression),
                                 "The method ${it.first}(${expectedParamTypes?.joinToString() ?: ""}) " +
-                                        "has been forbidden in the Detekt config."
+                                    "has been forbidden in the Detekt config."
                             )
                         )
                     }

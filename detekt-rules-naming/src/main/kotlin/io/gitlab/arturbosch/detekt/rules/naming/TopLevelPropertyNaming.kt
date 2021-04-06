@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtProperty
@@ -19,15 +20,16 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration constantPattern - naming pattern (default: `'[A-Z][_A-Z0-9]*'`)
  * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
  * @configuration privatePropertyPattern - naming pattern (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Top level property names should follow the naming convention set in the projects configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Top level property names should follow the naming convention set in the projects configuration.",
+        debt = Debt.FIVE_MINS
+    )
 
     private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Z][_A-Z0-9]*")
     private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")

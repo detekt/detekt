@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
@@ -26,19 +27,20 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  *
  * @configuration threshold - the nested depth required to trigger rule (default: `4`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class NestedBlockDepth(
     config: Config = Config.empty,
     threshold: Int = DEFAULT_THRESHOLD_NESTING
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue("NestedBlockDepth",
-            Severity.Maintainability,
-            "Excessive nesting leads to hidden complexity. " +
-                    "Prefer extracting code to make it easier to understand.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "NestedBlockDepth",
+        Severity.Maintainability,
+        "Excessive nesting leads to hidden complexity. " +
+            "Prefer extracting code to make it easier to understand.",
+        Debt.TWENTY_MINS
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val visitor = FunctionDepthVisitor(threshold)

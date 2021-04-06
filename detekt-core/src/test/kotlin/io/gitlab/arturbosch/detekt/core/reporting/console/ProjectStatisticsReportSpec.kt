@@ -16,7 +16,9 @@ class ProjectStatisticsReportSpec : Spek({
             val expected = "Project Statistics:\n\t- M2: 2\n\t- M1: 1\n"
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
-                    ProjectMetric("M1", 1, priority = 1), ProjectMetric("M2", 2, priority = 2))
+                    ProjectMetric("M1", 1, priority = 1),
+                    ProjectMetric("M2", 2, priority = 2)
+                )
             }
             assertThat(subject.render(detektion)).isEqualTo(expected)
         }

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -45,8 +46,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 @Suppress("ReturnCount", "ComplexMethod")
 class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(

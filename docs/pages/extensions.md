@@ -7,7 +7,7 @@ summary:
 ---
 
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
-The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/master/detekt-sample-extensions).
+The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions).
 
 #### <a name="customrulesets">Custom RuleSets</a>
 
@@ -199,7 +199,7 @@ So you have implemented your own rules or other extensions and want to integrate
 into your `detekt` run? Great, make sure to have a `jar` with all your needed dependencies 
 minus the ones `detekt` brings itself.
 
-Take a look at our [sample project](https://github.com/detekt/detekt/tree/master/detekt-sample-extensions) on how to achieve this with gradle.
+Take a look at our [sample project](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions) on how to achieve this with gradle.
 
 ##### Integrate your extension with the detekt CLI
 
@@ -223,7 +223,7 @@ dependencies {
 
 ##### Pitfalls
 
-- By default all rules not marked with `@active` in their `KDoc` are disabled.
+- By default all rules not annotated with `@ActiveByDefault` are disabled.
 That means your custom rules are also disabled if you have not explicitly enabled
 them in the `detekt` yaml configuration file.
 - If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this

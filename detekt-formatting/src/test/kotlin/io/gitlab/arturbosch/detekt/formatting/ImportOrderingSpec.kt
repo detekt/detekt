@@ -19,7 +19,8 @@ class ImportOrderingSpec : Spek({
     describe("different import ordering layouts") {
 
         it("defaults to the idea layout") {
-            val findings = ImportOrdering(Config.empty).lint("""
+            val findings = ImportOrdering(Config.empty).lint(
+                """
                 import android.app.Activity
                 import android.view.View
                 import android.view.ViewGroup
@@ -31,7 +32,8 @@ class ImportOrderingSpec : Spek({
                 import kotlin.io.Closeable
                 import android.content.Context as Ctx
                 import androidx.fragment.app.Fragment as F
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings).isEmpty()
         }
@@ -51,13 +53,15 @@ class ImportOrderingSpec : Spek({
             """.trimIndent()
 
             it("passes for alphabetical order") {
-                val findings = ImportOrdering(TestConfig("layout" to "ascii")).lint(negativeCase)
+                val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
+                    .lint(negativeCase)
 
                 assertThat(findings).isEmpty()
             }
 
             it("fails for non alphabetical order") {
-                val findings = ImportOrdering(TestConfig("layout" to "ascii")).lint(positiveCase)
+                val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
+                    .lint(positiveCase)
 
                 assertThat(findings).hasSize(1)
             }
@@ -77,7 +81,8 @@ class ImportOrderingSpec : Spek({
         describe("supports custom patterns") {
 
             it("misses a empty line between aliases and other imports") {
-                val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint("""
+                val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint(
+                    """
                     import android.app.Activity
                     import android.view.View
                     import android.view.ViewGroup
@@ -85,12 +90,14 @@ class ImportOrderingSpec : Spek({
                     import kotlin.concurrent.Thread
                     import android.content.Context as Ctx
                     import androidx.fragment.app.Fragment as F
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings).hasSize(1)
             }
             it("passes for empty line between aliases and other imports") {
-                val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint("""
+                val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint(
+                    """
                     import android.app.Activity
                     import android.view.View
                     import android.view.ViewGroup
@@ -99,7 +106,8 @@ class ImportOrderingSpec : Spek({
 
                     import android.content.Context as Ctx
                     import androidx.fragment.app.Fragment as F
-                """.trimIndent())
+                    """.trimIndent()
+                )
 
                 assertThat(findings).isEmpty()
             }
