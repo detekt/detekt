@@ -36,10 +36,14 @@ fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
 private fun MultiRule.toDescriptors(ruleSetId: RuleSetId): List<ReportingDescriptor> =
     this.rules.map { it.toDescriptor(ruleSetId) }
 
-private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor = ReportingDescriptor(
-    id = "detekt.$ruleSetId.$ruleId",
-    name = ruleId,
-    shortDescription = MultiformatMessageString(text = issue.description),
-    helpURI =
-        "https://detekt.github.io/detekt/${ruleSetId.toLowerCase(Locale.US)}.html#${ruleId.toLowerCase(Locale.US)}"
-)
+private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
+    val formattedRuleSetId = ruleSetId.toLowerCase(Locale.US)
+    val formattedRuleId = ruleId.toLowerCase(Locale.US)
+
+    return ReportingDescriptor(
+        id = "detekt.$ruleSetId.$ruleId",
+        name = ruleId,
+        shortDescription = MultiformatMessageString(text = issue.description),
+        helpURI = "https://detekt.github.io/detekt/$formattedRuleSetId.html#$formattedRuleId"
+    )
+}

@@ -8,7 +8,6 @@ import io.github.detekt.sarif4k.SarifSerializer
 import io.github.detekt.sarif4k.Tool
 import io.github.detekt.sarif4k.ToolComponent
 import io.github.detekt.sarif4k.Version
-import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
@@ -47,24 +46,26 @@ class SarifOutputReport : OutputReport() {
         val sarifSchema210 = SarifSchema210(
             schema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
             version = Version.The210,
-            runs = listOf(Run(
-                tool = Tool(
-                    driver = ToolComponent(
-                        downloadURI = "https://github.com/detekt/detekt/releases/download/v$version/detekt",
-                        fullName = "detekt",
-                        guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
-                        informationURI = "https://detekt.github.io/detekt",
-                        language = "en",
-                        name = "detekt",
-                        rules = toReportingDescriptors(config),
-                        organization = "detekt",
-                        semanticVersion = version,
-                        version = version
-                    )
-                ),
-                originalURIBaseIDS = basePath?.let { mapOf(SRCROOT to ArtifactLocation(uri = "file://$basePath")) },
-                results = toResults(detektion)
-            ))
+            runs = listOf(
+                Run(
+                    tool = Tool(
+                        driver = ToolComponent(
+                            downloadURI = "https://github.com/detekt/detekt/releases/download/v$version/detekt",
+                            fullName = "detekt",
+                            guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
+                            informationURI = "https://detekt.github.io/detekt",
+                            language = "en",
+                            name = "detekt",
+                            rules = toReportingDescriptors(config),
+                            organization = "detekt",
+                            semanticVersion = version,
+                            version = version
+                        )
+                    ),
+                    originalURIBaseIDS = basePath?.let { mapOf(SRCROOT to ArtifactLocation(uri = "file://$basePath")) },
+                    results = toResults(detektion)
+                )
+            )
         )
         return SarifSerializer.toJson(sarifSchema210)
     }
