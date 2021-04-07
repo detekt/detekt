@@ -14,7 +14,7 @@
 
 - ... do not forget to add the new rule to a `RuleSetProvider` (e.g. StyleGuideProvider)
 - ... do not forget to write a description for the issue of the new rule.
-- ... add the [correct KDoc](#contents-and-structure-of-a-rules-kdoc) and [annotations](#rule-annotations) to your `Rule` class. This is used to generate wiki pages and the `default-detekt-config.yml` automatically.
+- ... add the [correct KDoc](#contents-and-structure-of-a-rules-kdoc) and [annotations](#rule-annotations) to your `Rule` class. This is used to generate documentation pages and the `default-detekt-config.yml` automatically.
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule.
 Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
 Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
