@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.testkit
 class ProjectLayout(
     val numberOfSourceFilesInRootPerSourceDir: Int,
     val numberOfCodeSmellsInRootPerSourceDir: Int = 0,
-    val srcDirs: List<String> = listOf("src/main/java", "src/test/java")
+    val srcDirs: List<String> = listOf("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")
 ) {
 
     private val mutableSubmodules: MutableList<Submodule> = mutableListOf()
