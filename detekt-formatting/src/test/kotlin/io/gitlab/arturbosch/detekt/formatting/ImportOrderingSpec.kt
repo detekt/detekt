@@ -53,13 +53,15 @@ class ImportOrderingSpec : Spek({
             """.trimIndent()
 
             it("passes for alphabetical order") {
-                val findings = ImportOrdering(TestConfig("layout" to "ascii")).lint(negativeCase)
+                val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
+                    .lint(negativeCase)
 
                 assertThat(findings).isEmpty()
             }
 
             it("fails for non alphabetical order") {
-                val findings = ImportOrdering(TestConfig("layout" to "ascii")).lint(positiveCase)
+                val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
+                    .lint(positiveCase)
 
                 assertThat(findings).hasSize(1)
             }

@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.report
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import io.github.detekt.sarif4j.SarifSchema210
+import io.github.detekt.sarif4k.SarifSerializer
 import java.io.File
 
 /**
@@ -11,20 +9,11 @@ import java.io.File
 object SarifReportMerger {
 
     fun merge(inputs: Collection<File>, output: File) {
-        val objectMapper = ObjectMapper().apply {
-            enable(SerializationFeature.INDENT_OUTPUT)
+        val sarifs = inputs.filter { it.exists() }.map {
+            SarifSerializer.fromJson(it.readText())
         }
-        val mergedSarif = SarifSchema210()
-        inputs.filter { it.exists() }.forEachIndexed { index, input ->
-            val sarif = objectMapper.readValue(input, SarifSchema210::class.java)
-            if (index == 0) {
-                mergedSarif.`$schema` = sarif.`$schema`
-                mergedSarif.version = sarif.version
-                mergedSarif.runs = sarif.runs
-            } else {
-                mergedSarif.runs.first().results.addAll(sarif.runs.first().results)
-            }
-        }
-        objectMapper.writeValue(output, mergedSarif)
+        val mergedResults = sarifs.flatMap { it.runs.single().results.orEmpty() }
+        val mergedSarif = sarifs[0].copy(runs = listOf(sarifs[0].runs.single().copy(results = mergedResults)))
+        output.writeText(SarifSerializer.toJson(mergedSarif))
     }
 }

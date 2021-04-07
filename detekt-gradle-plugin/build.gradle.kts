@@ -1,7 +1,7 @@
 plugins {
     module
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.13.0"
+    id("com.gradle.plugin-publish") version "0.14.0"
 }
 
 repositories {
@@ -20,8 +20,7 @@ val intTest: Configuration by configurations.creating
 dependencies {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
     implementation(kotlin("gradle-plugin-api"))
-    implementation("io.github.detekt.sarif4j:sarif4j")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("io.github.detekt.sarif4k:sarif4k")
     compileOnly(androidGradlePlugin)
     compileOnly(kotlin("gradle-plugin"))
 
@@ -31,7 +30,7 @@ dependencies {
     intTest(androidGradlePlugin)
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0") {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32") {
             because(
                 """Android Gradle Plugin 4.1.1 depends on Kotlin 1.3.72 but we should not mix 1.3 and 1.4.
                 This constraint should be lifted on Android Gradle Plugin 4.2.0. See

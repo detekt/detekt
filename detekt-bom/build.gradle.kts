@@ -5,7 +5,7 @@ plugins {
 dependencies {
     val version = object {
         val spek = "2.0.15"
-        val ktlint = "0.40.0"
+        val ktlint = "0.41.0"
     }
 
     constraints {
@@ -13,7 +13,7 @@ dependencies {
         api("org.spekframework.spek2:spek-dsl-jvm:${version.spek}")
         api("org.spekframework.spek2:spek-runner-junit5:${version.spek}")
         api("org.reflections:reflections:0.9.12")
-        api("io.mockk:mockk:1.10.6")
+        api("io.mockk:mockk:1.11.0")
         api("org.junit.platform:junit-platform-launcher:1.7.1")
         api("org.yaml:snakeyaml:1.28")
         api("com.beust:jcommander:1.81")
@@ -22,8 +22,7 @@ dependencies {
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
         api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
         api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
-        api("io.github.detekt.sarif4j:sarif4j:1.0.0")
-        api("com.fasterxml.jackson.core:jackson-databind:2.12.2")
+        api("io.github.detekt.sarif4k:sarif4k:0.0.1")
     }
 }
 

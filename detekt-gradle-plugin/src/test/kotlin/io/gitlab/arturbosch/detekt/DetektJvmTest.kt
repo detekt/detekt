@@ -12,6 +12,7 @@ object DetektJvmTest : Spek({
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
             buildFileName = "build.gradle",
+            baselineFiles = listOf("baseline.xml", "baseline-main.xml", "baseline-test.xml"),
             mainBuildFileContent = """
                 plugins {
                     id "org.jetbrains.kotlin.jvm"
@@ -26,7 +27,6 @@ object DetektJvmTest : Spek({
 
                 detekt {
                     reports {
-                        sarif.enabled = true
                         txt.enabled = false
                     }
                 }
@@ -37,6 +37,7 @@ object DetektJvmTest : Spek({
 
         it("configures detekt type resolution task main") {
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-main.xml """)
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -46,6 +47,7 @@ object DetektJvmTest : Spek({
 
         it("configures detekt type resolution task test") {
             gradleRunner.runTasksAndCheckResult(":detektTest") { buildResult ->
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]baseline-test.xml """)
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")

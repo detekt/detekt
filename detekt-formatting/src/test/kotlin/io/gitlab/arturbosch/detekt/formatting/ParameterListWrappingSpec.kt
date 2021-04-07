@@ -15,7 +15,11 @@ class ParameterListWrappingSpec : Spek({
 
         describe("indent size equals 1") {
 
-            val code = "fun f(\n a: Int\n) {}"
+            val code = """
+                fun f(
+                 a: Int
+                ) {}
+            """.trimIndent()
 
             it("reports wrong indent size") {
                 assertThat(subject.lint(code)).hasSize(1)
@@ -28,8 +32,20 @@ class ParameterListWrappingSpec : Spek({
         }
 
         it("does not report correct ParameterListWrapping level") {
-            val code = "fun f(\n    a: Int\n) {}"
+            val code = """
+                fun f(
+                    a: Int
+                ) {}
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("reports when max line length is exceeded") {
+            val code = """
+                fun f(a: Int, b: Int, c: Int) {}
+            """.trimIndent()
+            val config = TestConfig(ParameterListWrapping.MAX_LINE_LENGTH to "10")
+            assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
         }
     }
 })

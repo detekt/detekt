@@ -61,7 +61,7 @@ abstract class DslTestBuilder {
             gradleBuildName,
             mainBuildFileContent,
             configFile,
-            baselineFile,
+            baselineFile?.let { listOf(it) } ?: emptyList(),
             gradleVersion,
             dryRun
         )

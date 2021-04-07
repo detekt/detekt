@@ -24,7 +24,8 @@ class DetektMultiplatformTest : Spek({
                     }
                     $DETEKT_BLOCK
                 """.trimIndent(),
-                srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
+                srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
+                baselineFiles = listOf("baseline.xml", "baseline-metadataMain.xml")
             )
         }
 
@@ -34,6 +35,7 @@ class DetektMultiplatformTest : Spek({
 
         it("configures detekt task without type resolution") {
             gradleRunner.runTasksAndCheckResult(":shared:detektMetadataMain") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
         }
@@ -96,7 +98,8 @@ class DetektMultiplatformTest : Spek({
                     "src/commonTest/kotlin",
                     "src/jvmBackendMain/kotlin",
                     "src/jvmEmbeddedMain/kotlin",
-                )
+                ),
+                baselineFiles = listOf("baseline.xml", "baseline-main.xml")
             )
         }
 
@@ -107,11 +110,16 @@ class DetektMultiplatformTest : Spek({
             gradleRunner.runTasks(":shared:detektBaselineJvmEmbeddedTest")
         }
 
-        it("configures detekt task with type resolution") {
+        it("configures detekt task with type resolution backend") {
             gradleRunner.runTasksAndCheckResult(":shared:detektJvmBackendMain") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline-main.xml """)
                 assertDetektWithClasspath(it)
             }
+        }
+
+        it("configures detekt task with type resolution embedded") {
             gradleRunner.runTasksAndCheckResult(":shared:detektJvmEmbeddedMain") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline-main.xml """)
                 assertDetektWithClasspath(it)
             }
         }
@@ -162,7 +170,8 @@ class DetektMultiplatformTest : Spek({
                     "src/androidMain/kotlin",
                     "src/commonMain/kotlin",
                     "src/commonTest/kotlin"
-                )
+                ),
+                baselineFiles = listOf("baseline.xml", "baseline-debug.xml", "baseline-release.xml")
             )
         }
 
@@ -177,9 +186,11 @@ class DetektMultiplatformTest : Spek({
 
         it("configures detekt task with type resolution") {
             gradleRunner.runTasksAndCheckResult(":shared:detektAndroidDebug") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline-debug.xml """)
                 assertDetektWithClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektAndroidRelease") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline-release.xml """)
                 assertDetektWithClasspath(it)
             }
         }
@@ -211,7 +222,8 @@ class DetektMultiplatformTest : Spek({
                     "src/commonTest/kotlin",
                     "src/jsMain/kotlin",
                     "src/jsTest/kotlin",
-                )
+                ),
+                baselineFiles = listOf("baseline.xml")
             )
         }
 
@@ -222,9 +234,11 @@ class DetektMultiplatformTest : Spek({
 
         it("configures detekt task without type resolution") {
             gradleRunner.runTasksAndCheckResult(":shared:detektJsMain") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektJsTest") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
         }
@@ -265,7 +279,8 @@ class DetektMultiplatformTest : Spek({
                     "src/iosX64Main/kotlin",
                     "src/iosX64Test/kotlin",
                     "src/iosMain/kotlin",
-                )
+                ),
+                baselineFiles = listOf("baseline.xml")
             )
         }
 
@@ -278,15 +293,19 @@ class DetektMultiplatformTest : Spek({
 
         it("configures detekt task without type resolution") {
             gradleRunner.runTasksAndCheckResult(":shared:detektIosArm64Main") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektIosArm64Test") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektIosX64Main") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektIosX64Test") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]baseline.xml """)
                 assertDetektWithoutClasspath(it)
             }
         }
@@ -344,7 +363,6 @@ private val KMM_PLUGIN_BLOCK = """
 private val DETEKT_BLOCK = """
     detekt {
         baseline = file("${"$"}projectDir/baseline.xml")
-        reports.sarif.enabled = true
         reports.txt.enabled = false
     }
 """.trimIndent()

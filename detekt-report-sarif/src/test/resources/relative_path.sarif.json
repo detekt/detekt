@@ -3,20 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "tool": {
-        "driver": {
-          "guid": "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
-          "name": "detekt",
-          "organization": "detekt",
-          "fullName": "detekt",
-          "version": "1.0.0",
-          "semanticVersion": "1.0.0",
-          "downloadUri": "https://github.com/detekt/detekt/releases/download/v1.0.0/detekt",
-          "informationUri": "https://detekt.github.io/detekt",
-          "rules": [],
-          "language": "en"
-        }
-      },
       "originalUriBaseIds": {
         "%SRCROOT%": {
           "uri": "file:///Users/tester/detekt/"
@@ -24,10 +10,7 @@
       },
       "results": [
         {
-          "ruleId": "detekt.TestSmellA.TestSmellA",
-          "message": {
-            "text": "TestMessage"
-          },
+          "level": "warning",
           "locations": [
             {
               "physicalLocation": {
@@ -36,18 +19,19 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 1,
-                  "startColumn": 1
+                  "startColumn": 1,
+                  "startLine": 1
                 }
               }
             }
-          ]
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellA.TestSmellA"
         },
         {
-          "ruleId": "detekt.TestSmellB.TestSmellB",
-          "message": {
-            "text": "TestMessage"
-          },
+          "level": "warning",
           "locations": [
             {
               "physicalLocation": {
@@ -56,18 +40,19 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 1,
-                  "startColumn": 1
+                  "startColumn": 1,
+                  "startLine": 1
                 }
               }
             }
-          ]
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellB.TestSmellB"
         },
         {
-          "ruleId": "detekt.TestSmellC.TestSmellC",
-          "message": {
-            "text": "TestMessage"
-          },
+          "level": "warning",
           "locations": [
             {
               "physicalLocation": {
@@ -76,14 +61,33 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 1,
-                  "startColumn": 1
+                  "startColumn": 1,
+                  "startLine": 1
                 }
               }
             }
-          ]
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellC.TestSmellC"
         }
-      ]
+      ],
+      "tool": {
+        "driver": {
+          "downloadUri": "https://github.com/detekt/detekt/releases/download/v1.16.0/detekt",
+          "fullName": "detekt",
+          "guid": "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
+          "informationUri": "https://detekt.github.io/detekt",
+          "language": "en",
+          "name": "detekt",
+          "organization": "detekt",
+          "rules": [
+          ],
+          "semanticVersion": "1.16.0",
+          "version": "1.16.0"
+        }
+      }
     }
   ]
 }
