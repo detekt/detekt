@@ -31,6 +31,11 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
         Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
     private val htmlTag = Regex("<.+>")
 
+    override fun visitDeclaration(dcl: KtDeclaration) {
+        super.visitDeclaration(dcl)
+        verify(dcl)
+    }
+
     fun verify(declaration: KtDeclaration) {
         declaration.docComment?.let {
             val text = it.getDefaultSection().getContent()

@@ -6,7 +6,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class EndOfSentenceFormatSpec : Spek({
-    val subject by memoized { KDocStyle() }
+    val subject by memoized { EndOfSentenceFormat() }
 
     describe("KDocStyle rule") {
 
