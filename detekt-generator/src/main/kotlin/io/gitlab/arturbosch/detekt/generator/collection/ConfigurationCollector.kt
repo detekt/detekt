@@ -54,7 +54,7 @@ class ConfigurationCollector {
     }
 
     private fun KtProperty.getListDeclarationAsConfigString(): String {
-        return listDeclaration
+        return getListDeclaration()
             .valueArguments
             .map { "'${it.text.withoutQuotes()}'" }.toString()
     }
@@ -98,7 +98,7 @@ class ConfigurationCollector {
         val delegateArgument = checkNotNull(
             (expression as KtCallExpression).valueArguments[0].getArgumentExpression()
         )
-        val listDeclarationForDefault = delegateArgument.listDeclarationOrNull
+        val listDeclarationForDefault = delegateArgument.getListDeclarationOrNull()
         if (listDeclarationForDefault != null) {
             return listDeclarationForDefault.valueArguments.map {
                 val value = constantsByName[it.text] ?: it.text
@@ -132,11 +132,11 @@ class ConfigurationCollector {
         private val KtProperty.declaredTypeOrNull: String?
             get() = typeReference?.text
 
-        private val KtElement.listDeclarationOrNull: KtCallExpression?
-            get() = findDescendantOfType { it.isListDeclaration() }
+        private fun KtElement.getListDeclaration(): KtCallExpression =
+            checkNotNull(getListDeclarationOrNull())
 
-        private val KtElement.listDeclaration: KtCallExpression
-            get() = checkNotNull(listDeclarationOrNull)
+        private fun KtElement.getListDeclarationOrNull(): KtCallExpression? =
+            findDescendantOfType { it.isListDeclaration() }
 
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text == DELEGATE_NAME
@@ -156,7 +156,8 @@ class ConfigurationCollector {
         private fun KtProperty.hasListDeclaration(): Boolean =
             anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
 
-        private fun KtCallExpression.isListDeclaration() = referenceExpression()?.text in LIST_CREATORS
+        private fun KtCallExpression.isListDeclaration() =
+            referenceExpression()?.text in LIST_CREATORS
 
         private fun KtElement.invalidDocumentation(message: () -> String): Nothing {
             throw InvalidDocumentationException("[${containingFile.name}] ${message.invoke()}")
