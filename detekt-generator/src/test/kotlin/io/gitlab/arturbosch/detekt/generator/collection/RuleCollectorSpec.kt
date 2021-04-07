@@ -176,10 +176,13 @@ class RuleCollectorSpec : Spek({
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(1)
-                    assertThat(items[0].configuration[0].name).isEqualTo("config")
-                    assertThat(items[0].configuration[0].description).isEqualTo("description")
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
-                    assertThat(items[0].configuration[0].deprecated).isNull()
+                    val expectedConfiguration = Configuration(
+                        name = "config",
+                        description = "description",
+                        defaultValue = "'[A-Z$]'",
+                        deprecated = null
+                    )
+                    assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
                 }
 
                 it("contains one configuration option of type Int") {
