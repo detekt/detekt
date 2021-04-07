@@ -5,25 +5,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.psi.KtDeclaration
-
-class KDocStyle(config: Config = Config.empty) : MultiRule() {
-
-    private val endOfSentenceFormat = EndOfSentenceFormat(config)
-
-    override val rules = listOf(
-        endOfSentenceFormat
-    )
-
-    override fun visitDeclaration(dcl: KtDeclaration) {
-        super.visitDeclaration(dcl)
-        endOfSentenceFormat.verify(dcl)
-    }
-}
 
 /**
  * This rule validates the end of the first sentence of a KDoc comment.
