@@ -54,7 +54,7 @@ class DeprecatedBlockTag(config: Config = Config.empty) : Rule(config) {
         verify(dcl)
     }
 
-    private fun verify(dcl: KtDeclaration) {
+    fun verify(dcl: KtDeclaration) {
         dcl.docComment?.getAllSections()?.forEach { section ->
             section.findTagsByName("deprecated").forEach { tag ->
                 report(

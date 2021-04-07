@@ -6,14 +6,17 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 
 class KDocStyle(config: Config = Config.empty) : MultiRule() {
 
+    private val deprecatedBlockTag = DeprecatedBlockTag(config)
     private val endOfSentenceFormat = EndOfSentenceFormat(config)
 
     override val rules = listOf(
+        deprecatedBlockTag,
         endOfSentenceFormat
     )
 
     override fun visitDeclaration(dcl: KtDeclaration) {
         super.visitDeclaration(dcl)
+        deprecatedBlockTag.verify(dcl)
         endOfSentenceFormat.verify(dcl)
     }
 }
