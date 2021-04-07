@@ -46,7 +46,7 @@ Make sure that you're adding the sonatype maven repository to both the `reposito
 If you're using the `plugins{}` block to apply detekt, you should update your `build.gradle` file to:
 
 ```groovy
-buildscript {
+plugins {
   id("io.gitlab.arturbosch.detekt") version "master-SNAPSHOT"
 }
 
