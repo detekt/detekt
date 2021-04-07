@@ -20,7 +20,6 @@ class CommentSmellProvider : DefaultRuleSetProvider {
             CommentOverPrivateFunction(config),
             CommentOverPrivateProperty(config),
             KDocStyle(config),
-            DeprecatedBlockTag(config),
             UndocumentedPublicClass(config),
             UndocumentedPublicFunction(config),
             UndocumentedPublicProperty(config),

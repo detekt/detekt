@@ -9,8 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtDeclaration
 
-// Note: this could probably be added to the KDocStyle class in EndOfSentenceFormat.kt
-
 /**
  * This rule reports use of the `@deprecated` block tag in KDoc comments. Deprecation must be specified using a
  * `@Deprecated` annotation as adding a `@deprecated` block tag in KDoc comments
