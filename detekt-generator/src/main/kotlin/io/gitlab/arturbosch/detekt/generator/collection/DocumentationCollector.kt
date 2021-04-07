@@ -19,9 +19,7 @@ class DocumentationCollector {
             ?.getContent()
             ?.trim()
             ?.replace("@@", "@")
-            ?.also { comment ->
-                extractRuleDocumentation(comment)
-            }
+            ?.let(::extractRuleDocumentation)
     }
 
     private fun extractRuleDocumentation(comment: String) {
