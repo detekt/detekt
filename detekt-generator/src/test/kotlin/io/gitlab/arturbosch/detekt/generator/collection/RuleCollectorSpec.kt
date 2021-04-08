@@ -151,114 +151,422 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
         }
 
-        it("contains no configuration options by default") {
-            val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].configuration).isEmpty()
-            assertThat(items[0].requiresTypeResolution).isFalse()
+        describe("collects configuration options") {
+            describe("using annotation") {
+                it("contains no configuration options by default") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).isEmpty()
+                }
+
+                it("contains one configuration option with correct formatting") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config("[A-Z$]")
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(1)
+                    val expectedConfiguration = Configuration(
+                        name = "config",
+                        description = "description",
+                        defaultValue = "'[A-Z$]'",
+                        deprecated = null
+                    )
+                    assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
+                }
+
+                it("contains one configuration option of type Int") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(99)
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(1)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value when defined with named parameter") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(defaultValue = 99)
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value for list of strings") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<String> by config(
+                                listOf(
+                                    "a", 
+                                    "b"
+                                )
+                            )
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
+                }
+
+                it("contains multiple configuration options") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config("")
+                            
+                            @Configuration("description")
+                            private val config2: String by config("")
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(2)
+                }
+
+                it("has description that is concatenated") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration(
+                                "This is a " +
+                                "multi line " +
+                                "description")
+                            private val config: String by config("a")
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                }
+
+                it("extracts default value when it is an Int constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = 99
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+
+                it("extracts default value when it is an Int constant as named parameter") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by config(defaultValue = DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = 99
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                }
+                it("extracts default value when it is a String constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config(DEFAULT_CONFIG_VALUE)
+                            
+                            companion object {
+                                private const val DEFAULT_CONFIG_VALUE = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                }
+                it("extracts default value for list of strings from constant") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
+
+                            @Configuration("description")
+                            private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
+
+                            companion object {
+                                private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
+                                private val DEFAULT_CONFIG_VALUE_A = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    val expected = "['a', 'b']"
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+                }
+
+                it("extracts emptyList default value") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: List<String> by config(listOf())
+
+                            @Configuration("description")
+                            private val config2: List<String> by config(emptyList())
+
+                            companion object {
+                                private val DEFAULT_CONFIG_VALUE_A = "a"
+                            }
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                }
+
+                it("is marked as deprecated as well") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Deprecated("use config1 instead")
+                            @Configuration("description")
+                            private val config: String by config("")
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
+                }
+
+                it("fails if annotation and kdoc are used both to define configuration") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config1 - description (default: `''`)
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config("")
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if not used in combination with delegate") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String = "foo"
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if not used in combination with config delegate") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by lazy { "foo" }
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if config delegate is used without annotation") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            private val config: String by config("")
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("fails if config delegate is used with unsupported type") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: List<Int> by config(listOf(1, 2))
+                        }                        
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+            }
+
+            describe("as part of kdoc") {
+                it("contains no configuration options by default") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).isEmpty()
+                }
+
+                it("contains one configuration option with correct formatting") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config - description (default: `'[A-Z$]'`)
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(1)
+                    assertThat(items[0].configuration[0].name).isEqualTo("config")
+                    assertThat(items[0].configuration[0].description).isEqualTo("description")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
+                }
+
+                it("contains multiple configuration options") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config - description (default: `''`)
+                         * @configuration config2 - description2 (default: `''`)
+                         */
+                        class SomeRandomClass: Rule
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration).hasSize(2)
+                }
+                it("config option doesn't have a default value") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config - description
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("has a blank default value") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config - description (default: ``)
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("has an incorrectly delimited default value") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration config - description (default: true)
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                it("contains a misconfigured configuration option") {
+                    val code = """
+                        /**
+                         * description
+                         * @configuration something: description
+                         */
+                        class SomeRandomClass : Rule
+                    """
+                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+            }
         }
 
-        it("contains one configuration option with correct formatting") {
-            val code = """
-                /**
-                 * description
-                 * @configuration config - description (default: `'[A-Z$]'`)
-                 */
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(1)
-            assertThat(items[0].configuration[0].name).isEqualTo("config")
-            assertThat(items[0].configuration[0].description).isEqualTo("description")
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
-        }
+        describe("collects type resolution information") {
+            it("has no type resolution by default") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].requiresTypeResolution).isFalse()
+            }
 
-        it("contains multiple configuration options") {
-            val code = """
-                /**
-                 * description
-                 * @configuration config - description (default: `''`)
-                 * @configuration config2 - description2 (default: `''`)
-                 */
-                class SomeRandomClass: Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(2)
-        }
+            it("collects the flag that it requires type resolution") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    @RequiresTypeResolution
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].requiresTypeResolution).isTrue()
+            }
 
-        it("collects the flag that it requires type resolution") {
-            val code = """
-                import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-                
-                /**
-                 * description
-                 */
-                @RequiresTypeResolution
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].requiresTypeResolution).isTrue()
-        }
-
-        it("collects the flag that it requires type resolution from fully qualified annotation") {
-            val code = """
-                /**
-                 * description
-                 */
-                @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-                class SomeRandomClass : Rule
-            """
-            val items = subject.run(code)
-            assertThat(items[0].requiresTypeResolution).isTrue()
-        }
-
-        it("config option doesn't have a default value") {
-            val code = """
-                /**
-                 * description
-                 * @configuration config - description
-                 */
-                class SomeRandomClass : Rule
-            """
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-        }
-
-        it("has a blank default value") {
-            val code = """
-                /**
-                 * description
-                 * @configuration config - description (default: ``)
-                 */
-                class SomeRandomClass : Rule
-            """
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-        }
-
-        it("has an incorrectly delimited default value") {
-            val code = """
-                /**
-                 * description
-                 * @configuration config - description (default: true)
-                 */
-                class SomeRandomClass : Rule
-            """
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-        }
-
-        it("contains a misconfigured configuration option") {
-            val code = """
-                /**
-                 * description
-                 * @configuration something: description
-                 */
-                class SomeRandomClass : Rule
-            """
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+            it("collects the flag that it requires type resolution from fully qualified annotation") {
+                val code = """
+                    /**
+                     * description
+                     */
+                    @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+                    class SomeRandomClass : Rule
+                """
+                val items = subject.run(code)
+                assertThat(items[0].requiresTypeResolution).isTrue()
+            }
         }
 
         it("contains compliant and noncompliant code examples") {

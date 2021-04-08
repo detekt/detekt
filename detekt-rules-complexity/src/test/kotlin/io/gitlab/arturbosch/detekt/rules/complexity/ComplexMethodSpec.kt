@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private val defaultConfigMap: Map<String, Any> = mapOf("threshold" to "1")
+
 class ComplexMethodSpec : Spek({
 
     val defaultComplexity = 1
@@ -19,7 +21,7 @@ class ComplexMethodSpec : Spek({
         context("different complex constructs") {
 
             it("counts different loops") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                     """
                     fun test() {
                         for (i in 1..10) {}
@@ -34,7 +36,7 @@ class ComplexMethodSpec : Spek({
             }
 
             it("counts catch blocks") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                     """
                     fun test() {
                         try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
@@ -46,7 +48,7 @@ class ComplexMethodSpec : Spek({
             }
 
             it("counts nested conditional statements") {
-                val findings = ComplexMethod(threshold = 1).compileAndLint(
+                val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                     """
                     fun test() {
                         try {
@@ -79,27 +81,27 @@ class ComplexMethodSpec : Spek({
                 """
 
             it("counts three with nesting function 'forEach'") {
-                val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "false"))
+                val config = TestConfig(defaultConfigMap.plus("ignoreNestingFunctions" to "false"))
                 assertExpectedComplexityValue(code, config, expectedValue = 3)
             }
 
             it("can ignore nesting functions like 'forEach'") {
-                val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "true"))
+                val config = TestConfig(defaultConfigMap.plus("ignoreNestingFunctions" to "true"))
                 assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips all if if the nested functions is empty") {
-                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to ""))
+                val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to ""))
                 assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips 'forEach' as it is not specified") {
-                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
+                val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to "let,apply,also"))
                 assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
 
             it("skips 'forEach' as it is not specified list") {
-                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to listOf("let", "apply", "also")))
+                val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to listOf("let", "apply", "also")))
                 assertExpectedComplexityValue(code, config, expectedValue = 2)
             }
         }
@@ -111,16 +113,18 @@ class ComplexMethodSpec : Spek({
             it("does not report complex methods with a single when expression") {
                 val config = TestConfig(
                     mapOf(
-                        ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"
+                        "threshold" to "4",
+                        "ignoreSingleWhenExpression" to "true"
                     )
                 )
-                val subject = ComplexMethod(config, threshold = 4)
+                val subject = ComplexMethod(config)
 
                 assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(43, 5))
             }
 
             it("reports all complex methods") {
-                val subject = ComplexMethod(threshold = 4)
+                val config = TestConfig(mapOf("threshold" to "4"))
+                val subject = ComplexMethod(config)
 
                 assertThat(subject.lint(path)).hasSourceLocations(
                     SourceLocation(6, 5),
@@ -132,7 +136,7 @@ class ComplexMethodSpec : Spek({
             }
 
             it("does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true") {
-                val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
+                val config = TestConfig(mapOf("ignoreSimpleWhenEntries" to "true"))
                 val subject = ComplexMethod(config)
                 val code = """
                      fun f() {
@@ -216,7 +220,7 @@ class ComplexMethodSpec : Spek({
 })
 
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
-    val findings = ComplexMethod(config, threshold = 1).lint(code)
+    val findings = ComplexMethod(config).lint(code)
 
     assertThat(findings).hasSourceLocations(SourceLocation(1, 5))
 

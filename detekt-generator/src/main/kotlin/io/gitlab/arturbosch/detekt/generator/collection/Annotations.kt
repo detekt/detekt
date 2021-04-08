@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import kotlin.reflect.KClass
 
-fun KtClassOrObject.isAnnotatedWith(annotation: KClass<out Annotation>): Boolean =
+fun KtAnnotated.isAnnotatedWith(annotation: KClass<out Annotation>): Boolean =
     annotationEntries.any { it.isOfType(annotation) }
 
-fun KtClassOrObject.firstAnnotationParameter(annotation: KClass<out Annotation>): String =
+fun KtAnnotated.firstAnnotationParameter(annotation: KClass<out Annotation>): String =
     checkNotNull(firstAnnotationParameterOrNull(annotation))
 
-fun KtClassOrObject.firstAnnotationParameterOrNull(annotation: KClass<out Annotation>): String? =
+fun KtAnnotated.firstAnnotationParameterOrNull(annotation: KClass<out Annotation>): String? =
     annotationEntries
         .firstOrNull { it.isOfType(annotation) }
         ?.firstParameterOrNull()
@@ -25,6 +25,9 @@ private fun KtAnnotationEntry.firstParameterOrNull() =
         ?.text
         ?.withoutQuotes()
 
-private fun String.withoutQuotes() = removePrefix(QUOTES).removeSuffix(QUOTES)
+internal fun String.withoutQuotes() = removePrefix(QUOTES)
+    .removeSuffix(QUOTES)
+    .replace(STRING_CONCAT_REGEX, "")
 
 private const val QUOTES = "\""
+private val STRING_CONCAT_REGEX = """["]\s*\+[\n\s]*["]""".toRegex()

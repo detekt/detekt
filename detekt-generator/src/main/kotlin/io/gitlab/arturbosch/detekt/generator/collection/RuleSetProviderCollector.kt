@@ -100,8 +100,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
-                ?.map { it.getArgumentExpression() }
-                ?.mapNotNull { it?.referenceExpression()?.text }
+                ?.mapNotNull { it.getArgumentExpression() }
+                ?.mapNotNull { it.referenceExpression()?.text }
                 ?: emptyList()
 
             ruleNames.addAll(ruleArgumentNames)
