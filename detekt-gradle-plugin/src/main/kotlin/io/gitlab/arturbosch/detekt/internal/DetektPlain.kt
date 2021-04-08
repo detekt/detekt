@@ -20,8 +20,6 @@ internal class DetektPlain(private val project: Project) {
                 baseline.set(project.layout.file(project.provider { baselineFile }))
             }
             setSource(existingInputDirectoriesProvider(project, extension))
-            setIncludes(DetektPlugin.defaultIncludes)
-            setExcludes(DetektPlugin.defaultExcludes)
             reportsDir.set(project.provider { extension.customReportsDir })
             reports = extension.reports
         }
