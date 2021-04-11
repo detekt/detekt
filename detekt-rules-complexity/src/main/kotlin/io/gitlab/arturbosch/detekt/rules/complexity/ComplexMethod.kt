@@ -40,6 +40,13 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 @ActiveByDefault(since = "1.0.0")
 class ComplexMethod(config: Config = Config.empty) : Rule(config) {
 
+    override val issue = Issue(
+        "ComplexMethod",
+        Severity.Maintainability,
+        "Prefer splitting up complex methods into smaller, easier to understand methods.",
+        Debt.TWENTY_MINS
+    )
+
     @Configuration("McCabe's Cyclomatic Complexity (MCC) number for a method.")
     private val threshold: Int by config(DEFAULT_THRESHOLD_METHOD_COMPLEXITY)
 
@@ -54,13 +61,6 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Comma separated list of function names which add complexity.")
     private val nestingFunctions: Set<String> by config(DEFAULT_NESTING_FUNCTIONS) { it.toSet() }
-
-    override val issue = Issue(
-        "ComplexMethod",
-        Severity.Maintainability,
-        "Prefer splitting up complex methods into smaller, easier to understand methods.",
-        Debt.TWENTY_MINS
-    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
