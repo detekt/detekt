@@ -56,7 +56,7 @@ class NamedArguments(
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
-        val unnamedArguments = valueArguments.filter { !it.isNamed() && it !is KtLambdaArgument }
+        val unnamedArguments = valueArguments.dropWhile { it.isNamed() || it is KtLambdaArgument }
         if (unnamedArguments.isEmpty()) return false
         val resolvedCall = getResolvedCall(bindingContext) ?: return false
         if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
