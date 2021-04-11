@@ -153,7 +153,7 @@ class ObjectLiteralToLambdaSpec : Spek({
                     }
                 }
                 """
-                subject.compileAndLint(code).assert().isEmpty()
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
             it("is empty interface") {
