@@ -4,14 +4,14 @@ import io.gitlab.arturbosch.detekt.api.ConfigAware
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun config(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
-    ListConfigProperty(defaultValue)
-
 fun <T : Any> config(defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     SimpleConfigProperty(defaultValue)
 
-fun <T : Any> config(fallbackProperty: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
+fun <T : Any> fallbackConfig(fallbackProperty: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     FallbackConfigProperty(fallbackProperty, defaultValue)
+
+fun listConfig(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
+    ListConfigProperty(defaultValue)
 
 private class SimpleConfigProperty<T : Any>(private val defaultValue: T) : ReadOnlyProperty<ConfigAware, T> {
     override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {

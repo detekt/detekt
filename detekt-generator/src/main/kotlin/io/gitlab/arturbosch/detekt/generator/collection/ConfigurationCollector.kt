@@ -78,7 +78,7 @@ class ConfigurationCollector {
             }
         }
         if (!isInitializedWithConfigDelegate()) {
-            invalidDocumentation { "'$name' is not using the '$DELEGATE_NAME' delegate" }
+            invalidDocumentation { "'$name' is not using one of the config property delegates ($DELEGATE_NAMES)" }
         }
 
         val propertyName: String = checkNotNull(name)
@@ -113,7 +113,8 @@ class ConfigurationCollector {
     }
 
     private fun KtPropertyDelegate.getDefaultValueExpression(): KtExpression {
-        val arguments = (expression as KtCallExpression).valueArguments
+        val callExpression = expression as KtCallExpression
+        val arguments = callExpression.valueArguments
         if (arguments.size == 1) {
             return checkNotNull(arguments[0].getArgumentExpression())
         }
@@ -124,7 +125,10 @@ class ConfigurationCollector {
     }
 
     companion object {
-        private const val DELEGATE_NAME = "config"
+        private const val SIMPLE_DELEGATE_NAME = "config"
+        private const val LIST_DELEGATE_NAME = "listConfig"
+        private const val FALLBACK_DELEGATE_NAME = "fallbackConfig"
+        private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, LIST_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
@@ -150,7 +154,7 @@ class ConfigurationCollector {
             findDescendantOfType { it.isListDeclaration() }
 
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
-            delegate?.expression?.referenceExpression()?.text == DELEGATE_NAME
+            delegate?.expression?.referenceExpression()?.text in DELEGATE_NAMES
 
         private fun KtProperty.hasSupportedType(): Boolean =
             declaredTypeOrNull in SUPPORTED_TYPES
