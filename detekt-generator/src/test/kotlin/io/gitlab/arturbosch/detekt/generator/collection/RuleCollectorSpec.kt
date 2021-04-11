@@ -151,8 +151,8 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
         }
 
-        describe("collects configuration options") {
-            describe("using annotation") {
+        context("collects configuration options") {
+            context("using annotation") {
                 it("contains no configuration options by default") {
                     val code = """
                         /**
@@ -445,9 +445,29 @@ class RuleCollectorSpec : Spek({
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
+                context("fallback property") {
+                    it("extracts default value") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: Int by config("prop", 99)
+                            @Configuration("description")
+                            private val config2: Int by config(fallbackProperty = "prop", defaultValue = 99)
+                            @Configuration("description")
+                            private val config3: Int by config(defaultValue = 99, fallbackProperty = "prop")
+                        }                        
+                    """
+                        val items = subject.run(code)
+                        assertThat(items[0].configuration).hasSize(3)
+                        assertThat(items[0].configuration.map { it.defaultValue }).containsOnly("99")
+                    }
+                }
             }
 
-            describe("as part of kdoc") {
+            context("as part of kdoc") {
                 it("contains no configuration options by default") {
                     val code = """
                         /**
@@ -532,7 +552,7 @@ class RuleCollectorSpec : Spek({
             }
         }
 
-        describe("collects type resolution information") {
+        context("collects type resolution information") {
             it("has no type resolution by default") {
                 val code = """
                     /**

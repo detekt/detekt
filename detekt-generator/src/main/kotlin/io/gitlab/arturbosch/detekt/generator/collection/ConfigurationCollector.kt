@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
@@ -95,10 +96,8 @@ class ConfigurationCollector {
     }
 
     private fun KtPropertyDelegate.getDefaultValueAsString(): String {
-        val delegateArgument = checkNotNull(
-            (expression as KtCallExpression).valueArguments[0].getArgumentExpression()
-        )
-        val listDeclarationForDefault = delegateArgument.getListDeclarationOrNull()
+        val defaultValueExpression = getDefaultValueExpression()
+        val listDeclarationForDefault = defaultValueExpression.getListDeclarationOrNull()
         if (listDeclarationForDefault != null) {
             return listDeclarationForDefault.valueArguments.map {
                 val value = constantsByName[it.text] ?: it.text
@@ -107,14 +106,26 @@ class ConfigurationCollector {
         }
 
         val defaultValueOrConstantName = checkNotNull(
-            delegateArgument.text?.withoutQuotes()
+            defaultValueExpression.text?.withoutQuotes()
         )
         val defaultValue = constantsByName[defaultValueOrConstantName] ?: defaultValueOrConstantName
         return property.formatDefaultValueAccordingToType(defaultValue)
     }
 
+    private fun KtPropertyDelegate.getDefaultValueExpression(): KtExpression {
+        val arguments = (expression as KtCallExpression).valueArguments
+        if (arguments.size == 1) {
+            return checkNotNull(arguments[0].getArgumentExpression())
+        }
+        val defaultArgument = arguments
+            .find { it.getArgumentName()?.text == DEFAULT_VALUE_ARGUMENT_NAME }
+            ?: arguments.last()
+        return checkNotNull(defaultArgument.getArgumentExpression())
+    }
+
     companion object {
         private const val DELEGATE_NAME = "config"
+        private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
         private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
