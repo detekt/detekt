@@ -53,7 +53,7 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
     private val ignoreNestingFunctions: Boolean by config(false)
 
     @Configuration("Comma separated list of function names which add complexity.")
-    private val nestingFunctions: List<String> by config(DEFAULT_NESTING_FUNCTIONS)
+    private val nestingFunctions: Set<String> by config(DEFAULT_NESTING_FUNCTIONS) { it.toSet() }
 
     override val issue = Issue(
         "ComplexMethod",
@@ -61,8 +61,6 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
         Debt.TWENTY_MINS
     )
-
-    private val nestingFunctionsAsSet: Set<String> = nestingFunctions.toSet()
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
@@ -72,7 +70,7 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
         val complexity = CyclomaticComplexity.calculate(function) {
             this.ignoreSimpleWhenEntries = this@ComplexMethod.ignoreSimpleWhenEntries
             this.ignoreNestingFunctions = this@ComplexMethod.ignoreNestingFunctions
-            this.nestingFunctions = this@ComplexMethod.nestingFunctionsAsSet
+            this.nestingFunctions = this@ComplexMethod.nestingFunctions
         }
 
         if (complexity >= threshold) {

@@ -10,7 +10,7 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class RuleCollectorSpec : Spek({
+object RuleCollectorSpec : Spek({
 
     val subject by memoized { RuleCollector() }
 
@@ -447,18 +447,6 @@ class RuleCollectorSpec : Spek({
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("fails if config delegate is used with unsupported type") {
-                    val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: List<Int> by config(listOf(1, 2))
-                        }                        
-                    """
-                    assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-                }
                 context("fallback property") {
                     it("extracts default value") {
                         val code = """
@@ -479,6 +467,87 @@ class RuleCollectorSpec : Spek({
                         val items = subject.run(code)
                         val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
                         assertThat(fallbackProperties).hasSize(3)
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                    }
+
+                    it("reports an error if the property to fallback on does not exist") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by configWithFallback("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
+                    }
+
+                    it("reports an error if the property to fallback on exists but is not a config property") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            private val prop: Int = 1
+                            @Configuration("description")
+                            private val config: Int by configWithFallback("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
+                    }
+                }
+                context("transformed property") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: Regex by config("[a-z]+") { it.toRegex() }
+                            @Configuration("description")
+                            private val config2: String by config(false, Boolean::toString)
+                        }                        
+                    """
+                    it("extracts default value with transformer function") {
+                        val items = subject.run(code)
+                        assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[a-z]+'")
+                    }
+                    it("extracts default value with method reference") {
+                        val items = subject.run(code)
+                        assertThat(items[0].configuration[1].defaultValue).isEqualTo("'false'")
+                    }
+                }
+                context("fallback property") {
+                    it("extracts default value") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val prop: Int by config(1)
+                            @Configuration("description")
+                            private val config1: Int by configWithFallback("prop", 99)
+                            @Configuration("description")
+                            private val config2: Int by configWithFallback(fallbackPropertyName = "prop", defaultValue = 99)
+                            @Configuration("description")
+                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackPropertyName = "prop")
+                            @Configuration("description")
+                            private val config4: Long by configWithFallback("prop", 99, Int::toLong)
+                        }                        
+                    """
+                        val items = subject.run(code)
+                        val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
+                        assertThat(fallbackProperties).hasSize(4)
                         assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
                     }
 

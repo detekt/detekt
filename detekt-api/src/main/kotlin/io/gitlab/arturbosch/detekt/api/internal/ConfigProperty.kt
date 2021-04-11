@@ -4,11 +4,25 @@ import io.gitlab.arturbosch.detekt.api.ConfigAware
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun <T : Any> config(defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
-    SimpleConfigProperty(defaultValue)
+fun <T : Any> config(
+    defaultValue: T
+): ReadOnlyProperty<ConfigAware, T> = config(defaultValue) { it }
 
-fun <T : Any> configWithFallback(fallbackPropertyName: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
-    FallbackConfigProperty(fallbackPropertyName, defaultValue)
+fun <T : Any, U : Any> config(
+    defaultValue: T,
+    transformer: (T) -> U
+): ReadOnlyProperty<ConfigAware, U> = TransformedConfigProperty(defaultValue, transformer)
+
+fun <T : Any> configWithFallback(
+    fallbackPropertyName: String,
+    defaultValue: T
+): ReadOnlyProperty<ConfigAware, T> = configWithFallback(fallbackPropertyName, defaultValue) { it }
+
+fun <T : Any, U : Any> configWithFallback(
+    fallbackPropertyName: String,
+    defaultValue: T,
+    transformer: (T) -> U
+): ReadOnlyProperty<ConfigAware, U> = FallbackConfigProperty(fallbackPropertyName, defaultValue, transformer)
 
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
@@ -23,26 +37,40 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
         }
         is String,
         is Boolean,
-        is Int,
-        is Long -> configAware.valueOrDefault(propertyName, defaultValue)
+        is Int -> configAware.valueOrDefault(propertyName, defaultValue)
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
-                "Use one of String, Boolean, Int, Long or List<String> instead."
+                "Use one of String, Boolean, Int or List<String> instead."
         )
     }
 }
 
-private class SimpleConfigProperty<T : Any>(private val defaultValue: T) : ReadOnlyProperty<ConfigAware, T> {
-    override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {
-        return getValueOrDefault(thisRef, property.name, defaultValue)
+private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {
+    private var value: U? = null
+
+    override fun getValue(thisRef: ConfigAware, property: KProperty<*>): U {
+        return value ?: doGetValue(thisRef, property).also { value = it }
+    }
+
+    abstract fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U
+}
+
+private class TransformedConfigProperty<T : Any, U : Any>(
+    private val defaultValue: T,
+    private val transform: (T) -> U
+) : MemoizedConfigProperty<U>() {
+    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
+        return transform(getValueOrDefault(thisRef, property.name, defaultValue))
     }
 }
 
-private class FallbackConfigProperty<T : Any>(
+private class FallbackConfigProperty<T : Any, U : Any>(
     private val fallbackPropertyName: String,
-    private val defaultValue: T
-) : ReadOnlyProperty<ConfigAware, T> {
-    override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {
-        return getValueOrDefault(thisRef, property.name, getValueOrDefault(thisRef, fallbackPropertyName, defaultValue))
+    private val defaultValue: T,
+    private val transform: (T) -> U
+) : MemoizedConfigProperty<U>() {
+    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
+        val fallbackValue = getValueOrDefault(thisRef, fallbackPropertyName, defaultValue)
+        return transform(getValueOrDefault(thisRef, property.name, fallbackValue))
     }
 }

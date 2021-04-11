@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
@@ -75,12 +76,6 @@ class ConfigurationCollector {
     }
 
     private fun KtProperty.toConfiguration(): Configuration {
-        if (!hasSupportedType()) {
-            invalidDocumentation {
-                "Type of '$name' is not supported. " +
-                    "For properties annotated with @Configuration use one of$SUPPORTED_TYPES."
-            }
-        }
         if (!isInitializedWithConfigDelegate()) {
             invalidDocumentation { "'$name' is not using one of the config property delegates ($DELEGATE_NAMES)" }
         }
@@ -123,14 +118,14 @@ class ConfigurationCollector {
     }
 
     private fun KtPropertyDelegate.getDefaultValueExpression(): KtExpression {
-        val callExpression = expression as KtCallExpression
-        val arguments = callExpression.valueArguments
+        val arguments = (expression as KtCallExpression).valueArguments.filterNot { it is KtLambdaArgument }
         if (arguments.size == 1) {
             return checkNotNull(arguments[0].getArgumentExpression())
         }
         val defaultArgument = arguments
             .find { it.getArgumentName()?.text == DEFAULT_VALUE_ARGUMENT_NAME }
-            ?: arguments.last()
+            ?: if (property.isFallbackConfigDelegate()) arguments[1] else arguments.first()
+
         return checkNotNull(defaultArgument.getArgumentExpression())
     }
 
@@ -151,7 +146,9 @@ class ConfigurationCollector {
         }
 
         fun isUsingInvalidFallbackReference(properties: List<KtProperty>, fallbackPropertyName: String) =
-            properties.filter { it.isInitializedWithConfigDelegate() }.none { it.name == fallbackPropertyName }
+            properties
+                .filter { it.isInitializedWithConfigDelegate() }
+                .none { it.name == fallbackPropertyName }
     }
 
     companion object {
@@ -163,11 +160,8 @@ class ConfigurationCollector {
         private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
 
         private const val TYPE_STRING = "String"
-        private const val TYPE_BOOLEAN = "Boolean"
-        private const val TYPE_INT = "Int"
-        private const val TYPE_LONG = "Long"
-        private const val TYPE_STRING_LIST = "List<String>"
-        private val SUPPORTED_TYPES = listOf(TYPE_STRING, TYPE_BOOLEAN, TYPE_INT, TYPE_LONG, TYPE_STRING_LIST)
+        private const val TYPE_REGEX = "Regex"
+        private val TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT = listOf(TYPE_STRING, TYPE_REGEX)
 
         private val KtPropertyDelegate.property: KtProperty
             get() = parent as KtProperty
@@ -184,16 +178,10 @@ class ConfigurationCollector {
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text in DELEGATE_NAMES
 
-        private fun KtProperty.hasSupportedType(): Boolean =
-            declaredTypeOrNull in SUPPORTED_TYPES
-
         private fun KtProperty.formatDefaultValueAccordingToType(value: String): String {
             val defaultValue = value.withoutQuotes()
-            return when (declaredTypeOrNull) {
-                TYPE_STRING -> "'$defaultValue'"
-                TYPE_BOOLEAN, TYPE_INT, TYPE_LONG, TYPE_STRING_LIST -> defaultValue
-                else -> error("Unable to format unexpected type '$declaredTypeOrNull'")
-            }
+            val needsQuotes = declaredTypeOrNull in TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT
+            return if (needsQuotes) "'$defaultValue'" else defaultValue
         }
 
         private fun KtProperty.hasListDeclaration(): Boolean =
