@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -53,11 +54,13 @@ class NamedArguments(
         }
     }
 
+    @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
+        val unnamedArguments = valueArguments.filterNot { it.isNamed() || it is KtLambdaArgument }
+        if (unnamedArguments.isEmpty()) return false
         val resolvedCall = getResolvedCall(bindingContext) ?: return false
         if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
-        val unnamedArguments = valueArguments.filter { !it.isNamed() }
-        return unnamedArguments.isNotEmpty() && unnamedArguments.all {
+        return unnamedArguments.all {
             resolvedCall.getParameterForArgument(it)?.varargElementType == null || it.getSpreadElement() != null
         }
     }
