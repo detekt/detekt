@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.name.FqName
@@ -34,9 +35,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * var mySet = setOf(1,2,3)
  * var myMap = mapOf("answer" to 42)
  * </compliant>
- *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

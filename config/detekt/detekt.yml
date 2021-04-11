@@ -103,7 +103,7 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author']
+    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author', '@requiresTypeResolution']
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   LibraryCodeMustSpecifyReturnType:
     active: true
