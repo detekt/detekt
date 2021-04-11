@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -42,7 +43,7 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
         "DoubleMutabilityInCollection",
         Severity.CodeSmell,
         "Using var with mutable collections leads to double mutability. " +
-                "Consider using val or immutable collection types.",
+            "Consider using val or immutable collection types.",
         Debt.FIVE_MINS
     )
 
@@ -53,27 +54,29 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
 
         val type =
             (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? VariableDescriptor)?.type ?: return
-        val standardType = type.getJetTypeFqName(false)
+        val standardType = type.fqNameOrNull()
         if (property.isVar && standardType in mutableTypes) {
-            report(CodeSmell(
-                issue,
-                Entity.from(property),
-                "Variable ${property.name} is declared as `var` with a mutable type $standardType. " +
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(property),
+                    "Variable ${property.name} is declared as `var` with a mutable type $standardType. " +
                         "Consider using `val` or an immutable collection type"
-            ))
+                )
+            )
         }
     }
 
     companion object {
         val mutableTypes = setOf(
-            "kotlin.collections.MutableList",
-            "kotlin.collections.MutableMap",
-            "kotlin.collections.MutableSet",
-            "java.util.ArrayList",
-            "java.util.LinkedHashSet",
-            "java.util.HashSet",
-            "java.util.LinkedHashMap",
-            "java.util.HashMap",
+            FqName("kotlin.collections.MutableList"),
+            FqName("kotlin.collections.MutableMap"),
+            FqName("kotlin.collections.MutableSet"),
+            FqName("java.util.ArrayList"),
+            FqName("java.util.LinkedHashSet"),
+            FqName("java.util.HashSet"),
+            FqName("java.util.LinkedHashMap"),
+            FqName("java.util.HashMap"),
         )
     }
 }
