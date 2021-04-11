@@ -134,7 +134,7 @@ class LabeledExpressionSpec : Spek({
                     loop@ for (i in 1..5) {}
                 }
             """
-            val config = TestConfig(mapOf(LabeledExpression.IGNORED_LABELS to listOf("loop")))
+            val config = TestConfig(mapOf("ignoredLabels" to listOf("loop")))
             val findings = LabeledExpression(config).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -145,7 +145,18 @@ class LabeledExpressionSpec : Spek({
                     loop@ for (i in 1..5) {}
                 }
             """
-            val config = TestConfig(mapOf(LabeledExpression.IGNORED_LABELS to "loop"))
+            val config = TestConfig(mapOf("ignoredLabels" to "loop"))
+            val findings = LabeledExpression(config).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report excluded label config with leading and trailing wildcard") {
+            val code = """
+                fun f() {
+                    loop@ for (i in 1..5) {}
+                }
+            """
+            val config = TestConfig(mapOf("ignoredLabels" to "*loop*,other"))
             val findings = LabeledExpression(config).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
