@@ -143,7 +143,7 @@ class ObjectLiteralToLambdaSpec : Spek({
         }
 
         context("is not correct implement") {
-            it("without context") {
+            it("without type resolution") {
                 val code = """
                 fun interface Sam {
                     fun foo()
