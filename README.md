@@ -260,15 +260,15 @@ Integrations:
 - [Bazel plugin that wraps the Detekt CLI](https://github.com/buildfoundation/bazel_rules_detekt)
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
-- [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 - [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
 - [MuseDev](https://github.com/marketplace/muse-dev)
 
-Custom rules from 3rd parties:
+Custom rules and reports from 3rd parties:
 
 - [cph-cachet/detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation)
 - [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
+- [GitLab report format](https://gitlab.com/cromefire_/detekt-gitlab-report)
 
 #### Credits
 
