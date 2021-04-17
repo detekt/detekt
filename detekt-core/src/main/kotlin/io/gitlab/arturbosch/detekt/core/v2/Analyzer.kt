@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.kotlin.psi.KtFile
 
-@FlowPreview
 fun analyze(
     rules: Flow<Pair<Rule, Filter>>,
     files: Flow<KtFile>,
@@ -37,7 +36,7 @@ fun analyze(
     }
 }
 
-@FlowPreview
+@OptIn(FlowPreview::class)
 private fun myAnalyze(
     rules: Flow<Pair<Rule, Filter>>,
     files: Flow<KtFile>,
