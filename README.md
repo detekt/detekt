@@ -211,6 +211,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Krzysztof Kruczynski](https://github.com/krzykrucz) - Rule fix: ThrowingExceptionInMain, ExitOutsideMain
 - [Paya Do](https://github.com/payathedo) - Designer for Detekt's logo
 - [zmunm](https://github.com/zmunm) - New rule: ObjectLiteralToLambda
+- [Vinicius Montes Munhoz](https://github.com/vfmunhoz) - Documentation improvement
 
 ### Mentions
 
