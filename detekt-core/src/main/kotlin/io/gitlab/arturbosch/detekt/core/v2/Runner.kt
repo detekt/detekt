@@ -102,12 +102,12 @@ private suspend fun run(
     fileProcessListenersProvider: FileProcessListenersProvider,
     analyzer: (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Flow<Finding>,
 ): AnalysisResult {
-    val files = filesProvider.get()
+    val files: Flow<KtFile> = filesProvider.get()
     val resolvedContext: Deferred<ResolvedContext> = coroutineScope {
         async(start = CoroutineStart.LAZY) { resolvedContextProvider.get(files) }
     }
-    val rules = ruleProvider.get(resolvedContext)
-    val fileProcessListeners = fileProcessListenersProvider.get(resolvedContext)
+    val rules: Flow<Pair<Rule, Filter>> = ruleProvider.get(resolvedContext)
+    val fileProcessListeners: Flow<FileProcessListener> = fileProcessListenersProvider.get(resolvedContext)
     val a = analyzer(rules, files, fileProcessListeners)
     TODO("Not yet implemented")
 }
