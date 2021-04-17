@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core.v2
 import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.Detekt
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.api.v2.Detektion
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.v2.Finding
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import io.gitlab.arturbosch.detekt.core.tooling.contentToKtFile
@@ -100,7 +100,7 @@ private suspend fun run(
     resolvedContextProvider: ResolvedContextProvider,
     ruleProvider: RulesProvider,
     fileProcessListenersProvider: FileProcessListenersProvider,
-    analyzer: (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Flow<Finding>,
+    analyzer: suspend (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Detektion,
 ): AnalysisResult {
     val files: Flow<KtFile> = filesProvider.get()
     val resolvedContext: Deferred<ResolvedContext> = coroutineScope {
@@ -108,6 +108,6 @@ private suspend fun run(
     }
     val rules: Flow<Pair<Rule, Filter>> = ruleProvider.get(resolvedContext)
     val fileProcessListeners: Flow<FileProcessListener> = fileProcessListenersProvider.get(resolvedContext)
-    val a = analyzer(rules, files, fileProcessListeners)
+    val detektion: Detektion = analyzer(rules, files, fileProcessListeners)
     TODO("Not yet implemented")
 }

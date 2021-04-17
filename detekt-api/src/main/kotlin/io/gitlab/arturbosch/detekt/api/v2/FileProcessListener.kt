@@ -4,11 +4,9 @@ import org.jetbrains.kotlin.psi.KtFile
 
 interface FileProcessListener {
 
-    fun onStart(files: List<KtFile>) = Unit
-
     fun onProcess(file: KtFile) = Unit
 
-    fun onProcessComplete(file: KtFile, findings: List<Finding>) = Unit
+    fun onProcessComplete(file: KtFile, findings: List<Finding>): List<Finding> = findings
 
-    fun onFinish(files: List<KtFile>, findings: List<Finding>) = Unit
+    fun onFinish(files: List<KtFile>, result: Detektion): Detektion = result
 }
