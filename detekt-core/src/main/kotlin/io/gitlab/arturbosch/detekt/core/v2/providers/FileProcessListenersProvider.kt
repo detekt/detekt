@@ -19,17 +19,22 @@ fun interface FileProcessListenersProvider {
 
 @OptIn(FlowPreview::class)
 class FileProcessListenersProviderImpl(
-    private val settings: ProcessingSettings,
+    private val fileProcessListenersProviders: Flow<CollectionFileProcessListenerProvider>,
 ) : FileProcessListenersProvider {
 
-    override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {
-        return flow {
+    constructor(
+        settings: ProcessingSettings,
+    ) : this(
+        flow {
             emitAll(
-                ServiceLoader.load(CollectionFileProcessListenerProvider::class.java, settings.pluginLoader)
-                    .asFlow()
-                    .flatMapMerge { ruleProvider -> ruleProvider.get(resolvedContext) }
-                // TODO I think that we need to sort this list. I'll check it later
+                ServiceLoader.load(CollectionFileProcessListenerProvider::class.java, settings.pluginLoader).asFlow()
             )
         }
+    )
+
+    override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {
+        return fileProcessListenersProviders
+            .flatMapMerge { ruleProvider -> ruleProvider.get(resolvedContext) }
+        // TODO I think that we need to sort this list. I'll check it later
     }
 }

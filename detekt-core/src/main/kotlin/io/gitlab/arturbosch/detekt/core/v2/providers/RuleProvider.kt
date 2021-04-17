@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.v2.providers
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.v2.Issue
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
@@ -23,27 +24,30 @@ fun interface RulesProvider {
 
 @OptIn(FlowPreview::class)
 class RulesProviderImpl(
-    private val settings: ProcessingSettings,
+    private val config: Config,
+    private val ruleProviders: Flow<CollectionRuleProvider>,
 ) : RulesProvider {
 
-    override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<Pair<Rule, Filter>> {
-        return flow {
-            emitAll(
-                ServiceLoader.load(CollectionRuleProvider::class.java, settings.pluginLoader)
-                    .asFlow()
-                    .flatMapMerge { ruleProvider -> ruleProvider.get(settings.config, resolvedContext) }
-                    .map { rule ->
-                        rule to object : Filter { // temporary meanwhile a find the place to instantiate this
-                            override fun filter(path: Path): Boolean {
-                                TODO("Not yet implemented")
-                            }
+    constructor(
+        settings: ProcessingSettings
+    ) : this(
+        settings.config,
+        flow { emitAll(ServiceLoader.load(CollectionRuleProvider::class.java, settings.pluginLoader).asFlow()) },
+    )
 
-                            override fun filter(issue: Issue): Boolean {
-                                TODO("Not yet implemented")
-                            }
-                        }
+    override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<Pair<Rule, Filter>> {
+        return ruleProviders
+            .flatMapMerge { ruleProvider -> ruleProvider.get(config, resolvedContext) }
+            .map { rule ->
+                rule to object : Filter { // temporary meanwhile we find the place to instantiate this
+                    override fun filter(path: Path): Boolean {
+                        TODO("Not yet implemented")
                     }
-            )
-        }
+
+                    override fun filter(issue: Issue): Boolean {
+                        TODO("Not yet implemented")
+                    }
+                }
+            }
     }
 }
