@@ -112,7 +112,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        if (failFast.getOrElse(false)) {
+        if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
             project.logger.warn(
                 "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
             )
@@ -128,7 +128,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            FailFastArgument(failFast.getOrElse(false)),
+            FailFastArgument(@Suppress("DEPRECATION") failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
             AllRulesArgument(allRules.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),

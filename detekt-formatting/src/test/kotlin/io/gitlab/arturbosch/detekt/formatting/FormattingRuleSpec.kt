@@ -76,6 +76,6 @@ class FormattingRuleSpec : Spek({
             expectedPath
         )
 
-        assertThat(findings.first().location.file).isEqualTo(expectedPath)
+        assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
     }
 })

@@ -27,6 +27,7 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
      * Visits given file with all rules of this rule set, returning a list
      * of all code smell findings.
      */
+    @Suppress("DEPRECATION")
     @Deprecated("Exposes detekt-core implementation details.")
     fun accept(file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): List<Finding> =
         if (pathFilters?.isIgnored(file) == true) {

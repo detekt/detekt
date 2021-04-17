@@ -2,6 +2,7 @@
 
 package io.github.detekt.report.xml
 
+import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -16,6 +17,7 @@ import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 import java.util.Locale
 
 private const val TAB = "\t"
@@ -29,7 +31,7 @@ class XmlOutputFormatSpec : Spek({
             Location(
                 SourceLocation(11, 1),
                 TextLocation(0, 10),
-                "src/main/com/sample/Sample1.kt"
+                FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample1.kt"))
             )
         )
     }
@@ -40,7 +42,7 @@ class XmlOutputFormatSpec : Spek({
             Location(
                 SourceLocation(22, 2),
                 TextLocation(0, 20),
-                "src/main/com/sample/Sample2.kt"
+                FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample2.kt"))
             )
         )
     }
@@ -198,7 +200,7 @@ class XmlOutputFormatSpec : Spek({
                     val expected = """
                     <?xml version="1.0" encoding="UTF-8"?>
                     <checkstyle version="4.3">
-                    <file name="${finding.location.file}">
+                    <file name="src/main/com/sample/Sample1.kt">
                     $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                     </file>
                     </checkstyle>
