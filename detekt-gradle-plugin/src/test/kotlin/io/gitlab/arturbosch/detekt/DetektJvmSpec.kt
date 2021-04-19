@@ -24,7 +24,7 @@ object DetektJvmSpec : Spek({
                     mavenLocal()
                 }
 
-                detekt {
+                tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                     reports {
                         txt.enabled = false
                     }
