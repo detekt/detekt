@@ -236,34 +236,6 @@ detekt {
     // Specify the base path for file paths in the formatted reports. 
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
-    
-    reports {
-        // Enable/Disable XML report (default: true)
-        xml {
-            enabled = true                                
-            destination = file("build/reports/detekt.xml")
-        }
-        // Enable/Disable HTML report (default: true)
-        html {
-            enabled = true
-            destination = file("build/reports/detekt.html")
-        }
-        // Enable/Disable TXT report (default: true)
-        txt {
-            enabled = true                                
-            destination = file("build/reports/detekt.txt")
-        }
-        // Enable/Disable SARIF report (default: false)
-        sarif {
-            enabled = true                                
-            destination = file("build/reports/detekt.sarif")
-        }
-        custom {
-            // The simple class name of your custom report.
-            reportId = "CustomJsonReport"                   
-            destination = file("build/reports/detekt.json")
-        }
-    }
 }
 ```
 
@@ -319,34 +291,6 @@ detekt {
     // Specify the base path for file paths in the formatted reports. 
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
-    
-    reports {
-        // Enable/Disable XML report (default: true)
-        xml {
-            enabled = true
-            destination = file("build/reports/detekt.xml")
-        }
-        // Enable/Disable HTML report (default: true)
-        html {
-            enabled = true
-            destination = file("build/reports/detekt.html")
-        }
-        // Enable/Disable TXT report (default: true)
-        txt {
-            enabled = true
-            destination = file("build/reports/detekt.txt")
-        }
-        // Enable/Disable SARIF report (default: false)
-        sarif {
-            enabled = true                                
-            destination = file("build/reports/detekt.sarif")
-        }
-        custom {
-            // The simple class name of your custom report.
-            reportId = "CustomJsonReport"
-            destination = file("build/reports/detekt.json")
-        }
-    }
 }
 ```
 

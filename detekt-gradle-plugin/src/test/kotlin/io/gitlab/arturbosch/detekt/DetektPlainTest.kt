@@ -54,7 +54,7 @@ object DetektPlainTest : Spek({
                     mavenLocal()
                 }
 
-                detekt {
+                tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                     reports {
                         sarif.enabled = true
                         txt.enabled = false

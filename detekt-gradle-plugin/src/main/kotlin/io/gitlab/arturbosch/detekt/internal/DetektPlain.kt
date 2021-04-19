@@ -23,7 +23,6 @@ internal class DetektPlain(private val project: Project) {
             setIncludes(DetektPlugin.defaultIncludes)
             setExcludes(DetektPlugin.defaultExcludes)
             reportsDir.set(project.provider { extension.customReportsDir })
-            reports = extension.reports
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {

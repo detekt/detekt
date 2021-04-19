@@ -55,7 +55,6 @@ internal class DetektMultiplatform(private val project: Project) {
                         }?.let { baselineFile ->
                             baseline.set(layout.file(project.provider { baselineFile }))
                         }
-                        reports = extension.reports
                         reports.xml.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".xml"))
                         reports.html.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".html"))
                         reports.txt.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".txt"))

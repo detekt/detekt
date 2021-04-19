@@ -22,6 +22,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val customReportsDir: File?
         get() = reportsDir
 
+    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
     val reports = DetektReports()
 
     var input: ConfigurableFileCollection = objects.fileCollection()
@@ -79,6 +80,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
      */
     var ignoredFlavors: List<String> = emptyList()
 
+    @Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
+    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     companion object {

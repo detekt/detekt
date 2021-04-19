@@ -116,7 +116,6 @@ internal class DetektAndroid(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-            reports = extension.reports
             reports.xml.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".xml"))
             reports.html.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".html"))
             reports.txt.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".txt"))

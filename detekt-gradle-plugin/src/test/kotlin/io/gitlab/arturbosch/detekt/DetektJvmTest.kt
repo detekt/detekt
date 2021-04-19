@@ -25,7 +25,7 @@ object DetektJvmTest : Spek({
                     jcenter()
                 }
 
-                detekt {
+                tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                     reports {
                         txt.enabled = false
                     }

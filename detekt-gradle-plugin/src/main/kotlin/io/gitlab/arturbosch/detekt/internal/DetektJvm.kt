@@ -32,7 +32,6 @@ internal class DetektJvm(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(sourceSet.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-            reports = extension.reports
             reports.xml.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".xml"))
             reports.html.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".html"))
             reports.txt.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".txt"))
