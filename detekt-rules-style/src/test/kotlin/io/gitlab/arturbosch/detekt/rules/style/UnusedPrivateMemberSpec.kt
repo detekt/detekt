@@ -84,17 +84,31 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("actual functions and classes") {
 
-        it("reports unused parameters in actual functions") {
+        it("should not report unused parameters in actual functions") {
             val code = """
                 actual class Foo {
                     actual fun bar(i: Int) {}
                     actual fun baz(i: Int, s: String) {}
                 }
             """
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports unused parameters in constructors") {
+        it("should not report unused parameters in actual constructors") {
+            val code = """
+                actual class Foo actual constructor(bar: String) {}
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("should not report unused actual fields defined as parameters of primary constructors") {
+            val code = """
+                actual class Foo actual constructor(actual val bar: String) {}
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("reports unused private fields defined as parameters of primary constructors") {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
             """

@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isExternal
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
@@ -255,7 +256,8 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() || isExpect()
+        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() ||
+            isExpect() || isActual()
 }
 
 private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
@@ -292,7 +294,10 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         super.visitPrimaryConstructor(constructor)
         constructor.valueParameters
-            .filter { (it.isPrivate() || !it.hasValOrVar()) && it.containingClassOrObject?.isExpect() == false }
+            .filter {
+                (it.isPrivate() || (!it.hasValOrVar() && !constructor.isActual())) &&
+                    it.containingClassOrObject?.isExpect() == false
+            }
             .forEach { maybeAddUnusedProperty(it) }
     }
 
