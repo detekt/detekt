@@ -18,6 +18,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             isIgnoreFailures = value
         }
 
+    @Deprecated("Use reportsDir which is equivalent", ReplaceWith("reportsDir"))
     val customReportsDir: File?
         get() = reportsDir
 
