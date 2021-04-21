@@ -3,10 +3,8 @@ package io.gitlab.arturbosch.detekt.internal
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
-import java.io.File
 
 internal fun Project.registerDetektTask(
     name: String,
@@ -44,9 +42,3 @@ internal fun Project.registerCreateBaselineTask(
         it.allRules.set(provider { extension.allRules })
         configuration(it)
     }
-
-internal fun DetektReport.setDefaultIfUnset(default: File) {
-    if (destination == null) {
-        destination = default
-    }
-}
