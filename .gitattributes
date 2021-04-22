@@ -3,9 +3,9 @@
 *.bat           text eol=crlf
 
 *.css           diff=css
-*.htm           diff=html
-*.html          diff=html
-*.md            diff=markdown
+*.htm           eol=lf diff=html
+*.html          eol=lf diff=html
+*.md            eol=lf diff=markdown
 
 *.jar           binary
 *.png           binary
