@@ -155,5 +155,21 @@ class UnnecessaryFilterSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        // https://github.com/detekt/detekt/issues/3541
+        it("Size in another statement") {
+            val code = """
+                fun foo() {
+                    val strings = listOf("abc", "cde", "ader")
+                    val filteredStrings = strings.filter { "a" in it }
+                    filteredStrings.forEach { println(it) }
+                    if (filteredStrings.size > 2) {
+                        println("more than two")
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })
