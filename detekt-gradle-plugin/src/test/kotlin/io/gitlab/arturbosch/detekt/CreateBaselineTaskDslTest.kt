@@ -77,7 +77,7 @@ internal class CreateBaselineTaskDslTest : Spek({
                         .build()
 
                     gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
-                        assertThat(result.output).contains("No value has been specified for property 'baseline'")
+                        assertThat(result.output).contains("property 'baseline' doesn't have a configured value")
                         assertThat(projectFile(baselineFilename)).doesNotExist()
                     }
                 }
