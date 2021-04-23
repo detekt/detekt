@@ -518,6 +518,42 @@ increase readability and make the documentation obsolete.</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
+<h3 id="deprecatedblocktag">DeprecatedBlockTag</h3>
+
+<p>This rule reports use of the <code class="language-plaintext highlighter-rouge">@deprecated</code> block tag in KDoc comments. Deprecation must be specified using a
+<code class="language-plaintext highlighter-rouge">@Deprecated</code> annotation as adding a <code class="language-plaintext highlighter-rouge">@deprecated</code> block tag in KDoc comments
+<a href="https://kotlinlang.org/docs/kotlin-doc.html#suppress">has no effect and is not supported</a>. The <code class="language-plaintext highlighter-rouge">@Deprecated</code>
+annotation constructor has dedicated fields for a message and a type (warning, error, etc.). You can also use the
+<code class="language-plaintext highlighter-rouge">@ReplaceWith</code> annotation to specify how to solve the deprecation automatically via the IDE.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="noncompliant-code">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+* This function prints a message followed by a new line.
+*
+* @deprecated Useless, the Kotlin standard library can already do this. Replace with println.
+*/</span>
+<span class="k">fun</span> <span class="nf">printThenNewline</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+* This function prints a message followed by a new line.
+*/</span>
+<span class="p">&amp;</span><span class="err">#</span><span class="mi">64</span><span class="p">;</span><span class="nc">Deprecated</span><span class="p">(</span><span class="s">"Useless, the Kotlin standard library can already do this."</span><span class="p">)</span>
+<span class="p">&amp;</span><span class="err">#</span><span class="mi">64</span><span class="p">;</span><span class="nc">ReplaceWith</span><span class="p">(</span><span class="s">"println(what)"</span><span class="p">)</span>
+<span class="k">fun</span> <span class="nf">printThenNewline</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="endofsentenceformat">EndOfSentenceFormat</h3>
 
 <p>This rule validates the end of the first sentence of a KDoc comment.
