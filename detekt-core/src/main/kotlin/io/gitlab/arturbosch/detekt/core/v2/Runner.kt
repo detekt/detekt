@@ -12,8 +12,8 @@ import io.gitlab.arturbosch.detekt.core.tooling.pathToKtFile
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProviderImpl
-import io.gitlab.arturbosch.detekt.core.v2.providers.KtFileProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProvider
+import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProviderWithBindingContext
@@ -39,7 +39,7 @@ class Runner(
         return spec.withSettings {
             runBlocking {
                 run(
-                    KtFileProviderImpl(this@withSettings),
+                    KtFilesProviderImpl(this@withSettings),
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
                     FileProcessListenersProviderImpl(this@withSettings),

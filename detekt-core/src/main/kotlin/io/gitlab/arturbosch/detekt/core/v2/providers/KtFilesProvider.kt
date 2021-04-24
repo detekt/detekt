@@ -10,7 +10,7 @@ fun interface KtFilesProvider {
     fun get(): Flow<KtFile>
 }
 
-class KtFileProviderImpl(
+class KtFilesProviderImpl(
     private val settings: ProcessingSettings,
 ) : KtFilesProvider {
     override fun get(): Flow<KtFile> {
