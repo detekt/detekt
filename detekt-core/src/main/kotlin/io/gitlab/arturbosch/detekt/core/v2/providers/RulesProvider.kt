@@ -37,7 +37,7 @@ class RulesProviderImpl(
 
     override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<Pair<Rule, Filter>> {
         return collectionRuleProviders
-            .flatMapMerge { ruleProvider -> ruleProvider.get(config, resolvedContext) }
+            .flatMapMerge { collectionProvider -> collectionProvider.get(config, resolvedContext) }
             .map { rule ->
                 rule to object : Filter { // temporary meanwhile we find the place to instantiate this
                     override fun filter(path: Path): Boolean {

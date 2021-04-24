@@ -33,7 +33,7 @@ class FileProcessListenersProviderImpl(
 
     override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {
         return collectionFileProcessListenerProviders
-            .flatMapMerge { ruleProvider -> ruleProvider.get(resolvedContext) }
+            .flatMapMerge { collectionProvider -> collectionProvider.get(resolvedContext) }
         // TODO I think that we need to sort this list. I'll check it later
     }
 }

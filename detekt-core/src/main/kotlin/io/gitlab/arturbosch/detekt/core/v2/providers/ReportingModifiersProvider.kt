@@ -17,7 +17,7 @@ fun interface ReportingModifiersProvider {
 
 @OptIn(FlowPreview::class)
 class ReportingModifiersProviderImpl(
-    private val collectionReportingModifierProvider: Flow<CollectionReportingModifierProvider>,
+    private val collectionReportingModifierProviders: Flow<CollectionReportingModifierProvider>,
 ) : ReportingModifiersProvider {
 
     constructor(
@@ -31,8 +31,8 @@ class ReportingModifiersProviderImpl(
     )
 
     override fun get(): Flow<ReportingModifier> {
-        return collectionReportingModifierProvider
-            .flatMapMerge { ruleProvider -> ruleProvider.get() }
+        return collectionReportingModifierProviders
+            .flatMapMerge { collectionProvider -> collectionProvider.get() }
         // TODO I think that we need to sort this list. I'll check it later
     }
 }
