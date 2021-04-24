@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.v2
 
-import io.github.detekt.tooling.api.AnalysisResult
-import io.github.detekt.tooling.api.Detekt
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.v2.Detektion
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
@@ -44,7 +42,7 @@ import java.nio.file.Paths
 class Runner(
     private val spec: ProcessingSpec // This class probably needs a refactor too
 ) : Detekt { // TODO all of this should be coroutines
-    override fun run(): AnalysisResult {
+    override fun run(): Detektion {
         return spec.withSettings {
             runBlocking {
                 run(
@@ -56,7 +54,7 @@ class Runner(
         }
     }
 
-    override fun run(path: Path): AnalysisResult {
+    override fun run(path: Path): Detektion {
         return spec.withSettings {
             runBlocking {
                 run(
@@ -68,7 +66,7 @@ class Runner(
         }
     }
 
-    override fun run(sourceCode: String, filename: String): AnalysisResult {
+    override fun run(sourceCode: String, filename: String): Detektion {
         return spec.withSettings {
             runBlocking {
                 run(
@@ -80,7 +78,7 @@ class Runner(
         }
     }
 
-    override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult { // TODO Flow<KtFile>
+    override fun run(files: Collection<KtFile>, bindingContext: BindingContext): Detektion { // TODO Flow<KtFile>
         return spec.withSettings {
             runBlocking {
                 run(
@@ -100,7 +98,7 @@ private suspend fun ProcessingSettings.run(
     filesProvider: KtFilesProvider,
     resolvedContextProvider: ResolvedContextProvider,
     ruleProvider: RulesProvider,
-): AnalysisResult {
+): Detektion {
     return run(
         filesProvider,
         resolvedContextProvider,
@@ -122,7 +120,7 @@ private suspend fun run(
     consoleReportersProvider: ConsoleReportersProvider,
     outputReportersProvider: OutputReportersProvider,
     analyzer: suspend (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Detektion,
-): AnalysisResult {
+): Detektion {
     val detektion: Detektion = runAnalysis(
         filesProvider,
         resolvedContextProvider,
@@ -132,7 +130,7 @@ private suspend fun run(
     )
     val finalDetektion: Detektion = runPostAnalysis(detektion, reportingModifiersProvider)
     runReports(finalDetektion, consoleReportersProvider, outputReportersProvider)
-    TODO("Not yet implemented")
+    return finalDetektion
 }
 
 private suspend fun runAnalysis(
