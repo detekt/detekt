@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.v2.Detektion
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.contentToKtFile
 import io.gitlab.arturbosch.detekt.core.tooling.pathToKtFile
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
@@ -42,8 +43,6 @@ class Runner(
                     KtFilesProviderImpl(this@withSettings),
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(pluginLoader),
-                    ::analyze
                 )
             }
         }
@@ -56,8 +55,6 @@ class Runner(
                     { pathToKtFile(path).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(pluginLoader),
-                    ::analyze
                 )
             }
         }
@@ -70,8 +67,6 @@ class Runner(
                     { contentToKtFile(sourceCode, Paths.get(filename)).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(pluginLoader),
-                    ::analyze
                 )
             }
         }
@@ -87,12 +82,24 @@ class Runner(
                         environment.configuration.languageVersionSettings
                     ),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(pluginLoader),
-                    ::analyze
                 )
             }
         }
     }
+}
+
+private suspend fun ProcessingSettings.run(
+    filesProvider: KtFilesProvider,
+    resolvedContextProvider: ResolvedContextProvider,
+    ruleProvider: RulesProvider,
+): AnalysisResult {
+    return run(
+        filesProvider,
+        resolvedContextProvider,
+        ruleProvider,
+        FileProcessListenersProviderImpl(pluginLoader),
+        ::analyze,
+    )
 }
 
 private suspend fun run(
