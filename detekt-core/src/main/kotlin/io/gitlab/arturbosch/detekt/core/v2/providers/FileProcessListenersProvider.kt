@@ -19,7 +19,7 @@ fun interface FileProcessListenersProvider {
 
 @OptIn(FlowPreview::class)
 class FileProcessListenersProviderImpl(
-    private val fileProcessListenersProviders: Flow<CollectionFileProcessListenerProvider>,
+    private val collectionFileProcessListenerProviders: Flow<CollectionFileProcessListenerProvider>,
 ) : FileProcessListenersProvider {
 
     constructor(
@@ -33,7 +33,7 @@ class FileProcessListenersProviderImpl(
     )
 
     override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {
-        return fileProcessListenersProviders
+        return collectionFileProcessListenerProviders
             .flatMapMerge { ruleProvider -> ruleProvider.get(resolvedContext) }
         // TODO I think that we need to sort this list. I'll check it later
     }

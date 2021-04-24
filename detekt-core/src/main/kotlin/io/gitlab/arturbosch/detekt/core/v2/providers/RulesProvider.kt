@@ -25,7 +25,7 @@ fun interface RulesProvider {
 @OptIn(FlowPreview::class)
 class RulesProviderImpl(
     private val config: Config,
-    private val ruleProviders: Flow<CollectionRuleProvider>,
+    private val collectionRuleProviders: Flow<CollectionRuleProvider>,
 ) : RulesProvider {
 
     constructor(
@@ -36,7 +36,7 @@ class RulesProviderImpl(
     )
 
     override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<Pair<Rule, Filter>> {
-        return ruleProviders
+        return collectionRuleProviders
             .flatMapMerge { ruleProvider -> ruleProvider.get(config, resolvedContext) }
             .map { rule ->
                 rule to object : Filter { // temporary meanwhile we find the place to instantiate this
