@@ -103,10 +103,10 @@ private suspend fun ProcessingSettings.run(
         filesProvider,
         resolvedContextProvider,
         ruleProvider,
-        FileProcessListenersProviderImpl(pluginLoader),
-        ReportingModifiersProviderImpl(pluginLoader),
-        ConsoleReportersProviderImpl(pluginLoader),
-        OutputReportersProviderImpl(pluginLoader),
+        FileProcessListenersProviderImpl(this),
+        ReportingModifiersProviderImpl(this),
+        ConsoleReportersProviderImpl(this),
+        OutputReportersProviderImpl(this),
         ::analyze,
     )
 }
