@@ -11,10 +11,14 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.contentToKtFile
 import io.gitlab.arturbosch.detekt.core.tooling.pathToKtFile
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
+import io.gitlab.arturbosch.detekt.core.v2.providers.ConsoleReportersProvider
+import io.gitlab.arturbosch.detekt.core.v2.providers.ConsoleReportersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.OutputReportersProvider
+import io.gitlab.arturbosch.detekt.core.v2.providers.OutputReportersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ReportingModifiersProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.ReportingModifiersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProvider
@@ -103,6 +107,8 @@ private suspend fun ProcessingSettings.run(
         ruleProvider,
         FileProcessListenersProviderImpl(pluginLoader),
         ReportingModifiersProviderImpl(pluginLoader),
+        ConsoleReportersProviderImpl(pluginLoader),
+        OutputReportersProviderImpl(pluginLoader),
         ::analyze,
     )
 }
@@ -113,6 +119,8 @@ private suspend fun run(
     ruleProvider: RulesProvider,
     fileProcessListenersProvider: FileProcessListenersProvider,
     reportingModifiersProvider: ReportingModifiersProvider,
+    consoleReportersProvider: ConsoleReportersProvider,
+    outputReportersProvider: OutputReportersProvider,
     analyzer: suspend (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Detektion,
 ): AnalysisResult {
     val detektion: Detektion = runAnalysis(
@@ -123,7 +131,7 @@ private suspend fun run(
         analyzer
     )
     val finalDetektion: Detektion = runPostAnalysis(detektion, reportingModifiersProvider)
-    runReports(finalDetektion)
+    runReports(finalDetektion, consoleReportersProvider, outputReportersProvider)
     TODO("Not yet implemented")
 }
 
@@ -156,6 +164,12 @@ private suspend fun runPostAnalysis(
     return finalDetektion
 }
 
-private fun runReports(detektion: Detektion) {
-
+private suspend fun runReports(
+    detektion: Detektion,
+    consoleReportersProvider: ConsoleReportersProvider,
+    outputReportersProvider: OutputReportersProvider,
+) {
+    // TODO all of this can be parallel BUT console between them should be serial
+    consoleReportersProvider.get().collect { it.render(detektion) }
+    outputReportersProvider.get().collect { it.render(detektion) }
 }
