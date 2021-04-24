@@ -15,6 +15,8 @@ import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProvide
 import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.ReportingModifiersProvider
+import io.gitlab.arturbosch.detekt.core.v2.providers.ReportingModifiersProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProvider
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProviderImpl
 import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProviderWithBindingContext
@@ -26,6 +28,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
@@ -98,6 +102,7 @@ private suspend fun ProcessingSettings.run(
         resolvedContextProvider,
         ruleProvider,
         FileProcessListenersProviderImpl(pluginLoader),
+        ReportingModifiersProviderImpl(pluginLoader),
         ::analyze,
     )
 }
@@ -107,14 +112,50 @@ private suspend fun run(
     resolvedContextProvider: ResolvedContextProvider,
     ruleProvider: RulesProvider,
     fileProcessListenersProvider: FileProcessListenersProvider,
+    reportingModifiersProvider: ReportingModifiersProvider,
     analyzer: suspend (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Detektion,
 ): AnalysisResult {
+    val detektion: Detektion = runAnalysis(
+        filesProvider,
+        resolvedContextProvider,
+        ruleProvider,
+        fileProcessListenersProvider,
+        analyzer
+    )
+    val finalDetektion: Detektion = runPostAnalysis(detektion, reportingModifiersProvider)
+    runReports(finalDetektion)
+    TODO("Not yet implemented")
+}
+
+private suspend fun runAnalysis(
+    filesProvider: KtFilesProvider,
+    resolvedContextProvider: ResolvedContextProvider,
+    ruleProvider: RulesProvider,
+    fileProcessListenersProvider: FileProcessListenersProvider,
+    analyzer: suspend (Flow<Pair<Rule, Filter>>, Flow<KtFile>, Flow<FileProcessListener>) -> Detektion,
+): Detektion {
     val files: Flow<KtFile> = filesProvider.get()
     val resolvedContext: Deferred<ResolvedContext> = coroutineScope {
         async(start = CoroutineStart.LAZY) { resolvedContextProvider.get(files) }
     }
     val rules: Flow<Pair<Rule, Filter>> = ruleProvider.get(resolvedContext)
     val fileProcessListeners: Flow<FileProcessListener> = fileProcessListenersProvider.get(resolvedContext)
-    val detektion: Detektion = analyzer(rules, files, fileProcessListeners)
-    TODO("Not yet implemented")
+    return analyzer(rules, files, fileProcessListeners)
+}
+
+private suspend fun runPostAnalysis(
+    detektion: Detektion,
+    reportingModifiersProvider: ReportingModifiersProvider,
+): Detektion {
+    val reportingModifiers = reportingModifiersProvider.get()
+    reportingModifiers.collect { it.onRawResult(detektion) }
+    val finalDetektion = reportingModifiers.fold(detektion) { acc: Detektion, reportingModifier ->
+        reportingModifier.transform(acc)
+    }
+    reportingModifiers.collect { it.onFinalResult(detektion) }
+    return finalDetektion
+}
+
+private fun runReports(detektion: Detektion) {
+
 }
