@@ -42,7 +42,7 @@ class Runner(
                     KtFilesProviderImpl(this@withSettings),
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(this@withSettings),
+                    FileProcessListenersProviderImpl(pluginLoader),
                     ::analyze
                 )
             }
@@ -56,7 +56,7 @@ class Runner(
                     { pathToKtFile(path).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(this@withSettings),
+                    FileProcessListenersProviderImpl(pluginLoader),
                     ::analyze
                 )
             }
@@ -70,7 +70,7 @@ class Runner(
                     { contentToKtFile(sourceCode, Paths.get(filename)).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(this@withSettings),
+                    FileProcessListenersProviderImpl(pluginLoader),
                     ::analyze
                 )
             }
@@ -87,7 +87,7 @@ class Runner(
                         environment.configuration.languageVersionSettings
                     ),
                     RulesProviderImpl(this@withSettings),
-                    FileProcessListenersProviderImpl(this@withSettings),
+                    FileProcessListenersProviderImpl(pluginLoader),
                     ::analyze
                 )
             }
