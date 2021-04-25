@@ -58,6 +58,8 @@ class MultilineLambdaItParameterSpec : Spek({
                     foo {
                         println(1)
                         println(2)
+                        val it = 3
+                        println(it)
                     }
                 }"""
                 val findings = subject.compileAndLintWithContext(env, code)
