@@ -30,20 +30,20 @@ interface Location {
 
 interface SourceLocation {
     val line: Int
-    val column: Int
+    val column: Int?
 
     operator fun component1(): Int = line
-    operator fun component2(): Int = column
+    operator fun component2(): Int? = column
 
     companion object {
-        operator fun invoke(line: Int, column: Int): SourceLocation {
+        operator fun invoke(line: Int, column: Int?): SourceLocation {
             return Impl(line, column)
         }
     }
 
     private data class Impl(
         override val line: Int,
-        override val column: Int
+        override val column: Int?
     ) : SourceLocation {
         override fun toString(): String = "$line:$column"
     }
