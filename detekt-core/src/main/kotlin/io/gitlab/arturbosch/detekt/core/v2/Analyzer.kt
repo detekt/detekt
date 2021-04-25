@@ -6,7 +6,13 @@ import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.kotlin.psi.KtFile
 
 suspend fun analyze(
@@ -27,12 +33,17 @@ private suspend fun myAnalyze(
     files: Flow<KtFile>,
     fileProcessListeners: Flow<FileProcessListener>,
 ): Detektion {
-    val findings = files
-        .onEach { file ->
-            fileProcessListeners.collect { listener ->
-                listener.onProcess(file)
-            }
+    files.collect { file ->
+        fileProcessListeners.collect { listener ->
+            listener.onProcess(file)
         }
+    }
+
+    val sortedFileProcessListeners = fileProcessListeners
+        .toList()
+        .sortedBy { it.priority }
+
+    val findings = files
         .flatMapMerge { file ->
             flow {
                 val path = file.absolutePath()
@@ -50,7 +61,7 @@ private suspend fun myAnalyze(
             }
         }
         .flatMapMerge { (file, ruleFindings) ->
-            fileProcessListeners
+            sortedFileProcessListeners
                 .fold(ruleFindings) { findings, listener -> listener.onProcessComplete(file, findings) }
                 .asFlow()
         }
@@ -58,7 +69,7 @@ private suspend fun myAnalyze(
 
     val filesList = files.toList()
 
-    return fileProcessListeners.fold(Detektion(findings = findings)) { detektion, listener ->
+    return sortedFileProcessListeners.fold(Detektion(findings = findings)) { detektion, listener ->
         listener.onFinish(filesList, detektion)
     }
 }

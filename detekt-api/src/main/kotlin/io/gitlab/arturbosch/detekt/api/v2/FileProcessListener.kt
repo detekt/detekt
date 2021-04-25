@@ -4,6 +4,9 @@ import org.jetbrains.kotlin.psi.KtFile
 
 interface FileProcessListener {
 
+    val priority: Int
+        get() = 0
+
     fun onProcess(file: KtFile) = Unit
 
     fun onProcessComplete(file: KtFile, findings: List<Finding>): List<Finding> = findings

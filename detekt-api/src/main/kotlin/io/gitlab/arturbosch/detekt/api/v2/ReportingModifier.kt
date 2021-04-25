@@ -6,6 +6,9 @@ package io.gitlab.arturbosch.detekt.api.v2
  */
 interface ReportingModifier {
 
+    val priority: Int
+        get() = 0
+
     /**
      * Is called before any [transform] calls were executed.
      */

@@ -31,7 +31,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
@@ -155,10 +155,13 @@ private suspend fun runPostAnalysis(
 ): Detektion {
     val reportingModifiers = reportingModifiersProvider.get()
     reportingModifiers.collect { it.onRawResult(detektion) }
-    val finalDetektion = reportingModifiers.fold(detektion) { acc: Detektion, reportingModifier ->
+    val sortedReportingModifiers = reportingModifiers
+        .toList()
+        .sortedBy { it.priority }
+    val finalDetektion = sortedReportingModifiers.fold(detektion) { acc: Detektion, reportingModifier ->
         reportingModifier.transform(acc)
     }
-    reportingModifiers.collect { it.onFinalResult(detektion) }
+    sortedReportingModifiers.forEach { it.onFinalResult(detektion) }
     return finalDetektion
 }
 
@@ -167,7 +170,10 @@ private suspend fun runReports(
     consoleReportersProvider: ConsoleReportersProvider,
     outputReportersProvider: OutputReportersProvider,
 ) {
-    // TODO all of this can be parallel BUT console between them should be serial
-    consoleReportersProvider.get().collect { it.render(detektion) }
+    // TODO These tow can of this can be parallel
+    consoleReportersProvider.get()
+        .toList()
+        .sortedBy { it.priority }
+        .forEach { it.render(detektion) }
     outputReportersProvider.get().collect { it.render(detektion) }
 }

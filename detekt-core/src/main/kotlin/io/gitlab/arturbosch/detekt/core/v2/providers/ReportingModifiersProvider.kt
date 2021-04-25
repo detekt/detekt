@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import java.util.ServiceLoader
 
-
 fun interface ReportingModifiersProvider {
     fun get(): Flow<ReportingModifier>
 }
@@ -38,6 +37,5 @@ class ReportingModifiersProviderImpl(
     override fun get(): Flow<ReportingModifier> {
         return collectionReportingModifierProviders
             .flatMapMerge { collectionProvider -> collectionProvider.get(setupContext) }
-        // TODO I think that we need to sort this list. I'll check it later
     }
 }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import java.util.ServiceLoader
 
 fun interface FileProcessListenersProvider {
@@ -39,6 +40,5 @@ class FileProcessListenersProviderImpl(
     override fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {
         return collectionFileProcessListenerProviders
             .flatMapMerge { collectionProvider -> collectionProvider.get(setupContext, resolvedContext) }
-        // TODO I think that we need to sort this list. I'll check it later
     }
 }

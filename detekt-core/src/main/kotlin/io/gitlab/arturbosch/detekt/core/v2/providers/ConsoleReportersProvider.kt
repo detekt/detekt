@@ -37,6 +37,5 @@ class ConsoleReportersProviderImpl(
     override fun get(): Flow<ConsoleReporter> {
         return collectionConsoleReporterProviders
             .flatMapMerge { collectionProvider -> collectionProvider.get(setupContext) }
-        // TODO I think that we need to sort this list. I'll check it later
     }
 }
