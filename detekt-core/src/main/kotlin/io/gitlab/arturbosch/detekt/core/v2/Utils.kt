@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.takeWhile
 
-suspend fun <T> Flow<T>.reusable(
+fun <T> Flow<T>.reusable(
     scope: CoroutineScope,
     replay: Int = 0
 ): Flow<T> {

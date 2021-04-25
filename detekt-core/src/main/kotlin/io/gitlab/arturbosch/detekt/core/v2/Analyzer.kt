@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.v2.Detektion
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -15,20 +14,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.kotlin.psi.KtFile
 
-suspend fun analyze(
-    rules: Flow<Pair<Rule, Filter>>,
-    files: Flow<KtFile>,
-    fileProcessListeners: Flow<FileProcessListener>,
-): Detektion {
-    return myAnalyze(
-        rules.reusable(UNLIMITED),
-        files.reusable(UNLIMITED),
-        fileProcessListeners.reusable(UNLIMITED),
-    )
-}
-
 @OptIn(FlowPreview::class)
-private suspend fun myAnalyze(
+suspend fun analyze(
     rules: Flow<Pair<Rule, Filter>>,
     files: Flow<KtFile>,
     fileProcessListeners: Flow<FileProcessListener>,
