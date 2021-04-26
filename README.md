@@ -111,7 +111,7 @@ tasks.withType(Detekt).configureEach {
 // or
 
 // Kotlin DSL
-tasks.withType<Detekt>.configureEach {
+tasks.withType<Detekt>().configureEach {
     // Target version of the generated JVM bytecode. It is used for type resolution.
     jvmTarget = "1.8"
 }
