@@ -156,7 +156,7 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        // https://github.com/detekt/detekt/issues/3541
+        // https://github.com/detekt/detekt/issues/3541#issuecomment-815136831
         it("Size in another statement") {
             val code = """
                 fun foo() {
@@ -166,6 +166,20 @@ class UnnecessaryFilterSpec : Spek({
                     if (filteredStrings.size > 2) {
                         println("more than two")
                     }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        // https://github.com/detekt/detekt/issues/3541
+        it("Size/isEmpty()/isNotEmpty() in another statement") {
+            val code = """
+                fun test(queryParts: List<String>, a: List<String>, b: List<String>, c: List<String>) {
+                    val dbQueryParts = queryParts.filter { it.length > 1 }.take(3)
+                    a.size
+                    b.isEmpty()
+                    c.isNotEmpty()
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)
