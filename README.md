@@ -56,8 +56,8 @@ Visit [the project website](https://detekt.github.io/detekt/) for installation g
 #### with the command-line interface
 
 ```sh
-curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt && chmod a+x detekt
-./detekt --help
+curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt-cli-[version]-all.jar
+java -jar detekt-cli-[version]-all.jar --help
 ```
 
 You can find [other ways to install detekt here](https://detekt.github.io/detekt/cli.html)
