@@ -9,8 +9,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
  * Lambda expressions are very useful in a lot of cases and they often include very small chunks of
@@ -91,7 +96,10 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
                 )
             // Implicit `it`
             parameterNames.isEmpty() -> {
-                if (lambdaExpression.hasImplicitParameter(bindingContext)) {
+                val implicitParameter = lambdaExpression.implicitParameter(bindingContext)
+                if (implicitParameter != null &&
+                    lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext)
+                ) {
                     report(
                         CodeSmell(
                             issue,
@@ -106,7 +114,26 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
         }
     }
 
-    private fun KtLambdaExpression.hasImplicitParameter(bindingContext: BindingContext): Boolean {
-        return (bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()) != null
+    private fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueParameterDescriptor? {
+        return bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()
+    }
+
+    private fun KtLambdaExpression.hasImplicitParameterReference(
+        implicitParameter: ValueParameterDescriptor,
+        bindingContext: BindingContext
+    ): Boolean {
+        return anyDescendantOfType<KtNameReferenceExpression> {
+            it.isImplicitParameterReference(this, implicitParameter, bindingContext)
+        }
+    }
+
+    private fun KtNameReferenceExpression.isImplicitParameterReference(
+        lambda: KtLambdaExpression,
+        implicitParameter: ValueParameterDescriptor,
+        bindingContext: BindingContext
+    ): Boolean {
+        return text == "it" &&
+            getStrictParentOfType<KtLambdaExpression>() == lambda &&
+            getResolvedCall(bindingContext)?.resultingDescriptor == implicitParameter
     }
 }

@@ -50,6 +50,21 @@ class MultilineLambdaItParameterSpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
+
+            it("does not report when lambda has no implicit parameter references") {
+                val code = """
+                fun foo(f: (Int) -> Unit) {}
+                fun main() {
+                    foo {
+                        println(1)
+                        println(2)
+                        val it = 3
+                        println(it)
+                    }
+                }"""
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
         }
 
         context("single parameter, multiline lambda with a single statement") {

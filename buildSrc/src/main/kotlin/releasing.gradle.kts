@@ -51,14 +51,14 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate = file("${rootProject.rootDir}/docs/_config.yml")
-        linePartToFind = "detekt_version:"
-        lineTransformation = { "detekt_version: ${Versions.DETEKT}" }
+        fileToUpdate.set(file("${rootProject.rootDir}/docs/_config.yml"))
+        linePartToFind.set("detekt_version:")
+        lineTransformation.set("detekt_version: ${Versions.DETEKT}")
     }
 
     register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
-        fileToUpdate = file("${rootProject.rootDir}/buildSrc/build.gradle.kts")
-        linePartToFind = "const val DETEKT ="
-        lineTransformation = { """    const val DETEKT = "${Versions.DETEKT}"""" }
+        fileToUpdate.set(file("${rootProject.rootDir}/buildSrc/build.gradle.kts"))
+        linePartToFind.set("const val DETEKT =")
+        lineTransformation.set("""    const val DETEKT = "${Versions.DETEKT}"""")
     }
 }
