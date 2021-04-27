@@ -23,6 +23,7 @@ object DetektJvmTest : Spek({
                 repositories {
                     mavenCentral()
                     mavenLocal()
+                    jcenter()
                 }
 
                 detekt {
