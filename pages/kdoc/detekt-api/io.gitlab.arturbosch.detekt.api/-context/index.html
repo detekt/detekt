@@ -457,16 +457,14 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/detekt-api/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a></p>
+  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a></p>
 
 <h1 id="context">Context</h1>
-<p>[jvm]</p>
+<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a></p>
 
 <p>A context describes the storing and reporting mechanism of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>’s inside a <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/">Rule</a>. Additionally it handles suppression and aliases management.</p>
 
 <p>The detekt engine retrieves the findings after each KtFile visit and resets the context before the next KtFile.</p>
-
-<p>interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/">Context</a></p>
 
 <h2 id="functions">Functions</h2>
 
@@ -479,24 +477,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a></td>
-      <td>[jvm]  <br />Brief description  <br /><br /><br />Clears previous findings. Normally this is done on every new KtFile analyzed and should be called by clients.<br /><br />  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a>()  <br /><br /><br /></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/clearFindings/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/clearFindings/#/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/clear-findings.html">clearFindings</a>()  <br />More info  <br />Clears previous findings.  <br /><br /><br /></td>
     </tr>
     <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a></td>
-      <td>[jvm]  <br />Content  <br />open operator override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/equals/#kotlin.Any?/PointingToDeclaration/">equals</a>(other: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>  <br /><br /><br /></td>
-    </tr>
-    <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a></td>
-      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/#kotlin/Any/hashCode/#/PointingToDeclaration/">hashCode</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>  <br /><br /><br /></td>
-    </tr>
-    <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a></td>
-      <td>[jvm]  <br />Brief description  <br /><br /><br />Reports a single new violation. By contract the implementation can check if this finding is already suppressed and should not get reported. An alias set can be given to additionally check if an alias was used when suppressing. Additionally suppression by rule set id is supported.<br /><br />  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(finding: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a>?)  <br /><br /><br />[jvm]  <br />Brief description  <br /><br /><br />Same as <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a> but reports a list of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/#io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDeclaration/">findings</a>.<br /><br />  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/">RuleSetId</a>?)  <br /><br /><br /></td>
-    </tr>
-    <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a></td>
-      <td>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/#kotlin/Any/toString/#/PointingToDeclaration/">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(finding: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt; = emptySet(), ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>? = null)  <br />More info  <br />Reports a single new violation.  <br /><br /><br />[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt; = emptySet(), ruleSetId: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>? = null)  <br />More info  <br />Same as <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">report</a> but reports a list of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html">findings</a>.  <br /><br /><br /></td>
     </tr>
   </tbody>
 </table>
@@ -512,8 +498,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/#io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDeclaration/">findings</a></td>
-      <td>[jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/#io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDeclaration/">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;   <br /></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/findings.html">findings</a></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-context/findings.html">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>&gt;   <br /></td>
     </tr>
   </tbody>
 </table>
@@ -528,10 +514,10 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/">DefaultContext</a></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api/DefaultContext///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/">DefaultContext</a></td>
     </tr>
     <tr>
-      <td><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a></td>
+      <td><a name="io.gitlab.arturbosch.detekt.api.internal/BaseRule///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-base-rule/">BaseRule</a></td>
     </tr>
   </tbody>
 </table>

@@ -465,18 +465,7 @@ $('#toc').on('click', 'a', function() {
 
 <h6 id="groovy-dsl">Groovy DSL</h6>
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">repositories</span> <span class="o">{</span>
-    <span class="n">jcenter</span><span class="o">()</span>
-
-    <span class="c1">// or</span>
-
     <span class="n">mavenCentral</span><span class="o">()</span>
-    <span class="n">jcenter</span> <span class="o">{</span>
-        <span class="n">content</span> <span class="o">{</span>
-            <span class="c1">// just allow to include kotlinx projects</span>
-            <span class="c1">// detekt needs 'kotlinx-html' for the html report</span>
-            <span class="n">includeGroup</span> <span class="s2">"org.jetbrains.kotlinx"</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
 <span class="o">}</span>
 
 <span class="n">configurations</span> <span class="o">{</span>
