@@ -20,7 +20,7 @@ dependencies {
         api("com.pinterest.ktlint:ktlint-ruleset-standard:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-core:${version.ktlint}")
         api("com.pinterest.ktlint:ktlint-ruleset-experimental:${version.ktlint}")
-        api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
+        api("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
         api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
         api("io.github.detekt.sarif4k:sarif4k:0.0.1")
     }

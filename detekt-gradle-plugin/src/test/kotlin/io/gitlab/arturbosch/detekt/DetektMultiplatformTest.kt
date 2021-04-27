@@ -330,8 +330,8 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                 repositories {
                     mavenCentral()
                     google()
-                    jcenter()
                     mavenLocal()
+                    jcenter()
                 }
             }
         """.trimIndent(),
