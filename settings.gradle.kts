@@ -46,11 +46,5 @@ gradleEnterprise {
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
-        jcenter {
-            content {
-                includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
-                includeGroup("org.jetbrains.dokka")
-            }
-        }
     }
 }
