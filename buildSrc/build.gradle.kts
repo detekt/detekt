@@ -2,10 +2,6 @@ plugins {
     `kotlin-dsl`
 }
 
-kotlinDslPluginOptions {
-    experimentalWarning.set(false)
-}
-
 repositories {
     mavenLocal() // used to publish and test local gradle plugin changes
     mavenCentral()
