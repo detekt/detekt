@@ -43,6 +43,7 @@ gradleEnterprise {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         if (isCiBuild) {
             termsOfServiceAgree = "yes"
+            publishAlways()
         }
     }
 }
