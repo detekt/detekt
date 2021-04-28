@@ -33,13 +33,18 @@ include(
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.6"
+    id("com.gradle.enterprise") version "3.6.1"
 }
 
 gradleEnterprise {
+    val isCiBuild = System.getenv("CI") != null
+
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
+        if (isCiBuild) {
+            termsOfServiceAgree = "yes"
+            publishAlways()
+        }
     }
 }
 
