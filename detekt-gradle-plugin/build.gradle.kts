@@ -7,12 +7,6 @@ plugins {
 repositories {
     mavenCentral()
     google()
-    jcenter {
-        content {
-            includeModule("org.jetbrains.trove4j", "trove4j")
-            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
-        }
-    }
 }
 
 val intTest: Configuration by configurations.creating
