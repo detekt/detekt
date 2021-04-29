@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${Plugins.KOTLIN}")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Plugins.DETEKT}")
     implementation("com.github.breadmoirai:github-release:${Plugins.GITHUB_RELEASE}")
-    implementation("com.github.jengelman.gradle.plugins:shadow:${Plugins.SHADOW}")
+    implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:${Plugins.SHADOW}")
     implementation("com.github.ben-manes:gradle-versions-plugin:${Plugins.VERSIONS}")
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${Plugins.SONAR}")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${Plugins.DOKKA}")
