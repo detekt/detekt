@@ -10,13 +10,3 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: org.jetbrains.kotlinx:kotlinx-html-jvm
-    versions:
-    - 0.7.3
-  - dependency-name: org.jetbrains.kotlin:kotlin-reflect
-    versions:
-    - 1.4.31
-  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-core
-    versions:
-    - 1.4.3-native-mt
