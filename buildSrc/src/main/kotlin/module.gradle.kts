@@ -49,7 +49,7 @@ tasks.withType<Test>().configureEach {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
-        languageVersion = "1.4"
+        languageVersion = "1.5"
         freeCompilerArgs = listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"

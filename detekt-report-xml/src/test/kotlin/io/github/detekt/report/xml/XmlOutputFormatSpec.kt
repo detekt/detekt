@@ -185,7 +185,7 @@ class XmlOutputFormatSpec : Spek({
 
             SeverityLevel.values().forEach { severity ->
 
-                val xmlSeverity = severity.name.toLowerCase(Locale.US)
+                val xmlSeverity = severity.name.lowercase(Locale.US)
 
                 it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
                     val finding = object : CodeSmell(

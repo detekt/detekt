@@ -128,7 +128,7 @@ private fun KtLambdaExpression.countReferences(): Int {
     val bodyExpression = bodyExpression ?: return 0
     val destructuringDeclaration = firstParameter?.destructuringDeclaration
     return if (destructuringDeclaration != null) {
-        destructuringDeclaration.entries.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString(), this) }
+        destructuringDeclaration.entries.sumOf { bodyExpression.countVarRefs(it.nameAsSafeName.asString(), this) }
     } else {
         val parameterName = firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL
         bodyExpression.countVarRefs(parameterName, this)
