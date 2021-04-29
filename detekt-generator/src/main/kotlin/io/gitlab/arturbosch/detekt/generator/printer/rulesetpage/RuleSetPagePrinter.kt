@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
+import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownContent
 import io.gitlab.arturbosch.detekt.generator.out.bold
@@ -40,15 +41,14 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 paragraph { "TODO: Specify description" }
             }
 
+            paragraph {
+                "${bold { "Active by default" }}: ${if (rule.defaultActivationStatus.active) "Yes" else "No"}" +
+                    ((rule.defaultActivationStatus as? Active)?.let { " - Since v${it.since}" } ?: "")
+            }
+
             if (rule.requiresTypeResolution) {
                 paragraph {
                     bold { "Requires Type Resolution" }
-                }
-            }
-
-            if (rule.severity.isNotEmpty()) {
-                paragraph {
-                    "${bold { "Severity" }}: ${rule.severity}"
                 }
             }
 
@@ -74,7 +74,12 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                             }
                             description { "${bold { "Deprecated" }}: ${it.deprecated}" }
                         } else {
-                            item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
+                            val defaultValues = it.defaultValue.lines()
+                            val defaultValuesString = defaultValues.joinToString {
+                                value ->
+                                value.trim().removePrefix("- ")
+                            }
+                            item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
                         }
                         description { it.description }
                     }

@@ -10,8 +10,9 @@ fun parseArguments(args: Array<out String>): CliArgs {
     val jCommander = JCommander(cli)
     jCommander.programName = "detekt"
 
+    @Suppress("SwallowedException") // Stacktrace in jCommander is likely irrelevant.
     try {
-        @Suppress("detekt.SpreadOperator")
+        @Suppress("SpreadOperator")
         jCommander.parse(*args)
     } catch (ex: ParameterException) {
         throw HandledArgumentViolation(ex.message, jCommander.usageAsString())
@@ -32,15 +33,16 @@ private fun JCommander.usageAsString(): String {
 
 private fun CliArgs.validate(jCommander: JCommander) {
     val violations = StringBuilder()
+    val baseline = baseline
 
     if (createBaseline && baseline == null) {
         violations.appendLine("Creating a baseline.xml requires the --baseline parameter to specify a path.")
     }
 
     if (!createBaseline && baseline != null) {
-        if (Files.notExists(checkNotNull(baseline))) {
+        if (Files.notExists(baseline)) {
             violations.appendLine("The file specified by --baseline should exist '$baseline'.")
-        } else if (!Files.isRegularFile(checkNotNull(baseline))) {
+        } else if (!Files.isRegularFile(baseline)) {
             violations.appendLine("The path specified by --baseline should be a file '$baseline'.")
         }
     }

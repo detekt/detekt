@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     compileOnly(project(":detekt-api"))
     compileOnly(project(":detekt-metrics"))

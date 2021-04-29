@@ -4,7 +4,9 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
+import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
+import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -120,10 +122,19 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean
         @Input
         get() = failFastProp.getOrElse(false)
         set(value) = failFastProp.set(value)
+
+    @get:Internal
+    internal val allRulesProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var allRules: Boolean
+        @Input
+        get() = allRulesProp.getOrElse(false)
+        set(value) = allRulesProp.set(value)
 
     @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
@@ -135,31 +146,42 @@ open class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
+    /**
+     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
+     */
+    @get:Input
+    @get:Optional
+    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    var basePath: String
+        @Internal
+        get() = basePathProp.getOrElse("")
+        set(value) = basePathProp.set(value)
+
     @get:Internal
     var reports = DetektReports()
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
 
-    internal val xmlReportFile: Provider<RegularFile>
+    val xmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.xml)
 
-    internal val htmlReportFile: Provider<RegularFile>
+    val htmlReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.html)
 
-    internal val txtReportFile: Provider<RegularFile>
+    val txtReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.txt)
 
-    internal val sarifReportFile: Provider<RegularFile>
+    val sarifReportFile: Provider<RegularFile>
         @OutputFile
         @Optional
-        get() = getTargetFileProvider(report = reports.sarif, defaultEnabledValue = false)
+        get() = getTargetFileProvider(reports.sarif)
 
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
@@ -188,9 +210,14 @@ open class Detekt @Inject constructor(
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-    @Suppress("DEPRECATION")
     @TaskAction
     fun check() {
+        if (failFastProp.getOrElse(false)) {
+            project.logger.warn(
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
+            )
+        }
+
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
@@ -206,7 +233,9 @@ open class Detekt @Inject constructor(
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
+            AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(convertCustomReportsToArguments())
@@ -234,10 +263,9 @@ open class Detekt @Inject constructor(
     }
 
     private fun getTargetFileProvider(
-        report: DetektReport,
-        defaultEnabledValue: Boolean = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+        report: DetektReport
     ): RegularFileProperty {
-        val isEnabled = report.enabled ?: defaultEnabledValue
+        val isEnabled = report.enabled ?: DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
         val provider = objects.fileProperty()
         if (isEnabled) {
             val destination = report.destination ?: reportsDir.getOrElse(defaultReportsDir.asFile)

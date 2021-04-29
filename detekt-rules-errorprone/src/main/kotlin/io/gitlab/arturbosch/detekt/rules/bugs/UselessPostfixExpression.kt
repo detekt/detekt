@@ -55,16 +55,19 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  */
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
-    override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
-            "The incremented or decremented value is unused. This value is replaced with the original value.",
-            Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(
+        "UselessPostfixExpression",
+        Severity.Defect,
+        "The incremented or decremented value is unused. This value is replaced with the original value.",
+        Debt.TWENTY_MINS
+    )
 
     var properties = setOf<String?>()
 
     override fun visitClass(klass: KtClass) {
         properties = klass.getProperties()
-                .map { it.name }
-                .union(klass.primaryConstructorParameters.filter { it.isPropertyParameter() }.map { it.name })
+            .map { it.name }
+            .union(klass.primaryConstructorParameters.filter { it.isPropertyParameter() }.map { it.name })
         super.visitClass(klass)
     }
 
@@ -76,7 +79,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         }
 
         getPostfixExpressionChilds(expression.returnedExpression)
-                ?.forEach { report(it) }
+            ?.forEach { report(it) }
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
@@ -84,11 +87,12 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         val leftIdentifierText = expression.left?.text
         checkPostfixExpression(postfixExpression, leftIdentifierText)
         getPostfixExpressionChilds(expression.right)
-                ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
+            ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
     private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
-            (operationToken === PLUSPLUS || operationToken === MINUSMINUS)) this else null
+        (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
+    ) this else null
 
     private fun checkPostfixExpression(postfixExpression: KtPostfixExpression?, leftIdentifierText: String?) {
         if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
@@ -104,8 +108,14 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(postfixExpression: KtPostfixExpression) {
-        report(CodeSmell(issue, Entity.from(postfixExpression), "The result of the postfix expression: " +
-                "${postfixExpression.text} will not be used and is therefore useless."))
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(postfixExpression),
+                "The result of the postfix expression: " +
+                    "${postfixExpression.text} will not be used and is therefore useless."
+            )
+        )
     }
 
     private fun getPostfixExpressionChilds(expression: KtExpression?) =

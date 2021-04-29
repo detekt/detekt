@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
     return ProcessingSpec {
-
         logging {
             debug = args.debug
             outputChannel = output
@@ -15,6 +14,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
 
         project {
+            basePath = args.basePath
             inputPaths = args.inputPaths
             excludes = asPatterns(args.excludes)
             includes = asPatterns(args.includes)
@@ -22,8 +22,14 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         rules {
             autoCorrect = args.autoCorrect
-            activateExperimentalRules = args.failFast
-            maxIssuePolicy = RulesSpec.MaxIssuePolicy.NonSpecified // not yet supported; prefer to read from config
+            @Suppress("DEPRECATION")
+            activateAllRules = args.failFast || args.allRules
+            maxIssuePolicy = when (val count = args.maxIssues) {
+                null -> RulesSpec.MaxIssuePolicy.NonSpecified // prefer to read from config
+                0 -> RulesSpec.MaxIssuePolicy.NoneAllowed
+                in -1 downTo Int.MIN_VALUE -> RulesSpec.MaxIssuePolicy.AllowAny
+                else -> RulesSpec.MaxIssuePolicy.AllowAmount(count)
+            }
             excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }

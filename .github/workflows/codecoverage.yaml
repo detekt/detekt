@@ -3,10 +3,10 @@ name: Code Coverage
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - '*'
+      - '**'
 
 jobs:
   publish-code-coverage:

@@ -16,9 +16,7 @@ enum class Case(val file: String) {
     UtilityClassesPositive("/UtilityClassesPositive.kt"),
     UtilityClassesNegative("/UtilityClassesNegative.kt"),
     NoTabsNegative("/NoTabsNegative.kt"),
-    NoTabsPositive("/NoTabsPositive.kt"),
-    UnusedPrivateMemberPositive("/UnusedPrivateMemberPositive.kt"),
-    UnusedPrivateMemberNegative("/UnusedPrivateMemberNegative.kt");
+    NoTabsPositive("/NoTabsPositive.kt");
 
     fun path(): Path = resourceAsPath(file)
 }

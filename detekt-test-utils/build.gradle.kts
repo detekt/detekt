@@ -1,3 +1,7 @@
+plugins {
+    module
+}
+
 dependencies {
     api(kotlin("stdlib-jdk8"))
     compileOnly("org.spekframework.spek2:spek-dsl-jvm")

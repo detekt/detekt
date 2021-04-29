@@ -1,0 +1,85 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "TestFile.kt"
+                },
+                "region": {
+                  "startColumn": 1,
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellA.TestSmellA"
+        },
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "TestFile.kt"
+                },
+                "region": {
+                  "startColumn": 1,
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellB.TestSmellB"
+        },
+        {
+          "level": "note",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "TestFile.kt"
+                },
+                "region": {
+                  "startColumn": 1,
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "TestMessage"
+          },
+          "ruleId": "detekt.TestSmellC.TestSmellC"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "downloadUri": "https://github.com/detekt/detekt/releases/download/v1.16.0/detekt",
+          "fullName": "detekt",
+          "guid": "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
+          "informationUri": "https://detekt.github.io/detekt",
+          "language": "en",
+          "name": "detekt",
+          "organization": "detekt",
+          "rules": [
+          ],
+          "semanticVersion": "1.16.0",
+          "version": "1.16.0"
+        }
+      }
+    }
+  ]
+}

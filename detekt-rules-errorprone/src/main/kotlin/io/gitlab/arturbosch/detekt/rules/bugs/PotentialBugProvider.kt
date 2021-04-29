@@ -2,13 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
 /**
  * The potential-bugs rule set provides rules that detect potential bugs.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "potential-bugs"
@@ -17,6 +17,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
         ruleSetId,
         listOf(
             Deprecation(config),
+            DontDowncastCollectionTypes(config),
+            DoubleMutabilityForCollection(config),
             DuplicateCaseInWhenExpression(config),
             EqualsAlwaysReturnsTrueOrFalse(config),
             EqualsWithHashCodeExist(config),
@@ -41,7 +43,10 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             WrongEqualsTypeParameter(config),
             IgnoredReturnValue(config),
             ImplicitUnitReturnType(config),
-            NullableToStringCall(config)
+            NullableToStringCall(config),
+            UnreachableCatchBlock(config),
+            CastToNullableType(config),
+            UnusedUnaryOperator(config)
         )
     )
 }

@@ -31,14 +31,25 @@ include(
     "detekt-tooling"
 )
 
-pluginManagement {
+// build scan plugin can only be applied in settings file
+plugins {
+    id("com.gradle.enterprise") version "3.6.1"
+}
 
-    repositories {
-        gradlePluginPortal()
+gradleEnterprise {
+    val isCiBuild = System.getenv("CI") != null
+
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        if (isCiBuild) {
+            termsOfServiceAgree = "yes"
+            publishAlways()
+        }
     }
 }
 
-// build scan plugin can only be applied in settings file
-plugins {
-    id("com.gradle.enterprise") version "3.3.1"
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
 }

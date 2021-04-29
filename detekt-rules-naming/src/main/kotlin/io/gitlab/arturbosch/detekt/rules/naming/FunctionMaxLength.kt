@@ -33,7 +33,8 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.atName(function),
-                    message = "Function names should be at most $maximumFunctionNameLength characters long.")
+                    message = "Function names should be at most $maximumFunctionNameLength characters long."
+                )
             )
         }
     }

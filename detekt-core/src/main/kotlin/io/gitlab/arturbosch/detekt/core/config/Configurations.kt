@@ -48,6 +48,7 @@ private fun parsePathConfig(paths: Collection<Path>): Config =
 internal fun ConfigSpec.extractUris(): Collection<URI> {
     fun initFileSystem(uri: URI) {
         runCatching {
+            @Suppress("SwallowedException") // Create file system inferred from URI if it does not exist.
             try {
                 FileSystems.getFileSystem(uri)
             } catch (e: FileSystemNotFoundException) {

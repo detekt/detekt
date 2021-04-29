@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -45,6 +46,8 @@ class ConfigAssert(
     }
 
     private fun checkOptions(ymlOptions: HashMap<String, *>, ruleClass: Class<out Rule>) {
+        if (ruleClass.isConfiguredWithAnnotations()) return
+
         val configFields = ruleClass.declaredFields.filter { isPublicStaticFinal(it) && it.name != "Companion" }
         var filter = ymlOptions.filterKeys { it !in allowedOptions }
         if (filter.containsKey(THRESHOLD)) {
@@ -58,6 +61,9 @@ class ConfigAssert(
             }
         }
     }
+
+    private fun Class<out Rule>.isConfiguredWithAnnotations(): Boolean =
+        declaredMethods.any { it.isAnnotationPresent(Configuration::class.java) }
 
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
         ?: error("yaml config expected but got ${config.javaClass}")

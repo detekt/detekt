@@ -32,7 +32,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class UseRequire(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UseRequire", Severity.Style,
+        "UseRequire",
+        Severity.Style,
         "Use require() instead of throwing an IllegalArgumentException.",
         Debt.FIVE_MINS
     )
@@ -43,7 +44,8 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
         if (expression.isOnlyExpressionInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)) {
+            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+        ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

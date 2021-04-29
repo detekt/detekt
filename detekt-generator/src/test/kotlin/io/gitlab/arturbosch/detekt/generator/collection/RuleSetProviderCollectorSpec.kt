@@ -56,7 +56,7 @@ class RuleSetProviderCollectorSpec : Spek({
         """
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -73,7 +73,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -87,8 +87,9 @@ class RuleSetProviderCollectorSpec : Spek({
             /**
              * $description
              *
-             * @active since v1.0.0
+             * 
              */
+            @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 
@@ -127,7 +128,7 @@ class RuleSetProviderCollectorSpec : Spek({
             it("is active") {
                 val items = subject.run(code)
                 val provider = items[0]
-                assertThat(provider.active).isTrue()
+                assertThat(provider.defaultActivationStatus.active).isTrue()
             }
         }
 
@@ -155,7 +156,7 @@ class RuleSetProviderCollectorSpec : Spek({
             it("is not active") {
                 val items = subject.run(code)
                 val provider = items[0]
-                assertThat(provider.active).isFalse()
+                assertThat(provider.defaultActivationStatus.active).isFalse()
             }
         }
 
@@ -179,7 +180,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -202,7 +203,32 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
+            }
+        }
+
+        context("a RuleSetProvider with invalid activation version") {
+            val code = """
+            package foo
+
+            /**
+             * description
+             */
+            @ActiveByDefault(since = "1.2.xyz")
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "ruleSetId"
+
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            TestRule(config)
+                    ))
+                }
+            }
+        """
+
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -222,7 +248,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                        .isThrownBy { subject.run(code) }
+                    .isThrownBy { subject.run(code) }
             }
         }
 
@@ -236,9 +262,8 @@ class RuleSetProviderCollectorSpec : Spek({
 
             /**
              * $description
-             *
-             * @active since v1.0.0
              */
+            @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "$ruleSetId"
 

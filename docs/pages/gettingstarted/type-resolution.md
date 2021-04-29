@@ -44,7 +44,7 @@ With type resolution, Detekt has access to all the symbols and types of your cod
 
 If you're running Detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that require type resolution are annotated with [`@requiresTypeResolution`](https://github.com/detekt/detekt/search?q=%5C%40requiresTypeResolution) in the KDoc. 
+All the rules that require type resolution are annotated with [`@RequiresTypeResolution`](https://github.com/detekt/detekt/search?q=%40RequiresTypeResolution). 
 
 Moreover, their official documentation in the Detekt website will mention _Requires Type Resolution_ ([like here](./potential-bugs.html#unnecessarysafecall)).
 
@@ -73,7 +73,12 @@ Other than the aforementioned tasks for JVM projects, you can use the following 
 - `detekt<Variant>` - Runs detekt with type resolution on the specific build variant
 - `detektBaseline<Variant>` - Creates a detekt baselines starting from a run of Detekt with type resolution enabled on the specific build variant.
 
-Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly. Doing this on Android is more complicated due to build types/flavors (see [#2259](https://github.com/detekt/detekt/issues/2259) for further context). Therefore, we recommend using the `detekt<Variant>` tasks offered by the Gradle plugins.
+Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly.
+Doing this on Android is more complicated due to build types/flavors (see [#2259](https://github.com/detekt/detekt/issues/2259) for further context).
+Therefore, we recommend using the `detekt<Variant>` tasks offered by the Gradle plugins.
+
+In case of build related issues, you may try `detekt.android.disabled=true` in `gradle.properties` to prevent detekt
+Gradle plugins from configuring Android-specific gradle tasks.
 
 ## Enabling on Detekt CLI
 

@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
+import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -72,6 +74,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
+    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     val failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input
@@ -80,7 +83,22 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
+    val allRules: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    @get:Input
+    @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    /**
+     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
+     */
+    @get:Input
+    @get:Optional
+    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    var basePath: String
+        @Internal
+        get() = basePathProp.get()
+        set(value) = basePathProp.set(value)
 
     @get:Input
     @get:Optional
@@ -94,6 +112,12 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
+        if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
+            project.logger.warn(
+                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
+            )
+        }
+
         val arguments = mutableListOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
@@ -104,8 +128,10 @@ open class DetektCreateBaselineTask : SourceTask() {
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            FailFastArgument(failFast.getOrElse(false)),
+            FailFastArgument(@Suppress("DEPRECATION") failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
+            AllRulesArgument(allRules.getOrElse(false)),
+            BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 

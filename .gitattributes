@@ -1,9 +1,17 @@
-# Always use crlf line endings Gradle .bat file
-gradlew.bat text eol=crlf
+* text eol=auto
 
-# Mark Gradle wrapper as a binary
-gradle/wrapper/gradle-wrapper.jar binary
+*.bat           text eol=crlf
 
-*.md eol=lf
-*.html eol=lf
-*.yml eol=lf
+*.css           diff=css
+*.htm           eol=lf diff=html
+*.html          eol=lf diff=html
+*.md            eol=lf diff=markdown
+
+*.jar           binary
+*.png           binary
+*.otf           binary
+*.eot           binary
+*.ttf           binary
+*.woff          binary
+*.woff2         binary
+*.ico           binary

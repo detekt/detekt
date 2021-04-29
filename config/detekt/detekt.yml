@@ -25,7 +25,7 @@ comments:
 complexity:
   StringLiteralDuplication:
     active: true
-    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     threshold: 5
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -64,10 +64,30 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  AnnotationSpacing:
+    active: true
+  EnumEntryNameCase:
+    active: true
+  ImportOrdering:
+    active: true
+  Indentation:
+    active: true
   MaximumLineLength:
     active: false
+  NoEmptyFirstLineInMethodBlock:
+    active: true
   ParameterListWrapping:
     active: false
+  SpacingAroundAngleBrackets:
+    active: true
+  SpacingAroundDoubleColon:
+    active: true
+  SpacingAroundUnaryOperator:
+    active: true
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: true
+  SpacingBetweenDeclarationsWithComments:
+    active: true
 
 potential-bugs:
   UnsafeCast:
@@ -83,7 +103,7 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author']
+    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author', '@requiresTypeResolution']
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   LibraryCodeMustSpecifyReturnType:
     active: true
@@ -91,13 +111,14 @@ style:
     includes: ['**/detekt-api/src/main/**/api/*.kt']
   MaxLineLength:
     active: true
-    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
   MagicNumber:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
     ignoreNumbers: ['-1', '0', '1', '2', '100', '1000']
+    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
   NestedClassesVisibility:
     active: true
   RedundantVisibilityModifierRule:

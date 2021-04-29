@@ -12,6 +12,8 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val issue: Issue
     val references: List<Entity>
     val message: String
+    val severity: SeverityLevel
+        get() = SeverityLevel.WARNING
 
     /**
      * Explanation why this finding was raised.
@@ -31,7 +33,7 @@ interface HasEntity {
     val charPosition: TextLocation
         get() = location.text
     val file: String
-        get() = location.file
+        get() = location.filePath.absolutePath.toString()
     val signature: String
         get() = entity.signature
 }

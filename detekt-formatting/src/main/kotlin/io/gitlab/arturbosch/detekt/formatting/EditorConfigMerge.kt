@@ -3,13 +3,11 @@ package io.gitlab.arturbosch.detekt.formatting
 import com.pinterest.ktlint.core.EditorConfig
 
 /**
- * Creates new EditorConfig by copying the existing EditorConfig with properties values passed by parameters.
- * Values of properties passed by parameters are more important than properties in sourceEditorConfig.
+ * Creates a new [EditorConfig] by copying the existing [EditorConfig] and replacing or adding entries by [overrides].
  */
-fun EditorConfig?.copy(vararg overrides: Pair<String, Any>): EditorConfig {
-    val valuesToOverride = overrides.toMap()
+fun EditorConfig?.copy(overrides: Map<String, Any>): EditorConfig {
     val newValues = HashMap<String, String>()
-    knownEditorConfigProps.forEach { copyProperty(newValues, it, valuesToOverride[it], this) }
+    knownEditorConfigProps.forEach { copyProperty(newValues, it, overrides[it], this) }
     return EditorConfig.fromMap(newValues)
 }
 

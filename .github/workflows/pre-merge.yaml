@@ -3,10 +3,10 @@ name: Pre Merge Checks
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - '*'
+      - '**'
 
 jobs:
   gradle:
@@ -47,17 +47,18 @@ jobs:
 
 
     - name: Setup Java
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.jdk }}
+        distribution: 'adopt'
 
 
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest shadowJarExecutable --parallel -x detekt
+      run: ./gradlew build moveJarForIntegrationTest -x detekt -PwarningsAsErrors=true --stacktrace
     - name: Run detekt-cli --help
-      run: java -jar ./detekt-cli/build/run/detekt --help
+      run: java -jar ./build/detekt-cli-all.jar --help
     - name: Run detekt-cli with argsfile
-      run: java -jar ./detekt-cli/build/run/detekt "@./config/detekt/argsfile"
+      run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
 
 
   verify-generated-config-file:
@@ -74,18 +75,19 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-ubuntu-latest-14-verifygenerator-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        key: cache-gradle-ubuntu-latest-11-verifygenerator-${{ hashFiles('detekt-bom/build.gradle.kts') }}
         restore-keys: |
-          cache-gradle-ubuntu-latest-14-verifygenerator-
-          cache-gradle-ubuntu-latest-14-
+          cache-gradle-ubuntu-latest-11-verifygenerator-
+          cache-gradle-ubuntu-latest-11-
           cache-gradle-ubuntu-latest-
           cache-gradle-
     - name: Setup Java
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
-        java-version: 14
+        java-version: 11
+        distribution: 'adopt'
     - name: Verify Generated Detekt Config File
-      run: ./gradlew verifyGeneratorOutput
+      run: ./gradlew verifyGeneratorOutput --stacktrace
 
 
   compile-test-snippets:
@@ -102,15 +104,16 @@ jobs:
           path: |
             ~/.gradle/caches/
             ~/.gradle/wrapper/
-          key: cache-gradle-ubuntu-latest-14-compiletestsnippets-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+          key: cache-gradle-ubuntu-latest-11-compiletestsnippets-${{ hashFiles('detekt-bom/build.gradle.kts') }}
           restore-keys: |
-            cache-gradle-ubuntu-latest-14-compiletestsnippets-
-            cache-gradle-ubuntu-latest-14-
+            cache-gradle-ubuntu-latest-11-compiletestsnippets-
+            cache-gradle-ubuntu-latest-11-
             cache-gradle-ubuntu-latest-
             cache-gradle-
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: 15
+          java-version: 11
+          distribution: 'adopt'
       - name: Build and compile test snippets
-        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true --parallel
+        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true --stacktrace

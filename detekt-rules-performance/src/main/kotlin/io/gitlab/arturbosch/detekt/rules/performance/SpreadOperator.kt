@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -48,9 +49,8 @@ import org.jetbrains.kotlin.resolve.calls.components.isVararg
  *     strs.forEach { println(it) }
  * }
  * </compliant>
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

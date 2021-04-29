@@ -10,26 +10,27 @@ class TxtOutputReportSpec : Spek({
 
     describe("TXT output report") {
 
-        it("render none") {
+        it("renders none") {
             val report = TxtOutputReport()
             val detektion = TestDetektion()
             val renderedText = ""
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
 
-        it("render one") {
+        it("renders one") {
             val report = TxtOutputReport()
             val detektion = TestDetektion(createFinding())
             val renderedText = "TestSmell - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature\n"
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
 
-        it("render multiple") {
+        it("renders multiple") {
             val report = TxtOutputReport()
             val detektion = TestDetektion(
                 createFinding(ruleName = "TestSmellA"),
                 createFinding(ruleName = "TestSmellB"),
-                createFinding(ruleName = "TestSmellC"))
+                createFinding(ruleName = "TestSmellC")
+            )
             val renderedText = """
                 TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
                 TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature

@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 fun KtModifierListOwner.isPublicNotOverridden() =
-        isPublic && !isOverride()
+    isPublic && !isOverride()
 
 fun KtModifierListOwner.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
 
@@ -28,3 +28,5 @@ fun KtModifierListOwner.isLateinit() = hasModifier(KtTokens.LATEINIT_KEYWORD)
 fun KtModifierListOwner.isInline() = hasModifier(KtTokens.INLINE_KEYWORD)
 
 fun KtModifierListOwner.isExpect() = hasModifier(KtTokens.EXPECT_KEYWORD)
+
+fun KtModifierListOwner.isActual() = hasModifier(KtTokens.ACTUAL_KEYWORD)

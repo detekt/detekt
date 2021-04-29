@@ -24,8 +24,8 @@ fun KtClassOrObject.hasCommentInside() = this.body?.hasCommentInside() ?: false
 fun PsiElement.hasCommentInside(): Boolean {
     val commentKey = Key<Boolean>("comment")
     this.acceptChildren(object : KtTreeVisitorVoid() {
-        override fun visitComment(comment: PsiComment?) {
-            if (comment != null) putUserData(commentKey, true)
+        override fun visitComment(comment: PsiComment) {
+            putUserData(commentKey, true)
         }
     })
     return getUserData(commentKey) == true
@@ -42,6 +42,8 @@ inline fun <reified T : Any> Any.safeAs(): T? = this as? T
 fun KtCallExpression.receiverIsUsed(context: BindingContext): Boolean =
     (parent as? KtQualifiedExpression)?.let {
         val scopeOfApplyCall = parent.parent
-        !((scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
-            (context == BindingContext.EMPTY || !it.isUsedAsExpression(context)))
+        !(
+            (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
+                (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
+            )
     } ?: true

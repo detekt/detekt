@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
@@ -15,22 +17,25 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
 
             describe("using ${builder.gradleBuildName}") {
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to all subprojects individually
                     |without sources in root project using the subprojects block
-                """.trimMargin()) {
-                    val projectLayout = ProjectLayout(0)
-                        .withSubmodule("child1", 2)
-                        .withSubmodule("child2", 4)
+                """.trimMargin()
+                ) {
+                    val projectLayout = ProjectLayout(0).apply {
+                        addSubmodule("child1", 2)
+                        addSubmodule("child2", 4)
+                    }
 
                     val mainBuildFileContent: String = """
-                        |${builder.gradlePluginsSection}
+                        |${builder.gradlePlugins}
                         |
                         |allprojects {
-                        |   ${builder.gradleRepositoriesSection}
+                        |   ${builder.gradleRepositories}
                         |}
                         |subprojects {
-                        |   ${builder.gradleApplyPlugins}
+                        |   ${builder.gradleSubprojectsApplyPlugins}
                         |}
                         |""".trimMargin()
 
@@ -54,20 +59,23 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                     }
                 }
 
-                it("""
+                it(
+                    """
                     |is applied with defaults to main project
                     |and subprojects individually using the allprojects block
-                """.trimMargin()) {
-                    val projectLayout = ProjectLayout(1)
-                        .withSubmodule("child1", 2)
-                        .withSubmodule("child2", 4)
+                """.trimMargin()
+                ) {
+                    val projectLayout = ProjectLayout(1).apply {
+                        addSubmodule("child1", 2)
+                        addSubmodule("child2", 4)
+                    }
 
                     val mainBuildFileContent: String = """
-                        |${builder.gradlePluginsSection}
+                        |${builder.gradlePlugins}
                         |
                         |allprojects {
-                        |   ${builder.gradleRepositoriesSection}
-                        |   ${builder.gradleApplyPlugins}
+                        |   ${builder.gradleRepositories}
+                        |   ${builder.gradleSubprojectsApplyPlugins}
                         |}
                         |""".trimMargin()
 
@@ -92,16 +100,17 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                 }
 
                 it("uses custom configs when configured in allprojects block") {
-                    val projectLayout = ProjectLayout(1)
-                        .withSubmodule("child1", 2)
-                        .withSubmodule("child2", 4)
+                    val projectLayout = ProjectLayout(1).apply {
+                        addSubmodule("child1", 2)
+                        addSubmodule("child2", 4)
+                    }
 
                     val mainBuildFileContent: String = """
-                        |${builder.gradlePluginsSection}
+                        |${builder.gradlePlugins}
                         |
                         |allprojects {
-                        |   ${builder.gradleRepositoriesSection}
-                        |   ${builder.gradleApplyPlugins}
+                        |   ${builder.gradleRepositories}
+                        |   ${builder.gradleSubprojectsApplyPlugins}
                         |
                         |   detekt {
                         |       reportsDir = file("build/detekt-reports")
@@ -135,16 +144,17 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                         |}
                         |""".trimMargin()
 
-                    val projectLayout = ProjectLayout(1)
-                        .withSubmodule("child1", 2)
-                        .withSubmodule("child2", 4, detektConfig = child2DetektConfig)
+                    val projectLayout = ProjectLayout(1).apply {
+                        addSubmodule("child1", 2)
+                        addSubmodule("child2", 4, buildFileContent = child2DetektConfig)
+                    }
 
                     val mainBuildFileContent: String = """
-                        |${builder.gradlePluginsSection}
+                        |${builder.gradlePlugins}
                         |
                         |allprojects {
-                        |   ${builder.gradleRepositoriesSection}
-                        |   ${builder.gradleApplyPlugins}
+                        |   ${builder.gradleRepositories}
+                        |   ${builder.gradleSubprojectsApplyPlugins}
                         |
                         |   detekt {
                         |       reportsDir = file("build/detekt-reports")
@@ -174,9 +184,10 @@ internal class DetektTaskMultiModuleIntegrationTest : Spek({
                 }
 
                 it("can be applied to all files in entire project resulting in 1 report") {
-                    val projectLayout = ProjectLayout(1)
-                        .withSubmodule("child1", 2)
-                        .withSubmodule("child2", 4)
+                    val projectLayout = ProjectLayout(1).apply {
+                        addSubmodule("child1", 2)
+                        addSubmodule("child2", 4)
+                    }
 
                     val detektConfig: String = """
                         |detekt {

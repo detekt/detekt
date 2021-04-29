@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
@@ -42,7 +42,7 @@ private val result = object : Detektion {
     override fun <V> getData(key: Key<V>): V? = userData.get(key)
 
     override fun <V> addData(key: Key<V>, value: V) {
-        userData = userData.plus(key, value)
+        userData = userData.plus(key, requireNotNull(value))
     }
 
     override fun add(notification: Notification) {

@@ -43,7 +43,7 @@ interface ConfigAware : Config {
 
     /**
      * Is this rule specified as active in configuration?
-     * If an rule is not specified in the underlying configuration, we assume it should not be run.
+     * If a rule is not specified in the underlying configuration, we assume it should not be run.
      */
     val active: Boolean get() = valueOrDefault(Config.ACTIVE_KEY, false)
 

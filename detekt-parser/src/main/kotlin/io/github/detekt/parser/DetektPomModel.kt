@@ -21,8 +21,8 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
     init {
         val extension = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
         val extensionClass = TreeCopyHandler::class.java.name
-        synchronized(Extensions.getRootArea()) {
-            arrayOf(project.extensionArea, Extensions.getRootArea())
+        synchronized(@Suppress("DEPRECATION") Extensions.getRootArea()) {
+            arrayOf(project.extensionArea, @Suppress("DEPRECATION") Extensions.getRootArea())
                 .filter { !it.hasExtensionPoint(extension) }
                 .forEach { it.registerExtensionPoint(extension, extensionClass, ExtensionPoint.Kind.INTERFACE) }
         }

@@ -10,10 +10,12 @@ class LongParameterListSpec : Spek({
 
     val defaultThreshold = 2
     val defaultConfig by memoized {
-        TestConfig(mapOf(
-            LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
-            LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
-        ))
+        TestConfig(
+            mapOf(
+                LongParameterList.FUNCTION_THRESHOLD to defaultThreshold,
+                LongParameterList.CONSTRUCTOR_THRESHOLD to defaultThreshold
+            )
+        )
     }
 
     val subject by memoized { LongParameterList(defaultConfig) }
@@ -81,10 +83,12 @@ class LongParameterListSpec : Spek({
         }
 
         it("does not report long parameter list for constructors of data classes if asked") {
-            val config = TestConfig(mapOf(
-                LongParameterList.IGNORE_DATA_CLASSES to "true",
-                LongParameterList.CONSTRUCTOR_THRESHOLD to "1"
-            ))
+            val config = TestConfig(
+                mapOf(
+                    LongParameterList.IGNORE_DATA_CLASSES to "true",
+                    LongParameterList.CONSTRUCTOR_THRESHOLD to "1"
+                )
+            )
             val rule = LongParameterList(config)
             val code = "data class Data(val a: Int)"
             assertThat(rule.compileAndLint(code)).isEmpty()
@@ -93,11 +97,13 @@ class LongParameterListSpec : Spek({
         describe("constructors and functions with ignored annotations") {
 
             val config by memoized {
-                TestConfig(mapOf(
-                    LongParameterList.IGNORE_ANNOTATED to listOf("Generated", "kotlin.Deprecated", "kotlin.jvm.JvmName"),
-                    LongParameterList.FUNCTION_THRESHOLD to 1,
-                    LongParameterList.CONSTRUCTOR_THRESHOLD to 1
-                ))
+                TestConfig(
+                    mapOf(
+                        LongParameterList.IGNORE_ANNOTATED to listOf("Generated", "kotlin.Deprecated", "kotlin.jvm.JvmName"),
+                        LongParameterList.FUNCTION_THRESHOLD to 1,
+                        LongParameterList.CONSTRUCTOR_THRESHOLD to 1
+                    )
+                )
             }
 
             val rule by memoized { LongParameterList(config) }

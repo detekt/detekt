@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -45,9 +46,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  *
  * @configuration mustBeFirst - name should only be checked if the file starts with a class or object (default: `true`)
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -79,8 +79,14 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
             val filename = file.fileNameWithoutSuffix()
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
                 val entity = Entity.from(declaration).copy(ktElement = file)
-                report(CodeSmell(issue, entity, "The file name '$filename' " +
-                    "does not match the name of the single top-level declaration '$declarationName'."))
+                report(
+                    CodeSmell(
+                        issue,
+                        entity,
+                        "The file name '$filename' " +
+                            "does not match the name of the single top-level declaration '$declarationName'."
+                    )
+                )
             }
         }
     }

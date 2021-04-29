@@ -2,13 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
 /**
  * This rule set contains rules that report complex code.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class ComplexityProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "complexity"

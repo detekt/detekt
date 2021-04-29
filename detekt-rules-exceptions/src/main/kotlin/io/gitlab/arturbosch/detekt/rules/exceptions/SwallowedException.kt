@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -26,7 +27,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
- * passed into a newly thrown exception.
+ * passed (e.g. as a cause) into a newly thrown exception.
+ *
+ * The exception types configured in `ignoredExceptionTypes` indicate nonexceptional outcomes.
+ * These by default configured exception types are part of Java.
+ * Therefore, Kotlin developers have to handle them by using the catch clause.
+ * For that reason, this rule ignores that these configured exception types are caught.
  *
  * <noncompliant>
  * fun foo() {
@@ -63,7 +69,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * }
  * </compliant>
  *
- * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
+ * @configuration ignoredExceptionTypes - exception types which should be ignored (both in the catch clause and body)
  * (default: `- InterruptedException
  *            - NumberFormatException
  *            - ParseException
@@ -71,20 +77,18 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'_|(ignore|expected).*'`)
  */
+@ActiveByDefault(since = "1.16.0")
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("SwallowedException", Severity.CodeSmell,
+    override val issue = Issue(
+        "SwallowedException",
+        Severity.CodeSmell,
         "The caught exception is swallowed. The original exception could be lost.",
-        Debt.TWENTY_MINS)
-
-    private val defaultIgnoredExceptions = listOf(
-            "NumberFormatException",
-            "InterruptedException",
-            "ParseException",
-            "MalformedURLException"
+        Debt.TWENTY_MINS
     )
+
     private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
-            .map { it.removePrefix("*").removeSuffix("*") }
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
@@ -92,7 +96,8 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
         if (!ignoredExceptionTypes.any { exceptionType?.contains(it, ignoreCase = true) == true } &&
             isExceptionSwallowedOrUnused(catchClause) &&
-            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
+            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
+        ) {
             report(CodeSmell(issue, Entity.from(catchClause), issue.description))
         }
     }
@@ -103,7 +108,9 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
         val catchBody = catchClause.catchBody ?: return true
-        return !catchBody.anyDescendantOfType<KtNameReferenceExpression> { it.text == parameterName }
+        return !catchBody.anyDescendantOfType<KtNameReferenceExpression> {
+            it.text in ignoredExceptionTypes || it.text == parameterName
+        }
     }
 
     private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
@@ -165,5 +172,12 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
         const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+
+        internal val defaultIgnoredExceptions = listOf(
+            "NumberFormatException",
+            "InterruptedException",
+            "ParseException",
+            "MalformedURLException"
+        )
     }
 }

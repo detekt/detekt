@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -34,19 +35,20 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these
  * annotation class names (default: `[]`); (e.g. ['Inject', 'Module', 'Suppress']);
  * the most common case is for dependency injection where constructors are annotated with @Inject.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class LongParameterList(
     config: Config = Config.empty
 ) : Rule(config) {
 
-    override val issue = Issue("LongParameterList",
-            Severity.Maintainability,
-            "The more parameters a function has the more complex it is. Long parameter lists are often " +
-                    "used to control complex algorithms and violate the Single Responsibility Principle. " +
-                    "Prefer functions with short parameter lists.",
-            Debt.TWENTY_MINS)
+    override val issue = Issue(
+        "LongParameterList",
+        Severity.Maintainability,
+        "The more parameters a function has the more complex it is. Long parameter lists are often " +
+            "used to control complex algorithms and violate the Single Responsibility Principle. " +
+            "Prefer functions with short parameter lists.",
+        Debt.TWENTY_MINS
+    )
 
     private val functionThreshold: Int =
         valueOrDefault(FUNCTION_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_FUNCTION_THRESHOLD))
@@ -105,14 +107,18 @@ class LongParameterList(
 
         if (parameterNumber >= threshold) {
             val parameterPrint = function.valueParameters.joinToString(separator = ", ") {
-                    it.nameAsSafeName.identifier + ": " + it.typeReference?.text
+                it.nameAsSafeName.identifier + ": " + it.typeReference?.text
             }
 
-            report(ThresholdedCodeSmell(issue,
+            report(
+                ThresholdedCodeSmell(
+                    issue,
                     Entity.from(parameterList),
                     Metric("SIZE", parameterNumber, threshold),
                     "The $identifier($parameterPrint) has too many parameters. " +
-                            "The current threshold is set to $threshold."))
+                        "The current threshold is set to $threshold."
+                )
+            )
         }
     }
 

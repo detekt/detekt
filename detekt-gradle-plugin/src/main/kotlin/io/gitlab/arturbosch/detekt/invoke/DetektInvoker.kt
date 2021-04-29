@@ -48,19 +48,19 @@ internal class DefaultCliInvoker(
         try {
             val loader = classLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
-            val runner = clazz.getMethod("buildRunner",
+            val runner = clazz.getMethod(
+                "buildRunner",
                 Array<String>::class.java,
                 PrintStream::class.java,
                 PrintStream::class.java
             ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
             runner::class.java.getMethod("execute").invoke(runner)
         } catch (reflectionWrapper: InvocationTargetException) {
-            val cause = reflectionWrapper.targetException
-            val message = cause.message
+            val message = reflectionWrapper.targetException.message
             if (message != null && isBuildFailure(message) && ignoreFailures) {
                 return
             }
-            throw GradleException(message ?: "There was a problem running detekt.", cause)
+            throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
         }
     }
 

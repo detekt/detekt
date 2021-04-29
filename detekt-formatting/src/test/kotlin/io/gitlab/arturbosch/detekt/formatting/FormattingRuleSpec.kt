@@ -15,21 +15,25 @@ class FormattingRuleSpec : Spek({
     describe("formatting rules can be suppressed") {
 
         it("does support suppression only on file level") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 @file:Suppress("NoLineBreakBeforeAssignment")
                 fun main() 
                 = Unit
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings).isEmpty()
         }
 
         it("does not support suppression on node level") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 @Suppress("NoLineBreakBeforeAssignment")
                 fun main() 
                 = Unit
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings).hasSize(1)
         }
@@ -38,20 +42,24 @@ class FormattingRuleSpec : Spek({
     describe("formatting rules have a signature") {
 
         it("has no package name") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 fun main() 
                 = Unit
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings.first().signature).isEqualTo("Test.kt:2")
         }
 
         it("has a package name") {
-            val findings = subject.lint("""
+            val findings = subject.lint(
+                """
                 package test.test.test
                 fun main() 
                 = Unit
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             assertThat(findings.first().signature).isEqualTo("test.test.test.Test.kt:3")
         }
@@ -68,6 +76,6 @@ class FormattingRuleSpec : Spek({
             expectedPath
         )
 
-        assertThat(findings.first().location.file).isEqualTo(expectedPath)
+        assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
     }
 })

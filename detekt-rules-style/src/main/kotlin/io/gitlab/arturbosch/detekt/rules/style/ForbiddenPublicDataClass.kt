@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 
 /**
@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * @configuration ignorePackages - ignores classes in the specified packages.
  * (default: `['*.internal', '*.internal.*']`)
  */
+@ActiveByDefault(since = "1.16.0")
 class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
@@ -46,9 +47,6 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         .distinct()
         .map { it.simplePatternToRegex() }
         .toList()
-
-    override fun visitCondition(root: KtFile): Boolean =
-        super.visitCondition(root) && filters != null
 
     override fun visitClass(klass: KtClass) {
         val packageName = klass.containingKtFile.packageDirective?.packageNameExpression?.text

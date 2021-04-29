@@ -39,11 +39,10 @@ inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
     }
 }
 
-inline fun MarkdownContent.referenceToHeading(reference: () -> String) =
-        "[${reference()}](#${reference().replace(' ', '-').toLowerCase()})"
-
+// Note: Use double-backticks here to be able to render code that itself contains backticks.
 inline fun MarkdownContent.code(code: () -> String) = "``${code()}``"
-inline fun MarkdownContent.codeBlock(code: () -> String) = "```kotlin\n${code()}\n```"
+
+inline fun MarkdownContent.codeBlock(syntax: String = "kotlin", code: () -> String) = "```$syntax\n${code()}\n```"
 
 fun MarkdownContent.emptyLine() = append("")
 
@@ -57,4 +56,4 @@ inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
 }
 
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
-inline fun MarkdownList.description(description: () -> String) = append("   ${description()}\n")
+inline fun MarkdownList.description(description: () -> String) = append("  ${description()}\n")

@@ -6,7 +6,9 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.DEFAULT_LICENSE_TEMPLATE_FILE
+import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.DEFAULT_LICENSE_TEMPLATE_IS_REGEX
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_FILE
+import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_IS_REGEX
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.RULE_NAME
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
@@ -41,6 +43,10 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
             .subConfig(RULE_NAME)
             .valueOrDefault(PARAM_LICENSE_TEMPLATE_FILE, DEFAULT_LICENSE_TEMPLATE_FILE)
 
+        fun isRegexTemplate(): Boolean = config.subConfig("comments")
+            .subConfig(RULE_NAME)
+            .valueOrDefault(PARAM_LICENSE_TEMPLATE_IS_REGEX, DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
+
         fun loadLicence(dir: Path): String {
             val templateFile = dir.resolve(getPathToTemplate())
 
@@ -48,7 +54,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
                 """
                 Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
                 Create file license header file or check your running path.
-            """.trimIndent()
+                """.trimIndent()
             }
 
             return Files.newBufferedReader(templateFile)
@@ -56,24 +62,35 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
                 .let(StringUtilRt::convertLineSeparators)
         }
 
-        fun cacheLicence(dir: Path) {
+        fun cacheLicence(dir: Path, isRegexTemplate: Boolean) {
             val licenceHeader = loadLicence(dir)
+            if (!isRegexTemplate) {
+                for (file in files) {
+                    file.putUserData(LICENCE_KEY, licenceHeader)
+                }
+                return
+            }
+            val licenseHeaderRegex = licenceHeader.toRegex(RegexOption.MULTILINE)
             for (file in files) {
-                file.putUserData(LICENCE_KEY, licenceHeader)
+                file.putUserData(LICENCE_REGEX_KEY, licenseHeaderRegex)
             }
         }
 
         if (configPath != null && shouldRuleRun()) {
-            val configDir = configPath?.parent
-            if (configDir != null) {
-                cacheLicence(configDir)
-            }
+            val configDir = configPath?.parent ?: return
+            cacheLicence(configDir, isRegexTemplate())
         }
     }
 }
 
 internal val LICENCE_KEY = Key.create<String>("LICENCE_HEADER")
+internal val LICENCE_REGEX_KEY = Key.create<Regex>("LICENCE_HEADER_REGEX")
 
 internal fun KtFile.hasLicenseHeader(): Boolean = this.getUserData(LICENCE_KEY) != null
 
 internal fun KtFile.getLicenseHeader(): String = this.getUserData(LICENCE_KEY) ?: error("License header expected")
+
+internal fun KtFile.hasLicenseHeaderRegex(): Boolean = this.getUserData(LICENCE_REGEX_KEY) != null
+
+internal fun KtFile.getLicenseHeaderRegex(): Regex =
+    this.getUserData(LICENCE_REGEX_KEY) ?: error("License header regex expected")

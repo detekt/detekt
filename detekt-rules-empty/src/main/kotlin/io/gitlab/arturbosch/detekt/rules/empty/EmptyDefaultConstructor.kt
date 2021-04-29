@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -13,15 +14,15 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
 /**
  * Reports empty default constructors. Empty blocks of code serve no purpose and should be removed.
- *
- * @active since v1.0.0
  */
+@ActiveByDefault(since = "1.0.0")
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         if (hasSuitableSignature(constructor) &&
-                isNotCalled(constructor) &&
-                !isExpectedAnnotationClass(constructor)) {
+            isNotCalled(constructor) &&
+            !isExpectedAnnotationClass(constructor)
+        ) {
             report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
         }
     }
@@ -38,9 +39,9 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
     }
 
     private fun hasSuitableSignature(constructor: KtPrimaryConstructor) =
-            hasPublicVisibility(constructor.visibilityModifierType()) &&
-                    constructor.annotationEntries.isEmpty() &&
-                    constructor.valueParameters.isEmpty()
+        hasPublicVisibility(constructor.visibilityModifierType()) &&
+            constructor.annotationEntries.isEmpty() &&
+            constructor.valueParameters.isEmpty()
 
     private fun hasPublicVisibility(visibility: KtModifierKeywordToken?): Boolean {
         return visibility == null || visibility == KtTokens.PUBLIC_KEYWORD

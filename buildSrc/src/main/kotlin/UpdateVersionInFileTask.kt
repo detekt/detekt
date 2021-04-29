@@ -4,38 +4,23 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.property
-import java.io.File
 
-open class UpdateVersionInFileTask : DefaultTask(), Runnable {
+abstract class UpdateVersionInFileTask : DefaultTask() {
 
-    private val fileProp: RegularFileProperty = project.objects.fileProperty()
     @get:InputFile
-    var fileToUpdate: File
-        get() = fileProp.get().asFile
-        set(value) {
-            fileProp.set(value)
-        }
-
-    private val containingProp: Property<String> = project.objects.property()
+    abstract val fileToUpdate: RegularFileProperty
 
     @get:Input
-    var linePartToFind: String
-        get() = containingProp.get()
-        set(value) {
-            containingProp.set(value)
-        }
+    abstract val linePartToFind: Property<String>
 
-    @Input
-    var lineTransformation: ((String) -> String)? = null
+    @get:Input
+    abstract val lineTransformation: Property<String>
 
     @TaskAction
-    override fun run() {
-        val transformation = lineTransformation
-        checkNotNull(transformation) { "lineTransformation property is not set." }
-        val newContent = fileToUpdate.readLines()
-            .joinToString(LN) { if (it.contains(linePartToFind)) transformation(it) else it }
-        fileToUpdate.writeText("$newContent$LN")
+    fun run() {
+        val newContent = fileToUpdate.asFile.get().readLines()
+            .joinToString(LN) { if (it.contains(linePartToFind.get())) lineTransformation.get() else it }
+        fileToUpdate.asFile.get().writeText("$newContent$LN")
     }
 
     companion object {

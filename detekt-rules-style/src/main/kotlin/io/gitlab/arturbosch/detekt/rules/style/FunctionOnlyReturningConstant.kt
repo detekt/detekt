@@ -9,7 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -33,23 +35,29 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
+ * @configuration ignoreActualFunction - if actual functions should be ignored (default: `true`)
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
  * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check
  * (default: `['dagger.Provides']`)
- *
- * @active since v1.2.0
  */
+@ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
         "A function that only returns a constant is misleading. " +
             "Consider declaring a constant instead",
-        Debt.TEN_MINS)
+        Debt.TEN_MINS
+    )
 
     private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
+    private val ignoreActualFunction = valueOrDefault(IGNORE_ACTUAL_FUNCTION, true)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "describeContents"))
     private val excludeAnnotatedFunctions = valueOrDefaultCommaSeparated(
-            EXCLUDE_ANNOTATED_FUNCTION, listOf("dagger.Provides"))
+        EXCLUDE_ANNOTATED_FUNCTION,
+        listOf("dagger.Provides")
+    )
         .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder
 
@@ -59,18 +67,23 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (checkOverridableFunction(function) &&
+        if (isNotIgnored(function) &&
             isNotExcluded(function) &&
-            isReturningAConstant(function)) {
+            isReturningAConstant(function)
+        ) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atName(function),
                     "${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."
-                ))
+                )
+            )
         }
         super.visitNamedFunction(function)
     }
+
+    private fun isNotIgnored(function: KtNamedFunction): Boolean =
+        checkOverridableFunction(function) && checkActualFunction(function)
 
     private fun checkOverridableFunction(function: KtNamedFunction): Boolean =
         if (ignoreOverridableFunction) {
@@ -83,6 +96,13 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         val containingClass = function.containingClass()
         return containingClass != null && containingClass.isInterface()
     }
+
+    private fun checkActualFunction(function: KtNamedFunction): Boolean =
+        if (ignoreActualFunction) {
+            !function.isActual()
+        } else {
+            true
+        }
 
     private fun isNotExcluded(function: KtNamedFunction) =
         !excludedFunctions.contains(function.name) && !annotationExcluder.shouldExclude(function.annotationEntries)
@@ -104,6 +124,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     companion object {
         const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
+        const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
         const val EXCLUDED_FUNCTIONS = "excludedFunctions"
         const val EXCLUDE_ANNOTATED_FUNCTION = "excludeAnnotatedFunction"
     }

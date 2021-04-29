@@ -17,7 +17,7 @@ interface Detektion {
     fun <V> getData(key: Key<V>): V?
 
     /**
-     * Stores an arbitrary value inside the result binded to the given key.
+     * Stores an arbitrary value inside the result bound to the given key.
      */
     fun <V> addData(key: Key<V>, value: V)
 

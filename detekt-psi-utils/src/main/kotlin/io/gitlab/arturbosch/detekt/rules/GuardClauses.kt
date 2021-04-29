@@ -29,7 +29,7 @@ inline fun <reified T : KtExpression> KtExpression.isGuardClause(): Boolean {
 fun <T : KtExpression> KtExpression.isIfConditionGuardClause(descendantExpr: T): Boolean {
     val ifExpr = this as? KtIfExpression ?: return false
     return ifExpr.`else` == null &&
-            descendantExpr === ifExpr.then?.lastBlockStatementOrThis()
+        descendantExpr === ifExpr.then?.lastBlockStatementOrThis()
 }
 
 fun KtExpression.isElvisOperatorGuardClause(): Boolean {

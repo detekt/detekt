@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.github.detekt.psi.FilePath
+import io.github.detekt.psi.toFilePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
@@ -7,16 +9,32 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import java.nio.file.Paths
 
 /**
  * Specifies a position within a source code fragment.
  */
-data class Location(
+data class Location @Deprecated("Consider relative path by passing a [FilePath]") @JvmOverloads constructor(
     val source: SourceLocation,
     val text: TextLocation,
-    val file: String
+    @Deprecated(
+        "Use filePath instead",
+        ReplaceWith(
+            "filePath.absolutePath.toString()"
+        )
+    )
+    val file: String,
+    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
 ) : Compactable {
 
+    @Suppress("DEPRECATION")
+    constructor(
+        source: SourceLocation,
+        text: TextLocation,
+        filePath: FilePath
+    ) : this(source, text, filePath.absolutePath.toString(), filePath)
+
+    @Suppress("DEPRECATION")
     @Deprecated(
         """
         locationString was removed and won't get passed to the main constructor.
@@ -34,7 +52,7 @@ data class Location(
         file: String
     ) : this(source, text, file)
 
-    override fun compact(): String = "$file:$source"
+    override fun compact(): String = "${filePath.absolutePath}:$source"
 
     companion object {
         /**
@@ -45,21 +63,22 @@ data class Location(
             val start = startLineAndColumn(element, offset)
             val sourceLocation = SourceLocation(start.line, start.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            val fileName = element.containingFile.name
-            return Location(sourceLocation, textLocation, fileName)
+            return Location(sourceLocation, textLocation, element.containingFile.toFilePath())
         }
 
         /**
          * Determines the line and column of a [PsiElement] in the source file.
          */
-        @Suppress("TooGenericExceptionCaught")
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
         fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
             return try {
                 val range = element.textRange
-                DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
-                    TextRange(range.startOffset + offset, range.endOffset + offset))
+                DiagnosticUtils.getLineAndColumnInPsiFile(
+                    element.containingFile,
+                    TextRange(range.startOffset + offset, range.endOffset + offset)
+                )
             } catch (e: IndexOutOfBoundsException) {
-                // #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
+                // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw exception.
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
             }
         }

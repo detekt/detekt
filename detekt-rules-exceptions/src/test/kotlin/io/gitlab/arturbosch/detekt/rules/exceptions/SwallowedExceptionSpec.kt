@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.net.MalformedURLException
-import java.text.ParseException
 
 class SwallowedExceptionSpec : Spek({
     val subject by memoized { SwallowedException() }
@@ -207,13 +205,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        listOf(
-            InterruptedException::class.java.simpleName,
-            MalformedURLException::class.java.simpleName,
-            NumberFormatException::class.java.simpleName,
-            ParseException::class.java.simpleName
-        ).forEach { exceptionName ->
-            it("ignores $exceptionName by default") {
+        SwallowedException.defaultIgnoredExceptions.forEach { exceptionName ->
+            it("ignores $exceptionName in the catch clause by default") {
                 val code = """
                 import java.net.MalformedURLException
                 import java.text.ParseException
@@ -222,6 +215,27 @@ class SwallowedExceptionSpec : Spek({
                     try {
                     } catch (e: $exceptionName) {
                         throw Exception()
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("ignores $exceptionName in the catch body by default") {
+                val exceptionInstantiation = if (exceptionName == "ParseException") {
+                    "$exceptionName(\"\", 0)"
+                } else {
+                    "$exceptionName(\"\")"
+                }
+
+                val code = """
+                import java.net.MalformedURLException
+                import java.text.ParseException
+
+                fun f() {
+                    try {
+                    } catch (e: Exception) {
+                        throw $exceptionInstantiation
                     }
                 }
             """

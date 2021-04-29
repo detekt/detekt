@@ -14,7 +14,7 @@ internal class WorkaroundConfigurationKtSpec : Spek({
         val config by memoized {
             ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/empty.yml")) }
-                rules { activateExperimentalRules = true }
+                rules { activateAllRules = true }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
@@ -44,7 +44,7 @@ internal class WorkaroundConfigurationKtSpec : Spek({
         val config by memoized {
             ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/fail-fast-will-override-here.yml")) }
-                rules { activateExperimentalRules = true }
+                rules { activateAllRules = true }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
@@ -117,7 +117,7 @@ internal class WorkaroundConfigurationKtSpec : Spek({
                 }
                 rules {
                     autoCorrect = false
-                    activateExperimentalRules = true
+                    activateAllRules = true
                 }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())

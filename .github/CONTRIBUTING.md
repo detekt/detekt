@@ -14,49 +14,12 @@
 
 - ... do not forget to add the new rule to a `RuleSetProvider` (e.g. StyleGuideProvider)
 - ... do not forget to write a description for the issue of the new rule.
-- Add the correct KDoc to the Rule class. This KDoc is used to generate wiki pages and the `default-detekt-config.yml`
-automatically. The format of the KDoc should be as follows:
-
-    ```kotlin
-    /**
-     * This is a nice description for the rule, explaining what it checks, why it exists and how violations can be
-     * solved.
-     *
-     * <noncompliant>
-     * // add the non-compliant code example here
-     * </noncompliant>
-     *
-     * <compliant>
-     * // add the compliant code example here
-     * </compliant>
-     *
-     * @configuration name - Description for the configuration option (default: `whatever should be the default`)
-     */
-    class SomeRule : Rule {
-  
-    }
-    ```
-    
-    The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
-    references that explain the rationale for the rule if possible.
-    The `<noncompliant>` and `<compliant>` code examples should be added right after the description of the rule.
-    The `@configuration` tag should follow the correct pattern. The name of the configuration option *has* to match the 
-    actual name used in the code, otherwise an invalid `default-detekt-config.yml` will be generated and the rule won't
-    function correctly by default. 
-    The default value will be taken as is for the configuration option and pasted into the `default-detekt-config.yml`.
-    
-    A `@configuration` tag as described above will translate to a rule entry in the `default-detekt-config.yml`:
-    ```yml
-    SomeRule:
-       active: false
-       name: whatever should be the default
-    ```
-
+- ... add the [correct KDoc](#contents-and-structure-of-a-rules-kdoc) and [annotations](#rule-annotations) to your `Rule` class. This is used to generate documentation pages and the `default-detekt-config.yml` automatically.
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule.
 Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
 Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
-- ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
-as well as add the new/changed rules to the documentation.
+- ... run `./gradlew generateDocumentation` to add your rule and its config options to the `default-detekt-config.yml`.
+- ... do not forget to run `./gradlew build`. This will execute tests locally.
 - To print the AST of sources you can pass the `--print-ast` flag to the CLI which will print each
 Kotlin files AST. This can be helpful when implementing and debugging rules.
 - To view the AST (PSI) of your source code you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
@@ -64,7 +27,58 @@ Kotlin files AST. This can be helpful when implementing and debugging rules.
 
 After some time and testing there is a chance this rule will become active on default.
 
-Rules that contain an `@active` tag in their KDoc will be marked as active in the `default-detekt-config.yml`.
+#### Contents and structure of a rule's KDoc
+
+```kotlin
+/**
+  * This is a nice description for the rule explaining what it checks, why it
+  * exists and how violations can be solved.
+  *
+  * <noncompliant>
+  * // add the non-compliant code example here
+  * </noncompliant>
+  *
+  * <compliant>
+  * // add the compliant code example here
+  * </compliant>
+  */
+class SomeRule(config: Config = Config.empty) : Rule(config) {
+
+}
+```
+
+The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
+references that explain the rationale for the rule if possible.
+
+The `<noncompliant>` and `<compliant>` code examples should be added right after the description of the rule.
+
+#### Rule annotations
+
+```kotlin
+@ActiveByDefault(since = "1.0.0")
+@RequiresTypeResolution
+class SomeRule(config: Config = Config.empty) : Rule(config) {
+
+    @Configuration("This is the description for the configuration parameter below.")
+    private val name: String by config(default = "whatever should be the default")
+
+}
+```
+
+Use the `@Configuration` annotation in combination with the `config` delegate to create a configurable property for your rule. The name of the property will become the key and the provided default will be the value in the `default-detekt-config.yml`. All information are also used to generate the rule documentation in the wiki. 
+Note that a property that is marked with `@Configuration` must use the config delegate (and vice versa).
+
+Rules annotated with `@ActiveByDefault` will be marked as active in the `default-detekt-config.yml`. Generally this will not be the case for new rules.
+
+A rule that requires type resolution must be marked with `@RequiresTypeResolution`. See [the type resolution wiki page](../docs/pages/gettingstarted/type-resolution.md) for more detail on this topic.
+
+The rule defined above will translate to a rule entry in the `default-detekt-config.yml`:
+```yml
+SomeRule:
+    active: true
+    name: 'whatever should be the default'
+```
+
 
 ### When updating the website ...
 

@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
@@ -12,8 +14,10 @@ import org.spekframework.spek2.style.specification.describe
 internal object DetektTaskDslTest : Spek({
 
     describe("When applying the detekt gradle plugin") {
+
         lateinit var gradleRunner: DslGradleRunner
         lateinit var result: BuildResult
+        val defaultDetektVersion = loadDetektVersion(DetektTaskDslTest::class.java.classLoader)
 
         listOf(groovy().dryRun(), kotlin().dryRun()).forEach { builder ->
             context("using ${builder.gradleBuildName}") {
@@ -43,9 +47,17 @@ internal object DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--report txt:$textReportFile")
                     }
 
-                    it("disables sarif report to default location") {
+                    it("enables sarif report to default location") {
                         val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
-                        assertThat(result.output).doesNotContain("--report sarif:$sarifReportFile")
+                        assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                    }
+
+                    it("set as input all the kotlin files in src/main/java and src/main/kotlin") {
+                        val file1 = gradleRunner.projectFile("src/main/java/My0Root0Class.kt")
+                        val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
+                        val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
+                        val file4 = gradleRunner.projectFile("src/test/kotlin/My3Root0Class.kt")
+                        assertThat(result.output).contains("--input $file1,$file2,$file3,$file4 ")
                     }
                 }
 
@@ -97,6 +109,28 @@ internal object DetektTaskDslTest : Spek({
                     }
                 }
 
+                describe("with custom baseline file that doesn't exist") {
+                    val baselineFilename = "detekt-baseline-no-exist.xml"
+
+                    beforeGroup {
+
+                        val config = """
+                        |detekt {
+                        |   baseline = file("$baselineFilename")
+                        |}
+                        """
+
+                        gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+                        result = gradleRunner.runDetektTask()
+                    }
+
+                    it("doesn't set the baseline parameter") {
+                        assertThat(result.output).doesNotContain("--baseline")
+                    }
+                }
+
                 describe("with custom input directories") {
                     val customSrc1 = "gensrc/kotlin"
                     val customSrc2 = "src/main/kotlin"
@@ -109,7 +143,10 @@ internal object DetektTaskDslTest : Spek({
                         |}
                         """
 
-                        val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
+                        val projectLayout = ProjectLayout(
+                            numberOfSourceFilesInRootPerSourceDir = 1,
+                            srcDirs = listOf(customSrc1, customSrc2)
+                        )
                         gradleRunner = builder
                             .withProjectLayout(projectLayout)
                             .withDetektConfig(config)
@@ -118,9 +155,9 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("sets input parameter to absolute filenames of all source files") {
-                        val file1 = gradleRunner.projectFile("$customSrc1/MyRoot0Class.kt")
-                        val file2 = gradleRunner.projectFile("$customSrc2/MyRoot0Class.kt")
-                        val expectedInputParam = "--input $file1,$file2"
+                        val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
+                        val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
+                        val expectedInputParam = "--input $file1,$file2 "
                         assertThat(result.output).contains(expectedInputParam)
                     }
 
@@ -374,6 +411,7 @@ internal object DetektTaskDslTest : Spek({
                         |    parallel = true
                         |    disableDefaultRuleSets = true
                         |    failFast = true
+                        |    allRules = true
                         |    autoCorrect = true
                         |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
@@ -402,6 +440,10 @@ internal object DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("Ignore failures: true")
                     }
 
+                    it("enables all rules") {
+                        assertThat(result.output).contains("--all-rules")
+                    }
+
                     it("enables fail fast") {
                         assertThat(result.output).contains("--fail-fast")
                     }
@@ -419,7 +461,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                             |dependencies {
-                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                            |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
                             |}
                             """
 
@@ -434,7 +476,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     it("adds the formatting lib to the project dependencies") {
-                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
                     }
                 }
 
@@ -469,8 +511,8 @@ internal object DetektTaskDslTest : Spek({
                 val builder = groovy().dryRun()
                 beforeGroup {
                     val config = """
-                        |task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
-                        |    description = "Runs a failfast detekt build."
+                        |task myDetekt(type: io.gitlab.arturbosch.detekt.Detekt) {
+                        |    description = "Runs a custom detekt build."
                         |
                         |    setSource("${"$"}projectDir")
                         |    config.setFrom(files("config.yml"))
@@ -480,21 +522,22 @@ internal object DetektTaskDslTest : Spek({
                         |    parallel = true
                         |    disableDefaultRuleSets = true
                         |    buildUponDefaultConfig = true
-                        |    failFast = false
+                        |    allRules = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
                         |    reports {
                         |        xml {
                         |            enabled = true
-                        |            destination = file("build/reports/failfast.xml")
+                        |            destination = file("build/reports/mydetekt.xml")
                         |        }
-                        |        html.destination = file("build/reports/failfast.html")
-                        |        txt.destination = file("build/reports/failfast.txt")
+                        |        html.destination = file("build/reports/mydetekt.html")
+                        |        txt.destination = file("build/reports/mydetekt.txt")
                         |        sarif {
                         |            enabled = true
-                        |            destination = file("build/reports/failfast.sarif")
+                        |            destination = file("build/reports/mydetekt.sarif")
                         |        }
                         |    }
+                        |    basePath = projectDir
                         |}
                         """
 
@@ -503,31 +546,35 @@ internal object DetektTaskDslTest : Spek({
                         .build()
                         .apply { writeProjectFile("config.yml", "") }
 
-                    result = gradleRunner.runTasks("detektFailFast")
+                    result = gradleRunner.runTasks("myDetekt")
                 }
 
                 it("completes successfully") {
-                    assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                    assertThat(result.task(":myDetekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
                 it("enables xml report to specified location") {
-                    val xmlReportFile = gradleRunner.projectFile("build/reports/failfast.xml")
+                    val xmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
                     assertThat(result.output).contains("--report xml:$xmlReportFile")
                 }
 
                 it("enables html report to specified location") {
-                    val htmlReportFile = gradleRunner.projectFile("build/reports/failfast.html")
+                    val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
                     assertThat(result.output).contains("--report html:$htmlReportFile")
                 }
 
                 it("enables text report to specified location") {
-                    val textReportFile = gradleRunner.projectFile("build/reports/failfast.txt")
+                    val textReportFile = gradleRunner.projectFile("build/reports/mydetekt.txt")
                     assertThat(result.output).contains("--report txt:$textReportFile")
                 }
 
                 it("enables sarif report to specified location") {
-                    val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
+                    val sarifReportFile = gradleRunner.projectFile("build/reports/mydetekt.sarif")
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                }
+
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {
@@ -554,8 +601,8 @@ internal object DetektTaskDslTest : Spek({
                 val builder = kotlin().dryRun()
                 beforeGroup {
                     val config = """
-                        |task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
-                        |    description = "Runs a failfast detekt build."
+                        |task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
+                        |    description = "Runs a custom detekt build."
                         |
                         |    setSource(files("${"$"}projectDir"))
                         |    setIncludes(listOf("**/*.kt", "**/*.kts"))
@@ -566,20 +613,22 @@ internal object DetektTaskDslTest : Spek({
                         |    disableDefaultRuleSets = true
                         |    buildUponDefaultConfig = true
                         |    failFast = false
+                        |    allRules = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
                         |    reports {
                         |        xml {
                         |            enabled = true
-                        |            destination = file("build/reports/failfast.xml")
+                        |            destination = file("build/reports/mydetekt.xml")
                         |        }
-                        |        html.destination = file("build/reports/failfast.html")
-                        |        txt.destination = file("build/reports/failfast.txt")
+                        |        html.destination = file("build/reports/mydetekt.html")
+                        |        txt.destination = file("build/reports/mydetekt.txt")
                         |        sarif {
                         |            enabled = true
-                        |            destination = file("build/reports/failfast.sarif")
+                        |            destination = file("build/reports/mydetekt.sarif")
                         |        }
                         |    }
+                        |    basePath = projectDir.toString()
                         |}
                         """
 
@@ -588,31 +637,35 @@ internal object DetektTaskDslTest : Spek({
                         .build()
                         .apply { writeProjectFile("config.yml", "") }
 
-                    result = gradleRunner.runTasks("detektFailFast")
+                    result = gradleRunner.runTasks("myDetekt")
                 }
 
                 it("completes successfully") {
-                    assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                    assertThat(result.task(":myDetekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
                 it("enables xml report to specified location") {
-                    val xmlReportFile = gradleRunner.projectFile("build/reports/failfast.xml")
+                    val xmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
                     assertThat(result.output).contains("--report xml:$xmlReportFile")
                 }
 
                 it("enables html report to specified location") {
-                    val htmlReportFile = gradleRunner.projectFile("build/reports/failfast.html")
+                    val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
                     assertThat(result.output).contains("--report html:$htmlReportFile")
                 }
 
                 it("enables text report to specified location") {
-                    val textReportFile = gradleRunner.projectFile("build/reports/failfast.txt")
+                    val textReportFile = gradleRunner.projectFile("build/reports/mydetekt.txt")
                     assertThat(result.output).contains("--report txt:$textReportFile")
                 }
 
                 it("enables sarif report to specified location") {
-                    val sarifReportFile = gradleRunner.projectFile("build/reports/failfast.sarif")
+                    val sarifReportFile = gradleRunner.projectFile("build/reports/mydetekt.sarif")
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
+                }
+
+                it("sets base path") {
+                    assertThat(result.output).contains("--base-path")
                 }
 
                 it("sets absolute filename of both config file to detekt cli") {

@@ -29,8 +29,6 @@ import java.util.Collections
  * Adapted from Unbescape - https://github.com/unbescape/unbescape/
  *
  * Utility class for performing XML escape/unescape operations.
- *
- * @since 1.0.0
  */
 object XmlEscape {
 
@@ -198,7 +196,6 @@ private object Xml10EscapeSymbolsInitializer {
     }
 
     fun initializeXml10(): XmlEscapeSymbols {
-
         val xml10References = XmlEscapeSymbols.References()
 
         /*

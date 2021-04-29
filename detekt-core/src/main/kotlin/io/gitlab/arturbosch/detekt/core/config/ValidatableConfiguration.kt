@@ -21,6 +21,8 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>includes",
     ".*>.*>active",
     ".*>.*>autoCorrect",
+    ".*>severity",
+    ".*>.*>severity",
     "build>weights.*"
 ).joinToString(",")
 
@@ -72,7 +74,6 @@ internal fun validateConfig(
 
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {
         for (prop in current.keys) {
-
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
 
             val deprecationWarning = DEPRECATED_PROPERTIES

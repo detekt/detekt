@@ -14,12 +14,14 @@ private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulese
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
 private const val AUTO_CORRECT_PARAMETER = "--auto-correct"
 private const val FAIL_FAST_PARAMETER = "--fail-fast"
+private const val ALL_RULES_PARAMETER = "--all-rules"
 private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
+private const val BASE_PATH_PARAMETER = "--base-path"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -38,9 +40,14 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
-    override fun toArgument() = if (!fileCollection.isEmpty) listOf(
-        CLASSPATH_PARAMETER,
-        fileCollection.joinToString(File.pathSeparator) { it.absolutePath }) else emptyList()
+    override fun toArgument() = if (!fileCollection.isEmpty) {
+        listOf(
+            CLASSPATH_PARAMETER,
+            fileCollection.joinToString(File.pathSeparator) { it.absolutePath }
+        )
+    } else {
+        emptyList()
+    }
 }
 
 internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {
@@ -64,6 +71,10 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
+internal data class BasePathArgument(val basePath: String?) : CliArgument() {
+    override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) } ?: emptyList()
+}
+
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {
 
     constructor(configFile: File) : this(listOf(configFile))
@@ -83,12 +94,17 @@ internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch:
 internal data class DebugArgument(override val value: Boolean) : BoolCliArgument(value, DEBUG_PARAMETER)
 
 internal data class ParallelArgument(override val value: Boolean) : BoolCliArgument(value, PARALLEL_PARAMETER)
-internal data class DisableDefaultRuleSetArgument(override val value: Boolean) :
-    BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
 
-internal data class BuildUponDefaultConfigArgument(override val value: Boolean) :
-    BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+internal data class DisableDefaultRuleSetArgument(
+    override val value: Boolean
+) : BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+
+internal data class BuildUponDefaultConfigArgument(
+    override val value: Boolean
+) : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
 internal data class FailFastArgument(override val value: Boolean) : BoolCliArgument(value, FAIL_FAST_PARAMETER)
+
+internal data class AllRulesArgument(override val value: Boolean) : BoolCliArgument(value, ALL_RULES_PARAMETER)
 
 internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)

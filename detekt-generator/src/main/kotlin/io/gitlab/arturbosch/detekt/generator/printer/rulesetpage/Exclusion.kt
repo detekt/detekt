@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 /**
  * Holds a list of extra exclusions for rules and rule sets.
  */
-val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions)
+val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, LibraryExclusions)
 
 /**
- * Tracks rules and rule sets which needs an extra `exclusions: $pattern` property
+ * Tracks rules and rule sets which needs an extra `excludes: $pattern` property
  * when printing the default detekt config yaml file.
  */
 abstract class Exclusions {
@@ -23,7 +23,7 @@ abstract class Exclusions {
 private object TestExclusions : Exclusions() {
 
     override val pattern =
-            "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
+        "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
     override val ruleSets = setOf("comments")
     override val rules = setOf(
         "NamingRules",
@@ -45,4 +45,14 @@ private object KotlinScriptExclusions : Exclusions() {
 
     override val pattern = "['*.kts']"
     override val rules = setOf("InvalidPackageDeclaration")
+}
+
+private object LibraryExclusions : Exclusions() {
+
+    override val pattern = "['**']"
+    override val rules = setOf(
+        "ForbiddenPublicDataClass",
+        "LibraryCodeMustSpecifyReturnType",
+        "LibraryEntitiesShouldNotBePublic",
+    )
 }

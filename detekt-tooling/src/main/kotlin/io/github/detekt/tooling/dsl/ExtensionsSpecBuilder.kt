@@ -6,11 +6,11 @@ import io.github.detekt.tooling.internal.PluginsHolder
 import java.nio.file.Path
 
 @ProcessingModelDsl
-class ExtensionsSpecBuilder : Builder<ExtensionsSpec>, ExtensionsSpec {
+class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
 
-    override var disableDefaultRuleSets: Boolean = false
-    override var plugins: ExtensionsSpec.Plugins? = null
-    override var disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
+    var disableDefaultRuleSets: Boolean = false
+    var plugins: ExtensionsSpec.Plugins? = null
+    var disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
 
     override fun build(): ExtensionsSpec = ExtensionsModel(
         disableDefaultRuleSets,
@@ -33,7 +33,7 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec>, ExtensionsSpec {
     }
 }
 
-internal data class ExtensionsModel(
+private data class ExtensionsModel(
     override val disableDefaultRuleSets: Boolean,
     override val plugins: ExtensionsSpec.Plugins?,
     override val disabledExtensions: Set<ExtensionId>

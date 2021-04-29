@@ -5,25 +5,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.psi.KtDeclaration
-
-class KDocStyle(config: Config = Config.empty) : MultiRule() {
-
-    private val endOfSentenceFormat = EndOfSentenceFormat(config)
-
-    override val rules = listOf(
-            endOfSentenceFormat
-    )
-
-    override fun visitDeclaration(dcl: KtDeclaration) {
-        super.visitDeclaration(dcl)
-        endOfSentenceFormat.verify(dcl)
-    }
-}
 
 /**
  * This rule validates the end of the first sentence of a KDoc comment.
@@ -35,14 +20,21 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
 @Suppress("MemberNameEqualsClassName")
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Maintainability,
-            "The first sentence in a KDoc comment should end with correct punctuation.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
+        "The first sentence in a KDoc comment should end with correct punctuation.",
+        Debt.FIVE_MINS
+    )
 
     private val endOfSentenceFormat =
-            Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
+        Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
     private val htmlTag = Regex("<.+>")
+
+    override fun visitDeclaration(dcl: KtDeclaration) {
+        super.visitDeclaration(dcl)
+        verify(dcl)
+    }
 
     fun verify(declaration: KtDeclaration) {
         declaration.docComment?.let {
@@ -51,8 +43,13 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
                 return
             }
             if (!endOfSentenceFormat.containsMatchIn(text) && !text.lastArgumentMatchesUrl()) {
-                report(CodeSmell(issue, Entity.from(declaration),
-                        "The first sentence of this KDoc does not end with the correct punctuation."))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(declaration),
+                        "The first sentence of this KDoc does not end with the correct punctuation."
+                    )
+                )
             }
         }
     }

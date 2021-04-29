@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -41,12 +42,14 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * str.toLowerCase(Locale.US)
  * </compliant>
  */
+@ActiveByDefault(since = "1.16.0")
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            "ImplicitDefaultLocale", Severity.CodeSmell,
-            "Implicit default locale used for string processing. Consider using explicit locale.",
-            Debt.FIVE_MINS
+        "ImplicitDefaultLocale",
+        Severity.CodeSmell,
+        "Implicit default locale used for string processing. Consider using explicit locale.",
+        Debt.FIVE_MINS
     )
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
@@ -68,8 +71,10 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
         ) {
             report(
                 CodeSmell(
-                issue, Entity.from(expression),
-                "${expression.text} uses implicitly default locale for string formatting.")
+                    issue,
+                    Entity.from(expression),
+                    "${expression.text} uses implicitly default locale for string formatting."
+                )
             )
         }
     }
@@ -77,11 +82,15 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
     private fun checkCaseConversion(expression: KtQualifiedExpression) {
         if (isStringOrNullableString(expression.receiverExpression.getType(bindingContext)) &&
             expression.isCalleeCaseConversion() &&
-            expression.isCalleeNoArgs()) {
-            report(CodeSmell(
-                issue,
-                Entity.from(expression),
-                "${expression.text} uses implicitly default locale for case conversion."))
+            expression.isCalleeNoArgs()
+        ) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "${expression.text} uses implicitly default locale for case conversion."
+                )
+            )
         }
     }
 }

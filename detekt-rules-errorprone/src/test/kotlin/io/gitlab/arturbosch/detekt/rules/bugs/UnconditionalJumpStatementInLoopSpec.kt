@@ -69,31 +69,36 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
         }
 
         it("does not report an conditional elvis continue") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLint(
+                """
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
                         return compute(i) ?: continue
                 }
-            """)
+            """
+            )
 
             assertThat(findings).isEmpty()
         }
 
         it("reports conditional elvis return") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLint(
+                """
                 fun main() {
                     fun compute(i: Int) = null
                     for (i in 1..5)  
                         return compute(i) ?: return
                 }
-            """)
+            """
+            )
 
             assertThat(findings).hasSize(1)
         }
 
         it("does not report a return after a conditional jump") {
-            val findings = subject.compileAndLint("""
+            val findings = subject.compileAndLint(
+                """
                 fun f(): Int {
                     for (i in 0 until 10) {
                         val a = i * i
@@ -113,7 +118,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
                     }
                     return 0
                 }
-            """)
+            """
+            )
 
             assertThat(findings).isEmpty()
         }

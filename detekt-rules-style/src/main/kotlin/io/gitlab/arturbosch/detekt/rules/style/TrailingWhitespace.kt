@@ -14,10 +14,12 @@ import io.gitlab.arturbosch.detekt.rules.isPartOfString
  */
 class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Checks which lines end with a whitespace.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Checks which lines end with a whitespace.",
+        Debt.FIVE_MINS
+    )
 
     fun visit(fileContent: KtFileContent) {
         var offset = 0

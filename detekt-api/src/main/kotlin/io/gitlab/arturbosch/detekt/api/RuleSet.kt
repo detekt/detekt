@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
@@ -28,9 +27,10 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
      * Visits given file with all rules of this rule set, returning a list
      * of all code smell findings.
      */
+    @Suppress("DEPRECATION")
     @Deprecated("Exposes detekt-core implementation details.")
     fun accept(file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): List<Finding> =
-        if (isFileIgnored(file)) {
+        if (pathFilters?.isIgnored(file) == true) {
             emptyList()
         } else {
             rules.flatMap {
@@ -38,8 +38,4 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
                 it.findings
             }
         }
-
-    @Suppress("DEPRECATION")
-    private fun isFileIgnored(file: KtFile) =
-        pathFilters?.isIgnored(file.absolutePath()) == true
 }

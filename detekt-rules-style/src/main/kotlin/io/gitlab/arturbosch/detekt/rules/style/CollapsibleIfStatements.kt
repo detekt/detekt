@@ -37,10 +37,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  */
 class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("CollapsibleIfStatements", Severity.Style,
-            "Two if statements which could be collapsed were detected. " +
-                    "These statements can be merged to improve readability.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        "CollapsibleIfStatements",
+        Severity.Style,
+        "Two if statements which could be collapsed were detected. " +
+            "These statements can be merged to improve readability.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitIfExpression(expression: KtIfExpression) {
         if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {
@@ -50,7 +53,7 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isNotElseIfOrElse(expression: KtIfExpression) =
-            expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
+        expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
 
     private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
         val statement = expression.then?.getChildrenOfType<KtExpression>()?.singleOrNull()

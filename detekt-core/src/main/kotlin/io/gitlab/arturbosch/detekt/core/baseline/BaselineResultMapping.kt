@@ -21,23 +21,26 @@ class BaselineResultMapping : ReportingExtension {
     }
 
     override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
-        require(
-            !createBaseline ||
-                (createBaseline && baselineFile != null)
-        ) { "Invalid baseline options invariant." }
-
-        if (baselineFile != null) {
-            val facade = BaselineFacade()
-            val baselinePath = checkNotNull(baselineFile)
-
-            if (createBaseline) {
-                val flatten = findings.flatMap { it.value }
-                facade.createOrUpdate(baselinePath, flatten)
-            }
-
-            return facade.transformResult(baselinePath, DetektResult(findings)).findings
+        val baselineFile = baselineFile
+        require(!createBaseline || (createBaseline && baselineFile != null)) {
+            "Invalid baseline options invariant."
         }
 
-        return findings
+        return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings
+    }
+
+    private fun Map<RuleSetId, List<Finding>>.transformWithBaseline(baselinePath: Path): Map<RuleSetId, List<Finding>> {
+        val facade = BaselineFacade()
+        val flatten = this.flatMap { it.value }
+
+        if (flatten.isEmpty()) {
+            return this
+        }
+
+        if (createBaseline) {
+            facade.createOrUpdate(baselinePath, flatten)
+        }
+
+        return facade.transformResult(baselinePath, DetektResult(this)).findings
     }
 }

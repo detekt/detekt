@@ -16,10 +16,8 @@ summary:
 - Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
 - Specify code smell thresholds to break your build or print a warning
 - Code Smell baseline and ignore lists for legacy projects
-- [Gradle plugin](#gradleplugin) for code analysis via Gradle builds
-- Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
-- Optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
-- [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
+- [Gradle plugin](pages/gettingstarted/gradle.md) for code analysis via Gradle builds
+- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensible by own rule sets and `FileProcessListener's`
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
@@ -29,18 +27,12 @@ summary:
 Apply the following configuration to your Gradle project build file:
 
 ```kotlin
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 plugins {
     id("io.gitlab.arturbosch.detekt").version("{{ site.detekt_version }}")
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 ```
 
@@ -95,6 +87,6 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
 
 {% include links.html %}

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
@@ -23,11 +24,13 @@ class GenerateConfigTaskTest : Spek({
                 }
 
                 it("chooses the last config file when configured") {
-                    val gradleRunner = builder.withDetektConfig("""
+                    val gradleRunner = builder.withDetektConfig(
+                        """
                         |detekt {
                         |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
                         |}
-                    """).build()
+                    """
+                    ).build()
 
                     gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
                         assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

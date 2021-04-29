@@ -186,13 +186,15 @@ internal class ConfigValidationSpec : Spek({
             ).forEach { (testName, warningsAsErrors) ->
 
                 it(testName) {
-                    val config = yamlConfigFromContent("""
+                    val config = yamlConfigFromContent(
+                        """
                     config:
                       warningsAsErrors: $warningsAsErrors
                     naming:
                       FunctionParameterNaming:
                         ignoreOverriddenFunctions: ''
-                """.trimIndent())
+                        """.trimIndent()
+                    )
 
                     val result = validateConfig(config, config)
 

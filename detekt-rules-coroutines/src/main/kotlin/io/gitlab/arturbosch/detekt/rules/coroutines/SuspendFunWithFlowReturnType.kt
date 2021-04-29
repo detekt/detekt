@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -56,8 +57,8 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * }
  * </compliant>
  *
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
 class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(
@@ -91,7 +92,7 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
             yield(this@isCoroutinesFlow)
             yieldAll(this@isCoroutinesFlow.supertypes())
         }
-            .map { it.getJetTypeFqName(printTypeArguments = false) }
+            .mapNotNull { it.fqNameOrNull()?.asString() }
             .contains("kotlinx.coroutines.flow.Flow")
     }
 }

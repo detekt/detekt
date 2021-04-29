@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
-import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
+import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
+import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.ReportingBasePlugin
-import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
-import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.util.Properties
 
 class DetektPlugin : Plugin<Project> {
 
@@ -28,64 +27,44 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
-        project.registerOldDetektTask(extension)
+        project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        project.registerDetektAndroidTasks(extension)
-        project.registerOldCreateBaselineTask(extension)
+        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+            project.registerDetektAndroidTasks(extension)
+        }
+        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+            project.registerDetektMultiplatformTasks(extension)
+        }
         project.registerGenerateConfigTask(extension)
     }
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
-            DetektJvm(this).registerDetektJvmTasks(extension)
+            DetektJvm(this).registerTasks(extension)
+        }
+    }
+
+    private fun Project.registerDetektMultiplatformTasks(extension: DetektExtension) {
+        plugins.withId("org.jetbrains.kotlin.multiplatform") {
+            DetektMultiplatform(this).registerTasks(extension)
         }
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
         plugins.withId("kotlin-android") {
-            DetektAndroid(this).registerDetektAndroidTasks(extension)
+            DetektAndroid(this).registerTasks(extension)
         }
     }
 
-    private fun Project.registerOldDetektTask(extension: DetektExtension) {
-        val detektTaskProvider = tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
-            it.debugProp.set(project.provider { extension.debug })
-            it.parallelProp.set(project.provider { extension.parallel })
-            it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-            it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
-            it.failFastProp.set(project.provider { extension.failFast })
-            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
-            it.config.setFrom(project.provider { extension.config })
-            it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-            it.reportsDir.set(project.provider { extension.customReportsDir })
-            it.reports = extension.reports
-            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-        }
-
-        tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-            it.dependsOn(detektTaskProvider)
-        }
+    private fun Project.registerDetektPlainTask(extension: DetektExtension) {
+        DetektPlain(this).registerTasks(extension)
     }
-
-    private fun Project.registerOldCreateBaselineTask(extension: DetektExtension) =
-        registerCreateBaselineTask(BASELINE_TASK_NAME, extension) {
-            setSource(existingInputDirectoriesProvider(project, extension))
-            baseline.set(project.layout.file(project.provider { extension.baseline }))
-        }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.config.setFrom(project.provider { extension.config })
         }
     }
-
-    private fun existingInputDirectoriesProvider(
-        project: Project,
-        extension: DetektExtension
-    ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
         project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
@@ -100,7 +79,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+                val version = extension.toolVersion ?: loadDetektVersion(DetektPlugin::class.java.classLoader)
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
@@ -127,12 +106,18 @@ class DetektPlugin : Plugin<Project> {
         const val BASELINE_TASK_NAME = "detektBaseline"
         const val DETEKT_EXTENSION = "detekt"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
-        internal val defaultExcludes = listOf("build/")
-        internal val defaultIncludes = listOf("**/*.kt", "**/*.kts")
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
+
+        internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
+        internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
     }
 }
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+
+internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
+    load(classLoader.getResourceAsStream("versions.properties"))
+    getProperty("detektVersion")
+}

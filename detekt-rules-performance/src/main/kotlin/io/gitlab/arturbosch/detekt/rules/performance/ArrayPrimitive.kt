@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.PrimitiveType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -38,10 +40,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * fun returningFunction(): DoubleArray { }
  * </compliant>
- *
- * @active since v1.2.0
- * @requiresTypeResolution
  */
+@RequiresTypeResolution
+@ActiveByDefault(since = "1.2.0")
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "ArrayPrimitive",
