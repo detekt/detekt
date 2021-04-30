@@ -34,7 +34,7 @@ jobs:
           java-version: 11
 
       - name: Package executable jar
-        run: ./gradlew moveJarForIntegrationTest --stacktrace
+        run: ./gradlew moveJarForIntegrationTest
 
       - name: Run detekt-cli with argsfile
         run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
@@ -71,4 +71,4 @@ jobs:
         java-version: 11
 
     - name: Run analysis
-      run: ./gradlew detektMain detektTest --build-cache --stacktrace
+      run: ./gradlew detektMain detektTest
