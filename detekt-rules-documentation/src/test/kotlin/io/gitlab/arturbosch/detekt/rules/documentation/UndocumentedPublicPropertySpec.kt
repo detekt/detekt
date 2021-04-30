@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -30,6 +31,32 @@ class UndocumentedPublicPropertySpec : Spek({
         it("reports undocumented public properties in a primary constructor") {
             val code = "class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports property as undocumented if only inline documentation provided") {
+            val code = """
+               class Test(
+                    /**
+                     * Some docs.
+                     */
+                    val a: Int
+               )
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("does not report constructor property if inline documentation provided and flag set") {
+            val code = """
+               class Test(
+                    /**
+                     * Some docs.
+                     */
+                    val a: Int
+               )
+            """
+            val findings = UndocumentedPublicProperty(TestConfig(mapOf(UndocumentedPublicProperty.ALLOW_INLINE_CONSTRUCTOR_PROPERTY_COMMENTS to "true"))).compileAndLint(code)
+
+            assertThat(findings).hasSize(0)
         }
 
         it("reports undocumented public property in a primary constructor") {

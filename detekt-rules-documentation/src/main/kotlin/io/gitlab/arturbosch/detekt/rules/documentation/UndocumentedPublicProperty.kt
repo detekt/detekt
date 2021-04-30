@@ -22,9 +22,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * This also includes public properties defined in a primary constructor.
  * If the codebase should have documentation on all public properties enable this rule to enforce this.
  * Overridden properties are excluded by this rule.
+ *
+ * @configuration allowInlineConstructorPropertyComments - allow properties defined in a primary constructor to have
+ * inline documentation (default: `false`).
  */
 class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
-
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
@@ -32,11 +34,20 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    private val isInlineConstructorPropertyCommentsAllowed =
+        valueOrDefault(ALLOW_INLINE_CONSTRUCTOR_PROPERTY_COMMENTS, false)
+
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         if (constructor.isPublicInherited()) {
             val comment = constructor.containingClassOrObject?.docComment?.text
             constructor.valueParameters
-                .filter { it.isPublicNotOverridden() && it.hasValOrVar() && it.isUndocumented(comment) }
+                .filter {
+                    when {
+                        !it.isPublicNotOverridden() || !it.hasValOrVar() -> false
+                        isInlineConstructorPropertyCommentsAllowed && it.docComment != null -> false
+                        else -> it.isUndocumented(comment)
+                    }
+                }
                 .forEach { report(it) }
         }
         super.visitPrimaryConstructor(constructor)
@@ -70,5 +81,9 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
                 "The property ${property.nameAsSafeName} is missing documentation."
             )
         )
+    }
+
+    companion object {
+        const val ALLOW_INLINE_CONSTRUCTOR_PROPERTY_COMMENTS = "allowInlineConstructorPropertyComments"
     }
 }
