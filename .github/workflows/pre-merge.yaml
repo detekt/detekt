@@ -54,7 +54,7 @@ jobs:
 
 
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest -x detekt -PwarningsAsErrors=true --stacktrace
+      run: ./gradlew build moveJarForIntegrationTest -x detekt
     - name: Run detekt-cli --help
       run: java -jar ./build/detekt-cli-all.jar --help
     - name: Run detekt-cli with argsfile
@@ -87,7 +87,7 @@ jobs:
         java-version: 11
         distribution: 'adopt'
     - name: Verify Generated Detekt Config File
-      run: ./gradlew verifyGeneratorOutput --stacktrace
+      run: ./gradlew verifyGeneratorOutput
 
 
   compile-test-snippets:
@@ -116,4 +116,4 @@ jobs:
           java-version: 11
           distribution: 'adopt'
       - name: Build and compile test snippets
-        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true --stacktrace
+        run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true
