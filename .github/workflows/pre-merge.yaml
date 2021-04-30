@@ -38,7 +38,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.jdk }}
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Build detekt
       run: ./gradlew build -x detekt
     - uses: actions/upload-artifact@v2
@@ -75,7 +75,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 11
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Verify Generated Detekt Config File
       run: ./gradlew verifyGeneratorOutput
 
@@ -103,6 +103,6 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-          distribution: 'adopt'
+          distribution: 'temurin'
       - name: Build and compile test snippets
         run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true
