@@ -9,8 +9,6 @@ jobs:
   gradle:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2

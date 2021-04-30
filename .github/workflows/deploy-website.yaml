@@ -8,9 +8,6 @@ on:
 jobs:
   build-detekt-docs:
     runs-on: ubuntu-latest
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2

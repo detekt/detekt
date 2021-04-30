@@ -17,8 +17,6 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         jdk: [8, 11, 17]
     runs-on: ${{ matrix.os }}
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -48,8 +46,6 @@ jobs:
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     runs-on: ubuntu-latest
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -66,8 +62,6 @@ jobs:
   compile-test-snippets:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     runs-on: ubuntu-latest
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
