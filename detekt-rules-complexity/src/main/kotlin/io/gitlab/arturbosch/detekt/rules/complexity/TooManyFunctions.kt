@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -24,15 +26,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
  * which clearly belongs together in separate parts of the code.
- *
- * @configuration thresholdInFiles - threshold in files (default: `11`)
- * @configuration thresholdInClasses - threshold in classes (default: `11`)
- * @configuration thresholdInInterfaces - threshold in interfaces (default: `11`)
- * @configuration thresholdInObjects - threshold in objects (default: `11`)
- * @configuration thresholdInEnums - threshold in enums (default: `11`)
- * @configuration ignoreDeprecated - ignore deprecated functions (default: `false`)
- * @configuration ignorePrivate - ignore private functions (default: `false`)
- * @configuration ignoreOverridden - ignore overridden functions (default: `false`)
  */
 @ActiveByDefault(since = "1.0.0")
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
@@ -46,14 +39,29 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
-    private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)
-    private val thresholdInObjects = valueOrDefault(THRESHOLD_IN_OBJECTS, DEFAULT_THRESHOLD)
-    private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
-    private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
-    private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
-    private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
-    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, false)
+    @Configuration("threshold in files")
+    private val thresholdInFiles: Int by config(DEFAULT_THRESHOLD)
+
+    @Configuration("threshold in classes")
+    private val thresholdInClasses: Int by config(DEFAULT_THRESHOLD)
+
+    @Configuration("threshold in interfaces")
+    private val thresholdInInterfaces: Int by config(DEFAULT_THRESHOLD)
+
+    @Configuration("threshold in objects")
+    private val thresholdInObjects: Int by config(DEFAULT_THRESHOLD)
+
+    @Configuration("threshold in enums")
+    private val thresholdInEnums: Int by config(DEFAULT_THRESHOLD)
+
+    @Configuration("ignore deprecated functions")
+    private val ignoreDeprecated: Boolean by config(false)
+
+    @Configuration("ignore private functions")
+    private val ignorePrivate: Boolean by config(false)
+
+    @Configuration("ignore overridden functions")
+    private val ignoreOverridden: Boolean by config(false)
 
     private var amountOfTopLevelFunctions: Int = 0
 
@@ -160,14 +168,6 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val DEFAULT_THRESHOLD = 11
-        const val THRESHOLD_IN_FILES = "thresholdInFiles"
-        const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
-        const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
-        const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
-        const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
-        const val IGNORE_DEPRECATED = "ignoreDeprecated"
-        const val IGNORE_PRIVATE = "ignorePrivate"
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
         private const val DEPRECATED = "Deprecated"
     }
 }
