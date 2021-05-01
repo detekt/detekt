@@ -453,6 +453,8 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
+                            private val prop: Int by config(1)
+                            @Configuration("description")
                             private val config1: Int by fallbackConfig("prop", 99)
                             @Configuration("description")
                             private val config2: Int by fallbackConfig(fallbackProperty = "prop", defaultValue = 99)
@@ -461,8 +463,44 @@ class RuleCollectorSpec : Spek({
                         }                        
                     """
                         val items = subject.run(code)
-                        assertThat(items[0].configuration).hasSize(3)
-                        assertThat(items[0].configuration.map { it.defaultValue }).containsOnly("99")
+                        val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
+                        assertThat(fallbackProperties).hasSize(3)
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                    }
+
+                    it("reports an error if the property to fallback on does not exist") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by fallbackConfig("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
+                    }
+
+                    it("reports an error if the property to fallback on exists but is not a config property") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            private val prop: Int = 1
+                            @Configuration("description")
+                            private val config: Int by fallbackConfig("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
                     }
                 }
             }

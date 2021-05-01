@@ -1,5 +1,9 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.FALLBACK_DELEGATE_NAME
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.getFallbackPropertyName
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.isFallbackConfigDelegate
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.isUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -80,6 +84,12 @@ class ConfigurationCollector {
         if (!isInitializedWithConfigDelegate()) {
             invalidDocumentation { "'$name' is not using one of the config property delegates ($DELEGATE_NAMES)" }
         }
+        if (isFallbackConfigDelegate()) {
+            val fallbackPropertyName = getFallbackPropertyName()
+            if (isUsingInvalidFallbackReference(properties, fallbackPropertyName)) {
+                invalidDocumentation { "The fallback property '$fallbackPropertyName' is missing for property '$name'" }
+            }
+        }
 
         val propertyName: String = checkNotNull(name)
         val deprecationMessage = firstAnnotationParameterOrNull(Deprecated::class)
@@ -124,10 +134,29 @@ class ConfigurationCollector {
         return checkNotNull(defaultArgument.getArgumentExpression())
     }
 
+    private object FallbackConfigPropertySupport {
+        const val FALLBACK_DELEGATE_NAME = "fallbackConfig"
+        private const val FALLBACK_ARGUMENT_NAME = "fallbackProperty"
+
+        fun KtProperty.isFallbackConfigDelegate(): Boolean =
+            delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
+
+        fun KtProperty.getFallbackPropertyName(): String {
+            val callExpression = delegate?.expression as KtCallExpression
+            val arguments = callExpression.valueArguments
+            val fallbackArgument = arguments
+                .find { it.getArgumentName()?.text == FALLBACK_ARGUMENT_NAME }
+                ?: arguments.first()
+            return checkNotNull(fallbackArgument.getArgumentExpression()?.text?.withoutQuotes())
+        }
+
+        fun isUsingInvalidFallbackReference(properties: List<KtProperty>, fallbackPropertyName: String) =
+            properties.filter { it.isInitializedWithConfigDelegate() }.none { it.name == fallbackPropertyName }
+    }
+
     companion object {
         private const val SIMPLE_DELEGATE_NAME = "config"
         private const val LIST_DELEGATE_NAME = "listConfig"
-        private const val FALLBACK_DELEGATE_NAME = "fallbackConfig"
         private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, LIST_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
