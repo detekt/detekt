@@ -11,6 +11,7 @@ project.afterEvaluate {
         repo.set("detekt")
         overwrite.set(true)
         dryRun.set(false)
+        targetCommitish.set("main")
         body {
             var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
             val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
