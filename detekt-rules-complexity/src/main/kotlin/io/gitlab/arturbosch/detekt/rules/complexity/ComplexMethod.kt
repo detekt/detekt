@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.config
+import io.gitlab.arturbosch.detekt.api.internal.listConfig
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -53,7 +54,7 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
     private val ignoreNestingFunctions: Boolean by config(false)
 
     @Configuration("Comma separated list of function names which add complexity.")
-    private val nestingFunctions: List<String> by config(DEFAULT_NESTING_FUNCTIONS)
+    private val nestingFunctions: List<String> by listConfig(DEFAULT_NESTING_FUNCTIONS)
 
     override val issue = Issue(
         "ComplexMethod",
