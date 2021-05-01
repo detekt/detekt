@@ -1,13 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MethodOverloadingSpec : Spek({
+    val defaultThreshold = 3
+    val defaultConfig by memoized { TestConfig(mapOf("threshold" to defaultThreshold)) }
 
-    val subject by memoized { MethodOverloading(threshold = 3) }
+    val subject by memoized { MethodOverloading(defaultConfig) }
 
     describe("MethodOverloading rule") {
 
