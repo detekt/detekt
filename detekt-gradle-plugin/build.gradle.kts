@@ -71,17 +71,9 @@ pluginBundle {
 }
 
 tasks.processResources {
-    filter<org.apache.tools.ant.filters.ReplaceTokens>(
-        "tokens" to mapOf(
-            "detektVersion" to project.version as String
-        )
-    )
+    expand(mutableMapOf("detektVersion" to project.version))
 }
 
 tasks.processTestResources {
-    filter<org.apache.tools.ant.filters.ReplaceTokens>(
-        "tokens" to mapOf(
-            "detektVersion" to project.version as String
-        )
-    )
+    expand(mutableMapOf("detektVersion" to project.version))
 }
