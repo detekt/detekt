@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
@@ -11,9 +11,6 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * Reports empty `catch` blocks. Empty catch blocks indicate that an exception is ignored and not handled.
  * In case exceptions are ignored intentionally, this should be made explicit
  * by using the specified names in the `allowedExceptionNameRegex`.
- *
- * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
- * (default: `'_|(ignore|expected).*'`)
  */
 @ActiveByDefault(since = "1.0.0")
 class EmptyCatchBlock(config: Config) : EmptyRule(
@@ -26,7 +23,8 @@ class EmptyCatchBlock(config: Config) : EmptyRule(
         "name the exception according to one of the exemptions as per the configuration of this rule."
 ) {
 
-    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+    @Configuration("ignores exception types which match this regex")
+    private val allowedExceptionNameRegex: Regex by config("_|(ignore|expected).*") { it.toRegex() }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
@@ -34,9 +32,5 @@ class EmptyCatchBlock(config: Config) : EmptyRule(
             return
         }
         catchClause.catchBody?.addFindingIfBlockExprIsEmpty()
-    }
-
-    companion object {
-        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
     }
 }
