@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.FALLBACK_DELEGATE_NAME
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.getFallbackPropertyName
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.isFallbackConfigDelegate
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.FallbackConfigPropertySupport.isUsingInvalidFallbackReference
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.FALLBACK_DELEGATE_NAME
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.getFallbackPropertyName
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isFallbackConfigDelegate
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -134,8 +134,8 @@ class ConfigurationCollector {
         return checkNotNull(defaultArgument.getArgumentExpression())
     }
 
-    private object FallbackConfigPropertySupport {
-        const val FALLBACK_DELEGATE_NAME = "fallbackConfig"
+    private object ConfigWithFallbackSupport {
+        const val FALLBACK_DELEGATE_NAME = "configWithFallback"
         private const val FALLBACK_ARGUMENT_NAME = "fallbackProperty"
 
         fun KtProperty.isFallbackConfigDelegate(): Boolean =
@@ -156,7 +156,7 @@ class ConfigurationCollector {
 
     companion object {
         private const val SIMPLE_DELEGATE_NAME = "config"
-        private const val LIST_DELEGATE_NAME = "listConfig"
+        private const val LIST_DELEGATE_NAME = "configList"
         private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, LIST_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"

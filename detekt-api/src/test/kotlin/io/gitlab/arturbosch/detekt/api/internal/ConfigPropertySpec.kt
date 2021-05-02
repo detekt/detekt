@@ -58,8 +58,8 @@ class ConfigPropertySpec : Spek({
             val defaultValue by memoized { listOf("x") }
             val subject by memoized {
                 object : TestConfigAware("present" to "a,b,c") {
-                    val present: List<String> by listConfig(defaultValue)
-                    val notPresent: List<String> by listConfig(defaultValue)
+                    val present: List<String> by configList(defaultValue)
+                    val notPresent: List<String> by configList(defaultValue)
                 }
             }
             it("uses the value provided in config if present") {
@@ -75,9 +75,9 @@ class ConfigPropertySpec : Spek({
             val fallbackValue = -1
             val subject by memoized {
                 object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
-                    val present: Int by fallbackConfig("fallback", defaultValue)
-                    val notPresentWithFallback: Int by fallbackConfig("fallback", defaultValue)
-                    val notPresentFallbackMissing: Int by fallbackConfig("missing", defaultValue)
+                    val present: Int by configWithFallback("fallback", defaultValue)
+                    val notPresentWithFallback: Int by configWithFallback("fallback", defaultValue)
+                    val notPresentFallbackMissing: Int by configWithFallback("missing", defaultValue)
                 }
             }
             it("uses the value provided in config if present") {

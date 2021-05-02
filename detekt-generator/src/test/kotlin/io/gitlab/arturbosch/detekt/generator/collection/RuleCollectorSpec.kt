@@ -221,7 +221,7 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: List<String> by listConfig(
+                            private val config: List<String> by configList(
                                 listOf(
                                     "a", 
                                     "b"
@@ -327,10 +327,10 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config1: List<String> by listConfig(DEFAULT_CONFIG_VALUE)
+                            private val config1: List<String> by configList(DEFAULT_CONFIG_VALUE)
 
                             @Configuration("description")
-                            private val config2: List<String> by listConfig(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
+                            private val config2: List<String> by configList(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
 
                             companion object {
                                 private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
@@ -351,10 +351,10 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config1: List<String> by listConfig(listOf())
+                            private val config1: List<String> by configList(listOf())
 
                             @Configuration("description")
-                            private val config2: List<String> by listConfig(emptyList())
+                            private val config2: List<String> by configList(emptyList())
 
                             companion object {
                                 private val DEFAULT_CONFIG_VALUE_A = "a"
@@ -455,11 +455,11 @@ class RuleCollectorSpec : Spek({
                             @Configuration("description")
                             private val prop: Int by config(1)
                             @Configuration("description")
-                            private val config1: Int by fallbackConfig("prop", 99)
+                            private val config1: Int by configWithFallback("prop", 99)
                             @Configuration("description")
-                            private val config2: Int by fallbackConfig(fallbackProperty = "prop", defaultValue = 99)
+                            private val config2: Int by configWithFallback(fallbackProperty = "prop", defaultValue = 99)
                             @Configuration("description")
-                            private val config3: Int by fallbackConfig(defaultValue = 99, fallbackProperty = "prop")
+                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = "prop")
                         }                        
                     """
                         val items = subject.run(code)
@@ -475,7 +475,7 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: Int by fallbackConfig("prop", 99)
+                            private val config: Int by configWithFallback("prop", 99)
                         }                        
                     """
                         assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
@@ -493,7 +493,7 @@ class RuleCollectorSpec : Spek({
                         class SomeRandomClass() : Rule {
                             private val prop: Int = 1
                             @Configuration("description")
-                            private val config: Int by fallbackConfig("prop", 99)
+                            private val config: Int by configWithFallback("prop", 99)
                         }                        
                     """
                         assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {

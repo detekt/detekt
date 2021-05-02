@@ -7,10 +7,10 @@ import kotlin.reflect.KProperty
 fun <T : Any> config(defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     SimpleConfigProperty(defaultValue)
 
-fun <T : Any> fallbackConfig(fallbackProperty: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
+fun <T : Any> configWithFallback(fallbackProperty: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     FallbackConfigProperty(fallbackProperty, defaultValue)
 
-fun listConfig(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
+fun configList(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
     ListConfigProperty(defaultValue)
 
 private class SimpleConfigProperty<T : Any>(private val defaultValue: T) : ReadOnlyProperty<ConfigAware, T> {
