@@ -2,6 +2,9 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
+import io.gitlab.arturbosch.detekt.api.internal.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -15,16 +18,17 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  *
  * Set the [ignoreOverridden] parameter to `true` to exclude all functions which are overriding other
  * functions from the superclass or from an interface (i.e., functions declared with the override modifier).
- *
- * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
- * (deprecated: "Use `ignoreOverridden` instead")
- * @configuration ignoreOverridden - Excludes all the overridden functions (default: `false`)
  */
 @ActiveByDefault(since = "1.0.0")
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
-    private val ignoreOverridden =
-        valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false))
+    @Suppress("unused")
+    @Configuration("Excludes all the overridden functions")
+    @Deprecated("Use `ignoreOverridden` instead")
+    private val ignoreOverriddenFunctions: Boolean by config(false)
+
+    @Configuration("Excludes all the overridden functions")
+    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunctions", false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -45,9 +49,4 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     private fun KtNamedFunction.isDefaultFunction() =
         getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
-
-    companion object {
-        const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-    }
 }

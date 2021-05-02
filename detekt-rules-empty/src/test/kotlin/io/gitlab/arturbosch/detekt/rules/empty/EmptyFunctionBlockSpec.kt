@@ -7,6 +7,9 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+
 class EmptyFunctionBlockSpec : Spek({
 
     val subject by memoized { EmptyFunctionBlock(Config.empty) }
@@ -75,7 +78,7 @@ class EmptyFunctionBlockSpec : Spek({
             }
 
             it("should not flag overridden functions") {
-                val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSourceLocation(1, 13)
             }
         }
@@ -103,7 +106,7 @@ class EmptyFunctionBlockSpec : Spek({
             }
 
             it("should not flag overridden functions with ignoreOverridden") {
-                val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN to "true"))
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "true"))
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).isEmpty()
             }
         }
