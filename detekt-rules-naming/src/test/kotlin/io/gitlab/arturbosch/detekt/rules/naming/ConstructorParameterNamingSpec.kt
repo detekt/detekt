@@ -34,7 +34,7 @@ class ConstructorParameterNamingSpec : Spek({
             assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
         }
 
-        it("should find a violation in the correct text locaction") {
+        it("should find a violation in the correct text location") {
             val code = """
                 class C(val PARAM: String)
             """
