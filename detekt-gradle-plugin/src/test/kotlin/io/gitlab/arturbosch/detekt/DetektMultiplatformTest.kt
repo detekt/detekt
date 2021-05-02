@@ -7,6 +7,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
+import java.util.concurrent.TimeUnit
 
 class DetektMultiplatformTest : Spek({
 
@@ -253,11 +254,7 @@ class DetektMultiplatformTest : Spek({
 
     describe(
         "multiplatform projects - iOS target",
-        skip = if (isMacOs() && isCI()) {
-            Skip.No
-        } else {
-            Skip.Yes("Not on MacOS.")
-        }
+        skip = if (isXCodeInstalled()) Skip.No else Skip.Yes("XCode is not installed.")
     ) {
         val gradleRunner = setupProject {
             addSubmodule(
@@ -367,6 +364,10 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
-private fun isMacOs() = System.getProperty("os.name").contains("mac", ignoreCase = true)
-
-private fun isCI() = System.getProperty("CI").toBoolean()
+private fun isXCodeInstalled(): Boolean {
+    val process = ProcessBuilder()
+        .command("xcode-select", "--print-path")
+        .start()
+    val terminates = process.waitFor(50, TimeUnit.MILLISECONDS)
+    return terminates && process.exitValue() == 0
+}
