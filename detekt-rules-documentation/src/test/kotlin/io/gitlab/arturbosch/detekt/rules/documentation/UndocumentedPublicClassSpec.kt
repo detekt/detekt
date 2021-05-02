@@ -6,6 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
+private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
+private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
+private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
+
 class UndocumentedPublicClassSpec : Spek({
     val subject by memoized { UndocumentedPublicClass() }
 
@@ -85,22 +90,28 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report inner classes when turned off") {
-            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_CLASS to "false"))).compileAndLint(inner)
+            val findings =
+                UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_CLASS to "false"))).compileAndLint(inner)
             assertThat(findings).isEmpty()
         }
 
         it("should not report inner objects when turned off") {
-            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_OBJECT to "false"))).compileAndLint(innerObject)
+            val findings =
+                UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_OBJECT to "false"))).compileAndLint(innerObject)
             assertThat(findings).isEmpty()
         }
 
         it("should not report inner interfaces when turned off") {
-            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_INTERFACE to "false"))).compileAndLint(innerInterface)
+            val findings =
+                UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_INTERFACE to "false"))).compileAndLint(
+                    innerInterface
+                )
             assertThat(findings).isEmpty()
         }
 
         it("should not report nested classes when turned off") {
-            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_NESTED_CLASS to "false"))).compileAndLint(nested)
+            val findings =
+                UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_NESTED_CLASS to "false"))).compileAndLint(nested)
             assertThat(findings).isEmpty()
         }
 

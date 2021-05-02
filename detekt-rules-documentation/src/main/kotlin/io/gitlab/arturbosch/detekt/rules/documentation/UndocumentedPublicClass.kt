@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
@@ -20,11 +22,6 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  *
  * By default this rule also searches for nested and inner classes and objects. This default behavior can be changed
  * with the configuration options of this rule.
- *
- * @configuration searchInNestedClass - if nested classes should be searched (default: `true`)
- * @configuration searchInInnerClass - if inner classes should be searched (default: `true`)
- * @configuration searchInInnerObject - if inner objects should be searched (default: `true`)
- * @configuration searchInInnerInterface - if inner interfaces should be searched (default: `true`)
  */
 class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
@@ -35,10 +32,17 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val searchInNestedClass = valueOrDefault(SEARCH_IN_NESTED_CLASS, true)
-    private val searchInInnerClass = valueOrDefault(SEARCH_IN_INNER_CLASS, true)
-    private val searchInInnerObject = valueOrDefault(SEARCH_IN_INNER_OBJECT, true)
-    private val searchInInnerInterface = valueOrDefault(SEARCH_IN_INNER_INTERFACE, true)
+    @Configuration("if nested classes should be searched")
+    private val searchInNestedClass: Boolean by config(true)
+
+    @Configuration("if inner classes should be searched")
+    private val searchInInnerClass: Boolean by config(true)
+
+    @Configuration("if inner objects should be searched")
+    private val searchInInnerObject: Boolean by config(true)
+
+    @Configuration("if inner interfaces should be searched")
+    private val searchInInnerInterface: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
@@ -89,11 +93,4 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
 
     private fun KtClassOrObject.notEnumEntry() = this !is KtEnumEntry
-
-    companion object {
-        const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
-        const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
-        const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
-        const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
-    }
 }
