@@ -7,8 +7,8 @@ import kotlin.reflect.KProperty
 fun <T : Any> config(defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     SimpleConfigProperty(defaultValue)
 
-fun <T : Any> configWithFallback(fallbackProperty: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
-    FallbackConfigProperty(fallbackProperty, defaultValue)
+fun <T : Any> configWithFallback(fallbackPropertyName: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
+    FallbackConfigProperty(fallbackPropertyName, defaultValue)
 
 fun configList(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
     ListConfigProperty(defaultValue)
@@ -20,11 +20,11 @@ private class SimpleConfigProperty<T : Any>(private val defaultValue: T) : ReadO
 }
 
 private class FallbackConfigProperty<T : Any>(
-    private val fallbackProperty: String,
+    private val fallbackPropertyName: String,
     private val defaultValue: T
 ) : ReadOnlyProperty<ConfigAware, T> {
     override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {
-        return thisRef.valueOrDefault(property.name, thisRef.valueOrDefault(fallbackProperty, defaultValue))
+        return thisRef.valueOrDefault(property.name, thisRef.valueOrDefault(fallbackPropertyName, defaultValue))
     }
 }
 

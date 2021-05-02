@@ -457,9 +457,9 @@ class RuleCollectorSpec : Spek({
                             @Configuration("description")
                             private val config1: Int by configWithFallback("prop", 99)
                             @Configuration("description")
-                            private val config2: Int by configWithFallback(fallbackProperty = "prop", defaultValue = 99)
+                            private val config2: Int by configWithFallback(fallbackPropertyName = "prop", defaultValue = 99)
                             @Configuration("description")
-                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = "prop")
+                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackPropertyName = "prop")
                         }                        
                     """
                         val items = subject.run(code)

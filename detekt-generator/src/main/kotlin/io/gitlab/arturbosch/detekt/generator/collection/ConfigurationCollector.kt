@@ -136,7 +136,7 @@ class ConfigurationCollector {
 
     private object ConfigWithFallbackSupport {
         const val FALLBACK_DELEGATE_NAME = "configWithFallback"
-        private const val FALLBACK_ARGUMENT_NAME = "fallbackProperty"
+        private const val FALLBACK_ARGUMENT_NAME = "fallbackPropertyName"
 
         fun KtProperty.isFallbackConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
