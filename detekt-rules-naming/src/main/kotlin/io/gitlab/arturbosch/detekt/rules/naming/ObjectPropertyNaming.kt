@@ -5,10 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtProperty
@@ -16,10 +17,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * Reports when property names inside objects which do not follow the specified naming convention are used.
- *
- * @configuration constantPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
- * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
- * @configuration privatePropertyPattern - naming pattern (default: `'(_)?[A-Za-z][_A-Za-z0-9]*'`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
@@ -31,9 +28,14 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][_A-Za-z0-9]*")
+    @Configuration("naming pattern")
+    private val constantPattern: Regex by config("[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
+
+    @Configuration("naming pattern")
+    private val propertyPattern: Regex by config("[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
+
+    @Configuration("naming pattern")
+    private val privatePropertyPattern: Regex by config("(_)?[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
 
     override fun visitProperty(property: KtProperty) {
         if (property.isLocal) {
@@ -71,11 +73,5 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
                 message = message
             )
         )
-    }
-
-    companion object {
-        const val CONSTANT_PATTERN = "constantPattern"
-        const val PROPERTY_PATTERN = "propertyPattern"
-        const val PRIVATE_PROPERTY_PATTERN = "privatePropertyPattern"
     }
 }
