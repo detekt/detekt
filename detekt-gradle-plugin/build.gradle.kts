@@ -70,10 +70,19 @@ pluginBundle {
     }
 }
 
-tasks.processResources {
-    expand(mutableMapOf("detektVersion" to project.version))
-}
+tasks {
+    val writeDetektVersionProperties by registering(WriteProperties::class) {
+        description = "Write the properties file with the Detekt version to be used by the plugin"
+        encoding = "UTF-8"
+        outputFile = file("${buildDir}/versions.properties")
+        property("detektVersion", project.version)
+    }
 
-tasks.processTestResources {
-    expand(mutableMapOf("detektVersion" to project.version))
+    processResources {
+        from(writeDetektVersionProperties)
+    }
+
+    processTestResources {
+        from(writeDetektVersionProperties)
+    }
 }
