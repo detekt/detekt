@@ -8,14 +8,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
 /**
  * Reports when the package declaration is missing or the file location does not match the declared package.
- *
- * @configuration rootPackage - if specified this part of the package structure is ignored (default: `''`)
  */
 class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
@@ -26,7 +26,8 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val rootPackage: String = valueOrDefault(ROOT_PACKAGE, "")
+    @Configuration("if specified this part of the package structure is ignored")
+    private val rootPackage: String by config("")
 
     private var packageDeclaration: KtPackageDirective? = null
 
@@ -66,8 +67,4 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")
 
     private fun packageNameToNormalizedForm(packageName: String) = packageName.split('.').toNormalizedForm()
-
-    companion object {
-        const val ROOT_PACKAGE = "rootPackage"
-    }
 }
