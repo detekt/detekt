@@ -211,6 +211,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Slawomir Czerwinski](https://github.com/sczerwinski) - Rule improvement: FunctionOnlyReturningConstant
 - [Ivo Smid](https://github.com/bedla) - Fix Local development on Windows
 - [Krzysztof Kruczynski](https://github.com/krzykrucz) - Rule fix: ThrowingExceptionInMain, ExitOutsideMain
+- [Paya Do](https://github.com/payathedo) - Designer for Detekt's logo
 
 ### Mentions
 
