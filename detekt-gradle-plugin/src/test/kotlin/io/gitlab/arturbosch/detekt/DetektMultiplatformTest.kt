@@ -254,7 +254,7 @@ class DetektMultiplatformTest : Spek({
 
     describe(
         "multiplatform projects - iOS target",
-        skip = if (isXCodeInstalled()) Skip.No else Skip.Yes("XCode is not installed.")
+        skip = if (isMacOs() && isXCodeInstalled()) Skip.No else Skip.Yes("XCode is not installed.")
     ) {
         val gradleRunner = setupProject {
             addSubmodule(
@@ -364,10 +364,16 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
+private fun isMacOs() = System.getProperty("os.name").contains("mac", ignoreCase = true)
+
 private fun isXCodeInstalled(): Boolean {
-    val process = ProcessBuilder()
-        .command("xcode-select", "--print-path")
-        .start()
-    val terminates = process.waitFor(50, TimeUnit.MILLISECONDS)
-    return terminates && process.exitValue() == 0
+    return try {
+        val process = ProcessBuilder()
+            .command("xcode-select", "--print-path")
+            .start()
+        val terminates = process.waitFor(50, TimeUnit.MILLISECONDS)
+        terminates && process.exitValue() == 0
+    } catch (ignored: Throwable) {
+        false
+    }
 }
