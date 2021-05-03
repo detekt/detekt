@@ -221,7 +221,7 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: List<String> by configList(
+                            private val config: List<String> by config(
                                 listOf(
                                     "a", 
                                     "b"
@@ -327,10 +327,10 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config1: List<String> by configList(DEFAULT_CONFIG_VALUE)
+                            private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
 
                             @Configuration("description")
-                            private val config2: List<String> by configList(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
+                            private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
 
                             companion object {
                                 private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
@@ -351,10 +351,10 @@ class RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config1: List<String> by configList(listOf())
+                            private val config1: List<String> by config(listOf())
 
                             @Configuration("description")
-                            private val config2: List<String> by configList(emptyList())
+                            private val config2: List<String> by config(emptyList())
 
                             companion object {
                                 private val DEFAULT_CONFIG_VALUE_A = "a"

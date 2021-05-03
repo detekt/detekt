@@ -10,12 +10,21 @@ fun <T : Any> config(defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
 fun <T : Any> configWithFallback(fallbackPropertyName: String, defaultValue: T): ReadOnlyProperty<ConfigAware, T> =
     FallbackConfigProperty(fallbackPropertyName, defaultValue)
 
-fun configList(defaultValue: List<String>): ReadOnlyProperty<ConfigAware, List<String>> =
-    ListConfigProperty(defaultValue)
+private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
+    @Suppress("UNCHECKED_CAST")
+    return when (defaultValue) {
+        is List<*> -> configAware.valueOrDefaultCommaSeparated(propertyName, defaultValue as List<String>) as T
+        is String,
+        is Boolean,
+        is Int,
+        is Long -> configAware.valueOrDefault(propertyName, defaultValue)
+        else -> error("${defaultValue.javaClass} is not supported as ")
+    }
+}
 
 private class SimpleConfigProperty<T : Any>(private val defaultValue: T) : ReadOnlyProperty<ConfigAware, T> {
     override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {
-        return thisRef.valueOrDefault(property.name, defaultValue)
+        return getValueOrDefault(thisRef, property.name, defaultValue)
     }
 }
 
@@ -24,12 +33,6 @@ private class FallbackConfigProperty<T : Any>(
     private val defaultValue: T
 ) : ReadOnlyProperty<ConfigAware, T> {
     override fun getValue(thisRef: ConfigAware, property: KProperty<*>): T {
-        return thisRef.valueOrDefault(property.name, thisRef.valueOrDefault(fallbackPropertyName, defaultValue))
-    }
-}
-
-private class ListConfigProperty(private val defaultValue: List<String>) : ReadOnlyProperty<ConfigAware, List<String>> {
-    override fun getValue(thisRef: ConfigAware, property: KProperty<*>): List<String> {
-        return thisRef.valueOrDefaultCommaSeparated(property.name, defaultValue)
+        return getValueOrDefault(thisRef, property.name, getValueOrDefault(thisRef, fallbackPropertyName, defaultValue))
     }
 }

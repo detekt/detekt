@@ -58,8 +58,8 @@ class ConfigPropertySpec : Spek({
             val defaultValue by memoized { listOf("x") }
             val subject by memoized {
                 object : TestConfigAware("present" to "a,b,c") {
-                    val present: List<String> by configList(defaultValue)
-                    val notPresent: List<String> by configList(defaultValue)
+                    val present: List<String> by config(defaultValue)
+                    val notPresent: List<String> by config(defaultValue)
                 }
             }
             it("uses the value provided in config if present") {

@@ -156,8 +156,7 @@ class ConfigurationCollector {
 
     companion object {
         private const val SIMPLE_DELEGATE_NAME = "config"
-        private const val LIST_DELEGATE_NAME = "configList"
-        private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, LIST_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
+        private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
