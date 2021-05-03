@@ -42,7 +42,7 @@ class GithubMilestoneReport : CliktCommand() {
         // get milestone and issue data
 
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
-        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.ALL, ghMilestone)
+        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
 
         val milestoneTitle = ghMilestone.title.trim()
         val groups = ghIssues.groupBy { issue ->

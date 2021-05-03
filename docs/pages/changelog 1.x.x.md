@@ -6,7 +6,7 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.17.0 - 2021-05-01
+#### 1.17.0 - 2021-05-04
 
 ##### Notable Changes
 
@@ -18,9 +18,9 @@ toc: true
 
 ##### Changelog
 
+- Properly populate versions.properties - [#3730](https://github.com/detekt/detekt/pull/3730)
 - MultilineLambdaItParameter: don't report when lambda has no implicit parameter references - [#3696](https://github.com/detekt/detekt/pull/3696)
 - Fix false positives for UnnecessaryFilter - [#3695](https://github.com/detekt/detekt/pull/3695)
-- Deprecate configuration of reports in detekt Gradle extension - [#3687](https://github.com/detekt/detekt/pull/3687)
 - Ignore actual members in UnusedPrivateMember - [#3669](https://github.com/detekt/detekt/pull/3669)
 - NamedArguments rule: fix false positive with trailing lambda - [#3661](https://github.com/detekt/detekt/pull/3661)
 - Add DeprecatedBlockTag rule - [#3660](https://github.com/detekt/detekt/pull/3660)
@@ -29,9 +29,7 @@ toc: true
 - Add MayBeConstant as alias for MayBeConst - [#3644](https://github.com/detekt/detekt/pull/3644)
 - [ThrowingExceptionInMain] [ExitOutsideMainfix] fix for KtNamedFunction.isMainFunction() - [#3641](https://github.com/detekt/detekt/pull/3641)
 - Fixing IllegalArgumentException in ForbiddenMethodCall rule for Intersection type parameters - [#3626](https://github.com/detekt/detekt/pull/3626)
-- Remove deprecated configurations and deprecate new ones - [#3621](https://github.com/detekt/detekt/pull/3621)
 - Replace getJetTypeFqName with fqNameOrNull extension - [#3613](https://github.com/detekt/detekt/pull/3613)
-- New Rule: ObjectLiteralToLambda - [#3599](https://github.com/detekt/detekt/pull/3599)
 - [MemberNameEqualsClassName] Support factory exemption for generic classes - [#3595](https://github.com/detekt/detekt/pull/3595)
 - Refactor Analyzer so that RuleSetProvider.instance is only called once - [#3585](https://github.com/detekt/detekt/pull/3585)
 - SarifOutputReportSpec: Correctly detect Windows root directory on local development machine - [#3584](https://github.com/detekt/detekt/pull/3584)
@@ -40,7 +38,6 @@ toc: true
 - Revert "Refactor Analyzer so that RuleSetProvider.instance is only called once" - [#3578](https://github.com/detekt/detekt/pull/3578)
 - fix error message -> buildUponDefaultConfig instead of buildOnDefaultConfig - [#3572](https://github.com/detekt/detekt/pull/3572)
 - UnnecessaryApply: fix false positive when lambda has multiple member references - [#3564](https://github.com/detekt/detekt/pull/3564)
-- Fix [ClassOrdering] to treat extensions properties as functions. - [#3559](https://github.com/detekt/detekt/pull/3559)
 - Switch SARIF report off jackson - [#3557](https://github.com/detekt/detekt/pull/3557)
 - Fix rules not appearing in the sarif output - [#3556](https://github.com/detekt/detekt/pull/3556)
 - Refactor Analyzer so that RuleSetProvider.instance is only called once - [#3555](https://github.com/detekt/detekt/pull/3555)
@@ -60,6 +57,9 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Update config file due to invalid argument - [#3735](https://github.com/detekt/detekt/pull/3735)
+- Specify Java language level in module plugin - [#3732](https://github.com/detekt/detekt/pull/3732)
+- Don't run unnecesary tasks - [#3725](https://github.com/detekt/detekt/pull/3725)
 - Remove --stacktrace now that we have scan - [#3724](https://github.com/detekt/detekt/pull/3724)
 - Drop JCenter usage from detekt's own build - [#3711](https://github.com/detekt/detekt/pull/3711)
 - Publish build scans for all CI builds - [#3710](https://github.com/detekt/detekt/pull/3710)
