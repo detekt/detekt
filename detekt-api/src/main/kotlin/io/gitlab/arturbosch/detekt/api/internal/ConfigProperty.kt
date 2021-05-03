@@ -13,12 +13,22 @@ fun <T : Any> configWithFallback(fallbackPropertyName: String, defaultValue: T):
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is List<*> -> configAware.valueOrDefaultCommaSeparated(propertyName, defaultValue as List<String>) as T
+        is List<*> -> {
+            if (defaultValue.all { it is String }) {
+                val defaultValueAsListOfStrings = defaultValue as List<String>
+                configAware.valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings) as T
+            } else {
+                error("Only lists of strings are supported. '$propertyName' is invalid. ")
+            }
+        }
         is String,
         is Boolean,
         is Int,
         is Long -> configAware.valueOrDefault(propertyName, defaultValue)
-        else -> error("${defaultValue.javaClass} is not supported as ")
+        else -> error(
+            "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
+                "Use one of String, Boolean, Int, Long or List<String> instead."
+        )
     }
 }
 
