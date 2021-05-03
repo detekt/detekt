@@ -9,6 +9,9 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private val A_REGEX = Regex("a-z")
+private val A_LIST_OF_INTS = listOf(1)
+
 class ConfigPropertySpec : Spek({
 
     describe("Config property delegate") {
@@ -56,35 +59,31 @@ class ConfigPropertySpec : Spek({
             }
         }
         context("Boolean property") {
-            val configValue = false
-            val defaultValue = true
             val subject by memoized {
-                object : TestConfigAware("present" to configValue) {
-                    val present: Boolean by config(defaultValue)
-                    val notPresent: Boolean by config(defaultValue)
+                object : TestConfigAware("present" to false) {
+                    val present: Boolean by config(true)
+                    val notPresent: Boolean by config(true)
                 }
             }
             it("uses the value provided in config if present") {
-                assertThat(subject.present).isEqualTo(configValue)
+                assertThat(subject.present).isEqualTo(false)
             }
             it("uses the default value if not present") {
-                assertThat(subject.notPresent).isEqualTo(defaultValue)
+                assertThat(subject.notPresent).isEqualTo(true)
             }
         }
         context("Boolean property defined as string") {
-            val configValue = false
-            val defaultValue = true
             val subject by memoized {
-                object : TestConfigAware("present" to "$configValue") {
-                    val present: Boolean by config(defaultValue)
-                    val notPresent: Boolean by config(defaultValue)
+                object : TestConfigAware("present" to "false") {
+                    val present: Boolean by config(true)
+                    val notPresent: Boolean by config(true)
                 }
             }
             it("uses the value provided in config if present") {
-                assertThat(subject.present).isEqualTo(configValue)
+                assertThat(subject.present).isEqualTo(false)
             }
             it("uses the default value if not present") {
-                assertThat(subject.notPresent).isEqualTo(defaultValue)
+                assertThat(subject.notPresent).isEqualTo(true)
             }
         }
         context("String list property") {
@@ -139,12 +138,10 @@ class ConfigPropertySpec : Spek({
             }
         }
         context("Invalid property type") {
-            val defaultRegex = Regex("a-z")
-            val defaultList = listOf(1)
             val subject by memoized {
                 object : TestConfigAware() {
-                    val regexProp: Regex by config(defaultRegex)
-                    val listProp: List<Int> by config(defaultList)
+                    val regexProp: Regex by config(A_REGEX)
+                    val listProp: List<Int> by config(A_LIST_OF_INTS)
                 }
             }
             it("fails when invalid regex property is accessed") {
