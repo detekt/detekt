@@ -25,9 +25,10 @@ private fun KtAnnotationEntry.firstParameterOrNull() =
         ?.text
         ?.withoutQuotes()
 
-internal fun String.withoutQuotes() = removePrefix(QUOTES)
-    .removeSuffix(QUOTES)
+internal fun String.withoutQuotes() = removeSurrounding(TRIPLE_QUOTES)
+    .removeSurrounding(SINGLE_QUOTES)
     .replace(STRING_CONCAT_REGEX, "")
 
-private const val QUOTES = "\""
+private const val SINGLE_QUOTES = "\""
+private const val TRIPLE_QUOTES = "\"\"\""
 private val STRING_CONCAT_REGEX = """["]\s*\+[\n\s]*["]""".toRegex()

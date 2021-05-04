@@ -200,6 +200,20 @@ class RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
                 }
 
+                it("extracts default value when it is a multi line string") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: String by config(""${"\""}abcd""${"\""})
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'abcd'")
+                }
+
                 it("extracts default value when defined with named parameter") {
                     val code = """
                         /**
