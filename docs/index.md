@@ -6,6 +6,7 @@ permalink: index.html
 summary:
 ---
 
+![detekt logo](images/logo.svg "detekt logo")
 ![detekt in action](images/detekt_in_action.png "detekt in action")
 
 ### Features
