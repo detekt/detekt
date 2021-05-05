@@ -3,9 +3,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":detekt-api"))
-    api(project(":detekt-test-utils"))
+    api(projects.detektApi)
+    api(projects.detektTestUtils)
     compileOnly(libs.assertj)
-    implementation(project(":detekt-core"))
-    implementation(project(":detekt-parser"))
+    implementation(projects.detektCore)
+    implementation(projects.detektParser)
 }

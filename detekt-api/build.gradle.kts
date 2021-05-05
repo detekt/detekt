@@ -9,9 +9,9 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
-    api(project(":detekt-psi-utils"))
+    api(projects.detektPsiUtils)
 
-    testImplementation(project(":detekt-test"))
+    testImplementation(projects.detektTest)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
 

@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":detekt-api"))
-    compileOnly(project(":detekt-metrics"))
-    testImplementation(project(":detekt-metrics"))
-    testImplementation(project(":detekt-test"))
+    compileOnly(projects.detektApi)
+    compileOnly(projects.detektMetrics)
+    testImplementation(projects.detektMetrics)
+    testImplementation(projects.detektTest)
 }

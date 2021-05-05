@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":detekt-api"))
+    implementation(projects.detektApi)
     implementation(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
@@ -14,7 +14,7 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
 
-    testImplementation(project(":detekt-test"))
+    testImplementation(projects.detektTest)
 }
 
 tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }

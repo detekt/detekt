@@ -17,7 +17,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
 
-    testImplementation(project(":detekt-test-utils"))
+    testImplementation(projects.detektTestUtils)
     testImplementation(libs.kotlin.gradlePlugin)
     intTest(libs.kotlin.gradlePlugin)
     intTest(libs.android.gradlePlugin)
