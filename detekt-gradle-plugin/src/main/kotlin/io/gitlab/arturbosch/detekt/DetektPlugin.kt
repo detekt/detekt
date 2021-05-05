@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.attributes.Bundling
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import java.util.Properties
@@ -77,6 +78,12 @@ class DetektPlugin : Plugin<Project> {
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+
+            // We set the org.gradle.dependency.bundling attribute to "external"
+            configuration.attributes.attribute(
+                Bundling.BUNDLING_ATTRIBUTE,
+                project.objects.named(Bundling::class.java, Bundling.EXTERNAL)
+            )
 
             configuration.defaultDependencies { dependencySet ->
                 val version = extension.toolVersion ?: loadDetektVersion(DetektPlugin::class.java.classLoader)
