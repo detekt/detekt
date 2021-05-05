@@ -16,7 +16,9 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-jacoco.toolVersion = Versions.JACOCO
+val catalogs = project.extensions.getByType(VersionCatalogsExtension::class)
+
+jacoco.toolVersion = catalogs.named("libs").findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()

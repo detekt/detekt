@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml")
+    implementation(libs.snakeyaml)
     implementation(project(":detekt-api"))
     implementation(project(":detekt-metrics"))
     implementation(project(":detekt-parser"))
