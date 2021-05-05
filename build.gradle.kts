@@ -16,7 +16,7 @@ allprojects {
     version = Versions.currentOrSnapshot()
 }
 
-jacoco.toolVersion = Versions.JACOCO
+jacoco.toolVersion = libs.versions.jacoco.get()
 
 tasks {
     jacocoTestReport {

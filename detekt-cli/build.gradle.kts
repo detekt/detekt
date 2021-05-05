@@ -9,7 +9,7 @@ application {
 }
 
 dependencies {
-    implementation("com.beust:jcommander")
+    implementation(libs.jcommander)
     implementation(project(":detekt-tooling"))
     implementation(project(":detekt-parser"))
     runtimeOnly(project(":detekt-core"))

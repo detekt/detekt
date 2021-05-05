@@ -3,11 +3,11 @@ plugins {
 }
 
 dependencies {
-    api(kotlin("stdlib-jdk8"))
-    compileOnly("org.spekframework.spek2:spek-dsl-jvm")
+    api(libs.kotlin.stdlibJdk8)
+    compileOnly(libs.spek.dsl)
     implementation(project(":detekt-parser"))
     implementation(project(":detekt-psi-utils"))
-    implementation(kotlin("script-runtime"))
-    implementation(kotlin("script-util"))
-    implementation(kotlin("scripting-compiler-embeddable"))
+    implementation(libs.kotlin.scriptRuntime)
+    implementation(libs.kotlin.scriptUtil)
+    implementation(libs.kotlin.scriptingCompilerEmbeddable)
 }

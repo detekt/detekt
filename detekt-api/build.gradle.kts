@@ -8,14 +8,14 @@ plugins {
 }
 
 dependencies {
-    api(kotlin("compiler-embeddable"))
+    api(libs.kotlin.compilerEmbeddable)
     api(project(":detekt-psi-utils"))
 
     testImplementation(project(":detekt-test"))
 
-    testFixturesApi(kotlin("stdlib-jdk8"))
+    testFixturesApi(libs.kotlin.stdlibJdk8)
 
-    dokkaJekyllPlugin("org.jetbrains.dokka:jekyll-plugin")
+    dokkaJekyllPlugin(libs.dokka.jekyll)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

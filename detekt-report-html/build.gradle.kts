@@ -5,7 +5,7 @@ plugins {
 dependencies {
     compileOnly(project(":detekt-api"))
     compileOnly(project(":detekt-metrics"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm") {
+    implementation(libs.kotlinx.html) {
         exclude(group = "org.jetbrains.kotlin")
     }
     testImplementation(project(":detekt-metrics"))

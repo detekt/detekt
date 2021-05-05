@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    api(kotlin("compiler-embeddable"))
+    api(libs.kotlin.compilerEmbeddable)
     implementation(project(":detekt-psi-utils"))
     testImplementation(project(":detekt-test-utils"))
 }

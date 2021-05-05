@@ -10,7 +10,7 @@ dependencies {
     implementation(project(":detekt-rules-empty"))
     implementation(project(":detekt-formatting"))
     implementation(project(":detekt-cli"))
-    implementation("com.beust:jcommander")
+    implementation(libs.jcommander)
 
     testImplementation(project(":detekt-test-utils"))
 }

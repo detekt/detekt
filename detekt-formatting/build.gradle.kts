@@ -4,13 +4,13 @@ plugins {
 
 dependencies {
     implementation(project(":detekt-api"))
-    implementation("com.pinterest.ktlint:ktlint-ruleset-standard") {
+    implementation(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-core") {
+    implementation(libs.ktlint.core) {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental") {
+    implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
 
