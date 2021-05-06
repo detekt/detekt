@@ -80,6 +80,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseCheckOrError(config),
             UseIfInsteadOfWhen(config),
             RedundantExplicitType(config),
+            RedundantExplicitImport(config),
             LibraryEntitiesShouldNotBePublic(config),
             LibraryCodeMustSpecifyReturnType(config),
             UseArrayLiteralsInAnnotations(config),
