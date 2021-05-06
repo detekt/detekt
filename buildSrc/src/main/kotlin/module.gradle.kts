@@ -105,7 +105,6 @@ dependencies {
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm")
     testImplementation("org.reflections:reflections")
-    testImplementation("io.mockk:mockk")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5")
