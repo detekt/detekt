@@ -21,17 +21,6 @@ dependencies {
     testImplementation(libs.kotlin.gradlePlugin)
     intTest(libs.kotlin.gradlePlugin)
     intTest(libs.android.gradlePlugin)
-
-    constraints {
-        implementation(libs.kotlin.reflect) {
-            because(
-                """Android Gradle Plugin 4.1.1 depends on Kotlin 1.3.72 but we should not mix 1.3 and 1.4.
-                This constraint should be lifted on Android Gradle Plugin 4.2.0. See
-                https://dl.google.com/android/maven2/com/android/tools/build/gradle/4.2.0-beta02/gradle-4.2.0-beta02.pom
-            """
-            )
-        }
-    }
 }
 
 gradlePlugin {
