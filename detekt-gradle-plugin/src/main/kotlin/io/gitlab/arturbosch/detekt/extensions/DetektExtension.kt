@@ -35,10 +35,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var baseline: File? = objects.fileProperty()
         .run {
             if (GradleVersion.current() < GradleVersion.version("6.0")) {
-                set(File("baseline.xml"))
+                set(File("detekt-baseline.xml"))
                 this
             } else {
-                fileValue(File("baseline.xml"))
+                fileValue(File("detekt-baseline.xml"))
             }
         }
         .get().asFile
