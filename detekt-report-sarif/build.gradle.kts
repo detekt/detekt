@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":detekt-api"))
-    compileOnly(project(":detekt-tooling"))
+    compileOnly(projects.detektApi)
+    compileOnly(projects.detektTooling)
     implementation(libs.sarif4k)
-    testImplementation(project(":detekt-tooling"))
-    testImplementation(project(":detekt-test-utils"))
-    testImplementation(testFixtures(project(":detekt-api")))
+    testImplementation(projects.detektTooling)
+    testImplementation(projects.detektTestUtils)
+    testImplementation(testFixtures(projects.detektApi))
 }

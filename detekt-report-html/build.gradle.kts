@@ -3,12 +3,12 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":detekt-api"))
-    compileOnly(project(":detekt-metrics"))
+    compileOnly(projects.detektApi)
+    compileOnly(projects.detektMetrics)
     implementation(libs.kotlinx.html) {
         exclude(group = "org.jetbrains.kotlin")
     }
-    testImplementation(project(":detekt-metrics"))
-    testImplementation(project(":detekt-test-utils"))
-    testImplementation(testFixtures(project(":detekt-api")))
+    testImplementation(projects.detektMetrics)
+    testImplementation(projects.detektTestUtils)
+    testImplementation(testFixtures(projects.detektApi))
 }

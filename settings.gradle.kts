@@ -32,6 +32,7 @@ include(
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 // build scan plugin can only be applied in settings file
 plugins {

@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":detekt-api"))
-    testImplementation(project(":detekt-test-utils"))
+    api(projects.detektApi)
+    testImplementation(projects.detektTestUtils)
 }

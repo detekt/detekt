@@ -10,12 +10,12 @@ application {
 
 dependencies {
     implementation(libs.jcommander)
-    implementation(project(":detekt-tooling"))
-    implementation(project(":detekt-parser"))
-    runtimeOnly(project(":detekt-core"))
-    runtimeOnly(project(":detekt-rules"))
+    implementation(projects.detektTooling)
+    implementation(projects.detektParser)
+    runtimeOnly(projects.detektCore)
+    runtimeOnly(projects.detektRules)
 
-    testImplementation(project(":detekt-test"))
+    testImplementation(projects.detektTest)
 }
 
 tasks.shadowJar {

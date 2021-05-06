@@ -6,8 +6,8 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
-    implementation(project(":detekt-psi-utils"))
-    testImplementation(project(":detekt-test-utils"))
+    implementation(projects.detektPsiUtils)
+    testImplementation(projects.detektTestUtils)
 }
 
 tasks.withType<Test> {

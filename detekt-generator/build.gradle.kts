@@ -5,14 +5,14 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":detekt-parser"))
-    implementation(project(":detekt-api"))
-    implementation(project(":detekt-rules-empty"))
-    implementation(project(":detekt-formatting"))
-    implementation(project(":detekt-cli"))
+    implementation(projects.detektParser)
+    implementation(projects.detektApi)
+    implementation(projects.detektRulesEmpty)
+    implementation(projects.detektFormatting)
+    implementation(projects.detektCli)
     implementation(libs.jcommander)
 
-    testImplementation(project(":detekt-test-utils"))
+    testImplementation(projects.detektTestUtils)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
