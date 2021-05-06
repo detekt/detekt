@@ -33,32 +33,6 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports property as undocumented if only inline documentation provided") {
-            val code = """
-               class Test(
-                    /**
-                     * Some docs.
-                     */
-                    val a: Int
-               )
-            """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
-        }
-
-        it("does not report constructor property if inline documentation provided and flag set") {
-            val code = """
-               class Test(
-                    /**
-                     * Some docs.
-                     */
-                    val a: Int
-               )
-            """
-            val findings = UndocumentedPublicProperty(TestConfig(mapOf(UndocumentedPublicProperty.ALLOW_INLINE_CONSTRUCTOR_PROPERTY_COMMENTS to "true"))).compileAndLint(code)
-
-            assertThat(findings).hasSize(0)
-        }
-
         it("reports undocumented public property in a primary constructor") {
             val code = "/* comment */ class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -171,7 +145,16 @@ class UndocumentedPublicPropertySpec : Spek({
                 * @property [c] int3
                 * @param d int4
                 */
-                class Test(val a: Int, val b: Int, val c: Int, val d: Int)
+                class Test(
+                    val a: Int, 
+                    val b: Int, 
+                    val c: Int, 
+                    val d: Int,
+                    /**
+                     * Some docs.
+                     */
+                    val e: Int                    
+                )
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
