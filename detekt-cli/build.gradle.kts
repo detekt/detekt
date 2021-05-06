@@ -18,6 +18,11 @@ dependencies {
     testImplementation(projects.detektTest)
 }
 
+val javaComponent = components["java"] as AdhocComponentWithVariants
+javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
+    skip()
+}
+
 tasks.shadowJar {
     mergeServiceFiles()
 }
