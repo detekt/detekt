@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>onProcessComplete - | A static code analyzer for Kotlin</title>
+<title>configWithFallback - | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="onProcessComplete -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="configWithFallback -">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -413,7 +413,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">onProcessComplete -</h1>
+   <h1 class="post-title-main">configWithFallback -</h1>
 </div>
 
 
@@ -450,23 +450,19 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process-complete.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/">FileProcessListener</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process-complete.html">onProcessComplete</a></p>
+  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/">io.gitlab.arturbosch.detekt.api.internal</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.html">configWithFallback</a></p>
 
-<h1 id="onprocesscomplete">onProcessComplete</h1>
+<h1 id="configwithfallback">configWithFallback</h1>
 <p>[jvm]<br />
 Content<br />
-<del>open</del> <del>fun</del> <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process-complete.html"><del>onProcessComplete</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>,</del> <del>findings</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>»<del>)</del><br />
-open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/on-process-complete.html">onProcessComplete</a>(file: KtFile, findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>», bindingContext: BindingContext)<br />
-More info</p>
-
-<p>Called when processing of a file completes. This method is called from a thread pool thread. Heavy computations allowed.</p>
+fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.html">configWithFallback</a>(fallbackPropertyName: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.html">T</a>&gt;</p>
 
 
 

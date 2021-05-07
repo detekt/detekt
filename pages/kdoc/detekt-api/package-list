@@ -1,11 +1,8 @@
 $dokka.format:jekyll-v1
 $dokka.linkExtension:md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal////PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/index.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#kotlin.Boolean/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#kotlin.Long/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal//configWithFallback/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//createPathFilters/io.gitlab.arturbosch.detekt.api.Config#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//isSuppressedBy/org.jetbrains.kotlin.psi.KtAnnotated#kotlin.String#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/is-suppressed-by.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//isSuppressedBy/org.jetbrains.kotlin.psi.KtElement#kotlin.String#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/is-suppressed-by.md
