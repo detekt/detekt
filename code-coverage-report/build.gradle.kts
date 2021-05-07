@@ -85,3 +85,7 @@ val jacocoMergedReport by tasks.registering(JacocoReport::class) {
         html.required.set(true)
     }
 }
+
+tasks.check {
+    dependsOn(jacocoMergedReport)
+}
