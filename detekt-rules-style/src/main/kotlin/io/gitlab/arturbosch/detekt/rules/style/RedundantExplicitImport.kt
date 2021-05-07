@@ -18,14 +18,18 @@ class RedundantExplicitImport(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Mark default import. Default imported don't need to be specified explicitly.",
+        "Mark default import. Default import don't need to be specified explicitly.",
         Debt.FIVE_MINS
     )
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
-        val import = importDirective.importedFqName?.asString() ?: ""
+        if (importDirective.aliasName != null) {
+            return
+        }
+
+        val import = importDirective.importPath?.pathStr ?: return
         if (defaultImports.contains(import.dropLastWhile { it != '.' })) {
             report(
                 CodeSmell(
