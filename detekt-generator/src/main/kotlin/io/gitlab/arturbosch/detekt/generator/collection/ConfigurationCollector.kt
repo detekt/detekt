@@ -1,9 +1,14 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.FALLBACK_DELEGATE_NAME
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.getFallbackPropertyName
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isFallbackConfigDelegate
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
@@ -77,7 +82,13 @@ class ConfigurationCollector {
             }
         }
         if (!isInitializedWithConfigDelegate()) {
-            invalidDocumentation { "'$name' is not using the '$DELEGATE_NAME' delegate" }
+            invalidDocumentation { "'$name' is not using one of the config property delegates ($DELEGATE_NAMES)" }
+        }
+        if (isFallbackConfigDelegate()) {
+            val fallbackPropertyName = getFallbackPropertyName()
+            if (isUsingInvalidFallbackReference(properties, fallbackPropertyName)) {
+                invalidDocumentation { "The fallback property '$fallbackPropertyName' is missing for property '$name'" }
+            }
         }
 
         val propertyName: String = checkNotNull(name)
@@ -95,10 +106,8 @@ class ConfigurationCollector {
     }
 
     private fun KtPropertyDelegate.getDefaultValueAsString(): String {
-        val delegateArgument = checkNotNull(
-            (expression as KtCallExpression).valueArguments[0].getArgumentExpression()
-        )
-        val listDeclarationForDefault = delegateArgument.getListDeclarationOrNull()
+        val defaultValueExpression = getDefaultValueExpression()
+        val listDeclarationForDefault = defaultValueExpression.getListDeclarationOrNull()
         if (listDeclarationForDefault != null) {
             return listDeclarationForDefault.valueArguments.map {
                 val value = constantsByName[it.text] ?: it.text
@@ -107,14 +116,48 @@ class ConfigurationCollector {
         }
 
         val defaultValueOrConstantName = checkNotNull(
-            delegateArgument.text?.withoutQuotes()
+            defaultValueExpression.text?.withoutQuotes()
         )
         val defaultValue = constantsByName[defaultValueOrConstantName] ?: defaultValueOrConstantName
         return property.formatDefaultValueAccordingToType(defaultValue)
     }
 
+    private fun KtPropertyDelegate.getDefaultValueExpression(): KtExpression {
+        val callExpression = expression as KtCallExpression
+        val arguments = callExpression.valueArguments
+        if (arguments.size == 1) {
+            return checkNotNull(arguments[0].getArgumentExpression())
+        }
+        val defaultArgument = arguments
+            .find { it.getArgumentName()?.text == DEFAULT_VALUE_ARGUMENT_NAME }
+            ?: arguments.last()
+        return checkNotNull(defaultArgument.getArgumentExpression())
+    }
+
+    private object ConfigWithFallbackSupport {
+        const val FALLBACK_DELEGATE_NAME = "configWithFallback"
+        private const val FALLBACK_ARGUMENT_NAME = "fallbackPropertyName"
+
+        fun KtProperty.isFallbackConfigDelegate(): Boolean =
+            delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
+
+        fun KtProperty.getFallbackPropertyName(): String {
+            val callExpression = delegate?.expression as KtCallExpression
+            val arguments = callExpression.valueArguments
+            val fallbackArgument = arguments
+                .find { it.getArgumentName()?.text == FALLBACK_ARGUMENT_NAME }
+                ?: arguments.first()
+            return checkNotNull(fallbackArgument.getArgumentExpression()?.text?.withoutQuotes())
+        }
+
+        fun isUsingInvalidFallbackReference(properties: List<KtProperty>, fallbackPropertyName: String) =
+            properties.filter { it.isInitializedWithConfigDelegate() }.none { it.name == fallbackPropertyName }
+    }
+
     companion object {
-        private const val DELEGATE_NAME = "config"
+        private const val SIMPLE_DELEGATE_NAME = "config"
+        private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
+        private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
         private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
@@ -139,7 +182,7 @@ class ConfigurationCollector {
             findDescendantOfType { it.isListDeclaration() }
 
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
-            delegate?.expression?.referenceExpression()?.text == DELEGATE_NAME
+            delegate?.expression?.referenceExpression()?.text in DELEGATE_NAMES
 
         private fun KtProperty.hasSupportedType(): Boolean =
             declaredTypeOrNull in SUPPORTED_TYPES

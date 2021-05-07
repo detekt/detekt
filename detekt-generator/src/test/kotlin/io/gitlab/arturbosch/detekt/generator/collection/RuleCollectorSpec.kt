@@ -151,8 +151,8 @@ class RuleCollectorSpec : Spek({
             assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
         }
 
-        describe("collects configuration options") {
-            describe("using annotation") {
+        context("collects configuration options") {
+            context("using annotation") {
                 it("contains no configuration options by default") {
                     val code = """
                         /**
@@ -459,9 +459,67 @@ class RuleCollectorSpec : Spek({
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
+                context("fallback property") {
+                    it("extracts default value") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val prop: Int by config(1)
+                            @Configuration("description")
+                            private val config1: Int by configWithFallback("prop", 99)
+                            @Configuration("description")
+                            private val config2: Int by configWithFallback(fallbackPropertyName = "prop", defaultValue = 99)
+                            @Configuration("description")
+                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackPropertyName = "prop")
+                        }                        
+                    """
+                        val items = subject.run(code)
+                        val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
+                        assertThat(fallbackProperties).hasSize(3)
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                    }
+
+                    it("reports an error if the property to fallback on does not exist") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config: Int by configWithFallback("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
+                    }
+
+                    it("reports an error if the property to fallback on exists but is not a config property") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            private val prop: Int = 1
+                            @Configuration("description")
+                            private val config: Int by configWithFallback("prop", 99)
+                        }                        
+                    """
+                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                            subject.run(
+                                code
+                            )
+                        }
+                    }
+                }
             }
 
-            describe("as part of kdoc") {
+            context("as part of kdoc") {
                 it("contains no configuration options by default") {
                     val code = """
                         /**
@@ -546,7 +604,7 @@ class RuleCollectorSpec : Spek({
             }
         }
 
-        describe("collects type resolution information") {
+        context("collects type resolution information") {
             it("has no type resolution by default") {
                 val code = """
                     /**
