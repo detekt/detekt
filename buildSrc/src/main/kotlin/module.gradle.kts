@@ -55,7 +55,7 @@ tasks.withType<KotlinCompile>().configureEach {
             "-Xopt-in=kotlin.RequiresOptIn"
         )
         // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
-        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
+        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true" || System.getenv("CI") == "true"
     }
 }
 
