@@ -144,7 +144,16 @@ class UndocumentedPublicPropertySpec : Spek({
                 * @property [c] int3
                 * @param d int4
                 */
-                class Test(val a: Int, val b: Int, val c: Int, val d: Int)
+                class Test(
+                    val a: Int, 
+                    val b: Int, 
+                    val c: Int, 
+                    val d: Int,
+                    /**
+                     * Some docs.
+                     */
+                    val e: Int                    
+                )
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }

@@ -36,7 +36,8 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
         if (constructor.isPublicInherited()) {
             val comment = constructor.containingClassOrObject?.docComment?.text
             constructor.valueParameters
-                .filter { it.isPublicNotOverridden() && it.hasValOrVar() && it.isUndocumented(comment) }
+                .filter { it.isPublicNotOverridden() && it.hasValOrVar() }
+                .filter { it.isUndocumented(comment) && it.docComment == null }
                 .forEach { report(it) }
         }
         super.visitPrimaryConstructor(constructor)
