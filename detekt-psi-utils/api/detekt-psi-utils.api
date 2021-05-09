@@ -45,7 +45,9 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 
 public final class io/gitlab/arturbosch/detekt/rules/GuardClausesKt {
 	public static final fun isElvisOperatorGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+	public static final synthetic fun isGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 	public static final fun isIfConditionGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+	public static final synthetic fun yieldStatementsSkippingGuardClauses (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Lkotlin/sequences/Sequence;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IdentifierNameKt {
@@ -53,6 +55,7 @@ public final class io/gitlab/arturbosch/detekt/rules/IdentifierNameKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IsPartOfUtilsKt {
+	public static final synthetic fun isPartOf (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
 	public static final fun isPartOfString (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
 }
 
@@ -63,6 +66,7 @@ public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
 	public static final fun hasCommentInside (Lorg/jetbrains/kotlin/psi/KtClassOrObject;)Z
 	public static final fun isUsedForNesting (Lorg/jetbrains/kotlin/psi/KtCallExpression;)Z
 	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final synthetic fun safeAs (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KeywordsKt {
@@ -123,12 +127,15 @@ public final class io/gitlab/arturbosch/detekt/rules/StringExtensionsKt {
 public final class io/gitlab/arturbosch/detekt/rules/ThrowExtensionsKt {
 	public static final fun getArguments (Lorg/jetbrains/kotlin/psi/KtThrowExpression;)Ljava/util/List;
 	public static final fun isEnclosedByConditionalStatement (Lorg/jetbrains/kotlin/psi/KtThrowExpression;)Z
+	public static final synthetic fun isExceptionOfType (Lorg/jetbrains/kotlin/psi/KtThrowExpression;)Z
 	public static final fun isIllegalArgumentException (Lorg/jetbrains/kotlin/psi/KtThrowExpression;)Z
 	public static final fun isIllegalStateException (Lorg/jetbrains/kotlin/psi/KtThrowExpression;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
 	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Z
+	public static final synthetic fun parentsOfTypeUntil (Lorg/jetbrains/kotlin/psi/KtElement;Z)Lkotlin/sequences/Sequence;
+	public static synthetic fun parentsOfTypeUntil$default (Lorg/jetbrains/kotlin/psi/KtElement;ZILjava/lang/Object;)Lkotlin/sequences/Sequence;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
