@@ -31,7 +31,7 @@ jobs:
           java-version: 11
 
       - name: Build Detekt Documentation
-        run: ./gradlew :detekt-generator:generateDocumentation --stacktrace
+        run: ./gradlew :detekt-generator:generateDocumentation
 
       - name: Upload Generated Rules documentation
         uses: actions/upload-artifact@v2
