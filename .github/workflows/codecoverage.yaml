@@ -25,7 +25,7 @@ jobs:
           java-version: 11
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoTestReport -Dorg.gradle.caching=false
+        run: ./gradlew jacocoTestReport --no-build-cache
 
       - name: Publish Coverage
         if: success()

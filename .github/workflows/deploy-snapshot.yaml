@@ -31,7 +31,7 @@ jobs:
         java-version: 8
 
     - name: Build detekt
-      run: ./gradlew build --build-cache
+      run: ./gradlew build
 
     - name: Deploy Snapshot
       env:
