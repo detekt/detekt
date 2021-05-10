@@ -256,6 +256,21 @@ class ConfigPropertySpec : Spek({
                     assertThat(subject.notPresent).isEqualTo(99)
                 }
             }
+            context("empty list of strings") {
+                val subject by memoized {
+                    object : TestConfigAware() {
+                        val defaultValue: List<String> = emptyList()
+                        val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
+                        val prop2: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
+                    }
+                }
+                it("can be defined as variable") {
+                    assertThat(subject.prop1).isEmpty()
+                }
+                it("can be defined using listOf<String>()") {
+                    assertThat(subject.prop2).isEmpty()
+                }
+            }
             context("memoization") {
                 val subject by memoized {
                     object : TestConfigAware() {

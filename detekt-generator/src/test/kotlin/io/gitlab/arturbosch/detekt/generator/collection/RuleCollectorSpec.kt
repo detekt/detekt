@@ -369,9 +369,27 @@ object RuleCollectorSpec : Spek({
 
                             @Configuration("description")
                             private val config2: List<String> by config(emptyList())
+                        }                        
+                    """
+                    val items = subject.run(code)
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                }
+
+                it("extracts emptyList default value of transformed list") {
+                    val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val config1: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
+
+                            @Configuration("description")
+                            private val config2: List<Int> by config(DEFAULT_CONFIG_VALUE) { it.map(String::toInt) }
 
                             companion object {
-                                private val DEFAULT_CONFIG_VALUE_A = "a"
+                                private val DEFAULT_CONFIG_VALUE: List<String> = emptyList()
                             }
                         }                        
                     """
