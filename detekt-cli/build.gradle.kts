@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass.set("io.gitlab.arturbosch.detekt.cli.Main")
 }
 
 dependencies {

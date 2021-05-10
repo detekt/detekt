@@ -13,7 +13,7 @@ gradleVersions-gradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.28.
 nexusStaging-gradlePlugin = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
 pluginPublishing-gradlePlugin = "com.gradle.publish:plugin-publish-plugin:0.14.0"
 semver4j-gradlePlugin = "com.vdurmont:semver4j:3.1.0"
-shadow-gradlePlugin = "com.github.jengelman.gradle.plugins:shadow:6.1.0"
+shadow-gradlePlugin = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
 sonarqube-gradlePlugin = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
