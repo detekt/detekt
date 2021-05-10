@@ -8,6 +8,10 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
+private const val IGNORE_ANNOTATION = "ignoreAnnotation"
+private const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
+private const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+
 class StringLiteralDuplicationSpec : Spek({
 
     val subject by memoized { StringLiteralDuplication() }
@@ -49,7 +53,7 @@ class StringLiteralDuplicationSpec : Spek({
             }
 
             it("reports strings in annotations according to config") {
-                val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_ANNOTATION to "false"))
+                val config = TestConfig(mapOf(IGNORE_ANNOTATION to "false"))
                 assertFindingWithConfig(code, config, 1)
             }
         }
@@ -63,7 +67,7 @@ class StringLiteralDuplicationSpec : Spek({
             }
 
             it("reports string with 4 characters") {
-                val config = TestConfig(mapOf(StringLiteralDuplication.EXCLUDE_SHORT_STRING to "false"))
+                val config = TestConfig(mapOf(EXCLUDE_SHORT_STRING to "false"))
                 assertFindingWithConfig(code, config, 1)
             }
         }
@@ -80,21 +84,21 @@ class StringLiteralDuplicationSpec : Spek({
                     val str1 = "lorem" + "lorem" + "lorem"
                     val str2 = "ipsum" + "ipsum" + "ipsum"
                 """
-                val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
+                val config = TestConfig(mapOf(IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
                 assertFindingWithConfig(code, config, 0)
             }
 
             it("should not fail with invalid regex when disabled") {
                 val configValues = mapOf(
                     "active" to "false",
-                    StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
+                    IGNORE_STRINGS_REGEX to "*lorem"
                 )
                 val config = TestConfig(configValues)
                 assertFindingWithConfig(regexTestingCode, config, 0)
             }
 
             it("should fail with invalid regex") {
-                val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"))
+                val config = TestConfig(mapOf(IGNORE_STRINGS_REGEX to "*lorem"))
                 assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                     StringLiteralDuplication(config).compileAndLint(regexTestingCode)
                 }
