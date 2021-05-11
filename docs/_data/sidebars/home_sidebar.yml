@@ -93,5 +93,5 @@ entries:
     output: web
     folderitems:
     - title: detekt-api
-      url: /pages/kdoc/
+      url: /pages/kdoc
       output: web
