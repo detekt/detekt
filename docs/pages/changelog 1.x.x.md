@@ -6,10 +6,11 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.17.0 - 2021-05-04
+#### 1.17.0 - 2021-05-12
 
 ##### Notable Changes
 
+- We're introducing our new Project logo :). See [#3726](https://github.com/detekt/detekt/pull/3726)
 - This release allows you to replace your `jcenter()` dependencies with `mavenCentral()` given that our dependency on `kotlinx.html` migrated to Maven Central - See [#3455](https://github.com/detekt/detekt/pull/3455)
 - We now introduced the `src/test/java` and `src/test/kotlin` by default for the plain `detekt` Gradle task. If you use that task, you might notice rule reports in your test sourceset. See [#3649](https://github.com/detekt/detekt/pull/3649)
 - We now default the baseline file to `baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619)
@@ -18,9 +19,17 @@ toc: true
 
 ##### Changelog
 
+- Fix kdoc link on blog navigation - [#3761](https://github.com/detekt/detekt/pull/3761)
+- We don't need to talk about jcenter anymore at our docs - [#3755](https://github.com/detekt/detekt/pull/3755)
+- Skip publishing for detekt-cli shadowRuntimeElements variant - [#3747](https://github.com/detekt/detekt/pull/3747)
+- Set the org.gradle.dependency.bundling attribute to external - [#3738](https://github.com/detekt/detekt/pull/3738)
+- Support triple quoted strings in default value of config delegate - [#3733](https://github.com/detekt/detekt/pull/3733)
 - Properly populate versions.properties - [#3730](https://github.com/detekt/detekt/pull/3730)
+- We have a logo :) - [#3726](https://github.com/detekt/detekt/pull/3726)
+- [UndocumentedPublicProperty] Allow inline comments for properties in primary constructor as documentation - [#3722](https://github.com/detekt/detekt/pull/3722)
 - MultilineLambdaItParameter: don't report when lambda has no implicit parameter references - [#3696](https://github.com/detekt/detekt/pull/3696)
 - Fix false positives for UnnecessaryFilter - [#3695](https://github.com/detekt/detekt/pull/3695)
+- Add support for fallback property - [#3675](https://github.com/detekt/detekt/pull/3675)
 - Ignore actual members in UnusedPrivateMember - [#3669](https://github.com/detekt/detekt/pull/3669)
 - NamedArguments rule: fix false positive with trailing lambda - [#3661](https://github.com/detekt/detekt/pull/3661)
 - Add DeprecatedBlockTag rule - [#3660](https://github.com/detekt/detekt/pull/3660)
@@ -30,6 +39,7 @@ toc: true
 - [ThrowingExceptionInMain] [ExitOutsideMainfix] fix for KtNamedFunction.isMainFunction() - [#3641](https://github.com/detekt/detekt/pull/3641)
 - Fixing IllegalArgumentException in ForbiddenMethodCall rule for Intersection type parameters - [#3626](https://github.com/detekt/detekt/pull/3626)
 - Replace getJetTypeFqName with fqNameOrNull extension - [#3613](https://github.com/detekt/detekt/pull/3613)
+- New Rule: ObjectLiteralToLambda - [#3599](https://github.com/detekt/detekt/pull/3599)
 - [MemberNameEqualsClassName] Support factory exemption for generic classes - [#3595](https://github.com/detekt/detekt/pull/3595)
 - Refactor Analyzer so that RuleSetProvider.instance is only called once - [#3585](https://github.com/detekt/detekt/pull/3585)
 - SarifOutputReportSpec: Correctly detect Windows root directory on local development machine - [#3584](https://github.com/detekt/detekt/pull/3584)
@@ -46,6 +56,10 @@ toc: true
 
 ##### Dependency Updates
 
+- Update to Gradle 7.0.1 - [#3760](https://github.com/detekt/detekt/pull/3760)
+- Update Shadow plugin to 7.0.0 - [#3759](https://github.com/detekt/detekt/pull/3759)
+- Upgrade to AGP 4.2.0 - [#3744](https://github.com/detekt/detekt/pull/3744)
+- JaCoCo 0.8.7 - [#3739](https://github.com/detekt/detekt/pull/3739)
 - Upgrade to GitHub-native Dependabot - [#3716](https://github.com/detekt/detekt/pull/3716)
 - Upgrade to Gradle 7 - [#3689](https://github.com/detekt/detekt/pull/3689)
 - Bump com.gradle.plugin-publish from 0.13.0 to 0.14.0 - [#3654](https://github.com/detekt/detekt/pull/3654)
@@ -57,7 +71,15 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Upload any heap dumps produced during CI build - [#3758](https://github.com/detekt/detekt/pull/3758)
+- Always run warningsAsErrors on CI - [#3754](https://github.com/detekt/detekt/pull/3754)
+- Clean ci - [#3753](https://github.com/detekt/detekt/pull/3753)
+- Revert "Set the org.gradle.dependency.bundling attribute to external" - [#3750](https://github.com/detekt/detekt/pull/3750)
+- Enable Gradle's type-safe project accessors - [#3742](https://github.com/detekt/detekt/pull/3742)
+- Enable Gradle's version catalogs - [#3741](https://github.com/detekt/detekt/pull/3741)
+- Ignore gradle plugin in codecov - [#3740](https://github.com/detekt/detekt/pull/3740)
 - Update config file due to invalid argument - [#3735](https://github.com/detekt/detekt/pull/3735)
+- Skip Multiplatform iOS tests if XCode is not configured - [#3734](https://github.com/detekt/detekt/pull/3734)
 - Specify Java language level in module plugin - [#3732](https://github.com/detekt/detekt/pull/3732)
 - Don't run unnecesary tasks - [#3725](https://github.com/detekt/detekt/pull/3725)
 - Remove --stacktrace now that we have scan - [#3724](https://github.com/detekt/detekt/pull/3724)
@@ -65,6 +87,7 @@ toc: true
 - Publish build scans for all CI builds - [#3710](https://github.com/detekt/detekt/pull/3710)
 - Remove deprecated kotlin-dsl Gradle config option - [#3709](https://github.com/detekt/detekt/pull/3709)
 - Update to setup-java@v2 - [#3704](https://github.com/detekt/detekt/pull/3704)
+- (Try to) improve CI build reliability - [#3703](https://github.com/detekt/detekt/pull/3703)
 - Simplify UpdateVersionInFileTask - [#3693](https://github.com/detekt/detekt/pull/3693)
 - Fix compilation issue in `:detekt-rules-style:compileTestKotlin` - [#3691](https://github.com/detekt/detekt/pull/3691)
 - Fix detekt failure in CI - [#3674](https://github.com/detekt/detekt/pull/3674)
