@@ -31,8 +31,8 @@ import org.jetbrains.kotlin.psi.KtDeclaration
  * /**
  *  * This function prints a message followed by a new line.
  *  */
- * &#64;Deprecated("Useless, the Kotlin standard library can already do this.")
- * &#64;ReplaceWith("println(what)")
+ * @@Deprecated("Useless, the Kotlin standard library can already do this.")
+ * @@ReplaceWith("println(what)")
  * fun printThenNewline(what: String) {
  *     // ...
  * }
