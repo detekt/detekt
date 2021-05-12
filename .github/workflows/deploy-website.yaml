@@ -22,8 +22,6 @@ jobs:
             ~/.gradle/caches/
             ~/.gradle/wrapper/
           key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
-          restore-keys: |
-            cache-gradle-
 
       - name: Setup Java
         uses: actions/setup-java@v1
