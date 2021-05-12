@@ -5,11 +5,118 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
-#### 1.16.0 - 2021-03-10
+
+#### 1.17.0 - 2021-05-12
 
 ##### Notable Changes
 
-##### Migration
+- We're introducing our new Project logo :). See [#3726](https://github.com/detekt/detekt/pull/3726)
+- This release allows you to replace your `jcenter()` dependencies with `mavenCentral()` given that our dependency on `kotlinx.html` migrated to Maven Central - See [#3455](https://github.com/detekt/detekt/pull/3455)
+- We now introduced the `src/test/java` and `src/test/kotlin` by default for the plain `detekt` Gradle task. If you use that task, you might notice rule reports in your test sourceset. See [#3649](https://github.com/detekt/detekt/pull/3649)
+- We now default the baseline file to `baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619)
+- We enabled the SARIF output format by default - See [#3543](https://github.com/detekt/detekt/pull/3543)
+- We're introducing annotations to provide metadata to rules, such as `@ActiveByDefault`, `@Configuration` and `@RequiresTypeResolution` - See [#3637](https://github.com/detekt/detekt/pull/3637) [#3592](https://github.com/detekt/detekt/pull/3592) and [#3579](https://github.com/detekt/detekt/pull/3579)
+
+##### Changelog
+
+- Fix kdoc link on blog navigation - [#3761](https://github.com/detekt/detekt/pull/3761)
+- We don't need to talk about jcenter anymore at our docs - [#3755](https://github.com/detekt/detekt/pull/3755)
+- Skip publishing for detekt-cli shadowRuntimeElements variant - [#3747](https://github.com/detekt/detekt/pull/3747)
+- Set the org.gradle.dependency.bundling attribute to external - [#3738](https://github.com/detekt/detekt/pull/3738)
+- Support triple quoted strings in default value of config delegate - [#3733](https://github.com/detekt/detekt/pull/3733)
+- Properly populate versions.properties - [#3730](https://github.com/detekt/detekt/pull/3730)
+- We have a logo :) - [#3726](https://github.com/detekt/detekt/pull/3726)
+- [UndocumentedPublicProperty] Allow inline comments for properties in primary constructor as documentation - [#3722](https://github.com/detekt/detekt/pull/3722)
+- MultilineLambdaItParameter: don't report when lambda has no implicit parameter references - [#3696](https://github.com/detekt/detekt/pull/3696)
+- Fix false positives for UnnecessaryFilter - [#3695](https://github.com/detekt/detekt/pull/3695)
+- Add support for fallback property - [#3675](https://github.com/detekt/detekt/pull/3675)
+- Ignore actual members in UnusedPrivateMember - [#3669](https://github.com/detekt/detekt/pull/3669)
+- NamedArguments rule: fix false positive with trailing lambda - [#3661](https://github.com/detekt/detekt/pull/3661)
+- Add DeprecatedBlockTag rule - [#3660](https://github.com/detekt/detekt/pull/3660)
+- Noisy gradle - [#3655](https://github.com/detekt/detekt/pull/3655)
+- Drop support to Gradle 5 - [#3647](https://github.com/detekt/detekt/pull/3647)
+- Add MayBeConstant as alias for MayBeConst - [#3644](https://github.com/detekt/detekt/pull/3644)
+- [ThrowingExceptionInMain] [ExitOutsideMainfix] fix for KtNamedFunction.isMainFunction() - [#3641](https://github.com/detekt/detekt/pull/3641)
+- Fixing IllegalArgumentException in ForbiddenMethodCall rule for Intersection type parameters - [#3626](https://github.com/detekt/detekt/pull/3626)
+- Replace getJetTypeFqName with fqNameOrNull extension - [#3613](https://github.com/detekt/detekt/pull/3613)
+- New Rule: ObjectLiteralToLambda - [#3599](https://github.com/detekt/detekt/pull/3599)
+- [MemberNameEqualsClassName] Support factory exemption for generic classes - [#3595](https://github.com/detekt/detekt/pull/3595)
+- Refactor Analyzer so that RuleSetProvider.instance is only called once - [#3585](https://github.com/detekt/detekt/pull/3585)
+- SarifOutputReportSpec: Correctly detect Windows root directory on local development machine - [#3584](https://github.com/detekt/detekt/pull/3584)
+- Replace @since KDoc tag with @SinceDetekt - [#3582](https://github.com/detekt/detekt/pull/3582)
+- Simplify code in RedundantSuspendModifier rule - [#3580](https://github.com/detekt/detekt/pull/3580)
+- Revert "Refactor Analyzer so that RuleSetProvider.instance is only called once" - [#3578](https://github.com/detekt/detekt/pull/3578)
+- fix error message -> buildUponDefaultConfig instead of buildOnDefaultConfig - [#3572](https://github.com/detekt/detekt/pull/3572)
+- UnnecessaryApply: fix false positive when lambda has multiple member references - [#3564](https://github.com/detekt/detekt/pull/3564)
+- Switch SARIF report off jackson - [#3557](https://github.com/detekt/detekt/pull/3557)
+- Fix rules not appearing in the sarif output - [#3556](https://github.com/detekt/detekt/pull/3556)
+- Refactor Analyzer so that RuleSetProvider.instance is only called once - [#3555](https://github.com/detekt/detekt/pull/3555)
+- New Rule: DoubleMutabilityForCollection - [#3553](https://github.com/detekt/detekt/pull/3553)
+- Adds a ForbiddenSingleExpressionSyntax rule - [#3550](https://github.com/detekt/detekt/pull/3550)
+
+##### Dependency Updates
+
+- Update to Gradle 7.0.1 - [#3760](https://github.com/detekt/detekt/pull/3760)
+- Update Shadow plugin to 7.0.0 - [#3759](https://github.com/detekt/detekt/pull/3759)
+- Upgrade to AGP 4.2.0 - [#3744](https://github.com/detekt/detekt/pull/3744)
+- JaCoCo 0.8.7 - [#3739](https://github.com/detekt/detekt/pull/3739)
+- Upgrade to GitHub-native Dependabot - [#3716](https://github.com/detekt/detekt/pull/3716)
+- Upgrade to Gradle 7 - [#3689](https://github.com/detekt/detekt/pull/3689)
+- Bump com.gradle.plugin-publish from 0.13.0 to 0.14.0 - [#3654](https://github.com/detekt/detekt/pull/3654)
+- Bump kotlin-reflect from 1.4.0 to 1.4.32 - [#3627](https://github.com/detekt/detekt/pull/3627)
+- Upgrade to ktlint 0.41.0 - [#3624](https://github.com/detekt/detekt/pull/3624)
+- Update to Kotlin 1.4.32 - [#3606](https://github.com/detekt/detekt/pull/3606)
+- Bump AGP from 4.1.2 to 4.1.3 - [#3589](https://github.com/detekt/detekt/pull/3589)
+- Bump mockk from 1.10.6 to 1.11.0 - [#3588](https://github.com/detekt/detekt/pull/3588)
+
+##### Housekeeping & Refactorings
+
+- Upload any heap dumps produced during CI build - [#3758](https://github.com/detekt/detekt/pull/3758)
+- Always run warningsAsErrors on CI - [#3754](https://github.com/detekt/detekt/pull/3754)
+- Clean ci - [#3753](https://github.com/detekt/detekt/pull/3753)
+- Revert "Set the org.gradle.dependency.bundling attribute to external" - [#3750](https://github.com/detekt/detekt/pull/3750)
+- Enable Gradle's type-safe project accessors - [#3742](https://github.com/detekt/detekt/pull/3742)
+- Enable Gradle's version catalogs - [#3741](https://github.com/detekt/detekt/pull/3741)
+- Ignore gradle plugin in codecov - [#3740](https://github.com/detekt/detekt/pull/3740)
+- Update config file due to invalid argument - [#3735](https://github.com/detekt/detekt/pull/3735)
+- Skip Multiplatform iOS tests if XCode is not configured - [#3734](https://github.com/detekt/detekt/pull/3734)
+- Specify Java language level in module plugin - [#3732](https://github.com/detekt/detekt/pull/3732)
+- Don't run unnecesary tasks - [#3725](https://github.com/detekt/detekt/pull/3725)
+- Remove --stacktrace now that we have scan - [#3724](https://github.com/detekt/detekt/pull/3724)
+- Drop JCenter usage from detekt's own build - [#3711](https://github.com/detekt/detekt/pull/3711)
+- Publish build scans for all CI builds - [#3710](https://github.com/detekt/detekt/pull/3710)
+- Remove deprecated kotlin-dsl Gradle config option - [#3709](https://github.com/detekt/detekt/pull/3709)
+- Update to setup-java@v2 - [#3704](https://github.com/detekt/detekt/pull/3704)
+- (Try to) improve CI build reliability - [#3703](https://github.com/detekt/detekt/pull/3703)
+- Simplify UpdateVersionInFileTask - [#3693](https://github.com/detekt/detekt/pull/3693)
+- Fix compilation issue in `:detekt-rules-style:compileTestKotlin` - [#3691](https://github.com/detekt/detekt/pull/3691)
+- Fix detekt failure in CI - [#3674](https://github.com/detekt/detekt/pull/3674)
+- Refactor UnusedPrivateMemberSpec - [#3667](https://github.com/detekt/detekt/pull/3667)
+- Warnings as errors - [#3646](https://github.com/detekt/detekt/pull/3646)
+- Skip ios tests if no ci - [#3635](https://github.com/detekt/detekt/pull/3635)
+- Fix tests - [#3634](https://github.com/detekt/detekt/pull/3634)
+- Include detekt-rules on CLI runtime classpath - [#3625](https://github.com/detekt/detekt/pull/3625)
+- Improve tests from :detekt-gradle-plugin - [#3623](https://github.com/detekt/detekt/pull/3623)
+- Improve generator test coverage - [#3622](https://github.com/detekt/detekt/pull/3622)
+- Improve tests - [#3618](https://github.com/detekt/detekt/pull/3618)
+- Apply more formatting rules to our code - [#3615](https://github.com/detekt/detekt/pull/3615)
+- Add negative test case for `requiresTypeResolution` - [#3614](https://github.com/detekt/detekt/pull/3614)
+- Simplify Gradle config - [#3612](https://github.com/detekt/detekt/pull/3612)
+- Decouple Gradle projects - [#3611](https://github.com/detekt/detekt/pull/3611)
+- Add --stacktrace to help triage CI flakiness - [#3604](https://github.com/detekt/detekt/pull/3604)
+- Fix CI failure for deploy-snapshot - [#3598](https://github.com/detekt/detekt/pull/3598)
+- Improve Deprecation and Documentation for allRules - [#3596](https://github.com/detekt/detekt/pull/3596)
+- Update files to support `main` branch in order to remove oppressive language - [#3586](https://github.com/detekt/detekt/pull/3586)
+- Format test code for RedundantSuspendModifierSpec - [#3581](https://github.com/detekt/detekt/pull/3581)
+- Gradle tweaks - [#3575](https://github.com/detekt/detekt/pull/3575)
+- Support Gradle config cache in detekt's build - [#3574](https://github.com/detekt/detekt/pull/3574)
+- Show information from @active in the website - [#3569](https://github.com/detekt/detekt/pull/3569)
+- Update rule doc for SwallowedException config - [#3547](https://github.com/detekt/detekt/pull/3547)
+- Markdown: Reintroduce double-backticks for inline code rendering - [#3545](https://github.com/detekt/detekt/pull/3545)
+
+See all issues at: [1.17.0](https://github.com/detekt/detekt/milestone/81)
+
+#### 1.16.0 - 2021-03-10
 
 ##### Changelog
 

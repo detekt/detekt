@@ -42,13 +42,22 @@ class GithubMilestoneReport : CliktCommand() {
         // get milestone and issue data
 
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
-        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.ALL, ghMilestone)
+        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
 
         val milestoneTitle = ghMilestone.title.trim()
         val groups = ghIssues.groupBy { issue ->
-            issue.labels.any { it.name == "housekeeping" }
+            val labels = issue.labels.map { it.name }
+            when {
+                "notable changes" in labels -> "notable changes"
+                "dependencies" in labels -> "dependencies"
+                "housekeeping" in labels -> "housekeeping"
+                else -> "changes"
+            }
         }
-        val (issuesForUsers, issuesForDevs) = groups[false] to groups[true]
+        val notableChanges = groups["notable changes"]
+        val dependencyBumps = groups["dependencies"]
+        val housekeepingChanges = groups["housekeeping"]
+        val issuesForUsers = groups["changes"]
 
         // print report
 
@@ -57,15 +66,21 @@ class GithubMilestoneReport : CliktCommand() {
             append("\n")
             append(section("Notable Changes"))
             append("\n")
+            append(formatIssues(notableChanges))
+            append("\n")
             append(section("Migration"))
             append("\n")
             append(section("Changelog"))
             append("\n")
             append(formatIssues(issuesForUsers))
             append("\n")
+            append(section("Dependency Updates"))
+            append("\n")
+            append(formatIssues(dependencyBumps))
+            append("\n")
             append(section("Housekeeping & Refactorings"))
             append("\n")
-            append(formatIssues(issuesForDevs))
+            append(formatIssues(housekeepingChanges))
             append("\n")
             append(footer(milestoneTitle, ghMilestone.htmlUrl))
         }.toString()

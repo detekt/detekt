@@ -11,6 +11,7 @@ project.afterEvaluate {
         repo.set("detekt")
         overwrite.set(true)
         dryRun.set(false)
+        targetCommitish.set("main")
         body {
             var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
             val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
@@ -57,8 +58,11 @@ tasks {
     }
 
     register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/buildSrc/build.gradle.kts"))
-        linePartToFind.set("const val DETEKT =")
-        lineTransformation.set("""    const val DETEKT = "${Versions.DETEKT}"""")
+        fileToUpdate.set(file("${rootProject.rootDir}/gradle/libs.versions.toml"))
+        linePartToFind.set("detekt-gradlePlugin = \"io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+        lineTransformation.set(
+            "detekt-gradlePlugin = \"io.gitlab.arturbosch.detekt:" +
+                "detekt-gradle-plugin:${Versions.DETEKT}\""
+        )
     }
 }
