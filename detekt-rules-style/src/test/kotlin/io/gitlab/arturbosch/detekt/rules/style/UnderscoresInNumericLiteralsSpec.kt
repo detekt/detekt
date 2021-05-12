@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
+
 class UnderscoresInNumericLiteralsSpec : Spek({
 
     describe("an Int of 1000") {
@@ -19,7 +21,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -44,7 +46,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -60,7 +62,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -76,7 +78,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -101,7 +103,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if ignored acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -126,7 +128,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -160,7 +162,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should still be reported even if acceptableDecimalLength is 7") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "7"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "7"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -300,7 +302,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if acceptableDecimalLength is 6") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "6"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "6"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -329,7 +331,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
@@ -345,7 +347,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 
         it("should not be reported if acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
+                TestConfig(mapOf(ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
