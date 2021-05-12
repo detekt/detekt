@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 
 /**
@@ -22,8 +24,6 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * data class FewerElements(val a: Int, val b: Int, val c: Int)
  * val (a, b, c) = TooManyElements(1, 2, 3)
  * </compliant>
- *
- * @configuration maxDestructuringEntries - maximum allowed elements in a destructuring declaration (default: `3`)
  */
 class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
@@ -34,16 +34,13 @@ class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) 
         Debt.TEN_MINS
     )
 
-    private val maxDestructuringEntries = valueOrDefault(MAX_DESTRUCTURING_ENTRIES, 3)
+    @Configuration("maximum allowed elements in a destructuring declaration")
+    private val maxDestructuringEntries: Int by config(3)
 
     override fun visitDestructuringDeclaration(destructuringDeclaration: KtDestructuringDeclaration) {
         if (destructuringDeclaration.entries.size > maxDestructuringEntries) {
             report(CodeSmell(issue, Entity.from(destructuringDeclaration), issue.description))
         }
         super.visitDestructuringDeclaration(destructuringDeclaration)
-    }
-
-    companion object {
-        const val MAX_DESTRUCTURING_ENTRIES = "maxDestructuringEntries"
     }
 }
