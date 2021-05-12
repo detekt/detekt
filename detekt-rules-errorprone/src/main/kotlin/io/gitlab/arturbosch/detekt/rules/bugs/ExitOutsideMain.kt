@@ -25,9 +25,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * fun randomFunction() {
  *     val result = doWork()
  *     if (result == FAILURE) {
- *       exitProcess(2)
+ *         exitProcess(2)
  *     } else {
- *       exitProcess(0)
+ *         exitProcess(0)
  *     }
  * }
  * </noncompliant>
@@ -36,9 +36,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * fun main() {
  *     val result = doWork()
  *     if (result == FAILURE) {
- *       exitProcess(2)
+ *         exitProcess(2)
  *     } else {
- *       exitProcess(0)
+ *         exitProcess(0)
  *     }
  * }
  * </compliant>
