@@ -13,6 +13,8 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
+private const val ALLOWED_NAMES_PATTERN = "allowedNames"
+
 class UnusedPrivateMemberSpec : Spek({
     setupKotlinEnvironment()
 
@@ -247,14 +249,14 @@ class UnusedPrivateMemberSpec : Spek({
         it("does not fail when disabled with invalid regex") {
             val configRules = mapOf(
                 "active" to "false",
-                UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
+                ALLOWED_NAMES_PATTERN to "*foo"
             )
             val config = TestConfig(configRules)
             assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
         }
 
         it("does fail when enabled with invalid regex") {
-            val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
+            val configRules = mapOf(ALLOWED_NAMES_PATTERN to "*foo")
             val config = TestConfig(configRules)
             assertThatExceptionOfType(PatternSyntaxException::class.java)
                 .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
