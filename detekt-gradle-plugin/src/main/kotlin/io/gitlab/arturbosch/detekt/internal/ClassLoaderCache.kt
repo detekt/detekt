@@ -5,7 +5,7 @@ import org.gradle.api.file.FileCollection
 import java.io.File
 import java.net.URLClassLoader
 
-interface ClassLoaderCache {
+fun interface ClassLoaderCache {
 
     fun getOrCreate(classpath: FileCollection): URLClassLoader
 }

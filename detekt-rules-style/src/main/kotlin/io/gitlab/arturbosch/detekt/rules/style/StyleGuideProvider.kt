@@ -46,6 +46,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryParentheses(config),
             UnnecessaryInheritance(config),
             UtilityClassWithPublicConstructor(config),
+            ObjectLiteralToLambda(config),
             OptionalAbstractKeyword(config),
             OptionalWhenBraces(config),
             OptionalUnit(config),
