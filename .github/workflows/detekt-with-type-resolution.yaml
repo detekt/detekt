@@ -24,9 +24,7 @@ jobs:
           path: |
             ~/.gradle/caches/
             ~/.gradle/wrapper/
-          key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
-          restore-keys: |
-            cache-gradle-
+          key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
 
       - name: Setup Java
         uses: actions/setup-java@v1
@@ -61,9 +59,7 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-${{ hashFiles('detekt-bom/build.gradle.kts') }}
-        restore-keys: |
-          cache-gradle-
+        key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
 
     - name: Setup Java
       uses: actions/setup-java@v1
