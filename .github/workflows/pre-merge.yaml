@@ -29,7 +29,7 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-${{ hashFiles('gradle/libs.versions.toml') }}
         restore-keys: |
           cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-
           cache-gradle-${{ matrix.os }}-
@@ -65,7 +65,7 @@ jobs:
         path: |
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-        key: cache-gradle-ubuntu-latest-11-verifygenerator-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+        key: cache-gradle-ubuntu-latest-11-verifygenerator-${{ hashFiles('gradle/libs.versions.toml') }}
         restore-keys: |
           cache-gradle-ubuntu-latest-11-verifygenerator-
           cache-gradle-ubuntu-latest-11-
@@ -93,7 +93,7 @@ jobs:
           path: |
             ~/.gradle/caches/
             ~/.gradle/wrapper/
-          key: cache-gradle-ubuntu-latest-11-compiletestsnippets-${{ hashFiles('detekt-bom/build.gradle.kts') }}
+          key: cache-gradle-ubuntu-latest-11-compiletestsnippets-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
             cache-gradle-ubuntu-latest-11-compiletestsnippets-
             cache-gradle-ubuntu-latest-11-
