@@ -26,43 +26,43 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  *
  * <noncompliant>
  * val digits = 1234.let {
- *   println(it)
- *   listOf(it)
+ *     println(it)
+ *     listOf(it)
  * }
  *
  * val digits = 1234.let { it ->
- *   println(it)
- *   listOf(it)
+ *     println(it)
+ *     listOf(it)
  * }
  *
  * val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it ->
- *   println(it)
- *   it + index
+ *     println(it)
+ *     it + index
  * }
  * </noncompliant>
  *
  * <compliant>
  * val digits = 1234.let { explicitParameterName ->
- *   println(explicitParameterName)
- *   listOf(explicitParameterName)
+ *     println(explicitParameterName)
+ *     listOf(explicitParameterName)
  * }
  *
  * val lambda = { item: Int, that: String ->
- *   println(item)
- *   item.toString() + that
+ *     println(item)
+ *     item.toString() + that
  * }
  *
  * val digits = 1234.let { listOf(it) }
  * val digits = 1234.let {
- *   listOf(it)
+ *     listOf(it)
  * }
  * val digits = 1234.let { it -> listOf(it) }
  * val digits = 1234.let { it ->
- *   listOf(it)
+ *     listOf(it)
  * }
  * val digits = 1234.let { explicit -> listOf(explicit) }
  * val digits = 1234.let { explicit ->
- *   listOf(explicit)
+ *     listOf(explicit)
  * }
  * </compliant>
  *

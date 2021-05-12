@@ -42,13 +42,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  *
  * <noncompliant>
  * suspend fun normalFunction() {
- *   println("string")
+ *     println("string")
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun normalFunction() {
- *   println("string")
+ *     println("string")
  * }
  * </compliant>
  *

@@ -25,12 +25,12 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * fun returnsNoValue() {}
  *
  * <noncompliant>
- *     returnsValue()
+ * returnsValue()
  * </noncompliant>
  *
  * <compliant>
- *     if (42 == returnsValue()) {}
- *     val x = returnsValue()
+ * if (42 == returnsValue()) {}
+ * val x = returnsValue()
  * </compliant>
  *
  * @configuration restrictToAnnotatedMethods - if the rule should check only annotated methods. (default: `true`)

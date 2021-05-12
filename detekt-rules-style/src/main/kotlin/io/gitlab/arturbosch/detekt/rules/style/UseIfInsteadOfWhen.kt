@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *
  * <noncompliant>
  * when (x) {
- *   null -> true
- *   else -> false
+ *     null -> true
+ *     else -> false
  * }
  * </noncompliant>
  *
