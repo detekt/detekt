@@ -547,8 +547,8 @@ annotation constructor has dedicated fields for a message and a type (warning, e
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
 * This function prints a message followed by a new line.
 */</span>
-<span class="p">&amp;</span><span class="err">#</span><span class="mi">64</span><span class="p">;</span><span class="nc">Deprecated</span><span class="p">(</span><span class="s">"Useless, the Kotlin standard library can already do this."</span><span class="p">)</span>
-<span class="p">&amp;</span><span class="err">#</span><span class="mi">64</span><span class="p">;</span><span class="nc">ReplaceWith</span><span class="p">(</span><span class="s">"println(what)"</span><span class="p">)</span>
+<span class="nd">@Deprecated</span><span class="p">(</span><span class="s">"Useless, the Kotlin standard library can already do this."</span><span class="p">)</span>
+<span class="nd">@ReplaceWith</span><span class="p">(</span><span class="s">"println(what)"</span><span class="p">)</span>
 <span class="k">fun</span> <span class="nf">printThenNewline</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// ...</span>
 <span class="p">}</span>
@@ -647,7 +647,7 @@ Overridden properties are excluded by this rule.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: May 12, 2021 <br />
+ Site last generated: May 13, 2021 <br />
                 </div>
             </div>
 </footer>
