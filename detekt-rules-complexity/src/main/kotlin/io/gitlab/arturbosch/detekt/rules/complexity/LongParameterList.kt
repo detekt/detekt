@@ -68,7 +68,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
             "the most common case is for dependency injection where constructors are annotated with `@Inject`."
     )
     private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
-        list.map { it.removeSurrounding("*") }
+        list.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     private lateinit var annotationExcluder: AnnotationExcluder
