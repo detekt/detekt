@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -32,12 +33,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </noncompliant>
  *
- * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden.
- * Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report calls of all methods
- * with this name or with full signature (i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call
- * with this concrete signature.
- *  (default: `['kotlin.io.println', 'kotlin.io.print']`)
- *
  */
 @RequiresTypeResolution
 class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
@@ -50,8 +45,21 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenMethods = valueOrDefaultCommaSeparated(METHODS, DEFAULT_METHODS)
-        .map { extractMethodNameAndParams(it) }
+    @Configuration(
+        "Comma separated list of fully qualified method signatures which are forbidden. " +
+            "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
+            "calls of all methods with this name or with full signature " +
+            "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
+            "with this concrete signature."
+    )
+    private val methods: List<String> by config(
+        listOf(
+            "kotlin.io.println",
+            "kotlin.io.print"
+        )
+    )
+
+    private val forbiddenMethods = methods.map { extractMethodNameAndParams(it) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -101,13 +109,5 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                     }
                 }
         }
-    }
-
-    companion object {
-        const val METHODS = "methods"
-        val DEFAULT_METHODS = listOf(
-            "kotlin.io.println",
-            "kotlin.io.print"
-        )
     }
 }

@@ -9,6 +9,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val METHODS = "methods"
+
 class ForbiddenMethodCallSpec : Spek({
     setupKotlinEnvironment()
 
@@ -39,7 +41,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings =
-                ForbiddenMethodCall(TestConfig(mapOf(ForbiddenMethodCall.METHODS to "  "))).compileAndLintWithContext(
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "  "))).compileAndLintWithContext(
                     env,
                     code
                 )
@@ -54,7 +56,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.lang.System.gc")))
+                TestConfig(mapOf(METHODS to listOf("java.lang.System.gc")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -66,7 +68,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
+                TestConfig(mapOf(METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(38 to 54)
@@ -80,7 +82,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
+                TestConfig(mapOf(METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(49 to 65)
@@ -97,7 +99,7 @@ class ForbiddenMethodCallSpec : Spek({
             val findings = ForbiddenMethodCall(
                 TestConfig(
                     mapOf(
-                        ForbiddenMethodCall.METHODS to listOf(
+                        METHODS to listOf(
                             "java.io.PrintStream.println",
                             "java.lang.System.gc"
                         )
@@ -117,7 +119,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.io.PrintStream.println, java.lang.System.gc"))
+                TestConfig(mapOf(METHODS to "java.io.PrintStream.println, java.lang.System.gc"))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
@@ -130,7 +132,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.math.BigDecimal.equals")))
+                TestConfig(mapOf(METHODS to listOf("java.math.BigDecimal.equals")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -143,7 +145,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("kotlin.Int.inc")))
+                TestConfig(mapOf(METHODS to listOf("kotlin.Int.inc")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -156,7 +158,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("kotlin.Int.dec")))
+                TestConfig(mapOf(METHODS to listOf("kotlin.Int.dec")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -172,7 +174,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now")))
+                TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.now")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }
@@ -188,7 +190,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now()")))
+                TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.now()")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(5, 26)
@@ -205,7 +207,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.now(java.time.Clock)")))
+                TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.now(java.time.Clock)")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(6, 27)
@@ -219,7 +221,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)")))
+                TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(3, 26)
@@ -233,7 +235,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)")))
+                TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(3, 26)
@@ -250,7 +252,7 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()")))
+                TestConfig(mapOf(METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()")))
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(6, 13)
@@ -269,7 +271,7 @@ class ForbiddenMethodCallSpec : Spek({
             val findings = ForbiddenMethodCall(
                 TestConfig(
                     mapOf(
-                        ForbiddenMethodCall.METHODS to
+                        METHODS to
                             listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")
                     )
                 )
