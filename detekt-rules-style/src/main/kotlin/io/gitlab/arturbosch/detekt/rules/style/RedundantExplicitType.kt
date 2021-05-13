@@ -34,13 +34,13 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
  *
  * <noncompliant>
  * fun function() {
- *   val x: String = "string"
+ *     val x: String = "string"
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun function() {
- *   val x = "string"
+ *     val x = "string"
  * }
  * </compliant>
  */

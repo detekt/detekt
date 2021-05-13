@@ -26,13 +26,13 @@ import org.jetbrains.kotlin.types.isFlexible
  *
  * <noncompliant>
  * class Person {
- *   fun apiCall() = System.getProperty("propertyName")
+ *     fun apiCall() = System.getProperty("propertyName")
  * }
  * </noncompliant>
  *
  * <compliant>
  * class Person {
- *   fun apiCall(): String = System.getProperty("propertyName")
+ *     fun apiCall(): String = System.getProperty("propertyName")
  * }
  * </compliant>
  *

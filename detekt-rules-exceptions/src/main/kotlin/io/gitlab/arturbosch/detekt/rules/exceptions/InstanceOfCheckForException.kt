@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  *     } catch(e: MyException) {
  *     } catch(e: IOException) {
  *     }
- *
+ * }
  * </compliant>
  */
 class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {

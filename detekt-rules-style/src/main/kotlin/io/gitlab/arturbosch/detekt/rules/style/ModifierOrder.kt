@@ -43,11 +43,11 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * taken from: http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
  *
  * <noncompliant>
- * lateinit internal private val str: String
+ * lateinit internal val str: String
  * </noncompliant>
  *
  * <compliant>
- * private internal lateinit val str: String
+ * internal lateinit val str: String
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")

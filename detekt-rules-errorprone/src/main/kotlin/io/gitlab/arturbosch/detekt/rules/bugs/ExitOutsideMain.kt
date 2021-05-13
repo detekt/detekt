@@ -23,23 +23,23 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  * <noncompliant>
  * fun randomFunction() {
- *   val result = doWork()
- *   if (result == FAILURE) {
- *     exitProcess(2)
- *   } else {
- *     exitProcess(0)
- *   }
+ *     val result = doWork()
+ *     if (result == FAILURE) {
+ *         exitProcess(2)
+ *     } else {
+ *         exitProcess(0)
+ *     }
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun main() {
- *   val result = doWork()
- *   if (result == FAILURE) {
- *     exitProcess(2)
- *   } else {
- *     exitProcess(0)
- *   }
+ *     val result = doWork()
+ *     if (result == FAILURE) {
+ *         exitProcess(2)
+ *     } else {
+ *         exitProcess(0)
+ *     }
  * }
  * </compliant>
  *
