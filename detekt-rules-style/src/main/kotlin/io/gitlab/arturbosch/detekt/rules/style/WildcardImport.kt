@@ -60,7 +60,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
             "kotlinx.android.synthetic.*"
         )
     ) { imports ->
-        imports.map { it.removeSurrounding("*") }
+        imports.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {

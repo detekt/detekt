@@ -57,7 +57,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     @Configuration("allows to provide a list of annotations that disable this check")
     private val excludeAnnotatedFunction: List<String> by config(listOf("dagger.Provides")) { functions ->
-        functions.map { it.removeSurrounding("*") }
+        functions.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     private lateinit var annotationExcluder: AnnotationExcluder

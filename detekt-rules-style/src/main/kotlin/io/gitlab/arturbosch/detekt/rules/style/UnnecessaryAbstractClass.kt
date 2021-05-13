@@ -62,7 +62,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     private val excludeAnnotatedClasses: List<String> by config(listOf("dagger.Module")) { classes ->
-        classes.map { it.removeSurrounding("*") }
+        classes.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     private lateinit var annotationExcluder: AnnotationExcluder
