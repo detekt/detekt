@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -36,8 +38,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *     }
  * }
  * </compliant>
- *
- * @configuration max - maximum amount of throw statements in a method (default: `2`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
@@ -49,8 +49,11 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val max = valueOrDefault(MAX, 2)
-    private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
+    @Configuration("maximum amount of throw statements in a method")
+    private val max: Int by config(2)
+
+    @Configuration("if set to true, guard clauses do not count towards the allowed throws count")
+    private val excludeGuardClauses: Boolean by config(false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -80,10 +83,5 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
                 )
             }
         }
-    }
-
-    companion object {
-        const val MAX = "max"
-        const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
     }
 }
