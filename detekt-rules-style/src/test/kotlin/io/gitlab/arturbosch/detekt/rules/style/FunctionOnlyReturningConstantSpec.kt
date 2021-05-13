@@ -8,6 +8,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
+private const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
+private const val EXCLUDED_FUNCTIONS = "excludedFunctions"
+private const val EXCLUDE_ANNOTATED_FUNCTION = "excludeAnnotatedFunction"
+
 class FunctionOnlyReturningConstantSpec : Spek({
     val subject by memoized { FunctionOnlyReturningConstant() }
 
@@ -20,7 +25,7 @@ class FunctionOnlyReturningConstantSpec : Spek({
         }
 
         it("reports overridden functions which return constants") {
-            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.IGNORE_OVERRIDABLE_FUNCTION to "false"))
+            val config = TestConfig(mapOf(IGNORE_OVERRIDABLE_FUNCTION to "false"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(path)).hasSize(9)
         }
@@ -36,14 +41,14 @@ class FunctionOnlyReturningConstantSpec : Spek({
         }
 
         it("reports actual functions which return constants") {
-            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.IGNORE_ACTUAL_FUNCTION to "false"))
+            val config = TestConfig(mapOf(IGNORE_ACTUAL_FUNCTION to "false"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(actualFunctionCode)).hasSize(1)
         }
 
         it("does not report excluded function which returns a constant") {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDED_FUNCTIONS to "f"))
+            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to "f"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -59,8 +64,8 @@ class FunctionOnlyReturningConstantSpec : Spek({
         """
 
         listOf(
-            TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")),
-            TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
+            TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")),
+            TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
         ).forEach { config ->
             it("does not report excluded annotated function which returns a constant") {
 
