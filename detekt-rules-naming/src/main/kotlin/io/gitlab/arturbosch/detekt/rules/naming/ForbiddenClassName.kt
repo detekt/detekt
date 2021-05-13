@@ -27,7 +27,7 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("forbidden class names")
     private val forbiddenName: List<String> by config(listOf<String>()) { names ->
-        names.map { it.removeSurrounding("*") }
+        names.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
