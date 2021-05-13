@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -29,9 +30,6 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * <compliant>
  * internal data class C(val a: String)
  * </compliant>
- *
- * @configuration ignorePackages - ignores classes in the specified packages.
- * (default: `['*.internal', '*.internal.*']`)
  */
 @ActiveByDefault(since = "1.16.0")
 class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
@@ -43,15 +41,15 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val ignorablePackages = valueOrDefaultCommaSeparated(IGNORE_PACKAGES, listOf("*.internal", "*.internal.*"))
-        .distinct()
-        .map { it.simplePatternToRegex() }
-        .toList()
+    @Configuration("ignores classes in the specified packages.")
+    private val ignorePackages: List<Regex> by config(listOf("*.internal", "*.internal.*")) { packages ->
+        packages.distinct().map(String::simplePatternToRegex)
+    }
 
     override fun visitClass(klass: KtClass) {
         val packageName = klass.containingKtFile.packageDirective?.packageNameExpression?.text
 
-        if (packageName != null && ignorablePackages.any { it.matches(packageName) }) {
+        if (packageName != null && ignorePackages.any { it.matches(packageName) }) {
             return
         }
 
@@ -64,9 +62,5 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
             }
             super.visitClass(klass)
         }
-    }
-
-    companion object {
-        const val IGNORE_PACKAGES = "ignorePackages"
     }
 }
