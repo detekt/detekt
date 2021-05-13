@@ -7,6 +7,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val MAX_JUMP_COUNT = "maxJumpCount"
+
 class LoopWithTooManyJumpStatementsSpec : Spek({
     val subject by memoized { LoopWithTooManyJumpStatements() }
 
@@ -19,7 +21,7 @@ class LoopWithTooManyJumpStatementsSpec : Spek({
         }
 
         it("does not report when max count configuration is set to 2") {
-            val config = TestConfig(mapOf(LoopWithTooManyJumpStatements.MAX_JUMP_COUNT to "2"))
+            val config = TestConfig(mapOf(MAX_JUMP_COUNT to "2"))
             val findings = LoopWithTooManyJumpStatements(config).lint(path)
             assertThat(findings).isEmpty()
         }
