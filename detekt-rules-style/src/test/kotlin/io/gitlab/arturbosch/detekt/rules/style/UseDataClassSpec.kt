@@ -11,6 +11,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val ALLOW_VARS = "allowVars"
+private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
+
 class UseDataClassSpec : Spek({
     setupKotlinEnvironment()
 
@@ -284,7 +287,7 @@ class UseDataClassSpec : Spek({
 
             it("does not report class with mutable constructor parameter") {
                 val code = """class DataClassCandidateWithVar(var i: Int)"""
-                val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
+                val config = TestConfig(mapOf(ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
@@ -294,7 +297,7 @@ class UseDataClassSpec : Spek({
                         var i2: Int = 0
                     }
                 """
-                val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
+                val config = TestConfig(mapOf(ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
@@ -304,7 +307,7 @@ class UseDataClassSpec : Spek({
                         var i2: Int = 0
                     }
                 """
-                val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
+                val config = TestConfig(mapOf(ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
@@ -314,7 +317,7 @@ class UseDataClassSpec : Spek({
                         val i2: Int = 0
                     }
                 """
-                val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
+                val config = TestConfig(mapOf(ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
         }
@@ -330,7 +333,7 @@ class UseDataClassSpec : Spek({
                 @SinceKotlin("1.0.0")
                 class AnnotatedClass(val i: Int) {}
                 """
-            val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
+            val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
 

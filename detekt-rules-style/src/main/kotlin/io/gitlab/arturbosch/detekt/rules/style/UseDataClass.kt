@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.isInline
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -46,10 +46,6 @@ import org.jetbrains.kotlin.types.KotlinType
  * class B() : I
  * class A(val b: B) : I by b
  * </compliant>
- *
- * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
- * (default: `[]`)
- * @configuration allowVars - allows to relax this rule in order to exclude classes that contains one (or more) Vars (default: `false`)
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
@@ -60,10 +56,13 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_CLASSES, emptyList())
-        .map { it.removePrefix("*").removeSuffix("*") }
-    private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
-    private val allowVars = valueOrDefault(ALLOW_VARS, false)
+    @Configuration("allows to provide a list of annotations that disable this check")
+    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
+        classes.map { it.removePrefix("*").removeSuffix("*") }
+    }
+
+    @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
+    private val allowVars: Boolean by config(false)
 
     override fun visit(root: KtFile) {
         super.visit(root)
@@ -145,7 +144,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         primaryConstructorParameterTypes: List<KotlinType>
     ): Boolean {
         return when (name) {
-            !in defaultFunctionNames -> false
+            !in DEFAULT_FUNCTION_NAMES -> false
             "copy" -> {
                 if (classType != null) {
                     val descriptor =
@@ -164,7 +163,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val ALLOW_VARS = "allowVars"
-        const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
+        private val DEFAULT_FUNCTION_NAMES = hashSetOf("hashCode", "equals", "toString", "copy")
     }
 }
