@@ -28,6 +28,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("MemberNameEqualsClassName")
     @Configuration("maximum line length")
     private val maxLineLength: Int by config(DEFAULT_IDEA_LINE_LENGTH)
 
