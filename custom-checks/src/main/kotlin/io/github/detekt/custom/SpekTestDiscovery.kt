@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -20,10 +21,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 /**
  * Expensive setup code can slow down test discovery.
  * Make sure to use memoization when declaring non trivial types.
- *
- * @configuration allowedTypes - full qualified type
- * (default: `kotlin.String, kotlin.Nothing, kotlin.Int, kotlin.Double, java.io.File, java.nio.file.Path`)
- * @configuration scopingFunctions - names of functions used to declare a test group (default: `describe, context`)
  *
  * <noncompliant>
  * class MyTest : Spek({
@@ -49,6 +46,25 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  */
 class SpekTestDiscovery(config: Config = Config.empty) : Rule(config) {
 
+    @Configuration("full qualified type")
+    private val allowedTypes: Set<String> by config(
+        listOf(
+            "kotlin.Nothing",
+            "kotlin.String",
+            "kotlin.Int",
+            "kotlin.Double",
+            "java.nio.file.Path",
+            "java.io.File"
+        ),
+        List<String>::toSet,
+    )
+
+    @Configuration("names of functions used to declare a test group")
+    private val scopingFunctions: Set<String> by config(
+        listOf("describe", "context"),
+        List<String>::toSet,
+    )
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Performance,
@@ -59,23 +75,6 @@ class SpekTestDiscovery(config: Config = Config.empty) : Rule(config) {
         """.trimMargin(),
         Debt.TEN_MINS
     )
-
-    private val allowedTypes = valueOrDefaultCommaSeparated(
-        ALLOWED_TYPES,
-        listOf(
-            "kotlin.Nothing",
-            "kotlin.String",
-            "kotlin.Int",
-            "kotlin.Double",
-            "java.nio.file.Path",
-            "java.io.File"
-        )
-    ).toSet()
-
-    private val scopingFunctions = valueOrDefaultCommaSeparated(
-        SCOPING_FUNCTIONS,
-        listOf("describe", "context")
-    ).toSet()
 
     override fun visitClass(klass: KtClass) {
         bindingContext != BindingContext.EMPTY ?: return
