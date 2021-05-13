@@ -38,7 +38,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("Allows you to provide a list of annotations that disable")
+    @Configuration("Allows you to provide a list of annotations that disable this check.")
     private val excludeAnnotatedProperties: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }

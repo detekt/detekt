@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitUnitReturnType.Companion.ALLOW_EXPLICIT_RETURN_TYPE
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -41,7 +40,7 @@ class ImplicitUnitReturnTypeSpec : Spek({
         it("reports explicit Unit return type if configured") {
             val code = """fun safeButStillReported(): Unit = println("Hello Unit")"""
 
-            val findings = ImplicitUnitReturnType(TestConfig(ALLOW_EXPLICIT_RETURN_TYPE to "false"))
+            val findings = ImplicitUnitReturnType(TestConfig("allowExplicitReturnType" to "false"))
                 .compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
