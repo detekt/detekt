@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -399,6 +398,7 @@ class MagicNumberSpec : Spek({
                     mapOf(
                         IGNORE_PROPERTY_DECLARATION to "false",
                         IGNORE_ANNOTATION to "false",
+                        IGNORE_NAMED_ARGUMENT to "false",
                         IGNORE_HASH_CODE to "false",
                         IGNORE_CONSTANT_DECLARATION to "false",
                         IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
@@ -552,30 +552,32 @@ class MagicNumberSpec : Spek({
                 var model = Model(someVal = $numberString)
             """
 
-                it("should not ignore int by default") {
-                    assertThat(MagicNumber().lint(code("53"))).hasSize(1)
+                it("should not ignore int") {
+                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
+                    assertThat(rule.lint(code("53"))).hasSize(1)
                 }
 
-                it("should not ignore float by default") {
-                    assertThat(MagicNumber().lint(code("53f"))).hasSize(1)
+                it("should not ignore float") {
+                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
+                    assertThat(rule.lint(code("53f"))).hasSize(1)
                 }
 
-                it("should not ignore binary by default") {
-                    assertThat(MagicNumber().lint(code("0b01001"))).hasSize(1)
+                it("should not ignore binary") {
+                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
+                    assertThat(rule.lint(code("0b01001"))).hasSize(1)
                 }
 
                 it("should ignore integer with underscores") {
-                    assertThat(MagicNumber().lint(code("101_000"))).hasSize(1)
+                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
+                    assertThat(rule.lint(code("101_000"))).hasSize(1)
                 }
 
-                it("should ignore numbers when 'ignoreNamedArgument' is set to true") {
-                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "true")))
-                    assertThat(rule.lint(code("53"))).isEmpty()
+                it("should ignore numbers by default") {
+                    assertThat(MagicNumber().lint(code("53"))).isEmpty()
                 }
 
-                it("should ignore numbers when 'ignoreNamedArgument' is set to true and value is negative") {
-                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "true")))
-                    assertThat(rule.lint(code("-53"))).isEmpty()
+                it("should ignore negative numbers by default") {
+                    assertThat(MagicNumber().lint(code("-53"))).isEmpty()
                 }
 
                 it("should ignore named arguments in inheritance - #992") {
@@ -584,17 +586,13 @@ class MagicNumberSpec : Spek({
 
                     object B : A(n = 5)
                 """
-                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "true")))
-                    assertThat(rule.compileAndLint(code)).isEmpty()
+                    assertThat(MagicNumber().compileAndLint(code)).isEmpty()
                 }
 
                 it("should ignore named arguments in parameter annotations - #1115") {
                     val code =
                         "@JvmStatic fun setCustomDimension(@IntRange(from = 0, to = 19) index: Int, value: String?) {}"
-                    MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "true")))
-                        .lint(code)
-                        .assert()
-                        .isEmpty()
+                    assertThat(MagicNumber().lint(code)).isEmpty()
                 }
             }
 
@@ -609,9 +607,8 @@ class MagicNumberSpec : Spek({
                 var model = Model($numberString)
             """
 
-                it("should detect the argument") {
-                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "true")))
-                    assertThat(rule.lint(code("53"))).hasSize(1)
+                it("should detect the argument by default") {
+                    assertThat(MagicNumber().lint(code("53"))).hasSize(1)
                 }
             }
 
@@ -619,7 +616,7 @@ class MagicNumberSpec : Spek({
                 fun code(number: Number) = """
                 fun tested(someVal: Int, other: String = "default")
 
-                tested(someVal = $number)
+                vaö t = tested(someVal = $number)
             """
                 it("should ignore int by default") {
                     assertThat(MagicNumber().lint(code(53))).isEmpty()
@@ -659,11 +656,19 @@ class MagicNumberSpec : Spek({
                     EXTRA_LARGE(id = 5)
                 }
             """
-                it("should be reported by default") {
-                    assertThat(MagicNumber().lint(code)).hasSize(1)
+                it("should be reported") {
+                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
+                    assertThat(rule.lint(code)).hasSize(1)
                 }
                 it("numbers when 'ignoreEnums' is set to true") {
-                    val rule = MagicNumber(TestConfig(mapOf(IGNORE_ENUMS to "true")))
+                    val rule = MagicNumber(
+                        TestConfig(
+                            mapOf(
+                                IGNORE_NAMED_ARGUMENT to "false",
+                                IGNORE_ENUMS to "true"
+                            )
+                        )
+                    )
                     assertThat(rule.lint(code)).isEmpty()
                 }
             }
