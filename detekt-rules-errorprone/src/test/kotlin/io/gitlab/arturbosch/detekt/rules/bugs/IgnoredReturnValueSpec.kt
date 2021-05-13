@@ -593,7 +593,7 @@ object IgnoredReturnValueSpec : Spek({
     describe("custom annotation config") {
         val subject by memoized {
             IgnoredReturnValue(
-                TestConfig(mapOf(IgnoredReturnValue.RETURN_VALUE_ANNOTATIONS to listOf("*.CustomReturn")))
+                TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
             )
         }
 
@@ -652,7 +652,7 @@ object IgnoredReturnValueSpec : Spek({
 
     describe("restrict to annotated methods config") {
         val subject by memoized {
-            IgnoredReturnValue(TestConfig(mapOf(IgnoredReturnValue.RESTRICT_TO_ANNOTATED_METHODS to false)))
+            IgnoredReturnValue(TestConfig(mapOf("restrictToAnnotatedMethods" to false)))
         }
 
         it("reports when a function is annotated with a custom annotation") {
