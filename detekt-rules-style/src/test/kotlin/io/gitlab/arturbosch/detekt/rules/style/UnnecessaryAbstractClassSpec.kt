@@ -9,6 +9,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
+
 class UnnecessaryAbstractClassSpec : Spek({
     setupKotlinEnvironment()
 
@@ -17,7 +19,7 @@ class UnnecessaryAbstractClassSpec : Spek({
         UnnecessaryAbstractClass(
             TestConfig(
                 mapOf(
-                    UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
+                    EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
                 )
             )
         )
