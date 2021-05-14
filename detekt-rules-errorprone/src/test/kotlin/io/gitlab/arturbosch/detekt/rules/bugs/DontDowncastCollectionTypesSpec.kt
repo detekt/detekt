@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -174,7 +175,7 @@ class DontDowncastCollectionTypesSpec : Spek({
                 assertThat(result).isEmpty()
             }
 
-            it("detects Map type casts") {
+            it("ignores Map type casts") {
                 val code = """
                 fun main() {
                     val myMap = mutableMapOf(1 to 2)
@@ -182,6 +183,17 @@ class DontDowncastCollectionTypesSpec : Spek({
                 }
                 """
                 val result = subject.compileAndLintWithContext(env, code)
+                assertThat(result).isEmpty()
+            }
+
+            it("ignores Synthetic types") {
+                val code = """
+                import kotlinx.android.synthetic.main.tooltip_progress_bar.view.*
+                fun main() {
+                    val params = tooltip_guide.layoutParams as LayoutParams
+                }
+                """
+                val result = subject.lintWithContext(env, code)
                 assertThat(result).isEmpty()
             }
         }
