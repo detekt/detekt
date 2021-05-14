@@ -67,7 +67,7 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
         val lhsType = left
             .getType(bindingContext)
             ?.fqNameOrNull()
-            ?.shortName()
+            ?.shortNameOrSpecial()
             ?.asString()
 
         val rhsType = right
