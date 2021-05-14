@@ -32,12 +32,11 @@ internal class CreateBaselineTaskDslTest : Spek({
                     gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
                         assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile(baselineFilename)).exists()
+                        assertThat(projectFile(DEFAULT_BASELINE_FILENAME)).doesNotExist()
                     }
                 }
 
                 it("can be executed when baseline file is not specified") {
-                    val baselineFilename = "baseline.xml"
-
                     val detektConfig = """
                         |detekt {
                         |}
@@ -54,13 +53,11 @@ internal class CreateBaselineTaskDslTest : Spek({
 
                     gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
                         assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(projectFile(baselineFilename)).exists()
+                        assertThat(projectFile(DEFAULT_BASELINE_FILENAME)).exists()
                     }
                 }
 
                 it("can not be executed when baseline file is specified null") {
-                    val baselineFilename = "baseline.xml"
-
                     val detektConfig = """
                         |detekt {
                         |   baseline = null
@@ -78,10 +75,12 @@ internal class CreateBaselineTaskDslTest : Spek({
 
                     gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
                         assertThat(result.output).contains("property 'baseline' doesn't have a configured value")
-                        assertThat(projectFile(baselineFilename)).doesNotExist()
+                        assertThat(projectFile(DEFAULT_BASELINE_FILENAME)).doesNotExist()
                     }
                 }
             }
         }
     }
 })
+
+private const val DEFAULT_BASELINE_FILENAME = "detekt-baseline.xml"
