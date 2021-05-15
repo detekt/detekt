@@ -71,7 +71,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
 
         Files.createDirectories(configFile.get().asFile.parentFile.toPath())
 
-        DetektInvoker.create(task = this).invokeCli(
+        DetektInvoker.create().invokeCli(
             arguments = arguments,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name,

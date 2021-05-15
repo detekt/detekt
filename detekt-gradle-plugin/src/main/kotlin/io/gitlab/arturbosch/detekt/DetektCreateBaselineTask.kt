@@ -139,7 +139,7 @@ abstract class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        DetektInvoker.create(task = this).invokeCli(
+        DetektInvoker.create().invokeCli(
             arguments = arguments,
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
