@@ -457,7 +457,7 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1170---2021-05-12">1.17.0 - 2021-05-12</h4>
+  <h4 id="1170---2021-05-15">1.17.0 - 2021-05-15</h4>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
@@ -465,7 +465,7 @@ $('#toc').on('click', 'a', function() {
   <li>We’re introducing our new Project logo :). See <a href="https://github.com/detekt/detekt/pull/3726">#3726</a></li>
   <li>This release allows you to replace your <code class="language-plaintext highlighter-rouge">jcenter()</code> dependencies with <code class="language-plaintext highlighter-rouge">mavenCentral()</code> given that our dependency on <code class="language-plaintext highlighter-rouge">kotlinx.html</code> migrated to Maven Central - See <a href="https://github.com/detekt/detekt/pull/3455">#3455</a></li>
   <li>We now introduced the <code class="language-plaintext highlighter-rouge">src/test/java</code> and <code class="language-plaintext highlighter-rouge">src/test/kotlin</code> by default for the plain <code class="language-plaintext highlighter-rouge">detekt</code> Gradle task. If you use that task, you might notice rule reports in your test sourceset. See <a href="https://github.com/detekt/detekt/pull/3649">#3649</a></li>
-  <li>We now default the baseline file to <code class="language-plaintext highlighter-rouge">baseline.xml</code> so you don’t have to specify it manually. You can revert the previous behavior by setting the baseline to <code class="language-plaintext highlighter-rouge">null</code> - See <a href="https://github.com/detekt/detekt/pull/3619">#3619</a></li>
+  <li>We now default the baseline file to <code class="language-plaintext highlighter-rouge">detekt-baseline.xml</code> so you don’t have to specify it manually. You can revert the previous behavior by setting the baseline to <code class="language-plaintext highlighter-rouge">null</code> - See <a href="https://github.com/detekt/detekt/pull/3619">#3619</a> and <a href="https://github.com/detekt/detekt/pull/3745">#3745</a></li>
   <li>We enabled the SARIF output format by default - See <a href="https://github.com/detekt/detekt/pull/3543">#3543</a></li>
   <li>We’re introducing annotations to provide metadata to rules, such as <code class="language-plaintext highlighter-rouge">@ActiveByDefault</code>, <code class="language-plaintext highlighter-rouge">@Configuration</code> and <code class="language-plaintext highlighter-rouge">@RequiresTypeResolution</code> - See <a href="https://github.com/detekt/detekt/pull/3637">#3637</a> <a href="https://github.com/detekt/detekt/pull/3592">#3592</a> and <a href="https://github.com/detekt/detekt/pull/3579">#3579</a></li>
 </ul>
@@ -473,7 +473,7 @@ $('#toc').on('click', 'a', function() {
 <h5 id="changelog">Changelog</h5>
 
 <ul>
-  <li>Fix kdoc link on blog navigation - <a href="https://github.com/detekt/detekt/pull/3761">#3761</a></li>
+  <li>Fix crash for DontDowncastCollectionTypes on Synthetic types - <a href="https://github.com/detekt/detekt/pull/3776">#3776</a></li>
   <li>We don’t need to talk about jcenter anymore at our docs - <a href="https://github.com/detekt/detekt/pull/3755">#3755</a></li>
   <li>Skip publishing for detekt-cli shadowRuntimeElements variant - <a href="https://github.com/detekt/detekt/pull/3747">#3747</a></li>
   <li>Set the org.gradle.dependency.bundling attribute to external - <a href="https://github.com/detekt/detekt/pull/3738">#3738</a></li>
@@ -483,6 +483,7 @@ $('#toc').on('click', 'a', function() {
   <li>[UndocumentedPublicProperty] Allow inline comments for properties in primary constructor as documentation - <a href="https://github.com/detekt/detekt/pull/3722">#3722</a></li>
   <li>MultilineLambdaItParameter: don’t report when lambda has no implicit parameter references - <a href="https://github.com/detekt/detekt/pull/3696">#3696</a></li>
   <li>Fix false positives for UnnecessaryFilter - <a href="https://github.com/detekt/detekt/pull/3695">#3695</a></li>
+  <li>Add support for transformer function in config property delegate - <a href="https://github.com/detekt/detekt/pull/3676">#3676</a></li>
   <li>Add support for fallback property - <a href="https://github.com/detekt/detekt/pull/3675">#3675</a></li>
   <li>Ignore actual members in UnusedPrivateMember - <a href="https://github.com/detekt/detekt/pull/3669">#3669</a></li>
   <li>NamedArguments rule: fix false positive with trailing lambda - <a href="https://github.com/detekt/detekt/pull/3661">#3661</a></li>
@@ -529,6 +530,8 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Fix document - <a href="https://github.com/detekt/detekt/pull/3765">#3765</a></li>
+  <li>Fix kdoc link on blog navigation - <a href="https://github.com/detekt/detekt/pull/3761">#3761</a></li>
   <li>Upload any heap dumps produced during CI build - <a href="https://github.com/detekt/detekt/pull/3758">#3758</a></li>
   <li>Always run warningsAsErrors on CI - <a href="https://github.com/detekt/detekt/pull/3754">#3754</a></li>
   <li>Clean ci - <a href="https://github.com/detekt/detekt/pull/3753">#3753</a></li>
