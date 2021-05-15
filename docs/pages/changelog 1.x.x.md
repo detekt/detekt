@@ -6,20 +6,20 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.17.0 - 2021-05-12
+#### 1.17.0 - 2021-05-15
 
 ##### Notable Changes
 
 - We're introducing our new Project logo :). See [#3726](https://github.com/detekt/detekt/pull/3726)
 - This release allows you to replace your `jcenter()` dependencies with `mavenCentral()` given that our dependency on `kotlinx.html` migrated to Maven Central - See [#3455](https://github.com/detekt/detekt/pull/3455)
 - We now introduced the `src/test/java` and `src/test/kotlin` by default for the plain `detekt` Gradle task. If you use that task, you might notice rule reports in your test sourceset. See [#3649](https://github.com/detekt/detekt/pull/3649)
-- We now default the baseline file to `baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619)
+- We now default the baseline file to `detekt-baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619) and [#3745](https://github.com/detekt/detekt/pull/3745)
 - We enabled the SARIF output format by default - See [#3543](https://github.com/detekt/detekt/pull/3543)
 - We're introducing annotations to provide metadata to rules, such as `@ActiveByDefault`, `@Configuration` and `@RequiresTypeResolution` - See [#3637](https://github.com/detekt/detekt/pull/3637) [#3592](https://github.com/detekt/detekt/pull/3592) and [#3579](https://github.com/detekt/detekt/pull/3579)
 
 ##### Changelog
 
-- Fix kdoc link on blog navigation - [#3761](https://github.com/detekt/detekt/pull/3761)
+- Fix crash for DontDowncastCollectionTypes on Synthetic types - [#3776](https://github.com/detekt/detekt/pull/3776)
 - We don't need to talk about jcenter anymore at our docs - [#3755](https://github.com/detekt/detekt/pull/3755)
 - Skip publishing for detekt-cli shadowRuntimeElements variant - [#3747](https://github.com/detekt/detekt/pull/3747)
 - Set the org.gradle.dependency.bundling attribute to external - [#3738](https://github.com/detekt/detekt/pull/3738)
@@ -29,6 +29,7 @@ toc: true
 - [UndocumentedPublicProperty] Allow inline comments for properties in primary constructor as documentation - [#3722](https://github.com/detekt/detekt/pull/3722)
 - MultilineLambdaItParameter: don't report when lambda has no implicit parameter references - [#3696](https://github.com/detekt/detekt/pull/3696)
 - Fix false positives for UnnecessaryFilter - [#3695](https://github.com/detekt/detekt/pull/3695)
+- Add support for transformer function in config property delegate - [#3676](https://github.com/detekt/detekt/pull/3676)
 - Add support for fallback property - [#3675](https://github.com/detekt/detekt/pull/3675)
 - Ignore actual members in UnusedPrivateMember - [#3669](https://github.com/detekt/detekt/pull/3669)
 - NamedArguments rule: fix false positive with trailing lambda - [#3661](https://github.com/detekt/detekt/pull/3661)
@@ -71,6 +72,8 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Fix document - [#3765](https://github.com/detekt/detekt/pull/3765)
+- Fix kdoc link on blog navigation - [#3761](https://github.com/detekt/detekt/pull/3761)
 - Upload any heap dumps produced during CI build - [#3758](https://github.com/detekt/detekt/pull/3758)
 - Always run warningsAsErrors on CI - [#3754](https://github.com/detekt/detekt/pull/3754)
 - Clean ci - [#3753](https://github.com/detekt/detekt/pull/3753)
