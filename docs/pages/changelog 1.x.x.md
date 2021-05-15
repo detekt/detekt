@@ -13,7 +13,7 @@ toc: true
 - We're introducing our new Project logo :). See [#3726](https://github.com/detekt/detekt/pull/3726)
 - This release allows you to replace your `jcenter()` dependencies with `mavenCentral()` given that our dependency on `kotlinx.html` migrated to Maven Central - See [#3455](https://github.com/detekt/detekt/pull/3455)
 - We now introduced the `src/test/java` and `src/test/kotlin` by default for the plain `detekt` Gradle task. If you use that task, you might notice rule reports in your test sourceset. See [#3649](https://github.com/detekt/detekt/pull/3649)
-- We now default the baseline file to `baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619)
+- We now default the baseline file to `detekt-baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619) and [#3745](https://github.com/detekt/detekt/pull/3745)
 - We enabled the SARIF output format by default - See [#3543](https://github.com/detekt/detekt/pull/3543)
 - We're introducing annotations to provide metadata to rules, such as `@ActiveByDefault`, `@Configuration` and `@RequiresTypeResolution` - See [#3637](https://github.com/detekt/detekt/pull/3637) [#3592](https://github.com/detekt/detekt/pull/3592) and [#3579](https://github.com/detekt/detekt/pull/3579)
 
