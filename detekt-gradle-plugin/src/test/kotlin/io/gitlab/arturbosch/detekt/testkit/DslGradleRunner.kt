@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.testkit
 
+import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
@@ -10,11 +12,12 @@ import java.util.UUID
 class DslGradleRunner @Suppress("LongParameterList") constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
-    val mainBuildFileContent: String,
+    val mainBuildFileContent: String = "",
     val configFileOrNone: String? = null,
     val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
-    val dryRun: Boolean = false
+    val dryRun: Boolean = false,
+    val projectScript: Project.() -> Unit = {},
 ) {
 
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
@@ -108,6 +111,11 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
 
     private val Submodule.moduleRoot: File
         get() = File(rootDir, name).apply { mkdirs() }
+
+    fun buildProject(): Project = ProjectBuilder.builder()
+        .withProjectDir(rootDir)
+        .build()
+        .apply(projectScript)
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
