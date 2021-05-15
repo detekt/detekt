@@ -44,13 +44,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    @Configuration("if the rule should check only annotated methods")
+    private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
+
     @Configuration("List of glob patterns to be used as inspection annotation")
     private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckReturnValue", "*.CheckResult")) {
         it.map(String::simplePatternToRegex)
     }
-
-    @Configuration("if the rule should check only annotated methods")
-    private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

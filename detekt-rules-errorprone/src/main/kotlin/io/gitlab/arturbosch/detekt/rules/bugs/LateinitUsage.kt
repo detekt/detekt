@@ -44,7 +44,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     }
 
     @Configuration("Allows you to disable the rule for a list of classes")
-    private val ignoreOnClassesPattern: Regex by config("''", String::toRegex)
+    private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
     private var properties = mutableListOf<KtProperty>()
 
