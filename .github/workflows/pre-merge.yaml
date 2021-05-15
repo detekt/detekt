@@ -30,6 +30,10 @@ jobs:
           ~/.gradle/caches/
           ~/.gradle/wrapper/
         key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-${{ hashFiles('gradle/libs.versions.toml') }}
+        restore-keys: |
+          cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}-
+          cache-gradle-${{ matrix.os }}-
+          cache-gradle-
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
@@ -62,6 +66,11 @@ jobs:
           ~/.gradle/caches/
           ~/.gradle/wrapper/
         key: cache-gradle-ubuntu-latest-11-verifygenerator-${{ hashFiles('gradle/libs.versions.toml') }}
+        restore-keys: |
+          cache-gradle-ubuntu-latest-11-verifygenerator-
+          cache-gradle-ubuntu-latest-11-
+          cache-gradle-ubuntu-latest-
+          cache-gradle-
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
@@ -85,6 +94,11 @@ jobs:
             ~/.gradle/caches/
             ~/.gradle/wrapper/
           key: cache-gradle-ubuntu-latest-11-compiletestsnippets-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: |
+            cache-gradle-ubuntu-latest-11-compiletestsnippets-
+            cache-gradle-ubuntu-latest-11-
+            cache-gradle-ubuntu-latest-
+            cache-gradle-
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
