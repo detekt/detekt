@@ -35,22 +35,22 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val booleanPropertyPrefixedWithAllowedWordsRule = BooleanPropertyPrefixedWithAllowedWords(config)
 
     override val rules: List<Rule> = listOf(
-            variableNamingRule,
-            variableMinNameLengthRule,
-            variableMaxNameLengthRule,
-            topLevelPropertyRule,
-            objectConstantNamingRule,
-            nonBooleanPropertyPrefixedWithIsRule,
-            packageNamingRule,
-            classOrObjectNamingRule,
-            enumEntryNamingRule,
-            functionNamingRule,
-            functionMaxNameLengthRule,
-            functionMinNameLengthRule,
-            forbiddenClassNameRule,
-            constructorParameterNamingRule,
-            functionParameterNamingRule,
-            booleanPropertyPrefixedWithAllowedWordsRule
+        variableNamingRule,
+        variableMinNameLengthRule,
+        variableMaxNameLengthRule,
+        topLevelPropertyRule,
+        objectConstantNamingRule,
+        nonBooleanPropertyPrefixedWithIsRule,
+        packageNamingRule,
+        classOrObjectNamingRule,
+        enumEntryNamingRule,
+        functionNamingRule,
+        functionMaxNameLengthRule,
+        functionMinNameLengthRule,
+        forbiddenClassNameRule,
+        constructorParameterNamingRule,
+        functionParameterNamingRule,
+        booleanPropertyPrefixedWithAllowedWordsRule
     )
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -106,5 +106,5 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     }
 
     private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
-            this.getNonStrictParentOfType<KtObjectDeclaration>() != null
+        this.getNonStrictParentOfType<KtObjectDeclaration>() != null
 }
