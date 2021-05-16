@@ -19,20 +19,38 @@ class KtCompilerTest : Spek({
         val path = resourceAsPath("/cases")
         val ktCompiler by memoized(CachingMode.SCOPE) { KtCompiler() }
 
-        it("Kotlin file has extra user data") {
-            val ktFile = ktCompiler.compile(path, path.resolve("Default.kt"))
+        it("Kotlin file with LF line separators has extra user data") {
+            val ktFile = ktCompiler.compile(path, path.resolve("DefaultLf.kt"))
 
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo(System.lineSeparator())
+            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
             assertThat(ktFile.getUserData(RELATIVE_PATH))
-                .isEqualTo("Default.kt")
+                .isEqualTo("DefaultLf.kt")
             assertThat(ktFile.getUserData(BASE_PATH))
                 .endsWith("cases")
         }
 
-        it("Kotlin file does not store extra data for relative path if not provided") {
-            val ktFile = ktCompiler.compile(null, path.resolve("Default.kt"))
+        it("Kotlin file with CRLF line separators has extra user data") {
+            val ktFile = ktCompiler.compile(path, path.resolve("DefaultCrLf.kt"))
 
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo(System.lineSeparator())
+            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
+            assertThat(ktFile.getUserData(RELATIVE_PATH))
+                .isEqualTo("DefaultCrLf.kt")
+            assertThat(ktFile.getUserData(BASE_PATH))
+                .endsWith("cases")
+        }
+
+        it("Kotlin file with LF line separators does not store extra data for relative path if not provided") {
+            val ktFile = ktCompiler.compile(null, path.resolve("DefaultLf.kt"))
+
+            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
+            assertThat(ktFile.getUserData(RELATIVE_PATH)).isNull()
+            assertThat(ktFile.getUserData(BASE_PATH)).isNull()
+        }
+
+        it("Kotlin file with CRLF line separators does not store extra data for relative path if not provided") {
+            val ktFile = ktCompiler.compile(null, path.resolve("DefaultCrLf.kt"))
+
+            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
             assertThat(ktFile.getUserData(RELATIVE_PATH)).isNull()
             assertThat(ktFile.getUserData(BASE_PATH)).isNull()
         }
