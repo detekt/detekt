@@ -41,6 +41,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         topLevelPropertyRule,
         objectConstantNamingRule,
         nonBooleanPropertyPrefixedWithIsRule,
+        booleanPropertyPrefixedWithAllowedWordsRule,
         packageNamingRule,
         classOrObjectNamingRule,
         enumEntryNamingRule,
@@ -49,8 +50,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         functionMinNameLengthRule,
         forbiddenClassNameRule,
         constructorParameterNamingRule,
-        functionParameterNamingRule,
-        booleanPropertyPrefixedWithAllowedWordsRule
+        functionParameterNamingRule
     )
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
