@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isLateinit
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
@@ -27,10 +27,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
  * }
  * </noncompliant>
- *
- * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
- * this check. (default: `[]`)
- * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: `''`)
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
@@ -42,10 +38,13 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val excludeAnnotatedProperties = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_PROPERTIES, emptyList())
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("Allows you to provide a list of annotations that disable this check.")
+    private val excludeAnnotatedProperties: List<String> by config(emptyList<String>()) { list ->
+        list.map { it.removePrefix("*").removeSuffix("*") }
+    }
 
-    private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
+    @Configuration("Allows you to disable the rule for a list of classes")
+    private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
     private var properties = mutableListOf<KtProperty>()
 
@@ -67,10 +66,5 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
             .forEach {
                 report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
             }
-    }
-
-    companion object {
-        const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
-        const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
     }
 }

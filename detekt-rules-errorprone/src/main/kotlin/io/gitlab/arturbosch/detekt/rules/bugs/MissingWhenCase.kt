@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.cfg.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -64,7 +66,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *     }
  * }
  * </compliant>
- * @configuration allowElseExpression - whether `else` can be treated as a valid case for enums and sealed classes (default: `true`)
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
@@ -77,7 +78,8 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val allowElseExpression = valueOrDefault(ALLOW_ELSE_EXPRESSION, true)
+    @Configuration("whether `else` can be treated as a valid case for enums and sealed classes")
+    private val allowElseExpression: Boolean by config(true)
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
@@ -110,9 +112,5 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
             }
             report(CodeSmell(issue, Entity.from(expression), message))
         }
-    }
-
-    companion object {
-        const val ALLOW_ELSE_EXPRESSION = "allowElseExpression"
     }
 }

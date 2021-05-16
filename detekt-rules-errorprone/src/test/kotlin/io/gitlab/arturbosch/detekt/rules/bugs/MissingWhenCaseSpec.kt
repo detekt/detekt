@@ -284,7 +284,7 @@ object MissingWhenCaseSpec : Spek({
     describe("MissingWhenCase rule when else expression is not considered") {
         val subject by memoized {
             MissingWhenCase(
-                TestConfig(mapOf(MissingWhenCase.ALLOW_ELSE_EXPRESSION to false))
+                TestConfig(mapOf("allowElseExpression" to false))
             )
         }
 

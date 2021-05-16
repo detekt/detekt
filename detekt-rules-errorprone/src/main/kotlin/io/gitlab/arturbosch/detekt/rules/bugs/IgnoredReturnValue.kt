@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -32,10 +33,6 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * if (42 == returnsValue()) {}
  * val x = returnsValue()
  * </compliant>
- *
- * @configuration restrictToAnnotatedMethods - if the rule should check only annotated methods. (default: `true`)
- * @configuration returnValueAnnotations - List of glob patterns to be used as inspection annotation (default: `['*.CheckReturnValue', '*.CheckResult']`)
- *
  */
 @RequiresTypeResolution
 class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
@@ -47,17 +44,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val annotationsRegexes = valueOrDefaultCommaSeparated(
-        RETURN_VALUE_ANNOTATIONS,
-        DEFAULT_RETURN_VALUE_ANNOTATIONS
-    )
-        .distinct()
-        .map { it.simplePatternToRegex() }
+    @Configuration("if the rule should check only annotated methods")
+    private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
 
-    private val restrictToAnnotatedMethods: Boolean = valueOrDefault(
-        RESTRICT_TO_ANNOTATED_METHODS,
-        DEFAULT_RESTRICT_TO_ANNOTATED_METHODS
-    )
+    @Configuration("List of glob patterns to be used as inspection annotation")
+    private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckReturnValue", "*.CheckResult")) {
+        it.map(String::simplePatternToRegex)
+    }
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -70,7 +63,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         if (resultingDescriptor.returnType?.isUnit() == true) return
         if (restrictToAnnotatedMethods) {
             val annotations = resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
-            if (annotations.none { annotation -> annotationsRegexes.any { it.matches(annotation) } }) {
+            if (annotations.none { annotation -> returnValueAnnotations.any { it.matches(annotation) } }) {
                 return
             }
         }
@@ -83,12 +76,5 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
                 message = "The call $messageText is returning a value that is ignored."
             )
         )
-    }
-
-    companion object {
-        const val RESTRICT_TO_ANNOTATED_METHODS = "restrictToAnnotatedMethods"
-        const val DEFAULT_RESTRICT_TO_ANNOTATED_METHODS = true
-        const val RETURN_VALUE_ANNOTATIONS = "returnValueAnnotations"
-        val DEFAULT_RETURN_VALUE_ANNOTATIONS = listOf("*.CheckReturnValue", "*.CheckResult")
     }
 }
