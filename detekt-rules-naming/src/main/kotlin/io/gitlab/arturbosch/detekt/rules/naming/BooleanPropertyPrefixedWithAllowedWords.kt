@@ -62,8 +62,7 @@ class BooleanPropertyPrefixedWithAllowedWords(config: Config = Config.empty) : R
         val typeName = getTypeName(declaration)
 
         if (
-            (typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME)
-            && !name.contains(regex)
+            (typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME) && !name.contains(regex)
         ) {
             report(reportCodeSmell(declaration, name, typeName.toString()))
         }
