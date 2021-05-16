@@ -1,11 +1,11 @@
-* text eol=auto
+* text eol=lf
 
 *.bat           text eol=crlf
 
 *.css           diff=css
-*.htm           eol=lf diff=html
-*.html          eol=lf diff=html
-*.md            eol=lf diff=markdown
+*.htm           diff=html
+*.html          diff=html
+*.md            diff=markdown
 
 *.jar           binary
 *.png           binary
