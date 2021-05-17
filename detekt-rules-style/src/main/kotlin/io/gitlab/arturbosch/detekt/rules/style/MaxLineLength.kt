@@ -93,6 +93,6 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val DEFAULT_IDEA_LINE_LENGTH = 120
+        private const val DEFAULT_IDEA_LINE_LENGTH = 120
     }
 }
