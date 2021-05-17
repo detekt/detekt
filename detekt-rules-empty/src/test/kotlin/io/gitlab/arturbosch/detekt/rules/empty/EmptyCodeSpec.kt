@@ -13,6 +13,8 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
+private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+
 class EmptyCodeSpec : Spek({
 
     val regexTestingCode = """
@@ -59,7 +61,7 @@ class EmptyCodeSpec : Spek({
                 } catch (foo: Exception) {
                 }
             }"""
-            val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
+            val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
             assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
         }
 
@@ -126,14 +128,14 @@ class EmptyCodeSpec : Spek({
         it("doesNotFailWithInvalidRegexWhenDisabled") {
             val configValues = mapOf(
                 "active" to "false",
-                EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
+                ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
             )
             val config = TestConfig(configValues)
             assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
         }
 
         it("doesFailWithInvalidRegex") {
-            val configValues = mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
+            val configValues = mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
             val config = TestConfig(configValues)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 EmptyCatchBlock(config).compileAndLint(regexTestingCode)
