@@ -4,11 +4,16 @@ style:
   rulesetconfig2:
     - foo
     - bar
+  rulesetconfig3:
+    - first
+    - 'se*cond'
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     conf1: foo
-    conf3: ['a', 'b']
+    conf3:
+      - a
+      - b
     conf5: 120
   EqualsNull:
     active: false

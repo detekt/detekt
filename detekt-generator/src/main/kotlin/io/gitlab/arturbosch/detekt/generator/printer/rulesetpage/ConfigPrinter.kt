@@ -62,8 +62,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     private fun YamlNode.printConfiguration(configuration: Configuration) {
         if (configuration.isDeprecated()) return
 
-        if (configuration.defaultValue.isYamlList()) {
-            list(configuration.name, configuration.defaultValue.toList())
+        if (configuration.isDefaultValueNonEmptyList()) {
+            list(configuration.name, configuration.getDefaultValueAsList())
         } else {
             keyValue { configuration.name to configuration.defaultValue }
         }
@@ -126,11 +126,4 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         # - 'XmlOutputReport'
         # - 'HtmlOutputReport'
     """.trimIndent()
-
-    private fun String.isYamlList() = trim().startsWith("-")
-
-    private fun String.toList(): List<String> =
-        split("\n")
-            .map { it.replace("-", "") }
-            .map { it.trim() }
 }
