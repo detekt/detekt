@@ -40,7 +40,7 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("the nested depth required to trigger rule")
-    private val threshold: Int by config(DEFAULT_THRESHOLD_NESTING)
+    private val threshold: Int by config(defaultValue = 4)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val visitor = FunctionDepthVisitor(threshold)
@@ -121,9 +121,5 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
                 }
             }
         }
-    }
-
-    companion object {
-        const val DEFAULT_THRESHOLD_NESTING = 4
     }
 }

@@ -52,7 +52,7 @@ class ComplexCondition(
     )
 
     @Configuration("the number of conditions which will trigger the rule")
-    private val threshold: Int by config(DEFAULT_CONDITIONS_COUNT)
+    private val threshold: Int by config(defaultValue = 4)
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -109,9 +109,5 @@ class ComplexCondition(
         }
 
         return count
-    }
-
-    companion object {
-        private const val DEFAULT_CONDITIONS_COUNT = 4
     }
 }

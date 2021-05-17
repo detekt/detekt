@@ -38,7 +38,7 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("number of overloads which will trigger the rule")
-    private val threshold: Int by config(DEFAULT_THRESHOLD_OVERLOAD_COUNT)
+    private val threshold: Int by config(defaultValue = 6)
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
@@ -92,9 +92,5 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
         }
 
         private fun KtNamedFunction.isOverriddenInsideEnumEntry() = containingClass() is KtEnumEntry && isOverride()
-    }
-
-    companion object {
-        const val DEFAULT_THRESHOLD_OVERLOAD_COUNT = 6
     }
 }

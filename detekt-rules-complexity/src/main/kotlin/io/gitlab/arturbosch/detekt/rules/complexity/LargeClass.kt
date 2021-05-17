@@ -36,7 +36,7 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("the size of class required to trigger the rule")
-    private val threshold: Int by config(DEFAULT_THRESHOLD_CLASS_LENGTH)
+    private val threshold: Int by config(defaultValue = 600)
 
     private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
     private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
@@ -79,9 +79,5 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
             yieldAll(nestedClasses)
             nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
         }
-    }
-
-    companion object {
-        private const val DEFAULT_THRESHOLD_CLASS_LENGTH = 600
     }
 }

@@ -36,7 +36,7 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("number of lines in a method to trigger the rule")
-    private val threshold: Int by config(DEFAULT_THRESHOLD_METHOD_LENGTH)
+    private val threshold: Int by config(defaultValue = 60)
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
@@ -90,9 +90,5 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
             yieldAll(nestedFunctions)
             nestedFunctions = nestedFunctions.mapNotNull { nestedFunctionTracking[it] }.flattenTo(HashSet())
         }
-    }
-
-    companion object {
-        private const val DEFAULT_THRESHOLD_METHOD_LENGTH = 60
     }
 }

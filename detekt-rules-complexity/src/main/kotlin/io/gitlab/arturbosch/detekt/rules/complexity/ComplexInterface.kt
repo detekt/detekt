@@ -43,7 +43,7 @@ class ComplexInterface(
     )
 
     @Configuration("the amount of definitions in an interface to trigger the rule")
-    private val threshold: Int by config(DEFAULT_LARGE_INTERFACE_COUNT)
+    private val threshold: Int by config(defaultValue = 10)
 
     @Configuration("whether static declarations should be included")
     private val includeStaticDeclarations: Boolean by config(defaultValue = false)
@@ -86,9 +86,5 @@ class ComplexInterface(
         return body.children
             .filter(PsiElement::considerPrivate)
             .count(PsiElement::isMember)
-    }
-
-    companion object {
-        private const val DEFAULT_LARGE_INTERFACE_COUNT = 10
     }
 }

@@ -42,7 +42,7 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("number of parameters that triggers this inspection")
-    private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
+    private val threshold: Int by config(defaultValue = 3)
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
@@ -63,9 +63,5 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
         return unnamedArguments.all {
             resolvedCall.getParameterForArgument(it)?.varargElementType == null || it.getSpreadElement() != null
         }
-    }
-
-    companion object {
-        const val DEFAULT_FUNCTION_THRESHOLD = 3
     }
 }

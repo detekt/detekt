@@ -53,7 +53,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("amount of duplications to trigger rule")
-    private val threshold: Int by config(3)
+    private val threshold: Int by config(defaultValue = 3)
 
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
