@@ -28,11 +28,13 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
+    @Suppress("unused")
     @Configuration("path to file with license header template resolved relatively to config file")
-    val licenseTemplateFile: String by config(DEFAULT_LICENSE_TEMPLATE_FILE)
+    private val licenseTemplateFile: String by config(DEFAULT_LICENSE_TEMPLATE_FILE)
 
+    @Suppress("unused")
     @Configuration("whether or not the license header template is a regex template")
-    val licenseTemplateIsRegex: Boolean by config(DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
+    private val licenseTemplateIsRegex: Boolean by config(DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
 
     override fun visitCondition(root: KtFile): Boolean =
         super.visitCondition(root) && (root.hasLicenseHeader() || root.hasLicenseHeaderRegex())
