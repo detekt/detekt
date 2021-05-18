@@ -17,7 +17,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.psi.ValueArgument
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -117,16 +119,18 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 
 private fun KtBlockExpression.hasOnlyOneStatement() = this.children.size == 1
 
-private fun PsiElement.countVarRefs(varName: String): Int =
-    children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName) && it !is ValueArgument) 1 else 0 }
+private fun PsiElement.countVarRefs(varName: String, lambda: KtLambdaExpression): Int =
+    collectDescendantsOfType<KtSimpleNameExpression> {
+        it.textMatches(varName) && it.getStrictParentOfType<KtLambdaExpression>() == lambda
+    }.count()
 
 private fun KtLambdaExpression.countReferences(): Int {
     val bodyExpression = bodyExpression ?: return 0
     val destructuringDeclaration = firstParameter?.destructuringDeclaration
     return if (destructuringDeclaration != null) {
-        destructuringDeclaration.entries.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString()) }
+        destructuringDeclaration.entries.sumBy { bodyExpression.countVarRefs(it.nameAsSafeName.asString(), this) }
     } else {
         val parameterName = firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL
-        bodyExpression.countVarRefs(parameterName)
+        bodyExpression.countVarRefs(parameterName, this)
     }
 }
