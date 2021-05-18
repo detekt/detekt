@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
+import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -81,8 +83,9 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (bindingContext != BindingContext.EMPTY &&
-            lambdaExpression.hasImplicitParameter() &&
+        if (bindingContext == BindingContext.EMPTY) return
+        val implicitParameter = lambdaExpression.implicitParameter(bindingContext) ?: return
+        if (lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext) &&
             lambdaExpression.hasParentImplicitParameterLambda()
         ) {
             report(
@@ -95,10 +98,8 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtLambdaExpression.hasImplicitParameter(): Boolean =
-        valueParameters.isEmpty() &&
-            bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull() != null
-
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
-        getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) { it.hasImplicitParameter() } != null
+        getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) {
+            implicitParameter(bindingContext) != null
+        } != null
 }
