@@ -24,12 +24,14 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  */
 class BooleanPropertyPrefixedWithAllowedWords(config: Config = Config.empty) : Rule(config) {
 
+    private val description = "Boolean property name should starts with " +
+        "'is/has/should/need/noNeed/was/are/may/can/had/for/with' prefix."
+
     private val regex = Regex("^(is|has|should|need|noNeed|was|are|may|can|had|for|with)")
 
     override val issue = Issue(
         javaClass.simpleName, Severity.CodeSmell,
-        "Boolean property name should starts with " +
-                "'is/has/should/need/noNeed/was/are/may/can/had/for/with' prefix.",
+        description,
         Debt.FIVE_MINS
     )
 
@@ -76,9 +78,7 @@ class BooleanPropertyPrefixedWithAllowedWords(config: Config = Config.empty) : R
         return CodeSmell(
             issue,
             Entity.from(declaration),
-            message = "Boolean properties should start with " +
-                    "'is/has/should/need/noNeed/was/are/may/can/had/for/with' prefix. " +
-                    "Actual type of $name: $typeName"
+            message = "$description Actual type of $name: $typeName"
         )
     }
 

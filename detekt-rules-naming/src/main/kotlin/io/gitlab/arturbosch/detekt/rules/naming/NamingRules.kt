@@ -91,7 +91,6 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         nonBooleanPropertyPrefixedWithIsRule.runIfActive { visitProperty(declaration) }
         booleanPropertyPrefixedWithAllowedWords.runIfActive { visitProperty(declaration) }
 
-
         when {
             declaration.isTopLevel -> topLevelPropertyRule.runIfActive { visitProperty(declaration) }
             declaration.withinObjectDeclaration() -> objectConstantNamingRule.runIfActive { visitProperty(declaration) }
