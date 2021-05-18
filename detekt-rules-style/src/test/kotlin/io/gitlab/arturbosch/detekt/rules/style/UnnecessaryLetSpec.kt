@@ -344,6 +344,19 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
             }
+
+            it("reports when implicit parameter isn't used") {
+                val content = """
+                    fun test(value: Int?) {
+                        value?.let {
+                          listOf(1).map { it }
+                        }
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, content)
+                assertThat(findings).hasSize(1)
+                assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
+            }
         }
     }
 })
