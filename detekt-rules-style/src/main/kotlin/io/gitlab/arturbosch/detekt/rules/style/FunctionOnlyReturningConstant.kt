@@ -53,7 +53,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private val ignoreActualFunction: Boolean by config(true)
 
     @Configuration("excluded functions")
-    private val excludedFunctions: SplitPattern by config("describeContents") { SplitPattern(it) }
+    private val excludedFunctions: SplitPattern by config("") { SplitPattern(it) }
 
     @Configuration("allows to provide a list of annotations that disable this check")
     private val excludeAnnotatedFunction: List<String> by config(listOf("dagger.Provides")) { functions ->
