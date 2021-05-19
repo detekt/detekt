@@ -5,12 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -68,14 +67,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *     }
  * }
  * </compliant>
- *
- * @configuration ignoredExceptionTypes - exception types which should be ignored (both in the catch clause and body)
- * (default: `- InterruptedException
- *            - NumberFormatException
- *            - ParseException
- *            - MalformedURLException`)
- * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
- * (default: `'_|(ignore|expected).*'`)
  */
 @ActiveByDefault(since = "1.16.0")
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
@@ -87,10 +78,13 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("exception types which should be ignored (both in the catch clause and body)")
+    private val ignoredExceptionTypes: List<String> by config(EXCEPTIONS_IGNORED_BY_DEFAULT) { exceptions ->
+        exceptions.map { it.removePrefix("*").removeSuffix("*") }
+    }
 
-    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+    @Configuration("ignores too generic exception types which match this regex")
+    private val allowedExceptionNameRegex: Regex by config("_|(ignore|expected).*", String::toRegex)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
@@ -170,10 +164,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
-        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
-
-        internal val defaultIgnoredExceptions = listOf(
+        internal val EXCEPTIONS_IGNORED_BY_DEFAULT = listOf(
             "NumberFormatException",
             "InterruptedException",
             "ParseException",
