@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
-import io.gitlab.arturbosch.detekt.testkit.createJavaClass
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -65,7 +64,6 @@ object DetektPlainTest : Spek({
             dryRun = true
         )
         gradleRunner.setupProject()
-        gradleRunner.createJavaClass("AJavaClass")
 
         it("configures detekt plain task") {
             gradleRunner.runTasksAndCheckResult(":detekt") { buildResult ->
@@ -74,8 +72,6 @@ object DetektPlainTest : Spek({
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
                 assertThat(buildResult.output).doesNotContain("--classpath")
-                assertThat(buildResult.output).doesNotContain("AJavaClass.java")
-                assertThat(buildResult.output).doesNotContain("AJavaClassTest.java")
             }
         }
     }
