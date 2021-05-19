@@ -6,6 +6,16 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.17.1 - 2021-05-19
+
+##### Notable Changes
+
+This is a patch release for Detekt `1.17.0` including a revert of a change on our Gradle Plugin. The original change [#3655](https://github.com/detekt/detekt/pull/3655) resulted in several false positives when using rules with Type Resolution on Java/Kotlin mixed codebases.
+
+##### Changelog
+
+- Revert "Noisy gradle (#3655)" - [#3792](https://github.com/detekt/detekt/pull/3792)
+
 #### 1.17.0 - 2021-05-15
 
 ##### Notable Changes

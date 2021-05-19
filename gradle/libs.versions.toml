@@ -7,7 +7,7 @@ spek = "2.0.15"
 
 [libraries]
 binaryCompatibilityValidator-gradlePlugin = "org.jetbrains.kotlinx:binary-compatibility-validator:0.4.0"
-detekt-gradlePlugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.0"
+detekt-gradlePlugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1"
 githubRelease-gradlePlugin = "com.github.breadmoirai:github-release:2.2.12"
 gradleVersions-gradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.28.0"
 nexusStaging-gradlePlugin = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
