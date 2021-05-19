@@ -6,7 +6,10 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class FunctionParameterNamingSpec : Spek({
+private const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+
+object FunctionParameterNamingSpec : Spek({
 
     describe("parameters in a function of a class") {
 
@@ -36,7 +39,7 @@ class FunctionParameterNamingSpec : Spek({
                 }
                 interface I { fun someStuff(`object`: String) }
             """
-            val config = TestConfig(mapOf(FunctionParameterNaming.IGNORE_OVERRIDDEN to "false"))
+            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
@@ -52,7 +55,7 @@ class FunctionParameterNamingSpec : Spek({
 
     describe("parameters in a function of an excluded class") {
 
-        val config by memoized { TestConfig(mapOf(FunctionParameterNaming.EXCLUDE_CLASS_PATTERN to "Excluded")) }
+        val config by memoized { TestConfig(mapOf(EXCLUDE_CLASS_PATTERN to "Excluded")) }
 
         it("should not detect function parameter") {
             val code = """

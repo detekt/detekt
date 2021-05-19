@@ -43,5 +43,17 @@ class ForbiddenClassNameSpec : Spek({
             )
                 .hasSize(2)
         }
+
+        it("should report classes with forbidden names using config string using wildcards") {
+            val code = """
+                class TestManager {} // violation
+                class TestProvider {} // violation
+                class TestHolder"""
+            assertThat(
+                ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "*Manager*, *Provider*")))
+                    .compileAndLint(code)
+            )
+                .hasSize(2)
+        }
     }
 })

@@ -5,17 +5,16 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
  * Reports when enum names which do not follow the specified naming convention are used.
- *
- * @configuration enumEntryPattern - naming pattern (default: `'[A-Z][_a-zA-Z0-9]*'`)
  */
 @ActiveByDefault(since = "1.0.0")
 class EnumNaming(config: Config = Config.empty) : Rule(config) {
@@ -27,7 +26,8 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val enumEntryPattern by LazyRegex(ENUM_PATTERN, "[A-Z][_a-zA-Z0-9]*")
+    @Configuration("naming pattern")
+    private val enumEntryPattern: Regex by config("[A-Z][_a-zA-Z0-9]*") { it.toRegex() }
 
     override fun visitEnumEntry(enumEntry: KtEnumEntry) {
         if (!enumEntry.identifierName().matches(enumEntryPattern)) {

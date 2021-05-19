@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -19,12 +19,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Reports when function names which do not follow the specified naming convention are used.
  * One exception are factory functions used to create instances of classes.
  * These factory functions can have the same name as the class being created.
- *
- * @configuration functionPattern - naming pattern (default: `'([a-z][a-zA-Z0-9]*)|(`.*`)'`)
- * @configuration excludeClassPattern - ignores functions in classes which match this regex (default: `'$^'`)
- * @configuration ignoreOverridden - ignores functions that have the override modifier (default: `true`)
- * @configuration ignoreAnnotated - ignore naming for functions in the context of these
- * annotation class names (default: `['Composable']`)
  */
 @ActiveByDefault(since = "1.0.0")
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
@@ -38,10 +32,17 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val functionPattern by LazyRegex(FUNCTION_PATTERN, "([a-z][a-zA-Z0-9]*)|(`.*`)")
-    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
-    private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, listOf("Composable"))
+    @Configuration("naming pattern")
+    private val functionPattern: Regex by config("([a-z][a-zA-Z0-9]*)|(`.*`)", String::toRegex)
+
+    @Configuration("ignores functions in classes which match this regex")
+    private val excludeClassPattern: Regex by config("$^", String::toRegex)
+
+    @Configuration("ignores functions that have the override modifier")
+    private val ignoreOverridden: Boolean by config(true)
+
+    @Configuration("ignore naming for functions in the context of these annotation class names")
+    private val ignoreAnnotated: List<String> by config(listOf("Composable"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.naming.InvalidPackageDeclaration.Companion.ROOT_PACKAGE
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -9,6 +8,8 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.FileSystems
 import java.nio.file.Paths
+
+private const val ROOT_PACKAGE = "rootPackage"
 
 internal class InvalidPackageDeclarationSpec : Spek({
 
