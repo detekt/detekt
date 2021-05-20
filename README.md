@@ -62,7 +62,7 @@ You can find [other ways to install detekt here](https://detekt.github.io/detekt
 
 #### with Gradle
 
-Gradle 5.4+ is required:
+Gradle 5.4+ is the minimum requirement. However the [recommended versions are listed here](https://detekt.github.io/detekt/compatibility.html):
 
 ```kotlin
 plugins {
