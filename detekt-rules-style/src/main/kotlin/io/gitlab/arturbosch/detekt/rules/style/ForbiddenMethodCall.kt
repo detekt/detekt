@@ -52,14 +52,12 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
             "with this concrete signature."
     )
-    private val methods: List<String> by config(
+    private val methods: List<Pair<String, List<String>?>> by config(
         listOf(
             "kotlin.io.println",
             "kotlin.io.print"
         )
-    )
-
-    private val forbiddenMethods = methods.map { extractMethodNameAndParams(it) }
+    ) { it.map(::extractMethodNameAndParams) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -90,7 +88,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             .map { it.type.fqNameOrNull()?.asString() }
 
         if (methodName != null) {
-            forbiddenMethods
+            methods
                 .filter { methodName == it.first }
                 .forEach {
                     val expectedParamTypes = it.second
