@@ -4,9 +4,9 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>valueOrDefault - | A static code analyzer for Kotlin</title>
+<meta name="description" content="This page lists the version of the Gradle plugins have been used to build Detekt.">
+<meta name="keywords" content=" detekt kotlin gradle compatibility android">
+<title>Compatibility Table | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="valueOrDefault -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Compatibility Table">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -247,7 +247,7 @@
           
           
           
-          <li><a href="/detekt/compatibility.html">Compatibility Table</a></li>
+          <li class="active"><a href="/detekt/compatibility.html">Compatibility Table</a></li>
           
           
           
@@ -420,13 +420,15 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">valueOrDefault -</h1>
+   <h1 class="post-title-main">Compatibility Table</h1>
 </div>
 
 
 
 <div class="post-content">
 
+   
+    <div class="summary">This page lists the version of the Gradle plugins have been used to build Detekt.</div>
    
 
     
@@ -457,23 +459,97 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//compatibility.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">valueOrDefault</a></p>
+  <h2 id="detekt-support-commitment">Detekt Support Commitment</h2>
 
-<h1 id="valueordefault">valueOrDefault</h1>
-<p>[jvm]<br />
-Content<br />
-open override fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">T</a>): <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html">T</a><br />
-More info</p>
+<p>Detekt is developed by open-source contributors as a volunteer effort.
+Due to our limited resources, we commit to support only the <strong>latest stable versions</strong> and related RC versions.</p>
 
-<p>Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.</p>
+<p>When opening Issues and Discussions, consider first updating to the latest version and align your tool versions
+with the one listed below. This allow us to offer you better support.</p>
 
+<h2 id="tool-versions">Tool Versions</h2>
+
+<p>When shipping the Detekt Gradle Plugin, we depend on both the <strong>Kotlin Gradle Plugin</strong> and the <strong>Android Gradle Plugin</strong>.</p>
+
+<p>Those dependencies are applied as <code class="language-plaintext highlighter-rouge">compileOnly</code> (<a href="https://github.com/detekt/detekt/blob/75622d3ba88b0ae0357aec5f2d82a55aa6c6d157/detekt-gradle-plugin/build.gradle.kts#L17-L18">see here</a>) to allow our users to pick the version of the Gradle plugin they prefer and don’t impose the one we use inside detekt.</p>
+
+<p>We try to provide <strong>backward compatibility</strong> when possible, although that’s not always trivial (especially with AGP or across minor versions of Kotlin).</p>
+
+<p>The following table lists the version of the Gradle plugin we used to compile the Detekt Gradle plugin. The <code class="language-plaintext highlighter-rouge">Java Target Level</code> entry specifies the level of the generated bytecode (i.e. the <code class="language-plaintext highlighter-rouge">-target</code> flag used when generating bytecode). The <code class="language-plaintext highlighter-rouge">JDK Version</code> represents the highest version of the JDK we test our code against.</p>
+
+<p>Consider <strong>aligning</strong> your Gradle plugin versions with the one listed below, as we can offer better support on Issues and Discussions for the listed versions of those tools.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Detekt Version</th>
+      <th>Gradle Version</th>
+      <th>Kotlin Version</th>
+      <th>AGP Version</th>
+      <th>Java Target Level</th>
+      <th>JDK Version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.17.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">7.0.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.32</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.2.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">15</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.16.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6.8.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.21</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.1.2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">15</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.15.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6.8.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.10</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.0.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">15</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.14.2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6.7.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.10</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.0.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">14</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.14.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6.7-rc-2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.10</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.0.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">14</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1.13.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6.6.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.4.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">4.0.1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1.8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">14</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>(older versions are omitted for brevity)</em></p>
 
 
     <div class="tags">
