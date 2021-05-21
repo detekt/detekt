@@ -32,7 +32,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val forbiddenClassNameRule = ForbiddenClassName(config)
     private val constructorParameterNamingRule = ConstructorParameterNaming(config)
     private val functionParameterNamingRule = FunctionParameterNaming(config)
-    private val booleanPropertyPrefixedWithAllowedWords = BooleanPropertyPrefixedWithAllowedWords(config)
+    private val booleanPropertyPrefixedWithAllowedWords = BooleanPropertyNaming(config)
 
     override val rules: List<Rule> = listOf(
         variableNamingRule,

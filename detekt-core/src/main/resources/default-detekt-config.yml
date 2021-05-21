@@ -380,7 +380,7 @@ formatting:
 
 naming:
   active: true
-  BooleanPropertyPrefixedWithAllowedWords:
+  BooleanPropertyNaming:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   ClassNaming:
