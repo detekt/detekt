@@ -5,16 +5,15 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
 /**
  * Reports when package names which do not follow the specified naming convention are used.
- *
- * @configuration packagePattern - naming pattern (default: `'[a-z]+(\.[a-z][A-Za-z0-9]*)*'`)
  */
 @ActiveByDefault(since = "1.0.0")
 class PackageNaming(config: Config = Config.empty) : Rule(config) {
@@ -28,7 +27,8 @@ class PackageNaming(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val packagePattern by LazyRegex(PACKAGE_PATTERN, "[a-z]+(\\.[a-z][A-Za-z0-9]*)*")
+    @Configuration("naming pattern")
+    private val packagePattern: Regex by config("""[a-z]+(\.[a-z][A-Za-z0-9]*)*""") { it.toRegex() }
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
         val name = directive.qualifiedName

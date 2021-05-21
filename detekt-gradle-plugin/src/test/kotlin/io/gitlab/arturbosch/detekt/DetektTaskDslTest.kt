@@ -143,10 +143,7 @@ internal object DetektTaskDslTest : Spek({
                         |}
                         """
 
-                        val projectLayout = ProjectLayout(
-                            numberOfSourceFilesInRootPerSourceDir = 1,
-                            srcDirs = listOf(customSrc1, customSrc2)
-                        )
+                        val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
                         gradleRunner = builder
                             .withProjectLayout(projectLayout)
                             .withDetektConfig(config)
@@ -157,7 +154,7 @@ internal object DetektTaskDslTest : Spek({
                     it("sets input parameter to absolute filenames of all source files") {
                         val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
                         val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
-                        val expectedInputParam = "--input $file1,$file2 "
+                        val expectedInputParam = "--input $file1,$file2"
                         assertThat(result.output).contains(expectedInputParam)
                     }
 

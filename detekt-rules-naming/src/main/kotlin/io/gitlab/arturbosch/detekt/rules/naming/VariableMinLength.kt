@@ -7,14 +7,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
  * Reports when very short variable names are used.
- *
- * @configuration minimumVariableNameLength - maximum name length (default: `1`)
  */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
@@ -25,8 +25,8 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val minimumVariableNameLength =
-        valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
+    @Configuration("minimum name length")
+    private val minimumVariableNameLength: Int by config(DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
 
     override fun visitProperty(property: KtProperty) {
         if (property.isSingleUnderscore) {

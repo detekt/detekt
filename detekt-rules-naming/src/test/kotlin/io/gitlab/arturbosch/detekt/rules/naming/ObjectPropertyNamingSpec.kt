@@ -6,6 +6,10 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val CONSTANT_PATTERN = "constantPattern"
+private const val PROPERTY_PATTERN = "propertyPattern"
+private const val PRIVATE_PROPERTY_PATTERN = "privatePropertyPattern"
+
 class ObjectPropertyNamingSpec : Spek({
 
     describe("constants in object declarations") {
@@ -164,8 +168,8 @@ class ObjectPropertyNamingSpec : Spek({
         val config by memoized {
             TestConfig(
                 mapOf(
-                    ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
-                    ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
+                    CONSTANT_PATTERN to "_[A-Za-z]*",
+                    PRIVATE_PROPERTY_PATTERN to ".*"
                 )
             )
         }
@@ -196,7 +200,7 @@ class ObjectPropertyNamingSpec : Spek({
         it("should not detect local properties") {
             val config = TestConfig(
                 mapOf(
-                    ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
+                    PROPERTY_PATTERN to "valid"
                 )
             )
             val subject = ObjectPropertyNaming(config)

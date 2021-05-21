@@ -5,10 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
@@ -18,11 +19,6 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
  * Reports when variable names which do not follow the specified naming convention are used.
- *
- * @configuration variablePattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
- * @configuration privateVariablePattern - naming pattern (default: `'(_)?[a-z][A-Za-z0-9]*'`)
- * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
- * @configuration ignoreOverridden - ignores member properties that have the override modifier (default: `true`)
  */
 @ActiveByDefault(since = "1.0.0")
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
@@ -34,10 +30,17 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
-    private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
-    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
+    @Configuration("naming pattern")
+    private val variablePattern: Regex by config("[a-z][A-Za-z0-9]*", String::toRegex)
+
+    @Configuration("naming pattern")
+    private val privateVariablePattern: Regex by config("(_)?[a-z][A-Za-z0-9]*", String::toRegex)
+
+    @Configuration("ignores variables in classes which match this regex")
+    private val excludeClassPattern: Regex by config("$^", String::toRegex)
+
+    @Configuration("ignores member properties that have the override modifier")
+    private val ignoreOverridden: Boolean by config(true)
 
     override fun visitProperty(property: KtProperty) {
         if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
@@ -72,8 +75,6 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val VARIABLE_PATTERN = "variablePattern"
-        const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

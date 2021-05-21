@@ -97,8 +97,6 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         writeKtFile(File(rootDir, srcDir), className)
     }
 
-    fun Submodule.projectFile(path: String): File = File(moduleRoot, path).canonicalFile
-
     private fun writeKtFile(dir: File, className: String, withCodeSmell: Boolean = false) {
         dir.mkdirs()
         File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
@@ -158,22 +156,4 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         const val SETTINGS_FILENAME = "settings.gradle"
         private const val DETEKT_TASK = "detekt"
     }
-}
-
-fun DslGradleRunner.createJavaClass(name: String) {
-    projectFile("${projectLayout.srcDirs.first { it.contains("main") }}/$name.java")
-        .apply { createNewFile() }
-        .writeText("public class $name {}")
-    projectFile("${projectLayout.srcDirs.first { it.contains("test") }}/${name}Test.java")
-        .apply { createNewFile() }
-        .writeText("public class ${name}Test {}")
-}
-
-fun DslGradleRunner.createJavaClass(submodule: Submodule, name: String) {
-    submodule.projectFile("${submodule.srcDirs.first { it.contains("main") }}/$name.java")
-        .apply { createNewFile() }
-        .writeText("public class $name {}")
-    submodule.projectFile("${submodule.srcDirs.first { it.contains("test") }}/${name}Test.java")
-        .apply { createNewFile() }
-        .writeText("public class ${name}Test {}")
 }

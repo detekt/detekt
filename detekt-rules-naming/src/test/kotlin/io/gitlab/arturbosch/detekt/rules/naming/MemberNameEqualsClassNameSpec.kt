@@ -10,6 +10,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+
 class MemberNameEqualsClassNameSpec : Spek({
     setupKotlinEnvironment()
 
@@ -21,7 +23,7 @@ class MemberNameEqualsClassNameSpec : Spek({
         val noIgnoreOverridden by memoized {
             TestConfig(
                 mapOf(
-                    MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+                    IGNORE_OVERRIDDEN to "false"
                 )
             )
         }

@@ -277,7 +277,7 @@ private object Xml10EscapeSymbolsInitializer {
     }
 
     private operator fun ByteArray.set(c: Char, value: Byte) {
-        set(c.toInt(), value)
+        set(c.code, value)
     }
 
     /**
