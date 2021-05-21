@@ -62,8 +62,6 @@ You can find [other ways to install detekt here](https://detekt.github.io/detekt
 
 #### with Gradle
 
-Gradle 5.4+ is the minimum requirement. However the [recommended versions are listed here](https://detekt.github.io/detekt/compatibility.html):
-
 ```kotlin
 plugins {
     id("io.gitlab.arturbosch.detekt").version("[version]")
@@ -105,6 +103,16 @@ tasks.withType<Detekt>().configureEach {
 See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
 
 If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
+
+#### Requirements
+
+Gradle 5.4+ is the minimum requirement. However the recommended versions, together with the other tools recommended versions are:
+
+| Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
+| -------------- | ------ | ------ | --- | ----------------- | --------------- |
+| `1.17.0` | `7.0.1` | `1.4.32` | `4.2.0` | `1.8` | `15` |
+
+The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
 
 ### Adding more rule sets
 
