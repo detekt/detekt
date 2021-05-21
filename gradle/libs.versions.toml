@@ -1,7 +1,7 @@
 [versions]
 dokka = "1.4.32"
 jacoco = "0.8.7"
-kotlin = "1.4.32"
+kotlin = "1.5.0"
 ktlint = "0.41.0"
 spek = "2.0.15"
 
@@ -25,7 +25,7 @@ kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scr
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
 
 android-gradlePlugin = "com.android.tools.build:gradle:4.2.0"
 

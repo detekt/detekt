@@ -31,7 +31,7 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
         )
     }
 
-    val amount = smells.sumBy { it.weighted() }
+    val amount = smells.sumOf { it.weighted() }
     this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
     return amount
 }
