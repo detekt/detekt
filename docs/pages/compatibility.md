@@ -10,9 +10,9 @@ When shipping the Detekt Gradle Plugin, we depend on both the **Kotlin Gradle Pl
 
 Those dependencies are applied as `compileOnly` ([see here](https://github.com/detekt/detekt/blob/75622d3ba88b0ae0357aec5f2d82a55aa6c6d157/detekt-gradle-plugin/build.gradle.kts#L17-L18)) to allow our users to pick the version of the Gradle plugin they prefer and don't impose the one we use inside detekt.
 
-We try to support b**ackward compatibility** when possible, although that's not always trivial (especially with AGP or across minor versions of Kotlin).
+We try to support **backward compatibility** when possible, although that's not always trivial (especially with AGP or across minor versions of Kotlin).
 
-This table lists the version of the Gradle plugin we used to compile the Detekt Gradle plugin. 
+The following table lists the version of the Gradle plugin we used to compile the Detekt Gradle plugin. 
 
 Consider **aligning** your Gradle plugin versions with the one listed below, as we can offer better support on Issues and Discussions for the listed versions of those tools.
 
