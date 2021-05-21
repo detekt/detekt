@@ -12,7 +12,6 @@ dependencies {
     implementation(projects.detektCore)
     implementation(projects.detektFormatting)
     implementation(projects.detektGenerator)
-    implementation(projects.detektGradlePlugin)
     implementation(projects.detektMetrics)
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
