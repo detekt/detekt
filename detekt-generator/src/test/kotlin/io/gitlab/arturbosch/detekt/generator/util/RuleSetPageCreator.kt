@@ -26,6 +26,18 @@ internal fun createRuleSetPage(): RuleSetPage {
                     name = "rulesetconfig2",
                     description = "description rulesetconfig2",
                     defaultValue = "['foo', 'bar']",
+                    deprecated = null
+                ),
+                Configuration(
+                    name = "deprecatedSimpleConfig",
+                    description = "description deprecatedSimpleConfig",
+                    defaultValue = "true",
+                    deprecated = "is deprecated"
+                ),
+                Configuration(
+                    name = "deprecatedListConfig",
+                    description = "description deprecatedListConfig",
+                    defaultValue = "['foo', 'bar']",
                     deprecated = "is deprecated"
                 )
             )

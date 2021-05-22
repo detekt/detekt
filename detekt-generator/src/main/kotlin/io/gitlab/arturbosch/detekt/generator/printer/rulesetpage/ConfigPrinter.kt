@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
@@ -38,14 +39,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             if (ruleSetExclusion != null) {
                 keyValue { Config.EXCLUDES_KEY to ruleSetExclusion.pattern }
             }
-            ruleSet.configuration
-                .forEach { configuration ->
-                    if (configuration.defaultValue.isYamlList()) {
-                        list(configuration.name, configuration.defaultValue.toList())
-                    } else {
-                        keyValue { configuration.name to configuration.defaultValue }
-                    }
-                }
+
+            ruleSet.configuration.forEach { printConfiguration(it) }
+
             rules.forEach { rule ->
                 node(rule.name) {
                     keyValue { Config.ACTIVE_KEY to "${rule.defaultActivationStatus.active}" }
@@ -67,6 +63,16 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                 }
             }
             emptyLine()
+        }
+    }
+
+    private fun YamlNode.printConfiguration(configuration: Configuration) {
+        if (configuration.isDeprecated()) return
+
+        if (configuration.defaultValue.isYamlList()) {
+            list(configuration.name, configuration.defaultValue.toList())
+        } else {
+            keyValue { configuration.name to configuration.defaultValue }
         }
     }
 
