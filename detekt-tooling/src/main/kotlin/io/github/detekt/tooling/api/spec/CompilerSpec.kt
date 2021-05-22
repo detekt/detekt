@@ -8,7 +8,7 @@ interface CompilerSpec {
     /**
      * Target version for the generated JVM bytecode (e.g. 1.8, 9, 10, 11 ...).
      */
-    val jvmTarget: String?
+    val jvmTarget: String
 
     /**
      * Kotlin language version (e.g. 1.0, 1.1, 1.2, 1.3, 1.4, ...).
