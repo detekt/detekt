@@ -481,7 +481,7 @@ should not throw any exceptions.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">methodNames</code> (default: <code class="language-plaintext highlighter-rouge">[toString, hashCode, equals, finalize]</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">methodNames</code> (default: <code class="language-plaintext highlighter-rouge">['toString', 'hashCode', 'equals', 'finalize']</code>)</p>
 
     <p>methods which should not throw exceptions</p>
   </li>
@@ -718,7 +718,7 @@ For that reason, this rule ignores that these configured exception types are cau
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> (default: <code class="language-plaintext highlighter-rouge">InterruptedException, NumberFormatException, ParseException, MalformedURLException</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">ignoredExceptionTypes</code> (default: <code class="language-plaintext highlighter-rouge">['NumberFormatException', 'InterruptedException', 'ParseException', 'MalformedURLException']</code>)</p>
 
     <p>exception types which should be ignored (both in the catch clause and body)</p>
   </li>
@@ -818,7 +818,7 @@ down an underlying issue in a better way.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">exceptions</code> (default: <code class="language-plaintext highlighter-rouge">IllegalArgumentException, IllegalStateException, IOException</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">exceptions</code> (default: <code class="language-plaintext highlighter-rouge">['ArrayIndexOutOfBoundsException', 'Error', 'Exception', 'IllegalMonitorStateException', 'NullPointerException', 'IndexOutOfBoundsException', 'RuntimeException', 'Throwable']</code>)</p>
 
     <p>exceptions which should not be thrown without message or cause</p>
   </li>
@@ -889,7 +889,7 @@ exception is too broad it can lead to unintended exceptions being caught.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">ArrayIndexOutOfBoundsException, Error, Exception, IllegalMonitorStateException, NullPointerException, IndexOutOfBoundsException, RuntimeException, Throwable</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">['ArrayIndexOutOfBoundsException', 'Error', 'Exception', 'IllegalMonitorStateException', 'NullPointerException', 'IndexOutOfBoundsException', 'RuntimeException', 'Throwable']</code>)</p>
 
     <p>exceptions which are too generic and should not be caught</p>
   </li>
@@ -931,7 +931,7 @@ exceptions to the case that has currently occurred.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">Error, Exception, Throwable, RuntimeException</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">exceptionNames</code> (default: <code class="language-plaintext highlighter-rouge">['Error', 'Exception', 'Throwable', 'RuntimeException']</code>)</p>
 
     <p>exceptions which are too generic and should not be thrown</p>
   </li>
