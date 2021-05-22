@@ -683,6 +683,7 @@ style:
   ThrowsCount:
     active: true
     max: 2
+    excludeGuardClauses: false
   TrailingWhitespace:
     active: false
   UnderscoresInNumericLiterals:

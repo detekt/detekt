@@ -161,7 +161,8 @@ class ConfigurationCollector {
 
         private const val TYPE_STRING = "String"
         private const val TYPE_REGEX = "Regex"
-        private val TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT = listOf(TYPE_STRING, TYPE_REGEX)
+        private const val TYPE_SPLIT_PATTERN = "SplitPattern"
+        private val TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT = listOf(TYPE_STRING, TYPE_REGEX, TYPE_SPLIT_PATTERN)
 
         private val KtPropertyDelegate.property: KtProperty
             get() = parent as KtProperty

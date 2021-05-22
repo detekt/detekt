@@ -5,11 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -26,10 +26,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * fun foo() { }
  * // STOPSHIP:
  * </noncompliant>
- *
- * @configuration values - forbidden comment strings (default: `['TODO:', 'FIXME:', 'STOPSHIP:']`)
- * @configuration allowedPatterns - ignores comments which match the specified regular expression.
- * For example `Ticket|Task`. (default: `''`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
@@ -41,9 +37,11 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val values: List<String> = valueOrDefaultCommaSeparated(VALUES, listOf("TODO:", "FIXME:", "STOPSHIP:"))
+    @Configuration("forbidden comment strings")
+    private val values: List<String> by config(listOf("TODO:", "FIXME:", "STOPSHIP:"))
 
-    private val allowedPatterns: Regex by LazyRegex(ALLOWED_PATTERNS, "")
+    @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")
+    private val allowedPatterns: Regex by config("", String::toRegex)
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
@@ -74,10 +72,5 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
                 )
             }
         }
-    }
-
-    companion object {
-        const val VALUES = "values"
-        const val ALLOWED_PATTERNS = "allowedPatterns"
     }
 }

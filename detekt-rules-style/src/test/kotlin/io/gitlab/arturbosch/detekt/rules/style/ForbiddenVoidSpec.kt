@@ -10,6 +10,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+private const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
+
 class ForbiddenVoidSpec : Spek({
     setupKotlinEnvironment()
 
@@ -59,7 +62,7 @@ class ForbiddenVoidSpec : Spek({
 
         describe("ignoreOverridden is enabled") {
 
-            val config by memoized { TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true")) }
+            val config by memoized { TestConfig(mapOf(IGNORE_OVERRIDDEN to "true")) }
 
             it("should not report Void in overriding function declarations") {
                 val code = """
@@ -130,7 +133,7 @@ class ForbiddenVoidSpec : Spek({
 
         describe("ignoreUsageInGenerics is enabled") {
 
-            val config by memoized { TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true")) }
+            val config by memoized { TestConfig(mapOf(IGNORE_USAGE_IN_GENERICS to "true")) }
 
             it("should not report Void in generic type declaration") {
                 val code = """

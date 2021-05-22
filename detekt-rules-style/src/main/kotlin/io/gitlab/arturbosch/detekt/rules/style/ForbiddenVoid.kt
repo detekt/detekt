@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.name.FqName
@@ -34,10 +36,6 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
  * runnable: () -> Unit
  * Void::class
  * </compliant>
- *
- * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: `false`)
- * @configuration ignoreUsageInGenerics - ignore void types as generic arguments (default: `false`)
- *
  */
 @RequiresTypeResolution
 class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
@@ -49,16 +47,22 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration("ignores void types in signatures of overridden functions")
+    private val ignoreOverridden: Boolean by config(false)
+
+    @Configuration("ignore void types as generic arguments")
+    private val ignoreUsageInGenerics: Boolean by config(false)
+
     @Suppress("ReturnCount")
     override fun visitTypeReference(typeReference: KtTypeReference) {
         if (bindingContext == BindingContext.EMPTY) return
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
 
         if (kotlinType.fqNameOrNull() == VOID_FQ_NAME) {
-            if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && typeReference.isPartOfOverriddenSignature()) {
+            if (ignoreOverridden && typeReference.isPartOfOverriddenSignature()) {
                 return
             }
-            if (ruleSetConfig.valueOrDefault(IGNORE_USAGE_IN_GENERICS, false) && typeReference.isGenericArgument()) {
+            if (ignoreUsageInGenerics && typeReference.isGenericArgument()) {
                 return
             }
             report(CodeSmell(issue, Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
@@ -83,8 +87,6 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
         getStrictParentOfType<KtTypeArgumentList>() != null
 
     companion object {
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-        const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
-        val VOID_FQ_NAME = FqName("java.lang.Void")
+        private val VOID_FQ_NAME = FqName("java.lang.Void")
     }
 }

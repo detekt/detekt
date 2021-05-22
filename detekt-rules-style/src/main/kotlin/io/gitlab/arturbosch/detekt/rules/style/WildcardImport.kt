@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -38,9 +39,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *     val element2 = DetektElement2()
  * }
  * </compliant>
- *
- * @configuration excludeImports - Define a list of package names that should be allowed to be imported
- * with wildcard imports. (default: `['java.util.*', 'kotlinx.android.synthetic.*']`)
  */
 @ActiveByDefault(since = "1.0.0")
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
@@ -55,11 +53,15 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val excludedImports = valueOrDefaultCommaSeparated(
-        EXCLUDED_IMPORTS,
-        listOf("java.util.*", "kotlinx.android.synthetic.*")
-    )
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("Define a list of package names that should be allowed to be imported with wildcard imports.")
+    private val excludeImports: List<String> by config(
+        listOf(
+            "java.util.*",
+            "kotlinx.android.synthetic.*"
+        )
+    ) { imports ->
+        imports.map { it.removePrefix("*").removeSuffix("*") }
+    }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         val import = importDirective.importPath?.pathStr
@@ -68,7 +70,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
                 return
             }
 
-            if (excludedImports.any { import.contains(it, ignoreCase = true) }) {
+            if (excludeImports.any { import.contains(it, ignoreCase = true) }) {
                 return
             }
             report(
@@ -80,9 +82,5 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
-    }
-
-    companion object {
-        const val EXCLUDED_IMPORTS = "excludeImports"
     }
 }
