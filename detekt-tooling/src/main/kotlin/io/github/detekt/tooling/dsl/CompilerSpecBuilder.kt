@@ -13,7 +13,7 @@ class CompilerSpecBuilder : Builder<CompilerSpec> {
 }
 
 private data class CompilerModel(
-    override val jvmTarget: String?,
+    override val jvmTarget: String,
     override val languageVersion: String?,
     override val classpath: String?
 ) : CompilerSpec
