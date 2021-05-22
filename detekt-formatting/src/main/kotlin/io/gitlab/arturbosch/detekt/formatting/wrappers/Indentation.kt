@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.CONTINUATION_INDENT_SIZE_KEY
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_CONTINUATION_INDENT
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
@@ -13,9 +14,8 @@ import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
  *
  * @configuration indentSize - indentation size (default: `4`)
  * @configuration continuationIndentSize - continuation indentation size (default: `4`)
- *
- * @autoCorrect since v1.0.0
  */
+@AutoCorrectable(since = "1.0.0")
 class Indentation(config: Config) : FormattingRule(config) {
 
     override val wrapping = IndentationRule()

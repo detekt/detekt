@@ -5,17 +5,17 @@ import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.FinalNewlineRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
  * @configuration insertFinalNewLine - report absence or presence of a newline (default: `true`)
- *
- * @autoCorrect since v1.0.0
  */
 @OptIn(FeatureInAlphaState::class)
 @ActiveByDefault(since = "1.0.0")
+@AutoCorrectable(since = "1.0.0")
 class FinalNewline(config: Config) : FormattingRule(config) {
 
     override val wrapping = FinalNewlineRule()

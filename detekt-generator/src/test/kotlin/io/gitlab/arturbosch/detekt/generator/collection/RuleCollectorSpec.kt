@@ -123,12 +123,13 @@ object RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
-        it("is auto-correctable tag is present") {
+        it("is auto-correctable") {
             val code = """
                 /**
                  * description
-                 * @autoCorrect
+                 *
                  */
+                @AutoCorrectable(since = "1.0.0")
                 class SomeRandomClass : Rule
             """
             val items = subject.run(code)
