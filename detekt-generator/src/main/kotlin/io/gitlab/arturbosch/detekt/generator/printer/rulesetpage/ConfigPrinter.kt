@@ -52,14 +52,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     if (ruleExclusion != null) {
                         keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
                     }
-                    rule.configuration
-                        .forEach { configuration ->
-                            if (configuration.defaultValue.isYamlList()) {
-                                list(configuration.name, configuration.defaultValue.toList())
-                            } else if (configuration.deprecated == null) {
-                                keyValue { configuration.name to configuration.defaultValue }
-                            }
-                        }
+                    rule.configuration.forEach { printConfiguration(it) }
                 }
             }
             emptyLine()
