@@ -16,7 +16,7 @@ sealed class YML(open val indent: Int = 0, open var content: String = "") {
     private fun getIndent(): String {
         var spaces = ""
         indent times {
-            spaces += "  "
+            spaces += SINGLE_INDENT
         }
         return spaces
     }
@@ -57,8 +57,10 @@ inline fun YamlNode.keyValue(comment: String = "", keyValue: () -> Pair<String, 
 fun YamlNode.list(name: String, list: List<String>) {
     append("$name:")
     list.forEach {
-        append(" - $it")
+        append("$SINGLE_INDENT- $it")
     }
 }
 
 inline fun YamlNode.yaml(yaml: () -> String) = append(yaml())
+
+private const val SINGLE_INDENT = "  "

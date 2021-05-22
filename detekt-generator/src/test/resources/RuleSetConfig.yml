@@ -7,8 +7,8 @@ style:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     conf1: foo
     conf3:
-     - a
-     - b
+      - a
+      - b
   EqualsNull:
     active: false
   NoUnitKeyword:
