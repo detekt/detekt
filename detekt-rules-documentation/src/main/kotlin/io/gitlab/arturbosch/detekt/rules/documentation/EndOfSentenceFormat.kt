@@ -7,15 +7,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.psi.KtDeclaration
 
 /**
  * This rule validates the end of the first sentence of a KDoc comment.
  * It should end with proper punctuation or with a correct URL.
- *
- * @configuration endOfSentenceFormat - regular expression which should match the end of the first sentence in the KDoc
- * (default: `'([.?!][ \t\n\r\f<])|([.?!:]$)'`)
  */
 @Suppress("MemberNameEqualsClassName")
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
@@ -27,8 +26,9 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val endOfSentenceFormat =
-        Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
+    @Configuration("regular expression which should match the end of the first sentence in the KDoc")
+    private val endOfSentenceFormat: Regex by config("""([.?!][ \t\n\r\f<])|([.?!:]$)""") { it.toRegex() }
+
     private val htmlTag = Regex("<.+>")
 
     override fun visitDeclaration(dcl: KtDeclaration) {
