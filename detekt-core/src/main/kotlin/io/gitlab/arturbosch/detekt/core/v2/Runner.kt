@@ -48,7 +48,6 @@ class Runner(
                 run(
                     KtFilesProviderImpl(this@withSettings),
                     ResolvedContextProviderImpl(environment, classpath),
-                    RulesProviderImpl(this@withSettings),
                 )
             }
         }
@@ -60,7 +59,6 @@ class Runner(
                 run(
                     { pathToKtFile(path).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
-                    RulesProviderImpl(this@withSettings),
                 )
             }
         }
@@ -72,7 +70,6 @@ class Runner(
                 run(
                     { contentToKtFile(sourceCode, Paths.get(filename)).invoke(this@withSettings).asFlow() },
                     ResolvedContextProviderImpl(environment, classpath),
-                    RulesProviderImpl(this@withSettings),
                 )
             }
         }
@@ -87,7 +84,6 @@ class Runner(
                         bindingContext,
                         environment.configuration.languageVersionSettings
                     ),
-                    RulesProviderImpl(this@withSettings),
                 )
             }
         }
@@ -97,12 +93,11 @@ class Runner(
 private suspend fun ProcessingSettings.run(
     filesProvider: KtFilesProvider,
     resolvedContextProvider: ResolvedContextProvider,
-    ruleProvider: RulesProvider,
 ): Detektion {
     return run(
         filesProvider,
         resolvedContextProvider,
-        ruleProvider,
+        RulesProviderImpl(this),
         FileProcessListenersProviderImpl(this),
         ReportingModifiersProviderImpl(this),
         ConsoleReportersProviderImpl(this),
