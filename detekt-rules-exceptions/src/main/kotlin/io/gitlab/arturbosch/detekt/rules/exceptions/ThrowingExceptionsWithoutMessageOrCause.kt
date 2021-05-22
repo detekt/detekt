@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -34,11 +35,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  *     // ...
  * }
  * </compliant>
- *
- * @configuration exceptions - exceptions which should not be thrown without message or cause
- * (default: `- IllegalArgumentException
- *            - IllegalStateException
- *            - IOException`)
  */
 @ActiveByDefault(since = "1.16.0")
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
@@ -52,21 +48,9 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
         Debt.FIVE_MINS
     )
 
-    private val exceptions = valueOrDefaultCommaSeparated(EXCEPTIONS, exceptionsDefaults)
-
-    override fun visitCallExpression(expression: KtCallExpression) {
-        val calleeExpressionText = expression.calleeExpression?.text
-        if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
-            expression.valueArguments.isEmpty()
-        ) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
-        }
-        super.visitCallExpression(expression)
-    }
-
-    companion object {
-        const val EXCEPTIONS = "exceptions"
-        private val exceptionsDefaults = listOf(
+    @Configuration("exceptions which should not be thrown without message or cause")
+    private val exceptions: List<String> by config(
+        listOf(
             "ArrayIndexOutOfBoundsException",
             "Error",
             "Exception",
@@ -76,5 +60,15 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
             "RuntimeException",
             "Throwable"
         )
+    )
+
+    override fun visitCallExpression(expression: KtCallExpression) {
+        val calleeExpressionText = expression.calleeExpression?.text
+        if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
+            expression.valueArguments.isEmpty()
+        ) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
+        }
+        super.visitCallExpression(expression)
     }
 }
