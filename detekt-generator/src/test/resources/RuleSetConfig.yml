@@ -6,7 +6,9 @@ style:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     conf1: foo
-    conf3: ['a', 'b']
+    conf3:
+     - a
+     - b
   EqualsNull:
     active: false
   NoUnitKeyword:
