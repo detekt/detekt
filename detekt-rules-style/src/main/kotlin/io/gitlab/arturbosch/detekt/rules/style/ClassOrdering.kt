@@ -50,6 +50,8 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  *     }
  * }
  * </compliant>
+ *
+ * @autoCorrect since v1.18.0
  */
 class ClassOrdering(config: Config = Config.empty) : Rule(config) {
 
@@ -63,8 +65,15 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
 
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
+        val reported = reportMisorder(classBody)
+        if (reported && autoCorrect) {
+            correctMisorder(classBody)
+        }
+    }
 
+    fun reportMisorder(classBody: KtClassBody): Boolean {
         var currentSection = Section(0)
+        var reported = false
         classBody.declarations.forEach { ktDeclaration ->
             val section = ktDeclaration.toSection()
             when {
@@ -79,11 +88,40 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
                             references = listOf(Entity.from(classBody))
                         )
                     )
+                    reported = true
                 }
                 section != null && section > currentSection -> currentSection = section
             }
         }
+        return reported
     }
+}
+
+@Suppress("MagicNumber")
+private fun correctMisorder(classBody: KtClassBody) {
+    val children = classBody.declarations
+    val orderedChildren = mutableListOf<KtDeclaration>()
+    for (priority in 0..3) {
+        orderedChildren.addAll(children.filter { it.toSection()?.priority ?: 0 == priority })
+    }
+
+    // Copy elements to a new code
+    val newClassBody = classBody.copy()
+    newClassBody.deleteChildRange(newClassBody.firstChild, newClassBody.lastChild)
+
+    var node = classBody.firstChild
+    var index = 0
+    while (node != null) {
+        if (node is KtDeclaration) {
+            // Handle all KtDeclarations
+            newClassBody.add(orderedChildren[index++])
+        } else {
+            // Handle whitespaces and braces
+            newClassBody.add(node)
+        }
+        node = node.nextSibling
+    }
+    classBody.replace(newClassBody)
 }
 
 private fun KtDeclaration.toDescription(): String = when {

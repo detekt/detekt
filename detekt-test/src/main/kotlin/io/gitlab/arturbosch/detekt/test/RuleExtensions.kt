@@ -37,6 +37,8 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
+fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
+
 fun BaseRule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
@@ -74,8 +76,6 @@ private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<K
         environment::createPackagePartProvider,
         ::FileBasedDeclarationProviderFactory
     ).bindingContext
-
-fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
 
 private fun BaseRule.findingsAfterVisit(
     ktFile: KtFile,

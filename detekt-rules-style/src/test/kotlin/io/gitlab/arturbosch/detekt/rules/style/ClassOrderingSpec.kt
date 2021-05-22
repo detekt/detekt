@@ -1,7 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.readResourceContent
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -261,6 +266,22 @@ class ClassOrderingSpec : Spek({
                 .isEqualTo("secondary constructor should be declared before companion object.")
             assertThat(findings[2].message)
                 .isEqualTo("property `y` should be declared before companion object.")
+        }
+
+        it("auto corrects all violations") {
+            val ktFile = compileForTest(resourceAsPath("ClassOrderingAutoCorrectible.kt"))
+
+            // Perform autocorrection
+            val findings = ClassOrdering(TestConfig(Config.AUTO_CORRECT_KEY to true)).lint(ktFile)
+            assertThat(findings).hasSize(4)
+
+            // Verify autocorrection output
+            val actualContent = ktFile.text
+            val expectedContent = readResourceContent("ClassOrderingAutoCorrected.kt")
+            assertThat(actualContent).isEqualToIgnoringNewLines(expectedContent)
+
+            // Ensure autocorrected code has no violation
+            assertThat(subject.lint(ktFile)).isEmpty()
         }
     }
 })

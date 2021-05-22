@@ -16,14 +16,14 @@ class KtFileModifier : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         files.filter { it.modificationStamp > 0 }
-            .map { it.absolutePath() to it.unnormalizeContent() }
-            .forEach {
-                result.add(ModificationNotification(it.first))
-                Files.write(it.first, it.second.toByteArray())
+            .map { it.absolutePath() to it.denormalizeContent() }
+            .forEach { (path, content) ->
+                result.add(ModificationNotification(path))
+                Files.write(path, content.toByteArray())
             }
     }
 
-    private fun KtFile.unnormalizeContent(): String {
+    private fun KtFile.denormalizeContent(): String {
         val lineSeparator = getUserData(LINE_SEPARATOR)
         require(lineSeparator != null) {
             "No line separator entry for ktFile ${javaFileFacadeFqName.asString()}"
