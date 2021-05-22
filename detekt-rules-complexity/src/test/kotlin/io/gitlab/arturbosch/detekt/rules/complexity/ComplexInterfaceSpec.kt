@@ -6,11 +6,18 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val THRESHOLD = 4
+private val defaultConfigMap = mapOf("threshold" to THRESHOLD)
+private val staticDeclarationsConfig = TestConfig(
+    defaultConfigMap + ("includeStaticDeclarations" to true)
+)
+private val privateDeclarationsConfig = TestConfig(
+    defaultConfigMap + ("includePrivateDeclarations" to true)
+)
+
 class ComplexInterfaceSpec : Spek({
 
-    val subject by memoized { ComplexInterface(threshold = THRESHOLD) }
-    val staticDeclarationsConfig by memoized { TestConfig(mapOf(ComplexInterface.INCLUDE_STATIC_DECLARATIONS to "true")) }
-    val privateDeclarationsConfig by memoized { TestConfig(mapOf(ComplexInterface.INCLUDE_PRIVATE_DECLARATIONS to "true")) }
+    val subject by memoized { ComplexInterface(TestConfig(defaultConfigMap)) }
 
     describe("ComplexInterface rule positives") {
 
@@ -29,7 +36,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -51,7 +58,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -73,7 +80,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -93,7 +100,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("does report complex interface with includePrivateDeclarations config") {
-                val rule = ComplexInterface(privateDeclarationsConfig, threshold = THRESHOLD)
+                val rule = ComplexInterface(privateDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -114,7 +121,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("does report complex interface with includePrivateDeclarations config") {
-                val rule = ComplexInterface(privateDeclarationsConfig, threshold = THRESHOLD)
+                val rule = ComplexInterface(privateDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -157,5 +164,3 @@ class ComplexInterfaceSpec : Spek({
         }
     }
 })
-
-private const val THRESHOLD = 4
