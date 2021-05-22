@@ -796,8 +796,7 @@ development. Offending code comments will then be reported.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">allowedPatterns</code> (default: <code class="language-plaintext highlighter-rouge">''</code>)</p>
 
-    <p>ignores comments which match the specified regular expression.
-For example <code class="language-plaintext highlighter-rouge">Ticket|Task</code>.</p>
+    <p>ignores comments which match the specified regular expression. For example <code class="language-plaintext highlighter-rouge">Ticket|Task</code>.</p>
   </li>
 </ul>
 
@@ -859,10 +858,7 @@ Detekt will then report all methods invocation that are forbidden.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">methods</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.io.println', 'kotlin.io.print']</code>)</p>
 
-    <p>Comma separated list of fully qualified method signatures which are forbidden.
-Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods
-with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call
-with this concrete signature.</p>
+    <p>Comma separated list of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature.</p>
   </li>
 </ul>
 
@@ -969,7 +965,7 @@ as a <code class="language-plaintext highlighter-rouge">const val</code>.</p>
     <p>if actual functions should be ignored</p>
   </li>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">excludedFunctions</code> (default: <code class="language-plaintext highlighter-rouge">'describeContents'</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">excludedFunctions</code> (default: <code class="language-plaintext highlighter-rouge">''</code>)</p>
 
     <p>excluded functions</p>
   </li>
@@ -1105,8 +1101,7 @@ describing what the magic number means.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">ignoreLocalVariableDeclaration</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
 
-    <p>whether magic numbers in local variable declarations should be
-ignored</p>
+    <p>whether magic numbers in local variable declarations should be ignored</p>
   </li>
   <li>
     <p><code class="language-plaintext highlighter-rouge">ignoreConstantDeclaration</code> (default: <code class="language-plaintext highlighter-rouge">true</code>)</p>
@@ -1116,8 +1111,7 @@ ignored</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">ignoreCompanionObjectPropertyDeclaration</code> (default: <code class="language-plaintext highlighter-rouge">true</code>)</p>
 
-    <p>whether magic numbers in companion object
-declarations should be ignored</p>
+    <p>whether magic numbers in companion object declarations should be ignored</p>
   </li>
   <li>
     <p><code class="language-plaintext highlighter-rouge">ignoreAnnotation</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
@@ -1843,6 +1837,11 @@ to confusion. Instead prefer to limit the amount of <code class="language-plaint
 
     <p>maximum amount of throw statements in a method</p>
   </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">excludeGuardClauses</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
+
+    <p>if set to true, guard clauses do not count towards the allowed throws count</p>
+  </li>
 </ul>
 
 <h4 id="noncompliant-code-39">Noncompliant Code:</h4>
@@ -1890,8 +1889,7 @@ explicitly ignored. For floats and doubles, anything to the right of the decimal
   <li>
     <p><code class="language-plaintext highlighter-rouge">acceptableDecimalLength</code> (default: <code class="language-plaintext highlighter-rouge">5</code>)</p>
 
-    <p>Length under which decimal base 10 literals are not required to have
-underscores</p>
+    <p>Length under which decimal base 10 literals are not required to have underscores</p>
   </li>
 </ul>
 
@@ -1925,8 +1923,7 @@ refactored into concrete classes.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">excludeAnnotatedClasses</code> (default: <code class="language-plaintext highlighter-rouge">['dagger.Module']</code>)</p>
 
-    <p>Allows you to provide a list of annotations that disable
-this check.</p>
+    <p>Allows you to provide a list of annotations that disable this check.</p>
   </li>
 </ul>
 
@@ -2258,7 +2255,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
   <li>
     <p><code class="language-plaintext highlighter-rouge">allowVars</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
 
-    <p>allows to relax this rule in order to exclude classes that contains one (or more) Vars</p>
+    <p>allows to relax this rule in order to exclude classes that contains one (or more) vars</p>
   </li>
 </ul>
 
@@ -2580,8 +2577,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
   <li>
     <p><code class="language-plaintext highlighter-rouge">excludeImports</code> (default: <code class="language-plaintext highlighter-rouge">['java.util.*', 'kotlinx.android.synthetic.*']</code>)</p>
 
-    <p>Define a list of package names that should be allowed to be imported
-with wildcard imports.</p>
+    <p>Define a list of package names that should be allowed to be imported with wildcard imports.</p>
   </li>
 </ul>
 
