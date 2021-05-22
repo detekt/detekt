@@ -7,15 +7,23 @@ import io.github.detekt.tooling.internal.DefaultAnalysisResult
 import io.github.detekt.tooling.internal.EmptyContainer
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
-import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
+import io.gitlab.arturbosch.detekt.core.v2.providers.ConsoleReportersProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.FileProcessListenersProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.KtFilesProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.OutputReportersProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.ReportingModifiersProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.ResolvedContextProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.providers.RulesProviderImpl
+import io.gitlab.arturbosch.detekt.core.v2.run
+import kotlinx.coroutines.runBlocking
 
 class CliRunner : DetektCli {
 
     override fun run(args: Array<String>): AnalysisResult = run(args, System.out, System.err)
 
     override fun run(args: Array<String>, outputChannel: Appendable, errorChannel: Appendable): AnalysisResult {
-        val arguments = runCatching { parseArguments(args) }
+        val arguments: CliArgs = runCatching { parseArguments(args) }
             .getOrElse { return DefaultAnalysisResult(null, UnexpectedError(it)) }
 
         val specialRunner = when {
@@ -30,7 +38,21 @@ class CliRunner : DetektCli {
                 .map { DefaultAnalysisResult(EmptyContainer) }
                 .getOrElse { DefaultAnalysisResult(null, UnexpectedError(it)) }
         } else {
-            Runner(arguments, outputChannel, errorChannel).call()
+            runBlocking {
+                run(
+                    filesProvider = KtFilesProviderImpl(TODO()),
+                    resolvedContextProvider = ResolvedContextProviderImpl(environment, classpath),
+                    ruleProvider = RulesProviderImpl(this),
+                    fileProcessListenersProvider = FileProcessListenersProviderImpl(this),
+                    reportingModifiersProvider = ReportingModifiersProviderImpl(this),
+                    consoleReportersProvider = ConsoleReportersProviderImpl(this),
+                    outputReportersProvider = OutputReportersProviderImpl(this),
+                ).toAnalysisResult()
+            }
         }
     }
+}
+
+private fun Any.toAnalysisResult(): AnalysisResult {
+    TODO()
 }
