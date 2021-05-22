@@ -68,17 +68,16 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 h4 { "Configuration options:" }
                 list {
                     rule.configuration.forEach {
-                        if (it.deprecated != null) {
+                        val defaultValues = it.defaultValue.lines()
+                        val defaultValuesString = defaultValues.joinToString { value ->
+                            value.trim().removePrefix("- ")
+                        }
+                        if (it.isDeprecated()) {
                             item {
-                                crossOut { code { it.name } } + " (default: ${code { it.defaultValue }})"
+                                crossOut { code { it.name } } + " (default: ${code { defaultValuesString }})"
                             }
                             description { "${bold { "Deprecated" }}: ${it.deprecated}" }
                         } else {
-                            val defaultValues = it.defaultValue.lines()
-                            val defaultValuesString = defaultValues.joinToString {
-                                value ->
-                                value.trim().removePrefix("- ")
-                            }
                             item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
                         }
                         description { it.description }
