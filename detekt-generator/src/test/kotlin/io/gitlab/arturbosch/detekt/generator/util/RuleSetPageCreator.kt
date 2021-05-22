@@ -60,6 +60,7 @@ internal fun createRules(): List<Rule> {
             Configuration("conf1", "a config option", "foo", null),
             Configuration("conf2", "deprecated config", "false", "use conf1 instead"),
             Configuration("conf3", "list config", "- a\n- b", null),
+            Configuration("conf4", "deprecated list config", "- a\n- b", "use conf3 instead"),
         )
     )
     val rule2 = Rule(

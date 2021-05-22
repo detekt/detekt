@@ -9,6 +9,9 @@ style:
     conf3:
      - a
      - b
+    conf4:
+     - a
+     - b
   EqualsNull:
     active: false
   NoUnitKeyword:
