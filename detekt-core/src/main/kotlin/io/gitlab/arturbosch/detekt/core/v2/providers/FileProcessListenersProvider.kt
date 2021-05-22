@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.v2.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.providers.CollectionFileProcessListenerProvider
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.v2.reusable
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.FlowPreview
@@ -28,14 +27,15 @@ class FileProcessListenersProviderImpl(
 ) : FileProcessListenersProvider {
 
     constructor(
-        settings: ProcessingSettings
+        pluginLoader: ClassLoader,
+        setupContext: SetupContext,
     ) : this(
         flow {
             emitAll(
-                ServiceLoader.load(CollectionFileProcessListenerProvider::class.java, settings.pluginLoader).asFlow()
+                ServiceLoader.load(CollectionFileProcessListenerProvider::class.java, pluginLoader).asFlow()
             )
         },
-        settings,
+        setupContext,
     )
 
     override suspend fun get(resolvedContext: Deferred<ResolvedContext>): Flow<FileProcessListener> {

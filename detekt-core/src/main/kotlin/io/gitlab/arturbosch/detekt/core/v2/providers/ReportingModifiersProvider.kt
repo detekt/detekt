@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.v2.ReportingModifier
 import io.gitlab.arturbosch.detekt.api.v2.providers.CollectionReportingModifierProvider
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.v2.reusable
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
@@ -26,14 +25,15 @@ class ReportingModifiersProviderImpl(
 ) : ReportingModifiersProvider {
 
     constructor(
-        settings: ProcessingSettings
+        pluginLoader: ClassLoader,
+        setupContext: SetupContext,
     ) : this(
         flow {
             emitAll(
-                ServiceLoader.load(CollectionReportingModifierProvider::class.java, settings.pluginLoader).asFlow()
+                ServiceLoader.load(CollectionReportingModifierProvider::class.java, pluginLoader).asFlow()
             )
         },
-        settings,
+        setupContext,
     )
 
     override suspend fun get(): Flow<ReportingModifier> {

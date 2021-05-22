@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.v2.ConsoleReporter
 import io.gitlab.arturbosch.detekt.api.v2.providers.CollectionConsoleReporterProvider
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -24,14 +23,15 @@ class ConsoleReportersProviderImpl(
 ) : ConsoleReportersProvider {
 
     constructor(
-        settings: ProcessingSettings
+        pluginLoader: ClassLoader,
+        setupContext: SetupContext,
     ) : this(
         flow {
             emitAll(
-                ServiceLoader.load(CollectionConsoleReporterProvider::class.java, settings.pluginLoader).asFlow()
+                ServiceLoader.load(CollectionConsoleReporterProvider::class.java, pluginLoader).asFlow()
             )
         },
-        settings,
+        setupContext,
     )
 
     override fun get(): Flow<ConsoleReporter> {

@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.v2.Issue
 import io.gitlab.arturbosch.detekt.api.v2.ResolvedContext
 import io.gitlab.arturbosch.detekt.api.v2.Rule
 import io.gitlab.arturbosch.detekt.api.v2.providers.CollectionRuleProvider
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.v2.Filter
 import io.gitlab.arturbosch.detekt.core.v2.reusable
 import kotlinx.coroutines.Deferred
@@ -31,10 +30,11 @@ class RulesProviderImpl(
 ) : RulesProvider {
 
     constructor(
-        settings: ProcessingSettings
+        pluginLoader: ClassLoader,
+        config: Config,
     ) : this(
-        settings.config,
-        flow { emitAll(ServiceLoader.load(CollectionRuleProvider::class.java, settings.pluginLoader).asFlow()) },
+        config,
+        flow { emitAll(ServiceLoader.load(CollectionRuleProvider::class.java, pluginLoader).asFlow()) },
     )
 
     override suspend fun get(resolvedContext: Deferred<ResolvedContext>): Flow<Pair<Rule, Filter>> {
