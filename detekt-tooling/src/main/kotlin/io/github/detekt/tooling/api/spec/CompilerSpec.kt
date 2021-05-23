@@ -11,7 +11,7 @@ interface CompilerSpec {
     val jvmTarget: String
 
     /**
-     * Kotlin language version (e.g. 1.0, 1.1, 1.2, 1.3, 1.4, ...).
+     * Kotlin language version (e.g. 1.0, 1.1, 1.2, 1.3 ...).
      */
     val languageVersion: String?
 
