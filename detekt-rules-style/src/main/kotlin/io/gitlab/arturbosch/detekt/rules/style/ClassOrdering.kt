@@ -65,10 +65,10 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
         super.visitClassBody(classBody)
 
         var currentSection = Section(0)
-        classBody.declarations.forEach { ktDeclaration ->
-            val section = ktDeclaration.toSection()
+        for (ktDeclaration in classBody.declarations) {
+            val section = ktDeclaration.toSection() ?: continue
             when {
-                section != null && section < currentSection -> {
+                section < currentSection -> {
                     val message =
                         "${ktDeclaration.toDescription()} should be declared before ${currentSection.toDescription()}."
                     report(
@@ -80,7 +80,7 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
                         )
                     )
                 }
-                section != null && section > currentSection -> currentSection = section
+                section > currentSection -> currentSection = section
             }
         }
     }
@@ -102,11 +102,11 @@ private fun KtDeclaration.toSection(): Section? = when {
     this is KtSecondaryConstructor -> Section(1)
     this is KtNamedFunction -> Section(2)
     this is KtObjectDeclaration && isCompanion() -> Section(3)
-    else -> null
+    else -> null // For declarations not relevant for ordering, such as nested classes.
 }
 
 @JvmInline
-@Suppress("MagicNumber", "ModifierOrder") // TODO Remove ModifierOrder once value class is supported.
+@Suppress("MagicNumber")
 private value class Section(val priority: Int) : Comparable<Section> {
 
     init {
