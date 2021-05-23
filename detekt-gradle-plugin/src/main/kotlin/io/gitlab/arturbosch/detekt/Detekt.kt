@@ -196,8 +196,6 @@ open class Detekt @Inject constructor(
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
-
     @InputFiles
     @SkipWhenEmpty
     @PathSensitive(PathSensitivity.RELATIVE)
@@ -240,7 +238,7 @@ open class Detekt @Inject constructor(
         )
         arguments.addAll(convertCustomReportsToArguments())
 
-        invoker.invokeCli(
+        DetektInvoker.create(this).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),

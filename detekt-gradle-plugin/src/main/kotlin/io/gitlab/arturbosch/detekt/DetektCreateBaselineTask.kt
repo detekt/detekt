@@ -108,12 +108,10 @@ open class DetektCreateBaselineTask : SourceTask() {
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
-
     @TaskAction
     fun baseline() {
         if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
-            project.logger.warn(
+            logger.warn(
                 "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
             )
         }
@@ -135,7 +133,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        invoker.invokeCli(
+        DetektInvoker.create(this).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),

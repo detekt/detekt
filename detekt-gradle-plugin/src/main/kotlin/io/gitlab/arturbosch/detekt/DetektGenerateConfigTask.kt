@@ -37,7 +37,6 @@ open class DetektGenerateConfigTask @Inject constructor(
     @get:PathSensitive(PathSensitivity.RELATIVE)
     val config: ConfigurableFileCollection = project.objects.fileCollection()
 
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
     @TaskAction
@@ -60,6 +59,6 @@ open class DetektGenerateConfigTask @Inject constructor(
             ConfigArgument(configurationToUse.last())
         )
 
-        invoker.invokeCli(arguments.toList(), detektClasspath, name)
+        DetektInvoker.create(this).invokeCli(arguments.toList(), detektClasspath, name)
     }
 }
