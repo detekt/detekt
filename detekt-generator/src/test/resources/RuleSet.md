@@ -22,11 +22,11 @@ a wildcard import
 
   deprecated config
 
-* ``conf3`` (default: ``a, b``)
+* ``conf3`` (default: ``['a', 'b']``)
 
   list config
 
-* ~~``conf4``~~ (default: ``a, b``)
+* ~~``conf4``~~ (default: ``['a', 'b']``)
 
   **Deprecated**: use conf3 instead
 
