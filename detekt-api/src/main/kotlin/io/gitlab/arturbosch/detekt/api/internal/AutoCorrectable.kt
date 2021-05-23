@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 /**
  * Annotated [io.gitlab.arturbosch.detekt.api.Rule] or [io.gitlab.arturbosch.detekt.api.RuleSetProvider]
- * is auto correctable.
+ * is auto-correctable.
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
