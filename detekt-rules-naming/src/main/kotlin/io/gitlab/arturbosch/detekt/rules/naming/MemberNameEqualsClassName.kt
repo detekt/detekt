@@ -8,6 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
+import io.gitlab.arturbosch.detekt.api.internal.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -50,10 +53,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     }
  * }
  * </compliant>
- *
- * @configuration ignoreOverriddenFunction - if overridden functions and properties should be ignored (default: `true`)
- * (deprecated: "Use `ignoreOverridden` instead")
- * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
  */
 @ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
@@ -70,7 +69,13 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val objectMessage = "A member is named after the object. " +
         "This might result in confusion. Please rename the member."
 
-    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true))
+    @Suppress("unused")
+    @Configuration("if overridden functions and properties should be ignored")
+    @Deprecated("Use `ignoreOverridden` instead")
+    private val ignoreOverriddenFunction: Boolean by config(true)
+
+    @Configuration("if overridden functions and properties should be ignored")
+    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunction", true)
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
@@ -123,10 +128,5 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
         } else {
             bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
         }
-    }
-
-    companion object {
-        const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

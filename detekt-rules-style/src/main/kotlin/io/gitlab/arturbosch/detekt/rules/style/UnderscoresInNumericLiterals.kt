@@ -100,7 +100,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
-            .toLowerCase(Locale.US)
+            .lowercase(Locale.US)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")

@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * Reports when very short function names are used.
- *
- * @configuration minimumFunctionNameLength - minimum name length (default: `3`)
  */
 class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 
@@ -24,8 +24,8 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val minimumFunctionNameLength =
-        valueOrDefault(MINIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH)
+    @Configuration("minimum name length")
+    private val minimumFunctionNameLength: Int by config(3)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.identifierName().length < minimumFunctionNameLength) {
@@ -37,10 +37,5 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
-    }
-
-    companion object {
-        const val MINIMUM_FUNCTION_NAME_LENGTH = "minimumFunctionNameLength"
-        private const val DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH = 3
     }
 }

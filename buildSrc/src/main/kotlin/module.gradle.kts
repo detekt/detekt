@@ -49,13 +49,18 @@ tasks.withType<Test>().configureEach {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
-        languageVersion = "1.4"
+        languageVersion = "1.5"
         freeCompilerArgs = listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"
         )
         // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
-        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true" || System.getenv("CI") == "true"
+        // Note: currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
+        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
+        allWarningsAsErrors = when (project.name) {
+            "detekt-gradle-plugin" -> false
+            else -> (project.findProperty("warningsAsErrors") == "true" || System.getenv("CI") == "true")
+        }
     }
 }
 

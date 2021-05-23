@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * Reports when very long function names are used.
- *
- * @configuration maximumFunctionNameLength - maximum name length (default: `30`)
  */
 class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
 
@@ -24,8 +24,8 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    private val maximumFunctionNameLength =
-        valueOrDefault(MAXIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH)
+    @Configuration("maximum name length")
+    private val maximumFunctionNameLength: Int by config(30)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.identifierName().length > maximumFunctionNameLength) {
@@ -41,6 +41,5 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val MAXIMUM_FUNCTION_NAME_LENGTH = "maximumFunctionNameLength"
-        private const val DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH = 30
     }
 }

@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -44,8 +46,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * fun Bar.toFoo(): Foo = ...
  *
  * </compliant>
- *
- * @configuration mustBeFirst - name should only be checked if the file starts with a class or object (default: `true`)
  */
 @ActiveByDefault(since = "1.0.0")
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
@@ -58,7 +58,8 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val mustBeFirst = valueOrDefault(MUST_BE_FIRST, true)
+    @Configuration("name should only be checked if the file starts with a class or object")
+    private val mustBeFirst: Boolean by config(true)
 
     override fun visitKtFile(file: KtFile) {
         val declarations = file.declarations
@@ -91,5 +92,3 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         }
     }
 }
-
-const val MUST_BE_FIRST = "mustBeFirst"

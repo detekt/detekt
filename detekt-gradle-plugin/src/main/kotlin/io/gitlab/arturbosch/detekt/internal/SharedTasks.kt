@@ -24,8 +24,6 @@ internal fun Project.registerDetektTask(
         it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         it.basePathProp.set(extension.basePath)
         it.allRulesProp.set(provider { extension.allRules })
-        it.setIncludes(DEFAULT_INCLUDES)
-        it.setExcludes(DEFAULT_EXCLUDES)
         configuration(it)
     }
 
@@ -52,6 +50,3 @@ internal fun DetektReport.setDefaultIfUnset(default: File) {
         destination = default
     }
 }
-
-private val DEFAULT_EXCLUDES = listOf("build/")
-private val DEFAULT_INCLUDES = listOf("**/*.kt", "**/*.kts")
