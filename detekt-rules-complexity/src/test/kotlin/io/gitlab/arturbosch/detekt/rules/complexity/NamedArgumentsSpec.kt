@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -12,11 +13,11 @@ class NamedArgumentsSpec : Spek({
 
     val env: KotlinCoreEnvironment by memoized()
     val defaultThreshold = 2
-    val namedArguments by memoized { NamedArguments(threshold = defaultThreshold) }
+    val defaultConfig by memoized { TestConfig(mapOf("threshold" to defaultThreshold)) }
+    val subject by memoized { NamedArguments(defaultConfig) }
 
     describe("NameArguments rule") {
 
-        val errorMessage = "Function invocation with more than $defaultThreshold parameters must all be named"
         it("invocation with more than 2 parameters should throw error") {
             val code = """
                 fun sum(a: Int, b:Int, c:Int) {
@@ -26,9 +27,8 @@ class NamedArgumentsSpec : Spek({
                     sum(1, 2, 3)
                 }
                 """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(errorMessage)
         }
 
         it("Function invocation with more than 2 parameters should not throw error if named") {
@@ -40,7 +40,7 @@ class NamedArgumentsSpec : Spek({
                     sum(a = 1, b = 2, c = 3)
                 }
                 """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -53,9 +53,8 @@ class NamedArgumentsSpec : Spek({
                     sum(1, b = 2, c = 3)
                 }
                 """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(errorMessage)
         }
 
         it("invocation with less than 3 parameters should not throw error") {
@@ -67,7 +66,7 @@ class NamedArgumentsSpec : Spek({
                     sum(1, 2)
                 }
                 """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -80,7 +79,7 @@ class NamedArgumentsSpec : Spek({
                     sum(a = 1, b = 2)
                 }
                 """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -90,9 +89,8 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(1, 2, 3)
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(errorMessage)
         }
 
         it("constructor invocation with more than 3 named parameters should not throw error") {
@@ -101,7 +99,7 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(a = 1, b = 2, c= 3)
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -111,7 +109,7 @@ class NamedArgumentsSpec : Spek({
                 
                 val obj = C(1, 2)
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -123,7 +121,7 @@ class NamedArgumentsSpec : Spek({
                     LocalDateTime.of(2020, 3, 13, 14, 0, 0)
                 }
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -136,7 +134,7 @@ class NamedArgumentsSpec : Spek({
                     bar(1, 2, 3, "a")
                 }
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
 
@@ -147,7 +145,7 @@ class NamedArgumentsSpec : Spek({
                     bar(1, 2, 3, *arrayOf("a"))
                 }
             """
-            val findings = namedArguments.compileAndLintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -160,7 +158,7 @@ class NamedArgumentsSpec : Spek({
                     foo(a = 1, b = 2, c = 3, { it })
                 }
             """
-                val findings = namedArguments.compileAndLintWithContext(env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -172,7 +170,7 @@ class NamedArgumentsSpec : Spek({
                     foo(a = 1, b = 2, c = 3) { it }
                 }
             """
-                val findings = namedArguments.compileAndLintWithContext(env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(0)
             }
 
@@ -184,7 +182,7 @@ class NamedArgumentsSpec : Spek({
                     foo(a = 1, b = 2, 3) { it }
                 }
             """
-                val findings = namedArguments.compileAndLintWithContext(env, code)
+                val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }

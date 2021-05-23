@@ -121,7 +121,7 @@ class SwallowedExceptionSpec : Spek({
             context("ignores given exception types config") {
 
                 val config by memoized {
-                    TestConfig(SwallowedException.IGNORED_EXCEPTION_TYPES to ignoredExceptionValue)
+                    TestConfig("ignoredExceptionTypes" to ignoredExceptionValue)
                 }
                 val rule by memoized { SwallowedException(config) }
 
@@ -151,7 +151,7 @@ class SwallowedExceptionSpec : Spek({
 
         context("ignores given exception name config") {
 
-            val config by memoized { TestConfig(mapOf(SwallowedException.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore")) }
+            val config by memoized { TestConfig(mapOf("allowedExceptionNameRegex" to "myIgnore")) }
             val rule by memoized { SwallowedException(config) }
 
             it("ignores given exception name") {
@@ -205,7 +205,7 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        SwallowedException.defaultIgnoredExceptions.forEach { exceptionName ->
+        SwallowedException.EXCEPTIONS_IGNORED_BY_DEFAULT.forEach { exceptionName ->
             it("ignores $exceptionName in the catch clause by default") {
                 val code = """
                 import java.net.MalformedURLException

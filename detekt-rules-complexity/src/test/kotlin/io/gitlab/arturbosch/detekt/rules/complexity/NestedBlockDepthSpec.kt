@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -11,7 +12,9 @@ import org.spekframework.spek2.style.specification.describe
 
 class NestedBlockDepthSpec : Spek({
 
-    val subject by memoized { NestedBlockDepth(threshold = 4) }
+    val defaultThreshold = 4
+    val defaultConfig by memoized { TestConfig(mapOf("threshold" to defaultThreshold)) }
+    val subject by memoized { NestedBlockDepth(defaultConfig) }
 
     describe("nested classes are also considered") {
         it("should detect only the nested large class") {

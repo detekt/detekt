@@ -6,6 +6,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val VALUES = "values"
+private const val ALLOWED_PATTERNS = "allowedPatterns"
+
 class ForbiddenCommentSpec : Spek({
 
     val todoColon = "// TODO: I need to fix this."
@@ -80,8 +83,8 @@ class ForbiddenCommentSpec : Spek({
         context("custom default values are configured") {
 
             listOf(
-                TestConfig(mapOf(ForbiddenComment.VALUES to "Banana")),
-                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana")))
+                TestConfig(mapOf(VALUES to "Banana")),
+                TestConfig(mapOf(VALUES to listOf("Banana")))
             )
                 .forEach { config ->
                     val banana = "// Banana."
@@ -107,7 +110,7 @@ class ForbiddenCommentSpec : Spek({
                     }
 
                     it("should report Banana usages regardless of case sensitive") {
-                        val forbiddenComment = ForbiddenComment(TestConfig(mapOf(ForbiddenComment.VALUES to "bAnAnA")))
+                        val forbiddenComment = ForbiddenComment(TestConfig(mapOf(VALUES to "bAnAnA")))
                         val findings = forbiddenComment.compileAndLint(banana)
                         assertThat(findings).hasSize(1)
                     }
@@ -119,8 +122,8 @@ class ForbiddenCommentSpec : Spek({
             val patternsConfig by memoized {
                 TestConfig(
                     mapOf(
-                        ForbiddenComment.VALUES to "Comment",
-                        ForbiddenComment.ALLOWED_PATTERNS to "Ticket|Task"
+                        VALUES to "Comment",
+                        ALLOWED_PATTERNS to "Ticket|Task"
                     )
                 )
             }

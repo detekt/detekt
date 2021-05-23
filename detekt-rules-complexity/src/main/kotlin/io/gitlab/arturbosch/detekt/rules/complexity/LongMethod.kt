@@ -6,10 +6,12 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -21,14 +23,9 @@ import java.util.IdentityHashMap
  * Prefer smaller methods with clear names that describe their functionality clearly.
  *
  * Extract parts of the functionality of long methods into separate, smaller methods.
- *
- * @configuration threshold - number of lines in a method to trigger the rule (default: `60`)
  */
 @ActiveByDefault(since = "1.0.0")
-class LongMethod(
-    config: Config = Config.empty,
-    threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH
-) : ThresholdRule(config, threshold) {
+class LongMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",
@@ -37,6 +34,9 @@ class LongMethod(
             "Prefer smaller methods to make them easier to understand.",
         Debt.TWENTY_MINS
     )
+
+    @Configuration("number of lines in a method to trigger the rule")
+    private val threshold: Int by config(defaultValue = 60)
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
@@ -90,9 +90,5 @@ class LongMethod(
             yieldAll(nestedFunctions)
             nestedFunctions = nestedFunctions.mapNotNull { nestedFunctionTracking[it] }.flattenTo(HashSet())
         }
-    }
-
-    companion object {
-        const val DEFAULT_THRESHOLD_METHOD_LENGTH = 60
     }
 }

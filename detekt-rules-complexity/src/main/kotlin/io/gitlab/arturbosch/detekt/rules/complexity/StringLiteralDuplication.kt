@@ -5,11 +5,12 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
@@ -41,16 +42,8 @@ import org.jetbrains.kotlin.psi.psiUtil.plainContent
  *     }
  * }
  * </compliant>
- *
- * @configuration threshold - amount of duplications to trigger rule (default: `3`)
- * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: `true`)
- * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: `true`)
- * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: `'$^'`)
  */
-class StringLiteralDuplication(
-    config: Config = Config.empty,
-    threshold: Int = DEFAULT_DUPLICATION
-) : ThresholdRule(config, threshold) {
+class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -59,9 +52,17 @@ class StringLiteralDuplication(
         Debt.FIVE_MINS
     )
 
-    private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
-    private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
-    private val ignoreStringsRegex by LazyRegex(IGNORE_STRINGS_REGEX, "$^")
+    @Configuration("amount of duplications to trigger rule")
+    private val threshold: Int by config(defaultValue = 3)
+
+    @Configuration("if values in Annotations should be ignored")
+    private val ignoreAnnotation: Boolean by config(true)
+
+    @Configuration("if short strings should be excluded")
+    private val excludeStringsWithLessThan5Characters: Boolean by config(true)
+
+    @Configuration("RegEx of Strings that should be ignored")
+    private val ignoreStringsRegex: Regex by config("$^", String::toRegex)
 
     override fun visitKtFile(file: KtFile) {
         val visitor = StringLiteralVisitor()
@@ -116,10 +117,6 @@ class StringLiteralDuplication(
     }
 
     companion object {
-        const val DEFAULT_DUPLICATION = 3
-        const val STRING_EXCLUSION_LENGTH = 5
-        const val IGNORE_ANNOTATION = "ignoreAnnotation"
-        const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
-        const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+        private const val STRING_EXCLUSION_LENGTH = 5
     }
 }

@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -43,17 +45,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  *     }
  * }
  * </compliant>
- *
- * @configuration max - define the maximum number of return statements allowed per function
- * (default: `2`)
- * @configuration excludedFunctions - define functions to be ignored by this check
- * (default: `'equals'`)
- * @configuration excludeLabeled - if labeled return statements should be ignored
- * (default: `false`)
- * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
- * (default: `true`)
- * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
- * (default: `false`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
@@ -65,11 +56,20 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val max = valueOrDefault(MAX, 2)
-    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "equals"))
-    private val excludeLabeled = valueOrDefault(EXCLUDE_LABELED, false)
-    private val excludeLambdas = valueOrDefault(EXCLUDE_RETURN_FROM_LAMBDA, true)
-    private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
+    @Configuration("define the maximum number of return statements allowed per function")
+    private val max: Int by config(2)
+
+    @Configuration("define functions to be ignored by this check")
+    private val excludedFunctions: SplitPattern by config("equals") { SplitPattern(it) }
+
+    @Configuration("if labeled return statements should be ignored")
+    private val excludeLabeled: Boolean by config(false)
+
+    @Configuration("if labeled return from a lambda should be ignored")
+    private val excludeReturnFromLambda: Boolean by config(true)
+
+    @Configuration("if true guard clauses at the beginning of a method should be ignored")
+    private val excludeGuardClauses: Boolean by config(false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -95,7 +95,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun countReturnStatements(function: KtNamedFunction): Int {
         fun KtReturnExpression.isExcluded(): Boolean = when {
             excludeLabeled && labeledExpression != null -> true
-            excludeLambdas && isNamedReturnFromLambda() -> true
+            excludeReturnFromLambda && isNamedReturnFromLambda() -> true
             else -> false
         }
 
@@ -121,13 +121,5 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
                 .any { it in label.text }
         }
         return false
-    }
-
-    companion object {
-        const val MAX = "max"
-        const val EXCLUDED_FUNCTIONS = "excludedFunctions"
-        const val EXCLUDE_LABELED = "excludeLabeled"
-        const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
-        const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
     }
 }

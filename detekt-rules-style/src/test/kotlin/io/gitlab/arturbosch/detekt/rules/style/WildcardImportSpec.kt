@@ -1,13 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.style.WildcardImport.Companion.EXCLUDED_IMPORTS
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+
+private const val EXCLUDED_IMPORTS = "excludeImports"
 
 class WildcardImportSpec : Spek({
 
@@ -44,14 +45,24 @@ class WildcardImportSpec : Spek({
             }
 
             it("should not report excluded wildcard imports when multiple are excluded") {
-                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("org.spekframework.*", "io.gitlab.arturbosch.detekt"))))
+                val rule = WildcardImport(
+                    TestConfig(
+                        mapOf(
+                            EXCLUDED_IMPORTS to listOf(
+                                "org.spekframework.*",
+                                "io.gitlab.arturbosch.detekt"
+                            )
+                        )
+                    )
+                )
 
                 val findings = rule.compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should not report excluded wildcard imports when multiple are excluded using config string") {
-                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "org.spekframework.*, io.gitlab.arturbosch.detekt")))
+                val rule =
+                    WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "org.spekframework.*, io.gitlab.arturbosch.detekt")))
 
                 val findings = rule.compileAndLint(code)
                 assertThat(findings).isEmpty()

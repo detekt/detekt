@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -29,8 +31,6 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
  *     }
  * }
  * </noncompliant>
- *
- * @configuration maxJumpCount - maximum allowed jumps in a loop (default: `1`)
  */
 @ActiveByDefault(since = "1.2.0")
 class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {
@@ -43,7 +43,8 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
         Debt.TEN_MINS
     )
 
-    private val maxJumpCount = valueOrDefault(MAX_JUMP_COUNT, 1)
+    @Configuration("maximum allowed jumps in a loop")
+    private val maxJumpCount: Int by config(1)
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
         if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
@@ -68,9 +69,5 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
             }
         })
         return count
-    }
-
-    companion object {
-        const val MAX_JUMP_COUNT = "maxJumpCount"
     }
 }

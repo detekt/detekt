@@ -24,7 +24,7 @@ private object TestExclusions : Exclusions() {
 
     override val pattern =
         "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
-    override val ruleSets = setOf("comments")
+    override val ruleSets = emptySet<String>()
     override val rules = setOf(
         "NamingRules",
         "WildcardImport",
@@ -37,7 +37,10 @@ private object TestExclusions : Exclusions() {
         "FunctionMaxLength",
         "TooGenericExceptionCaught",
         "InstanceOfCheckForException",
-        "ThrowingExceptionsWithoutMessageOrCause"
+        "ThrowingExceptionsWithoutMessageOrCause",
+        "UndocumentedPublicClass",
+        "UndocumentedPublicFunction",
+        "UndocumentedPublicProperty"
     )
 }
 
