@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -28,18 +29,16 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val hasProgressBar: Boolean = true
  * </compliant>
  *
+ * @configuration allowedPrefixes - naming pattern (default: `'^(is|has|should|need|noNeed|was|are|may|can|had|for|with)'`)
  */
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    private val description = "Boolean property name should starts with " +
-        "'is/has/should/need/noNeed/was/are/may/can/had/for/with' prefix."
-
-    private val regex = Regex("^(is|has|should|need|noNeed|was|are|may|can|had|for|with)")
+    private val allowedPrefixes by LazyRegex(ALLOWED_PREFIXES, "^(is|has|should|need|noNeed|was|are|may|can|had|for|with)")
 
     override val issue = Issue(
         javaClass.simpleName, Severity.CodeSmell,
-        description,
+        "Boolean property names prefix should follow the naming convention set in the projects configuration",
         Debt.FIVE_MINS
     )
 
@@ -66,7 +65,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         val typeName = getTypeName(declaration)
 
         if (
-            (typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME) && !name.contains(regex)
+            (typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME) && !name.contains(allowedPrefixes)
         ) {
             report(reportCodeSmell(declaration, name))
         }
@@ -76,6 +75,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         declaration: KtCallableDeclaration,
         name: String
     ): CodeSmell {
+        val description = "Boolean property name should starts with $allowedPrefixes prefix."
         return CodeSmell(
             issue,
             Entity.from(declaration),
@@ -93,5 +93,6 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val KOTLIN_BOOLEAN_TYPE_NAME = "kotlin.Boolean"
         const val JAVA_BOOLEAN_TYPE_NAME = "java.lang.Boolean"
+        const val ALLOWED_PREFIXES = "allowedPrefixes"
     }
 }
