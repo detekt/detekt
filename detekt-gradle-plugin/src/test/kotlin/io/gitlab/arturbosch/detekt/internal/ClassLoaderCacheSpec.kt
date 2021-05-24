@@ -11,53 +11,40 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
-import kotlin.random.Random
 
 internal class ClassLoaderCacheSpec : Spek({
 
     describe("classpath changes") {
 
-        it("passes for same files") {
-            val changed = hasClasspathChanged(
-                setOf(FixedDateFile("/a/b/c")),
-                setOf(FixedDateFile("/a/b/c"))
-            )
+        it("same classloader is returned for the same files") {
+            val cache = DefaultClassLoaderCache()
+            val initialClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
+            val secondClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
 
-            assertThat(changed).isFalse()
+            assertThat(initialClassLoader === secondClassLoader)
         }
 
-        it("reports for different file count") {
-            val changed = hasClasspathChanged(
-                setOf(DifferentDateFile("/a/b/c"), DifferentDateFile("/c/b/a")),
-                setOf(DifferentDateFile("/a/b/c"))
-            )
+        it("different classloaders are returned for different files") {
+            val cache = DefaultClassLoaderCache()
+            val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
+            val secondClassLoader = cache.getOrCreate(TestFileCollection(File("c/b/a")))
 
-            assertThat(changed).isTrue()
+            assertThat(firstClassLoader !== secondClassLoader)
         }
 
-        it("reports different files") {
-            val changed = hasClasspathChanged(
-                setOf(DifferentDateFile("/c/b/a")),
-                setOf(DifferentDateFile("/a/b/c"))
-            )
+        it("same classloader for the same files in different order") {
+            val cache = DefaultClassLoaderCache()
+            val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c"), File("d/e/f")))
+            val secondClassLoader = cache.getOrCreate(TestFileCollection(File("d/e/f"), File("a/b/c")))
 
-            assertThat(changed).isTrue()
-        }
-
-        it("concurrent blocking file resolution does not deadlock") {
-            val changed = hasClasspathChanged(
-                setOf(DifferentDateFile("/a/b/c")),
-                setOf(DifferentDateFile("/a/b/c"))
-            )
-
-            assertThat(changed).isTrue()
+            assertThat(firstClassLoader === secondClassLoader)
         }
 
         it("resolves files without synchronization") {
-            val file1 = FixedDateFile("/a/b/c")
+            val file1 = File("/a/b/c")
             val collection1 = CountdownFileCollection(file1)
 
-            val file2 = FixedDateFile("/c/b/a")
+            val file2 = File("/c/b/a")
             val collection2 = TestFileCollection(file2)
 
             val cache = DefaultClassLoaderCache()
@@ -85,32 +72,6 @@ internal class ClassLoaderCacheSpec : Spek({
         }
     }
 })
-
-private open class FixedDateFile(path: String) : File(path) {
-    override fun compareTo(other: File?): Int {
-        if (other == null) return 1
-        return path.compareTo(other.path)
-    }
-
-    override fun lastModified(): Long = 12345L
-}
-
-private class DifferentDateFile(path: String) : FixedDateFile(path) {
-
-    override fun lastModified(): Long {
-        var nextDate = random.nextLong()
-        while (cache.contains(nextDate)) {
-            nextDate = random.nextLong()
-        }
-        cache.add(nextDate)
-        return nextDate
-    }
-
-    companion object {
-        private val random = Random(seed = 200)
-        private val cache = HashSet<Long>()
-    }
-}
 
 private class CountdownFileCollection(private vararg val files: File) : AbstractFileCollection() {
 
