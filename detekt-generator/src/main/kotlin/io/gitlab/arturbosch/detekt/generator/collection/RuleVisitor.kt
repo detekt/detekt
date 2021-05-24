@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
@@ -101,7 +102,7 @@ internal class RuleVisitor : DetektVisitor() {
             defaultActivationStatus = Active(since = activeByDefaultSinceValue)
         }
 
-        autoCorrect = classOrObject.hasKDocTag(TAG_AUTO_CORRECT)
+        autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
         configurationByKdoc = classOrObject.parseConfigurationTags()
 
@@ -168,8 +169,6 @@ internal class RuleVisitor : DetektVisitor() {
             ThresholdRule::class.simpleName,
             EmptyRule::class.simpleName
         )
-
-        private const val TAG_AUTO_CORRECT = "autoCorrect"
 
         private const val ISSUE_ARGUMENT_SIZE = 4
         private const val DEBT_ARGUMENT_INDEX = 3
