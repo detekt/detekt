@@ -1239,7 +1239,7 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-         it("does not report unused variables when declared with backticks") {
+        it("does not report unused variables when declared with backticks") {
             val code = """
                 fun main() {
                     val `actual` = "fee"
