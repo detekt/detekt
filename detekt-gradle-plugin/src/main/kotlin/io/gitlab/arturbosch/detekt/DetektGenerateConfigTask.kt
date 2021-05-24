@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
@@ -37,6 +38,8 @@ open class DetektGenerateConfigTask @Inject constructor(
     @get:PathSensitive(PathSensitivity.RELATIVE)
     val config: ConfigurableFileCollection = project.objects.fileCollection()
 
+    private val isDryRun: Boolean = project.isDryRunEnabled()
+
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
     @TaskAction
@@ -59,6 +62,10 @@ open class DetektGenerateConfigTask @Inject constructor(
             ConfigArgument(configurationToUse.last())
         )
 
-        DetektInvoker.create(this).invokeCli(arguments.toList(), detektClasspath, name)
+        DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
+            arguments = arguments.toList(),
+            classpath = detektClasspath,
+            taskName = name,
+        )
     }
 }
