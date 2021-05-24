@@ -7,9 +7,6 @@ plugins {
     detekt
     id("com.github.ben-manes.versions")
     id("org.sonarqube")
-
-    // remove once Kotlin 1.5.10 is released (https://youtrack.jetbrains.com/issue/KT-46368)
-    id("dev.zacsweers.kgp-150-leak-patcher") version "1.1.0"
 }
 
 allprojects {
