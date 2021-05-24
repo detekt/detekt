@@ -25,7 +25,19 @@ internal fun createRuleSetPage(): RuleSetPage {
                 Configuration(
                     name = "rulesetconfig2",
                     description = "description rulesetconfig2",
-                    defaultValue = "['foo', 'bar']",
+                    defaultValue = "- foo\n- bar",
+                    deprecated = null
+                ),
+                Configuration(
+                    name = "deprecatedSimpleConfig",
+                    description = "description deprecatedSimpleConfig",
+                    defaultValue = "true",
+                    deprecated = "is deprecated"
+                ),
+                Configuration(
+                    name = "deprecatedListConfig",
+                    description = "description deprecatedListConfig",
+                    defaultValue = "- foo\n- bar",
                     deprecated = "is deprecated"
                 )
             )
@@ -48,6 +60,7 @@ internal fun createRules(): List<Rule> {
             Configuration("conf1", "a config option", "foo", null),
             Configuration("conf2", "deprecated config", "false", "use conf1 instead"),
             Configuration("conf3", "list config", "['a', 'b']", null),
+            Configuration("conf4", "deprecated list config", "['a', 'b']", "use conf3 instead"),
         )
     )
     val rule2 = Rule(
