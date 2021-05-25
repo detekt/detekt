@@ -4,7 +4,6 @@ import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
-import org.gradle.util.GradleVersion
 import java.io.File
 import javax.inject.Inject
 
@@ -33,14 +32,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         )
 
     var baseline: File? = objects.fileProperty()
-        .run {
-            if (GradleVersion.current() < GradleVersion.version("6.0")) {
-                set(File("detekt-baseline.xml"))
-                this
-            } else {
-                fileValue(File("detekt-baseline.xml"))
-            }
-        }
+        .fileValue(File("detekt-baseline.xml"))
         .get().asFile
 
     var basePath: String? = null

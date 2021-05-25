@@ -332,7 +332,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                     mavenCentral()
                     google()
                     mavenLocal()
-                    jcenter()
                 }
             }
         """.trimIndent(),
