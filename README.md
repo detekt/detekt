@@ -211,6 +211,8 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Krzysztof Kruczynski](https://github.com/krzykrucz) - Rule fix: ThrowingExceptionInMain, ExitOutsideMain
 - [Paya Do](https://github.com/payathedo) - Designer for Detekt's logo
 - [zmunm](https://github.com/zmunm) - New rule: ObjectLiteralToLambda
+- [Eliezer Graber](https://github.com/eygraber) - Rule fix: ModifierOrder
+- [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyPrefixedWithAllowedWords
 
 ### Mentions
