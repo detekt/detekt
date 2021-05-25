@@ -317,11 +317,7 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        if (expression.text.startsWith("`") && expression.text.endsWith("`")) {
-            nameAccesses.add(expression.text.removePrefix("`").removeSuffix("`"))
-        } else {
-            nameAccesses.add(expression.text)
-        }
+        nameAccesses.add(expression.text.removeSurrounding("`"))        
         super.visitReferenceExpression(expression)
     }
 }
