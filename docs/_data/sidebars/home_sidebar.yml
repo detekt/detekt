@@ -35,6 +35,9 @@ entries:
     - title: Using snapshots
       url: /snapshots.html
       output: web
+    - title: Compatibility Table
+      url: /compatibility.html
+      output: web
   - title: Getting Started
     output: web
     folderitems:

@@ -10,7 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -33,12 +34,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * <compliant>
  * const val constantString = "1"
  * </compliant>
- *
- * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
- * @configuration ignoreActualFunction - if actual functions should be ignored (default: `true`)
- * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
- * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check
- * (default: `['dagger.Provides']`)
  */
 @ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
@@ -51,18 +46,24 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         Debt.TEN_MINS
     )
 
-    private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
-    private val ignoreActualFunction = valueOrDefault(IGNORE_ACTUAL_FUNCTION, true)
-    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, "describeContents"))
-    private val excludeAnnotatedFunctions = valueOrDefaultCommaSeparated(
-        EXCLUDE_ANNOTATED_FUNCTION,
-        listOf("dagger.Provides")
-    )
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("if overriden functions should be ignored")
+    private val ignoreOverridableFunction: Boolean by config(true)
+
+    @Configuration("if actual functions should be ignored")
+    private val ignoreActualFunction: Boolean by config(true)
+
+    @Configuration("excluded functions")
+    private val excludedFunctions: SplitPattern by config("") { SplitPattern(it) }
+
+    @Configuration("allows to provide a list of annotations that disable this check")
+    private val excludeAnnotatedFunction: List<String> by config(listOf("dagger.Provides")) { functions ->
+        functions.map { it.removePrefix("*").removeSuffix("*") }
+    }
+
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visit(root: KtFile) {
-        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedFunctions)
+        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedFunction)
         super.visit(root)
     }
 
@@ -120,12 +121,5 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private fun returnsConstant(function: KtNamedFunction): Boolean {
         val returnExpression = function.bodyExpression?.children?.singleOrNull() as? KtReturnExpression
         return isConstantExpression(returnExpression?.returnedExpression)
-    }
-
-    companion object {
-        const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
-        const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
-        const val EXCLUDED_FUNCTIONS = "excludedFunctions"
-        const val EXCLUDE_ANNOTATED_FUNCTION = "excludeAnnotatedFunction"
     }
 }

@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -28,9 +29,6 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *     }
  * }
  * </noncompliant>
- *
- * @configuration methodNames - methods which should not throw exceptions
- * (default: `[toString, hashCode, equals, finalize]`)
  */
 @ActiveByDefault(since = "1.16.0")
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
@@ -42,10 +40,8 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
         Debt.TWENTY_MINS
     )
 
-    private val methods = valueOrDefaultCommaSeparated(
-        METHOD_NAMES,
-        listOf("toString", "hashCode", "equals", "finalize")
-    )
+    @Configuration("methods which should not throw exceptions")
+    private val methodNames: List<String> by config(listOf("toString", "hashCode", "equals", "finalize"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
@@ -59,12 +55,8 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
         }
     }
 
-    private fun isPotentialMethod(function: KtNamedFunction) = methods.any { function.name == it }
+    private fun isPotentialMethod(function: KtNamedFunction) = methodNames.any { function.name == it }
 
     private fun hasThrowExpression(declaration: KtExpression?) =
         declaration?.anyDescendantOfType<KtThrowExpression>() == true
-
-    companion object {
-        const val METHOD_NAMES = "methodNames"
-    }
 }

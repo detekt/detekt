@@ -5,9 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.companionObject
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
@@ -25,15 +27,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
- *
- * @configuration threshold - the amount of definitions in an interface to trigger the rule (default: `10`)
- * @configuration includeStaticDeclarations - whether static declarations should be included (default: `false`)
- * @configuration includePrivateDeclarations - whether private declarations should be included (default: `false`)
  */
 class ComplexInterface(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT
-) : ThresholdRule(config, threshold) {
+) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -45,8 +42,14 @@ class ComplexInterface(
         Debt.TWENTY_MINS
     )
 
-    private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
-    private val includePrivateDeclarations = valueOrDefault(INCLUDE_PRIVATE_DECLARATIONS, false)
+    @Configuration("the amount of definitions in an interface to trigger the rule")
+    private val threshold: Int by config(defaultValue = 10)
+
+    @Configuration("whether static declarations should be included")
+    private val includeStaticDeclarations: Boolean by config(defaultValue = false)
+
+    @Configuration("whether private declarations should be included")
+    private val includePrivateDeclarations: Boolean by config(defaultValue = false)
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {
@@ -83,11 +86,5 @@ class ComplexInterface(
         return body.children
             .filter(PsiElement::considerPrivate)
             .count(PsiElement::isMember)
-    }
-
-    companion object {
-        const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
-        const val INCLUDE_PRIVATE_DECLARATIONS = "includePrivateDeclarations"
-        const val DEFAULT_LARGE_INTERFACE_COUNT = 10
     }
 }

@@ -29,7 +29,7 @@ object GradleVersionTest : Spek({
     }
 })
 
-private fun getJdkVersion(): Int {
+internal fun getJdkVersion(): Int {
     val version = System.getProperty("java.version")
     val majorVersion = if (version.startsWith("1.")) {
         version.substring(2, 3)

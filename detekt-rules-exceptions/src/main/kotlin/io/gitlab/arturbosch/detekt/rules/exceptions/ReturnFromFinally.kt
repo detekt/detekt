@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -38,8 +40,6 @@ import org.jetbrains.kotlin.types.KotlinType
  *
  * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
  * </noncompliant>
- *
- * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
@@ -52,7 +52,8 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
+    @Configuration("ignores labeled return statements")
+    private val ignoreLabeled: Boolean by config(false)
 
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
@@ -104,9 +105,5 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         if (finallyExpression.statements.isEmpty()) return false
 
         return finalExpression.getType(bindingContext) == type
-    }
-
-    companion object {
-        const val IGNORE_LABELED = "ignoreLabeled"
     }
 }

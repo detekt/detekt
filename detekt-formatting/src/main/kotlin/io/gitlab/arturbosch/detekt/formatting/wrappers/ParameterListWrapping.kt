@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.ANDROID_MAX_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_IDEA_LINE_LENGTH
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
@@ -15,10 +16,9 @@ import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
  *
  * @configuration indentSize - indentation size (default: `4`)
  * @configuration maxLineLength - maximum line length (default: `120`)
- *
- * @autoCorrect since v1.0.0
  */
 @ActiveByDefault(since = "1.0.0")
+@AutoCorrectable(since = "1.0.0")
 class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = ParameterListWrappingRule()

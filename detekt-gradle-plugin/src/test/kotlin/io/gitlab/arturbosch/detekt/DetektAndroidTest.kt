@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 object DetektAndroidTest : Spek({
     describe(
         "When applying detekt in an Android project",
-        skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")
+        skip = skipIfAndroidEnvironmentRequirementsUnmet()
     ) {
         describe("configures android tasks for android application") {
             val projectLayout = ProjectLayout(
@@ -387,6 +387,12 @@ object DetektAndroidTest : Spek({
  */
 internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
+
+internal fun skipIfAndroidEnvironmentRequirementsUnmet() = when {
+    !isAndroidSdkInstalled() -> Skip.Yes("No android SDK.")
+    getJdkVersion() >= 16 -> Skip.Yes("Android 4.1.3 & 4.2.1 don't run on JDK 16 or higher")
+    else -> Skip.No
+}
 
 internal val MANIFEST_CONTENT = """
     <manifest package="io.gitlab.arturbosch.detekt.app"

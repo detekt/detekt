@@ -5,11 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -34,18 +34,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *     } catch(e: IOException) { }
  * }
  * </compliant>
- *
- * @configuration exceptionNames - exceptions which are too generic and should not be caught
- * (default: `- ArrayIndexOutOfBoundsException
- *            - Error
- *            - Exception
- *            - IllegalMonitorStateException
- *            - NullPointerException
- *            - IndexOutOfBoundsException
- *            - RuntimeException
- *            - Throwable`)
- * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
- * (default: `'_|(ignore|expected).*'`)
  */
 @ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
@@ -58,12 +46,11 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val exceptions: Set<String> = valueOrDefault(
-        CAUGHT_EXCEPTIONS_PROPERTY,
-        caughtExceptionDefaults
-    ).toHashSet()
+    @Configuration("exceptions which are too generic and should not be caught")
+    private val exceptionNames: Set<String> by config(caughtExceptionDefaults) { it.toSet() }
 
-    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+    @Configuration("ignores too generic exception types which match this regex")
+    private val allowedExceptionNameRegex: Regex by config("_|(ignore|expected).*", String::toRegex)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchParameter?.let {
@@ -77,22 +64,19 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     }
 
     private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
-        return typeReference?.text in exceptions
+        return typeReference?.text in exceptionNames
     }
 
     companion object {
-        const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
-        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+        val caughtExceptionDefaults = listOf(
+            "ArrayIndexOutOfBoundsException",
+            "Error",
+            "Exception",
+            "IllegalMonitorStateException",
+            "NullPointerException",
+            "IndexOutOfBoundsException",
+            "RuntimeException",
+            "Throwable"
+        )
     }
 }
-
-val caughtExceptionDefaults = listOf(
-    "ArrayIndexOutOfBoundsException",
-    "Error",
-    "Exception",
-    "IllegalMonitorStateException",
-    "NullPointerException",
-    "IndexOutOfBoundsException",
-    "RuntimeException",
-    "Throwable"
-)

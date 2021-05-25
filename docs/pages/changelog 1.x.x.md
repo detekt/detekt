@@ -6,6 +6,22 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.17.1 - 2021-05-19
+
+##### Notable Changes
+
+This is a patch release for Detekt `1.17.0` including fixes that we considered worth a point release. 
+
+Specifically, we're reverting a change on our Gradle Plugin. The original change [#3655](https://github.com/detekt/detekt/pull/3655) resulted in several false positives when using rules with Type Resolution on Java/Kotlin mixed codebases.
+
+Moreover we included a couple of false positive fixes for `NoNameShadowing` and `UnnecessaryLet`
+
+##### Changelog
+
+- Revert "Noisy gradle (#3655)" - [#3792](https://github.com/detekt/detekt/pull/3792)
+- NoNameShadowing: don't report when implicit 'it' parameter isn't used - [#3793](https://github.com/detekt/detekt/pull/3793)
+- UnnecessaryLet: report when implicit parameter isn't used - [#3794](https://github.com/detekt/detekt/pull/3794)
+
 #### 1.17.0 - 2021-05-15
 
 ##### Notable Changes

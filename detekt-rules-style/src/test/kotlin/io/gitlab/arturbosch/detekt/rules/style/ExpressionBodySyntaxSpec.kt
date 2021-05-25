@@ -7,6 +7,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
+
 class ExpressionBodySyntaxSpec : Spek({
     val subject by memoized { ExpressionBodySyntax(Config.empty) }
 
@@ -95,7 +97,7 @@ class ExpressionBodySyntaxSpec : Spek({
             }
 
             it("reports with includeLineWrapping = true configuration") {
-                val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }
@@ -115,7 +117,7 @@ class ExpressionBodySyntaxSpec : Spek({
             }
 
             it("reports with includeLineWrapping = true configuration") {
-                val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }
@@ -134,7 +136,7 @@ class ExpressionBodySyntaxSpec : Spek({
             }
 
             it("reports with includeLineWrapping = true configuration") {
-                val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }

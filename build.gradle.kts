@@ -2,48 +2,16 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
-    kotlin("jvm") apply false
-    jacoco
     packaging
     releasing
     detekt
     id("com.github.ben-manes.versions")
     id("org.sonarqube")
-
-    // remove once Kotlin 1.5.10 is released (https://youtrack.jetbrains.com/issue/KT-46368)
-    id("dev.zacsweers.kgp-150-leak-patcher") version "1.1.0"
 }
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
-}
-
-jacoco.toolVersion = libs.versions.jacoco.get()
-
-tasks {
-    jacocoTestReport {
-        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        val examplesOrTestUtils = setOf(
-            "detekt-bom",
-            "detekt-test",
-            "detekt-test-utils",
-            "detekt-sample-extensions"
-        )
-
-        subprojects
-            .filterNot { it.name in examplesOrTestUtils }
-            .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
-                this@jacocoTestReport.dependsOn(it.tasks.test)
-            }
-
-        reports {
-            xml.isEnabled = true
-            xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        }
-    }
 }
 
 val analysisDir = file(projectDir)

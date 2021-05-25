@@ -6,19 +6,27 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class TooManyFunctionsSpec : Spek({
+private const val THRESHOLD_IN_FILES = "thresholdInFiles"
+private const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
+private const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
+private const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
+private const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
+private const val IGNORE_DEPRECATED = "ignoreDeprecated"
+private const val IGNORE_PRIVATE = "ignorePrivate"
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
+object TooManyFunctionsSpec : Spek({
     describe("different declarations with one function as threshold") {
 
         val rule by memoized {
             TooManyFunctions(
                 TestConfig(
                     mapOf(
-                        TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                        TooManyFunctions.THRESHOLD_IN_ENUMS to "1",
-                        TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                        TooManyFunctions.THRESHOLD_IN_INTERFACES to "1",
-                        TooManyFunctions.THRESHOLD_IN_OBJECTS to "1"
+                        THRESHOLD_IN_CLASSES to "1",
+                        THRESHOLD_IN_ENUMS to "1",
+                        THRESHOLD_IN_FILES to "1",
+                        THRESHOLD_IN_INTERFACES to "1",
+                        THRESHOLD_IN_OBJECTS to "1"
                     )
                 )
             )
@@ -128,9 +136,9 @@ class TooManyFunctionsSpec : Spek({
                 val configuredRule = TooManyFunctions(
                     TestConfig(
                         mapOf(
-                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                            TooManyFunctions.IGNORE_DEPRECATED to "true"
+                            THRESHOLD_IN_CLASSES to "1",
+                            THRESHOLD_IN_FILES to "1",
+                            IGNORE_DEPRECATED to "true"
                         )
                     )
                 )
@@ -154,9 +162,9 @@ class TooManyFunctionsSpec : Spek({
                 val configuredRule = TooManyFunctions(
                     TestConfig(
                         mapOf(
-                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                            TooManyFunctions.IGNORE_PRIVATE to "true"
+                            THRESHOLD_IN_CLASSES to "1",
+                            THRESHOLD_IN_FILES to "1",
+                            IGNORE_PRIVATE to "true"
                         )
                     )
                 )
@@ -188,11 +196,11 @@ class TooManyFunctionsSpec : Spek({
                 val configuredRule = TooManyFunctions(
                     TestConfig(
                         mapOf(
-                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                            TooManyFunctions.IGNORE_PRIVATE to "true",
-                            TooManyFunctions.IGNORE_DEPRECATED to "true",
-                            TooManyFunctions.IGNORE_OVERRIDDEN to "true"
+                            THRESHOLD_IN_CLASSES to "1",
+                            THRESHOLD_IN_FILES to "1",
+                            IGNORE_PRIVATE to "true",
+                            IGNORE_DEPRECATED to "true",
+                            IGNORE_OVERRIDDEN to "true"
                         )
                     )
                 )
@@ -218,9 +226,9 @@ class TooManyFunctionsSpec : Spek({
                 val configuredRule = TooManyFunctions(
                     TestConfig(
                         mapOf(
-                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                            TooManyFunctions.IGNORE_OVERRIDDEN to "true"
+                            THRESHOLD_IN_CLASSES to "1",
+                            THRESHOLD_IN_FILES to "1",
+                            IGNORE_OVERRIDDEN to "true"
                         )
                     )
                 )
@@ -231,9 +239,9 @@ class TooManyFunctionsSpec : Spek({
                 val configuredRule = TooManyFunctions(
                     TestConfig(
                         mapOf(
-                            TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
-                            TooManyFunctions.THRESHOLD_IN_FILES to "1",
-                            TooManyFunctions.IGNORE_OVERRIDDEN to "false"
+                            THRESHOLD_IN_CLASSES to "1",
+                            THRESHOLD_IN_FILES to "1",
+                            IGNORE_OVERRIDDEN to "false"
                         )
                     )
                 )

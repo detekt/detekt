@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrefixExpression
@@ -31,9 +33,6 @@ import java.util.Locale
  *     const val DEFAULT_AMOUNT = 1_000_000
  * }
  * </compliant>
- *
- * @configuration acceptableDecimalLength - Length under which decimal base 10 literals are not required to have
- * underscores (default: `5`)
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
 
@@ -46,9 +45,8 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         Debt.FIVE_MINS
     )
 
-    private val underscoreNumberRegex = Regex("[0-9]{1,3}(_[0-9]{3})*")
-
-    private val acceptableDecimalLength = valueOrDefault(ACCEPTABLE_DECIMAL_LENGTH, DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
+    @Configuration("Length under which decimal base 10 literals are not required to have underscores")
+    private val acceptableDecimalLength: Int by config(DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val normalizedText = normalizeForMatching(expression.text)
@@ -65,7 +63,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberString: String) {
-        if (!numberString.matches(underscoreNumberRegex)) {
+        if (!numberString.matches(UNDERSCORE_NUMBER_REGEX)) {
             report(
                 CodeSmell(
                     issue,
@@ -107,8 +105,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     companion object {
-        const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
-
+        private val UNDERSCORE_NUMBER_REGEX = Regex("[0-9]{1,3}(_[0-9]{3})*")
         private const val HEX_PREFIX = "0x"
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"

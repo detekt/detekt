@@ -101,7 +101,7 @@ class ReturnFromFinallySpec : Spek({
             }
 
             it("should not report when ignoreLabeled is true") {
-                val config = TestConfig(mapOf(ReturnFromFinally.IGNORE_LABELED to "true"))
+                val config = TestConfig(mapOf("ignoreLabeled" to "true"))
                 val findings = ReturnFromFinally(config).compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }

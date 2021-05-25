@@ -2,13 +2,13 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.experimental.SpacingBetweenDeclarationsWithAnnotationsRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
- *
- * @autoCorrect since v1.10.0
  */
+@AutoCorrectable(since = "1.10.0")
 class SpacingBetweenDeclarationsWithAnnotations(config: Config) : FormattingRule(config) {
 
     override val wrapping = SpacingBetweenDeclarationsWithAnnotationsRule()
