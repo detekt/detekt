@@ -6,9 +6,11 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -23,13 +25,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * Method overloading tightly couples these methods together which might make the code harder to understand.
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
- *
- * @configuration threshold - number of overloads which will trigger the rule (default: `6`)
  */
-class MethodOverloading(
-    config: Config = Config.empty,
-    threshold: Int = DEFAULT_THRESHOLD_OVERLOAD_COUNT
-) : ThresholdRule(config, threshold) {
+class MethodOverloading(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "MethodOverloading",
@@ -39,6 +36,9 @@ class MethodOverloading(
             "Refactor these methods and try to use optional parameters.",
         Debt.TWENTY_MINS
     )
+
+    @Configuration("number of overloads which will trigger the rule")
+    private val threshold: Int by config(defaultValue = 6)
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
@@ -92,9 +92,5 @@ class MethodOverloading(
         }
 
         private fun KtNamedFunction.isOverriddenInsideEnumEntry() = containingClass() is KtEnumEntry && isOverride()
-    }
-
-    companion object {
-        const val DEFAULT_THRESHOLD_OVERLOAD_COUNT = 6
     }
 }

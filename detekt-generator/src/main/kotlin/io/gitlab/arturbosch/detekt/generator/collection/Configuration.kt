@@ -5,4 +5,6 @@ data class Configuration(
     val description: String,
     val defaultValue: String,
     val deprecated: String?
-)
+) {
+    fun isDeprecated() = deprecated != null
+}

@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
+
 class DataClassContainsFunctionsSpec : Spek({
     val subject by memoized { DataClassContainsFunctions() }
 
@@ -27,7 +29,7 @@ class DataClassContainsFunctionsSpec : Spek({
             }
 
             it("reports valid data class w/o conversion function") {
-                val config = TestConfig(mapOf(DataClassContainsFunctions.CONVERSION_FUNCTION_PREFIX to ""))
+                val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to ""))
                 val rule = DataClassContainsFunctions(config)
                 assertThat(rule.compileAndLint(code)).hasSize(2)
             }

@@ -121,5 +121,16 @@ class ModifierOrderSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
+
+        context("value class") {
+
+            it("should not report correctly ordered modifiers") {
+                val code = """
+                    @JvmInline
+                    private value class Foo(val bar: Int)
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
     }
 })

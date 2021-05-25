@@ -182,7 +182,7 @@ class CliArgs {
         names = ["--language-version"],
         converter = LanguageVersionConverter::class,
         description = "EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports errors for all " +
-            "language features that came out later (1.0, 1.1, 1.2, 1.3, 1.4)"
+            "language features that came out later (1.0, 1.1, 1.2, 1.3, 1.4 or 1.5)"
     )
     var languageVersion: LanguageVersion? = null
 
@@ -190,7 +190,7 @@ class CliArgs {
         names = ["--jvm-target"],
         converter = JvmTargetConverter::class,
         description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
-            "compilation and is now being used for type resolution (1.6, 1.8, 9, 10, 11 or 12)"
+            "compilation and is now being used for type resolution (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15 or 16)"
     )
     var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 

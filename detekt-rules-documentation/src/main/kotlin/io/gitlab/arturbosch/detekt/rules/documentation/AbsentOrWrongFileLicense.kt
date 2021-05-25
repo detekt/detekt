@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -16,11 +18,6 @@ import org.jetbrains.kotlin.psi.KtFile
  * `licenseTemplateFile` configuration option. If `licenseTemplateIsRegex = true` the rule matches the header with
  * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
  * option).
- *
- * @configuration licenseTemplateFile - path to file with license header template resolved relatively to config file
- * (default: `'license.template'`)
- * @configuration licenseTemplateIsRegex - whether or not the license header template is a regex template
- * (default: `false`)
  */
 class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
@@ -30,6 +27,14 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
         description = "License text is absent or incorrect in the file.",
         debt = Debt.FIVE_MINS
     )
+
+    @Suppress("unused")
+    @Configuration("path to file with license header template resolved relatively to config file")
+    private val licenseTemplateFile: String by config(DEFAULT_LICENSE_TEMPLATE_FILE)
+
+    @Suppress("unused")
+    @Configuration("whether or not the license header template is a regex template")
+    private val licenseTemplateIsRegex: Boolean by config(DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
 
     override fun visitCondition(root: KtFile): Boolean =
         super.visitCondition(root) && (root.hasLicenseHeader() || root.hasLicenseHeaderRegex())

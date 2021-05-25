@@ -10,7 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -42,9 +43,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *     fun f() { }
  * }
  * </noncompliant>
- *
- * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
- * this check. (default: `['dagger.Module']`)
  */
 @ActiveByDefault(since = "1.2.0")
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
@@ -62,11 +60,11 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS
         )
 
-    private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(
-        EXCLUDE_ANNOTATED_CLASSES,
-        listOf("dagger.Module")
-    )
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("Allows you to provide a list of annotations that disable this check.")
+    private val excludeAnnotatedClasses: List<String> by config(listOf("dagger.Module")) { classes ->
+        classes.map { it.removePrefix("*").removeSuffix("*") }
+    }
+
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
@@ -130,9 +128,5 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 }
             }
         }
-    }
-
-    companion object {
-        const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
     }
 }

@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -35,8 +37,6 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *             .stuffStuff()
  * }
  * </compliant>
- *
- * @configuration includeLineWrapping - include return statements with line wraps in it (default: `false`)
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
@@ -48,7 +48,8 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val includeLineWrapping = valueOrDefault(INCLUDE_LINE_WRAPPING, false)
+    @Configuration("include return statements with line wraps in it")
+    private val includeLineWrapping: Boolean by config(false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val stmt = function.bodyExpression
@@ -68,8 +69,4 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
     private fun isLineWrapped(expression: KtExpression): Boolean =
         expression.children.any { it.text.contains('\n') }
-
-    companion object {
-        const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
-    }
 }

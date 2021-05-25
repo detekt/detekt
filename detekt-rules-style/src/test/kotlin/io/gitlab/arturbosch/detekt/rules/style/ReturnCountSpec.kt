@@ -8,6 +8,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val MAX = "max"
+private const val EXCLUDED_FUNCTIONS = "excludedFunctions"
+private const val EXCLUDE_LABELED = "excludeLabeled"
+private const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
+private const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
+
 class ReturnCountSpec : Spek({
 
     describe("ReturnCount rule") {
@@ -45,7 +51,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flagged for if condition guard clauses") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
@@ -67,13 +73,13 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flagged for if condition guard clauses") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should get flagged without guard clauses") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "false")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "false")))
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -99,7 +105,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -118,7 +124,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flagged for ELVIS operator guard clauses") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
@@ -137,7 +143,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should get flagged for an if condition guard clause which is not the first statement") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -156,7 +162,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should get flagged for an ELVIS guard clause which is not the first statement") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
                     .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -180,7 +186,7 @@ class ReturnCountSpec : Spek({
             it("should not count all four guard clauses") {
                 val findings = ReturnCount(
                     TestConfig(
-                        ReturnCount.EXCLUDE_GUARD_CLAUSES to "true"
+                        EXCLUDE_GUARD_CLAUSES to "true"
                     )
                 ).compileAndLint(code)
                 assertThat(findings).isEmpty()
@@ -189,7 +195,7 @@ class ReturnCountSpec : Spek({
             it("should count all four guard clauses") {
                 val findings = ReturnCount(
                     TestConfig(
-                        ReturnCount.EXCLUDE_GUARD_CLAUSES to "false"
+                        EXCLUDE_GUARD_CLAUSES to "false"
                     )
                 ).compileAndLint(code)
                 assertThat(findings).hasSize(1)
@@ -214,12 +220,12 @@ class ReturnCountSpec : Spek({
             }
 
             it("should not get flagged when max value is 3") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "3"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "3"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should get flagged when max value is 1") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "1"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -241,12 +247,12 @@ class ReturnCountSpec : Spek({
             }
 
             it("should not get flagged when max value is 2") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should get flagged when max value is 1") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "1"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -267,8 +273,8 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(
                     TestConfig(
                         mapOf(
-                            ReturnCount.MAX to "2",
-                            ReturnCount.EXCLUDED_FUNCTIONS to "test"
+                            MAX to "2",
+                            EXCLUDED_FUNCTIONS to "test"
                         )
                     )
                 ).compileAndLint(code)
@@ -310,8 +316,8 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(
                     TestConfig(
                         mapOf(
-                            ReturnCount.MAX to "2",
-                            ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2"
+                            MAX to "2",
+                            EXCLUDED_FUNCTIONS to "test1,test2"
                         )
                     )
                 ).compileAndLint(code)
@@ -340,7 +346,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flag when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -375,7 +381,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should not get flag when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -412,7 +418,7 @@ class ReturnCountSpec : Spek({
         """
 
             it("should get flagged when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
+                val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -436,7 +442,7 @@ class ReturnCountSpec : Spek({
 
             it("should count labeled returns from lambda when activated") {
                 val findings = ReturnCount(
-                    TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))
+                    TestConfig(mapOf(EXCLUDE_RETURN_FROM_LAMBDA to "false"))
                 ).lint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -445,8 +451,8 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(
                     TestConfig(
                         mapOf(
-                            ReturnCount.EXCLUDE_LABELED to "true",
-                            ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
+                            EXCLUDE_LABELED to "true",
+                            EXCLUDE_RETURN_FROM_LAMBDA to "false"
                         )
                     )
                 ).lint(code)
