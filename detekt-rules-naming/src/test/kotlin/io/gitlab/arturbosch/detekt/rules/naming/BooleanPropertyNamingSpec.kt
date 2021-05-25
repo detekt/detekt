@@ -118,7 +118,7 @@ class BooleanPropertyNamingSpec : Spek({
             it("should not detect primitive types") {
                 val code = """
                     class Test {
-                        var count: Int
+                        var count: Int = 0
                     }
                     """
                 val findings = subject.compileAndLintWithContext(env, code)
