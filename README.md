@@ -223,7 +223,6 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyNaming
 
-
 ### Mentions
 
 [![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
