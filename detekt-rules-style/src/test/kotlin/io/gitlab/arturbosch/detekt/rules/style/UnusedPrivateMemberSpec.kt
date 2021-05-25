@@ -1217,7 +1217,16 @@ class UnusedPrivateMemberSpec : Spek({
 
     describe("backtick identifiers - #3825") {
 
-        it("does not report unused variables with keyword name") {
+        it("does report unused variables with keyword name") {
+            val code = """
+                fun main() {
+                    val `in` = "foo"
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report used variables with keyword name") {
             val code = """
                 fun main() {
                     val `in` = "fee"
@@ -1228,7 +1237,7 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report unused variables when referenced with backticks") {
+        it("does not report used variables when referenced with backticks") {
             val code = """
                 fun main() {
                     val actual = "fee"
@@ -1239,7 +1248,7 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report unused variables when declared with backticks") {
+        it("does not report used variables when declared with backticks") {
             val code = """
                 fun main() {
                     val `actual` = "fee"
