@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
-import org.codehaus.groovy.runtime.DefaultGroovyMethods.hasProperty
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.Task
