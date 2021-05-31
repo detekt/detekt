@@ -4,6 +4,7 @@ import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
@@ -13,10 +14,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3ce/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt
  *
  * @configuration layout - the import ordering layout; (default: `'*,java.**,javax.**,kotlin.**,^'`)
- *
- * @autoCorrect since v1.0.0
  */
 @OptIn(FeatureInAlphaState::class)
+@AutoCorrectable(since = "1.0.0")
 class ImportOrdering(config: Config) : FormattingRule(config) {
 
     override val wrapping = ImportOrderingRule()

@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import io.gitlab.arturbosch.detekt.rules.isPartOf
@@ -66,26 +67,6 @@ import java.util.Locale
  *     }
  * }
  * </compliant>
- *
- * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: `['-1', '0', '1', '2']`)
- * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
- * (default: `true`)
- * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
- * (default: `false`)
- * @configuration ignoreLocalVariableDeclaration - whether magic numbers in local variable declarations should be
- * ignored (default: `false`)
- * @configuration ignoreConstantDeclaration - whether magic numbers in constant declarations should be ignored
- * (default: `true`)
- * @configuration ignoreCompanionObjectPropertyDeclaration - whether magic numbers in companion object
- * declarations should be ignored (default: `true`)
- * @configuration ignoreAnnotation - whether magic numbers in annotations should be ignored
- * (default: `false`)
- * @configuration ignoreNamedArgument - whether magic numbers in named arguments should be ignored
- * (default: `true`)
- * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: `false`)
- * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: `false`)
- * @configuration ignoreExtensionFunctions - whether magic numbers as subject of an extension function should be ignored
- * (default: `true`)
  */
 @Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.0.0")
@@ -101,21 +82,40 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val ignoredNumbers = valueOrDefaultCommaSeparated(IGNORE_NUMBERS, listOf("-1", "0", "1", "2"))
-        .map { parseAsDouble(it) }
-        .sorted()
+    @Configuration("numbers which do not count as magic numbers")
+    private val ignoreNumbers: List<Double> by config(listOf("-1", "0", "1", "2")) { numbers ->
+        numbers.map(this::parseAsDouble).sorted()
+    }
 
-    private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
-    private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
-    private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
-    private val ignoreLocalVariables = valueOrDefault(IGNORE_LOCAL_VARIABLES, false)
-    private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
-    private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
-    private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
-    private val ignoreCompanionObjectPropertyDeclaration =
-        valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
-    private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
-    private val ignoreExtensionFunctions = valueOrDefault(IGNORE_EXTENSION_FUNCTIONS, true)
+    @Configuration("whether magic numbers in hashCode functions should be ignored")
+    private val ignoreHashCodeFunction: Boolean by config(true)
+
+    @Configuration("whether magic numbers in property declarations should be ignored")
+    private val ignorePropertyDeclaration: Boolean by config(false)
+
+    @Configuration("whether magic numbers in local variable declarations should be ignored")
+    private val ignoreLocalVariableDeclaration: Boolean by config(false)
+
+    @Configuration("whether magic numbers in constant declarations should be ignored")
+    private val ignoreConstantDeclaration: Boolean by config(true)
+
+    @Configuration("whether magic numbers in companion object declarations should be ignored")
+    private val ignoreCompanionObjectPropertyDeclaration: Boolean by config(true)
+
+    @Configuration("whether magic numbers in annotations should be ignored")
+    private val ignoreAnnotation: Boolean by config(false)
+
+    @Configuration("whether magic numbers in named arguments should be ignored")
+    private val ignoreNamedArgument: Boolean by config(true)
+
+    @Configuration("whether magic numbers in enums should be ignored")
+    private val ignoreEnums: Boolean by config(false)
+
+    @Configuration("whether magic numbers in ranges should be ignored")
+    private val ignoreRanges: Boolean by config(false)
+
+    @Configuration("whether magic numbers as subject of an extension function should be ignored")
+    private val ignoreExtensionFunctions: Boolean by config(true)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val elementType = expression.elementType
@@ -135,7 +135,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         }
 
         val number = parseAsDoubleOrNull(rawNumber)
-        if (number != null && !ignoredNumbers.contains(number)) {
+        if (number != null && !ignoreNumbers.contains(number)) {
             report(
                 CodeSmell(
                     issue,
@@ -149,7 +149,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun isIgnoredByConfig(expression: KtConstantExpression) = when {
         ignorePropertyDeclaration && expression.isProperty() -> true
-        ignoreLocalVariables && expression.isLocalProperty() -> true
+        ignoreLocalVariableDeclaration && expression.isLocalProperty() -> true
         ignoreConstantDeclaration && expression.isConstantProperty() -> true
         ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
         ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> true
@@ -180,7 +180,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun normalizeForParsingAsDouble(text: String): String {
         return text.trim()
-            .toLowerCase(Locale.US)
+            .lowercase(Locale.US)
             .replace("_", "")
             .removeSuffix("l")
             .removeSuffix("d")
@@ -249,18 +249,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
 
     companion object {
-        const val IGNORE_NUMBERS = "ignoreNumbers"
-        const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
-        const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
-        const val IGNORE_LOCAL_VARIABLES = "ignoreLocalVariableDeclaration"
-        const val IGNORE_CONSTANT_DECLARATION = "ignoreConstantDeclaration"
-        const val IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION = "ignoreCompanionObjectPropertyDeclaration"
-        const val IGNORE_ANNOTATION = "ignoreAnnotation"
-        const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
-        const val IGNORE_ENUMS = "ignoreEnums"
-        const val IGNORE_RANGES = "ignoreRanges"
-        const val IGNORE_EXTENSION_FUNCTIONS = "ignoreExtensionFunctions"
-
         private const val HEX_RADIX = 16
         private const val BINARY_RADIX = 2
     }

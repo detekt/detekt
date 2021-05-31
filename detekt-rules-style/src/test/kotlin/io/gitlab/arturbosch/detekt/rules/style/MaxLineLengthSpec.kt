@@ -9,6 +9,11 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val MAX_LINE_LENGTH = "maxLineLength"
+private const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
+private const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
+private const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+
 class MaxLineLengthSpec : Spek({
 
     describe("MaxLineLength rule") {
@@ -20,7 +25,7 @@ class MaxLineLengthSpec : Spek({
             val fileContent by memoized { KtFileContent(file, lines) }
 
             it("should report no errors when maxLineLength is set to 200") {
-                val rule = MaxLineLength(TestConfig(mapOf(MaxLineLength.MAX_LINE_LENGTH to "200")))
+                val rule = MaxLineLength(TestConfig(mapOf(MAX_LINE_LENGTH to "200")))
 
                 rule.visit(fileContent)
                 assertThat(rule.findings).isEmpty()
@@ -66,7 +71,7 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60"
+                            MAX_LINE_LENGTH to "60"
                         )
                     )
                 )
@@ -79,9 +84,9 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "false",
+                            EXCLUDE_IMPORT_STATEMENTS to "false"
                         )
                     )
                 )
@@ -94,9 +99,9 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "true",
+                            EXCLUDE_IMPORT_STATEMENTS to "true"
                         )
                     )
                 )
@@ -116,7 +121,7 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60"
+                            MAX_LINE_LENGTH to "60"
                         )
                     )
                 )
@@ -129,10 +134,10 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false",
-                            MaxLineLength.EXCLUDE_COMMENT_STATEMENTS to "false"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "false",
+                            EXCLUDE_IMPORT_STATEMENTS to "false",
+                            EXCLUDE_COMMENT_STATEMENTS to "false"
                         )
                     )
                 )
@@ -145,8 +150,8 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_COMMENT_STATEMENTS to "true"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_COMMENT_STATEMENTS to "true"
                         )
                     )
                 )
@@ -175,7 +180,7 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60"
+                            MAX_LINE_LENGTH to "60"
                         )
                     )
                 )
@@ -188,9 +193,9 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "false",
+                            EXCLUDE_IMPORT_STATEMENTS to "false"
                         )
                     )
                 )
@@ -203,9 +208,9 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "true",
+                            EXCLUDE_IMPORT_STATEMENTS to "true"
                         )
                     )
                 )
@@ -218,9 +223,9 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength(
                     TestConfig(
                         mapOf(
-                            MaxLineLength.MAX_LINE_LENGTH to "60",
-                            MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
-                            MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
+                            MAX_LINE_LENGTH to "60",
+                            EXCLUDE_PACKAGE_STATEMENTS to "true",
+                            EXCLUDE_IMPORT_STATEMENTS to "true"
                         )
                     )
                 )

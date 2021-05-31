@@ -6,10 +6,12 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -21,14 +23,9 @@ import java.util.IdentityHashMap
  * the class does instead handle multiple responsibilities. Instead of doing many things at once prefer to
  * split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
  * things.
- *
- * @configuration threshold - the size of class required to trigger the rule (default: `600`)
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(
-    config: Config = Config.empty,
-    threshold: Int = DEFAULT_THRESHOLD_CLASS_LENGTH
-) : ThresholdRule(config, threshold) {
+class LargeClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LargeClass",
@@ -37,6 +34,9 @@ class LargeClass(
             "Split up large classes into smaller classes that are easier to understand.",
         Debt.TWENTY_MINS
     )
+
+    @Configuration("the size of class required to trigger the rule")
+    private val threshold: Int by config(defaultValue = 600)
 
     private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
     private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
@@ -79,9 +79,5 @@ class LargeClass(
             yieldAll(nestedClasses)
             nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
         }
-    }
-
-    companion object {
-        const val DEFAULT_THRESHOLD_CLASS_LENGTH = 600
     }
 }

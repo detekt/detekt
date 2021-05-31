@@ -5,10 +5,12 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -36,14 +38,11 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
  * </compliant>
- *
- * @configuration threshold - the number of conditions which will trigger the rule (default: `4`)
  */
 @ActiveByDefault(since = "1.0.0")
 class ComplexCondition(
-    config: Config = Config.empty,
-    threshold: Int = DEFAULT_CONDITIONS_COUNT
-) : ThresholdRule(config, threshold) {
+    config: Config = Config.empty
+) : Rule(config) {
 
     override val issue = Issue(
         "ComplexCondition",
@@ -51,6 +50,9 @@ class ComplexCondition(
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
         Debt.TWENTY_MINS
     )
+
+    @Configuration("the number of conditions which will trigger the rule")
+    private val threshold: Int by config(defaultValue = 4)
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -107,9 +109,5 @@ class ComplexCondition(
         }
 
         return count
-    }
-
-    companion object {
-        const val DEFAULT_CONDITIONS_COUNT = 4
     }
 }

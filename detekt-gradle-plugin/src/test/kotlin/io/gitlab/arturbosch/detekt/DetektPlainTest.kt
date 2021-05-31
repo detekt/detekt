@@ -19,7 +19,6 @@ object DetektPlainTest : Spek({
 
                 repositories {
                     mavenCentral()
-                    jcenter()
                     mavenLocal()
                 }
 
@@ -50,7 +49,6 @@ object DetektPlainTest : Spek({
 
                 repositories {
                     mavenCentral()
-                    jcenter()
                     mavenLocal()
                 }
 

@@ -137,7 +137,7 @@ class DetektMultiplatformTest : Spek({
 
     describe(
         "multiplatform projects - Android target",
-        skip = if (isAndroidSdkInstalled()) Skip.No else Skip.Yes("No android sdk.")
+        skip = skipIfAndroidEnvironmentRequirementsUnmet()
     ) {
         val gradleRunner = setupProject {
             addSubmodule(
@@ -332,7 +332,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                     mavenCentral()
                     google()
                     mavenLocal()
-                    jcenter()
                 }
             }
         """.trimIndent(),

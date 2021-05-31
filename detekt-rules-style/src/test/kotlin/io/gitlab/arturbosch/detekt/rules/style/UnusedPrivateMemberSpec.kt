@@ -13,6 +13,8 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
+private const val ALLOWED_NAMES_PATTERN = "allowedNames"
+
 class UnusedPrivateMemberSpec : Spek({
     setupKotlinEnvironment()
 
@@ -247,14 +249,14 @@ class UnusedPrivateMemberSpec : Spek({
         it("does not fail when disabled with invalid regex") {
             val configRules = mapOf(
                 "active" to "false",
-                UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
+                ALLOWED_NAMES_PATTERN to "*foo"
             )
             val config = TestConfig(configRules)
             assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
         }
 
         it("does fail when enabled with invalid regex") {
-            val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
+            val configRules = mapOf(ALLOWED_NAMES_PATTERN to "*foo")
             val config = TestConfig(configRules)
             assertThatExceptionOfType(PatternSyntaxException::class.java)
                 .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
@@ -1210,6 +1212,51 @@ class UnusedPrivateMemberSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        }
+    }
+
+    describe("backtick identifiers - #3825") {
+
+        it("does report unused variables with keyword name") {
+            val code = """
+                fun main() {
+                    val `in` = "foo"
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report used variables with keyword name") {
+            val code = """
+                fun main() {
+                    val `in` = "fee"
+                    val expected = "foo"
+                    println(expected == `in`)
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report used variables when referenced with backticks") {
+            val code = """
+                fun main() {
+                    val actual = "fee"
+                    val expected = "foo"
+                    println(expected == `actual`)
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report used variables when declared with backticks") {
+            val code = """
+                fun main() {
+                    val `actual` = "fee"
+                    val expected = "foo"
+                    println(expected == actual)
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

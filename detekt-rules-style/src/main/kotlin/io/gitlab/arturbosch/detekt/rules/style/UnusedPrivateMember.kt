@@ -6,10 +6,11 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
@@ -49,9 +50,6 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  * Reports unused private properties, function parameters and functions.
  * If these private elements are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
- *
- * @configuration allowedNames - unused private member names matching this regex are ignored
- * (default: `'(_|ignored|expected|serialVersionUID)'`)
  */
 @ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
@@ -65,7 +63,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
+    @Configuration("unused private member names matching this regex are ignored")
+    private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)
@@ -77,10 +76,6 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedMemberVisitor) {
         accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
-    }
-
-    companion object {
-        const val ALLOWED_NAMES_PATTERN = "allowedNames"
     }
 }
 
@@ -322,7 +317,7 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        nameAccesses.add(expression.text)
+        nameAccesses.add(expression.text.removeSurrounding("`"))
         super.visitReferenceExpression(expression)
     }
 }

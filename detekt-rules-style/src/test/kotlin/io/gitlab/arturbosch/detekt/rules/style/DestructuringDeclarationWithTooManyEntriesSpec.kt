@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+private const val MAX_DESTRUCTURING_ENTRIES = "maxDestructuringEntries"
+
 class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
     val subject by memoized { DestructuringDeclarationWithTooManyEntries() }
 
@@ -80,7 +82,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec : Spek({
 
             val configuredRule by memoized {
                 DestructuringDeclarationWithTooManyEntries(
-                    TestConfig(mapOf(DestructuringDeclarationWithTooManyEntries.MAX_DESTRUCTURING_ENTRIES to "2"))
+                    TestConfig(mapOf(MAX_DESTRUCTURING_ENTRIES to "2"))
                 )
             }
 

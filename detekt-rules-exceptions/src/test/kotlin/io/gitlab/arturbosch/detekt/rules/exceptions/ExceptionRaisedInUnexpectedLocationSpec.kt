@@ -24,7 +24,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
         }
 
         it("reports the configured method") {
-            val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to listOf("toDo", "todo2")))
+            val config = TestConfig(mapOf("methodNames" to listOf("toDo", "todo2")))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
                 """
             fun toDo() {
@@ -35,7 +35,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
         }
 
         it("reports the configured method with String") {
-            val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
+            val config = TestConfig(mapOf("methodNames" to "toDo,todo2"))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
                 """
             fun toDo() {

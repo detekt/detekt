@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -32,12 +34,6 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *     // ...
  * }
  * </compliant>
- *
- * @configuration exceptionNames - exceptions which are too generic and should not be thrown
- * (default: `- Error
- *            - Exception
- *            - Throwable
- *            - RuntimeException`)
  */
 @ActiveByDefault(since = "1.0.0")
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
@@ -49,12 +45,19 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val exceptions: Set<String> =
-        valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()
+    @Configuration("exceptions which are too generic and should not be thrown")
+    private val exceptionNames: Set<String> by config(
+        listOf(
+            "Error",
+            "Exception",
+            "Throwable",
+            "RuntimeException"
+        )
+    ) { it.toSet() }
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         expression.thrownExpression?.referenceExpression()?.text?.let {
-            if (it in exceptions) {
+            if (it in exceptionNames) {
                 report(
                     CodeSmell(
                         issue,
@@ -67,15 +70,4 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
         }
         super.visitThrowExpression(expression)
     }
-
-    companion object {
-        const val THROWN_EXCEPTIONS_PROPERTY = "exceptionNames"
-    }
 }
-
-val thrownExceptionDefaults = listOf(
-    "Error",
-    "Exception",
-    "Throwable",
-    "RuntimeException"
-)

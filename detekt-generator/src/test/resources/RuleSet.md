@@ -26,6 +26,12 @@ a wildcard import
 
   list config
 
+* ~~``conf4``~~ (default: ``['a', 'b']``)
+
+  **Deprecated**: use conf3 instead
+
+  deprecated list config
+
 #### Noncompliant Code:
 
 ```kotlin

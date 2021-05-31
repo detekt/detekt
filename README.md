@@ -1,14 +1,14 @@
 # __detekt__
 
-[![Join the chat at https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/](https://img.shields.io/badge/chat-on_slack-red.svg?style=flat-square)](https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/)
-[![Visit the website at https://detekt.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?style=flat-square)](https://detekt.github.io/detekt/)
-[![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
-[![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
+[![Visit the website at detekt.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.github.io/detekt/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
+[![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
-[![codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt?ref=badge_shield)
+[![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt.svg?type=small)](https://app.fossa.com/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt?ref=badge_small)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
@@ -62,8 +62,6 @@ You can find [other ways to install detekt here](https://detekt.github.io/detekt
 
 #### with Gradle
 
-Gradle 5.4+ is required:
-
 ```kotlin
 plugins {
     id("io.gitlab.arturbosch.detekt").version("[version]")
@@ -105,6 +103,16 @@ tasks.withType<Detekt>().configureEach {
 See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
 
 If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
+
+#### Requirements
+
+Gradle 6.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
+
+| Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
+| -------------- | ------ | ------ | --- | ----------------- | --------------- |
+| `1.17.0` | `7.0.1` | `1.4.32` | `4.2.0` | `1.8` | `15` |
+
+The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
 
 ### Adding more rule sets
 
@@ -212,6 +220,8 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Paya Do](https://github.com/payathedo) - Designer for Detekt's logo
 - [zmunm](https://github.com/zmunm) - New rule: ObjectLiteralToLambda
 - [Vinicius Montes Munhoz](https://github.com/vfmunhoz) - Documentation improvement
+- [Eliezer Graber](https://github.com/eygraber) - Rule fix: ModifierOrder
+- [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
 
 ### Mentions
 

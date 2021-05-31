@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 
 /**
@@ -15,11 +17,6 @@ import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
  *
  * Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
  * in the codebase will help make the code more uniform.
- *
- * @configuration maxLineLength - maximum line length (default: `120`)
- * @configuration excludePackageStatements - if package statements should be ignored (default: `true`)
- * @configuration excludeImportStatements - if import statements should be ignored (default: `true`)
- * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
  */
 @ActiveByDefault(since = "1.0.0")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
@@ -31,14 +28,18 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val lengthThreshold: Int =
-        valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
-    private val excludePackageStatements: Boolean =
-        valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
-    private val excludeImportStatements: Boolean =
-        valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, true)
-    private val excludeCommentStatements: Boolean =
-        valueOrDefault(EXCLUDE_COMMENT_STATEMENTS, false)
+    @Suppress("MemberNameEqualsClassName")
+    @Configuration("maximum line length")
+    private val maxLineLength: Int by config(DEFAULT_IDEA_LINE_LENGTH)
+
+    @Configuration("if package statements should be ignored")
+    private val excludePackageStatements: Boolean by config(true)
+
+    @Configuration("if import statements should be ignored")
+    private val excludeImportStatements: Boolean by config(true)
+
+    @Configuration("if comment statements should be ignored")
+    private val excludeCommentStatements: Boolean by config(false)
 
     fun visit(element: KtFileContent) {
         var offset = 0
@@ -62,7 +63,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isValidLine(line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= lengthThreshold || isIgnoredStatement(line) || isUrl
+        return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
     }
 
     private fun isIgnoredStatement(line: String): Boolean {
@@ -92,10 +93,6 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val MAX_LINE_LENGTH = "maxLineLength"
-        const val DEFAULT_IDEA_LINE_LENGTH = 120
-        const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
-        const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
-        const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+        private const val DEFAULT_IDEA_LINE_LENGTH = 120
     }
 }

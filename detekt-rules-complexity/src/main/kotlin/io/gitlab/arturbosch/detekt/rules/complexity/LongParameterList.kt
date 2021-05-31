@@ -10,7 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.config
+import io.gitlab.arturbosch.detekt.api.internal.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
@@ -25,22 +27,9 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
- *
- * @configuration threshold - number of parameters required to trigger the rule (default: `6`)
- * (deprecated: "Use `functionThreshold` and `constructorThreshold` instead")
- * @configuration functionThreshold - number of function parameters required to trigger the rule (default: `6`)
- * @configuration constructorThreshold - number of constructor parameters required to trigger the rule (default: `7`)
- * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
- * @configuration ignoreDataClasses - ignore long constructor parameters list for data classes (default: `true`)
- * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these
- * annotation class names (default: `[]`); (e.g. ['Inject', 'Module', 'Suppress']);
- * the most common case is for dependency injection where constructors are annotated with @Inject.
  */
 @ActiveByDefault(since = "1.0.0")
-class LongParameterList(
-    config: Config = Config.empty
-) : Rule(config) {
-
+class LongParameterList(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "LongParameterList",
         Severity.Maintainability,
@@ -50,18 +39,37 @@ class LongParameterList(
         Debt.TWENTY_MINS
     )
 
-    private val functionThreshold: Int =
-        valueOrDefault(FUNCTION_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_FUNCTION_THRESHOLD))
+    @Suppress("unused")
+    @Deprecated("Use `functionThreshold` and `constructorThreshold` instead")
+    @Configuration("number of parameters required to trigger the rule")
+    private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
-    private val constructorThreshold: Int =
-        valueOrDefault(CONSTRUCTOR_THRESHOLD, valueOrDefault(THRESHOLD, DEFAULT_CONSTRUCTOR_THRESHOLD))
+    @Configuration("number of function parameters required to trigger the rule")
+    private val functionThreshold: Int by configWithFallback(
+        fallbackPropertyName = "threshold",
+        defaultValue = DEFAULT_FUNCTION_THRESHOLD
+    )
 
-    private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
+    @Configuration("number of constructor parameters required to trigger the rule")
+    private val constructorThreshold: Int by configWithFallback(
+        fallbackPropertyName = "threshold",
+        defaultValue = DEFAULT_CONSTRUCTOR_THRESHOLD
+    )
 
-    private val ignoreDataClasses = valueOrDefault(IGNORE_DATA_CLASSES, true)
+    @Configuration("ignore parameters that have a default value")
+    private val ignoreDefaultParameters: Boolean by config(defaultValue = false)
 
-    private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, emptyList())
-        .map { it.removePrefix("*").removeSuffix("*") }
+    @Configuration("ignore long constructor parameters list for data classes")
+    private val ignoreDataClasses: Boolean by config(defaultValue = true)
+
+    @Configuration(
+        "ignore long parameters list for constructors or functions in the " +
+            "context of these annotation class names; (e.g. ['Inject', 'Module', 'Suppress']); " +
+            "the most common case is for dependency injection where constructors are annotated with `@Inject`."
+    )
+    private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
+        list.map { it.removePrefix("*").removeSuffix("*") }
+    }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
@@ -131,14 +139,7 @@ class LongParameterList(
     }
 
     companion object {
-        const val THRESHOLD = "threshold"
-        const val FUNCTION_THRESHOLD = "functionThreshold"
-        const val CONSTRUCTOR_THRESHOLD = "constructorThreshold"
-        const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
-        const val IGNORE_DATA_CLASSES = "ignoreDataClasses"
-        const val IGNORE_ANNOTATED = "ignoreAnnotated"
-
-        const val DEFAULT_FUNCTION_THRESHOLD = 6
-        const val DEFAULT_CONSTRUCTOR_THRESHOLD = 7
+        private const val DEFAULT_FUNCTION_THRESHOLD = 6
+        private const val DEFAULT_CONSTRUCTOR_THRESHOLD = 7
     }
 }

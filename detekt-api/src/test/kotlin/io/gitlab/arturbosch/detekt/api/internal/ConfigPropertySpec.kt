@@ -245,8 +245,8 @@ class ConfigPropertySpec : Spek({
                 val defaultValue by memoized { listOf("99") }
                 val subject by memoized {
                     object : TestConfigAware("present" to "1,2,3") {
-                        val present: Int by config(defaultValue) { it.sumBy(String::toInt) }
-                        val notPresent: Int by config(defaultValue) { it.sumBy(String::toInt) }
+                        val present: Int by config(defaultValue) { it.sumOf(String::toInt) }
+                        val notPresent: Int by config(defaultValue) { it.sumOf(String::toInt) }
                     }
                 }
                 it("applies transformer to list configured") {
