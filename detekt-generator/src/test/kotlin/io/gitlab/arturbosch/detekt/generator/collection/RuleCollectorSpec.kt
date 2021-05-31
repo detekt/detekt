@@ -181,6 +181,7 @@ object RuleCollectorSpec : Spek({
                         name = "config",
                         description = "description",
                         defaultValue = "'[A-Z$]'",
+                        defaultAndroidValue = null,
                         deprecated = null
                     )
                     assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
@@ -464,6 +465,53 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
+                }
+
+                context("android variants") {
+                    it("extracts values with android variants") {
+                        val code = """
+                            /**
+                             * description
+                             */
+                            class SomeRandomClass() : Rule {
+                                @Configuration("description")
+                                private val maxLineLength: Int by configWithAndroidVariants(120, 100)
+                            }                        
+                        """
+                        val items = subject.run(code)
+                        assertThat(items[0].configuration[0]).isEqualTo(
+                            Configuration(
+                                name = "maxLineLength",
+                                description = "description",
+                                defaultValue = "120",
+                                defaultAndroidValue = "100",
+                                deprecated = null
+                            )
+                        )
+                    }
+
+                    it("extracts values with android variants as named arguments") {
+                        val code = """
+                            /**
+                             * description
+                             */
+                            class SomeRandomClass() : Rule {
+                                @Configuration("description")
+                                private val maxLineLength: Int by
+                                    configWithAndroidVariants(defaultValue = 120, defaultAndroidValue = 100)
+                            }                        
+                        """
+                        val items = subject.run(code)
+                        assertThat(items[0].configuration[0]).isEqualTo(
+                            Configuration(
+                                name = "maxLineLength",
+                                description = "description",
+                                defaultValue = "120",
+                                defaultAndroidValue = "100",
+                                deprecated = null
+                            )
+                        )
+                    }
                 }
 
                 context("fallback property") {
