@@ -52,14 +52,6 @@ check.dependsOn detekt
 ```kotlin
 repositories {
     mavenCentral()
-
-    jcenter {
-        content {
-            // just allow to include kotlinx projects
-            // detekt needs 'kotlinx-html' for the html report
-            includeGroup("org.jetbrains.kotlinx")
-        }
-    }
 }
 
 val detekt by configurations.creating
