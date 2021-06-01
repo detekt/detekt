@@ -24,6 +24,18 @@ fun <T : Any, U : Any> configWithFallback(
     transformer: (T) -> U
 ): ReadOnlyProperty<ConfigAware, U> = FallbackConfigProperty(fallbackPropertyName, defaultValue, transformer)
 
+fun <T : Any> configWithAndroidVariants(
+    defaultValue: T,
+    defaultAndroidValue: T,
+): ReadOnlyProperty<ConfigAware, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
+
+fun <T : Any, U : Any> configWithAndroidVariants(
+    defaultValue: T,
+    defaultAndroidValue: T,
+    transformer: (T) -> U
+): ReadOnlyProperty<ConfigAware, U> =
+    TransformedConfigPropertyWithAndroidVariants(defaultValue, defaultAndroidValue, transformer)
+
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
@@ -53,6 +65,18 @@ private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Config
     }
 
     abstract fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U
+}
+
+private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
+    private val defaultValue: T,
+    private val defaultAndroidValue: T,
+    private val transform: (T) -> U
+) : MemoizedConfigProperty<U>() {
+    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
+        val isAndroid = getValueOrDefault(thisRef, "android", false)
+        val value = if (isAndroid) defaultAndroidValue else defaultValue
+        return transform(getValueOrDefault(thisRef, property.name, value))
+    }
 }
 
 private class TransformedConfigProperty<T : Any, U : Any>(
