@@ -84,6 +84,7 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
         languageVersion = "1.5"
+        apiVersion = "1.4"
         freeCompilerArgs = listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"
