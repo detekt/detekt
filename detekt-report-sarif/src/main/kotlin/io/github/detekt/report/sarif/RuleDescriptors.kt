@@ -37,8 +37,8 @@ private fun MultiRule.toDescriptors(ruleSetId: RuleSetId): List<ReportingDescrip
     this.rules.map { it.toDescriptor(ruleSetId) }
 
 private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
-    val formattedRuleSetId = ruleSetId.lowercase(Locale.US)
-    val formattedRuleId = ruleId.lowercase(Locale.US)
+    val formattedRuleSetId = ruleSetId.toLowerCase(Locale.US)
+    val formattedRuleId = ruleId.toLowerCase(Locale.US)
 
     return ReportingDescriptor(
         id = "detekt.$ruleSetId.$ruleId",
