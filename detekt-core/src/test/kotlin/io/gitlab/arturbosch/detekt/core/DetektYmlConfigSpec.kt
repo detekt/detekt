@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
+import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -10,76 +12,53 @@ class DetektYmlConfigSpec : Spek({
 
         val config by memoized { DefaultConfig.newInstance() }
 
-        it("complexitySection") {
-            ConfigAssert(
-                config,
-                "complexity",
-                "io.gitlab.arturbosch.detekt.rules.complexity"
-            ).assert()
+        ruleSetsNamesToPackage.forEach { (name, packageName) ->
+            it("$name section") {
+                ConfigAssert(config, name, packageName).assert()
+            }
         }
 
-        it("coroutinesSection") {
-            ConfigAssert(
-                config,
-                "coroutines",
-                "io.gitlab.arturbosch.detekt.rules.coroutines"
-            ).assert()
+        it("is backed by a yaml file") {
+            assertThat(config).isInstanceOf(YamlConfig::class.java)
         }
 
-        it("documentationSection") {
-            ConfigAssert(
-                config,
-                "comments",
-                "io.gitlab.arturbosch.detekt.rules.documentation"
-            ).assert()
+        it("contains all general config keys") {
+            val yamlConfig = config as YamlConfig
+
+            val topLevelConfigKeys = yamlConfig.properties.keys
+
+            assertThat(topLevelConfigKeys).containsAll(generalConfigKeys)
         }
 
-        it("emptyBlocksSection") {
-            ConfigAssert(
-                config,
-                "empty-blocks",
-                "io.gitlab.arturbosch.detekt.rules.empty"
-            ).assert()
-        }
+        it("is completely checked") {
+            val yamlConfig = config as YamlConfig
+            val checkedRuleSetNames = ruleSetsNamesToPackage.map { it.first }
 
-        it("exceptionsSection") {
-            ConfigAssert(
-                config,
-                "exceptions",
-                "io.gitlab.arturbosch.detekt.rules.exceptions"
-            ).assert()
-        }
+            val topLevelConfigKeys = yamlConfig.properties.keys
 
-        it("namingSection") {
-            ConfigAssert(
-                config,
-                "naming",
-                "io.gitlab.arturbosch.detekt.rules.naming"
-            ).assert()
-        }
-
-        it("performanceSection") {
-            ConfigAssert(
-                config,
-                "performance",
-                "io.gitlab.arturbosch.detekt.rules.performance"
-            ).assert()
-        }
-
-        it("potentialBugsSection") {
-            ConfigAssert(
-                config,
-                "potential-bugs",
-                "io.gitlab.arturbosch.detekt.rules.bugs"
-            ).assert()
-        }
-
-        it("styleSection") {
-            ConfigAssert(
-                config,
-                "style",
-                "io.gitlab.arturbosch.detekt.rules.style"
-            ).assert()
+            assertThat(topLevelConfigKeys - generalConfigKeys)
+                .containsExactlyInAnyOrderElementsOf(checkedRuleSetNames)
         }
     }
 })
+
+private val ruleSetsNamesToPackage: List<Pair<String, String>> = listOf(
+    "complexity" to "io.gitlab.arturbosch.detekt.rules.complexity",
+    "coroutines" to "io.gitlab.arturbosch.detekt.rules.coroutines",
+    "comments" to "io.gitlab.arturbosch.detekt.rules.documentation",
+    "empty-blocks" to "io.gitlab.arturbosch.detekt.rules.empty",
+    "exceptions" to "io.gitlab.arturbosch.detekt.rules.exceptions",
+    "formatting" to "io.gitlab.arturbosch.detekt.formatting",
+    "naming" to "io.gitlab.arturbosch.detekt.rules.naming",
+    "performance" to "io.gitlab.arturbosch.detekt.rules.performance",
+    "potential-bugs" to "io.gitlab.arturbosch.detekt.rules.bugs",
+    "style" to "io.gitlab.arturbosch.detekt.rules.style",
+)
+
+private val generalConfigKeys = listOf(
+    "build",
+    "config",
+    "processors",
+    "console-reports",
+    "output-reports"
+)

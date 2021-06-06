@@ -17,15 +17,19 @@ class ConfigAssert(
     private val allowedOptions = setOf(
         Config.ACTIVE_KEY,
         Config.EXCLUDES_KEY,
-        Config.INCLUDES_KEY
+        Config.INCLUDES_KEY,
+        Config.AUTO_CORRECT_KEY,
+        "android"
     )
 
     fun assert() {
         val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key !in allowedOptions }
         assertThat(ymlDeclarations).isNotEmpty
+
         val ruleClasses = getRuleClasses()
-        assertThat(ruleClasses).isNotEmpty
-        assertThat(ruleClasses).hasSize(ymlDeclarations.size)
+        val foundRulesClassNames = ruleClasses.map { it.simpleName }
+        val ruleNamesInConfig = ymlDeclarations.keys
+        assertThat(foundRulesClassNames).containsExactlyInAnyOrderElementsOf(ruleNamesInConfig)
 
         checkRules(ruleClasses, ymlDeclarations)
     }
