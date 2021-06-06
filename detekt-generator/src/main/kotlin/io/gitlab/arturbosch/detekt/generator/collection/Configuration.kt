@@ -12,10 +12,10 @@ data class Configuration(
     fun isDefaultValueNonEmptyList() = defaultValue.isNonEmptyList()
 
     fun getDefaultValueAsList(): List<String> {
-        return if (defaultValue.isNonEmptyList())
-            defaultValue.toList()
-        else
-            error("default value '$defaultValue' is not a list")
+        if (defaultValue.isNonEmptyList()) {
+            return defaultValue.toList()
+        }
+        error("default value '$defaultValue' is not a list")
     }
 
     private fun String.isNonEmptyList(): Boolean = NON_EMPTY_LIST_REGEX.matchEntire(this) != null

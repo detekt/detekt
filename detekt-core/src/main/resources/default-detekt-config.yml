@@ -110,6 +110,7 @@ complexity:
   LongMethod:
     active: true
     threshold: 60
+    ignoreAnnotated: []
   LongParameterList:
     active: true
     functionThreshold: 6
@@ -433,8 +434,7 @@ naming:
     functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
     excludeClassPattern: '$^'
     ignoreOverridden: true
-    ignoreAnnotated:
-      - Composable
+    ignoreAnnotated: []
   FunctionParameterNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -443,7 +443,7 @@ naming:
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
-    excludes: ['*.kts']
+    excludes: ['**/*.kts']
     rootPackage: ''
   MatchingDeclarationName:
     active: true
