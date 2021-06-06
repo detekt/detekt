@@ -162,5 +162,12 @@ class UnnecessaryParenthesesSpec : Spek({
             """
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("should not report interface delegation with parenthesis - #3851") {
+            val code = """
+                class Clazz: Comparable<String> by ("hello".filter { it != 'l' })
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 })
