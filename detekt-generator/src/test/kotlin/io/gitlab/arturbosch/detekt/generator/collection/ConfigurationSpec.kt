@@ -9,6 +9,7 @@ private val defaultConfiguration = Configuration(
     name = "name",
     description = "description",
     defaultValue = "",
+    defaultAndroidValue = null,
     deprecated = null
 )
 
@@ -57,20 +58,6 @@ object ConfigurationSpec : Spek({
 
             it("converts to a list") {
                 assertThat(subject.getDefaultValueAsList()).isEqualTo(listOf("a", "b"))
-            }
-        }
-        describe("yaml list default value (allowed in rule set provider kdoc)") {
-            val defaultValue = """- a
-               - b
-               - c"""
-            val subject by memoized { defaultConfiguration.copy(defaultValue = defaultValue) }
-
-            it("identifies default as a non empty list") {
-                assertThat(subject.isDefaultValueNonEmptyList()).isTrue()
-            }
-
-            it("converts to a list") {
-                assertThat(subject.getDefaultValueAsList()).isEqualTo(listOf("a", "b", "c"))
             }
         }
     }

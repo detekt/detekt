@@ -26,7 +26,7 @@ internal fun createRuleSetPage(): RuleSetPage {
                 Configuration(
                     name = "rulesetconfig2",
                     description = "description rulesetconfig2",
-                    defaultValue = "- foo\n- bar",
+                    defaultValue = "['foo', 'bar']",
                     defaultAndroidValue = null,
                     deprecated = null
                 ),
@@ -40,10 +40,17 @@ internal fun createRuleSetPage(): RuleSetPage {
                 Configuration(
                     name = "deprecatedListConfig",
                     description = "description deprecatedListConfig",
-                    defaultValue = "- foo\n- bar",
+                    defaultValue = "['foo', 'bar']",
                     defaultAndroidValue = null,
                     deprecated = "is deprecated"
                 ),
+                Configuration(
+                    name = "rulesetconfig3",
+                    description = "description rulesetconfig2",
+                    defaultValue = "['first', 'se*cond']",
+                    defaultAndroidValue = null,
+                    deprecated = null
+                )
             )
         )
     return RuleSetPage(ruleSetProvider, rules)

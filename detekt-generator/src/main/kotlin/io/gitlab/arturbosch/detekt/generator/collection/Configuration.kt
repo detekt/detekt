@@ -9,25 +9,18 @@ data class Configuration(
 ) {
     fun isDeprecated() = deprecated != null
 
-    fun isDefaultValueNonEmptyList() = defaultValue.isNonEmptyYamlList() || defaultValue.isNonEmptyBracketList()
+    fun isDefaultValueNonEmptyList() = defaultValue.isNonEmptyList()
 
     fun getDefaultValueAsList(): List<String> {
-        return when {
-            defaultValue.isNonEmptyYamlList() -> defaultValue.toListFromYamlList()
-            defaultValue.isNonEmptyBracketList() -> defaultValue.toListFromBracketList()
-            else -> error("default value '$defaultValue' is not a list")
-        }
+        return if (defaultValue.isNonEmptyList())
+            defaultValue.toList()
+        else
+            error("default value '$defaultValue' is not a list")
     }
 
-    private fun String.isNonEmptyYamlList() = trim().startsWith("- ")
-    private fun String.toListFromYamlList(): List<String> =
-        split("\n")
-            .map { it.replace("-", "") }
-            .map { it.trim() }
+    private fun String.isNonEmptyList(): Boolean = NON_EMPTY_LIST_REGEX.matchEntire(this) != null
 
-    private fun String.isNonEmptyBracketList(): Boolean = NON_EMPTY_BRACKET_LIST_REGEX.matchEntire(this) != null
-
-    private fun String.toListFromBracketList(): List<String> =
+    private fun String.toList(): List<String> =
         trim()
             .removePrefix("[")
             .removeSuffix("]")
@@ -35,6 +28,6 @@ data class Configuration(
             .map { it.trim().removeSurrounding("'") }
 
     companion object {
-        private val NON_EMPTY_BRACKET_LIST_REGEX = Regex("""\[.*[\S]+.*]""")
+        private val NON_EMPTY_LIST_REGEX = Regex("""\[.*[\S]+.*]""")
     }
 }
