@@ -18,6 +18,14 @@ class DetektYmlConfigSpec : Spek({
             ).assert()
         }
 
+        it("coroutinesSection") {
+            ConfigAssert(
+                config,
+                "coroutines",
+                "io.gitlab.arturbosch.detekt.rules.coroutines"
+            ).assert()
+        }
+
         it("documentationSection") {
             ConfigAssert(
                 config,
@@ -39,6 +47,14 @@ class DetektYmlConfigSpec : Spek({
                 config,
                 "exceptions",
                 "io.gitlab.arturbosch.detekt.rules.exceptions"
+            ).assert()
+        }
+
+        it("namingSection") {
+            ConfigAssert(
+                config,
+                "naming",
+                "io.gitlab.arturbosch.detekt.rules.naming"
             ).assert()
         }
 
