@@ -378,6 +378,43 @@ object DetektAndroidTest : Spek({
                 }
             }
         }
+
+        describe("android tasks have javac intermediates on classpath") {
+            val projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 0,
+            ).apply {
+                addSubmodule(
+                    name = "app",
+                    numberOfSourceFilesPerSourceDir = 0,
+                    numberOfCodeSmells = 0,
+                    buildFileContent = """
+                        $APP_PLUGIN_BLOCK
+                        $ANDROID_BLOCK_WITH_VIEW_BINDING
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf("src/main/java"),
+                )
+            }
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = false)
+
+            gradleRunner.projectFile("app/src/main/java").mkdirs()
+            gradleRunner.projectFile("app/src/main/res/layout").mkdirs()
+            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("app/src/main/res/layout/activity_sample.xml", SAMPLE_ACTIVITY_LAYOUT)
+            gradleRunner.writeProjectFile("app/src/main/java/SampleActivity.kt", SAMPLE_ACTIVITY_USING_VIEW_BINDING)
+
+            it("task :app:detektMain has javac intermediates on the classpath") {
+                gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
+                    assertThat(buildResult.output).doesNotContain("error: unresolved reference: databinding")
+                }
+            }
+
+            it("task :app:detektTest has javac intermediates on the classpath") {
+                gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
+                    assertThat(buildResult.output).doesNotContain("error: unresolved reference: databinding")
+                }
+            }
+        }
     }
 })
 
@@ -439,6 +476,19 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
     }
 """.trimIndent()
 
+private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
+    android {
+        compileSdkVersion = 30
+        defaultConfig {
+            applicationId = "io.gitlab.arturbosch.detekt.app"
+            minSdkVersion = 24
+        }
+        buildFeatures {
+            viewBinding = true
+        }
+    }
+""".trimIndent()
+
 private val DETEKT_BLOCK = """
     detekt {
         reports {
@@ -447,7 +497,39 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
-private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = DslGradleRunner(
+private val SAMPLE_ACTIVITY_LAYOUT = """
+    <?xml version="1.0" encoding="utf-8"?>
+    <View
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sample_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+""".trimIndent()
+
+private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
+    package io.gitlab.arturbosch.detekt.app
+    
+    import android.app.Activity
+    import android.os.Bundle
+    import android.view.LayoutInflater
+    import io.gitlab.arturbosch.detekt.app.databinding.ActivitySampleBinding
+    
+    class SampleActivity : Activity() {
+    
+        private lateinit var binding: ActivitySampleBinding
+    
+        override fun onCreate(savedInstanceState: Bundle?) {
+            binding = ActivitySampleBinding.inflate(LayoutInflater.from(this))
+            setContentView(binding.root)
+        }
+    }
+""".trimIndent() + "\n" // new line at end of file rule
+
+private fun createGradleRunnerAndSetupProject(
+    projectLayout: ProjectLayout,
+    dryRun: Boolean = true,
+) = DslGradleRunner(
     projectLayout = projectLayout,
     buildFileName = "build.gradle",
     mainBuildFileContent = """
@@ -459,5 +541,5 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = Ds
             }
         }
     """.trimIndent(),
-    dryRun = true
+    dryRun = dryRun,
 ).also { it.setupProject() }
