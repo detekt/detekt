@@ -134,9 +134,7 @@ internal class DetektAndroid(private val project: Project) {
             classpath.apply {
                 setFrom(variant.getCompileClasspath(null).filter { it.exists() })
                 from(bootClasspath)
-                from(intermediatesJavaCJar.map { task ->
-                    task.destinationDirectory.asFileTree.matching { it.include("*.jar") }
-                })
+                from(intermediatesJavaCJar.map { it.destinationDirectory.asFileTree })
             }
             dependsOn(intermediatesJavaCJar)
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
@@ -163,9 +161,7 @@ internal class DetektAndroid(private val project: Project) {
             classpath.apply {
                 setFrom(variant.getCompileClasspath(null).filter { it.exists() })
                 from(bootClasspath)
-                from(intermediatesJavaCJar.map { task ->
-                    task.destinationDirectory.asFileTree.matching { it.include("*.jar") }
-                })
+                from(intermediatesJavaCJar.map { it.destinationDirectory.asFileTree })
             }
             dependsOn(intermediatesJavaCJar)
             val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
