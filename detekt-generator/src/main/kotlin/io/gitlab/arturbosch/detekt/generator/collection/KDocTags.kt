@@ -15,6 +15,8 @@ fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection(
 
 fun KtClassOrObject.hasKDocTag(tagName: String) = kDocSection()?.findTagByName(tagName) != null
 
+fun KtClassOrObject.hasConfigurationKDocTag() = hasKDocTag(TAG_CONFIGURATION)
+
 private fun KDocTag.parseConfigTag(): Configuration {
     val content: String = getContent()
     val delimiterIndex = content.indexOf('-')
