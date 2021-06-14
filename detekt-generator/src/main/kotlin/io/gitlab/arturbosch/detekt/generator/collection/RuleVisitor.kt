@@ -83,7 +83,7 @@ internal class RuleVisitor : DetektVisitor() {
             return
         }
 
-        name = classOrObject.name?.trim() ?: error("Unable to determine rule name.")
+        name = checkNotNull(classOrObject.name?.trim()) { "Unable to determine rule name." }
 
         // Use unparsed KDoc text here to check for tabs
         // Parsed [KDocSection] element contains no tabs
