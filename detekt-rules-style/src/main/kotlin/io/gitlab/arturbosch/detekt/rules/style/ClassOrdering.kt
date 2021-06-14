@@ -105,9 +105,8 @@ private fun KtDeclaration.toSection(): Section? = when {
     else -> null // For declarations not relevant for ordering, such as nested classes.
 }
 
-@JvmInline
 @Suppress("MagicNumber")
-private value class Section(val priority: Int) : Comparable<Section> {
+private class Section(val priority: Int) : Comparable<Section> {
 
     init {
         require(priority in 0..3)
