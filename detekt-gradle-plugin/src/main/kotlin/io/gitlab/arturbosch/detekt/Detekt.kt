@@ -159,7 +159,7 @@ open class Detekt @Inject constructor(
         set(value) = basePathProp.set(value)
 
     @get:Internal
-    var reports = DetektReports()
+    var reports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
@@ -187,7 +187,7 @@ open class Detekt @Inject constructor(
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
         @Optional
-        get() = objects.fileCollection().from(reports.custom.mapNotNull { it.destination })
+        get() = objects.fileCollection().from(reports.custom.mapNotNull { it.outputLocation.asFile.orNull })
 
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
@@ -249,7 +249,7 @@ open class Detekt @Inject constructor(
 
     private fun convertCustomReportsToArguments(): List<CustomReportArgument> = reports.custom.map {
         val reportId = it.reportId
-        val destination = it.destination
+        val destination = it.outputLocation.asFile.orNull
 
         checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
         check(!DetektReportType.isWellKnownReportId(reportId)) {
@@ -264,10 +264,10 @@ open class Detekt @Inject constructor(
     private fun getTargetFileProvider(
         report: DetektReport
     ): RegularFileProperty {
-        val isEnabled = report.enabled ?: DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+        val isEnabled = report.required.getOrElse(DetektExtension.DEFAULT_REPORT_ENABLED_VALUE)
         val provider = objects.fileProperty()
         if (isEnabled) {
-            val destination = report.destination ?: reportsDir.getOrElse(defaultReportsDir.asFile)
+            val destination = report.outputLocation.asFile.orNull ?: reportsDir.getOrElse(defaultReportsDir.asFile)
                 .resolve("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
             provider.set(destination)
         }

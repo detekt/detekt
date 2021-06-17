@@ -170,11 +170,6 @@ internal object DetektTaskDslTest : Spek({
                         val config = """
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
-                        |    reports {
-                        |        sarif {
-                        |            enabled = true
-                        |        }
-                        |    }
                         |}
                         """
 
@@ -212,6 +207,9 @@ internal object DetektTaskDslTest : Spek({
                         val config = """
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
+                        |}
+                        |
+                        |tasks.detekt {
                         |    reports {
                         |        xml.destination = file("build/xml-reports/custom-detekt.xml")
                         |    }
@@ -245,7 +243,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
 
                         val config = """
-                        |detekt {
+                        |tasks.detekt {
                         |    reports {
                         |        xml.enabled = false
                         |        html {
@@ -277,7 +275,7 @@ internal object DetektTaskDslTest : Spek({
                         beforeGroup {
 
                             val config = """
-                                |detekt {
+                                |tasks.detekt {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "customXml"
@@ -310,7 +308,7 @@ internal object DetektTaskDslTest : Spek({
                         beforeGroup {
 
                             val config = """
-                                |detekt {
+                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                 |    reports {
                                 |        custom {
                                 |           destination = file("build/reports/custom.xml")
@@ -331,7 +329,7 @@ internal object DetektTaskDslTest : Spek({
                         beforeGroup {
 
                             val config = """
-                                |detekt {
+                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "customJson"
@@ -354,7 +352,7 @@ internal object DetektTaskDslTest : Spek({
                             val aDirectory = "\${rootDir}/src"
 
                             val config = """
-                                |detekt {
+                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "foo"
@@ -378,7 +376,7 @@ internal object DetektTaskDslTest : Spek({
                                 beforeGroup {
 
                                     val config = """
-                                        |detekt {
+                                        |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                         |    reports {
                                         |        custom {
                                         |            reportId = "${wellKnownType.reportId}"

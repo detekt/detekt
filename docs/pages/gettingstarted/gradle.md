@@ -17,7 +17,7 @@ Detekt requires **Gradle 6.1** or higher. We, however, recommend using the versi
 The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
-`detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
+`detekt` closure. By default, the standard rule set without any ignore list is executed on sources files located
  in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html, txt, and sarif format and can be 
  found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively. Please note that the `detekt` task is automatically 
  run when executing `gradle check`.
@@ -236,34 +236,6 @@ detekt {
     // Specify the base path for file paths in the formatted reports. 
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
-    
-    reports {
-        // Enable/Disable XML report (default: true)
-        xml {
-            enabled = true                                
-            destination = file("build/reports/detekt.xml")
-        }
-        // Enable/Disable HTML report (default: true)
-        html {
-            enabled = true
-            destination = file("build/reports/detekt.html")
-        }
-        // Enable/Disable TXT report (default: true)
-        txt {
-            enabled = true                                
-            destination = file("build/reports/detekt.txt")
-        }
-        // Enable/Disable SARIF report (default: false)
-        sarif {
-            enabled = true                                
-            destination = file("build/reports/detekt.sarif")
-        }
-        custom {
-            // The simple class name of your custom report.
-            reportId = "CustomJsonReport"                   
-            destination = file("build/reports/detekt.json")
-        }
-    }
 }
 ```
 
@@ -319,32 +291,36 @@ detekt {
     // Specify the base path for file paths in the formatted reports. 
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
-    
+}
+```
+
+### Reports
+
+Report output can be customized for each task. The DSL is the same in both Groovy and Kotlin:
+
+```kotlin
+tasks.named("detekt").configure {
     reports {
         // Enable/Disable XML report (default: true)
-        xml {
-            enabled = true
-            destination = file("build/reports/detekt.xml")
-        }
+        xml.required.set(true)
+        xml.outputLocation.set(file("build/reports/detekt.xml"))
+
         // Enable/Disable HTML report (default: true)
-        html {
-            enabled = true
-            destination = file("build/reports/detekt.html")
-        }
+        html.required.set(true)
+        html.outputLocation.set(file("build/reports/detekt.html"))
+
         // Enable/Disable TXT report (default: true)
-        txt {
-            enabled = true
-            destination = file("build/reports/detekt.txt")
-        }
+        txt.required.set(true)
+        txt.outputLocation.set(file("build/reports/detekt.txt"))
+
         // Enable/Disable SARIF report (default: false)
-        sarif {
-            enabled = true                                
-            destination = file("build/reports/detekt.sarif")
-        }
+        sarif.required.set(true)
+        sarif.outputLocation.set(file("build/reports/detekt.sarif"))
+
         custom {
             // The simple class name of your custom report.
             reportId = "CustomJsonReport"
-            destination = file("build/reports/detekt.json")
+            outputLocation.set(file("build/reports/detekt.json"))
         }
     }
 }

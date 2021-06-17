@@ -116,11 +116,34 @@ internal class DetektAndroid(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-            reports = extension.reports
-            reports.xml.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".xml"))
-            reports.html.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".html"))
-            reports.txt.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".txt"))
-            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".sarif"))
+            reports.xml.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, variant.name + ".xml").absolutePath
+                    }
+                )
+            )
+            reports.html.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, variant.name + ".html").absolutePath
+                    }
+                )
+            )
+            reports.txt.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, variant.name + ".txt").absolutePath
+                    }
+                )
+            )
+            reports.sarif.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, variant.name + ".sarif").absolutePath
+                    }
+                )
+            )
             description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
         }
 

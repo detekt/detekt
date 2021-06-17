@@ -23,7 +23,7 @@ object DetektAndroidTest : Spek({
                     buildFileContent = """
                         $APP_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                     baselineFiles = listOf(
@@ -92,7 +92,7 @@ object DetektAndroidTest : Spek({
                     buildFileContent = """
                         $APP_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
@@ -127,7 +127,7 @@ object DetektAndroidTest : Spek({
                     buildFileContent = """
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                     baselineFiles = listOf(
@@ -197,7 +197,7 @@ object DetektAndroidTest : Spek({
                     buildFileContent = """
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_FLAVOR
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
@@ -439,8 +439,8 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
     }
 """.trimIndent()
 
-private val DETEKT_BLOCK = """
-    detekt {
+private val DETEKT_REPORTS_BLOCK = """
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
         reports {
             txt.enabled = false
         }
