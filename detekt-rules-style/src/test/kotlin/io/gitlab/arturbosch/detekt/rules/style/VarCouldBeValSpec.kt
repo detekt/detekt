@@ -85,7 +85,7 @@ class VarCouldBeValSpec : Spek({
             val code = """
             fun test() {
                 var a = 1
-                something(a)
+                println(a)
             }
             """
             val findings = subject.compileAndLintWithContext(env, code)
