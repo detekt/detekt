@@ -1,12 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class VarCouldBeValSpec : Spek({
+    setupKotlinEnvironment()
 
+    val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { VarCouldBeVal() }
 
     describe("local declarations in functions") {
@@ -18,7 +23,7 @@ class VarCouldBeValSpec : Spek({
                 a = 2
             }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report variables that are re-assigned with assignment operator") {
@@ -28,7 +33,7 @@ class VarCouldBeValSpec : Spek({
                 a += 2
             }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report variables that are re-assigned with postfix operators") {
@@ -38,7 +43,7 @@ class VarCouldBeValSpec : Spek({
                 a++
             }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report variables that are re-assigned with infix operators") {
@@ -48,7 +53,7 @@ class VarCouldBeValSpec : Spek({
                 --a
             }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report variables that are re-assigned inside scope functions") {
@@ -60,7 +65,7 @@ class VarCouldBeValSpec : Spek({
                 }
             }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports variables that are not re-assigned, but used in expressions") {
@@ -70,7 +75,7 @@ class VarCouldBeValSpec : Spek({
                 val b = a + 2
             }
             """
-            val findings = subject.lint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
@@ -83,7 +88,7 @@ class VarCouldBeValSpec : Spek({
                 something(a)
             }
             """
-            val findings = subject.lint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
@@ -99,7 +104,7 @@ class VarCouldBeValSpec : Spek({
                 }
             }
             """
-            val lint = subject.lint(code)
+            val lint = subject.compileAndLintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
             with(lint[0].entity) {
@@ -119,7 +124,7 @@ class VarCouldBeValSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         it("should not report this-prefixed property") {
@@ -131,7 +136,7 @@ class VarCouldBeValSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should report unused local variable") {
@@ -144,11 +149,34 @@ class VarCouldBeValSpec : Spek({
                     }
                 }
             """
-            with(subject.lint(code)[0]) {
-                // we accept wrong entity reporting here due to no type resolution
-                // false reporting with shadowed vars vs false positives
-                assertThat(entity.ktElement?.text).isEqualTo("private var myVar: String? = null")
+            with(subject.compileAndLintWithContext(env, code)[0]) {
+                assertThat(entity.ktElement?.text).isEqualTo("var myVar = value")
             }
+        }
+    }
+
+    describe("properties defined in anonymous object - #3805") {
+        it("should report unassigned properties") {
+            val code = """
+                fun test() {
+                    val wrapper = object {
+                        var test: Boolean = true
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("should not report assigned properties") {
+            val code = """
+                fun test() {
+                    val wrapper = object {
+                        var test: Boolean = true
+                    }
+                    wrapper.test = false
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })
