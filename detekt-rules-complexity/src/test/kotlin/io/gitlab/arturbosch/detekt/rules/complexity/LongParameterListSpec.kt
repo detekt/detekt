@@ -102,7 +102,8 @@ class LongParameterListSpec : Spek({
                         "ignoreAnnotated" to listOf(
                             "Generated",
                             "kotlin.Deprecated",
-                            "kotlin.jvm.JvmName"
+                            "kotlin.jvm.JvmName",
+                            "kotlin.Suppress"
                         ),
                         "functionThreshold" to 1,
                         "constructorThreshold" to 1
@@ -160,14 +161,34 @@ class LongParameterListSpec : Spek({
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
+            it("reports long parameter list for constructors if constructor parameters are annotated with annotation that is not ignored") {
+                val code = """
+                    @Target(AnnotationTarget.VALUE_PARAMETER)
+                    annotation class CustomAnnotation
+
+                    class Data constructor(@CustomAnnotation val a: Int)
+                """
+                assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports long parameter list for functions if enough function parameters are annotated with annotation that is not ignored") {
+                val code = """
+                    @Target(AnnotationTarget.VALUE_PARAMETER)
+                    annotation class CustomAnnotation
+
+                    class Data { fun foo(@CustomAnnotation a: Int) {} }
+                """
+                assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+
             it("does not report long parameter list for constructors if enough constructor parameters are annotated with ignored annotation") {
-                val code = "class Data constructor(@kotlin.Deprecated(message = \"\") val a: Int)"
+                val code = "class Data constructor(@kotlin.Suppress(\"\") val a: Int)"
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
             it("does not report long parameter list for functions if enough function parameters are annotated with ignored annotation") {
                 val code = """class Data {
-                    fun foo(@kotlin.Deprecated(message = "") a: Int) {} }
+                    fun foo(@kotlin.Suppress("") a: Int) {} }
                 """
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
