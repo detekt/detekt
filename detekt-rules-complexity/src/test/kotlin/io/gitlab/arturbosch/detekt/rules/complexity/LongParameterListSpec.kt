@@ -159,6 +159,18 @@ class LongParameterListSpec : Spek({
                 """
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report long parameter list for constructors if enough constructor parameters are annotated with ignored annotation") {
+                val code = "class Data constructor(@kotlin.Deprecated(message = \"\") val a: Int)"
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report long parameter list for functions if enough function parameters are annotated with ignored annotation") {
+                val code = """class Data {
+                    fun foo(@kotlin.Deprecated(message = "") a: Int) {} }
+                """
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
         }
     }
 })
