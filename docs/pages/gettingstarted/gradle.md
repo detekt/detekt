@@ -18,9 +18,9 @@ The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 `detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
- in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html, txt, and sarif format and can be 
- found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively. Please note that the `detekt` task is automatically 
- run when executing `gradle check`.
+ in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`. Reports are automatically generated in xml,
+ html, txt, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively.
+ Please note that the `detekt` task is automatically run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 
@@ -190,7 +190,7 @@ detekt {
     toolVersion = "{{ site.detekt_version }}"
     
     // The directories where detekt looks for source files. 
-    // Defaults to `files("src/main/java", "src/main/kotlin")`.
+    // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
     input = files(
         "src/main/kotlin",
         "gensrc/main/kotlin"
@@ -276,7 +276,7 @@ detekt {
     toolVersion = "{{ site.detekt_version }}"
     
     // The directories where detekt looks for source files. 
-    // Defaults to `files("src/main/java", "src/main/kotlin")`.
+    // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
     input = files("src/main/java", "src/main/kotlin")     
     
     // Builds the AST in parallel. Rules are always executed in parallel. 
