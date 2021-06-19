@@ -222,6 +222,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Vinicius Montes Munhoz](https://github.com/vfmunhoz) - Documentation improvement
 - [Eliezer Graber](https://github.com/eygraber) - Rule fix: ModifierOrder
 - [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
+- [Andre Paz](https://github.com/andrepaz) - Rule improvement: LongParameterList
 
 ### Mentions
 
