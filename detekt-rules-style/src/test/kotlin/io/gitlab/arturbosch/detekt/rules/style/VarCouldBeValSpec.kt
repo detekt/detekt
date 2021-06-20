@@ -178,5 +178,22 @@ class VarCouldBeValSpec : Spek({
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        it("should not report assigned properties that have accessors") {
+            val code = """
+                interface I {
+                    var optionEnabled: Boolean
+                }
+                fun test(i: Int) {
+                    val o = object: I {
+                        override var optionEnabled: Boolean = false
+                            get() = i == 1
+                            set(value) { field = i != 1 && value }
+                    }
+                    o.optionEnabled = false
+                }
+           """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
     }
 })
