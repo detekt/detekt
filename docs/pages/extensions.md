@@ -21,7 +21,7 @@ The easiest way to define a rule set is to clone the provided **detekt-sample-ex
 
 Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
 A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
-To allow your rule to be configurable, pass it a Config object from within your rule set provider.  
+To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
 An `Issue` property defines what ID, severity and message should be printed on the console or on any other output format.
 
 Example of a custom rule:
@@ -87,11 +87,14 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
 }
 ```
 
-If you want your rule to be configurable, write down your properties inside the detekt.yml file:
+If you want your rule to be configurable, write down your properties inside the detekt.yml file.
+Please note that this will only take effect, if the Config object is passed on by the RuleSetProvider
+the the rule itself.
 
 ```yaml
 MyRuleSet:
   TooManyFunctions2:
+    active: true
     threshold: 10
   OtherRule:
     active: false
@@ -223,9 +226,9 @@ dependencies {
 
 ##### Pitfalls
 
-- By default all rules not annotated with `@ActiveByDefault` are disabled.
-That means your custom rules are also disabled if you have not explicitly enabled
-them in the `detekt` yaml configuration file.
+- All rules are disabled by default and have to be explicitly enabled in the `detekt` yaml configuration file.
+- If you do not pass the Config object from the rule set provider to the rule, the rule is active but you will not be able to use
+any configuration options or disable the rule via config file.
 - If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this
 subproject is build before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
