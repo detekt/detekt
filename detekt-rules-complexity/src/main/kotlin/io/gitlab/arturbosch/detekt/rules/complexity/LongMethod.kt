@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -38,6 +39,9 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of lines in a method to trigger the rule")
     private val threshold: Int by config(defaultValue = 60)
 
+    @Configuration("ignore long methods in the context of these annotation class names")
+    private val ignoreAnnotated: List<String> by config(listOf("Composable"))
+
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
     private val nestedFunctionTracking = IdentityHashMap<KtNamedFunction, HashSet<KtNamedFunction>>()
@@ -57,6 +61,8 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
         }
         for ((function, lines) in functionToLines) {
             if (lines >= threshold) {
+                val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
+                if (annotationExcluder.shouldExclude(function.annotationEntries)) continue
                 report(
                     ThresholdedCodeSmell(
                         issue,

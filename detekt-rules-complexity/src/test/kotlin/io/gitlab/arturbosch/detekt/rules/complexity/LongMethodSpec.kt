@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -148,6 +149,46 @@ class LongMethodSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations("nestedLongMethod")
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
+        }
+    }
+
+    describe("annotated functions") {
+        val code = """
+                annotation class Composable
+                annotation class TestAnn
+
+                fun foo() {
+                    println()
+                    println()
+                }
+
+                @Composable
+                fun bar() {
+                    println()
+                    println()
+                }
+
+                @TestAnn
+                fun baz() {
+                    println()
+                    println()
+                }
+            """
+
+        it("ignores default annotated functions") {
+            val config = TestConfig(mapOf("threshold" to 2))
+            assertThat(LongMethod(config).compileAndLint(code)).hasSourceLocations(
+                SourceLocation(4, 5),
+                SourceLocation(16, 5)
+            )
+        }
+
+        it("ignores annotated functions if ignoreAnnotated includes the given annotation class") {
+            val config = TestConfig(mapOf("threshold" to 2, "ignoreAnnotated" to listOf("TestAnn")))
+            assertThat(LongMethod(config).compileAndLint(code)).hasSourceLocations(
+                SourceLocation(4, 5),
+                SourceLocation(10, 5)
+            )
         }
     }
 })
