@@ -61,8 +61,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
         }
         for ((function, lines) in functionToLines) {
             if (lines >= threshold) {
-                val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
-                if (annotationExcluder.shouldExclude(function.annotationEntries)) continue
                 report(
                     ThresholdedCodeSmell(
                         issue,
@@ -77,6 +75,9 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
+        if (annotationExcluder.shouldExclude(function.annotationEntries)) return
+
         val parentMethods = function.getStrictParentOfType<KtNamedFunction>()
         val bodyEntity = function.bodyBlockExpression ?: function.bodyExpression
         val lines = (if (parentMethods != null) function else bodyEntity)?.linesOfCode() ?: 0
