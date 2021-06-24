@@ -40,7 +40,7 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     private val threshold: Int by config(defaultValue = 60)
 
     @Configuration("ignore long methods in the context of these annotation class names")
-    private val ignoreAnnotated: List<String> by config(listOf("Composable"))
+    private val ignoreAnnotated: List<String> by config(emptyList())
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()

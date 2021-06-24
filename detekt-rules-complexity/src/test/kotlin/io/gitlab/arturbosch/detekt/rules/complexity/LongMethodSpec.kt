@@ -175,19 +175,20 @@ class LongMethodSpec : Spek({
                 }
             """
 
-        it("ignores default annotated functions") {
+        it("does not ignore annotated functions if ignoreAnnotated is empty") {
             val config = TestConfig(mapOf("threshold" to 2))
             assertThat(LongMethod(config).compileAndLint(code)).hasSourceLocations(
                 SourceLocation(4, 5),
+                SourceLocation(10, 5),
                 SourceLocation(16, 5)
             )
         }
 
         it("ignores annotated functions if ignoreAnnotated includes the given annotation class") {
-            val config = TestConfig(mapOf("threshold" to 2, "ignoreAnnotated" to listOf("TestAnn")))
+            val config = TestConfig(mapOf("threshold" to 2, "ignoreAnnotated" to listOf("Composable")))
             assertThat(LongMethod(config).compileAndLint(code)).hasSourceLocations(
                 SourceLocation(4, 5),
-                SourceLocation(10, 5)
+                SourceLocation(16, 5)
             )
         }
     }
