@@ -26,7 +26,7 @@ An `Issue` property defines what ID, severity and message should be printed on t
 
 Example of a custom rule:
 ```kotlin
-class TooManyFunctions : Rule() {
+class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
         Severity.CodeSmell,
