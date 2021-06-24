@@ -479,11 +479,11 @@ has as content the fully qualified name of your <code class="language-plaintext 
 
 <p>Own rules have to extend the abstract <em>Rule</em> class and override the <code class="language-plaintext highlighter-rouge">visitXXX()</code>-functions from the AST.<br />
 A <code class="language-plaintext highlighter-rouge">RuleSetProvider</code> must be implemented, which declares a <code class="language-plaintext highlighter-rouge">RuleSet</code> in the <code class="language-plaintext highlighter-rouge">instance()</code>-function.
-To allow your rule to be configurable, pass it a Config object from within your rule set provider.<br />
+To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
 An <code class="language-plaintext highlighter-rouge">Issue</code> property defines what ID, severity and message should be printed on the console or on any other output format.</p>
 
 <p>Example of a custom rule:</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">TooManyFunctions</span> <span class="p">:</span> <span class="nc">Rule</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">TooManyFunctions</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nc">Config</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Rule</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="k">override</span> <span class="kd">val</span> <span class="py">issue</span> <span class="p">=</span> <span class="nc">Issue</span><span class="p">(</span><span class="n">javaClass</span><span class="p">.</span><span class="n">simpleName</span><span class="p">,</span>
         <span class="nc">Severity</span><span class="p">.</span><span class="nc">CodeSmell</span><span class="p">,</span>
@@ -543,10 +543,13 @@ An <code class="language-plaintext highlighter-rouge">Issue</code> property defi
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>If you want your rule to be configurable, write down your properties inside the detekt.yml file:</p>
+<p>If you want your rule to be configurable, write down your properties inside the detekt.yml file.
+Please note that this will only take effect, if the <code class="language-plaintext highlighter-rouge">Config</code> object is passed on by the <code class="language-plaintext highlighter-rouge">RuleSetProvider</code>
+to the rule itself.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">MyRuleSet</span><span class="pi">:</span>
   <span class="na">TooManyFunctions2</span><span class="pi">:</span>
+    <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
     <span class="na">threshold</span><span class="pi">:</span> <span class="m">10</span>
   <span class="na">OtherRule</span><span class="pi">:</span>
     <span class="na">active</span><span class="pi">:</span> <span class="no">false</span>
@@ -676,9 +679,9 @@ To enable it, we add the published dependency to <code class="language-plaintext
 <h5 id="pitfalls">Pitfalls</h5>
 
 <ul>
-  <li>By default all rules not annotated with <code class="language-plaintext highlighter-rouge">@ActiveByDefault</code> are disabled.
-That means your custom rules are also disabled if you have not explicitly enabled
-them in the <code class="language-plaintext highlighter-rouge">detekt</code> yaml configuration file.</li>
+  <li>All rules are disabled by default and have to be explicitly enabled in the <code class="language-plaintext highlighter-rouge">detekt</code> yaml configuration file.</li>
+  <li>If you do not pass the <code class="language-plaintext highlighter-rouge">Config</code> object from the <code class="language-plaintext highlighter-rouge">RuleSetProvider</code> to the rule, the rule is active, but you will not be able to use
+any configuration options or disable the rule via config file.</li>
   <li>If your extension is part of your project and you integrate it like <code class="language-plaintext highlighter-rouge">detektPlugins project(":my-rules")</code> make sure that this
 subproject is build before <code class="language-plaintext highlighter-rouge">gradle detekt</code> is run.
 In the <code class="language-plaintext highlighter-rouge">kotlin-dsl</code> you could add something like <code class="language-plaintext highlighter-rouge">tasks.withType&lt;Detekt&gt; { dependsOn(":my-rules:assemble") }</code> to explicitly run <code class="language-plaintext highlighter-rouge">detekt</code> only 
