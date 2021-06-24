@@ -46,6 +46,8 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
     private val nestedFunctionTracking = IdentityHashMap<KtNamedFunction, HashSet<KtNamedFunction>>()
 
+    private lateinit var annotationExcluder: AnnotationExcluder
+
     override fun preVisit(root: KtFile) {
         functionToLinesCache.clear()
         functionToBodyLinesCache.clear()
@@ -75,7 +77,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
         if (annotationExcluder.shouldExclude(function.annotationEntries)) return
 
         val parentMethods = function.getStrictParentOfType<KtNamedFunction>()
@@ -89,6 +90,11 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
             .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
             .takeIf { it > 0 }
             ?.let { functionToLinesCache[function] = lines - it }
+    }
+
+    override fun visitKtFile(file: KtFile) {
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated)
+        super.visitKtFile(file)
     }
 
     private fun findAllNestedFunctions(startFunction: KtNamedFunction): Sequence<KtNamedFunction> = sequence {
