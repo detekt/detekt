@@ -114,19 +114,13 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
                 val refName = (typeReference.typeElement as? KtUserType)?.referencedName ?: typeReference.text
                 refName == klass.name
             }
-            function.bodyExpression !is KtBlockExpression -> {
-                val functionDescriptor = function.descriptor() as? FunctionDescriptor
-                functionDescriptor?.returnType?.constructor?.declarationDescriptor == klass.descriptor()
+            function.bodyExpression !is KtBlockExpression && bindingContext != BindingContext.EMPTY -> {
+                val functionDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, function]
+                        as? FunctionDescriptor
+                val classDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass]
+                functionDescriptor?.returnType?.constructor?.declarationDescriptor == classDescriptor
             }
             else -> false
-        }
-    }
-
-    private fun KtDeclaration.descriptor(): DeclarationDescriptor? {
-        return if (bindingContext == BindingContext.EMPTY) {
-            null
-        } else {
-            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
         }
     }
 }
