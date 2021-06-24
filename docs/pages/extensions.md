@@ -89,7 +89,7 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
 
 If you want your rule to be configurable, write down your properties inside the detekt.yml file.
 Please note that this will only take effect, if the Config object is passed on by the RuleSetProvider
-the the rule itself.
+to the rule itself.
 
 ```yaml
 MyRuleSet:
