@@ -47,24 +47,22 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
     private var properties = mutableListOf<KtProperty>()
-
-    override fun visitProperty(property: KtProperty) {
-        if (property.isLateinit()) {
-            properties.add(property)
-        }
-    }
+    private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visit(root: KtFile) {
-        properties = mutableListOf()
-
         super.visit(root)
-
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
-
+        properties = mutableListOf()
+        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
             .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
             .forEach {
                 report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
             }
+    }
+
+    override fun visitProperty(property: KtProperty) {
+        if (property.isLateinit()) {
+            properties.add(property)
+        }
     }
 }

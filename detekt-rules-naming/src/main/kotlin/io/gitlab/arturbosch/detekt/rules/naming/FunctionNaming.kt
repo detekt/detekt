@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -44,10 +45,17 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignore naming for functions in the context of these annotation class names")
     private val ignoreAnnotated: List<String> by config(emptyList())
 
+    private lateinit var annotationExcluder: AnnotationExcluder
+
+    override fun visitKtFile(file: KtFile) {
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated)
+        super.visitKtFile(file)
+    }
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
-        if (ignoreOverridden && function.isOverride() || shouldAnnotatedFunctionBeExcluded(function)) {
+        if (ignoreOverridden && function.isOverride() || annotationExcluder.shouldExclude(function.annotationEntries)) {
             return
         }
 
@@ -64,11 +72,6 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
-    }
-
-    private fun shouldAnnotatedFunctionBeExcluded(function: KtNamedFunction): Boolean {
-        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
-        return annotationExcluder.shouldExclude(function.annotationEntries)
     }
 
     companion object {

@@ -64,14 +64,16 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 
+    private lateinit var annotationExcluder: AnnotationExcluder
+
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
-        root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
+        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
+        root.forEachDescendantOfType<KtClass> { visitKlass(it) }
     }
 
     @Suppress("ComplexMethod")
-    private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
+    private fun visitKlass(klass: KtClass) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
