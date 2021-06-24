@@ -227,7 +227,7 @@ dependencies {
 ##### Pitfalls
 
 - All rules are disabled by default and have to be explicitly enabled in the `detekt` yaml configuration file.
-- If you do not pass the Config object from the rule set provider to the rule, the rule is active but you will not be able to use
+- If you do not pass the `Config` object from the `RuleSetProvider` to the rule, the rule is active, but you will not be able to use
 any configuration options or disable the rule via config file.
 - If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this
 subproject is build before `gradle detekt` is run.
