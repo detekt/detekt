@@ -12,12 +12,10 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.api.internal.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -115,8 +113,8 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
                 refName == klass.name
             }
             function.bodyExpression !is KtBlockExpression && bindingContext != BindingContext.EMPTY -> {
-                val functionDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, function]
-                        as? FunctionDescriptor
+                val functionDescriptor =
+                    bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, function] as? FunctionDescriptor
                 val classDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass]
                 functionDescriptor?.returnType?.constructor?.declarationDescriptor == classDescriptor
             }
