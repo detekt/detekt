@@ -406,7 +406,7 @@ naming:
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
-    excludes: ['*.kts']
+    excludes: ['**/*.kts']
     rootPackage: ''
   MatchingDeclarationName:
     active: true
