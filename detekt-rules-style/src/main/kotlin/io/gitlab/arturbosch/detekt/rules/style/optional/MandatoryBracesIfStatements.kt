@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtWhenCondition
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 private const val DESCRIPTION = "Multi-line if statement was found that does not have braces. " +
@@ -56,5 +58,6 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     private fun KtIfExpression.isNotBlockOrIfExpression(): Boolean =
         this.`else` != null &&
             this.`else` !is KtIfExpression &&
-            this.`else` !is KtBlockExpression
+            this.`else` !is KtBlockExpression &&
+            this.`else` !is KtWhenExpression
 }
