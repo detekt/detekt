@@ -55,8 +55,4 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun String.startsWithHtmlTag() = startsWith("<") && contains(htmlTag)
-
-    companion object {
-        const val END_OF_SENTENCE_FORMAT = "endOfSentenceFormat"
-    }
 }
