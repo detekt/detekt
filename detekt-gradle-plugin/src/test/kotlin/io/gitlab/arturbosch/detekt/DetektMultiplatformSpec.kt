@@ -9,7 +9,7 @@ import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
 import java.util.concurrent.TimeUnit
 
-class DetektMultiplatformTest : Spek({
+class DetektMultiplatformSpec : Spek({
 
     describe("multiplatform projects - Common target") {
 
