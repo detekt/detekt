@@ -11,8 +11,8 @@ internal class DetektReportMergeSpec : Spek({
 
     describe("Sarif merge is configured correctly for multi module project") {
 
-        val groovy = DslTestBuilder.groovy()
-        val groovyBuildFileContent = """
+        val groovy by memoized { DslTestBuilder.groovy() }
+        val groovyBuildFileContent by memoized { """
             |${groovy.gradlePlugins}
             |
             |allprojects {
@@ -39,9 +39,9 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin()
-        val kotlin = DslTestBuilder.kotlin()
-        val kotlinBuildFileContent = """
+            |""".trimMargin() }
+        val kotlin by memoized { DslTestBuilder.kotlin() }
+        val kotlinBuildFileContent by memoized { """
             |${kotlin.gradlePlugins}
             |
             |allprojects {
@@ -68,13 +68,13 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |""".trimMargin() }
 
-        listOf(
-            groovy to groovyBuildFileContent,
-            kotlin to kotlinBuildFileContent
-        ).forEach { (builder, mainBuildFileContent) ->
-            it("using ${builder.gradleBuildName}") {
+        it("using Groovy and Kotlin") {
+            listOf(
+                groovy to groovyBuildFileContent,
+                kotlin to kotlinBuildFileContent
+            ).forEach { (builder, mainBuildFileContent) ->
                 val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                     addSubmodule(
                         name = "child1",
@@ -105,8 +105,8 @@ internal class DetektReportMergeSpec : Spek({
 
     describe("XML merge is configured correctly for multi module project") {
 
-        val groovy = DslTestBuilder.groovy()
-        val groovyBuildFileContent = """
+        val groovy by memoized { DslTestBuilder.groovy() }
+        val groovyBuildFileContent by memoized { """
             |${groovy.gradlePlugins}
             |
             |allprojects {
@@ -133,9 +133,9 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin()
-        val kotlin = DslTestBuilder.kotlin()
-        val kotlinBuildFileContent = """
+            |""".trimMargin() }
+        val kotlin by memoized { DslTestBuilder.kotlin() }
+        val kotlinBuildFileContent by memoized { """
             |${kotlin.gradlePlugins}
             |
             |allprojects {
@@ -162,13 +162,13 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |""".trimMargin() }
 
-        listOf(
-            groovy to groovyBuildFileContent,
-            kotlin to kotlinBuildFileContent
-        ).forEach { (builder, mainBuildFileContent) ->
-            it("using ${builder.gradleBuildName}") {
+        it("using Groovy and Kotlin") {
+            listOf(
+                groovy to groovyBuildFileContent,
+                kotlin to kotlinBuildFileContent
+            ).forEach { (builder, mainBuildFileContent) ->
                 val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                     addSubmodule(
                         name = "child1",
