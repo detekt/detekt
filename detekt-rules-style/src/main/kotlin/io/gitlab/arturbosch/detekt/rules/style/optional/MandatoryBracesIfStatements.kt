@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
@@ -35,28 +36,26 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue("MandatoryBracesIfStatements", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
+        if (expression.then !is KtBlockExpression && hasNewLine(expression.rightParenthesis)) {
             report(CodeSmell(issue, Entity.from(expression.then ?: expression), DESCRIPTION))
         }
 
-        if (expression.isNotBlockOrIfExpression() && hasNewLine(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(expression.`else` ?: expression), DESCRIPTION))
+        val `else`: KtExpression? = expression.`else`
+        if (`else` != null && hasCorrectElseType(`else`) && hasNewLine(expression.elseKeyword)) {
+            report(CodeSmell(issue, Entity.from(`else`), DESCRIPTION))
         }
 
         super.visitIfExpression(expression)
     }
 
-    private fun hasNewLine(element: PsiElement?): Boolean =
-        element
-            ?.siblings(forward = true, withItself = false)
-            ?.takeWhile { it.text != "else" }
-            ?.firstOrNull { it.textContains('\n') } != null
+    private fun hasNewLine(element: PsiElement?): Boolean {
+        if (element == null) return false
+        return element
+            .siblings(forward = true, withItself = false)
+            .takeWhile { it.text != "else" }
+            .any { it.textContains('\n') }
+    }
 
-    private fun KtIfExpression.isNotBlockExpression(): Boolean = this.then !is KtBlockExpression
-
-    private fun KtIfExpression.isNotBlockOrIfExpression(): Boolean =
-        this.`else` != null &&
-            this.`else` !is KtIfExpression &&
-            this.`else` !is KtBlockExpression &&
-            this.`else` !is KtWhenExpression
+    private fun hasCorrectElseType(expression: KtExpression): Boolean =
+        expression !is KtIfExpression && expression !is KtBlockExpression && expression !is KtWhenExpression
 }
