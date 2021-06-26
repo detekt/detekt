@@ -13,21 +13,23 @@ class DetektMultiplatformSpec : Spek({
 
     describe("multiplatform projects - Common target") {
 
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        jvm()
-                    }
-                    $DETEKT_BLOCK
-                """.trimIndent(),
-                srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
-                baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
-            )
+        val gradleRunner by memoized {
+            setupProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
+                        $KMM_PLUGIN_BLOCK
+                        kotlin {
+                            jvm()
+                        }
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
+                    baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
+                )
+            }
         }
 
         it("configures baseline task") {
@@ -50,22 +52,23 @@ class DetektMultiplatformSpec : Spek({
 
     describe("multiplatform projects - detekt plain only if user opts out") {
 
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        jvm()
-                    }
-                    $DETEKT_BLOCK
-                """.trimIndent(),
-                srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
-            )
+        val gradleRunner by memoized {
+            setupMultiplatformProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
+                        $KMM_PLUGIN_BLOCK
+                        kotlin {
+                            jvm()
+                        }
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
+                )
+            }
         }
-        gradleRunner.writeProjectFile("gradle.properties", "detekt.multiplatform.disabled=true")
 
         it("does not configure baseline task") {
             gradleRunner.runTasksAndExpectFailure(":shared:detektBaselineMetadataMain") { result ->
@@ -81,27 +84,29 @@ class DetektMultiplatformSpec : Spek({
     }
 
     describe("multiplatform projects - JVM target") {
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        jvm("jvmBackend")
-                        jvm("jvmEmbedded")
-                    }
-                    $DETEKT_BLOCK
-                """.trimIndent(),
-                srcDirs = listOf(
-                    "src/commonMain/kotlin",
-                    "src/commonTest/kotlin",
-                    "src/jvmBackendMain/kotlin",
-                    "src/jvmEmbeddedMain/kotlin",
-                ),
-                baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
-            )
+        val gradleRunner by memoized {
+            setupProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
+                        $KMM_PLUGIN_BLOCK
+                        kotlin {
+                            jvm("jvmBackend")
+                            jvm("jvmEmbedded")
+                        }
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/commonTest/kotlin",
+                        "src/jvmBackendMain/kotlin",
+                        "src/jvmEmbeddedMain/kotlin",
+                    ),
+                    baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
+                )
+            }
         }
 
         it("configures baseline task") {
@@ -139,50 +144,48 @@ class DetektMultiplatformSpec : Spek({
         "multiplatform projects - Android target",
         skip = skipIfAndroidEnvironmentRequirementsUnmet()
     ) {
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
-                    plugins {
-                        id "kotlin-multiplatform"
-                        id "com.android.library"
-                        id "io.gitlab.arturbosch.detekt"
-                    }
-                    android {
-                        compileSdkVersion 30
-                        buildTypes {
-                            release {
-                            }
-                            debug {
+        val gradleRunner by memoized {
+            setupAndroidProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
+                        plugins {
+                            id "kotlin-multiplatform"
+                            id "com.android.library"
+                            id "io.gitlab.arturbosch.detekt"
+                        }
+                        android {
+                            compileSdkVersion 30
+                            buildTypes {
+                                release {
+                                }
+                                debug {
+                                }
                             }
                         }
-                    }
-                    kotlin {
-                        android()
-                    }
-                    $DETEKT_BLOCK
-                """.trimIndent(),
-                srcDirs = listOf(
-                    "src/debug/kotlin",
-                    "src/release/kotlin",
-                    "src/androidTest/kotlin",
-                    "src/androidMain/kotlin",
-                    "src/commonMain/kotlin",
-                    "src/commonTest/kotlin"
-                ),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-release.xml"
+                        kotlin {
+                            android()
+                        }
+                        $DETEKT_BLOCK
+                    """.trimIndent(),
+                    srcDirs = listOf(
+                        "src/debug/kotlin",
+                        "src/release/kotlin",
+                        "src/androidTest/kotlin",
+                        "src/androidMain/kotlin",
+                        "src/commonMain/kotlin",
+                        "src/commonTest/kotlin"
+                    ),
+                    baselineFiles = listOf(
+                        "detekt-baseline.xml",
+                        "detekt-baseline-debug.xml",
+                        "detekt-baseline-release.xml"
+                    )
                 )
-            )
+            }
         }
-
-        gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", MANIFEST_CONTENT)
-        gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", MANIFEST_CONTENT)
-        gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", MANIFEST_CONTENT)
 
         it("configures baseline task") {
             gradleRunner.runTasks(":shared:detektBaselineAndroidDebug")
@@ -208,12 +211,13 @@ class DetektMultiplatformSpec : Spek({
     }
 
     describe("multiplatform projects - JS target") {
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
+        val gradleRunner by memoized {
+            setupProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
                         js {
@@ -222,14 +226,15 @@ class DetektMultiplatformSpec : Spek({
                     }
                     $DETEKT_BLOCK
                 """.trimIndent(),
-                srcDirs = listOf(
-                    "src/commonMain/kotlin",
-                    "src/commonTest/kotlin",
-                    "src/jsMain/kotlin",
-                    "src/jsTest/kotlin",
-                ),
-                baselineFiles = listOf("detekt-baseline.xml")
-            )
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/commonTest/kotlin",
+                        "src/jsMain/kotlin",
+                        "src/jsTest/kotlin",
+                    ),
+                    baselineFiles = listOf("detekt-baseline.xml")
+                )
+            }
         }
 
         it("configures baseline task") {
@@ -260,29 +265,31 @@ class DetektMultiplatformSpec : Spek({
         "multiplatform projects - iOS target",
         skip = if (isMacOs() && isXCodeInstalled()) Skip.No else Skip.Yes("XCode is not installed.")
     ) {
-        val gradleRunner = setupProject {
-            addSubmodule(
-                "shared",
-                1,
-                1,
-                buildFileContent = """
+        val gradleRunner by memoized {
+            setupProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
                         ios()
                     }
                     $DETEKT_BLOCK
                 """.trimIndent(),
-                srcDirs = listOf(
-                    "src/commonMain/kotlin",
-                    "src/commonTest/kotlin",
-                    "src/iosArm64Main/kotlin",
-                    "src/iosArm64Test/kotlin",
-                    "src/iosX64Main/kotlin",
-                    "src/iosX64Test/kotlin",
-                    "src/iosMain/kotlin",
-                ),
-                baselineFiles = listOf("detekt-baseline.xml")
-            )
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/commonTest/kotlin",
+                        "src/iosArm64Main/kotlin",
+                        "src/iosArm64Test/kotlin",
+                        "src/iosX64Main/kotlin",
+                        "src/iosX64Test/kotlin",
+                        "src/iosMain/kotlin",
+                    ),
+                    baselineFiles = listOf("detekt-baseline.xml")
+                )
+            }
         }
 
         it("configures baseline task") {
@@ -339,6 +346,20 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
     ).also {
         it.setupProject()
     }
+}
+
+private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
+    val gradleRunner = setupProject { projectLayoutAction() }
+    gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", MANIFEST_CONTENT)
+    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", MANIFEST_CONTENT)
+    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", MANIFEST_CONTENT)
+    return gradleRunner
+}
+
+private fun setupMultiplatformProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
+    val gradleRunner = setupProject { projectLayoutAction() }
+    gradleRunner.writeProjectFile("gradle.properties", "detekt.multiplatform.disabled=true")
+    return gradleRunner
 }
 
 private fun assertDetektWithoutClasspath(buildResult: BuildResult) {
