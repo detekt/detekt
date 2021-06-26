@@ -40,9 +40,9 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
             report(CodeSmell(issue, Entity.from(expression.then ?: expression), DESCRIPTION))
         }
 
-        val `else`: KtExpression? = expression.`else`
-        if (`else` != null && hasCorrectElseType(`else`) && hasNewLine(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(`else`), DESCRIPTION))
+        val elseExpression = expression.`else`
+        if (elseExpression != null && hasCorrectElseType(elseExpression) && hasNewLine(expression.elseKeyword)) {
+            report(CodeSmell(issue, Entity.from(elseExpression), DESCRIPTION))
         }
 
         super.visitIfExpression(expression)
