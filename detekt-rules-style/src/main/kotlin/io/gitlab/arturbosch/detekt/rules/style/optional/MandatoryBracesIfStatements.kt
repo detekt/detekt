@@ -36,19 +36,20 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue("MandatoryBracesIfStatements", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        if (expression.then !is KtBlockExpression && hasNewLine(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(expression.then ?: expression), DESCRIPTION))
+        super.visitIfExpression(expression)
+
+        val thenExpression = expression.then ?: return
+        if (thenExpression !is KtBlockExpression && hasNewLineAfter(expression.rightParenthesis)) {
+            report(CodeSmell(issue, Entity.from(thenExpression), DESCRIPTION))
         }
 
-        val elseExpression = expression.`else`
-        if (elseExpression != null && hasCorrectElseType(elseExpression) && hasNewLine(expression.elseKeyword)) {
+        val elseExpression = expression.`else` ?: return
+        if (mustBeOnSameLine(elseExpression) && hasNewLineAfter(expression.elseKeyword)) {
             report(CodeSmell(issue, Entity.from(elseExpression), DESCRIPTION))
         }
-
-        super.visitIfExpression(expression)
     }
 
-    private fun hasNewLine(element: PsiElement?): Boolean {
+    private fun hasNewLineAfter(element: PsiElement?): Boolean {
         if (element == null) return false
         return element
             .siblings(forward = true, withItself = false)
@@ -56,6 +57,6 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
             .any { it.textContains('\n') }
     }
 
-    private fun hasCorrectElseType(expression: KtExpression): Boolean =
+    private fun mustBeOnSameLine(expression: KtExpression): Boolean =
         expression !is KtIfExpression && expression !is KtBlockExpression && expression !is KtWhenExpression
 }
