@@ -40,7 +40,8 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin() }
+            |""".trimMargin()
+        }
         val kotlin by memoized { DslTestBuilder.kotlin() }
         val kotlinBuildFileContent by memoized {
             """
@@ -70,7 +71,8 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin() }
+            |""".trimMargin()
+        }
 
         it("using Groovy and Kotlin") {
             listOf(
@@ -136,9 +138,11 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin() }
+            |""".trimMargin()
+        }
         val kotlin by memoized { DslTestBuilder.kotlin() }
-        val kotlinBuildFileContent by memoized { """
+        val kotlinBuildFileContent by memoized {
+            """
             |${kotlin.gradlePlugins}
             |
             |allprojects {
@@ -165,7 +169,8 @@ internal class DetektReportMergeSpec : Spek({
             |    }
             |  }
             |}
-            |""".trimMargin() }
+            |""".trimMargin()
+        }
 
         it("using Groovy and Kotlin") {
             listOf(

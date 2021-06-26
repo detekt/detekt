@@ -225,7 +225,7 @@ class DetektMultiplatformSpec : Spek({
                         }
                     }
                     $DETEKT_BLOCK
-                """.trimIndent(),
+                    """.trimIndent(),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
@@ -277,7 +277,7 @@ class DetektMultiplatformSpec : Spek({
                         ios()
                     }
                     $DETEKT_BLOCK
-                """.trimIndent(),
+                    """.trimIndent(),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
