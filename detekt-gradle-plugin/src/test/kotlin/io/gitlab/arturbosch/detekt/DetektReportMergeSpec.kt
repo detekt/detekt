@@ -12,7 +12,8 @@ internal class DetektReportMergeSpec : Spek({
     describe("Sarif merge is configured correctly for multi module project") {
 
         val groovy by memoized { DslTestBuilder.groovy() }
-        val groovyBuildFileContent by memoized { """
+        val groovyBuildFileContent by memoized {
+            """
             |${groovy.gradlePlugins}
             |
             |allprojects {
@@ -41,7 +42,8 @@ internal class DetektReportMergeSpec : Spek({
             |}
             |""".trimMargin() }
         val kotlin by memoized { DslTestBuilder.kotlin() }
-        val kotlinBuildFileContent by memoized { """
+        val kotlinBuildFileContent by memoized {
+            """
             |${kotlin.gradlePlugins}
             |
             |allprojects {
@@ -106,7 +108,8 @@ internal class DetektReportMergeSpec : Spek({
     describe("XML merge is configured correctly for multi module project") {
 
         val groovy by memoized { DslTestBuilder.groovy() }
-        val groovyBuildFileContent by memoized { """
+        val groovyBuildFileContent by memoized {
+            """
             |${groovy.gradlePlugins}
             |
             |allprojects {
