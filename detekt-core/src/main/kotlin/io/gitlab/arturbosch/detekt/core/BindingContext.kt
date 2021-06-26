@@ -23,7 +23,7 @@ internal fun generateBindingContext(
     }
 
     val analyzer = AnalyzerWithCompilerReport(
-        PrintingMessageCollector(System.err, DetektMessageRenderer, true),
+        DetektMessageCollector(CompilerMessageSeverity.ERROR),
         environment.configuration.languageVersionSettings
     )
     analyzer.analyzeAndReport(files) {
@@ -39,15 +39,16 @@ internal fun generateBindingContext(
     return analyzer.analysisResult.bindingContext
 }
 
+private class DetektMessageCollector(val minSeverity: CompilerMessageSeverity) :
+    PrintingMessageCollector(System.err, DetektMessageRenderer, false) {
+    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
+        if (severity.ordinal <= minSeverity.ordinal) {
+            super.report(severity, message, location)
+        }
+    }
+}
+
 private object DetektMessageRenderer : PlainTextMessageRenderer() {
     override fun getName() = "detekt message renderer"
     override fun getPath(location: CompilerMessageSourceLocation) = location.path
-    override fun render(
-        severity: CompilerMessageSeverity,
-        message: String,
-        location: CompilerMessageSourceLocation?,
-    ): String {
-        if (!severity.isError) return ""
-        return super.render(severity, message, location)
-    }
 }
