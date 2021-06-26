@@ -7,7 +7,7 @@ import org.spekframework.spek2.style.specification.describe
 object YamlSpec : Spek({
 
     describe("keyValue") {
-        it("renders it as provided") {
+        it("renders key and value as provided") {
             val result = yaml { keyValue() { "key" to "value" } }
             assertThat(result).isEqualTo("key: value")
         }
