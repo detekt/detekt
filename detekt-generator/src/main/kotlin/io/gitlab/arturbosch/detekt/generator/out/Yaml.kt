@@ -57,10 +57,25 @@ inline fun YamlNode.keyValue(comment: String = "", keyValue: () -> Pair<String, 
 fun YamlNode.list(name: String, list: List<String>) {
     append("$name:")
     list.forEach {
-        append("$SINGLE_INDENT- $it")
+        append("$SINGLE_INDENT- ${it.quotedForList()}")
     }
 }
 
 inline fun YamlNode.yaml(yaml: () -> String) = append(yaml())
 
+private fun String.quotedForList(): String {
+    return when {
+        isBlank() -> quoted()
+        startsWith(SINGLE_QUOTE) && endsWith(SINGLE_QUOTE)
+            || startsWith(DOUBLE_QUOTE) && endsWith(DOUBLE_QUOTE) -> this
+        matches(NO_QUOTES_REQUIRED) -> this
+        else -> quoted()
+    }
+}
+
+private fun String.quoted() = "'$this'"
+
 private const val SINGLE_INDENT = "  "
+private const val SINGLE_QUOTE = "'"
+private const val DOUBLE_QUOTE = "\""
+private val NO_QUOTES_REQUIRED = Regex("""[.\w\s-]+""")
