@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
+import java.io.PrintStream
 
 internal fun generateBindingContext(
     environment: KotlinCoreEnvironment,
@@ -23,7 +24,7 @@ internal fun generateBindingContext(
     }
 
     val analyzer = AnalyzerWithCompilerReport(
-        DetektMessageCollector(CompilerMessageSeverity.ERROR),
+        DetektMessageCollector(minSeverity = CompilerMessageSeverity.ERROR),
         environment.configuration.languageVersionSettings
     )
     analyzer.analyzeAndReport(files) {
@@ -39,8 +40,11 @@ internal fun generateBindingContext(
     return analyzer.analysisResult.bindingContext
 }
 
-private class DetektMessageCollector(val minSeverity: CompilerMessageSeverity) :
-    PrintingMessageCollector(System.err, DetektMessageRenderer, false) {
+internal class DetektMessageCollector(
+    errorStream: PrintStream = System.err,
+    verbose: Boolean = false,
+    private val minSeverity: CompilerMessageSeverity = CompilerMessageSeverity.ERROR
+) : PrintingMessageCollector(errorStream, DetektMessageRenderer, verbose) {
     override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
         if (severity.ordinal <= minSeverity.ordinal) {
             super.report(severity, message, location)
