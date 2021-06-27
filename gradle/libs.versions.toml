@@ -40,7 +40,7 @@ spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spe
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
-assertj = "org.assertj:assertj-core:3.19.0"
+assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.9.12"
 mockk = "io.mockk:mockk:1.11.0"
 junitLauncher = "org.junit.platform:junit-platform-launcher:1.7.1"
