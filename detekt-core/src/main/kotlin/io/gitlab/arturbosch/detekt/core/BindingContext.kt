@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
+import java.io.PrintStream
 
 internal fun generateBindingContext(
     environment: KotlinCoreEnvironment,
@@ -23,7 +24,7 @@ internal fun generateBindingContext(
     }
 
     val analyzer = AnalyzerWithCompilerReport(
-        PrintingMessageCollector(System.err, DetektMessageRenderer, true),
+        DetektMessageCollector(minSeverity = CompilerMessageSeverity.ERROR),
         environment.configuration.languageVersionSettings
     )
     analyzer.analyzeAndReport(files) {
@@ -39,15 +40,19 @@ internal fun generateBindingContext(
     return analyzer.analysisResult.bindingContext
 }
 
+internal class DetektMessageCollector(
+    errorStream: PrintStream = System.err,
+    verbose: Boolean = false,
+    private val minSeverity: CompilerMessageSeverity = CompilerMessageSeverity.ERROR
+) : PrintingMessageCollector(errorStream, DetektMessageRenderer, verbose) {
+    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
+        if (severity.ordinal <= minSeverity.ordinal) {
+            super.report(severity, message, location)
+        }
+    }
+}
+
 private object DetektMessageRenderer : PlainTextMessageRenderer() {
     override fun getName() = "detekt message renderer"
     override fun getPath(location: CompilerMessageSourceLocation) = location.path
-    override fun render(
-        severity: CompilerMessageSeverity,
-        message: String,
-        location: CompilerMessageSourceLocation?,
-    ): String {
-        if (!severity.isError) return ""
-        return super.render(severity, message, location)
-    }
 }
