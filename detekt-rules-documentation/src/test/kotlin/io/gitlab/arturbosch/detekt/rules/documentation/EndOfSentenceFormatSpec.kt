@@ -19,7 +19,7 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings on objects") {
+        it("reports invalid KDoc endings on function with expression body") {
             val code = """
                 /** Some doc */
                 fun f(x: Int, y: Int, z: Int) = 
