@@ -48,6 +48,7 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
+import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 import javax.inject.Inject
@@ -210,6 +211,16 @@ open class Detekt @Inject constructor(
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
+
+    @Option(option = "auto-correct", description = "Enables auto correct")
+    fun autoCorrect() {
+        autoCorrect = true
+    }
+
+    @Option(option = "no-auto-correct", description = "Disables auto correct")
+    fun noAutoCorrect() {
+        autoCorrect = false
+    }
 
     @TaskAction
     fun check() {
