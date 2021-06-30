@@ -9,13 +9,13 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-object ReferentialEqualitySpec : Spek({
+object AvoidReferentialEqualitySpec : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
 
     describe("ReferentialEquality with defaults") {
-        val subject by memoized { ReferentialEquality(Config.empty) }
+        val subject by memoized { AvoidReferentialEquality(Config.empty) }
         it("reports usage of === for strings") {
             val code = """
                 val s = "a string" 
@@ -88,7 +88,7 @@ object ReferentialEqualitySpec : Spek({
     }
 
     describe("ReferentialEquality enabled for all types") {
-        val subject by memoized { ReferentialEquality(TestConfig("forbiddenTypesRegex" to ".*")) }
+        val subject by memoized { AvoidReferentialEquality(TestConfig("forbiddenTypesRegex" to ".*")) }
         it("reports usage of === for strings") {
             val code = """
                 val s = "a string" 
@@ -105,7 +105,7 @@ object ReferentialEqualitySpec : Spek({
 
     describe("ReferentialEquality enabled for all lists") {
         val pattern = """kotlin\.collections\..*List"""
-        val subject by memoized { ReferentialEquality(TestConfig("forbiddenTypesRegex" to pattern)) }
+        val subject by memoized { AvoidReferentialEquality(TestConfig("forbiddenTypesRegex" to pattern)) }
         it("reports usage of ===") {
             val code = """
                 val listA = listOf(1)

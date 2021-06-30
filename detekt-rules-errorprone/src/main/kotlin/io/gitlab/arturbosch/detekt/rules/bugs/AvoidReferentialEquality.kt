@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
  * </compliant>
  */
 @RequiresTypeResolution
-class ReferentialEquality(config: Config) : Rule(config) {
+class AvoidReferentialEquality(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ReferentialEquality",
