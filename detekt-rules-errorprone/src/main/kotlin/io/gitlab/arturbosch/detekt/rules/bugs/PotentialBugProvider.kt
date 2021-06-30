@@ -33,6 +33,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             MapGetWithNotNullAssertionOperator(config),
             MissingWhenCase(config),
             RedundantElseInWhen(config),
+            ReferentialEquality(config),
             UnconditionalJumpStatementInLoop(config),
             UnnecessaryNotNullOperator(config),
             UnnecessarySafeCall(config),
