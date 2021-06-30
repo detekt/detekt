@@ -54,6 +54,10 @@ class ReferentialEquality(config: Config) : Rule(config) {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
+        checkBinaryExpression(expression)
+    }
+
+    private fun checkBinaryExpression(expression: KtBinaryExpression) {
         if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken != EQEQEQ && expression.operationToken != EXCLEQEQEQ) return
 
