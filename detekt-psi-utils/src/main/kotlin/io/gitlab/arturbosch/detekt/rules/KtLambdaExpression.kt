@@ -8,10 +8,15 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
-fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueParameterDescriptor? {
-    if (valueParameters.isNotEmpty()) return null
-    return bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()
-}
+fun KtLambdaExpression.firstParameter(bindingContext: BindingContext) =
+    bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()
+
+fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueParameterDescriptor? =
+    if (valueParameters.isNotEmpty()) {
+        null
+    } else {
+        firstParameter(bindingContext)
+    }
 
 fun KtLambdaExpression.hasImplicitParameterReference(
     implicitParameter: ValueParameterDescriptor,
