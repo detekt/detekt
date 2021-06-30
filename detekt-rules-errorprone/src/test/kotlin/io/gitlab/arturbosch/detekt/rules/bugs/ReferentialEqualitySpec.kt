@@ -51,6 +51,40 @@ object ReferentialEqualitySpec : Spek({
 
             assertThat(actual).hasSize(1)
         }
+        it("ignores usage of === for non strings") {
+            val code = """
+                val i = 42 
+                val l = 99L
+                val c = 'a'
+                val b = i === 1 || l === 100L || c === 'b'
+            """.trimIndent()
+
+            val actual = subject.compileAndLintWithContext(env, code)
+
+            assertThat(actual).isEmpty()
+        }
+        it("ignores usage of == for strings") {
+            val code = """
+                val s = "a string" 
+                val b = s == "something"
+                fun f(other: String) = s == other
+                fun g(other: String) = if (s == other) 1 else 2
+            """.trimIndent()
+
+            val actual = subject.compileAndLintWithContext(env, code)
+
+            assertThat(actual).isEmpty()
+        }
+        it("ignores usage of === with generic parameters") {
+            val code = """
+                fun <T : Any> same(one: T, two: T): Boolean = one === two
+                val b = same("this", "that")
+            """.trimIndent()
+
+            val actual = subject.compileAndLintWithContext(env, code)
+
+            assertThat(actual).isEmpty()
+        }
     }
 
     describe("ReferentialEquality enabled for all types") {
@@ -72,16 +106,29 @@ object ReferentialEqualitySpec : Spek({
     describe("ReferentialEquality enabled for all lists") {
         val pattern = """kotlin\.collections\..*List"""
         val subject by memoized { ReferentialEquality(TestConfig("forbiddenTypesRegex" to pattern)) }
-        it("reports usage of === for strings") {
+        it("reports usage of ===") {
             val code = """
-                val list = listOf(1)
+                val listA = listOf(1)
+                val listB = listOf(1)
                 val mutableList = mutableListOf(1)
-                val b = list === listOf(2) || mutableList === mutableListOf(2)
+                val b = listOf(2) === listA || listA === listB || mutableList === mutableListOf(2)
             """.trimIndent()
 
             val actual = subject.compileAndLintWithContext(env, code)
 
-            assertThat(actual).hasSize(2)
+            assertThat(actual).hasSize(3)
+        }
+        it("ignores usage of ==") {
+            val code = """
+                val listA = listOf(1)
+                val listB = listOf(1)
+                val mutableList = mutableListOf(1)
+                val b = listOf(2) == listA || listA == listB || mutableList == mutableListOf(2)
+            """.trimIndent()
+
+            val actual = subject.compileAndLintWithContext(env, code)
+
+            assertThat(actual).isEmpty()
         }
     }
 })

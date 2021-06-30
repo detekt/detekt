@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
 /**
  * Kotlin supports two types of equality: structural equality and referential equality. While there are
@@ -61,6 +62,11 @@ class ReferentialEquality(config: Config) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken != EQEQEQ && expression.operationToken != EXCLEQEQEQ) return
 
+        val type = expression.left?.getType(bindingContext) ?: return
+        if (type.isTypeParameter()) {
+            expression.parent
+            type.arguments.forEach { println(it) }
+        }
         val checkedType = expression.left?.getType(bindingContext)?.fqNameOrNull() ?: return
         val fullyQualifiedType = checkedType.asString()
 
