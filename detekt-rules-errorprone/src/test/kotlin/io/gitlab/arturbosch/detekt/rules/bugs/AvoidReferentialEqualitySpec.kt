@@ -88,7 +88,7 @@ object AvoidReferentialEqualitySpec : Spek({
     }
 
     describe("ReferentialEquality enabled for all types") {
-        val subject by memoized { AvoidReferentialEquality(TestConfig("forbiddenTypesRegex" to ".*")) }
+        val subject by memoized { AvoidReferentialEquality(TestConfig("forbiddenTypesRegex" to "*")) }
         it("reports usage of === for strings") {
             val code = """
                 val s = "a string" 
@@ -104,7 +104,7 @@ object AvoidReferentialEqualitySpec : Spek({
     }
 
     describe("ReferentialEquality enabled for all lists") {
-        val pattern = """kotlin\.collections\..*List"""
+        val pattern = """kotlin.collections.*List"""
         val subject by memoized { AvoidReferentialEquality(TestConfig("forbiddenTypesRegex" to pattern)) }
         it("reports usage of ===") {
             val code = """

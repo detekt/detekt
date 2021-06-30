@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.internal.SimpleGlob
 import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
@@ -47,11 +48,11 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
         "Specifies those types for which referential equality checks are considered a rule violation. " +
             "The types are defined by a list of regular expressions that match the fully qualified type name."
     )
-    private val forbiddenTypesRegex: List<Regex> by config(
+    private val forbiddenTypesRegex: List<SimpleGlob> by config(
         listOf(
             "kotlin.String"
         )
-    ) { it.map(String::toRegex) }
+    ) { it.map(SimpleGlob::of) }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
