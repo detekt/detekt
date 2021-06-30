@@ -46,9 +46,10 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
 
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +
-            "The types are defined by a list of regular expressions that match the fully qualified type name."
+            "The types are defined by a list of simple glob patterns (supporting `*` and `?` wildcards) " +
+            "that match the fully qualified type name."
     )
-    private val forbiddenTypesRegex: List<SimpleGlob> by config(
+    private val forbiddenTypePatterns: List<SimpleGlob> by config(
         listOf(
             "kotlin.String"
         )
@@ -71,7 +72,7 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
         val checkedType = expression.left?.getType(bindingContext)?.fqNameOrNull() ?: return
         val fullyQualifiedType = checkedType.asString()
 
-        if (forbiddenTypesRegex.any { it.matches(fullyQualifiedType) }) {
+        if (forbiddenTypePatterns.any { it.matches(fullyQualifiedType) }) {
             report(
                 CodeSmell(
                     issue,
