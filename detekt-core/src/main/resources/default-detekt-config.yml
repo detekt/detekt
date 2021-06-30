@@ -554,6 +554,10 @@ potential-bugs:
     active: false
   RedundantElseInWhen:
     active: true
+  ReferentialEquality:
+    active: false
+    forbiddenTypesRegex:
+      - kotlin.String
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:
