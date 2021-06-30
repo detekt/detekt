@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
 /**
  * Kotlin supports two types of equality: structural equality and referential equality. While there are
- * use cases for both, checking for referential equality for some types (such as `String` or `List` is
+ * use cases for both, checking for referential equality for some types (such as `String` or `List`) is
  * likely not intentional and may case unexpected results.
  *
  * <noncompliant>
