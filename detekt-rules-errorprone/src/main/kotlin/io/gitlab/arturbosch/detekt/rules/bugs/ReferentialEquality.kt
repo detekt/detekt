@@ -43,7 +43,7 @@ class ReferentialEquality(config: Config) : Rule(config) {
     )
 
     @Configuration(
-        "specifies those types for which referential equality checks are considered a rule violation. " +
+        "Specifies those types for which referential equality checks are considered a rule violation. " +
             "The types are defined by a list of regular expressions that match the fully qualified type name."
     )
     private val forbiddenTypesRegex: List<Regex> by config(
