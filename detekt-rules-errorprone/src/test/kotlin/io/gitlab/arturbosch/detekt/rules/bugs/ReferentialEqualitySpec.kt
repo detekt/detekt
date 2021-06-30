@@ -41,7 +41,7 @@ object ReferentialEqualitySpec : Spek({
 
             assertThat(actual).hasSize(4)
         }
-        it("reports usage of !== with nullable") {
+        it("reports usage of !== for strings") {
             val code = """
                 var s: String = "a string" 
                 val b = s !== "something"
