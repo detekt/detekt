@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
@@ -180,7 +181,7 @@ object RuleCollectorSpec : Spek({
                     val expectedConfiguration = Configuration(
                         name = "config",
                         description = "description",
-                        defaultValue = "'[A-Z$]'",
+                        defaultValue = of("[A-Z$]"),
                         defaultAndroidValue = null,
                         deprecated = null
                     )
@@ -194,12 +195,12 @@ object RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: Int by config(99)
+                            private val config: Int by config(1_999_000)
                         }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(1)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(1999000))
                 }
 
                 it("extracts default value when it is a multi line string") {
@@ -213,7 +214,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'abcd'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("abcd"))
                 }
 
                 it("extracts default value when defined with named parameter") {
@@ -227,7 +228,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
 
                 it("extracts default value for list of strings") {
@@ -246,7 +247,8 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
+                    val expected = of(listOf("a", "b"))
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
                 }
 
                 it("contains multiple configuration options") {
@@ -281,7 +283,7 @@ object RuleCollectorSpec : Spek({
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
                 }
 
                 it("extracts default value when it is an Int constant") {
@@ -299,7 +301,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
 
                 it("extracts default value when it is an Int constant as named parameter") {
@@ -317,7 +319,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
                 it("extracts default value when it is a String constant") {
                     val code = """
@@ -334,7 +336,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
                 }
                 it("extracts default value for list of strings from constant") {
                     val code = """
@@ -355,7 +357,7 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    val expected = "['a', 'b']"
+                    val expected = of(listOf("a", "b"))
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
                     assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
@@ -374,8 +376,9 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
-                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                    val expected = of(emptyList())
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
                 it("extracts emptyList default value of transformed list") {
@@ -396,8 +399,9 @@ object RuleCollectorSpec : Spek({
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
-                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                    val expected = of(emptyList())
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
                 it("is marked as deprecated as well") {
@@ -481,8 +485,8 @@ object RuleCollectorSpec : Spek({
                             Configuration(
                                 name = "maxLineLength",
                                 description = "description",
-                                defaultValue = "120",
-                                defaultAndroidValue = "100",
+                                defaultValue = of(120),
+                                defaultAndroidValue = of(100),
                                 deprecated = null
                             )
                         )
@@ -504,8 +508,8 @@ object RuleCollectorSpec : Spek({
                             Configuration(
                                 name = "maxLineLength",
                                 description = "description",
-                                defaultValue = "120",
-                                defaultAndroidValue = "100",
+                                defaultValue = of(120),
+                                defaultAndroidValue = of(100),
                                 deprecated = null
                             )
                         )
@@ -532,7 +536,7 @@ object RuleCollectorSpec : Spek({
                         val items = subject.run(code)
                         val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
                         assertThat(fallbackProperties).hasSize(3)
-                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly(of(99))
                     }
 
                     it("reports an error if the property to fallback on does not exist") {
@@ -584,11 +588,11 @@ object RuleCollectorSpec : Spek({
                     """
                     it("extracts default value with transformer function") {
                         val items = subject.run(code)
-                        assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[a-z]+'")
+                        assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("[a-z]+"))
                     }
                     it("extracts default value with method reference") {
                         val items = subject.run(code)
-                        assertThat(items[0].configuration[1].defaultValue).isEqualTo("'false'")
+                        assertThat(items[0].configuration[1].defaultValue).isEqualTo(of(false))
                     }
                 }
                 context("fallback property") {
@@ -613,7 +617,7 @@ object RuleCollectorSpec : Spek({
                         val items = subject.run(code)
                         val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
                         assertThat(fallbackProperties).hasSize(4)
-                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly(of(99))
                     }
 
                     it("reports an error if the property to fallback on does not exist") {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
@@ -8,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 private val defaultConfiguration = Configuration(
     name = "name",
     description = "description",
-    defaultValue = "",
+    defaultValue = of(""),
     defaultAndroidValue = null,
     deprecated = null
 )
@@ -17,7 +18,7 @@ object ConfigurationSpec : Spek({
 
     describe("default value to list conversion") {
         describe("empty default value") {
-            val subject by memoized { defaultConfiguration.copy(defaultValue = "") }
+            val subject by memoized { defaultConfiguration.copy(defaultValue = of("")) }
 
             it("identifies default as not a list") {
                 assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
@@ -28,7 +29,7 @@ object ConfigurationSpec : Spek({
             }
         }
         describe("non list default value") {
-            val subject by memoized { defaultConfiguration.copy(defaultValue = "abc") }
+            val subject by memoized { defaultConfiguration.copy(defaultValue = of("abc")) }
 
             it("identifies default as not a list") {
                 assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
@@ -39,7 +40,7 @@ object ConfigurationSpec : Spek({
             }
         }
         describe("empty list default value") {
-            val subject by memoized { defaultConfiguration.copy(defaultValue = "[ ]") }
+            val subject by memoized { defaultConfiguration.copy(defaultValue = of(emptyList())) }
 
             it("identifies default as not a non empty list") {
                 assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
@@ -50,7 +51,7 @@ object ConfigurationSpec : Spek({
             }
         }
         describe("bracket list default value") {
-            val subject by memoized { defaultConfiguration.copy(defaultValue = "[ 'a', 'b' ]") }
+            val subject by memoized { defaultConfiguration.copy(defaultValue = of(listOf("a", "b"))) }
 
             it("identifies default as a non empty list") {
                 assertThat(subject.isDefaultValueNonEmptyList()).isTrue()

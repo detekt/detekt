@@ -21,10 +21,20 @@ private fun KDocTag.parseConfigTag(): Configuration {
     val content: String = getContent()
     val delimiterIndex = content.indexOf('-')
     val name = content.substring(0, delimiterIndex - 1)
-    val defaultValue = configurationDefaultValueRegex.find(content)
+    val rawDefaultValue = configurationDefaultValueRegex.find(content)
         ?.groupValues
         ?.get(1)
         ?.trim() ?: ""
+    val defaultValue = if (rawDefaultValue.startsWith("-")) {
+        DefaultValue.of(rawDefaultValue.lines().map { it.trim().removePrefix("- ") })
+    } else {
+        val unquoted = rawDefaultValue.replace('\'', '"')
+        createDefaultValueIfLiteral(unquoted) ?: throw InvalidDocumentationException(
+            "[${containingFile.name}] '$content' doesn't seem to contain a correctly formatted default value.\n" +
+                EXPECTED_CONFIGURATION_FORMAT
+        )
+    }
+
     val deprecatedMessage = configurationDeprecatedRegex.find(content)
         ?.groupValues
         ?.get(1)
