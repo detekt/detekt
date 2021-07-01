@@ -68,8 +68,8 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 h4 { "Configuration options:" }
                 list {
                     rule.configuration.forEach {
-                        val defaultValues = formatDefaultValues(it.defaultValue)
-                        val defaultAndroidValues = it.defaultAndroidValue?.let(RuleSetPagePrinter::formatDefaultValues)
+                        val defaultValues = it.defaultValue.getQuotedIfNecessary()
+                        val defaultAndroidValues = it.defaultAndroidValue?.getQuotedIfNecessary()
                         val defaultString = if (defaultAndroidValues != null) {
                             "(default: ${code { defaultValues }}) (android default: ${code { defaultAndroidValues }})"
                         } else {
@@ -92,10 +92,6 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             printRuleCodeExamples(rule)
         }
-    }
-
-    private fun formatDefaultValues(rawString: String) = rawString.lines().joinToString {
-        it.trim().removePrefix("- ")
     }
 
     private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {

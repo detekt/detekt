@@ -87,6 +87,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
+        if (!containsRuleSetProvider) return
+
         if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
@@ -95,7 +97,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
                 )
         }
         if (property.isAnnotatedWith(ConfigAnnotation::class)) {
-            val defaultValue = formatDefaultValue(
+            val defaultValue = toDefaultValue(
+                name,
                 checkNotNull(property.delegate?.expression as? KtCallExpression)
                     .valueArguments
                     .first()
@@ -134,13 +137,24 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
     companion object {
 
+        private val IS_INT = """^\d+$""".toRegex()
+        private val IS_ENCLOSED_IN_DOUBLE_QUOTES = """^".*"$""".toRegex()
         private const val DOUBLE_QUOTE = '"'
 
-        private fun formatDefaultValue(defaultValueText: String): String =
-            if (defaultValueText.startsWith(DOUBLE_QUOTE) && defaultValueText.endsWith(DOUBLE_QUOTE)) {
-                "'${defaultValueText.removeSurrounding("$DOUBLE_QUOTE")}'"
-            } else {
-                defaultValueText
+        @Suppress("UnusedPrivateMember")
+        private operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
+
+        private fun toDefaultValue(providerName: String, defaultValueText: String): DefaultValue =
+            when (defaultValueText) {
+                "true", "false" -> DefaultValue.of(defaultValueText.toBoolean())
+                in IS_INT -> DefaultValue.of(defaultValueText.toInt())
+                in IS_ENCLOSED_IN_DOUBLE_QUOTES -> DefaultValue.of(
+                    defaultValueText.removeSurrounding("$DOUBLE_QUOTE")
+                )
+                else -> throw InvalidDocumentationException(
+                    "Unsupported default value format '$defaultValueText' " +
+                        "in $providerName. Please use a Boolean, Int or String literal instead."
+                )
             }
     }
 }
