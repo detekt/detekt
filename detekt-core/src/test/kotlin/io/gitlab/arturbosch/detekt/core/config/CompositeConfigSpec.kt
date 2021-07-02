@@ -46,8 +46,10 @@ class CompositeConfigSpec : Spek({
             val expectedErrorMessage = "Value \"truuu\" set for config parameter \"style > LargeClass > active\" " +
                 "is not of required type Boolean"
 
-            assertThatThrownBy { val config: Boolean = config.valueOrDefault("active", true) }
-                .isInstanceOf(IllegalStateException::class.java)
+            assertThatThrownBy {
+                val value: Boolean = config.valueOrDefault("active", true)
+                println(value)
+            }.isInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining(expectedErrorMessage)
         }
     }
