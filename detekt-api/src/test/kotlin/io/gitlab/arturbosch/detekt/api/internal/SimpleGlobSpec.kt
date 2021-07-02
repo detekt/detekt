@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -191,7 +192,10 @@ object SimpleGlobSpec : Spek({
         }
 
         describe("invalid pattern") {
-            it("fails") {}
+            it("fails") {
+                assertThatThrownBy { SimpleGlob.of("""a[b""") }
+                    .isInstanceOf(IllegalArgumentException::class.java)
+            }
         }
     }
 })
