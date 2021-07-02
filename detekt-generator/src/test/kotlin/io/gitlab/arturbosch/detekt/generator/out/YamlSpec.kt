@@ -19,7 +19,7 @@ object YamlSpec : Spek({
             val given = listOf("value")
             val result = yaml { list("key", given) }
             val expected = """key:
-                |  - value
+                |  - 'value'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }
@@ -28,8 +28,8 @@ object YamlSpec : Spek({
             val given = listOf("value 1", "value 2")
             val result = yaml { list("key", given) }
             val expected = """key:
-                |  - value 1
-                |  - value 2
+                |  - 'value 1'
+                |  - 'value 2'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }

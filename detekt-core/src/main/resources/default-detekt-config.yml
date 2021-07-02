@@ -92,15 +92,15 @@ complexity:
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
     nestingFunctions:
-      - run
-      - let
-      - apply
-      - with
-      - also
-      - use
-      - forEach
-      - isNotNull
-      - ifNull
+      - 'run'
+      - 'let'
+      - 'apply'
+      - 'with'
+      - 'also'
+      - 'use'
+      - 'forEach'
+      - 'isNotNull'
+      - 'ifNull'
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -199,10 +199,10 @@ exceptions:
   ExceptionRaisedInUnexpectedLocation:
     active: true
     methodNames:
-      - toString
-      - hashCode
-      - equals
-      - finalize
+      - 'toString'
+      - 'hashCode'
+      - 'equals'
+      - 'finalize'
   InstanceOfCheckForException:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -220,10 +220,10 @@ exceptions:
   SwallowedException:
     active: true
     ignoredExceptionTypes:
-      - NumberFormatException
-      - InterruptedException
-      - ParseException
-      - MalformedURLException
+      - 'NumberFormatException'
+      - 'InterruptedException'
+      - 'ParseException'
+      - 'MalformedURLException'
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   ThrowingExceptionFromFinally:
     active: true
@@ -233,36 +233,36 @@ exceptions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
-      - ArrayIndexOutOfBoundsException
-      - Error
-      - Exception
-      - IllegalMonitorStateException
-      - NullPointerException
-      - IndexOutOfBoundsException
-      - RuntimeException
-      - Throwable
+      - 'ArrayIndexOutOfBoundsException'
+      - 'Error'
+      - 'Exception'
+      - 'IllegalMonitorStateException'
+      - 'NullPointerException'
+      - 'IndexOutOfBoundsException'
+      - 'RuntimeException'
+      - 'Throwable'
   ThrowingNewInstanceOfSameException:
     active: true
   TooGenericExceptionCaught:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptionNames:
-      - ArrayIndexOutOfBoundsException
-      - Error
-      - Exception
-      - IllegalMonitorStateException
-      - NullPointerException
-      - IndexOutOfBoundsException
-      - RuntimeException
-      - Throwable
+      - 'ArrayIndexOutOfBoundsException'
+      - 'Error'
+      - 'Exception'
+      - 'IllegalMonitorStateException'
+      - 'NullPointerException'
+      - 'IndexOutOfBoundsException'
+      - 'RuntimeException'
+      - 'Throwable'
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   TooGenericExceptionThrown:
     active: true
     exceptionNames:
-      - Error
-      - Exception
-      - Throwable
-      - RuntimeException
+      - 'Error'
+      - 'Exception'
+      - 'Throwable'
+      - 'RuntimeException'
 
 formatting:
   active: true
@@ -614,8 +614,8 @@ style:
   ForbiddenMethodCall:
     active: false
     methods:
-      - kotlin.io.println
-      - kotlin.io.print
+      - 'kotlin.io.println'
+      - 'kotlin.io.print'
   ForbiddenPublicDataClass:
     active: true
     excludes: ['**']
@@ -632,7 +632,7 @@ style:
     ignoreActualFunction: true
     excludedFunctions: ''
     excludeAnnotatedFunction:
-      - dagger.Provides
+      - 'dagger.Provides'
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**']
@@ -646,10 +646,10 @@ style:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     ignoreNumbers:
-      - -1
-      - 0
-      - 1
-      - 2
+      - '-1'
+      - '0'
+      - '1'
+      - '2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false
@@ -725,7 +725,7 @@ style:
   UnnecessaryAbstractClass:
     active: true
     excludeAnnotatedClasses:
-      - dagger.Module
+      - 'dagger.Module'
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:

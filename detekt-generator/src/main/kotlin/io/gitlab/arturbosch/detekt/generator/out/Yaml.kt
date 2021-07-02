@@ -68,7 +68,6 @@ private fun String.quotedForList(): String {
         isBlank() -> quoted()
         startsWith(SINGLE_QUOTE) && endsWith(SINGLE_QUOTE)
             || startsWith(DOUBLE_QUOTE) && endsWith(DOUBLE_QUOTE) -> this
-        matches(NO_QUOTES_REQUIRED) -> this
         else -> quoted()
     }
 }
@@ -78,4 +77,3 @@ private fun String.quoted() = "'$this'"
 private const val SINGLE_INDENT = "  "
 private const val SINGLE_QUOTE = "'"
 private const val DOUBLE_QUOTE = "\""
-private val NO_QUOTES_REQUIRED = Regex("""[.\w\s-]+""")
