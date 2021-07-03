@@ -63,9 +63,10 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private val ignoreDataClasses: Boolean by config(defaultValue = true)
 
     @Configuration(
-        "ignore long parameters list for constructors or functions in the " +
-            "context of these annotation class names; (e.g. ['Inject', 'Module', 'Suppress']); " +
-            "the most common case is for dependency injection where constructors are annotated with `@Inject`."
+        "ignore long parameters list for constructors, functions or their parameters in the " +
+            "context of these annotation class names; (e.g. ['Inject', 'Module', 'Suppress', 'Value']); " +
+            "the most common cases are for dependency injection where constructors are annotated with `@Inject` " +
+            "or parameters are annotated with `@Value` and should not be counted for the rule to trigger"
     )
     private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
@@ -131,10 +132,11 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtParameterList.parameterCount(): Int {
+        val preFilteredParameters = parameters.filter { !it.isIgnored() }
         return if (ignoreDefaultParameters) {
-            parameters.filter { !it.hasDefaultValue() }.size
+            preFilteredParameters.filter { !it.hasDefaultValue() }.size
         } else {
-            parameters.size
+            preFilteredParameters.size
         }
     }
 

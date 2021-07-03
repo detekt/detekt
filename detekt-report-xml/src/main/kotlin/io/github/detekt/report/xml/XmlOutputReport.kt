@@ -17,7 +17,7 @@ class XmlOutputReport : OutputReport() {
     override val name = "Checkstyle XML report"
 
     private val Finding.severityLabel: String
-        get() = severity.name.lowercase(Locale.US)
+        get() = severity.name.toLowerCase(Locale.US)
 
     override fun render(detektion: Detektion): String {
         val smells = detektion.findings.flatMap { it.value }

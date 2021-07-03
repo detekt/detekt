@@ -10,8 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
+import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -19,8 +22,8 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -70,7 +73,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(expression), "let expression can be omitted"))
             }
         } else {
-            val lambdaReferenceCount = lambdaExpr.countReferences()
+            val lambdaReferenceCount = lambdaExpr.countReferences(bindingContext)
             if (lambdaReferenceCount == 0 && !expression.receiverIsUsed(bindingContext) && isNullSafeOperator) {
                 report(
                     CodeSmell(
@@ -119,18 +122,18 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 
 private fun KtBlockExpression.hasOnlyOneStatement() = this.children.size == 1
 
-private fun PsiElement.countVarRefs(varName: String, lambda: KtLambdaExpression): Int =
+private fun PsiElement.countVarRefs(parameter: CallableDescriptor, context: BindingContext): Int =
     collectDescendantsOfType<KtSimpleNameExpression> {
-        it.textMatches(varName) && it.getStrictParentOfType<KtLambdaExpression>() == lambda
+        it.getResolvedCall(context)?.resultingDescriptor == parameter
     }.count()
 
-private fun KtLambdaExpression.countReferences(): Int {
+private fun KtLambdaExpression.countReferences(context: BindingContext): Int {
     val bodyExpression = bodyExpression ?: return 0
-    val destructuringDeclaration = firstParameter?.destructuringDeclaration
-    return if (destructuringDeclaration != null) {
-        destructuringDeclaration.entries.sumOf { bodyExpression.countVarRefs(it.nameAsSafeName.asString(), this) }
+    val firstParameter = firstParameter(context) ?: return 0
+
+    return if (firstParameter is ValueParameterDescriptorImpl.WithDestructuringDeclaration) {
+        firstParameter.destructuringVariables.sumOf { bodyExpression.countVarRefs(it, context) }
     } else {
-        val parameterName = firstParameter?.nameAsSafeName?.asString() ?: IT_LITERAL
-        bodyExpression.countVarRefs(parameterName, this)
+        bodyExpression.countVarRefs(firstParameter, context)
     }
 }

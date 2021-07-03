@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -192,11 +193,11 @@ open class Detekt @Inject constructor(
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
         .dir("detekt")
 
+    private val isDryRun: Boolean = project.isDryRunEnabled()
+
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
-
-    private val invoker: DetektInvoker = DetektInvoker.create(project)
 
     @InputFiles
     @SkipWhenEmpty
@@ -213,9 +214,7 @@ open class Detekt @Inject constructor(
     @TaskAction
     fun check() {
         if (failFastProp.getOrElse(false)) {
-            project.logger.warn(
-                "'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'."
-            )
+            logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
         }
 
         val arguments = mutableListOf(
@@ -240,7 +239,7 @@ open class Detekt @Inject constructor(
         )
         arguments.addAll(convertCustomReportsToArguments())
 
-        invoker.invokeCli(
+        DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),

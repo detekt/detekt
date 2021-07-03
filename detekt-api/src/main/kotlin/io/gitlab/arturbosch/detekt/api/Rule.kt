@@ -72,7 +72,7 @@ abstract class Rule(
     private fun computeSeverity(): SeverityLevel {
         val configValue: String = valueOrNull(SEVERITY_KEY)
             ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "warning")
-        return enumValueOf(configValue.uppercase(Locale.US))
+        return enumValueOf(configValue.toUpperCase(Locale.US))
     }
 
     /**

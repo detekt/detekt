@@ -31,7 +31,9 @@ object DeprecationSpec : Spek({
                     }
                 }
                 """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo("Foo is deprecated.")
         }
 
         it("does not report when supertype is not deprecated") {

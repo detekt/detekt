@@ -13,7 +13,7 @@ class SampleProvider : RuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            TooManyFunctions(),
+            TooManyFunctions(config),
             TooManyFunctionsTwo(config)
         )
     )

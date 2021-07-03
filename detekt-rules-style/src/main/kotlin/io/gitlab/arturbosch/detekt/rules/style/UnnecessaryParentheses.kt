@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
@@ -49,6 +50,8 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
         super.visitParenthesizedExpression(expression)
 
         if (expression.expression == null) return
+
+        if (expression.parent is KtDelegatedSuperTypeEntry) return
 
         if (KtPsiUtil.areParenthesesUseless(expression)) {
             val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +

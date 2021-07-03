@@ -180,4 +180,21 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
+
+    describe("multi-line when following an else statement without requiring braces") {
+
+        it("does not report multi-line when") {
+            val code = """
+                fun f(i: Int) {
+                	if (true) {
+                        println()
+                    } else when(i) {
+                        1 -> println(1)
+                        else -> println()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 })

@@ -26,7 +26,7 @@ class ParameterListWrappingSpec : Spek({
             }
 
             it("does not report when using an indentation level config of 1") {
-                val config = TestConfig(ParameterListWrapping.INDENT_SIZE to "1")
+                val config = TestConfig("indentSize" to "1")
                 assertThat(ParameterListWrapping(config).lint(code)).isEmpty()
             }
         }
@@ -44,7 +44,7 @@ class ParameterListWrappingSpec : Spek({
             val code = """
                 fun f(a: Int, b: Int, c: Int) {}
             """.trimIndent()
-            val config = TestConfig(ParameterListWrapping.MAX_LINE_LENGTH to "10")
+            val config = TestConfig("maxLineLength" to "10")
             assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
         }
     }

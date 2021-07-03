@@ -32,6 +32,10 @@ a wildcard import
 
   deprecated list config
 
+* ``conf5`` (default: ``120``) (android default: ``100``)
+
+  rule with android variants
+
 #### Noncompliant Code:
 
 ```kotlin

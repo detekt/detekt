@@ -10,7 +10,7 @@ import java.nio.file.Paths
 class MaximumLineLengthSpec : Spek({
 
     val subject by memoized {
-        val config = TestConfig(MaximumLineLength.MAX_LINE_LENGTH to "30")
+        val config = TestConfig(MAX_LINE_LENGTH to "30")
         MaximumLineLength(config)
     }
 
@@ -37,7 +37,7 @@ class MaximumLineLengthSpec : Spek({
             }
 
             it("does not report line which does not exceed the threshold") {
-                val config = TestConfig(MaximumLineLength.MAX_LINE_LENGTH to code.length)
+                val config = TestConfig(MAX_LINE_LENGTH to code.length)
                 assertThat(MaximumLineLength(config).lint(code)).isEmpty()
             }
         }
@@ -66,11 +66,13 @@ class MaximumLineLengthSpec : Spek({
             """.trimIndent()
             val findings = MaximumLineLength(
                 TestConfig(
-                    MaximumLineLength.MAX_LINE_LENGTH to "30",
-                    MaximumLineLength.IGNORE_BACK_TICKED_IDENTIFIER to "true"
+                    MAX_LINE_LENGTH to "30",
+                    "ignoreBackTickedIdentifier" to "true"
                 )
             ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
 })
+
+const val MAX_LINE_LENGTH = "maxLineLength"

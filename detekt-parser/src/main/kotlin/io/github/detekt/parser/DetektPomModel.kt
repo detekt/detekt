@@ -1,7 +1,6 @@
 package io.github.detekt.parser
 
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
-import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
@@ -13,7 +12,7 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import sun.reflect.ReflectionFactory
 
 /**
- * Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt
+ * Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/internal/KotlinPsiFileFactory.kt
  * Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE
  */
 class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
@@ -21,10 +20,11 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
     init {
         val extension = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
         val extensionClass = TreeCopyHandler::class.java.name
-        synchronized(@Suppress("DEPRECATION") Extensions.getRootArea()) {
-            arrayOf(project.extensionArea, @Suppress("DEPRECATION") Extensions.getRootArea())
-                .filter { !it.hasExtensionPoint(extension) }
-                .forEach { it.registerExtensionPoint(extension, extensionClass, ExtensionPoint.Kind.INTERFACE) }
+        val extensionArea = project.extensionArea
+        synchronized(extensionArea) {
+            if (extensionArea.hasExtensionPoint(extension)) {
+                extensionArea.registerExtensionPoint(extension, extensionClass, ExtensionPoint.Kind.INTERFACE)
+            }
         }
     }
 
