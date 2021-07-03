@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -19,7 +20,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
  * Reports when a boolean property doesn't have one of the following prefixes:
- * is/has/should/need/noNeed/was/are/may/can/had/for/with.
+ * is|has|are.
  *
  * <noncompliant>
  * val progressBar: Boolean = true
@@ -28,15 +29,14 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * <compliant>
  * val hasProgressBar: Boolean = true
  * </compliant>
- *
- * @configuration allowedPrefixes - naming pattern (default: `'^(is|has|should|need|noNeed|was|are|may|can|had|for|with)'`)
  */
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    private val allowedPrefixes by LazyRegex(
+    @Configuration("naming pattern")
+    private val allowedPattern by LazyRegex(
         ALLOWED_PREFIXES,
-        "^(is|has|should|need|noNeed|was|are|may|can|had|for|with)"
+        "^(is|has|are)"
     )
 
     override val issue = Issue(
@@ -69,7 +69,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         val isBooleanType =
             typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME
 
-        if (isBooleanType && !name.contains(allowedPrefixes)) {
+        if (isBooleanType && !name.contains(allowedPattern)) {
             report(reportCodeSmell(declaration, name))
         }
     }
@@ -78,7 +78,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         declaration: KtCallableDeclaration,
         name: String
     ): CodeSmell {
-        val description = "Boolean property name should starts with $allowedPrefixes prefix."
+        val description = "Boolean property name should starts with $allowedPattern prefix."
         return CodeSmell(
             issue,
             Entity.from(declaration),
