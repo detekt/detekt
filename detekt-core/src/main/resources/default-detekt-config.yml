@@ -506,7 +506,7 @@ potential-bugs:
   AvoidReferentialEquality:
     active: false
     forbiddenTypePatterns:
-      - kotlin.String
+      - 'kotlin.String'
   CastToNullableType:
     active: false
   Deprecation:
