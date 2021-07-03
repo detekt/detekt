@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -137,6 +139,20 @@ class BooleanPropertyNamingSpec : Spek({
 
                 assertThat(findings).isEmpty()
             }
+
+            it("should warn if there is not prefix from config") {
+                val code = """
+                    class Test {
+                        var hasDefault: Boolean = true
+                    }
+                    """
+
+                val config = TestConfig(mapOf(ALLOWED_PREFIXES to "^(is|are)"))
+                assertThat(BooleanPropertyNaming(config).compileAndLint(code))
+                    .hasSize(1)
+            }
         }
     }
 })
+
+private const val ALLOWED_PREFIXES = "allowedPrefixes"
