@@ -48,8 +48,6 @@ jobs:
         if-no-files-found: ignore
     - name: Run detekt-cli --help
       run: java -jar ./build/detekt-cli-all.jar --help
-    - name: Run detekt-cli to verify generated detekt-default-config.yml
-      run: java -jar ./build/detekt-cli-all.jar --build-upon-default-config --input detekt-api/src/main
     - name: Run detekt-cli with argsfile
       run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
 
