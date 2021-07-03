@@ -7,8 +7,8 @@
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
 [![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt?ref=badge_shield)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt.svg?type=small)](https://app.fossa.com/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt?ref=badge_small)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
@@ -106,7 +106,7 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 #### Requirements
 
-Gradle 5.4+ is the minimum requirement. However the recommended versions, together with the other tools recommended versions are:
+Gradle 6.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
 | -------------- | ------ | ------ | --- | ----------------- | --------------- |
@@ -219,8 +219,10 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Krzysztof Kruczynski](https://github.com/krzykrucz) - Rule fix: ThrowingExceptionInMain, ExitOutsideMain
 - [Paya Do](https://github.com/payathedo) - Designer for Detekt's logo
 - [zmunm](https://github.com/zmunm) - New rule: ObjectLiteralToLambda
+- [Vinicius Montes Munhoz](https://github.com/vfmunhoz) - Documentation improvement
 - [Eliezer Graber](https://github.com/eygraber) - Rule fix: ModifierOrder
 - [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
+- [Andre Paz](https://github.com/andrepaz) - Rule improvement: LongParameterList
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyNaming
 
 ### Mentions

@@ -24,7 +24,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:master-SNAPSHOT"
+    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:main-SNAPSHOT"
   }
 }
 
@@ -47,7 +47,7 @@ If you're using the `plugins{}` block to apply detekt, you should update your `b
 
 ```groovy
 plugins {
-  id("io.gitlab.arturbosch.detekt") version "master-SNAPSHOT"
+  id("io.gitlab.arturbosch.detekt") version "main-SNAPSHOT"
 }
 
 allprojects {

@@ -61,59 +61,64 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val comparator: Comparator<KtDeclaration> = Comparator { dec1: KtDeclaration, dec2: KtDeclaration ->
-        if (dec1.priority == null || dec2.priority == null) return@Comparator 0
-        compareValues(dec1.priority, dec2.priority)
-    }
-
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
 
-        val misorders = comparator.findOutOfOrder(classBody.declarations)
-        if (misorders.isNotEmpty()) {
-            report(
-                misorders.map {
-                    CodeSmell(
-                        issue = issue,
-                        entity = Entity.from(it.first),
-                        message = "${it.first.description} should not come before ${it.second.description}",
-                        references = listOf(Entity.from(classBody))
+        var currentSection = Section(0)
+        for (ktDeclaration in classBody.declarations) {
+            val section = ktDeclaration.toSection() ?: continue
+            when {
+                section < currentSection -> {
+                    val message =
+                        "${ktDeclaration.toDescription()} should be declared before ${currentSection.toDescription()}."
+                    report(
+                        CodeSmell(
+                            issue = issue,
+                            entity = Entity.from(ktDeclaration),
+                            message = message,
+                            references = listOf(Entity.from(classBody))
+                        )
                     )
                 }
-            )
+                section > currentSection -> currentSection = section
+            }
         }
     }
 }
 
-private fun Comparator<KtDeclaration>.findOutOfOrder(
-    declarations: List<KtDeclaration>
-): List<Pair<KtDeclaration, KtDeclaration>> =
-    declarations
-        .zipWithNext { a, b -> if (compare(a, b) > 0) Pair(a, b) else null }
-        .filterNotNull()
+private fun KtDeclaration.toDescription(): String = when {
+    this is KtProperty -> "property `$name`"
+    this is KtClassInitializer -> "initializer blocks"
+    this is KtSecondaryConstructor -> "secondary constructor"
+    this is KtNamedFunction -> "method `$name()`"
+    this is KtObjectDeclaration && isCompanion() -> "companion object"
+    else -> ""
+}
 
-private val KtDeclaration.description: String
-    get() = when (this) {
-        is KtClassInitializer -> "class initializer"
-        is KtObjectDeclaration -> if (isCompanion()) "Companion object" else ""
-        else -> "$name ($printableDeclaration)"
+@Suppress("MagicNumber")
+private fun KtDeclaration.toSection(): Section? = when {
+    this is KtProperty -> Section(0)
+    this is KtClassInitializer -> Section(0)
+    this is KtSecondaryConstructor -> Section(1)
+    this is KtNamedFunction -> Section(2)
+    this is KtObjectDeclaration && isCompanion() -> Section(3)
+    else -> null // For declarations not relevant for ordering, such as nested classes.
+}
+
+@Suppress("MagicNumber")
+private class Section(val priority: Int) : Comparable<Section> {
+
+    init {
+        require(priority in 0..3)
     }
 
-private val KtDeclaration.printableDeclaration: String
-    get() = when (this) {
-        is KtProperty -> "property"
-        is KtSecondaryConstructor -> "secondary constructor"
-        is KtNamedFunction -> "function"
+    fun toDescription(): String = when (priority) {
+        0 -> "property declarations and initializer blocks"
+        1 -> "secondary constructors"
+        2 -> "method declarations"
+        3 -> "companion object"
         else -> ""
     }
 
-@Suppress("MagicNumber")
-private val KtDeclaration.priority: Int?
-    get() = when (this) {
-        is KtProperty -> 0
-        is KtClassInitializer -> 0
-        is KtSecondaryConstructor -> 1
-        is KtNamedFunction -> 2
-        is KtObjectDeclaration -> if (isCompanion()) 3 else null
-        else -> null
-    }
+    override fun compareTo(other: Section): Int = priority.compareTo(other.priority)
+}

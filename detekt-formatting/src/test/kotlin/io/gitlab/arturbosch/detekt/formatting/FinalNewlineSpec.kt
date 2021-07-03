@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
-import io.gitlab.arturbosch.detekt.formatting.wrappers.INSERT_FINAL_NEWLINE
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -31,7 +30,7 @@ class FinalNewlineSpec : Spek({
         }
 
         it("should report new line when configured") {
-            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE to "false"))
+            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
                 .lint(
                     """
                 fun main() = Unit
@@ -43,10 +42,12 @@ class FinalNewlineSpec : Spek({
         }
 
         it("should not report when no new line is configured and not present") {
-            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE to "false"))
+            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
                 .lint("fun main() = Unit")
 
             assertThat(findings).isEmpty()
         }
     }
 })
+
+private const val INSERT_FINAL_NEWLINE_KEY = "insertFinalNewLine"

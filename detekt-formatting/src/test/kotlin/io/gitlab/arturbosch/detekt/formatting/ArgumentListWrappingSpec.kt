@@ -40,7 +40,7 @@ class ArgumentListWrappingSpec : Spek({
                  3
                 )
             """.trimIndent()
-            val config = TestConfig(ArgumentListWrapping.INDENT_SIZE to "1")
+            val config = TestConfig("indentSize" to "1")
             assertThat(ArgumentListWrapping(config).lint(code)).isEmpty()
         }
 
@@ -48,7 +48,7 @@ class ArgumentListWrappingSpec : Spek({
             val code = """
                 val x = f(1111, 2222, 3333)
             """.trimIndent()
-            val config = TestConfig(ArgumentListWrapping.MAX_LINE_LENGTH to "10")
+            val config = TestConfig("maxLineLength" to "10")
             assertThat(ArgumentListWrapping(config).lint(code)).hasSize(4)
         }
     }

@@ -77,8 +77,7 @@ class ClassOrderingSpec : Spek({
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0].message).isEqualTo(
-                "OutOfOrder (secondary constructor) " +
-                    "should not come before class initializer"
+                "initializer blocks should be declared before secondary constructors."
             )
         }
 
@@ -102,10 +101,12 @@ class ClassOrderingSpec : Spek({
             """
 
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(2)
             assertThat(findings[0].message).isEqualTo(
-                "OutOfOrder (secondary constructor) " +
-                    "should not come before y (property)"
+                "property `y` should be declared before secondary constructors."
+            )
+            assertThat(findings[1].message).isEqualTo(
+                "initializer blocks should be declared before secondary constructors."
             )
         }
 
@@ -129,8 +130,13 @@ class ClassOrderingSpec : Spek({
             """
 
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("returnX (function) should not come before y (property)")
+            assertThat(findings).hasSize(3)
+            assertThat(findings[0].message)
+                .isEqualTo("property `y` should be declared before method declarations.")
+            assertThat(findings[1].message)
+                .isEqualTo("initializer blocks should be declared before method declarations.")
+            assertThat(findings[2].message)
+                .isEqualTo("secondary constructor should be declared before method declarations.")
         }
 
         it("reports when companion object is out of order") {
@@ -154,7 +160,7 @@ class ClassOrderingSpec : Spek({
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Companion object should not come before returnX (function)")
+            assertThat(findings[0].message).isEqualTo("method `returnX()` should be declared before companion object.")
         }
 
         it("does not report nested class order") {
@@ -201,6 +207,37 @@ class ClassOrderingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
+        it("report all issues with interleaving nested class") {
+            val code = """
+                class MultipleMisorders(private val x: String) {
+                    companion object {
+                        const val IMPORTANT_VALUE = 3
+                    }
+
+                    class Nested { }
+
+                    fun returnX() = x
+
+                    class Nested2 { }
+
+                    constructor(z: Int): this(z.toString())
+
+                    class Nested3 { }
+                    
+                    val y = x
+                }
+            """
+
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(3)
+            assertThat(findings[0].message)
+                .isEqualTo("method `returnX()` should be declared before companion object.")
+            assertThat(findings[1].message)
+                .isEqualTo("secondary constructor should be declared before companion object.")
+            assertThat(findings[2].message)
+                .isEqualTo("property `y` should be declared before companion object.")
+        }
+
         it("does report all issues in a class with multiple misorderings") {
             val code = """
                 class MultipleMisorders(private val x: String) {
@@ -219,11 +256,11 @@ class ClassOrderingSpec : Spek({
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(3)
             assertThat(findings[0].message)
-                .isEqualTo("Companion object should not come before returnX (function)")
+                .isEqualTo("method `returnX()` should be declared before companion object.")
             assertThat(findings[1].message)
-                .isEqualTo("returnX (function) should not come before MultipleMisorders (secondary constructor)")
+                .isEqualTo("secondary constructor should be declared before companion object.")
             assertThat(findings[2].message)
-                .isEqualTo("MultipleMisorders (secondary constructor) should not come before y (property)")
+                .isEqualTo("property `y` should be declared before companion object.")
         }
     }
 })

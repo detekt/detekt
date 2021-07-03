@@ -68,17 +68,22 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 h4 { "Configuration options:" }
                 list {
                     rule.configuration.forEach {
-                        val defaultValues = it.defaultValue.lines()
-                        val defaultValuesString = defaultValues.joinToString { value ->
-                            value.trim().removePrefix("- ")
+                        val defaultValues = formatDefaultValues(it.defaultValue)
+                        val defaultAndroidValues = it.defaultAndroidValue?.let(::formatDefaultValues)
+                        val defaultString = if (defaultAndroidValues != null) {
+                            "(default: ${code { defaultValues }}) (android default: ${code { defaultAndroidValues }})"
+                        } else {
+                            "(default: ${code { defaultValues }})"
                         }
                         if (it.isDeprecated()) {
                             item {
-                                crossOut { code { it.name } } + " (default: ${code { defaultValuesString }})"
+                                crossOut { code { it.name } } + " " + defaultString
                             }
                             description { "${bold { "Deprecated" }}: ${it.deprecated}" }
                         } else {
-                            item { "${code { it.name }} (default: ${code { defaultValuesString }})" }
+                            item {
+                                code { it.name } + " " + defaultString
+                            }
                         }
                         description { it.description }
                     }
@@ -87,6 +92,10 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             printRuleCodeExamples(rule)
         }
+    }
+
+    private fun formatDefaultValues(rawString: String) = rawString.lines().joinToString {
+        it.trim().removePrefix("- ")
     }
 
     private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {

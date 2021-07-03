@@ -33,7 +33,7 @@ class Deprecation(config: Config) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         if (hasDeprecationCompilerWarnings(element)) {
             val entity = if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element)
-            report(CodeSmell(issue, entity, "$element is deprecated."))
+            report(CodeSmell(issue, entity, "${element.text} is deprecated."))
         }
         super.visitElement(element)
     }

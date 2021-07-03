@@ -1,19 +1,20 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.ANDROID_VARIANTS_DELEGATE_NAME
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.DEFAULT_ANDROID_VALUE_ARGUMENT_NAME
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.isAndroidVariantConfigDelegate
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.FALLBACK_DELEGATE_NAME
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.getFallbackPropertyName
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.checkUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isFallbackConfigDelegate
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -52,57 +53,78 @@ class ConfigurationCollector {
 
     private fun KtProperty.getConstantValueAsStringOrNull(): String? {
         if (hasListDeclaration()) {
-            return getListDeclarationAsConfigString()
+            return getListDeclaration()
+                .valueArguments
+                .map { "'${it.text.withoutQuotes()}'" }
+                .toString()
         }
 
         return findDescendantOfType<KtConstantExpression>()?.text
             ?: findDescendantOfType<KtStringTemplateExpression>()?.text?.withoutQuotes()
     }
 
-    private fun KtProperty.getListDeclarationAsConfigString(): String {
-        return getListDeclaration()
-            .valueArguments
-            .map { "'${it.text.withoutQuotes()}'" }.toString()
-    }
-
-    private fun KtProperty.parseConfigurationAnnotation(): Configuration? {
-        if (isAnnotatedWith(ConfigAnnotation::class)) return toConfiguration()
-        if (isInitializedWithConfigDelegate()) {
-            invalidDocumentation {
-                "'$name' is using the config delegate but is not annotated with @Configuration"
-            }
+    private fun KtProperty.parseConfigurationAnnotation(): Configuration? = when {
+        isAnnotatedWith(ConfigAnnotation::class) -> toConfiguration()
+        isInitializedWithConfigDelegate() -> invalidDocumentation {
+            "'$name' is using the config delegate but is not annotated with @Configuration"
         }
-        return null
+        else -> null
     }
 
     private fun KtProperty.toConfiguration(): Configuration {
         if (!isInitializedWithConfigDelegate()) {
             invalidDocumentation { "'$name' is not using one of the config property delegates ($DELEGATE_NAMES)" }
         }
+
         if (isFallbackConfigDelegate()) {
-            val fallbackPropertyName = getFallbackPropertyName()
-            if (isUsingInvalidFallbackReference(properties, fallbackPropertyName)) {
-                invalidDocumentation { "The fallback property '$fallbackPropertyName' is missing for property '$name'" }
-            }
+            checkUsingInvalidFallbackReference(properties)
         }
 
         val propertyName: String = checkNotNull(name)
         val deprecationMessage = firstAnnotationParameterOrNull(Deprecated::class)
         val description: String = firstAnnotationParameter(ConfigAnnotation::class)
-        val defaultValueAsString = delegate?.getDefaultValueAsString()
-            ?: invalidDocumentation { "'$propertyName' is not a delegated property" }
+        val defaultValueAsString = getDefaultValueAsString()
+        val defaultAndroidValueAsString = getDefaultAndroidValueAsString()
 
         return Configuration(
             name = propertyName,
             description = description,
             defaultValue = defaultValueAsString,
-            deprecated = deprecationMessage
+            defaultAndroidValue = defaultAndroidValueAsString,
+            deprecated = deprecationMessage,
         )
     }
 
-    private fun KtPropertyDelegate.getDefaultValueAsString(): String {
-        val defaultValueExpression = getDefaultValueExpression()
-        val listDeclarationForDefault = defaultValueExpression.getListDeclarationOrNull()
+    private fun KtProperty.getDefaultValueAsString(): String {
+        val defaultValueArgument = getValueArgument(
+            name = DEFAULT_VALUE_ARGUMENT_NAME,
+            actionForPositionalMatch = { arguments ->
+                when {
+                    isFallbackConfigDelegate() -> arguments[1]
+                    isAndroidVariantConfigDelegate() -> arguments[0]
+                    else -> arguments[0]
+                }
+            }
+        ) ?: invalidDocumentation { "'$name' is not a delegated property" }
+        return formatDefaultValueExpression(checkNotNull(defaultValueArgument.getArgumentExpression()))
+    }
+
+    private fun KtProperty.getDefaultAndroidValueAsString(): String? {
+        val defaultValueArgument = getValueArgument(
+            name = DEFAULT_ANDROID_VALUE_ARGUMENT_NAME,
+            actionForPositionalMatch = { arguments ->
+                when {
+                    isAndroidVariantConfigDelegate() -> arguments[1]
+                    else -> null
+                }
+            }
+        )
+        val defaultValueExpression = defaultValueArgument?.getArgumentExpression() ?: return null
+        return formatDefaultValueExpression(defaultValueExpression)
+    }
+
+    private fun KtProperty.formatDefaultValueExpression(ktExpression: KtExpression): String {
+        val listDeclarationForDefault = ktExpression.getListDeclarationOrNull()
         if (listDeclarationForDefault != null) {
             return listDeclarationForDefault.valueArguments.map {
                 val value = constantsByName[it.text] ?: it.text
@@ -110,23 +132,10 @@ class ConfigurationCollector {
             }.toString()
         }
 
-        val defaultValueOrConstantName = checkNotNull(
-            defaultValueExpression.text?.withoutQuotes()
-        )
+        val defaultValueOrConstantName = checkNotNull(ktExpression.text.withoutQuotes())
         val defaultValue = constantsByName[defaultValueOrConstantName] ?: defaultValueOrConstantName
-        return property.formatDefaultValueAccordingToType(defaultValue)
-    }
-
-    private fun KtPropertyDelegate.getDefaultValueExpression(): KtExpression {
-        val arguments = (expression as KtCallExpression).valueArguments.filterNot { it is KtLambdaArgument }
-        if (arguments.size == 1) {
-            return checkNotNull(arguments[0].getArgumentExpression())
-        }
-        val defaultArgument = arguments
-            .find { it.getArgumentName()?.text == DEFAULT_VALUE_ARGUMENT_NAME }
-            ?: if (property.isFallbackConfigDelegate()) arguments[1] else arguments.first()
-
-        return checkNotNull(defaultArgument.getArgumentExpression())
+        val needsQuotes = declaredTypeOrNull in TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT
+        return if (needsQuotes) "'$defaultValue'" else defaultValue
     }
 
     private object ConfigWithFallbackSupport {
@@ -136,24 +145,37 @@ class ConfigurationCollector {
         fun KtProperty.isFallbackConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
 
-        fun KtProperty.getFallbackPropertyName(): String {
-            val callExpression = delegate?.expression as KtCallExpression
-            val arguments = callExpression.valueArguments
-            val fallbackArgument = arguments
-                .find { it.getArgumentName()?.text == FALLBACK_ARGUMENT_NAME }
-                ?: arguments.first()
-            return checkNotNull(fallbackArgument.getArgumentExpression()?.text?.withoutQuotes())
-        }
-
-        fun isUsingInvalidFallbackReference(properties: List<KtProperty>, fallbackPropertyName: String) =
-            properties
+        fun KtProperty.checkUsingInvalidFallbackReference(properties: List<KtProperty>) {
+            val fallbackPropertyName = getValueArgument(
+                name = FALLBACK_ARGUMENT_NAME,
+                actionForPositionalMatch = { it.first() }
+            )?.getArgumentExpression()?.text?.withoutQuotes()
+            val hasInvalidFallbackReference = properties
                 .filter { it.isInitializedWithConfigDelegate() }
                 .none { it.name == fallbackPropertyName }
+            if (hasInvalidFallbackReference) {
+                invalidDocumentation {
+                    "The fallback property '$fallbackPropertyName' is missing for property '$name'"
+                }
+            }
+        }
+    }
+
+    private object ConfigWithAndroidVariantsSupport {
+        const val ANDROID_VARIANTS_DELEGATE_NAME = "configWithAndroidVariants"
+        const val DEFAULT_ANDROID_VALUE_ARGUMENT_NAME = "defaultAndroidValue"
+
+        fun KtProperty.isAndroidVariantConfigDelegate(): Boolean =
+            delegate?.expression?.referenceExpression()?.text == ANDROID_VARIANTS_DELEGATE_NAME
     }
 
     companion object {
         private const val SIMPLE_DELEGATE_NAME = "config"
-        private val DELEGATE_NAMES = listOf(SIMPLE_DELEGATE_NAME, FALLBACK_DELEGATE_NAME)
+        private val DELEGATE_NAMES = listOf(
+            SIMPLE_DELEGATE_NAME,
+            FALLBACK_DELEGATE_NAME,
+            ANDROID_VARIANTS_DELEGATE_NAME
+        )
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
@@ -163,9 +185,6 @@ class ConfigurationCollector {
         private const val TYPE_REGEX = "Regex"
         private const val TYPE_SPLIT_PATTERN = "SplitPattern"
         private val TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT = listOf(TYPE_STRING, TYPE_REGEX, TYPE_SPLIT_PATTERN)
-
-        private val KtPropertyDelegate.property: KtProperty
-            get() = parent as KtProperty
 
         private val KtProperty.declaredTypeOrNull: String?
             get() = typeReference?.text
@@ -179,12 +198,6 @@ class ConfigurationCollector {
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text in DELEGATE_NAMES
 
-        private fun KtProperty.formatDefaultValueAccordingToType(value: String): String {
-            val defaultValue = value.withoutQuotes()
-            val needsQuotes = declaredTypeOrNull in TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT
-            return if (needsQuotes) "'$defaultValue'" else defaultValue
-        }
-
         private fun KtProperty.hasListDeclaration(): Boolean =
             anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
 
@@ -193,6 +206,15 @@ class ConfigurationCollector {
 
         private fun KtElement.invalidDocumentation(message: () -> String): Nothing {
             throw InvalidDocumentationException("[${containingFile.name}] ${message.invoke()}")
+        }
+
+        private fun KtProperty.getValueArgument(
+            name: String,
+            actionForPositionalMatch: (List<KtValueArgument>) -> KtValueArgument?
+        ): KtValueArgument? {
+            val callExpression = delegate?.expression as? KtCallExpression ?: return null
+            val arguments = callExpression.valueArguments
+            return arguments.find { it.getArgumentName()?.text == name } ?: actionForPositionalMatch(arguments)
         }
     }
 }

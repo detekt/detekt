@@ -15,6 +15,8 @@ fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection(
 
 fun KtClassOrObject.hasKDocTag(tagName: String) = kDocSection()?.findTagByName(tagName) != null
 
+fun KtClassOrObject.hasConfigurationKDocTag() = hasKDocTag(TAG_CONFIGURATION)
+
 private fun KDocTag.parseConfigTag(): Configuration {
     val content: String = getContent()
     val delimiterIndex = content.indexOf('-')
@@ -31,7 +33,13 @@ private fun KDocTag.parseConfigTag(): Configuration {
         .replace(configurationDefaultValueRegex, "")
         .replace(configurationDeprecatedRegex, "")
         .trim()
-    return Configuration(name, description, defaultValue, deprecatedMessage)
+    return Configuration(
+        name = name,
+        description = description,
+        defaultValue = defaultValue,
+        defaultAndroidValue = null,
+        deprecated = deprecatedMessage
+    )
 }
 
 private const val EXPECTED_CONFIGURATION_FORMAT =

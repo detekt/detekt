@@ -9,7 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 private const val DESCRIPTION = "Multi-line if statement was found that does not have braces. " +
@@ -34,27 +36,27 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue("MandatoryBracesIfStatements", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(expression.then ?: expression), DESCRIPTION))
-        }
-
-        if (expression.isNotBlockOrIfExpression() && hasNewLine(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(expression.`else` ?: expression), DESCRIPTION))
-        }
-
         super.visitIfExpression(expression)
+
+        val thenExpression = expression.then ?: return
+        if (thenExpression !is KtBlockExpression && hasNewLineAfter(expression.rightParenthesis)) {
+            report(CodeSmell(issue, Entity.from(thenExpression), DESCRIPTION))
+        }
+
+        val elseExpression = expression.`else` ?: return
+        if (mustBeOnSameLine(elseExpression) && hasNewLineAfter(expression.elseKeyword)) {
+            report(CodeSmell(issue, Entity.from(elseExpression), DESCRIPTION))
+        }
     }
 
-    private fun hasNewLine(element: PsiElement?): Boolean =
-        element
-            ?.siblings(forward = true, withItself = false)
-            ?.takeWhile { it.text != "else" }
-            ?.firstOrNull { it.textContains('\n') } != null
+    private fun hasNewLineAfter(element: PsiElement?): Boolean {
+        if (element == null) return false
+        return element
+            .siblings(forward = true, withItself = false)
+            .takeWhile { it.text != "else" }
+            .any { it.textContains('\n') }
+    }
 
-    private fun KtIfExpression.isNotBlockExpression(): Boolean = this.then !is KtBlockExpression
-
-    private fun KtIfExpression.isNotBlockOrIfExpression(): Boolean =
-        this.`else` != null &&
-            this.`else` !is KtIfExpression &&
-            this.`else` !is KtBlockExpression
+    private fun mustBeOnSameLine(expression: KtExpression): Boolean =
+        expression !is KtIfExpression && expression !is KtBlockExpression && expression !is KtWhenExpression
 }

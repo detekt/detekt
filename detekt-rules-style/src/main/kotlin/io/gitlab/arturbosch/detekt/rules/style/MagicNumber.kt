@@ -180,7 +180,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun normalizeForParsingAsDouble(text: String): String {
         return text.trim()
-            .lowercase(Locale.US)
+            .toLowerCase(Locale.US)
             .replace("_", "")
             .removeSuffix("l")
             .removeSuffix("d")

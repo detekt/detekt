@@ -297,5 +297,13 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
         }
+
+        it("should not report when function initializer is Nothing") {
+            val code = """
+                    fun test(): Unit = throw UnsupportedOperationException()
+                """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })
