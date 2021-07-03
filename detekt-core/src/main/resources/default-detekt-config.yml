@@ -365,7 +365,7 @@ naming:
   active: true
   BooleanPropertyNaming:
     active: false
-    allowedPrefixes: '^(is|has|should|need|noNeed|was|are|may|can|had|for|with)'
+    allowedPrefixes: '^(is|has|are)'
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   ClassNaming:
     active: true
