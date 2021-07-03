@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * Reports when a boolean property doesn't have one of the following prefixes:
  * is/has/should/need/noNeed/was/are/may/can/had/for/with.
  *
- * * <noncompliant>
+ * <noncompliant>
  * val progressBar: Boolean = true
  * </noncompliant>
  *
