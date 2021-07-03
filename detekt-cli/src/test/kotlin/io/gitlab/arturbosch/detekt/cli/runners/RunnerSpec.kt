@@ -266,4 +266,20 @@ class RunnerSpec : Spek({
             executeDetekt("--input", inputPath.toString(), "--max-issues", "2")
         }
     }
+
+    describe("runner with build-upon-default-config checking detekt-api") {
+
+        val referencePath: Path = resourceAsPath("/cases/CleanPoko.kt")
+        val path: Path = referencePath.resolve("../../../../../../detekt-api/src/main").normalize()
+
+        it("should not throw") {
+            assertThatCode {
+                executeDetekt(
+                    "--input",
+                    path.toString(),
+                    "--build-upon-default-config"
+                )
+            }.doesNotThrowAnyException()
+        }
+    }
 })
