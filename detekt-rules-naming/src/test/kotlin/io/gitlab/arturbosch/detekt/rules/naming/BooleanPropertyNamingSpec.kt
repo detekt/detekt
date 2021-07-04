@@ -143,16 +143,16 @@ class BooleanPropertyNamingSpec : Spek({
             it("should warn if there is not prefix from config") {
                 val code = """
                     class Test {
-                        var hasDefault: Boolean = true
+                        var needReload: Boolean = true
                     }
                     """
 
-                val config = TestConfig(mapOf(ALLOWED_PREFIXES to "^(is|are)"))
+                val config = TestConfig(mapOf(ALLOWED_PATTERN to "^(is|has|are|need)"))
                 assertThat(BooleanPropertyNaming(config).compileAndLint(code))
-                    .hasSize(1)
+                    .isEmpty()
             }
         }
     }
 })
 
-private const val ALLOWED_PREFIXES = "allowedPrefixes"
+private const val ALLOWED_PATTERN = "allowedPattern"

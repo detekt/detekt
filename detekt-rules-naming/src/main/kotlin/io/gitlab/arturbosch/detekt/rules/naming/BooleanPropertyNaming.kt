@@ -5,11 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -19,8 +19,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when a boolean property doesn't have one of the following prefixes:
- * is|has|are.
+ * Reports when a boolean property doesn't have one of the allowing prefixes
  *
  * <noncompliant>
  * val progressBar: Boolean = true
@@ -33,11 +32,8 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    @Configuration("naming pattern")
-    private val allowedPattern by LazyRegex(
-        ALLOWED_PREFIXES,
-        "^(is|has|are)"
-    )
+    @Configuration("RegEx to start with name")
+    private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
 
     override val issue = Issue(
         javaClass.simpleName, Severity.CodeSmell,
@@ -96,6 +92,5 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val KOTLIN_BOOLEAN_TYPE_NAME = "kotlin.Boolean"
         const val JAVA_BOOLEAN_TYPE_NAME = "java.lang.Boolean"
-        const val ALLOWED_PREFIXES = "allowedPrefixes"
     }
 }
