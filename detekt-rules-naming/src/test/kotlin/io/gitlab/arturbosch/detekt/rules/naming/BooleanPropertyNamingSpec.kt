@@ -140,7 +140,7 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should warn if there is not prefix from config") {
+            it("should not detect titles, starting with allowed words from config") {
                 val code = """
                     class Test {
                         var needReload: Boolean = true
