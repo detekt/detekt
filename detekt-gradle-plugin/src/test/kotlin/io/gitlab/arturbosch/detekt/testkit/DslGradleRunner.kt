@@ -116,6 +116,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             add("--info")
             add("--build-cache")
             add("-Dorg.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m")
+            add("--no-daemon")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
