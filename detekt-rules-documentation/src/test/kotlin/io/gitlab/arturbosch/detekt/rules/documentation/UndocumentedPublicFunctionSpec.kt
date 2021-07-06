@@ -17,6 +17,26 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("reports undocumented public function in object") {
+            val code = """
+                object Test {
+                    fun noComment1() {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports undocumented public function in nested object") {
+            val code = """
+                class Test {
+                    object Test2 {
+                        fun noComment1() {}
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("reports undocumented public functions in companion object") {
             val code = """
                 class Test {
@@ -90,6 +110,15 @@ class UndocumentedPublicFunctionSpec : Spek({
 					public fun nope2() {}
 				}
 			"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report public functions in private object") {
+            val code = """
+                private object Test {
+                    fun noComment1() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
