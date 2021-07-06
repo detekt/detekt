@@ -49,6 +49,15 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
+        it("reports undocumented public function in an interface") {
+            val code = """
+                interface Test {
+                    fun noComment1()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("does not report documented public function") {
             val code = """
                 /**
