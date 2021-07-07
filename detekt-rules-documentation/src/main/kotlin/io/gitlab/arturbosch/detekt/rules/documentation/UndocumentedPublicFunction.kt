@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
@@ -41,5 +41,5 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtNamedFunction.shouldBeDocumented() =
-        (isTopLevel || containingClass()?.isPublic == true) && isPublicNotOverridden()
+        (isTopLevel || containingClassOrObject?.isPublic == true) && isPublicNotOverridden()
 }
