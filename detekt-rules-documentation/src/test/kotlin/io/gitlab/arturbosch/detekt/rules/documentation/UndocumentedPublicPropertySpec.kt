@@ -50,7 +50,7 @@ class UndocumentedPublicPropertySpec : Spek({
         it("reports undocumented public property in an interface") {
             val code = """
                 interface Test {
-                    val a = 1 
+                    val a: Int
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
