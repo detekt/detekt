@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.diagnostics.WhenMissingCase
+import org.jetbrains.kotlin.cfg.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
