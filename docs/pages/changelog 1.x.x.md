@@ -6,6 +6,82 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.18.0-RC1 - 2021-07-08
+
+##### Notable Changes
+
+- This version of Detekt ships with Kotlin `1.5.x`, and we're compiling with `apiVersion` set to `1.4` - [#3718](https://github.com/detekt/detekt/pull/3718) and [#3852](https://github.com/detekt/detekt/pull/3852)
+- The minimum version of Gradle to use Detekt Gradle Plugin is now `6.1` - [#3830](https://github.com/detekt/detekt/pull/3830)
+- This version of Detekt has been tested against Java 16 - [#3698](https://github.com/detekt/detekt/pull/3698)
+- We fixed a long-standing bug related to parallel execution (#3248) - [#3799](https://github.com/detekt/detekt/pull/3799) and [#3822](https://github.com/detekt/detekt/pull/3822)
+- We now use multi-line format for list options in the default detekt config file - [#3827](https://github.com/detekt/detekt/pull/3827)
+- The rule `VarCouldBeVal` has been updated and now works only with type resolution to provide more precise findings - [#3880](https://github.com/detekt/detekt/pull/3880)
+- We removed all the references to `Extensions.getRootArea` that is now deprecated from our codebase. This was affecting users with sporadic crashes. - [#3848](https://github.com/detekt/detekt/pull/3848)
+- For Android projects using Detekt Gradle plugins, we now add javac intermediates to classpath. This will allow running more precise type resolutions inspections - [#3867](https://github.com/detekt/detekt/pull/3867)
+- We continued the work to introduce annotations to declare rules metadata. Specifically the `@Autocorrect` annotation has been added - [#3820](https://github.com/detekt/detekt/pull/3820)
+
+##### Changelog
+
+- UndocumentedPublicProperty and UndocumentedPublicFunction should include objects - [#3940](https://github.com/detekt/detekt/pull/3940)
+- Fix exclusion pattern for InvalidPackageDeclaration - [#3907](https://github.com/detekt/detekt/pull/3907)
+- Allow else when {...} in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
+- Remove unnecessary constant declaration - [#3903](https://github.com/detekt/detekt/pull/3903)
+- Check bindingContext only once in MemberNameEqualsClassName - [#3899](https://github.com/detekt/detekt/pull/3899)
+- LongMethod: add 'ignoreAnnotated' configuration option - [#3892](https://github.com/detekt/detekt/pull/3892)
+- Fix Deprecation rule message - [#3885](https://github.com/detekt/detekt/pull/3885)
+- Improve LongParameterList rule by supporting ignoring annotated parameters - [#3879](https://github.com/detekt/detekt/pull/3879)
+- OptionalUnit: fix false positive when function initializer is Nothing type - [#3876](https://github.com/detekt/detekt/pull/3876)
+- UnnecessaryParentheses: fix false positive for delegated expressions - [#3858](https://github.com/detekt/detekt/pull/3858)
+- Fix UnnecessaryLet false positive in inner lambdas - [#3841](https://github.com/detekt/detekt/pull/3841)
+- Fix false positive for UnusedPrivateMember - Backtick identifiers - [#3828](https://github.com/detekt/detekt/pull/3828)
+- Properly apply test excludes for comments - [#3815](https://github.com/detekt/detekt/pull/3815)
+- Fix generation issues around (deprecated) list properties - [#3813](https://github.com/detekt/detekt/pull/3813)
+- Update the implementation of ClassOrdering to handle false negatives - [#3810](https://github.com/detekt/detekt/pull/3810)
+- [comments] Do not exclude tests globally - [#3801](https://github.com/detekt/detekt/pull/3801)
+- UnnecessaryLet: report when implicit parameter isn't used - [#3794](https://github.com/detekt/detekt/pull/3794)
+- NoNameShadowing: don't report when implicit 'it' parameter isn't used - [#3793](https://github.com/detekt/detekt/pull/3793)
+- Fix ModifierOrder to support value class - [#3719](https://github.com/detekt/detekt/pull/3719)
+- Remove inline value class to stay compatible with Kotlin 1.4 API - [#3871](https://github.com/detekt/detekt/pull/3871)
+- Use annotations to configure rules in detekt-rules-exceptions - [#3798](https://github.com/detekt/detekt/pull/3798)
+- Use @Configuration in detekt-rules-style - [#3774](https://github.com/detekt/detekt/pull/3774)
+- Use annotations to configure rules in custom-checks - [#3773](https://github.com/detekt/detekt/pull/3773)
+- Use @Configuration for rules-errorprone - [#3772](https://github.com/detekt/detekt/pull/3772)
+- Use annotation to configure rules in rules-empty - [#3771](https://github.com/detekt/detekt/pull/3771)
+- Use annotation to configure rules in rules-documentation - [#3770](https://github.com/detekt/detekt/pull/3770)
+- Use annotations to configure rules in rules-naming - [#3769](https://github.com/detekt/detekt/pull/3769)
+- Use annotations to configure rules in rules-complexity - [#3768](https://github.com/detekt/detekt/pull/3768)
+- Move formatting rules to @Configuration - [#3847](https://github.com/detekt/detekt/pull/3847)
+
+##### Dependency Updates
+
+- Revert "Bump Kotlin to v1.5.20" - [#3941](https://github.com/detekt/detekt/pull/3941)
+- Bump Kotlin to v1.5.20 - [#3921](https://github.com/detekt/detekt/pull/3921)
+- Kotlin 1.5.10 - [#3826](https://github.com/detekt/detekt/pull/3826)
+- Update assertj to v3.20.2 - [#3912](https://github.com/detekt/detekt/pull/3912)
+- Update snakeyaml to v1.29 - [#3911](https://github.com/detekt/detekt/pull/3911)
+- Bump byte-buddy from 1.11.2 to 1.11.5 - [#3886](https://github.com/detekt/detekt/pull/3886)
+- Bump byte-buddy from 1.11.1 to 1.11.2 - [#3872](https://github.com/detekt/detekt/pull/3872)
+- Bump byte-buddy from 1.11.0 to 1.11.1 - [#3861](https://github.com/detekt/detekt/pull/3861)
+
+##### Housekeeping & Refactorings
+
+- Increase memory available to gradle integration test daemon - [#3938](https://github.com/detekt/detekt/pull/3938) 
+- Avoid empty lines when running detekt with type resolution - [#3909](https://github.com/detekt/detekt/pull/3909)
+- Fix java.lang.ClassCastException is reading default yaml config - [#3920](https://github.com/detekt/detekt/pull/3920)
+- Refactor + rename util function inside MandatoryBracesIfStatement rule - [#3908](https://github.com/detekt/detekt/pull/3908)
+- Rename Tests to Spec - [#3906](https://github.com/detekt/detekt/pull/3906)
+- verify that no rule is configured with kdoc tags - [#3870](https://github.com/detekt/detekt/pull/3870)
+- Setup FOSSA - [#3836](https://github.com/detekt/detekt/pull/3836)
+- jvmTarget can't be null - [#3818](https://github.com/detekt/detekt/pull/3818)
+- Add test for ruleset provider configuration - [#3814](https://github.com/detekt/detekt/pull/3814)
+- Merge JaCoCo coverage reports the "right" way - [#3650](https://github.com/detekt/detekt/pull/3650)
+- Update outdated Gradle plugin documentation regarding source files - [#3883](https://github.com/detekt/detekt/pull/3883)
+- Make documentation more precise about how rules are enabled - [#3889](https://github.com/detekt/detekt/pull/3889)
+- Rename MapGetWithNotNullAsserSpec to follow test convention - [#3878](https://github.com/detekt/detekt/pull/3878)
+- Remove custom assertions that check kdoc of rules - [#3859](https://github.com/detekt/detekt/pull/3859)
+
+See all issues at: [1.18.0](https://github.com/detekt/detekt/milestone/82)
+
 #### 1.17.1 - 2021-05-19
 
 ##### Notable Changes
