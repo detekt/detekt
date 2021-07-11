@@ -22,6 +22,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     val reports = DetektReports()
 
+    @Deprecated(message = "Use source instead.", replaceWith = ReplaceWith("source"))
     var input: ConfigurableFileCollection by this::source
 
     var source: ConfigurableFileCollection = objects.fileCollection()
