@@ -12,7 +12,6 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
-
         @JvmName("ignoreFailures_")
         set(value) {
             isIgnoreFailures = value
@@ -23,7 +22,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     val reports = DetektReports()
 
-    var input: ConfigurableFileCollection = objects.fileCollection()
+    var input: ConfigurableFileCollection by this::source
+
+    var source: ConfigurableFileCollection = objects.fileCollection()
         .from(
             DEFAULT_SRC_DIR_JAVA,
             DEFAULT_TEST_SRC_DIR_JAVA,

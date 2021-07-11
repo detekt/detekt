@@ -41,5 +41,5 @@ internal class DetektPlain(private val project: Project) {
     private fun existingInputDirectoriesProvider(
         project: Project,
         extension: DetektExtension
-    ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
+    ): Provider<FileCollection> = project.provider { extension.source.filter { it.exists() } }
 }
