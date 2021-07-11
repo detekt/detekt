@@ -443,7 +443,7 @@ naming:
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
-    excludes: ['**/*.kts']
+    excludes: ['**/*.kts', 'buildSrc/**']
     rootPackage: ''
   MatchingDeclarationName:
     active: true
