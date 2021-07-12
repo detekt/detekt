@@ -12,6 +12,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
+
         @JvmName("ignoreFailures_")
         set(value) {
             isIgnoreFailures = value
@@ -22,8 +23,12 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     val reports = DetektReports()
 
-    @Deprecated(message = "Use source instead.", replaceWith = ReplaceWith("source"))
-    var input: ConfigurableFileCollection by this::source
+    @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
+    var input: ConfigurableFileCollection
+        get() = source
+        set(value) {
+            source = value
+        }
 
     var source: ConfigurableFileCollection = objects.fileCollection()
         .from(
