@@ -42,7 +42,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     @Configuration("ignore naming for functions in the context of these annotation class names")
-    private val ignoreAnnotated: List<String> by config(emptyList())
+    private val ignoreAnnotated: List<String> by config(listOf("Composable"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
