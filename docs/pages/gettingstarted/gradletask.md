@@ -20,7 +20,7 @@ configurations {
 	detekt
 }
 
-task detekt(type: JavaExec) {
+def detektTask = tasks.register("detekt", JavaExec) {
 	main = "io.gitlab.arturbosch.detekt.cli.Main"
 	classpath = configurations.detekt
 
@@ -37,7 +37,7 @@ dependencies {
 }
 
 // Remove this line if you don't want to run detekt on every build
-check.dependsOn detekt
+check.dependsOn detektTask
 ```
 
 ###### Kotlin DSL
