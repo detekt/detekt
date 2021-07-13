@@ -462,7 +462,9 @@ exclude detekt from the check task.
 #### Groovy DSL
 
 ```groovy
-// TODO
+check.configure {
+    dependsOn = dependsOn.findAll { it.name != 'detekt' }
+}
 ```
 
 #### Kotlin DSL
