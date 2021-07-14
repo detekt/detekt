@@ -191,7 +191,7 @@ internal class DetektTaskMultiModuleIntegrationSpec : Spek({
 
                     val detektConfig: String = """
                         |detekt {
-                        |    input = files(
+                        |    source = files(
                         |       "${"$"}projectDir/src",
                         |       "${"$"}projectDir/child1/src",
                         |       "${"$"}projectDir/child2/src"

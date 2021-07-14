@@ -41,7 +41,7 @@ repositories {
 }
 
 detekt {
-    input = files(rootProject.rootDir)
+    source = files(rootProject.rootDir)
     buildUponDefaultConfig = true
 }
 ```
