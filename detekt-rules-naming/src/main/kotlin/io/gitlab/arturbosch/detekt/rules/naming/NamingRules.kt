@@ -32,6 +32,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val forbiddenClassNameRule = ForbiddenClassName(config)
     private val constructorParameterNamingRule = ConstructorParameterNaming(config)
     private val functionParameterNamingRule = FunctionParameterNaming(config)
+    private val booleanPropertyNamingRule = BooleanPropertyNaming(config)
 
     override val rules: List<Rule> = listOf(
         variableNamingRule,
@@ -48,7 +49,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         functionMinNameLengthRule,
         forbiddenClassNameRule,
         constructorParameterNamingRule,
-        functionParameterNamingRule
+        functionParameterNamingRule,
+        booleanPropertyNamingRule
     )
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -87,6 +89,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         variableMaxNameLengthRule.runIfActive { visitProperty(declaration) }
         variableMinNameLengthRule.runIfActive { visitProperty(declaration) }
         nonBooleanPropertyPrefixedWithIsRule.runIfActive { visitProperty(declaration) }
+        booleanPropertyNamingRule.runIfActive { visitProperty(declaration) }
 
         when {
             declaration.isTopLevel -> topLevelPropertyRule.runIfActive { visitProperty(declaration) }
