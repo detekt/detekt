@@ -905,7 +905,9 @@ exclude detekt from the check task.</p>
 
 <h4 id="groovy-dsl-7">Groovy DSL</h4>
 
-<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// TODO</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">check</span><span class="o">.</span><span class="na">configure</span> <span class="o">{</span>
+    <span class="n">dependsOn</span> <span class="o">=</span> <span class="n">dependsOn</span><span class="o">.</span><span class="na">findAll</span> <span class="o">{</span> <span class="n">it</span><span class="o">.</span><span class="na">name</span> <span class="o">!=</span> <span class="s1">'detekt'</span> <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 id="kotlin-dsl-7">Kotlin DSL</h4>
