@@ -478,7 +478,7 @@ $('#toc').on('click', 'a', function() {
 	<span class="n">detekt</span>
 <span class="o">}</span>
 
-<span class="n">task</span> <span class="nf">detekt</span><span class="o">(</span><span class="nl">type:</span> <span class="n">JavaExec</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">def</span> <span class="n">detektTask</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="s2">"detekt"</span><span class="o">,</span> <span class="n">JavaExec</span><span class="o">)</span> <span class="o">{</span>
 	<span class="n">main</span> <span class="o">=</span> <span class="s2">"io.gitlab.arturbosch.detekt.cli.Main"</span>
 	<span class="n">classpath</span> <span class="o">=</span> <span class="n">configurations</span><span class="o">.</span><span class="na">detekt</span>
 
@@ -495,7 +495,7 @@ $('#toc').on('click', 'a', function() {
 <span class="o">}</span>
 
 <span class="c1">// Remove this line if you don't want to run detekt on every build</span>
-<span class="n">check</span><span class="o">.</span><span class="na">dependsOn</span> <span class="n">detekt</span>
+<span class="n">check</span><span class="o">.</span><span class="na">dependsOn</span> <span class="n">detektTask</span>
 </code></pre></div></div>
 
 <h6 id="kotlin-dsl">Kotlin DSL</h6>
