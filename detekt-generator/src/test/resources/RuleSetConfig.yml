@@ -10,7 +10,7 @@ style:
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    conf1: foo
+    conf1: 'foo'
     conf3:
       - 'a'
       - 'b'

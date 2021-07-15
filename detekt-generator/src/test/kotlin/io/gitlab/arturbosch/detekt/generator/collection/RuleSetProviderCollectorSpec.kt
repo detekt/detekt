@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
@@ -309,7 +310,7 @@ object RuleSetProviderCollectorSpec : Spek({
                 val conf = items[0].configuration[0]
                 assertThat(conf.name).isEqualTo("aBool")
                 assertThat(conf.description).isEqualTo("bool description")
-                assertThat(conf.defaultValue).isEqualTo("false")
+                assertThat(conf.defaultValue).isEqualTo(of(false))
                 assertThat(conf.deprecated).isNull()
             }
 
@@ -317,7 +318,7 @@ object RuleSetProviderCollectorSpec : Spek({
                 val conf = items[0].configuration[1]
                 assertThat(conf.name).isEqualTo("aString")
                 assertThat(conf.description).isEqualTo("string description")
-                assertThat(conf.defaultValue).isEqualTo("'a'")
+                assertThat(conf.defaultValue).isEqualTo(of("a"))
                 assertThat(conf.deprecated).isEqualTo("use something else")
             }
 
@@ -325,14 +326,14 @@ object RuleSetProviderCollectorSpec : Spek({
                 val conf = items[0].configuration[2]
                 assertThat(conf.name).isEqualTo("anInt")
                 assertThat(conf.description).isEqualTo("int description")
-                assertThat(conf.defaultValue).isEqualTo("99")
+                assertThat(conf.defaultValue).isEqualTo(of(99))
             }
 
             it("extracts list configuration option") {
                 val conf = items[0].configuration[3]
                 assertThat(conf.name).isEqualTo("aList")
                 assertThat(conf.description).isEqualTo("list description")
-                assertThat(conf.defaultValue).isEqualTo("- aaaa\n    - bbbb")
+                assertThat(conf.defaultValue).isEqualTo(of(listOf("aaaa", "bbbb")))
             }
         }
     }
