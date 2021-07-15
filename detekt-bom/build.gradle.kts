@@ -2,7 +2,13 @@ plugins {
     `java-platform`
 }
 
+javaPlatform {
+    allowDependencies()
+}
+
 dependencies {
+    api(libs.kotlinx.coroutines.bom)
+
     constraints {
         api(libs.assertj)
         api(libs.spek.dsl)
@@ -16,7 +22,6 @@ dependencies {
         api(libs.ktlint.core)
         api(libs.ktlint.rulesetExperimental)
         api(libs.kotlinx.html)
-        api(libs.kotlinx.coroutines)
         api(libs.sarif4k)
     }
 }

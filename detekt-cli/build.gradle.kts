@@ -10,9 +10,10 @@ application {
 
 dependencies {
     implementation(libs.jcommander)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(projects.detektTooling)
     implementation(projects.detektParser)
-    runtimeOnly(projects.detektCore)
+    implementation(projects.detektCore)
     runtimeOnly(projects.detektRules)
 
     testImplementation(projects.detektTest)

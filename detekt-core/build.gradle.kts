@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(libs.snakeyaml)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(projects.detektApi)
     implementation(projects.detektMetrics)
     implementation(projects.detektParser)
