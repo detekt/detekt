@@ -16,6 +16,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
+            AvoidReferentialEquality(config),
             Deprecation(config),
             DontDowncastCollectionTypes(config),
             DoubleMutabilityForCollection(config),
