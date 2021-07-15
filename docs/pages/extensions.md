@@ -54,14 +54,16 @@ class TooManyFunctions(config: Config) : Rule(config) {
 
 Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
 ```kotlin
-class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
+class TooManyFunctions2(config: Config) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
+    override val issue = Issue(
+        javaClass.simpleName,
         Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
-        Debt.TWENTY_MINS)
+        Debt.TWENTY_MINS
+    )
 
-    private val threshold = valueOrDefault("threshold", THRESHOLD)
+    private val threshold: Int by config(defaultValue = 10)
     private var amount: Int = 0
 
     override fun visitKtFile(file: KtFile) {
@@ -82,8 +84,6 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
         super.visitNamedFunction(function)
         amount++
     }
-    
-    const val THRESHOLD = 10
 }
 ```
 
@@ -95,7 +95,7 @@ to the rule itself.
 MyRuleSet:
   TooManyFunctions2:
     active: true
-    threshold: 10
+    threshold: 5
   OtherRule:
     active: false
 ```

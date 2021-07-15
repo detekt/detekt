@@ -43,6 +43,8 @@ class TooManyFunctions(config: Config) : Rule(config) {
         super.visitNamedFunction(function)
         amount++
     }
-}
 
-const val THRESHOLD = 10
+    companion object {
+        private const val THRESHOLD = 10
+    }
+}

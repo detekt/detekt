@@ -10,6 +10,7 @@ import kotlin.reflect.KProperty
  *
  * `key` & `default` are used to retrieve a value from config.
  */
+@Deprecated("Use config property delegate with transformer instead.")
 class LazyRegex(
     private val key: String,
     private val default: String

@@ -94,6 +94,15 @@ public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
 	public static fun withAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Lkotlin/jvm/functions/Function0;)V
 }
 
+public final class io/gitlab/arturbosch/detekt/api/ConfigPropertyKt {
+	public static final fun config (Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithFallback (Ljava/lang/String;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithFallback (Ljava/lang/String;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+}
+
 public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigValidator : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun validate (Lio/gitlab/arturbosch/detekt/api/Config;)Ljava/util/Collection;
 }
