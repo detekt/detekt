@@ -15,8 +15,7 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
     )
 
     override fun visitDeclaration(dcl: KtDeclaration) {
-        super.visitDeclaration(dcl)
-        deprecatedBlockTag.verify(dcl)
-        endOfSentenceFormat.verify(dcl)
+        deprecatedBlockTag.visitDeclaration(dcl)
+        endOfSentenceFormat.visitDeclaration(dcl)
     }
 }

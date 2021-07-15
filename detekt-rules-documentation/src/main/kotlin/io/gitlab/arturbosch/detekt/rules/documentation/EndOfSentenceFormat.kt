@@ -33,11 +33,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
     override fun visitDeclaration(dcl: KtDeclaration) {
         super.visitDeclaration(dcl)
-        verify(dcl)
-    }
-
-    fun verify(declaration: KtDeclaration) {
-        declaration.docComment?.let {
+        dcl.docComment?.let {
             val text = it.getDefaultSection().getContent()
             if (text.isEmpty() || text.startsWithHtmlTag()) {
                 return
@@ -46,7 +42,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(declaration),
+                        Entity.from(dcl),
                         "The first sentence of this KDoc does not end with the correct punctuation."
                     )
                 )
