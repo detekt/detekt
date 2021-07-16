@@ -191,7 +191,7 @@ detekt {
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
-    source = files(
+    input = files(
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
@@ -277,7 +277,7 @@ detekt {
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
-    source = files("src/main/java", "src/main/kotlin")     
+    input = files("src/main/java", "src/main/kotlin")     
     
     // Builds the AST in parallel. Rules are always executed in parallel. 
     // Can lead to speedups in larger projects. `false` by default.
