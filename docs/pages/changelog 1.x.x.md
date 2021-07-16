@@ -6,18 +6,17 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.18.0-RC1 - 2021-07-08
+#### 1.18.0-RC2 - 2021-07-16
 
 ##### Notable Changes
 
-- This version of Detekt ships with Kotlin `1.5.x`, and we're compiling with `apiVersion` set to `1.4` - [#3718](https://github.com/detekt/detekt/pull/3718) and [#3852](https://github.com/detekt/detekt/pull/3852)
+- This version of Detekt ships with Kotlin `1.5.21`, and we're compiling with `apiVersion` set to `1.4` - [#3956](https://github.com/detekt/detekt/pull/3956) and [#3852](https://github.com/detekt/detekt/pull/3852)
 - The minimum version of Gradle to use Detekt Gradle Plugin is now `6.1` - [#3830](https://github.com/detekt/detekt/pull/3830)
 - This version of Detekt has been tested against Java 16 - [#3698](https://github.com/detekt/detekt/pull/3698)
 - We fixed a long-standing bug related to parallel execution (#3248) - [#3799](https://github.com/detekt/detekt/pull/3799) and [#3822](https://github.com/detekt/detekt/pull/3822)
 - We now use multi-line format for list options in the default detekt config file - [#3827](https://github.com/detekt/detekt/pull/3827)
 - The rule `VarCouldBeVal` has been updated and now works only with type resolution to provide more precise findings - [#3880](https://github.com/detekt/detekt/pull/3880)
 - We removed all the references to `Extensions.getRootArea` that is now deprecated from our codebase. This was affecting users with sporadic crashes. - [#3848](https://github.com/detekt/detekt/pull/3848)
-- For Android projects using Detekt Gradle plugins, we now add javac intermediates to classpath. This will allow running more precise type resolutions inspections - [#3867](https://github.com/detekt/detekt/pull/3867)
 - We continued the work to introduce annotations to declare rules metadata. Specifically the `@Autocorrect` annotation has been added - [#3820](https://github.com/detekt/detekt/pull/3820)
 
 ##### Changelog
@@ -42,6 +41,9 @@ toc: true
 - NoNameShadowing: don't report when implicit 'it' parameter isn't used - [#3793](https://github.com/detekt/detekt/pull/3793)
 - Fix ModifierOrder to support value class - [#3719](https://github.com/detekt/detekt/pull/3719)
 - Remove inline value class to stay compatible with Kotlin 1.4 API - [#3871](https://github.com/detekt/detekt/pull/3871)
+- [FunctionNaming] Revert annotations that are ignored by default - [#3948](https://github.com/detekt/detekt/pull/3948)
+- Android: add javac intermediates to classpath - [#3867]((https://github.com/detekt/detekt/pull/3867)
+- Revert "Android: add javac intermediates to classpath (#3867)" - [#3958]((https://github.com/detekt/detekt/pull/3958)
 - Use annotations to configure rules in detekt-rules-exceptions - [#3798](https://github.com/detekt/detekt/pull/3798)
 - Use @Configuration in detekt-rules-style - [#3774](https://github.com/detekt/detekt/pull/3774)
 - Use annotations to configure rules in custom-checks - [#3773](https://github.com/detekt/detekt/pull/3773)
@@ -54,6 +56,7 @@ toc: true
 
 ##### Dependency Updates
 
+- Bump Kotlin to 1.5.21 - [#3956](https://github.com/detekt/detekt/pull/3956)
 - Revert "Bump Kotlin to v1.5.20" - [#3941](https://github.com/detekt/detekt/pull/3941)
 - Bump Kotlin to v1.5.20 - [#3921](https://github.com/detekt/detekt/pull/3921)
 - Kotlin 1.5.10 - [#3826](https://github.com/detekt/detekt/pull/3826)
@@ -62,6 +65,7 @@ toc: true
 - Bump byte-buddy from 1.11.2 to 1.11.5 - [#3886](https://github.com/detekt/detekt/pull/3886)
 - Bump byte-buddy from 1.11.1 to 1.11.2 - [#3872](https://github.com/detekt/detekt/pull/3872)
 - Bump byte-buddy from 1.11.0 to 1.11.1 - [#3861](https://github.com/detekt/detekt/pull/3861)
+- Update mockk to 1.12.0 - [#3937](https://github.com/detekt/detekt/pull/3937)
 
 ##### Housekeeping & Refactorings
 
@@ -79,6 +83,8 @@ toc: true
 - Make documentation more precise about how rules are enabled - [#3889](https://github.com/detekt/detekt/pull/3889)
 - Rename MapGetWithNotNullAsserSpec to follow test convention - [#3878](https://github.com/detekt/detekt/pull/3878)
 - Remove custom assertions that check kdoc of rules - [#3859](https://github.com/detekt/detekt/pull/3859)
+- Avoid overlapping outputs - [#3790](https://github.com/detekt/detekt/pull/3790)
+- Revert "Avoid overlapping outputs" - [#3943](https://github.com/detekt/detekt/pull/3943)
 
 See all issues at: [1.18.0](https://github.com/detekt/detekt/milestone/82)
 
