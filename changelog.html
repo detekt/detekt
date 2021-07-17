@@ -464,19 +464,18 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1180-rc1---2021-07-08">1.18.0-RC1 - 2021-07-08</h4>
+  <h4 id="1180-rc2---2021-07-16">1.18.0-RC2 - 2021-07-16</h4>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
 <ul>
-  <li>This version of Detekt ships with Kotlin <code class="language-plaintext highlighter-rouge">1.5.x</code>, and we’re compiling with <code class="language-plaintext highlighter-rouge">apiVersion</code> set to <code class="language-plaintext highlighter-rouge">1.4</code> - <a href="https://github.com/detekt/detekt/pull/3718">#3718</a> and <a href="https://github.com/detekt/detekt/pull/3852">#3852</a></li>
+  <li>This version of Detekt ships with Kotlin <code class="language-plaintext highlighter-rouge">1.5.21</code>, and we’re compiling with <code class="language-plaintext highlighter-rouge">apiVersion</code> set to <code class="language-plaintext highlighter-rouge">1.4</code> - <a href="https://github.com/detekt/detekt/pull/3956">#3956</a> and <a href="https://github.com/detekt/detekt/pull/3852">#3852</a></li>
   <li>The minimum version of Gradle to use Detekt Gradle Plugin is now <code class="language-plaintext highlighter-rouge">6.1</code> - <a href="https://github.com/detekt/detekt/pull/3830">#3830</a></li>
   <li>This version of Detekt has been tested against Java 16 - <a href="https://github.com/detekt/detekt/pull/3698">#3698</a></li>
   <li>We fixed a long-standing bug related to parallel execution (#3248) - <a href="https://github.com/detekt/detekt/pull/3799">#3799</a> and <a href="https://github.com/detekt/detekt/pull/3822">#3822</a></li>
   <li>We now use multi-line format for list options in the default detekt config file - <a href="https://github.com/detekt/detekt/pull/3827">#3827</a></li>
   <li>The rule <code class="language-plaintext highlighter-rouge">VarCouldBeVal</code> has been updated and now works only with type resolution to provide more precise findings - <a href="https://github.com/detekt/detekt/pull/3880">#3880</a></li>
   <li>We removed all the references to <code class="language-plaintext highlighter-rouge">Extensions.getRootArea</code> that is now deprecated from our codebase. This was affecting users with sporadic crashes. - <a href="https://github.com/detekt/detekt/pull/3848">#3848</a></li>
-  <li>For Android projects using Detekt Gradle plugins, we now add javac intermediates to classpath. This will allow running more precise type resolutions inspections - <a href="https://github.com/detekt/detekt/pull/3867">#3867</a></li>
   <li>We continued the work to introduce annotations to declare rules metadata. Specifically the <code class="language-plaintext highlighter-rouge">@Autocorrect</code> annotation has been added - <a href="https://github.com/detekt/detekt/pull/3820">#3820</a></li>
 </ul>
 
@@ -503,6 +502,9 @@ $('#toc').on('click', 'a', function() {
   <li>NoNameShadowing: don’t report when implicit ‘it’ parameter isn’t used - <a href="https://github.com/detekt/detekt/pull/3793">#3793</a></li>
   <li>Fix ModifierOrder to support value class - <a href="https://github.com/detekt/detekt/pull/3719">#3719</a></li>
   <li>Remove inline value class to stay compatible with Kotlin 1.4 API - <a href="https://github.com/detekt/detekt/pull/3871">#3871</a></li>
+  <li>[FunctionNaming] Revert annotations that are ignored by default - <a href="https://github.com/detekt/detekt/pull/3948">#3948</a></li>
+  <li>Android: add javac intermediates to classpath - [#3867]((https://github.com/detekt/detekt/pull/3867)</li>
+  <li>Revert “Android: add javac intermediates to classpath (#3867)” - [#3958]((https://github.com/detekt/detekt/pull/3958)</li>
   <li>Use annotations to configure rules in detekt-rules-exceptions - <a href="https://github.com/detekt/detekt/pull/3798">#3798</a></li>
   <li>Use @Configuration in detekt-rules-style - <a href="https://github.com/detekt/detekt/pull/3774">#3774</a></li>
   <li>Use annotations to configure rules in custom-checks - <a href="https://github.com/detekt/detekt/pull/3773">#3773</a></li>
@@ -517,6 +519,7 @@ $('#toc').on('click', 'a', function() {
 <h5 id="dependency-updates">Dependency Updates</h5>
 
 <ul>
+  <li>Bump Kotlin to 1.5.21 - <a href="https://github.com/detekt/detekt/pull/3956">#3956</a></li>
   <li>Revert “Bump Kotlin to v1.5.20” - <a href="https://github.com/detekt/detekt/pull/3941">#3941</a></li>
   <li>Bump Kotlin to v1.5.20 - <a href="https://github.com/detekt/detekt/pull/3921">#3921</a></li>
   <li>Kotlin 1.5.10 - <a href="https://github.com/detekt/detekt/pull/3826">#3826</a></li>
@@ -525,6 +528,7 @@ $('#toc').on('click', 'a', function() {
   <li>Bump byte-buddy from 1.11.2 to 1.11.5 - <a href="https://github.com/detekt/detekt/pull/3886">#3886</a></li>
   <li>Bump byte-buddy from 1.11.1 to 1.11.2 - <a href="https://github.com/detekt/detekt/pull/3872">#3872</a></li>
   <li>Bump byte-buddy from 1.11.0 to 1.11.1 - <a href="https://github.com/detekt/detekt/pull/3861">#3861</a></li>
+  <li>Update mockk to 1.12.0 - <a href="https://github.com/detekt/detekt/pull/3937">#3937</a></li>
 </ul>
 
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
@@ -544,6 +548,8 @@ $('#toc').on('click', 'a', function() {
   <li>Make documentation more precise about how rules are enabled - <a href="https://github.com/detekt/detekt/pull/3889">#3889</a></li>
   <li>Rename MapGetWithNotNullAsserSpec to follow test convention - <a href="https://github.com/detekt/detekt/pull/3878">#3878</a></li>
   <li>Remove custom assertions that check kdoc of rules - <a href="https://github.com/detekt/detekt/pull/3859">#3859</a></li>
+  <li>Avoid overlapping outputs - <a href="https://github.com/detekt/detekt/pull/3790">#3790</a></li>
+  <li>Revert “Avoid overlapping outputs” - <a href="https://github.com/detekt/detekt/pull/3943">#3943</a></li>
 </ul>
 
 <p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/82">1.18.0</a></p>
@@ -2462,7 +2468,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Jul 16, 2021 <br />
+ Site last generated: Jul 17, 2021 <br />
                 </div>
             </div>
 </footer>
