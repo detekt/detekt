@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -37,6 +38,19 @@ class CompositeConfigSpec : Spek({
             val config = compositeConfig.subConfig("style").subConfig("MagicNumber")
             val value = config.valueOrDefault("ignoreNumbers", emptyList<String>())
             assertThat(value).isEqualTo(listOf("-1", "0", "1", "2", "100", "1000"))
+        }
+
+        it("should fail with a meaningful exception when boolean property is invalid") {
+            val config = compositeConfig.subConfig("style").subConfig("LargeClass")
+
+            val expectedErrorMessage = "Value \"truuu\" set for config parameter \"style > LargeClass > active\" " +
+                "is not of required type Boolean"
+
+            assertThatThrownBy {
+                val value: Boolean = config.valueOrDefault("active", true)
+                println(value)
+            }.isInstanceOf(IllegalStateException::class.java)
+                .hasMessageContaining(expectedErrorMessage)
         }
     }
 })
