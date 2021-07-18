@@ -1,12 +1,6 @@
 $dokka.format:jekyll-v1
 $dokka.linkExtension:md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal////PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/index.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//configWithFallback/#kotlin.String#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.md
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal//configWithFallback/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-fallback.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//createPathFilters/io.gitlab.arturbosch.detekt.api.Config#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/create-path-filters.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//isSuppressedBy/org.jetbrains.kotlin.psi.KtAnnotated#kotlin.String#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/is-suppressed-by.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//isSuppressedBy/org.jetbrains.kotlin.psi.KtElement#kotlin.String#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/is-suppressed-by.md
@@ -55,6 +49,12 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/toSt
 $dokka.location:io.gitlab.arturbosch.detekt.api////PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/index.md
 $dokka.location:io.gitlab.arturbosch.detekt.api//DEFAULT_FLOAT_CONVERSION_FACTOR/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.md
 $dokka.location:io.gitlab.arturbosch.detekt.api//commaSeparatedPattern/kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//configWithFallback/#kotlin.String#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-fallback.md
+$dokka.location:io.gitlab.arturbosch.detekt.api//configWithFallback/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-fallback.md
 $dokka.location:io.gitlab.arturbosch.detekt.api//getOrNull/io.gitlab.arturbosch.detekt.api.PropertiesAware#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.md
 $dokka.location:io.gitlab.arturbosch.detekt.api//simplePatternToRegex/kotlin.String#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/simple-pattern-to-regex.md
 $dokka.location:io.gitlab.arturbosch.detekt.api/AnnotationExcluder///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/index.md

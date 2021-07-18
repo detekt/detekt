@@ -457,20 +457,79 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/">io.gitlab.arturbosch.detekt.api.internal</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">configWithAndroidVariants</a></p>
+  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">configWithAndroidVariants</a></p>
 
 <h1 id="configwithandroidvariants">configWithAndroidVariants</h1>
 <p>[jvm]<br />
 Content<br />
-fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">configWithAndroidVariants</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>, defaultAndroidValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>&gt;<br />
-fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">U</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">configWithAndroidVariants</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>, defaultAndroidValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>, transformer: (<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">T</a>) -&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">U</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/config-with-android-variants.html">U</a>&gt;</p>
+fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">configWithAndroidVariants</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>, defaultAndroidValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>&gt;<br />
+More info</p>
+
+<p>Creates a delegated read-only property that can be used in <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated only once.</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>jvm</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a>defaultValue</td>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.<br /><br /></String></td>
+    </tr>
+    <tr>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a>defaultAndroidValue</td>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config and there is a configuration property in the rule set named “android” that is set to <code>true</code>.<br /><br /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>[jvm]<br />
+Content<br />
+fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">U</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">configWithAndroidVariants</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>, defaultAndroidValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>, transformer: (<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a>) -&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">U</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">U</a>&gt;<br />
+More info</p>
+
+<p>Creates a delegated read-only property that can be used in <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated and transformed only once.</p>
+
+<h2 id="parameters-1">Parameters</h2>
+
+<p>jvm</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a>defaultValue</td>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-android-variants.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.<br /><br /></String></td>
+    </tr>
+    <tr>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a>defaultAndroidValue</td>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config and there is a configuration property in the rule set named “android” that is set to <code>true</code>.<br /><br /></td>
+    </tr>
+    <tr>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a>transformer</td>
+      <td><a name="io.gitlab.arturbosch.detekt.api//configWithAndroidVariants/#TypeParam(bounds=[kotlin.Any])#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a><br /><br />a function that transforms the value from the configuration (or the default) into its final value.<br /><br /></td>
+    </tr>
+  </tbody>
+</table>
 
 
 

@@ -510,14 +510,16 @@ An <code class="language-plaintext highlighter-rouge">Issue</code> property defi
 </code></pre></div></div>
 
 <p>Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">TooManyFunctions2</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nc">Config</span><span class="p">)</span> <span class="p">:</span> <span class="nc">ThresholdRule</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nc">THRESHOLD</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">TooManyFunctions2</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nc">Config</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Rule</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="p">{</span>
 
-    <span class="k">override</span> <span class="kd">val</span> <span class="py">issue</span> <span class="p">=</span> <span class="nc">Issue</span><span class="p">(</span><span class="n">javaClass</span><span class="p">.</span><span class="n">simpleName</span><span class="p">,</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">issue</span> <span class="p">=</span> <span class="nc">Issue</span><span class="p">(</span>
+        <span class="n">javaClass</span><span class="p">.</span><span class="n">simpleName</span><span class="p">,</span>
         <span class="nc">Severity</span><span class="p">.</span><span class="nc">CodeSmell</span><span class="p">,</span>
         <span class="s">"This rule reports a file with an excessive function count."</span><span class="p">,</span>
-        <span class="nc">Debt</span><span class="p">.</span><span class="nc">TWENTY_MINS</span><span class="p">)</span>
+        <span class="nc">Debt</span><span class="p">.</span><span class="nc">TWENTY_MINS</span>
+    <span class="p">)</span>
 
-    <span class="k">private</span> <span class="kd">val</span> <span class="py">threshold</span> <span class="p">=</span> <span class="nf">valueOrDefault</span><span class="p">(</span><span class="s">"threshold"</span><span class="p">,</span> <span class="nc">THRESHOLD</span><span class="p">)</span>
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">threshold</span><span class="p">:</span> <span class="nc">Int</span> <span class="k">by</span> <span class="nf">config</span><span class="p">(</span><span class="n">defaultValue</span> <span class="p">=</span> <span class="mi">10</span><span class="p">)</span>
     <span class="k">private</span> <span class="kd">var</span> <span class="py">amount</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
 
     <span class="k">override</span> <span class="k">fun</span> <span class="nf">visitKtFile</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nc">KtFile</span><span class="p">)</span> <span class="p">{</span>
@@ -538,8 +540,6 @@ An <code class="language-plaintext highlighter-rouge">Issue</code> property defi
         <span class="k">super</span><span class="p">.</span><span class="nf">visitNamedFunction</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
         <span class="n">amount</span><span class="p">++</span>
     <span class="p">}</span>
-    
-    <span class="k">const</span> <span class="kd">val</span> <span class="py">THRESHOLD</span> <span class="p">=</span> <span class="mi">10</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -550,7 +550,7 @@ to the rule itself.</p>
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">MyRuleSet</span><span class="pi">:</span>
   <span class="na">TooManyFunctions2</span><span class="pi">:</span>
     <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
-    <span class="na">threshold</span><span class="pi">:</span> <span class="m">10</span>
+    <span class="na">threshold</span><span class="pi">:</span> <span class="m">5</span>
   <span class="na">OtherRule</span><span class="pi">:</span>
     <span class="na">active</span><span class="pi">:</span> <span class="no">false</span>
 </code></pre></div></div>
