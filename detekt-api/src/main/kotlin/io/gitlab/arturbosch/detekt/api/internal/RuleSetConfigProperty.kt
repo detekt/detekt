@@ -9,7 +9,7 @@ fun <T : Any> ruleSetConfig(defaultValue: T): ReadOnlyProperty<Any?, RuleSetConf
 
 private class RuleSetConfigPropertyDelegate<T : Any>(
     val defaultValue: T
-): ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> {
+) : ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> {
 
     @Volatile private var _value: RuleSetConfigProperty<T>? = null
 
