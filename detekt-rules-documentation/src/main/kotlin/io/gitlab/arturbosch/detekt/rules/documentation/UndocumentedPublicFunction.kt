@@ -44,6 +44,6 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
     private fun KtNamedFunction.shouldBeDocumented() =
         (isTopLevel || containingClassOrObject?.isPublic == true) &&
-            parents.filterIsInstance<KtClassOrObject>().none { !it.isPublic } &&
+            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic } &&
             isPublicNotOverridden()
 }
