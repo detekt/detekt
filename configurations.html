@@ -464,7 +464,7 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p><em>detekt</em> uses a yaml style configuration file for various things:</p>
+  <p><em>detekt</em> uses a <a href="https://yaml.org/spec/1.2/spec.html">YAML style configuration</a> file for various things:</p>
 
 <ul>
   <li>rule set and rule properties</li>
@@ -502,6 +502,20 @@ and rule authors the ability to write <em>library only</em> rules.</p>
     <span class="s">...</span>
     <span class="s">excludes</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">**/internal/**'</span><span class="pi">]</span>
     <span class="na">includes</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">**/internal/util/NeedsToBeChecked.kt'</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<p>In case you want to apply the same filters for different rules, you can use
+<a href="https://yaml.org/spec/1.2/spec.html#id2785586">YAML anchors and aliases</a> to reapply previously defined paths.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">naming</span><span class="pi">:</span>
+  <span class="na">ClassNaming</span><span class="pi">:</span>
+    <span class="s">...</span>
+    <span class="s">excludes</span><span class="pi">:</span> <span class="nl">&amp;testFolders</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">**/test/**'</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">**/androidTest/**'</span>
+  <span class="na">ConstructorParameterNaming</span><span class="pi">:</span>
+    <span class="s">...</span>
+    <span class="s">excludes</span><span class="pi">:</span> <span class="nv">*testFolders</span>
 </code></pre></div></div>
 
 <h2 id="build-failure">Build failure</h2>
@@ -627,7 +641,7 @@ More details on the IntelliJ support are available
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Jul 18, 2021 <br />
+ Site last generated: Jul 19, 2021 <br />
                 </div>
             </div>
 </footer>
