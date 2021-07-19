@@ -6,13 +6,14 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
+import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(
     val name: String,
@@ -46,7 +47,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
     private var description: String = ""
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private val ruleNames: MutableList<String> = mutableListOf()
-    private val configuration = mutableListOf<Configuration>()
+    private val configurations = mutableListOf<Configuration>()
 
     fun getRuleSetProvider(): RuleSetProvider {
         if (name.isEmpty()) {
@@ -57,7 +58,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
             throw InvalidDocumentationException("Missing description for RuleSet $name.")
         }
 
-        return RuleSetProvider(name, description, defaultActivationStatus, ruleNames, configuration)
+        return RuleSetProvider(name, description, defaultActivationStatus, ruleNames, configurations)
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -69,13 +70,12 @@ class RuleSetProviderVisitor : DetektVisitor() {
         super.visitSuperTypeList(list)
     }
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
-        if (classOrObject.isAnnotatedWith(ActiveByDefault::class)) {
-            defaultActivationStatus = Active(since = classOrObject.firstAnnotationParameter(ActiveByDefault::class))
+    override fun visitClass(ktClass: KtClass) {
+        description = ktClass.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
+        if (ktClass.isAnnotatedWith(ActiveByDefault::class)) {
+            defaultActivationStatus = Active(since = ktClass.firstAnnotationParameter(ActiveByDefault::class))
         }
-        configuration.addAll(classOrObject.parseConfigurationTags())
-        super.visitClassOrObject(classOrObject)
+        super.visitClassOrObject(ktClass)
     }
 
     override fun visitProperty(property: KtProperty) {
@@ -86,6 +86,19 @@ class RuleSetProviderVisitor : DetektVisitor() {
                     "RuleSetProvider class " +
                         "${property.containingClass()?.name ?: ""} doesn't provide list of rules."
                 )
+        }
+        if (property.isAnnotatedWith(ConfigAnnotation::class)) {
+            val defaultValue = checkNotNull(property.delegate?.expression as? KtCallExpression)
+                .valueArguments.first().text.let(::formatDefaultValue)
+            configurations.add(
+                Configuration(
+                    name = checkNotNull(property.name),
+                    description = property.firstAnnotationParameter(ConfigAnnotation::class),
+                    defaultValue = defaultValue,
+                    defaultAndroidValue = defaultValue,
+                    deprecated = property.firstAnnotationParameterOrNull(Deprecated::class),
+                )
+            )
         }
     }
 
@@ -106,5 +119,17 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
             ruleNames.addAll(ruleArgumentNames)
         }
+    }
+
+    companion object {
+
+        private const val DOUBLE_QUOTE = '"'
+
+        private fun formatDefaultValue(defaultValueText: String): String =
+            if (defaultValueText.startsWith(DOUBLE_QUOTE) && defaultValueText.endsWith(DOUBLE_QUOTE)) {
+                "'${defaultValueText.removeSurrounding("$DOUBLE_QUOTE")}'"
+            } else {
+                defaultValueText
+            }
     }
 }

@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.internal.value
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
@@ -35,7 +36,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      * This property is read from the ruleSet config.
      */
     protected val isAndroid
-        get() = ruleSetConfig.valueOrDefault("android", false)
+        get() = ruleSetConfig.value(FormattingProvider.android)
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()

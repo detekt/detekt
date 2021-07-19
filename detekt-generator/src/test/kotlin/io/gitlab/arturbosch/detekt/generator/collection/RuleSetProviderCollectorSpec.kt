@@ -288,18 +288,24 @@ object RuleSetProviderCollectorSpec : Spek({
 
             /**
              * description
-             * @configuration aBool - bool description (default: `false`)
-             * @configuration aString - string description (default: `'a'`)
-             * (deprecated: "use something else")
-             * @configuration anInt - int description (default: `99`)
-             * @configuration aList - list description (default: `- aaaa
-             *                                                    - bbbb`)
              */
             class TestProvider: RuleSetProvider {
                 override val ruleSetId: String = "ruleSetId"
 
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(RruleName(config)))
+                }
+
+                companion object {
+                    @Configuration("bool description")
+                    val aBool by ruleSetConfig(true)
+    
+                    @Configuration("int description")
+                    val anInt by ruleSetConfig(99)
+                    
+                    @Deprecated("use something else")
+                    @Configuration("string description")
+                    val aString by ruleSetConfig("a")
                 }
             }
         """
@@ -309,30 +315,23 @@ object RuleSetProviderCollectorSpec : Spek({
                 val conf = items[0].configuration[0]
                 assertThat(conf.name).isEqualTo("aBool")
                 assertThat(conf.description).isEqualTo("bool description")
-                assertThat(conf.defaultValue).isEqualTo("false")
+                assertThat(conf.defaultValue).isEqualTo("true")
                 assertThat(conf.deprecated).isNull()
             }
 
-            it("extracts string configuration option") {
-                val conf = items[0].configuration[1]
-                assertThat(conf.name).isEqualTo("aString")
-                assertThat(conf.description).isEqualTo("string description")
-                assertThat(conf.defaultValue).isEqualTo("'a'")
-                assertThat(conf.deprecated).isEqualTo("use something else")
-            }
-
             it("extracts int configuration option") {
-                val conf = items[0].configuration[2]
+                val conf = items[0].configuration[1]
                 assertThat(conf.name).isEqualTo("anInt")
                 assertThat(conf.description).isEqualTo("int description")
                 assertThat(conf.defaultValue).isEqualTo("99")
             }
 
-            it("extracts list configuration option") {
-                val conf = items[0].configuration[3]
-                assertThat(conf.name).isEqualTo("aList")
-                assertThat(conf.description).isEqualTo("list description")
-                assertThat(conf.defaultValue).isEqualTo("- aaaa\n    - bbbb")
+            it("extracts string configuration option") {
+                val conf = items[0].configuration[2]
+                assertThat(conf.name).isEqualTo("aString")
+                assertThat(conf.description).isEqualTo("string description")
+                assertThat(conf.defaultValue).isEqualTo("'a'")
+                assertThat(conf.deprecated).isEqualTo("use something else")
             }
         }
     }
