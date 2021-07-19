@@ -8,9 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
+import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
  * This rule will report any public function which does not have the required documentation.
@@ -41,5 +43,7 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtNamedFunction.shouldBeDocumented() =
-        (isTopLevel || containingClassOrObject?.isPublic == true) && isPublicNotOverridden()
+        (isTopLevel || containingClassOrObject?.isPublic == true) &&
+            parents.filterIsInstance<KtClassOrObject>().none { !it.isPublic } &&
+            isPublicNotOverridden()
 }
