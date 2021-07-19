@@ -75,7 +75,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
         if (ktClass.isAnnotatedWith(ActiveByDefault::class)) {
             defaultActivationStatus = Active(since = ktClass.firstAnnotationParameter(ActiveByDefault::class))
         }
-        super.visitClassOrObject(ktClass)
+        super.visitClass(ktClass)
     }
 
     override fun visitProperty(property: KtProperty) {
