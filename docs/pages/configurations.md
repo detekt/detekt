@@ -6,7 +6,7 @@ permalink: configurations.html
 summary:
 ---
 
-_detekt_ uses a yaml style configuration file for various things:
+_detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
 - rule set and rule properties
 - build failure
@@ -44,6 +44,21 @@ complexity:
     ...
     excludes: ['**/internal/**']
     includes: ['**/internal/util/NeedsToBeChecked.kt']
+```
+
+In case you want to apply the same filters for different rules, you can use
+[YAML anchors and aliases](https://yaml.org/spec/1.2/spec.html#id2785586) to reapply previously defined paths.
+
+```yaml
+naming:
+  ClassNaming:
+    ...
+    excludes: &testFolders
+      - '**/test/**'
+      - '**/androidTest/**'
+  ConstructorParameterNaming:
+    ...
+    excludes: *testFolders
 ```
 
 ## Build failure
