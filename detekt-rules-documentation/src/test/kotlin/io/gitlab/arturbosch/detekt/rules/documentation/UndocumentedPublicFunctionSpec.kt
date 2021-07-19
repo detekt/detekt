@@ -146,14 +146,14 @@ class UndocumentedPublicFunctionSpec : Spek({
 
             it("does not report public functions in private class") {
                 val code = """
-                class Foo {
-                    private class Bar {
-                        class Baz {
-                            fun f() {
+                    class Foo {
+                        private class Bar {
+                            class Baz {
+                                fun f() {
+                                }
                             }
                         }
                     }
-                }
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
