@@ -130,5 +130,45 @@ class UndocumentedPublicFunctionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        context("nested class") {
+            it("does not report public functions in internal interface") {
+                val code = """
+                    internal interface Foo {
+                        interface Bar {
+                            fun f() {
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report public functions in private class") {
+                val code = """
+                    class Foo {
+                        private class Bar {
+                            class Baz {
+                                fun f() {
+                                }
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report public functions in private object") {
+                val code = """
+                    private object Foo {
+                        class Bar {
+                            fun f() {
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
     }
 })
