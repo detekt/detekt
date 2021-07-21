@@ -14,13 +14,7 @@ private class RuleSetConfigPropertyDelegate<T : Any>(
     @Volatile private var _value: RuleSetConfigProperty<T>? = null
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): RuleSetConfigProperty<T> =
-        if (_value != null) {
-            _value as RuleSetConfigProperty<T>
-        } else {
-            RuleSetConfigProperty(property.name, defaultValue).also {
-                _value = it
-            }
-        }
+        _value ?: RuleSetConfigProperty(property.name, defaultValue).also { _value = it }
 }
 
 class RuleSetConfigProperty<T : Any>(val key: String, val defaultValue: T)
