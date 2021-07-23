@@ -77,7 +77,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
         }
         if (ktClass.hasConfigurationKDocTag()) {
             throw InvalidDocumentationException(
-                "Configuration of rule set ${ktClass.name} is invalid. Rule configuration via KDoc tag is no longer supported. " +
+                "Configuration of rule set ${ktClass.name} is invalid. " +
+                    "Rule set configuration via KDoc tag is no longer supported. " +
                     "Use rule set config delegate instead."
             )
         }
