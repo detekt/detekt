@@ -41,6 +41,10 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/PathFilters/isIgnored/#
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/PathFilters/isIgnored/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/is-ignored.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RequiresTypeResolution///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/index.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RequiresTypeResolution/RequiresTypeResolution/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/-requires-type-resolution.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob.Companion///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/-companion/index.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob.Companion/of/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/-companion/of.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/index.md
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob/matches/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/matches.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/SimpleNotification/#kotlin.String#io.gitlab.arturbosch.detekt.api.Notification.Level/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/-simple-notification.md
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/level/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/level.md
