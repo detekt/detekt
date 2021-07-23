@@ -75,6 +75,12 @@ class RuleSetProviderVisitor : DetektVisitor() {
         if (ktClass.isAnnotatedWith(ActiveByDefault::class)) {
             defaultActivationStatus = Active(since = ktClass.firstAnnotationParameter(ActiveByDefault::class))
         }
+        if (ktClass.hasConfigurationKDocTag()) {
+            throw InvalidDocumentationException(
+                "Configuration of rule set ${ktClass.name} is invalid. Rule configuration via KDoc tag is no longer supported. " +
+                    "Use rule set config delegate instead."
+            )
+        }
         super.visitClass(ktClass)
     }
 
