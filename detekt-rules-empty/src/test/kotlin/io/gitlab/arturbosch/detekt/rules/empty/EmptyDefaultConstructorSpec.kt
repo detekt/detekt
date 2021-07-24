@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -60,6 +61,17 @@ internal class EmptyDefaultConstructorSpec : Spek({
                 }
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
+        }
+
+        it("should not report empty constructors for annotation classes with expect or actual keyword - #1362") {
+            val code = """
+                expect annotation class NeedsConstructor()
+                actual annotation class NeedsConstructor actual constructor()
+
+                @NeedsConstructor
+                fun annotatedFunction() = Unit
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
         }
     }
 })
