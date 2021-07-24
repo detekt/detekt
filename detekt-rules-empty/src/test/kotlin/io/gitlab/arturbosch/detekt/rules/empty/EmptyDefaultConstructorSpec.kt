@@ -10,6 +10,13 @@ internal class EmptyDefaultConstructorSpec : Spek({
 
     describe("EmptyDefaultConstructor rule") {
 
+        it("EmptyConstructor") {
+            val code = """
+                class EmptyConstructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
+        }
+
         it("EmptyPrimaryConstructor") {
             val code = """
                 class EmptyPrimaryConstructor constructor()
