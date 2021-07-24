@@ -5,8 +5,8 @@
         <description>Meet detekt, a static code analysis tool for Kotlin.</description>
         <link>https://detekt.github.io/</link>
         <atom:link href="https://detekt.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 23 Jul 2021 00:13:42 -0500</pubDate>
-        <lastBuildDate>Fri, 23 Jul 2021 00:13:42 -0500</lastBuildDate>
+        <pubDate>Sat, 24 Jul 2021 04:15:17 -0500</pubDate>
+        <lastBuildDate>Sat, 24 Jul 2021 04:15:17 -0500</lastBuildDate>
         <generator>Jekyll v3.9.0</generator>
         
         <item>
@@ -349,7 +349,7 @@ Such a setup could look like the following in its simplest form:&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;detekt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rootProject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rootDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rootProject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rootDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;buildUponDefaultConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
