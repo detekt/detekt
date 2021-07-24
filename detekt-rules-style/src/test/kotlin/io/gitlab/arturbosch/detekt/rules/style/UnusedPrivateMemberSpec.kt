@@ -1293,6 +1293,23 @@ class UnusedPrivateMemberSpec : Spek({
             """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
+        it("doesn't report used private list get operator function - declared in a class - called by operator - multiple parameters") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class TestWrapper(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(a: String, b: String) = strings[a, b]
+
+                    private operator fun List<StringWrapper>.get(a: String, b: String) =
+                        this.firstOrNull { it.s == b }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
         it("doesn't report used private list get operator function - declared in a class - called directly") {
             val code = """
                 class StringWrapper(
