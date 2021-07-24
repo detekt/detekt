@@ -63,6 +63,20 @@ internal class EmptyDefaultConstructorSpec : Spek({
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
 
+        it("should not report empty constructors for classes with expect keyword - #1362") {
+            val code = """
+                expect class NeedsConstructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        }
+
+        it("should not report empty constructors for classes with actual - #1362") {
+            val code = """
+                actual class NeedsConstructor actual constructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        }
+
         it("should not report empty constructors for annotation classes with expect keyword - #1362") {
             val code = """
                 expect annotation class NeedsConstructor()

@@ -21,18 +21,18 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         if (hasSuitableSignature(constructor) &&
             isNotCalled(constructor) &&
-            !isExpectedAnnotationClass(constructor)
+            !isExpectedOrActualClass(constructor)
         ) {
             report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
         }
     }
 
     /**
-     * Annotations with the 'expect' or 'actual' keyword need the explicit default constructor - #1362
+     * Classes with the 'expect' or 'actual' keyword need the explicit default constructor - #1362 and #3929
      */
-    private fun isExpectedAnnotationClass(constructor: KtPrimaryConstructor): Boolean {
+    private fun isExpectedOrActualClass(constructor: KtPrimaryConstructor): Boolean {
         val parent = constructor.parent
-        if (parent is KtClass && parent.isAnnotation()) {
+        if (parent is KtClass) {
             return parent.hasExpectModifier() || parent.hasActualModifier()
         }
         return false
