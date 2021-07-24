@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -12,16 +10,49 @@ internal class EmptyDefaultConstructorSpec : Spek({
 
     describe("EmptyDefaultConstructor rule") {
 
-        it("findsEmptyDefaultConstructor") {
-            val rule = EmptyDefaultConstructor(Config.empty)
-            val file = compileForTest(resourceAsPath("EmptyDefaultConstructorPositive.kt"))
-            Assertions.assertThat(rule.lint(file)).hasSize(2)
+        it("EmptyPrimaryConstructor") {
+            val code = """
+                class EmptyPrimaryConstructor constructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
-        it("doesNotFindEmptyDefaultConstructor") {
-            val rule = EmptyDefaultConstructor(Config.empty)
-            val file = compileForTest(resourceAsPath("EmptyDefaultConstructorNegative.kt"))
-            Assertions.assertThat(rule.lint(file)).isEmpty()
+        it("EmptyPublicPrimaryConstructor") {
+            val code = """
+                class EmptyPublicPrimaryConstructor public constructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
+        }
+
+        it("PrimaryConstructorWithParameter") {
+            val code = """
+                class PrimaryConstructorWithParameter constructor(x: Int)
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
+        }
+
+        it("PrimaryConstructorWithAnnotation") {
+            val code = """
+                class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
+        }
+
+        it("PrivatePrimaryConstructor") {
+            val code = """
+                class PrivatePrimaryConstructor private constructor()
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
+        }
+
+        it("EmptyConstructorIsCalled") {
+            val code = """
+                class EmptyConstructorIsCalled() {
+
+                    constructor(i: Int) : this()
+                }
+            """
+            assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
     }
 })
