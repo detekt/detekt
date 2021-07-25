@@ -17,21 +17,17 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import java.util.Locale
 
 /**
- * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
+ * This rule detects and reports base 10 numbers above a certain length that should be underscore
  * separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
  * under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
- * explicitly ignored. For floats and doubles, anything to the right of the decimal is ignored.
+ * explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.
  *
  * <noncompliant>
- * object Money {
- *     const val DEFAULT_AMOUNT = 1000000
- * }
+ * const val DEFAULT_AMOUNT = 1000000
  * </noncompliant>
  *
  * <compliant>
- * object Money {
- *     const val DEFAULT_AMOUNT = 1_000_000
- * }
+ * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
@@ -39,13 +35,13 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
+        "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
             "should be underscore separated to increase readability. Underscores that do not make groups of " +
             "3 digits are also reported.",
         Debt.FIVE_MINS
     )
 
-    @Configuration("Length under which decimal base 10 literals are not required to have underscores")
+    @Configuration("Length under which base 10 numbers are not required to have underscores")
     private val acceptableDecimalLength: Int by config(DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
@@ -57,7 +53,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
         val numberString = normalizedText.split('.').first()
 
-        if (numberString.length >= acceptableDecimalLength || numberString.contains('_')) {
+        if (numberString.length > acceptableDecimalLength || numberString.contains('_')) {
             reportIfInvalidUnderscorePattern(expression, numberString)
         }
     }
@@ -68,8 +64,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "This numeric literal should be separated " +
-                        "by underscores in order to increase readability."
+                    "This number should be separated by underscores in order to increase readability."
                 )
             )
         }
@@ -98,7 +93,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
-            .toLowerCase(Locale.US)
+            .toLowerCase(Locale.ROOT)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
