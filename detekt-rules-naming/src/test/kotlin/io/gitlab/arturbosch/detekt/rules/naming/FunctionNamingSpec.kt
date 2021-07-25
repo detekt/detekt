@@ -97,6 +97,13 @@ class FunctionNamingSpec : Spek({
             )
         }
 
+        it("allow functions with backtick") {
+            val code = """
+                fun `7his is a function name _`() = Unit
+            """
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        }
+
         describe("annotated functions") {
             val code = """
                 annotation class Composable
