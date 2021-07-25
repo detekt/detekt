@@ -26,6 +26,14 @@ class ClassNamingSpec : Spek({
             assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
 
+        it("should detect no violations with class using backticks") {
+            val code = """
+                class `NamingConventions`
+            """
+
+            assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        }
+
         it("should detect because it have a _") {
             val code = """
                 class _NamingConventions
