@@ -68,7 +68,7 @@ class FunctionNamingSpec : Spek({
             fun Foo(): Foo = FooImpl()
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).compileAndLint(code))
+            assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
         it("flags functions with bad names inside overridden functions by default") {

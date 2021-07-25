@@ -54,7 +54,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         val functionName = function.nameIdentifier?.text ?: return
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !functionName.matches(functionPattern) &&
-            functionName != function.typeReference?.name
+            functionName != function.typeReference?.text
         ) {
             report(
                 CodeSmell(
