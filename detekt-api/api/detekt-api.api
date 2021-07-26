@@ -99,8 +99,8 @@ public final class io/gitlab/arturbosch/detekt/api/ConfigPropertyKt {
 	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithFallback (Ljava/lang/String;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithFallback (Ljava/lang/String;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithFallback (Lkotlin/reflect/KProperty;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun configWithFallback (Lkotlin/reflect/KProperty;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigValidator : io/gitlab/arturbosch/detekt/api/Extension {
