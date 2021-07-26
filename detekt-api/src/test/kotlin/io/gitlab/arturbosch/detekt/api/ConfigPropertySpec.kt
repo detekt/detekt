@@ -297,9 +297,11 @@ class ConfigPropertySpec : Spek({
                 val fallbackValue = -1
                 val subject by memoized {
                     object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
-                        val present: Int by configWithFallback("fallback", defaultValue)
-                        val notPresentWithFallback: Int by configWithFallback("fallback", defaultValue)
-                        val notPresentFallbackMissing: Int by configWithFallback("missing", defaultValue)
+                        val fallback: Int by config(42)
+                        val missing: Int by config(42)
+                        val present: Int by configWithFallback(::fallback, defaultValue)
+                        val notPresentWithFallback: Int by configWithFallback(::fallback, defaultValue)
+                        val notPresentFallbackMissing: Int by configWithFallback(::missing, defaultValue)
                     }
                 }
                 it("uses the value provided in config if present") {
@@ -318,13 +320,15 @@ class ConfigPropertySpec : Spek({
                 val fallbackValue = -1
                 val subject by memoized {
                     object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
-                        val present: String by configWithFallback("fallback", defaultValue) { v ->
+                        val fallback: String by config(42, Integer::toString)
+                        val missing: String by config(42, Integer::toString)
+                        val present: String by configWithFallback(::fallback, defaultValue) { v ->
                             v.toString()
                         }
-                        val notPresentWithFallback: String by configWithFallback("fallback", defaultValue) { v ->
+                        val notPresentWithFallback: String by configWithFallback(::fallback, defaultValue) { v ->
                             v.toString()
                         }
-                        val notPresentFallbackMissing: String by configWithFallback("missing", defaultValue) { v ->
+                        val notPresentFallbackMissing: String by configWithFallback(::missing, defaultValue) { v ->
                             v.toString()
                         }
                     }

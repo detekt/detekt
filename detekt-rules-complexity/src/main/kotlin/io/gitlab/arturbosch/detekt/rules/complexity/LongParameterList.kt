@@ -39,28 +39,21 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Suppress("unused")
     @Deprecated("Use `functionThreshold` and `constructorThreshold` instead")
     @Configuration("number of parameters required to trigger the rule")
-    private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
+    val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
     @Configuration("number of function parameters required to trigger the rule")
-    private val functionThreshold: Int by configWithFallback(
-        fallbackPropertyName = "threshold",
-        defaultValue = DEFAULT_FUNCTION_THRESHOLD
-    )
+    private val functionThreshold: Int by configWithFallback(::threshold, DEFAULT_FUNCTION_THRESHOLD)
 
     @Configuration("number of constructor parameters required to trigger the rule")
-    private val constructorThreshold: Int by configWithFallback(
-        fallbackPropertyName = "threshold",
-        defaultValue = DEFAULT_CONSTRUCTOR_THRESHOLD
-    )
+    private val constructorThreshold: Int by configWithFallback(::threshold, DEFAULT_CONSTRUCTOR_THRESHOLD)
 
     @Configuration("ignore parameters that have a default value")
-    private val ignoreDefaultParameters: Boolean by config(defaultValue = false)
+    private val ignoreDefaultParameters: Boolean by config(false)
 
     @Configuration("ignore long constructor parameters list for data classes")
-    private val ignoreDataClasses: Boolean by config(defaultValue = true)
+    private val ignoreDataClasses: Boolean by config(true)
 
     @Configuration(
         "ignore long parameters list for constructors, functions or their parameters in the " +

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDe
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -520,13 +521,13 @@ object RuleCollectorSpec : Spek({
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val prop: Int by config(1)
+                            val prop: Int by config(1)
                             @Configuration("description")
-                            private val config1: Int by configWithFallback("prop", 99)
+                            private val config1: Int by configWithFallback(this::prop, 99)
                             @Configuration("description")
-                            private val config2: Int by configWithFallback(fallbackPropertyName = "prop", defaultValue = 99)
+                            private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
                             @Configuration("description")
-                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackPropertyName = "prop")
+                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
                         }                        
                     """
                         val items = subject.run(code)
@@ -535,41 +536,40 @@ object RuleCollectorSpec : Spek({
                         assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
                     }
 
-                    it("reports an error if the property to fallback on does not exist") {
-                        val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by configWithFallback("prop", 99)
-                        }                        
-                    """
-                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
-                            subject.run(
-                                code
-                            )
-                        }
-                    }
-
                     it("reports an error if the property to fallback on exists but is not a config property") {
                         val code = """
                         /**
                          * description
                          */
                         class SomeRandomClass() : Rule {
-                            private val prop: Int = 1
+                            val prop: Int = 1
                             @Configuration("description")
-                            private val config: Int by configWithFallback("prop", 99)
+                            private val config: Int by configWithFallback(::prop, 99)
                         }                        
                     """
-                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
-                            subject.run(
-                                code
-                            )
-                        }
+                        assertThatThrownBy { subject.run(code) }
+                            .isInstanceOf(InvalidDocumentationException::class.java)
+                            .hasMessageContaining("delegate")
+                    }
+                    it("reports an error if the property to fallback on exists but is marked as private") {
+                        val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            @Deprecated("Use config")
+                            private val prop: Int by config(1)
+                            @Configuration("description")
+                            private val config: Int by configWithFallback(::prop, 99)
+                        }                        
+                    """
+                        assertThatThrownBy { subject.run(code) }
+                            .isInstanceOf(InvalidDocumentationException::class.java)
+                            .hasMessageContaining("private")
                     }
                 }
+
                 context("transformed property") {
                     val code = """
                         /**
@@ -589,66 +589,6 @@ object RuleCollectorSpec : Spek({
                     it("extracts default value with method reference") {
                         val items = subject.run(code)
                         assertThat(items[0].configuration[1].defaultValue).isEqualTo("'false'")
-                    }
-                }
-                context("fallback property") {
-                    it("extracts default value") {
-                        val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val prop: Int by config(1)
-                            @Configuration("description")
-                            private val config1: Int by configWithFallback("prop", 99)
-                            @Configuration("description")
-                            private val config2: Int by configWithFallback(fallbackPropertyName = "prop", defaultValue = 99)
-                            @Configuration("description")
-                            private val config3: Int by configWithFallback(defaultValue = 99, fallbackPropertyName = "prop")
-                            @Configuration("description")
-                            private val config4: Long by configWithFallback("prop", 99, Int::toLong)
-                        }                        
-                    """
-                        val items = subject.run(code)
-                        val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
-                        assertThat(fallbackProperties).hasSize(4)
-                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
-                    }
-
-                    it("reports an error if the property to fallback on does not exist") {
-                        val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by configWithFallback("prop", 99)
-                        }                        
-                    """
-                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
-                            subject.run(
-                                code
-                            )
-                        }
-                    }
-
-                    it("reports an error if the property to fallback on exists but is not a config property") {
-                        val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            private val prop: Int = 1
-                            @Configuration("description")
-                            private val config: Int by configWithFallback("prop", 99)
-                        }                        
-                    """
-                        assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
-                            subject.run(
-                                code
-                            )
-                        }
                     }
                 }
             }

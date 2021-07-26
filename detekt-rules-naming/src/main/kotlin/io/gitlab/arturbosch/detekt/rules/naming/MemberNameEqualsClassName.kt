@@ -67,13 +67,12 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val objectMessage = "A member is named after the object. " +
         "This might result in confusion. Please rename the member."
 
-    @Suppress("unused")
     @Configuration("if overridden functions and properties should be ignored")
     @Deprecated("Use `ignoreOverridden` instead")
-    private val ignoreOverriddenFunction: Boolean by config(true)
+    val ignoreOverriddenFunction: Boolean by config(true)
 
     @Configuration("if overridden functions and properties should be ignored")
-    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunction", true)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunction, true)
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {

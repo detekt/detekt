@@ -35,13 +35,12 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores variables in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
 
-    @Suppress("unused")
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     @Deprecated("Use `ignoreOverridden` instead")
-    private val ignoreOverriddenFunctions: Boolean by config(true)
+    val ignoreOverriddenFunctions: Boolean by config(true)
 
     @Configuration("ignores overridden functions with parameters not matching the pattern")
-    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunctions", true)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isContainingExcludedClass(excludeClassPattern)) {
