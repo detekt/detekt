@@ -534,6 +534,8 @@ potential-bugs:
     returnValueAnnotations:
       - '*.CheckReturnValue'
       - '*.CheckResult'
+    ignoreReturnValueAnnotations:
+      - '*.CanIgnoreReturnValue'
   ImplicitDefaultLocale:
     active: true
   ImplicitUnitReturnType:

@@ -588,6 +588,65 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("reports when the containing class of a function has `@CheckReturnValue`") {
+            val code = """
+                package foo
+
+                annotation class CheckReturnValue
+                
+                @CheckReturnValue
+                class Assertions {
+                    fun listOfChecked(value: String) = listOf(value)
+                }
+                
+                fun main() {
+                    Assertions().listOfChecked("hello")
+                }
+            """
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        it("reports when the containing object of a function has `@CheckReturnValue`") {
+            val code = """
+                package foo
+
+                annotation class CheckReturnValue
+                
+                @CheckReturnValue
+                object Assertions {
+                    fun listOfChecked(value: String) = listOf(value)
+                }
+
+                fun main() {
+                    Assertions.listOfChecked("hello")
+                }
+            """
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        it("does not report when the containing class of a function has `@CheckReturnValue` but the function has `@CanIgnoreReturnValue`") {
+            val code = """
+                package foo
+
+                annotation class CheckReturnValue
+                annotation class CanIgnoreReturnValue
+                
+                @CheckReturnValue
+                class Assertions {
+                    @CanIgnoreReturnValue
+                    fun listOfChecked(value: String) = listOf(value)
+                }
+                
+                fun main() {
+                    Assertions().listOfChecked("hello")
+                }
+            """
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     describe("custom annotation config") {
@@ -688,6 +747,50 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(4, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
+        }
+
+        it("does not report when a function has `@CanIgnoreReturnValue`") {
+            val code = """
+                package foo
+
+                annotation class CanIgnoreReturnValue
+
+                @CanIgnoreReturnValue
+                fun listOfChecked(value: String) = listOf(value)
+                
+                fun foo() : Int {
+                    listOfChecked("hello")
+                    return 42
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report when a function has a custom annotation") {
+            val code = """
+                package foo
+
+                annotation class CustomIgnoreReturn
+
+                @CustomIgnoreReturn
+                fun listOfChecked(value: String) = listOf(value)
+                
+                fun foo() : Int {
+                    listOfChecked("hello")
+                    return 42
+                }
+            """
+            val rule = IgnoredReturnValue(
+                TestConfig(
+                    mapOf(
+                        "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
+                        "restrictToAnnotatedMethods" to false
+                    )
+                )
+            )
+            val findings = rule.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
     }
 })
