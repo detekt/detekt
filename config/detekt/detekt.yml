@@ -95,6 +95,8 @@ potential-bugs:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
     active: true
+  IgnoredReturnValue:
+    active: true
 
 style:
   ClassOrdering:
