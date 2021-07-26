@@ -282,7 +282,24 @@ object RuleSetProviderCollectorSpec : Spek({
             }
         }
 
-        context("configuration") {
+        context("a RuleSetProvider with configurations in kdoc") {
+            val code = """
+            package foo
+
+            /**
+             * description
+             * @configuration android - if android style guides should be preferred (default: `false`)
+             */
+            class TestProvider: RuleSetProvider {
+            """.trimIndent()
+
+            it("throws exception for configuration in kdoc") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+            }
+        }
+
+        context("a RuleSetProvider with configurations") {
             val code = """
             package foo
 
