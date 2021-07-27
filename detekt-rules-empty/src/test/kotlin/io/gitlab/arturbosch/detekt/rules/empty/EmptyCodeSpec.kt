@@ -113,18 +113,6 @@ class EmptyCodeSpec : Spek({
             test { EmptySecondaryConstructor(Config.empty) }
         }
 
-        it("findsEmptyDefaultConstructor") {
-            val rule = EmptyDefaultConstructor(Config.empty)
-            val file = compileForTest(resourceAsPath("EmptyDefaultConstructorPositive.kt"))
-            assertThat(rule.lint(file)).hasSize(2)
-        }
-
-        it("doesNotFindEmptyDefaultConstructor") {
-            val rule = EmptyDefaultConstructor(Config.empty)
-            val file = compileForTest(resourceAsPath("EmptyDefaultConstructorNegative.kt"))
-            assertThat(rule.lint(file)).isEmpty()
-        }
-
         it("doesNotFailWithInvalidRegexWhenDisabled") {
             val configValues = mapOf(
                 "active" to "false",
