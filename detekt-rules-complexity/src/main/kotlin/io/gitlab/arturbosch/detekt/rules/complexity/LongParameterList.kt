@@ -43,9 +43,11 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of parameters required to trigger the rule")
     val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
+    @Suppress("DEPRECATION")
     @Configuration("number of function parameters required to trigger the rule")
     private val functionThreshold: Int by configWithFallback(::threshold, DEFAULT_FUNCTION_THRESHOLD)
 
+    @Suppress("DEPRECATION")
     @Configuration("number of constructor parameters required to trigger the rule")
     private val constructorThreshold: Int by configWithFallback(::threshold, DEFAULT_CONSTRUCTOR_THRESHOLD)
 

@@ -148,7 +148,6 @@ class ConfigurationCollector {
             delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
 
         fun KtProperty.checkUsingInvalidFallbackReference(properties: List<KtProperty>) {
-            (getValueArgument("fallbackProperty") { it.first() }?.getArgumentExpression() as? KtCallableReferenceExpression)?.callableReference?.getIdentifier()
             val fallbackPropertyReference = getValueArgument(
                 name = FALLBACK_ARGUMENT_NAME,
                 actionForPositionalMatch = { it.first() }
@@ -157,7 +156,8 @@ class ConfigurationCollector {
             val fallbackProperty = properties.find { it.name == fallbackPropertyReference }
             if (fallbackProperty == null || !fallbackProperty.isInitializedWithConfigDelegate()) {
                 invalidDocumentation {
-                    "The fallback property '$fallbackPropertyReference' of property '$name' must also be defined using a config property delegate "
+                    "The fallback property '$fallbackPropertyReference' of property '$name' " +
+                        "must also be defined using a config property delegate "
                 }
             }
             if (fallbackProperty.isPrivate()) {

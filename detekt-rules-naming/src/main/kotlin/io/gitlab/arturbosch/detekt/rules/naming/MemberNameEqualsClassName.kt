@@ -71,6 +71,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     @Deprecated("Use `ignoreOverridden` instead")
     val ignoreOverriddenFunction: Boolean by config(true)
 
+    @Suppress("DEPRECATION")
     @Configuration("if overridden functions and properties should be ignored")
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunction, true)
 
