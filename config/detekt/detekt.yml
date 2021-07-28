@@ -45,15 +45,19 @@ complexity:
     active: true
 
 exceptions:
+  InstanceOfCheckForException:
+    active: true
   NotImplementedDeclaration:
     active: true
-  InstanceOfCheckForException:
+  ObjectExtendsThrowable:
     active: true
   RethrowCaughtException:
     active: true
   ReturnFromFinally:
     active: true
   ThrowingExceptionFromFinally:
+    active: true
+  ThrowingExceptionInMain:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
