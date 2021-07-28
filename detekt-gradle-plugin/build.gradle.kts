@@ -14,13 +14,13 @@ val intTest: Configuration by configurations.creating
 dependencies {
     implementation(libs.kotlin.gradlePluginApi)
     implementation("io.github.detekt.sarif4k:sarif4k")
-    compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.android.gradle)
+    compileOnly(libs.kotlin.gradle)
 
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.kotlin.gradlePlugin)
-    intTest(libs.kotlin.gradlePlugin)
-    intTest(libs.android.gradlePlugin)
+    testImplementation(libs.kotlin.gradle)
+    intTest(libs.kotlin.gradle)
+    intTest(libs.android.gradle)
 }
 
 gradlePlugin {
