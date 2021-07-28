@@ -6,18 +6,18 @@ ktlint = "0.41.0"
 spek = "2.0.15"
 
 [libraries]
-binaryCompatibilityValidator-gradlePlugin = "org.jetbrains.kotlinx:binary-compatibility-validator:0.4.0"
-detekt-gradlePlugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.0-RC2"
-githubRelease-gradlePlugin = "com.github.breadmoirai:github-release:2.2.12"
-gradleVersions-gradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.28.0"
-nexusStaging-gradlePlugin = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
-pluginPublishing-gradlePlugin = "com.gradle.publish:plugin-publish-plugin:0.14.0"
-semver4j-gradlePlugin = "com.vdurmont:semver4j:3.1.0"
-shadow-gradlePlugin = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
-sonarqube-gradlePlugin = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+binaryCompatibilityValidator-gradle = "org.jetbrains.kotlinx:binary-compatibility-validator:0.4.0"
+detekt-gradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.0-RC2"
+githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
+gradleVersions-gradle = "com.github.ben-manes:gradle-versions-plugin:0.28.0"
+nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+pluginPublishing-gradle = "com.gradle.publish:plugin-publish-plugin:0.14.0"
+semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
+shadow-gradle = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
+sonarqube-gradle = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-scriptRuntime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }
 kotlin-scriptUtil = { module = "org.jetbrains.kotlin:kotlin-script-util", version.ref = "kotlin" }
@@ -27,14 +27,14 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
 
-android-gradlePlugin = "com.android.tools.build:gradle:4.2.0"
+android-gradle = "com.android.tools.build:gradle:4.2.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 
 dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "dokka"}
-dokka-gradlePlugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek" }
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
