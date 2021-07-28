@@ -60,11 +60,15 @@ exceptions:
     active: true
   InstanceOfCheckForException:
     active: true
+  ObjectExtendsThrowable:
+    active: true
   RethrowCaughtException:
     active: true
   ReturnFromFinally:
     active: true
   ThrowingExceptionFromFinally:
+    active: true
+  ThrowingExceptionInMain:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
