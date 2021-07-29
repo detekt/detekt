@@ -22,16 +22,16 @@ inline fun markdown(content: MarkdownContent.() -> Unit): String {
     }
 }
 
-inline fun MarkdownContent.markdown(markdown: () -> String) = append(markdown())
-inline fun MarkdownContent.paragraph(content: () -> String) = append("${content()}\n")
+inline fun MarkdownContent.markdown(markdown: () -> String): Unit = append(markdown())
+inline fun MarkdownContent.paragraph(content: () -> String): Unit = append("${content()}\n")
 
 inline fun MarkdownContent.bold(content: () -> String) = "**${content()}**"
 inline fun MarkdownContent.crossOut(code: () -> String) = "~~${code()}~~"
 
-inline fun MarkdownContent.h1(heading: () -> String) = append("# ${heading()}\n")
-inline fun MarkdownContent.h2(heading: () -> String) = append("## ${heading()}\n")
-inline fun MarkdownContent.h3(heading: () -> String) = append("### ${heading()}\n")
-inline fun MarkdownContent.h4(heading: () -> String) = append("#### ${heading()}\n")
+inline fun MarkdownContent.h1(heading: () -> String): Unit = append("# ${heading()}\n")
+inline fun MarkdownContent.h2(heading: () -> String): Unit = append("## ${heading()}\n")
+inline fun MarkdownContent.h3(heading: () -> String): Unit = append("### ${heading()}\n")
+inline fun MarkdownContent.h4(heading: () -> String): Unit = append("#### ${heading()}\n")
 
 inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
     for (i in sectionList().indices) {
@@ -44,7 +44,7 @@ inline fun MarkdownContent.code(code: () -> String) = "``${code()}``"
 
 inline fun MarkdownContent.codeBlock(syntax: String = "kotlin", code: () -> String) = "```$syntax\n${code()}\n```"
 
-fun MarkdownContent.emptyLine() = append("")
+fun MarkdownContent.emptyLine(): Unit = append("")
 
 inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
     return MarkdownList().let { list ->
@@ -55,5 +55,5 @@ inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
     }
 }
 
-inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
-inline fun MarkdownList.description(description: () -> String) = append("  ${description()}\n")
+inline fun MarkdownList.item(item: () -> String): Unit = append("* ${item()}\n")
+inline fun MarkdownList.description(description: () -> String): Unit = append("  ${description()}\n")
