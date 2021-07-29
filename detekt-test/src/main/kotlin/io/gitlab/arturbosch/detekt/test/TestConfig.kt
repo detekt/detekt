@@ -28,8 +28,7 @@ open class TestConfig(
     }
 
     override fun <T : Any> valueOrNull(key: String): T? =
-        if (key == Config.ACTIVE_KEY) (values[Config.ACTIVE_KEY] ?: true) as T?
-        else values[key] as? T
+        if (key == Config.ACTIVE_KEY) (values[Config.ACTIVE_KEY] ?: true) as T? else values[key] as? T
 
     private fun tryParseBasedOnDefaultRespectingCollections(result: String, defaultResult: Any): Any =
         when (defaultResult) {

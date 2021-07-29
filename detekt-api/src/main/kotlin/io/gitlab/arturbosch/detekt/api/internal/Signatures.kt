@@ -29,8 +29,7 @@ internal fun PsiElement.searchName(): String {
  * Example: KtFile with name /full/path/to/Test.kt will have its name formatted to be simply Test.kt
  */
 private fun String.formatElementName(): String =
-    if (contains(File.separatorChar)) substringAfterLast(File.separatorChar)
-    else this
+    if (contains(File.separatorChar)) substringAfterLast(File.separatorChar) else this
 
 /*
  * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.

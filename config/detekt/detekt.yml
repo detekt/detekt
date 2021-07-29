@@ -144,6 +144,14 @@ style:
     active: true
   CollapsibleIfStatements:
     active: true
+  DestructuringDeclarationWithTooManyEntries:
+    active: true
+  EqualsOnSignatureLine:
+    active: true
+  ExplicitCollectionElementAccessMethod:
+    active: true
+  ExplicitItLambdaParameter:
+    active: true
   ForbiddenComment:
     active: true
     values:
@@ -153,10 +161,16 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenVoid:
+    active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
+  MandatoryBracesIfStatements:
+    active: true
+  MandatoryBracesLoops:
+    active: true
   MaxLineLength:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
