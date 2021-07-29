@@ -61,7 +61,7 @@ fun YamlNode.list(name: String, list: List<String>) {
     }
 }
 
-inline fun YamlNode.yaml(yaml: () -> String) = append(yaml())
+inline fun YamlNode.yaml(yaml: () -> String): Unit = append(yaml())
 
 private fun String.quotedForList(): String {
     return when {
