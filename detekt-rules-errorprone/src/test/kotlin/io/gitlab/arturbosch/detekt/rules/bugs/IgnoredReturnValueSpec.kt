@@ -647,6 +647,27 @@ object IgnoredReturnValueSpec : Spek({
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("does not report when the containing class of a function has no `@CheckReturnValue` but the parent class has `@CheckReturnValue`") {
+            val code = """
+                package foo
+                
+                annotation class CheckReturnValue
+                
+                @CheckReturnValue
+                class Parent {
+                    class Child {
+                        fun listOfChecked(value: String) = listOf(value)
+                    }
+                }
+                
+                fun main() {
+                    Parent.Child().listOfChecked("hello")
+                }
+            """
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     describe("custom annotation config") {
