@@ -104,10 +104,20 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
 
+naming:
+  InvalidPackageDeclaration:
+    active: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+  VariableMaxLength:
+    active: true
+  VariableMinLength:
+    active: true
+
 potential-bugs:
   UnsafeCast:
     active: true
-    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
+    excludes: [ '**/test/**', '**/*.Test.kt', '**/*.Spec.kt' ]
   UselessPostfixExpression:
     active: true
   IgnoredReturnValue:
