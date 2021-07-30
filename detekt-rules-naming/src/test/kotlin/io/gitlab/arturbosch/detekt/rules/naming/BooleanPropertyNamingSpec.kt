@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -137,6 +139,20 @@ class BooleanPropertyNamingSpec : Spek({
 
                 assertThat(findings).isEmpty()
             }
+
+            it("should not detect titles, starting with allowed words from config") {
+                val code = """
+                    class Test {
+                        var needReload: Boolean = true
+                    }
+                    """
+
+                val config = TestConfig(mapOf(ALLOWED_PATTERN to "^(is|has|are|need)"))
+                assertThat(BooleanPropertyNaming(config).compileAndLint(code))
+                    .isEmpty()
+            }
         }
     }
 })
+
+private const val ALLOWED_PATTERN = "allowedPattern"
