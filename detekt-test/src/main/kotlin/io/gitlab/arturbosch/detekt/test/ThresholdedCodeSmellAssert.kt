@@ -17,7 +17,7 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
         ThresholdedCodeSmellAssert::class.java
     ) {
 
-    fun withValue(expected: Int) = hasValue(expected).let { this }
+    fun withValue(expected: Int) = apply { hasValue(expected) }
 
     fun hasValue(expected: Int) {
         isNotNull
@@ -28,7 +28,7 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
         }
     }
 
-    fun withThreshold(expected: Int) = hasThreshold(expected).let { this }
+    fun withThreshold(expected: Int) = apply { hasThreshold(expected) }
 
     fun hasThreshold(expected: Int) {
         isNotNull

@@ -68,7 +68,7 @@ internal class DetektAndroid(private val project: Project) {
         // so we catch them all by looking for this one
         project.afterEvaluate {
             val baseExtension = project.extensions.findByType(BaseExtension::class.java)
-            baseExtension?.let {
+            if (baseExtension != null) {
                 val bootClasspath = project.files(baseExtension.bootClasspath)
                 baseExtension.variants
                     ?.matching { !extension.matchesIgnoredConfiguration(it) }

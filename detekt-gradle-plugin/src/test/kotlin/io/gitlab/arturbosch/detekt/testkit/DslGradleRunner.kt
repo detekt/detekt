@@ -4,7 +4,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import java.nio.file.Files
-import java.util.UUID
+import java.util.*
 
 @Suppress("TooManyFunctions", "ClassOrdering")
 class DslGradleRunner @Suppress("LongParameterList") constructor(
@@ -55,7 +55,9 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)
         writeProjectFile(SETTINGS_FILENAME, settingsContent)
-        configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
+        if (configFileOrNone != null) {
+            writeProjectFile(configFileOrNone, configFileContent)
+        }
         baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
             repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) { srcFileIndex ->
@@ -126,7 +128,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             withProjectDir(rootDir)
             withPluginClasspath()
             withArguments(args)
-            gradleVersionOrNone?.let { withGradleVersion(gradleVersionOrNone) }
+            gradleVersionOrNone?.let(::withGradleVersion)
         }
     }
 

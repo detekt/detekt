@@ -57,6 +57,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
                 """.trimIndent()
             }
 
+            @Suppress("UnnecessaryLet")
             return Files.newBufferedReader(templateFile)
                 .use(BufferedReader::readText)
                 .let(StringUtilRt::convertLineSeparators)

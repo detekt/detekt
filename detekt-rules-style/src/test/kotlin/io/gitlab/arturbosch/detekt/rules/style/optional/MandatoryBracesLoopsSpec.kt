@@ -310,7 +310,7 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops with braces") {
-            val code = """		
+            val code = """
             fun test() {		
                 do {		
                     while (true) {		
@@ -324,7 +324,7 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("does not report nested loops on single line") {
-            val code = """		
+            val code = """
             fun test() {		
                 var i = 0
                 do do i += 1 while(i < 5) while (i < 5)	
@@ -335,7 +335,7 @@ class MandatoryBracesLoopsSpec : Spek({
         }
 
         it("reports in nested loop outer") {
-            val code = """		
+            val code = """
             fun test() {		
                 do 		
                     do {		
