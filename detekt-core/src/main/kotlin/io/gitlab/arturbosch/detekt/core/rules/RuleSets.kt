@@ -28,9 +28,9 @@ fun RuleSet.visitFile(
     file: KtFile,
     bindingContext: BindingContext = BindingContext.EMPTY
 ): List<Finding> =
-    rules.flatMap {
-        it.visitFile(file, bindingContext)
-        it.findings
+    rules.flatMap { rule ->
+        rule.visitFile(file, bindingContext)
+        rule.findings
     }
 
 fun associateRuleIdsToRuleSetIds(ruleSets: Sequence<RuleSet>): Map<RuleId, RuleSetId> {

@@ -160,21 +160,13 @@ style:
       - 'STOPSHIP:'
       - '@author'
       - '@requiresTypeResolution'
-    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+    excludes: [ '**/detekt-rules-style/**/ForbiddenComment.kt' ]
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
-    excludes: ['**/*.kt']
-    includes: ['**/detekt-api/src/main/**/api/*.kt']
-  MandatoryBracesIfStatements:
-    active: true
-  MandatoryBracesLoops:
-    active: true
-  MaxLineLength:
-    active: true
-    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
-    excludeCommentStatements: true
+    excludes: [ '**/*.kt' ]
+    includes: [ '**/detekt-api/src/main/**/api/*.kt' ]
   MagicNumber:
     excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
     ignorePropertyDeclaration: true
@@ -187,7 +179,25 @@ style:
       - '2'
       - '100'
       - '1000'
+  MandatoryBracesIfStatements:
+    active: true
+  MandatoryBracesLoops:
+    active: true
+  MaxLineLength:
+    active: true
+    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludeCommentStatements: true
+  NoTabs:
+    active: true
   NestedClassesVisibility:
+    active: true
+  ObjectLiteralToLambda:
+    active: true
+  PreferToOverPairSyntax:
+    active: true
+  RedundantExplicitType:
+    active: true
+  RedundantHigherOrderMapUsage:
     active: true
   RedundantVisibilityModifierRule:
     active: true
