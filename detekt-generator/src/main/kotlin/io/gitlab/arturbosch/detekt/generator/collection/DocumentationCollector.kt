@@ -14,7 +14,7 @@ class DocumentationCollector {
         private set
 
     fun setClass(classOrObject: KtClassOrObject) {
-        name = classOrObject.name?.trim() ?: ""
+        name = classOrObject.name?.trim().orEmpty()
         classOrObject.kDocSection()
             ?.getContent()
             ?.trim()

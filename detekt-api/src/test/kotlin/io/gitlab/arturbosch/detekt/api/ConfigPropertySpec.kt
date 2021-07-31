@@ -255,6 +255,7 @@ class ConfigPropertySpec : Spek({
             }
             context("empty list of strings") {
                 val subject by memoized {
+                    @Suppress("UseEmptyCounterpart")
                     object : TestConfigAware() {
                         val defaultValue: List<String> = emptyList()
                         val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }

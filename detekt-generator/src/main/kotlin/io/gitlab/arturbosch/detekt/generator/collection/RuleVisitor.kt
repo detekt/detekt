@@ -69,7 +69,7 @@ internal class RuleVisitor : DetektVisitor() {
         val className = containingClass?.name
         if (containingClass != null && className != null && !classesMap.containsKey(className)) {
             classesMap[className] = isRule
-            parent = containingClass.getSuperNames().firstOrNull { ruleClasses.contains(it) } ?: ""
+            parent = containingClass.getSuperNames().firstOrNull { ruleClasses.contains(it) }.orEmpty()
             extractIssueSeverityAndDebt(containingClass)
             extractAliases(containingClass)
         }
@@ -138,7 +138,7 @@ internal class RuleVisitor : DetektVisitor() {
                 .singleOrNull { it.name == "issue" }
                 ?.initializer as? KtCallExpression
             )
-            ?.valueArguments ?: emptyList()
+            ?.valueArguments.orEmpty()
 
         if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
             severity = getArgument(arguments[1], "Severity")

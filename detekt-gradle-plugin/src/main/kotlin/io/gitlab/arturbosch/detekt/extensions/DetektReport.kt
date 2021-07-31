@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import java.io.File
 
-class DetektReport(val type: DetektReportType) {
+data class DetektReport(val type: DetektReportType) {
 
     var enabled: Boolean? = null
 

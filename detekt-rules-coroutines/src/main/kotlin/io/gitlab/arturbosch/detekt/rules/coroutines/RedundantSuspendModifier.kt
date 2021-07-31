@@ -107,7 +107,7 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
                 if (hasDelegateExpression()) {
                     val variableDescriptor =
                         bindingContext[DECLARATION_TO_DESCRIPTOR, this] as? VariableDescriptorWithAccessors
-                    val accessors = variableDescriptor?.accessors ?: emptyList()
+                    val accessors = variableDescriptor?.accessors.orEmpty()
                     accessors.any { accessor ->
                         val delegatedFunctionDescriptor =
                             bindingContext[DELEGATED_PROPERTY_RESOLVED_CALL, accessor]?.resultingDescriptor

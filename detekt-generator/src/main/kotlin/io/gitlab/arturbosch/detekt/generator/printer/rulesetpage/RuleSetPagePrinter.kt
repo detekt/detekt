@@ -43,7 +43,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
             paragraph {
                 "${bold { "Active by default" }}: ${if (rule.defaultActivationStatus.active) "Yes" else "No"}" +
-                    ((rule.defaultActivationStatus as? Active)?.let { " - Since v${it.since}" } ?: "")
+                    ((rule.defaultActivationStatus as? Active)?.let { " - Since v${it.since}" }.orEmpty())
             }
 
             if (rule.requiresTypeResolution) {

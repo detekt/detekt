@@ -61,7 +61,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
             val statements = if (excludeGuardClauses) {
                 function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
             } else {
-                function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
+                function.bodyBlockExpression?.statements?.asSequence().orEmpty()
             }
 
             val countOfThrows = statements

@@ -14,7 +14,7 @@ val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, LibraryExclusio
 abstract class Exclusions {
 
     abstract val pattern: String
-    open val ruleSets: Set<String> = setOf()
+    open val ruleSets: Set<String> = emptySet()
     abstract val rules: Set<String>
 
     fun isExcluded(rule: Rule) = rule.name in rules || rule.inMultiRule in rules
@@ -24,7 +24,7 @@ private object TestExclusions : Exclusions() {
 
     override val pattern =
         "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
-    override val ruleSets = emptySet<String>()
+    override val ruleSets: Set<String> = emptySet()
     override val rules = setOf(
         "NamingRules",
         "WildcardImport",

@@ -135,7 +135,7 @@ potential-bugs:
     active: true
   UnsafeCast:
     active: true
-    excludes: [ '**/test/**', '**/*.Test.kt', '**/*.Spec.kt' ]
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
     active: true
 
@@ -160,15 +160,15 @@ style:
       - 'STOPSHIP:'
       - '@author'
       - '@requiresTypeResolution'
-    excludes: [ '**/detekt-rules-style/**/ForbiddenComment.kt' ]
+    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
-    excludes: [ '**/*.kt' ]
-    includes: [ '**/detekt-api/src/main/**/api/*.kt' ]
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
   MagicNumber:
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
@@ -185,7 +185,7 @@ style:
     active: true
   MaxLineLength:
     active: true
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
   NoTabs:
     active: true
@@ -225,3 +225,20 @@ style:
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
     active: true
+  UseDataClass:
+    active: true
+  UseEmptyCounterpart:
+    active: true
+  UseIfEmptyOrIfBlank:
+    active: true
+#  UseIfInsteadOfWhen:
+#    active: true
+  UseIsNullOrEmpty:
+    active: true
+  UseOrEmpty:
+    active: true
+  UseRequire:
+    active: true
+  UseRequireNotNull:
+    active: true
+

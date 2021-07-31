@@ -49,7 +49,7 @@ class MethodSignatureSpec : Spek({
     }
 })
 
-private class TestCase(
+private data class TestCase(
     val testDescription: String,
     val methodSignature: String,
     val expectedMethodName: String,

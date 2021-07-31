@@ -9,7 +9,7 @@ fun KtClassOrObject.parseConfigurationTags() =
     kDocSection()?.findTagsByName(TAG_CONFIGURATION)
         ?.filter { it.isValidConfigurationTag() }
         ?.map { it.parseConfigTag() }
-        ?: emptyList()
+        .orEmpty()
 
 fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
 
@@ -24,7 +24,8 @@ private fun KDocTag.parseConfigTag(): Configuration {
     val defaultValue = configurationDefaultValueRegex.find(content)
         ?.groupValues
         ?.get(1)
-        ?.trim() ?: ""
+        ?.trim()
+        .orEmpty()
     val deprecatedMessage = configurationDeprecatedRegex.find(content)
         ?.groupValues
         ?.get(1)

@@ -62,7 +62,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    var properties = setOf<String?>()
+    var properties: Set<String?> = emptySet()
 
     override fun visitClass(klass: KtClass) {
         properties = klass.getProperties()

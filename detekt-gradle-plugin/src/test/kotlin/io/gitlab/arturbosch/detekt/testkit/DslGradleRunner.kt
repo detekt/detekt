@@ -4,7 +4,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import java.nio.file.Files
-import java.util.*
+import java.util.UUID
 
 @Suppress("TooManyFunctions", "ClassOrdering")
 class DslGradleRunner @Suppress("LongParameterList") constructor(
@@ -73,7 +73,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         }
 
         projectLayout.submodules.forEach { submodule ->
-            submodule.writeModuleFile(buildFileName, submodule.buildFileContent ?: "")
+            submodule.writeModuleFile(buildFileName, submodule.buildFileContent.orEmpty())
             submodule.baselineFiles.forEach { file -> submodule.writeModuleFile(file, baselineContent) }
             submodule.srcDirs.forEachIndexed { srcDirIdx, moduleSourceDir ->
                 repeat(submodule.numberOfSourceFilesPerSourceDir) {
