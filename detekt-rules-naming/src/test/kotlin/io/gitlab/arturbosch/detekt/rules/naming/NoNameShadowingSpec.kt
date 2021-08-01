@@ -90,11 +90,16 @@ class NoNameShadowingSpec : Spek({
                 fun test() {
                     listOf(1).forEach { i ->
                         listOf(2).forEach {
+                            println(it)
                         }
                     }
                     "".run {
                         listOf(2).forEach {
+                            println(it)
                         }
+                    }
+                    listOf("").let { list ->
+                        list.map { it + "x" }
                     }
                 }
             """

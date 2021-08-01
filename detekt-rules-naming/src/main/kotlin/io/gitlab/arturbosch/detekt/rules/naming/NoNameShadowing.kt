@@ -100,6 +100,6 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
         getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) {
-            implicitParameter(bindingContext) != null
+            it.implicitParameter(bindingContext) != null
         } != null
 }
