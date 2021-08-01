@@ -107,7 +107,7 @@ formatting:
 naming:
   InvalidPackageDeclaration:
     active: true
-    excludes: ['**/buildSrc/**/*.kt']
+    excludes: ['**/buildSrc/**/*.kt', '**/*.kts']
   NonBooleanPropertyPrefixedWithIs:
     active: true
   VariableMaxLength:
