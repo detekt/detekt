@@ -15,7 +15,7 @@ class OutputFacade(
     private var reports: Map<String, ReportsSpec.Report> =
         settings.getOrNull<Collection<ReportsSpec.Report>>(DETEKT_OUTPUT_REPORT_PATHS_KEY)
             ?.associateBy { it.type }
-            ?: emptyMap()
+            .orEmpty()
 
     fun run(result: Detektion) {
         // Always run output reports first.

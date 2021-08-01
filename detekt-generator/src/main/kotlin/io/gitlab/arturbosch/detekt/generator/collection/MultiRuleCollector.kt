@@ -21,7 +21,7 @@ data class MultiRule(
     operator fun contains(ruleName: String) = ruleName in this.rules
 }
 
-private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName ?: ""
+private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName.orEmpty()
 
 class MultiRuleCollector : Collector<MultiRule> {
     override val items = mutableListOf<MultiRule>()
@@ -80,7 +80,7 @@ class MultiRuleVisitor : DetektVisitor() {
             return
         }
 
-        name = classOrObject.name?.trim() ?: ""
+        name = classOrObject.name?.trim().orEmpty()
     }
 
     override fun visitProperty(property: KtProperty) {
@@ -115,14 +115,14 @@ class RuleListVisitor : DetektVisitor() {
         ruleNames.addAll(
             argumentExpressions
                 .filterIsInstance<KtCallExpression>()
-                .map { it.calleeExpression?.text ?: "" }
+                .map { it.calleeExpression?.text.orEmpty() }
         )
 
         // Reference Expression = variable we need to search for
         ruleProperties.addAll(
             argumentExpressions
                 .filterIsInstance<KtReferenceExpression>()
-                .map { it.text ?: "" }
+                .map { it.text.orEmpty() }
         )
     }
 }
