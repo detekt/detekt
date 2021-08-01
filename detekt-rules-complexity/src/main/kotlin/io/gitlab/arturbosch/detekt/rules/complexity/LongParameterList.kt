@@ -134,7 +134,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private fun KtParameterList.parameterCount(): Int {
         val preFilteredParameters = parameters.filter { !it.isIgnored() }
         return if (ignoreDefaultParameters) {
-            preFilteredParameters.filter { !it.hasDefaultValue() }.size
+            preFilteredParameters.count { !it.hasDefaultValue() }
         } else {
             preFilteredParameters.size
         }

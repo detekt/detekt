@@ -155,8 +155,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         ?.run {
             declarations
                 .filterIsInstance<KtNamedFunction>()
-                .filter { !isIgnoredFunction(it) }
-                .size
+                .count { !isIgnoredFunction(it) }
         } ?: 0
 
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {

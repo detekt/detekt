@@ -112,7 +112,7 @@ class HtmlOutputReportSpec : Spek({
         it("renders a metric report correctly") {
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
-                    ProjectMetric("M1", 10000),
+                    ProjectMetric("M1", 10_000),
                     ProjectMetric("M2", 2)
                 )
             }
