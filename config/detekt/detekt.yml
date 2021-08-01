@@ -231,8 +231,6 @@ style:
     active: true
   UseIfEmptyOrIfBlank:
     active: true
-#  UseIfInsteadOfWhen:
-#    active: true
   UseIsNullOrEmpty:
     active: true
   UseOrEmpty:
