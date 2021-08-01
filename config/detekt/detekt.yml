@@ -107,6 +107,7 @@ formatting:
 naming:
   InvalidPackageDeclaration:
     active: true
+    excludes: ['**/buildSrc/**/*.kt']
   NonBooleanPropertyPrefixedWithIs:
     active: true
   VariableMaxLength:
