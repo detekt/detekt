@@ -176,6 +176,8 @@ style:
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
     active: true
+  UseIfEmptyOrIfBlank:
+    active: true
   UseIsNullOrEmpty:
     active: true
   UseRequire:
