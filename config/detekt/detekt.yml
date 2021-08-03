@@ -157,3 +157,5 @@ style:
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
     active: true
+  UseEmptyCounterpart:
+    active: true
