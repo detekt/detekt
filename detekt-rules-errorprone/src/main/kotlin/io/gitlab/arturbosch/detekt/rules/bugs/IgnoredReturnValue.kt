@@ -7,10 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -52,6 +53,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(String::simplePatternToRegex)
     }
 
+    @Configuration("Annotations to skip this inspection")
+    private val ignoreReturnValueAnnotations: List<Regex> by config(listOf("*.CanIgnoreReturnValue")) {
+        it.map(String::simplePatternToRegex)
+    }
+
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -61,12 +67,12 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
-        if (restrictToAnnotatedMethods) {
-            val annotations = resultingDescriptor.annotations.mapNotNull { it.fqName?.asString() }
-            if (annotations.none { annotation -> returnValueAnnotations.any { it.matches(annotation) } }) {
-                return
-            }
-        }
+
+        val annotations = resultingDescriptor.annotations
+        if (annotations.any { it in ignoreReturnValueAnnotations }) return
+        if (restrictToAnnotatedMethods &&
+            (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
+        ) return
 
         val messageText = expression.calleeExpression?.text ?: expression.text
         report(
@@ -76,5 +82,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
                 message = "The call $messageText is returning a value that is ignored."
             )
         )
+    }
+
+    @Suppress("UnusedPrivateMember")
+    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor): Boolean {
+        val fqName = annotation.fqName?.asString() ?: return false
+        return any { it.matches(fqName) }
     }
 }

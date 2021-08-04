@@ -9,15 +9,15 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.detekt.gradlePlugin)
-    implementation(libs.githubRelease.gradlePlugin)
-    implementation(libs.shadow.gradlePlugin)
-    implementation(libs.gradleVersions.gradlePlugin)
-    implementation(libs.sonarqube.gradlePlugin)
-    implementation(libs.dokka.gradlePlugin)
-    implementation(libs.semver4j.gradlePlugin)
-    implementation(libs.nexusStaging.gradlePlugin)
-    implementation(libs.binaryCompatibilityValidator.gradlePlugin)
-    implementation(libs.pluginPublishing.gradlePlugin)
+    implementation(libs.kotlin.gradle)
+    implementation(libs.detekt.gradle)
+    implementation(libs.githubRelease.gradle)
+    implementation(libs.shadow.gradle)
+    implementation(libs.gradleVersions.gradle)
+    implementation(libs.sonarqube.gradle)
+    implementation(libs.dokka.gradle)
+    implementation(libs.semver4j.gradle)
+    implementation(libs.nexusStaging.gradle)
+    implementation(libs.binaryCompatibilityValidator.gradle)
+    implementation(libs.pluginPublishing.gradle)
 }

@@ -14,8 +14,8 @@ open class CodeSmell(
     final override val issue: Issue,
     override val entity: Entity,
     override val message: String,
-    override val metrics: List<Metric> = listOf(),
-    override val references: List<Entity> = listOf()
+    override val metrics: List<Metric> = emptyList(),
+    override val references: List<Entity> = emptyList()
 ) : Finding {
 
     internal var internalSeverity: SeverityLevel = SeverityLevel.WARNING
@@ -50,8 +50,8 @@ open class CorrectableCodeSmell(
     issue: Issue,
     entity: Entity,
     message: String,
-    metrics: List<Metric> = listOf(),
-    references: List<Entity> = listOf(),
+    metrics: List<Metric> = emptyList(),
+    references: List<Entity> = emptyList(),
     val autoCorrectEnabled: Boolean
 ) : CodeSmell(
     issue,

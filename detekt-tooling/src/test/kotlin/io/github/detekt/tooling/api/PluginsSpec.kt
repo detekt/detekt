@@ -14,7 +14,7 @@ internal class PluginsSpec : Spek({
         it("throws when both sources are supplied via dsl") {
             assertThatCode {
                 ExtensionsSpecBuilder().apply {
-                    fromPaths { listOf() }
+                    fromPaths { emptyList() }
                     fromClassloader { javaClass.classLoader }
                 }.build()
             }.isInstanceOf(IllegalArgumentException::class.java)
@@ -22,13 +22,13 @@ internal class PluginsSpec : Spek({
             assertThatCode {
                 ExtensionsSpecBuilder().apply {
                     fromClassloader { javaClass.classLoader }
-                    fromPaths { listOf() }
+                    fromPaths { emptyList() }
                 }.build()
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
 
         it("throws when both sources are supplied via internal helper class") {
-            assertThatCode { PluginsHolder(listOf(), javaClass.classLoader) }
+            assertThatCode { PluginsHolder(emptyList(), javaClass.classLoader) }
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
 

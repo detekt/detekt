@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
@@ -69,7 +69,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("allows to provide a list of label names which should be ignored by this rule")
-    private val ignoredLabels: List<String> by config(listOf<String>()) { list ->
+    private val ignoredLabels: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
 

@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -32,7 +32,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (!classOrObject.identifierName().matches(classPattern)) {
+        if (!classOrObject.identifierName().removeSurrounding("`").matches(classPattern)) {
             report(
                 CodeSmell(
                     issue,

@@ -14,7 +14,7 @@ internal class DefaultCliInvokerSpec : Spek({
 
         assertThatCode {
             DefaultCliInvoker(stubbedCache)
-                .invokeCli(listOf(), TestFileCollection(), "detekt", ignoreFailures = false)
+                .invokeCli(emptyList(), TestFileCollection(), "detekt", ignoreFailures = false)
         }.isInstanceOf(GradleException::class.java)
             .hasMessageContaining("testing reflection wrapper...")
     }

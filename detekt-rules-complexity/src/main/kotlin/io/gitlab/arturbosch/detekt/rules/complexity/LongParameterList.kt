@@ -9,10 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.config
-import io.gitlab.arturbosch.detekt.api.internal.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
@@ -68,7 +68,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
             "the most common cases are for dependency injection where constructors are annotated with `@Inject` " +
             "or parameters are annotated with `@Value` and should not be counted for the rule to trigger"
     )
-    private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
+    private val ignoreAnnotated: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
 

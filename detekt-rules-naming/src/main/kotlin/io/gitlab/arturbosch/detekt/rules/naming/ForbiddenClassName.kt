@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.config
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
@@ -26,7 +26,7 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden class names")
-    private val forbiddenName: List<String> by config(listOf<String>()) { names ->
+    private val forbiddenName: List<String> by config(emptyList<String>()) { names ->
         names.map { it.removePrefix("*").removeSuffix("*") }
     }
 

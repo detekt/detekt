@@ -8,9 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -42,7 +42,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     @Configuration("ignore naming for functions in the context of these annotation class names")
-    private val ignoreAnnotated: List<String> by config(emptyList())
+    private val ignoreAnnotated: List<String> by config(listOf("Composable"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -54,7 +54,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         val functionName = function.nameIdentifier?.text ?: return
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !functionName.matches(functionPattern) &&
-            functionName != function.typeReference?.name
+            functionName != function.typeReference?.text
         ) {
             report(
                 CodeSmell(

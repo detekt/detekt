@@ -23,7 +23,7 @@ class TestProvider(override val ruleSetId: String = "Test") : RuleSetProvider {
 
 class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider {
     override fun instance(config: Config): RuleSet {
-        return RuleSet("Test", listOf())
+        return RuleSet("Test", emptyList())
     }
 }
 
