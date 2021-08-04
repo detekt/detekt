@@ -16,7 +16,6 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.jvm.tasks.Jar
 import java.io.File
 
 internal class DetektAndroid(private val project: Project) {
@@ -75,43 +74,24 @@ internal class DetektAndroid(private val project: Project) {
                 baseExtension.variants
                     ?.matching { !extension.matchesIgnoredConfiguration(it) }
                     ?.all { variant ->
-                        val intermediatesJavacJar = project.registerIntermediatesJavacJarTask(variant)
-                        project.registerAndroidDetektTask(
-                            bootClasspath = bootClasspath,
-                            extension = extension,
-                            variant = variant,
-                            intermediatesJavaCJar = intermediatesJavacJar
-                        ).also { provider ->
+                        project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
                             mainTaskProvider.dependsOn(provider)
                         }
-                        project.registerAndroidCreateBaselineTask(
-                            bootClasspath = bootClasspath,
-                            extension = extension,
-                            variant = variant,
-                            intermediatesJavaCJar = intermediatesJavacJar
-                        ).also { provider ->
-                            mainBaselineTaskProvider.dependsOn(provider)
-                        }
+                        project.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
+                            .also { provider ->
+                                mainBaselineTaskProvider.dependsOn(provider)
+                            }
                         variant.testVariants
                             .filter { !extension.matchesIgnoredConfiguration(it) }
                             .forEach { testVariant ->
-                                val testIntermediatesJavacJar = project.registerIntermediatesJavacJarTask(testVariant)
-                                project.registerAndroidDetektTask(
-                                    bootClasspath = bootClasspath,
-                                    extension = extension,
-                                    variant = testVariant,
-                                    intermediatesJavaCJar = testIntermediatesJavacJar
-                                ).also { provider ->
-                                    testTaskProvider.dependsOn(provider)
-                                }
-                                project.registerAndroidCreateBaselineTask(
-                                    bootClasspath,
-                                    extension,
-                                    testVariant,
-                                    testIntermediatesJavacJar
-                                ).also { provider ->
-                                    testBaselineTaskProvider.dependsOn(provider)
-                                }
+                                project.registerAndroidDetektTask(bootClasspath, extension, testVariant)
+                                    .also { provider ->
+                                        testTaskProvider.dependsOn(provider)
+                                    }
+                                project.registerAndroidCreateBaselineTask(bootClasspath, extension, testVariant)
+                                    .also { provider ->
+                                        testBaselineTaskProvider.dependsOn(provider)
+                                    }
                             }
                     }
             }
@@ -126,17 +106,11 @@ internal class DetektAndroid(private val project: Project) {
     private fun Project.registerAndroidDetektTask(
         bootClasspath: FileCollection,
         extension: DetektExtension,
-        variant: BaseVariant,
-        intermediatesJavaCJar: TaskProvider<Jar>,
+        variant: BaseVariant
     ): TaskProvider<Detekt> =
         registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize(), extension) {
             setSource(variant.sourceSets.map { it.javaDirectories })
-            classpath.apply {
-                setFrom(variant.getCompileClasspath(null).filter { it.exists() })
-                from(bootClasspath)
-                from(intermediatesJavaCJar.map { it.destinationDirectory.asFileTree })
-            }
-            dependsOn(intermediatesJavaCJar)
+            classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
             extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
@@ -153,36 +127,13 @@ internal class DetektAndroid(private val project: Project) {
     private fun Project.registerAndroidCreateBaselineTask(
         bootClasspath: FileCollection,
         extension: DetektExtension,
-        variant: BaseVariant,
-        intermediatesJavaCJar: TaskProvider<Jar>,
+        variant: BaseVariant
     ): TaskProvider<DetektCreateBaselineTask> =
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(), extension) {
             setSource(variant.sourceSets.map { it.javaDirectories })
-            classpath.apply {
-                setFrom(variant.getCompileClasspath(null).filter { it.exists() })
-                from(bootClasspath)
-                from(intermediatesJavaCJar.map { it.destinationDirectory.asFileTree })
-            }
-            dependsOn(intermediatesJavaCJar)
+            classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
             val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
             baseline.set(project.layout.file(project.provider { variantBaselineFile }))
             description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
         }
-
-    private fun Project.registerIntermediatesJavacJarTask(variant: BaseVariant): TaskProvider<Jar> {
-        val jarTaskName = "detektIntermediatesJavacJar${variant.name.capitalize()}"
-        val jarOutputDir = layout.buildDirectory.dir(jarTaskName).get()
-        return tasks.register(jarTaskName, Jar::class.java) { task ->
-            task.from(
-                layout
-                    .buildDirectory
-                    .dir("intermediates/javac/${variant.name}/classes")
-                    .get()
-                    .asFileTree
-                    .matching { it.include("**/*.class") }
-            )
-            task.destinationDirectory.set(jarOutputDir)
-            task.dependsOn(variant.assembleProvider)
-        }
-    }
 }

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -163,10 +162,11 @@ internal class RuleVisitor : DetektVisitor() {
     }
 
     companion object {
+        @Suppress("DEPRECATION")
         private val ruleClasses = listOf(
             io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
             FormattingRule::class.simpleName,
-            ThresholdRule::class.simpleName,
+            io.gitlab.arturbosch.detekt.api.ThresholdRule::class.simpleName,
             EmptyRule::class.simpleName
         )
 

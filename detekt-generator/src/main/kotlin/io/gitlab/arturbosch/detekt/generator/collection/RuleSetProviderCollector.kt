@@ -18,8 +18,8 @@ data class RuleSetProvider(
     val name: String,
     val description: String,
     val defaultActivationStatus: DefaultActivationStatus,
-    val rules: List<String> = listOf(),
-    val configuration: List<Configuration> = listOf()
+    val rules: List<String> = emptyList(),
+    val configuration: List<Configuration> = emptyList()
 )
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {

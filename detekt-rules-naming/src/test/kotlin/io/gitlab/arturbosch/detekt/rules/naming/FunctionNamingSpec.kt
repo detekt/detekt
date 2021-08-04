@@ -68,7 +68,7 @@ class FunctionNamingSpec : Spek({
             fun Foo(): Foo = FooImpl()
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).compileAndLint(code))
+            assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
         it("flags functions with bad names inside overridden functions by default") {
@@ -97,6 +97,13 @@ class FunctionNamingSpec : Spek({
             )
         }
 
+        it("allow functions with backtick") {
+            val code = """
+                fun `7his is a function name _`() = Unit
+            """
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        }
+
         describe("annotated functions") {
             val code = """
                 annotation class Composable
@@ -115,19 +122,18 @@ class FunctionNamingSpec : Spek({
 
             """
 
-            it("Does not ignore annotated functions if ignoreAnnotated is empty") {
+            it("Ignores default annotated functions") {
                 assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(
                     SourceLocation(4, 9),
-                    SourceLocation(8, 9),
-                    SourceLocation(12, 9)
+                    SourceLocation(8, 9)
                 )
             }
 
             it("Ignores annotated functions if ignoreAnnotated includes the given annotation class") {
-                val config = TestConfig(mapOf(FunctionNaming.IGNORE_ANNOTATED to listOf("Composable")))
+                val config = TestConfig(mapOf(FunctionNaming.IGNORE_ANNOTATED to listOf("Suppress")))
                 assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(
                     SourceLocation(4, 9),
-                    SourceLocation(8, 9)
+                    SourceLocation(12, 9)
                 )
             }
         }

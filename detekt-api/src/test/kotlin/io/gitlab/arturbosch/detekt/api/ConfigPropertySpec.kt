@@ -1,8 +1,5 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ConfigAware
-import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -261,7 +258,7 @@ class ConfigPropertySpec : Spek({
                     object : TestConfigAware() {
                         val defaultValue: List<String> = emptyList()
                         val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
-                        val prop2: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
+                        val prop2: List<Int> by config(emptyList<String>()) { it.map(String::toInt) }
                     }
                 }
                 it("can be defined as variable") {

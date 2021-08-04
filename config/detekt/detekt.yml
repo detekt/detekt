@@ -44,6 +44,17 @@ complexity:
   MethodOverloading:
     active: true
 
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: true
+  RedundantSuspendModifier:
+    active: true
+  SleepInsteadOfDelay:
+    active: true
+  SuspendFunWithFlowReturnType:
+    active: true
+
 exceptions:
   NotImplementedDeclaration:
     active: true
@@ -95,6 +106,8 @@ potential-bugs:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
     active: true
+  IgnoredReturnValue:
+    active: true
 
 style:
   ClassOrdering:
@@ -103,7 +116,12 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author', '@requiresTypeResolution']
+    values:
+      - 'TODO:'
+      - 'FIXME:'
+      - 'STOPSHIP:'
+      - '@author'
+      - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   LibraryCodeMustSpecifyReturnType:
     active: true
@@ -114,11 +132,17 @@ style:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
   MagicNumber:
+    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
-    ignoreNumbers: ['-1', '0', '1', '2', '100', '1000']
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    ignoreNumbers:
+      - '-1'
+      - '0'
+      - '1'
+      - '2'
+      - '100'
+      - '1000'
   NestedClassesVisibility:
     active: true
   RedundantVisibilityModifierRule:
@@ -132,4 +156,6 @@ style:
     active: true
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
+    active: true
+  UseEmptyCounterpart:
     active: true

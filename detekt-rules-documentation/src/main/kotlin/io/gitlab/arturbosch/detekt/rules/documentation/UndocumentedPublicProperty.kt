@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
@@ -61,7 +60,7 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     private fun KtProperty.shouldBeDocumented() =
         docComment == null && isTopLevelOrInPublicClass() && isPublicNotOverridden()
 
-    private fun KtProperty.isTopLevelOrInPublicClass() = isTopLevel || containingClass()?.isPublic == true
+    private fun KtProperty.isTopLevelOrInPublicClass() = isTopLevel || containingClassOrObject?.isPublic == true
 
     private fun report(property: KtNamedDeclaration) {
         report(

@@ -17,6 +17,26 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("reports undocumented public function in object") {
+            val code = """
+                object Test {
+                    fun noComment1() {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports undocumented public function in nested object") {
+            val code = """
+                class Test {
+                    object Test2 {
+                        fun noComment1() {}
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("reports undocumented public functions in companion object") {
             val code = """
                 class Test {
@@ -27,6 +47,15 @@ class UndocumentedPublicFunctionSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        it("reports undocumented public function in an interface") {
+            val code = """
+                interface Test {
+                    fun noComment1()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report documented public function") {
@@ -91,6 +120,55 @@ class UndocumentedPublicFunctionSpec : Spek({
 				}
 			"""
             assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report public functions in private object") {
+            val code = """
+                private object Test {
+                    fun noComment1() {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        context("nested class") {
+            it("does not report public functions in internal interface") {
+                val code = """
+                    internal interface Foo {
+                        interface Bar {
+                            fun f() {
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report public functions in private class") {
+                val code = """
+                    class Foo {
+                        private class Bar {
+                            class Baz {
+                                fun f() {
+                                }
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report public functions in private object") {
+                val code = """
+                    private object Foo {
+                        class Bar {
+                            fun f() {
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
     }
 })
