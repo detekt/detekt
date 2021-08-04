@@ -53,7 +53,7 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect titles, starting with allowed words") {
+            it("should not detect names that match an allowed pattern") {
                 val code = """data class Test (var isEnabled: Boolean, var hasDefault: Boolean)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
@@ -128,7 +128,7 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect titles, starting with allowed words") {
+            it("should not detect names that match an allowed pattern") {
                 val code = """
                     class Test {
                         var isEnabled: Boolean = true
@@ -140,7 +140,7 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect titles, starting with allowed words from config") {
+            it("should not detect names that match an allowed pattern from config") {
                 val code = """
                     class Test {
                         var needReload: Boolean = true

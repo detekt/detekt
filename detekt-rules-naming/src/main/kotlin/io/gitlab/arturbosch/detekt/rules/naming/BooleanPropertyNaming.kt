@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when a boolean property doesn't have one of the allowing prefixes
+ * Reports when a boolean property doesn't match a pattern
  *
  * <noncompliant>
  * val progressBar: Boolean = true
@@ -32,12 +32,12 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
-    @Configuration("RegEx to start with name")
+    @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
 
     override val issue = Issue(
         javaClass.simpleName, Severity.CodeSmell,
-        "Boolean property names prefix should follow the naming convention set in the projects configuration",
+        "Boolean property name should follow the naming convention set in the projects configuration",
         Debt.FIVE_MINS
     )
 
@@ -74,7 +74,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         declaration: KtCallableDeclaration,
         name: String
     ): CodeSmell {
-        val description = "Boolean property name should starts with $allowedPattern prefix."
+        val description = "Boolean property name should match a $allowedPattern pattern."
         return CodeSmell(
             issue,
             Entity.from(declaration),
@@ -82,7 +82,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getTypeName(parameter: KtCallableDeclaration): String? {
+    private fun getTypeName(parameter: KtCallableDeclaration): String {
         return parameter.createTypeBindingForReturnType(bindingContext)
             ?.type
             ?.fqNameOrNull()
