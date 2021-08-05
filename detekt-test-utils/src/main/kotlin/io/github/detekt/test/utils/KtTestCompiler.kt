@@ -37,7 +37,7 @@ internal object KtTestCompiler : KtCompiler() {
      * Not sure why but this function only works from this context.
      * Somehow the Kotlin language was not yet initialized.
      */
-    fun createEnvironment(additionalRootPaths: List<File> = listOf()): KotlinCoreEnvironmentWrapper {
+    fun createEnvironment(additionalRootPaths: List<File> = emptyList()): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)

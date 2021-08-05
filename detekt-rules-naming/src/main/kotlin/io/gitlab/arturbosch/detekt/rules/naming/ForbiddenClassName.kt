@@ -26,7 +26,7 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden class names")
-    private val forbiddenName: List<String> by config(listOf<String>()) { names ->
+    private val forbiddenName: List<String> by config(emptyList<String>()) { names ->
         names.map { it.removePrefix("*").removeSuffix("*") }
     }
 
