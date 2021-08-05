@@ -9,39 +9,57 @@ class ClassNamingSpec : Spek({
 
     describe("different naming conventions inside classes") {
 
-        it("should detect no violations") {
-            val findings = ClassNaming().compileAndLint(
-                """
-                    class MyClassWithNumbers5
+        it("should detect no violations class with numbers") {
+            val code = """
+                class MyClassWithNumbers5
+            """
 
-                    class NamingConventions {
-                    }
-                """
-            )
-            assertThat(findings).isEmpty()
+            assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should find two violations") {
-            val findings = ClassNaming().compileAndLint(
-                """
-                    class _NamingConventions
+        it("should detect no violations") {
+            val code = """
+                class NamingConventions {
+                }
+            """
 
-                    class namingConventions {}
-                """
-            )
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(6 to 24, 32 to 49)
+            assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        }
+
+        it("should detect no violations with class using backticks") {
+            val code = """
+                class `NamingConventions`
+            """
+
+            assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        }
+
+        it("should detect because it have a _") {
+            val code = """
+                class _NamingConventions
+            """
+
+            assertThat(ClassNaming().compileAndLint(code))
+                .hasSize(1)
+                .hasTextLocations(6 to 24)
+        }
+
+        it("should detect because it have starts with lowercase") {
+            val code = """
+                class namingConventions {}
+            """
+
+            assertThat(ClassNaming().compileAndLint(code))
+                .hasSize(1)
+                .hasTextLocations(6 to 23)
         }
 
         it("should ignore the issue by alias suppression") {
-            assertThat(
-                ClassNaming().compileAndLint(
-                    """
-                    @Suppress("ClassName")
-                    class namingConventions {}
-                """
-                )
-            ).isEmpty()
+            val code = """
+                @Suppress("ClassName")
+                class namingConventions {}
+            """
+            assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
     }
 })

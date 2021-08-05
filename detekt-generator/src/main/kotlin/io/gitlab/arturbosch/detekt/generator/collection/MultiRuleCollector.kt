@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 data class MultiRule(
     val name: String,
-    val rules: List<String> = listOf()
+    val rules: List<String> = emptyList()
 ) {
 
     operator fun contains(ruleName: String) = ruleName in this.rules

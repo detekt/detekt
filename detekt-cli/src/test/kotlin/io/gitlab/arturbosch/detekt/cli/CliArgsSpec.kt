@@ -18,7 +18,7 @@ internal class CliArgsSpec : Spek({
     describe("Parsing the input path") {
 
         it("the current working directory is used if parameter is not set") {
-            val cli = parseArguments(arrayOf())
+            val cli = parseArguments(emptyArray())
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
         }

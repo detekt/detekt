@@ -90,7 +90,7 @@ class CyclomaticComplexitySpec : Spek({
         it("does not count when forEach is not specified") {
             assertThat(
                 CyclomaticComplexity.calculate(code) {
-                    nestingFunctions = setOf()
+                    nestingFunctions = emptySet()
                 }
             ).isEqualTo(defaultFunctionComplexity)
         }

@@ -44,6 +44,17 @@ complexity:
   MethodOverloading:
     active: true
 
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: true
+  RedundantSuspendModifier:
+    active: true
+  SleepInsteadOfDelay:
+    active: true
+  SuspendFunWithFlowReturnType:
+    active: true
+
 exceptions:
   NotImplementedDeclaration:
     active: true
@@ -145,6 +156,8 @@ style:
     active: true
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
+    active: true
+  UseEmptyCounterpart:
     active: true
   UseOrEmpty:
     active: true
