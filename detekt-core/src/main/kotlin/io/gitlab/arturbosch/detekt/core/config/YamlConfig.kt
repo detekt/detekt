@@ -20,7 +20,7 @@ class YamlConfig internal constructor(
 ) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
-        val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
+        val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() }
         return YamlConfig(
             subProperties as Map<String, Any>,
             if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
