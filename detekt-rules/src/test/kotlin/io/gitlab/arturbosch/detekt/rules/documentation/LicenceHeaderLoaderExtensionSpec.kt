@@ -24,7 +24,9 @@ class LicenceHeaderLoaderExtensionSpec : Spek({
                     override val outputChannel: PrintStream = NullPrintStream()
                     override val errorChannel: PrintStream = NullPrintStream()
                     override val properties: Map<String, Any?> = HashMap()
-                    override fun register(key: String, value: Any): Unit = Unit
+
+                    @Suppress("ImplicitUnitReturnType") // see #4004
+                    override fun register(key: String, value: Any) = Unit
                 })
             }.doesNotThrowAnyException()
         }
