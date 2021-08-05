@@ -178,7 +178,10 @@ class RedundantVisibilityModifierRuleSpec : Spek({
 
             fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
                 val languageVersionSettings = mockk<LanguageVersionSettings>()
-                every { languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode) } returns mode
+                every {
+                    hint(ExplicitApiMode::class)
+                    languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+                } returns mode
                 @Suppress("DEPRECATION")
                 return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
             }

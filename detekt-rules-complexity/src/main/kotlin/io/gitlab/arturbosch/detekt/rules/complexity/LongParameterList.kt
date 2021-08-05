@@ -63,7 +63,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
             "the most common cases are for dependency injection where constructors are annotated with `@Inject` " +
             "or parameters are annotated with `@Value` and should not be counted for the rule to trigger"
     )
-    private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
+    private val ignoreAnnotated: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
 

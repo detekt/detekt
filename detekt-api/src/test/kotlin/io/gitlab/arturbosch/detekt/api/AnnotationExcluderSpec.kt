@@ -38,7 +38,7 @@ class AnnotationExcluderSpec : Spek({
         }
 
         it("should not exclude when no annotations should be excluded") {
-            val excluder = AnnotationExcluder(file, listOf())
+            val excluder = AnnotationExcluder(file, emptyList())
             assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isFalse()
         }
 
