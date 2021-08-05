@@ -14,7 +14,7 @@ val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, LibraryExclusio
 abstract class Exclusions {
 
     abstract val pattern: String
-    open val ruleSets: Set<String> = setOf()
+    open val ruleSets: Set<String> = emptySet()
     abstract val rules: Set<String>
 
     fun isExcluded(rule: Rule) = rule.name in rules || rule.inMultiRule in rules
