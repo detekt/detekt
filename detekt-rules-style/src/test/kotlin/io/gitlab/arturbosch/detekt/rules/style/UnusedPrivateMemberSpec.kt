@@ -128,6 +128,18 @@ class UnusedPrivateMemberSpec : Spek({
         }
     }
 
+    describe("protected functions") {
+
+        it("should not report parameters in protected functions") {
+            val code = """
+                open class Foo {
+                    protected fun fee(bar: String) {}
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
     describe("overridden functions") {
 
         it("should not report parameters in not private functions") {

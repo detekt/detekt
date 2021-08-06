@@ -30,3 +30,5 @@ fun KtModifierListOwner.isInline() = hasModifier(KtTokens.INLINE_KEYWORD)
 fun KtModifierListOwner.isExpect() = hasModifier(KtTokens.EXPECT_KEYWORD)
 
 fun KtModifierListOwner.isActual() = hasModifier(KtTokens.ACTUAL_KEYWORD)
+
+fun KtModifierListOwner.isProtected() = hasModifier(KtTokens.PROTECTED_KEYWORD)
