@@ -100,6 +100,19 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
 
+naming:
+  InvalidPackageDeclaration:
+    active: true
+    excludes: ['**/buildSrc/**/*.kt', '**/*.kts']
+  NoNameShadowing:
+    active: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+  VariableMaxLength:
+    active: true
+  VariableMinLength:
+    active: true
+
 potential-bugs:
   UnsafeCast:
     active: true
