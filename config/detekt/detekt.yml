@@ -100,6 +100,19 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
 
+naming:
+  InvalidPackageDeclaration:
+    active: true
+    excludes: ['**/buildSrc/**/*.kt', '**/*.kts']
+  NoNameShadowing:
+    active: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+  VariableMaxLength:
+    active: true
+  VariableMinLength:
+    active: true
+
 potential-bugs:
   UnsafeCast:
     active: true
@@ -114,6 +127,14 @@ style:
     active: true
   CollapsibleIfStatements:
     active: true
+  DestructuringDeclarationWithTooManyEntries:
+    active: true
+  EqualsOnSignatureLine:
+    active: true
+  ExplicitCollectionElementAccessMethod:
+    active: true
+  ExplicitItLambdaParameter:
+    active: true
   ForbiddenComment:
     active: true
     values:
@@ -123,14 +144,12 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenVoid:
+    active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
-  MaxLineLength:
-    active: true
-    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
-    excludeCommentStatements: true
   MagicNumber:
     excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
     ignorePropertyDeclaration: true
@@ -143,7 +162,19 @@ style:
       - '2'
       - '100'
       - '1000'
+  MandatoryBracesLoops:
+    active: true
+  MaxLineLength:
+    active: true
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
+    excludeCommentStatements: true
   NestedClassesVisibility:
+    active: true
+  ObjectLiteralToLambda:
+    active: true
+  RedundantExplicitType:
+    active: true
+  RedundantHigherOrderMapUsage:
     active: true
   RedundantVisibilityModifierRule:
     active: true
@@ -152,6 +183,18 @@ style:
     excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
     active: true
+  TrailingWhitespace:
+    active: true
+  UnderscoresInNumericLiterals:
+    active: true
+  UnnecessaryAnnotationUseSiteTarget:
+    active: true
+  UnnecessaryFilter:
+    active: true
+  UntilInsteadOfRangeTo:
+    active: true
+  UnusedImports:
+    active: true
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
@@ -159,5 +202,13 @@ style:
     active: true
   UseEmptyCounterpart:
     active: true
+  UseIfEmptyOrIfBlank:
+    active: true
+  UseIsNullOrEmpty:
+    active: true
   UseOrEmpty:
+    active: true
+  UseRequire:
+    active: true
+  UseRequireNotNull:
     active: true

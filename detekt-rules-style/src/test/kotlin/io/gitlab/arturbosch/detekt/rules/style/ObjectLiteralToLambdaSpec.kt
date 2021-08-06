@@ -480,8 +480,8 @@ class ObjectLiteralToLambdaSpec : Spek({
         context("Edge case") {
             // https://github.com/detekt/detekt/pull/3599#issuecomment-806389701
             it(
-                """Anonymous objects are always newly created, 
-                |but lambdas are singletons, 
+                """Anonymous objects are always newly created,
+                |but lambdas are singletons,
                 |so they have the same reference.""".trimMargin()
             ) {
                 val code = """

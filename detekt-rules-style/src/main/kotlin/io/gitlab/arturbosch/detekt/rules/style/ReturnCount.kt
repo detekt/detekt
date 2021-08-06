@@ -107,8 +107,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
         return statements.flatMap { it.collectDescendantsOfType<KtReturnExpression>().asSequence() }
             .filterNot { it.isExcluded() }
-            .filter { it.getParentOfType<KtNamedFunction>(true) == function }
-            .count()
+            .count { it.getParentOfType<KtNamedFunction>(true) == function }
     }
 
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {

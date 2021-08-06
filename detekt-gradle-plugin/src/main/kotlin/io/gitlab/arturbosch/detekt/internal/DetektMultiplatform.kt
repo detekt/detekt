@@ -25,8 +25,8 @@ internal class DetektMultiplatform(private val project: Project) {
     private fun Project.registerMultiplatformTasks(extension: DetektExtension) {
         // We need another project.afterEvaluate as the Android target is attached on
         // a project.afterEvaluate inside AGP. We should further investigate and potentially remove this.
-        project.afterEvaluate {
-            val kmpExtension = project.extensions.getByType(KotlinMultiplatformExtension::class.java)
+        project.afterEvaluate { evaluatedProject ->
+            val kmpExtension = evaluatedProject.extensions.getByType(KotlinMultiplatformExtension::class.java)
 
             kmpExtension.targets.all { target ->
                 target.compilations.forEach { compilation ->
@@ -36,9 +36,9 @@ internal class DetektMultiplatform(private val project: Project) {
 
                     val inputSource = compilation.kotlinSourceSets
                         .map { it.kotlin.sourceDirectories }
-                        .fold(project.files() as FileCollection) { collection, next -> collection.plus(next) }
+                        .fold(evaluatedProject.files() as FileCollection) { collection, next -> collection.plus(next) }
 
-                    val detektTaskProvider = project.registerDetektTask(
+                    val detektTaskProvider = evaluatedProject.registerDetektTask(
                         DetektPlugin.DETEKT_TASK_NAME + taskSuffix,
                         extension
                     ) {
@@ -53,7 +53,7 @@ internal class DetektMultiplatform(private val project: Project) {
                         } else {
                             extension.baseline?.takeIf { it.exists() }
                         }?.let { baselineFile ->
-                            baseline.set(layout.file(project.provider { baselineFile }))
+                            baseline.set(layout.file(evaluatedProject.provider { baselineFile }))
                         }
                         reports = extension.reports
                         reports.xml.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".xml"))
@@ -69,7 +69,9 @@ internal class DetektMultiplatform(private val project: Project) {
                     tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }
                         .configureEach { it.dependsOn(detektTaskProvider) }
 
-                    project.registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension) {
+                    evaluatedProject.registerCreateBaselineTask(
+                        DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension
+                    ) {
                         setSource(inputSource)
                         if (runWithTypeResolution) {
                             classpath.setFrom(inputSource, compilation.compileDependencyFiles)
@@ -79,7 +81,7 @@ internal class DetektMultiplatform(private val project: Project) {
                         } else {
                             extension.baseline
                         }
-                        baseline.set(project.layout.file(project.provider { variantBaselineFile }))
+                        baseline.set(evaluatedProject.layout.file(evaluatedProject.provider { variantBaselineFile }))
 
                         description = "Creates detekt baseline for ${target.name} and source set ${compilation.name}"
                         if (runWithTypeResolution) {

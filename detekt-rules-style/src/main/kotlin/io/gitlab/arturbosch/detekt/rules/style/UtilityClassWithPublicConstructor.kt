@@ -104,7 +104,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
     }
 
     private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
-        if (declarations == null || declarations.isEmpty()) {
+        if (declarations.isNullOrEmpty()) {
             return false
         }
         var containsCompanionObject = false
