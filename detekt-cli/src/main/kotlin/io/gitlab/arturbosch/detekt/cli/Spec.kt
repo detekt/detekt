@@ -44,8 +44,8 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             shouldValidateBeforeAnalysis = false
             knownPatterns = emptyList()
             // ^^ cli does not have these properties yet; specified in yaml config for now
-            configPaths = config?.let { MultipleExistingPathConverter().convert(it) } ?: emptyList()
-            resources = configResource?.let { MultipleClasspathResourceConverter().convert(it) } ?: emptyList()
+            configPaths = config?.let { MultipleExistingPathConverter().convert(it) }.orEmpty()
+            resources = configResource?.let { MultipleClasspathResourceConverter().convert(it) }.orEmpty()
         }
 
         execution {
@@ -55,7 +55,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         extensions {
             disableDefaultRuleSets = args.disableDefaultRuleSets
-            fromPaths { args.plugins?.let { MultipleExistingPathConverter().convert(it) } ?: emptyList() }
+            fromPaths { args.plugins?.let { MultipleExistingPathConverter().convert(it) }.orEmpty() }
         }
 
         reports {
@@ -76,7 +76,7 @@ private fun asPatterns(rawValue: String?): List<String> =
     rawValue?.trim()
         ?.commaSeparatedPattern(",", ";")
         ?.toList()
-        ?: emptyList()
+        .orEmpty()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions

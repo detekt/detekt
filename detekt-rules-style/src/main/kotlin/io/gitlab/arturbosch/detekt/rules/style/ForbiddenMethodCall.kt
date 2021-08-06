@@ -100,7 +100,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                             CodeSmell(
                                 issue,
                                 Entity.from(expression),
-                                "The method ${it.first}(${expectedParamTypes?.joinToString() ?: ""}) " +
+                                "The method ${it.first}(${expectedParamTypes?.joinToString().orEmpty()}) " +
                                     "has been forbidden in the Detekt config."
                             )
                         )

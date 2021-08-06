@@ -51,20 +51,20 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
 }
 
 internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {
-    override fun toArgument() = languageVersion?.let { listOf(LANGUAGE_VERSION_PARAMETER, it) } ?: emptyList()
+    override fun toArgument() = languageVersion?.let { listOf(LANGUAGE_VERSION_PARAMETER, it) }.orEmpty()
 }
 
 internal data class JvmTargetArgument(val jvmTarget: String?) : CliArgument() {
-    override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) } ?: emptyList()
+    override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) }.orEmpty()
 }
 
 internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument() {
-    override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) } ?: emptyList()
+    override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) }.orEmpty()
 }
 
 internal data class DefaultReportArgument(val type: DetektReportType, val file: RegularFile?) : CliArgument() {
     override fun toArgument() =
-        file?.let { listOf(REPORT_PARAMETER, "${type.reportId}:${it.asFile.absoluteFile}") } ?: emptyList()
+        file?.let { listOf(REPORT_PARAMETER, "${type.reportId}:${it.asFile.absoluteFile}") }.orEmpty()
 }
 
 internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {
@@ -72,7 +72,7 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
 }
 
 internal data class BasePathArgument(val basePath: String?) : CliArgument() {
-    override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) } ?: emptyList()
+    override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) }.orEmpty()
 }
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {

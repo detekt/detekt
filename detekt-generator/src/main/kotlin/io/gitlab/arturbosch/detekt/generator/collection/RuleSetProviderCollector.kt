@@ -64,13 +64,13 @@ class RuleSetProviderVisitor : DetektVisitor() {
         val superTypes = list.entries
             ?.map { it.typeAsUserType?.referencedName }
             ?.toSet()
-            ?: emptySet()
+            .orEmpty()
         containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
         super.visitSuperTypeList(list)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
+        description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim().orEmpty()
         if (classOrObject.isAnnotatedWith(ActiveByDefault::class)) {
             defaultActivationStatus = Active(since = classOrObject.firstAnnotationParameter(ActiveByDefault::class))
         }
@@ -84,7 +84,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
                     "RuleSetProvider class " +
-                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules."
+                        "${property.containingClass()?.name.orEmpty()} doesn't provide list of rules."
                 )
         }
     }
@@ -102,7 +102,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
                 ?.valueArguments
                 ?.mapNotNull { it.getArgumentExpression() }
                 ?.mapNotNull { it.referenceExpression()?.text }
-                ?: emptyList()
+                .orEmpty()
 
             ruleNames.addAll(ruleArgumentNames)
         }

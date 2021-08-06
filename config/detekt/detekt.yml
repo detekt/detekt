@@ -206,6 +206,8 @@ style:
     active: true
   UseIsNullOrEmpty:
     active: true
+  UseOrEmpty:
+    active: true
   UseRequire:
     active: true
   UseRequireNotNull:
