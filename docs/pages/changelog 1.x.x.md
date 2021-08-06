@@ -6,10 +6,11 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.18.0-RC2 - 2021-07-16
+#### 1.18.0-RC3 - 2021-08-05
 
 ##### Notable Changes
 
+- We've added two new rules: `AvoidReferentialEquality` and `BooleanPropertyNaming` (see [#3924](https://github.com/detekt/detekt/pull/3924) and [#3795](https://github.com/detekt/detekt/pull/3795))
 - This version of Detekt ships with Kotlin `1.5.21`, and we're compiling with `apiVersion` set to `1.4` - [#3956](https://github.com/detekt/detekt/pull/3956) and [#3852](https://github.com/detekt/detekt/pull/3852)
 - The minimum version of Gradle to use Detekt Gradle Plugin is now `6.1` - [#3830](https://github.com/detekt/detekt/pull/3830)
 - This version of Detekt has been tested against Java 16 - [#3698](https://github.com/detekt/detekt/pull/3698)
@@ -17,10 +18,39 @@ toc: true
 - We now use multi-line format for list options in the default detekt config file - [#3827](https://github.com/detekt/detekt/pull/3827)
 - The rule `VarCouldBeVal` has been updated and now works only with type resolution to provide more precise findings - [#3880](https://github.com/detekt/detekt/pull/3880)
 - We removed all the references to `Extensions.getRootArea` that is now deprecated from our codebase. This was affecting users with sporadic crashes. - [#3848](https://github.com/detekt/detekt/pull/3848)
-- We continued the work to introduce annotations to declare rules metadata. Specifically the `@Autocorrect` annotation has been added - [#3820](https://github.com/detekt/detekt/pull/3820)
+
+##### Migration
+
+- We renamed the `input` property inside the `detekt{}` extension of the Gradle plugin to `source`. The `input` property has been deprecated, and we invite you to migrate to the new property (see [#3951](https://github.com/detekt/detekt/pull/3951))
+
+```
+// BEFORE
+detekt {
+    input = files(...)
+}
+
+// AFTER
+detekt {
+    source = files(...)
+}
+```
+
+- For custom rule authors: we finished the rework to use the annotations in custom rules. Specifically configurations should be configured with `@Configuration` and a config delegate (see [#3891](https://github.com/detekt/detekt/pull/3891)) while auto-correction capability should be specified with the `@AutoCorrectable` annotation [#3820](https://github.com/detekt/detekt/pull/3820).
+
+- For custom rule authors: This will be the last version of detekt where we publish the `detekt-bom` artifact. This change should not affect anyone. If it affects you, [please let us know](https://github.com/detekt/detekt/issues/3988).
 
 ##### Changelog
 
+- ClassNaming: Don't treat Kotlin syntax ` as part of class name - [#3977](https://github.com/detekt/detekt/pull/3977)
+- IgnoredReturnValue: fix false negative when annotation is on the class - [#3979](https://github.com/detekt/detekt/pull/3979) 
+- NoNameShadowing: fix false positive with nested lambda has implicit parameter - [#3991](https://github.com/detekt/detekt/pull/3991)
+- UnusedPrivateMember - added handling of overloaded array get operator - [#3666](https://github.com/detekt/detekt/pull/3666)
+- Publish bundled/Shadow JAR artifact to Maven repos - [#3986](https://github.com/detekt/detekt/pull/3986) 
+-  EmptyDefaultConstructor false positive with expect and actual classes - [#3970](https://github.com/detekt/detekt/pull/3970) 
+- FunctionNaming - Allow factory function names - fix #1639 - [#3973](https://github.com/detekt/detekt/pull/3973)
+- EndOfSentenceFormat - Fix #3893 by only calling super.visit once - [#3904](https://github.com/detekt/detekt/pull/3904)
+- UndocumentedPublicFunction: don't report when nested class is inside not public class [#3962](https://github.com/detekt/detekt/pull/3962)
+- Fail with a meaningful error message for invalid boolean - [#3931](https://github.com/detekt/detekt/pull/3931)
 - UndocumentedPublicProperty and UndocumentedPublicFunction should include objects - [#3940](https://github.com/detekt/detekt/pull/3940)
 - Fix exclusion pattern for InvalidPackageDeclaration - [#3907](https://github.com/detekt/detekt/pull/3907)
 - Allow else when {...} in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
@@ -69,6 +99,14 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Enable UseEmptyCounterpart for detekt code base - [#4000](https://github.com/detekt/detekt/pull/4000) 
+- enable coroutine rules for detekt code base - [#3994](https://github.com/detekt/detekt/pull/3994)
+- Remove "plugin" suffix from version catalog aliases - [#3987](https://github.com/detekt/detekt/pull/3987)
+- Fix ClassCastException in test on java 11 openjdk9 - [#3984](https://github.com/detekt/detekt/pull/3984)
+- Activate IgnoredReturnValue on detekt code base - [#3974](https://github.com/detekt/detekt/pull/3974)
+- Add missing test in FunctionNaming - [#3976](https://github.com/detekt/detekt/pull/3976)
+- Fix trunk compilation - [#3968](https://github.com/detekt/detekt/pull/3968)
+- Reformat internal detekt.yml using multi line lists - [#3936](https://github.com/detekt/detekt/pull/3936)
 - Increase memory available to gradle integration test daemon - [#3938](https://github.com/detekt/detekt/pull/3938) 
 - Avoid empty lines when running detekt with type resolution - [#3909](https://github.com/detekt/detekt/pull/3909)
 - Fix java.lang.ClassCastException is reading default yaml config - [#3920](https://github.com/detekt/detekt/pull/3920)
