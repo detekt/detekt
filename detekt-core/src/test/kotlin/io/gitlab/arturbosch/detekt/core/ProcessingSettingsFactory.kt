@@ -48,8 +48,6 @@ fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): Pro
 class DirectExecutor : AbstractExecutorService() {
 
     override fun execute(command: Runnable): Unit = command.run()
-
-    @Suppress("ImplicitUnitReturnType") // see #4004
     override fun shutdown() = Unit
     override fun shutdownNow(): MutableList<Runnable> = mutableListOf()
     override fun isShutdown(): Boolean = true
