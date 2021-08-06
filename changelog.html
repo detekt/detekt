@@ -464,11 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1180-rc2---2021-07-16">1.18.0-RC2 - 2021-07-16</h4>
+  <h4 id="1180-rc3---2021-08-05">1.18.0-RC3 - 2021-08-05</h4>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
 <ul>
+  <li>We’ve added two new rules: <code class="language-plaintext highlighter-rouge">AvoidReferentialEquality</code> and <code class="language-plaintext highlighter-rouge">BooleanPropertyNaming</code> (see <a href="https://github.com/detekt/detekt/pull/3924">#3924</a> and <a href="https://github.com/detekt/detekt/pull/3795">#3795</a>)</li>
   <li>This version of Detekt ships with Kotlin <code class="language-plaintext highlighter-rouge">1.5.21</code>, and we’re compiling with <code class="language-plaintext highlighter-rouge">apiVersion</code> set to <code class="language-plaintext highlighter-rouge">1.4</code> - <a href="https://github.com/detekt/detekt/pull/3956">#3956</a> and <a href="https://github.com/detekt/detekt/pull/3852">#3852</a></li>
   <li>The minimum version of Gradle to use Detekt Gradle Plugin is now <code class="language-plaintext highlighter-rouge">6.1</code> - <a href="https://github.com/detekt/detekt/pull/3830">#3830</a></li>
   <li>This version of Detekt has been tested against Java 16 - <a href="https://github.com/detekt/detekt/pull/3698">#3698</a></li>
@@ -476,12 +477,47 @@ $('#toc').on('click', 'a', function() {
   <li>We now use multi-line format for list options in the default detekt config file - <a href="https://github.com/detekt/detekt/pull/3827">#3827</a></li>
   <li>The rule <code class="language-plaintext highlighter-rouge">VarCouldBeVal</code> has been updated and now works only with type resolution to provide more precise findings - <a href="https://github.com/detekt/detekt/pull/3880">#3880</a></li>
   <li>We removed all the references to <code class="language-plaintext highlighter-rouge">Extensions.getRootArea</code> that is now deprecated from our codebase. This was affecting users with sporadic crashes. - <a href="https://github.com/detekt/detekt/pull/3848">#3848</a></li>
-  <li>We continued the work to introduce annotations to declare rules metadata. Specifically the <code class="language-plaintext highlighter-rouge">@Autocorrect</code> annotation has been added - <a href="https://github.com/detekt/detekt/pull/3820">#3820</a></li>
+</ul>
+
+<h5 id="migration">Migration</h5>
+
+<ul>
+  <li>We renamed the <code class="language-plaintext highlighter-rouge">input</code> property inside the <code class="language-plaintext highlighter-rouge">detekt{}</code> extension of the Gradle plugin to <code class="language-plaintext highlighter-rouge">source</code>. The <code class="language-plaintext highlighter-rouge">input</code> property has been deprecated, and we invite you to migrate to the new property (see <a href="https://github.com/detekt/detekt/pull/3951">#3951</a>)</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// BEFORE
+detekt {
+    input = files(...)
+}
+
+// AFTER
+detekt {
+    source = files(...)
+}
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>For custom rule authors: we finished the rework to use the annotations in custom rules. Specifically configurations should be configured with <code class="language-plaintext highlighter-rouge">@Configuration</code> and a config delegate (see <a href="https://github.com/detekt/detekt/pull/3891">#3891</a>) while auto-correction capability should be specified with the <code class="language-plaintext highlighter-rouge">@AutoCorrectable</code> annotation <a href="https://github.com/detekt/detekt/pull/3820">#3820</a>.</p>
+  </li>
+  <li>
+    <p>For custom rule authors: This will be the last version of detekt where we publish the <code class="language-plaintext highlighter-rouge">detekt-bom</code> artifact. This change should not affect anyone. If it affects you, <a href="https://github.com/detekt/detekt/issues/3988">please let us know</a>.</p>
+  </li>
 </ul>
 
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>ClassNaming: Don’t treat Kotlin syntax ` as part of class name - <a href="https://github.com/detekt/detekt/pull/3977">#3977</a></li>
+  <li>IgnoredReturnValue: fix false negative when annotation is on the class - <a href="https://github.com/detekt/detekt/pull/3979">#3979</a></li>
+  <li>NoNameShadowing: fix false positive with nested lambda has implicit parameter - <a href="https://github.com/detekt/detekt/pull/3991">#3991</a></li>
+  <li>UnusedPrivateMember - added handling of overloaded array get operator - <a href="https://github.com/detekt/detekt/pull/3666">#3666</a></li>
+  <li>Publish bundled/Shadow JAR artifact to Maven repos - <a href="https://github.com/detekt/detekt/pull/3986">#3986</a></li>
+  <li>EmptyDefaultConstructor false positive with expect and actual classes - <a href="https://github.com/detekt/detekt/pull/3970">#3970</a></li>
+  <li>FunctionNaming - Allow factory function names - fix #1639 - <a href="https://github.com/detekt/detekt/pull/3973">#3973</a></li>
+  <li>EndOfSentenceFormat - Fix #3893 by only calling super.visit once - <a href="https://github.com/detekt/detekt/pull/3904">#3904</a></li>
+  <li>UndocumentedPublicFunction: don’t report when nested class is inside not public class <a href="https://github.com/detekt/detekt/pull/3962">#3962</a></li>
+  <li>Fail with a meaningful error message for invalid boolean - <a href="https://github.com/detekt/detekt/pull/3931">#3931</a></li>
   <li>UndocumentedPublicProperty and UndocumentedPublicFunction should include objects - <a href="https://github.com/detekt/detekt/pull/3940">#3940</a></li>
   <li>Fix exclusion pattern for InvalidPackageDeclaration - <a href="https://github.com/detekt/detekt/pull/3907">#3907</a></li>
   <li>Allow else when {…} in MandatoryBracesIfStatements rule - <a href="https://github.com/detekt/detekt/pull/3905">#3905</a></li>
@@ -534,6 +570,14 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Enable UseEmptyCounterpart for detekt code base - <a href="https://github.com/detekt/detekt/pull/4000">#4000</a></li>
+  <li>enable coroutine rules for detekt code base - <a href="https://github.com/detekt/detekt/pull/3994">#3994</a></li>
+  <li>Remove “plugin” suffix from version catalog aliases - <a href="https://github.com/detekt/detekt/pull/3987">#3987</a></li>
+  <li>Fix ClassCastException in test on java 11 openjdk9 - <a href="https://github.com/detekt/detekt/pull/3984">#3984</a></li>
+  <li>Activate IgnoredReturnValue on detekt code base - <a href="https://github.com/detekt/detekt/pull/3974">#3974</a></li>
+  <li>Add missing test in FunctionNaming - <a href="https://github.com/detekt/detekt/pull/3976">#3976</a></li>
+  <li>Fix trunk compilation - <a href="https://github.com/detekt/detekt/pull/3968">#3968</a></li>
+  <li>Reformat internal detekt.yml using multi line lists - <a href="https://github.com/detekt/detekt/pull/3936">#3936</a></li>
   <li>Increase memory available to gradle integration test daemon - <a href="https://github.com/detekt/detekt/pull/3938">#3938</a></li>
   <li>Avoid empty lines when running detekt with type resolution - <a href="https://github.com/detekt/detekt/pull/3909">#3909</a></li>
   <li>Fix java.lang.ClassCastException is reading default yaml config - <a href="https://github.com/detekt/detekt/pull/3920">#3920</a></li>
@@ -867,7 +911,7 @@ for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).</p>
 <p>detekt now supports <a href="https://sarifweb.azurewebsites.net/">SARIF</a> as an output format. In the future you will be able to
 upload this format to GitHub and see detekt issues right in your pull requests.</p>
 
-<h5 id="migration">Migration</h5>
+<h5 id="migration-1">Migration</h5>
 
 <p>We removed implementations of the <code class="language-plaintext highlighter-rouge">Config</code> interface from the public api.<br />
 It was first deprecated and then moved to <code class="language-plaintext highlighter-rouge">internal</code> package earlier this year.<br />
@@ -1096,7 +1140,7 @@ The 1.13.0 release got corrupted and should not be used.</p>
 
 <h4 id="1130---2020-09-07">1.13.0 - 2020-09-07</h4>
 
-<h5 id="migration-1">Migration</h5>
+<h5 id="migration-2">Migration</h5>
 
 <ul>
   <li>This release drops several deprecations in <code class="language-plaintext highlighter-rouge">detekt-api</code>.</li>
@@ -1153,7 +1197,7 @@ The 1.13.0 release got corrupted and should not be used.</p>
   <li>KtLint 0.38.1 support (via detekt-formatting)</li>
 </ul>
 
-<h5 id="migration-2">Migration</h5>
+<h5 id="migration-3">Migration</h5>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">ArrayPrimitive</code> rule is more precise but requires type resolution now.</li>
@@ -1410,7 +1454,7 @@ See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.
 Please update your links if you used it for references.</li>
 </ul>
 
-<h5 id="migration-3">Migration</h5>
+<h5 id="migration-4">Migration</h5>
 
 <ul>
   <li>We fixed a regression in baseline signatures. This breaks baseline ids for reported issues at functions for some rules. You may need to regenerate the baseline file or manually change the ids. We are very sorry for this inconvenience.</li>
@@ -1594,7 +1638,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
   <li>New rules: <code class="language-plaintext highlighter-rouge">UnnecessaryNotNullOperator</code> and <code class="language-plaintext highlighter-rouge">UnnecessarySafeCall</code></li>
 </ul>
 
-<h5 id="migration-4">Migration</h5>
+<h5 id="migration-5">Migration</h5>
 
 <ul>
   <li>Formatting rules get reported now on the correct lines. The baseline file may need to be adjusted/regenerated.</li>
@@ -1867,7 +1911,7 @@ This was fixed and specifying the <code class="language-plaintext highlighter-ro
 
 <h4 id="160">1.6.0</h4>
 
-<h5 id="migration-5">Migration</h5>
+<h5 id="migration-6">Migration</h5>
 
 <p>Rule set authors do not need to exclude their rule set from config validation anymore.
 This will be done by default now.</p>
@@ -2019,7 +2063,7 @@ As always new rules must be activated by the user until they get stable.</p>
   <li>NoEmptyFirstLineInMethodBlock</li>
 </ul>
 
-<h5 id="migration-6">Migration</h5>
+<h5 id="migration-7">Migration</h5>
 
 <p>The properties <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunction</code> and <code class="language-plaintext highlighter-rouge">ignoreOverriddenFunctions</code> of some rules got deprecated and unified to a new property <code class="language-plaintext highlighter-rouge">ignoreOverridden</code>.</p>
 
@@ -2208,7 +2252,7 @@ As always new rules must be activated by the user until they get stable.</p>
   <li>detekt internally does not use the <code class="language-plaintext highlighter-rouge">ForkJoinPool.commonPool()</code> anymore. When embedding detekt feel free to pass your own <code class="language-plaintext highlighter-rouge">ExecutionService</code> to the <code class="language-plaintext highlighter-rouge">ProcessingSettings</code>.</li>
 </ul>
 
-<h5 id="migration-7">Migration</h5>
+<h5 id="migration-8">Migration</h5>
 
 <ul>
   <li>Some reported positions of rules have changed, see issues starting with “Improve text location: “.
@@ -2404,7 +2448,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
 
 <h4 id="100">1.0.0</h4>
 
-<h5 id="migration-8">Migration</h5>
+<h5 id="migration-9">Migration</h5>
 
 <ul>
   <li>Gradle Plugin: removed report consolidation. It was flawed and some users were stuck with RC14. It will be replaced in a further version.</li>
