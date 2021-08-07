@@ -18,6 +18,7 @@ toc: true
 - We now use multi-line format for list options in the default detekt config file - [#3827](https://github.com/detekt/detekt/pull/3827)
 - The rule `VarCouldBeVal` has been updated and now works only with type resolution to provide more precise findings - [#3880](https://github.com/detekt/detekt/pull/3880)
 - We removed all the references to `Extensions.getRootArea` that is now deprecated from our codebase. This was affecting users with sporadic crashes. - [#3848](https://github.com/detekt/detekt/pull/3848)
+- For _detekt_ rule authors: We finished the rework to use the annotations instead of kdoc tags in rules. Specifically configurations must be configured using `@Configuration` while auto-correction capability should be specified with the `@AutoCorrectable` annotation [#3820](https://github.com/detekt/detekt/pull/3820).
 
 ##### Migration
 
@@ -35,7 +36,49 @@ detekt {
 }
 ```
 
-- For custom rule authors: we finished the rework to use the annotations in custom rules. Specifically configurations should be configured with `@Configuration` and a config delegate (see [#3891](https://github.com/detekt/detekt/pull/3891)) while auto-correction capability should be specified with the `@AutoCorrectable` annotation [#3820](https://github.com/detekt/detekt/pull/3820).
+- For all rule authors: When accessing a config value within a rule, using `valueOrDefault` and `valueOrDefaultCommaSeparated` is no longer recommended. While both will remain part of the public api, they should be replaced by one of the config delegates (see [#3891](https://github.com/detekt/detekt/pull/3891)). The key that is used to lookup the configured value is derived from the property name.
+```kotlin
+/* simple property */
+// BEFORE
+val ignoreDataClasses = valueOrDefault("ignoreDataClasses", true)
+// AFTER
+val ignoreDataClasses: Boolean by config(true)
+
+/* transformed simple property */
+// BEFORE
+val ignoredName = valueOrDefault("ignoredName", "").trim()
+// AFTER
+val ignoredName: String by config("", String::trim)
+
+/* transformed list property */
+// BEFORE
+val ignoreAnnotated = valueOrDefaultCommaSeparated("ignoreAnnotated", listOf("Inject", "Value"))
+        .map(String::trim)
+// AFTER
+val ignoreAnnotated: List<String> by config(listOf("Inject", "Value")) { list -> 
+    list.map(String::trim) 
+}
+```
+
+- For all rule authors: The types `ThresholdRule` and `LazyRegex` have been marked as deprecated and will be removed in a future release. Please migrate to config delegates.
+```kotlin
+/* ThresholdRule */
+// BEFORE
+class MyRule(config: Config, threshold: Int = 10) : ThresholdRule(config, threshold) {
+    // ...
+}
+// AFTER
+class MyRule(config: Config) : Rule(config) {
+    private val threshold: Int by config(10)
+    // ...
+}
+
+/* LazyRegex */
+// BEFORE
+private val allowedPattern: Regex by LazyRegex("allowedPatterns", "")
+// AFTER
+private val allowedPattern: Regex by config("", String::toRegex)
+```
 
 - For custom rule authors: This will be the last version of detekt where we publish the `detekt-bom` artifact. This change should not affect anyone. If it affects you, [please let us know](https://github.com/detekt/detekt/issues/3988).
 
@@ -46,7 +89,7 @@ detekt {
 - NoNameShadowing: fix false positive with nested lambda has implicit parameter - [#3991](https://github.com/detekt/detekt/pull/3991)
 - UnusedPrivateMember - added handling of overloaded array get operator - [#3666](https://github.com/detekt/detekt/pull/3666)
 - Publish bundled/Shadow JAR artifact to Maven repos - [#3986](https://github.com/detekt/detekt/pull/3986) 
--  EmptyDefaultConstructor false positive with expect and actual classes - [#3970](https://github.com/detekt/detekt/pull/3970) 
+- EmptyDefaultConstructor false positive with expect and actual classes - [#3970](https://github.com/detekt/detekt/pull/3970) 
 - FunctionNaming - Allow factory function names - fix #1639 - [#3973](https://github.com/detekt/detekt/pull/3973)
 - EndOfSentenceFormat - Fix #3893 by only calling super.visit once - [#3904](https://github.com/detekt/detekt/pull/3904)
 - UndocumentedPublicFunction: don't report when nested class is inside not public class [#3962](https://github.com/detekt/detekt/pull/3962)
