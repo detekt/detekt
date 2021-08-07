@@ -326,6 +326,14 @@ class UseDataClassSpec : Spek({
             assertThat(subject.lint("inline class A(val x: Int)")).isEmpty()
         }
 
+        it("does not report value classes") {
+            val code = """
+                @JvmInline
+                value class PlayerId(val value: Long)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
         it("does not report a class which has an ignored annotation") {
             val code = """
                 import kotlin.SinceKotlin
