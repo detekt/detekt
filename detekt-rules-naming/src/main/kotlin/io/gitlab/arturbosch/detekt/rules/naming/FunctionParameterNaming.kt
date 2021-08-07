@@ -37,7 +37,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     @Deprecated("Use `ignoreOverridden` instead")
-    val ignoreOverriddenFunctions: Boolean by config(true)
+    private val ignoreOverriddenFunctions: Boolean by config(true)
 
     @Suppress("DEPRECATION")
     @Configuration("ignores overridden functions with parameters not matching the pattern")

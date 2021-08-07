@@ -24,7 +24,7 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     @Configuration("Excludes all the overridden functions")
     @Deprecated("Use `ignoreOverridden` instead")
-    val ignoreOverriddenFunctions: Boolean by config(false)
+    private val ignoreOverriddenFunctions: Boolean by config(false)
 
     @Suppress("DEPRECATION")
     @Configuration("Excludes all the overridden functions")
