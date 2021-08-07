@@ -477,6 +477,7 @@ $('#toc').on('click', 'a', function() {
   <li>We now use multi-line format for list options in the default detekt config file - <a href="https://github.com/detekt/detekt/pull/3827">#3827</a></li>
   <li>The rule <code class="language-plaintext highlighter-rouge">VarCouldBeVal</code> has been updated and now works only with type resolution to provide more precise findings - <a href="https://github.com/detekt/detekt/pull/3880">#3880</a></li>
   <li>We removed all the references to <code class="language-plaintext highlighter-rouge">Extensions.getRootArea</code> that is now deprecated from our codebase. This was affecting users with sporadic crashes. - <a href="https://github.com/detekt/detekt/pull/3848">#3848</a></li>
+  <li>For <em>detekt</em> rule authors: We finished the rework to use the annotations instead of kdoc tags in rules. Specifically configurations must be configured using <code class="language-plaintext highlighter-rouge">@Configuration</code> while auto-correction capability should be specified with the <code class="language-plaintext highlighter-rouge">@AutoCorrectable</code> annotation <a href="https://github.com/detekt/detekt/pull/3820">#3820</a>.</li>
 </ul>
 
 <h5 id="migration">Migration</h5>
@@ -497,12 +498,52 @@ detekt {
 </code></pre></div></div>
 
 <ul>
-  <li>
-    <p>For custom rule authors: we finished the rework to use the annotations in custom rules. Specifically configurations should be configured with <code class="language-plaintext highlighter-rouge">@Configuration</code> and a config delegate (see <a href="https://github.com/detekt/detekt/pull/3891">#3891</a>) while auto-correction capability should be specified with the <code class="language-plaintext highlighter-rouge">@AutoCorrectable</code> annotation <a href="https://github.com/detekt/detekt/pull/3820">#3820</a>.</p>
-  </li>
-  <li>
-    <p>For custom rule authors: This will be the last version of detekt where we publish the <code class="language-plaintext highlighter-rouge">detekt-bom</code> artifact. This change should not affect anyone. If it affects you, <a href="https://github.com/detekt/detekt/issues/3988">please let us know</a>.</p>
-  </li>
+  <li>For all rule authors: When accessing a config value within a rule, using <code class="language-plaintext highlighter-rouge">valueOrDefault</code> and <code class="language-plaintext highlighter-rouge">valueOrDefaultCommaSeparated</code> is no longer recommended. While both will remain part of the public api, they should be replaced by one of the config delegates (see <a href="https://github.com/detekt/detekt/pull/3891">#3891</a>). The key that is used to lookup the configured value is derived from the property name.
+```kotlin
+/* simple property */
+// BEFORE
+val ignoreDataClasses = valueOrDefault(“ignoreDataClasses”, true)
+// AFTER
+val ignoreDataClasses: Boolean by config(true)</li>
+</ul>
+
+<p>/* transformed simple property */
+// BEFORE
+val ignoredName = valueOrDefault(“ignoredName”, “”).trim()
+// AFTER
+val ignoredName: String by config(“”, String::trim)</p>
+
+<p>/* transformed list property */
+// BEFORE
+val ignoreAnnotated = valueOrDefaultCommaSeparated(“ignoreAnnotated”, listOf(“Inject”, “Value”))
+        .map(String::trim)
+// AFTER
+val ignoreAnnotated: List<String> by config(listOf("Inject", "Value")) { list -&gt; 
+    list.map(String::trim) 
+}</String></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+- For all rule authors: The types `ThresholdRule` and `LazyRegex` have been marked as deprecated and will be removed in a future release. Please migrate to config delegates.
+```kotlin
+/* ThresholdRule */
+// BEFORE
+class MyRule(config: Config, threshold: Int = 10) : ThresholdRule(config, threshold) {
+    // ...
+}
+// AFTER
+class MyRule(config: Config) : Rule(config) {
+    private val threshold: Int by config(10)
+    // ...
+}
+
+/* LazyRegex */
+// BEFORE
+private val allowedPattern: Regex by LazyRegex("allowedPatterns", "")
+// AFTER
+private val allowedPattern: Regex by config("", String::toRegex)
+</code></pre></div></div>
+
+<ul>
+  <li>For custom rule authors: This will be the last version of detekt where we publish the <code class="language-plaintext highlighter-rouge">detekt-bom</code> artifact. This change should not affect anyone. If it affects you, <a href="https://github.com/detekt/detekt/issues/3988">please let us know</a>.</li>
 </ul>
 
 <h5 id="changelog">Changelog</h5>
