@@ -9,5 +9,6 @@ import org.gradle.api.Project
     """Either apply detekt plugin to root project or follow this advice:
 https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:multi_project_builds_applying_plugins"""
 )
-fun Project.detekt(configure: DetektExtension.() -> Unit) =
+fun Project.detekt(configure: DetektExtension.() -> Unit) {
     extensions.configure(DetektExtension::class.java, configure)
+}

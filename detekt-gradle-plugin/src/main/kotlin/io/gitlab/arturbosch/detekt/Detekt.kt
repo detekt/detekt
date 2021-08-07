@@ -207,9 +207,13 @@ open class Detekt @Inject constructor(
     @Input
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
 
-    override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
+    override fun setIgnoreFailures(value: Boolean) {
+        ignoreFailuresProp.set(value)
+    }
 
-    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
+    fun reports(configure: Action<DetektReports>) {
+        configure.execute(reports)
+    }
 
     @TaskAction
     fun check() {
