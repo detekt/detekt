@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+import kotlin.reflect.KProperty0
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -44,7 +45,7 @@ fun <T : Any, U : Any> config(
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
 fun <T : Any> configWithFallback(
-    fallbackProperty: KProperty<T>,
+    fallbackProperty: KProperty0<T>,
     defaultValue: T
 ): ReadOnlyProperty<ConfigAware, T> = configWithFallback(fallbackProperty, defaultValue) { it }
 
@@ -65,7 +66,7 @@ fun <T : Any> configWithFallback(
  * value.
  */
 fun <T : Any, U : Any> configWithFallback(
-    fallbackProperty: KProperty<U>,
+    fallbackProperty: KProperty0<U>,
     defaultValue: T,
     transformer: (T) -> U
 ): ReadOnlyProperty<ConfigAware, U> =
@@ -158,7 +159,7 @@ private class TransformedConfigProperty<T : Any, U : Any>(
 }
 
 private class FallbackConfigProperty<T : Any, U : Any>(
-    private val fallbackProperty: KProperty<U>,
+    private val fallbackProperty: KProperty0<U>,
     private val defaultValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
@@ -167,7 +168,7 @@ private class FallbackConfigProperty<T : Any, U : Any>(
             return transform(getValueOrDefault(thisRef, property.name, defaultValue))
         }
         if (thisRef.isConfigured(fallbackProperty.name)) {
-            return fallbackProperty.getter.call()
+            return fallbackProperty.get()
         }
         return transform(defaultValue)
     }

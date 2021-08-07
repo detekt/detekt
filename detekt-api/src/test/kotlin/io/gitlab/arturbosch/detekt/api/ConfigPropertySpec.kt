@@ -297,8 +297,8 @@ class ConfigPropertySpec : Spek({
                 val fallbackValue = -1
                 val subject by memoized {
                     object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
-                        val fallback: Int by config(42)
-                        val missing: Int by config(42)
+                        private val fallback: Int by config(42)
+                        private val missing: Int by config(42)
                         val present: Int by configWithFallback(::fallback, defaultValue)
                         val notPresentWithFallback: Int by configWithFallback(::fallback, defaultValue)
                         val notPresentFallbackMissing: Int by configWithFallback(::missing, defaultValue)
@@ -321,8 +321,8 @@ class ConfigPropertySpec : Spek({
                 val fallbackOffset = 10
                 val subject by memoized {
                     object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
-                        val fallback: String by config(42) { (it + fallbackOffset).toString() }
-                        val missing: String by config(42) { (it + fallbackOffset).toString() }
+                        private val fallback: String by config(42) { (it + fallbackOffset).toString() }
+                        private val missing: String by config(42) { (it + fallbackOffset).toString() }
                         val present: String by configWithFallback(::fallback, defaultValue) { v ->
                             v.toString()
                         }
