@@ -57,10 +57,10 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
             "IllegalArgumentException",
             "IllegalMonitorStateException",
             "IllegalStateException",
-            "NullPointerException",
             "IndexOutOfBoundsException",
+            "NullPointerException",
             "RuntimeException",
-            "Throwable"
+            "Throwable",
         )
     )
 
