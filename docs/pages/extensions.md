@@ -17,7 +17,8 @@ So it is possible to define rules/rule sets and enhance _detekt_ with your own f
 Attention: You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
 has as content the fully qualified name of your `RuleSetProvider` e.g. _io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider_.
 
-The easiest way to define a rule set is to clone the provided **detekt-sample-extensions** project.
+You can use our [Github template](https://github.com/detekt/detekt-custom-rule-template) to have a basic scaffolding to
+develop your own custom rules. Another option is to clone the provided [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions) project.
 
 Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
 A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
