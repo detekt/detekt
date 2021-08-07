@@ -329,7 +329,7 @@ class UseDataClassSpec : Spek({
         it("does not report value classes") {
             val code = """
                 @JvmInline
-                value class PlayerId(val value: Long)
+                value class A(val x: Int)
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
