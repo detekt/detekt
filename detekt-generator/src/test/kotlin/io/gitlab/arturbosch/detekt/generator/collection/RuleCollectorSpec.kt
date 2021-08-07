@@ -551,23 +551,6 @@ object RuleCollectorSpec : Spek({
                             .isInstanceOf(InvalidDocumentationException::class.java)
                             .hasMessageContaining("delegate")
                     }
-                    it("reports an error if the property to fallback on exists but is marked as private") {
-                        val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            @Deprecated("Use config")
-                            private val prop: Int by config(1)
-                            @Configuration("description")
-                            private val config: Int by configWithFallback(::prop, 99)
-                        }                        
-                    """
-                        assertThatThrownBy { subject.run(code) }
-                            .isInstanceOf(InvalidDocumentationException::class.java)
-                            .hasMessageContaining("private")
-                    }
                 }
 
                 context("transformed property") {

@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotation
 
@@ -158,11 +157,6 @@ class ConfigurationCollector {
                 invalidDocumentation {
                     "The fallback property '$fallbackPropertyReference' of property '$name' " +
                         "must also be defined using a config property delegate "
-                }
-            }
-            if (fallbackProperty.isPrivate()) {
-                invalidDocumentation {
-                    "The fallback property '$fallbackPropertyReference' of property '$name' may not be private"
                 }
             }
         }
