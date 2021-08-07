@@ -9,7 +9,6 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
-    api(libs.kotlin.reflect)
     api(projects.detektPsiUtils)
 
     testImplementation(projects.detektTest)
