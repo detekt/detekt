@@ -2,8 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>
-      UnnecessaryLet:LicenceHeaderLoaderExtension.kt$LicenceHeaderLoaderExtension$let(StringUtilRt::convertLineSeparators)
-    </ID>
+    <ID>UnnecessaryLet:LicenceHeaderLoaderExtension.kt$LicenceHeaderLoaderExtension$let(StringUtilRt::convertLineSeparators)</ID>
   </CurrentIssues>
 </SmellBaseline>
