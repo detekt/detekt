@@ -69,10 +69,13 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
     commandLine = listOf("git", "diff", defaultConfigFile)
     standardOutput = configDiff
 
-    if (configDiff.toString().isNotEmpty()) {
-        throw GradleException(
-            "The default-detekt-config.yml is not up-to-date. " +
-                "You can execute the generateDocumentation Gradle task to update it and commit the changed files."
-        )
+    doLast {
+        if (configDiff.toString().isNotEmpty()) {
+            throw GradleException(
+                "The default-detekt-config.yml is not up-to-date. " +
+                    "You can execute the generateDocumentation Gradle task " +
+                    "to update it and commit the changed files."
+            )
+        }
     }
 }
