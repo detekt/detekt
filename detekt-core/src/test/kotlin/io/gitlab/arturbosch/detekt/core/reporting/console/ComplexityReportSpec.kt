@@ -37,7 +37,7 @@ internal class ComplexityReportSpec : Spek({
     }
 })
 
-private fun createDetektion(): Detektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+private fun createDetektion(): Detektion = DetektResult(mapOf("Key" to listOf(createFinding())))
 
 private fun addData(detektion: Detektion) {
     detektion.addData(complexityKey, 2)

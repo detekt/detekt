@@ -15,8 +15,8 @@ class IssueExtensionSpec : Spek({
 
     val issues by memoized {
         mapOf(
-            Pair("Ruleset1", listOf(createFinding(), createCorrectableFinding())),
-            Pair("Ruleset2", listOf(createFinding()))
+            "Ruleset1" to listOf(createFinding(), createCorrectableFinding()),
+            "Ruleset2" to listOf(createFinding())
         )
     }
 

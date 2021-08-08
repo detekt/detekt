@@ -188,11 +188,13 @@ style:
     active: true
   MaxLineLength:
     active: true
-    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
+    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
     excludeCommentStatements: true
   NestedClassesVisibility:
     active: true
   ObjectLiteralToLambda:
+    active: true
+  PreferToOverPairSyntax:
     active: true
   RedundantExplicitType:
     active: true
