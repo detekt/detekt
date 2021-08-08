@@ -222,6 +222,8 @@ style:
     allowedNames: '(_|ignored|expected)'
   UseCheckOrError:
     active: true
+  UseDataClass:
+    active: true
   UseEmptyCounterpart:
     active: true
   UseIfEmptyOrIfBlank:

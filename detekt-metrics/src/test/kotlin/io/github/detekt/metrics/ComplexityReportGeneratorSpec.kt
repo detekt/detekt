@@ -87,7 +87,5 @@ private fun TestDetektion.withTestData(): TestDetektion {
 }
 
 private fun generateComplexityReport(detektion: Detektion): List<String>? {
-    val complexityMetric = ComplexityMetric(detektion)
-    val generator = ComplexityReportGenerator(complexityMetric)
-    return generator.generate()
+    return ComplexityReportGenerator.create(detektion).generate()
 }

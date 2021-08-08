@@ -54,7 +54,7 @@ internal interface Lifecycle {
     }
 }
 
-internal class DefaultLifecycle(
+internal data class DefaultLifecycle(
     override val settings: ProcessingSettings,
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =

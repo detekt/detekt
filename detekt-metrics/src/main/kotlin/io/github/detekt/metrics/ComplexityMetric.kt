@@ -6,14 +6,30 @@ import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 
-class ComplexityMetric(detektion: Detektion) {
+data class ComplexityMetric(
+    val mcc: Int?,
+    val cognitiveComplexity: Int?,
+    val loc: Int?,
+    val sloc: Int?,
+    val lloc: Int?,
+    val cloc: Int?,
+    val findings: Set<Map.Entry<RuleSetId, List<Finding>>>
+) {
 
-    val mcc = detektion.getData(complexityKey)
-    val cognitiveComplexity = detektion.getData(CognitiveComplexity.KEY)
-    val loc = detektion.getData(linesKey)
-    val sloc = detektion.getData(sourceLinesKey)
-    val lloc = detektion.getData(logicalLinesKey)
-    val cloc = detektion.getData(commentLinesKey)
-    val findings = detektion.findings.entries
+    companion object Factory {
+        fun create(detektion: Detektion): ComplexityMetric = detektion.run {
+            ComplexityMetric(
+                mcc = getData(complexityKey),
+                cognitiveComplexity = getData(CognitiveComplexity.KEY),
+                loc = getData(linesKey),
+                sloc = getData(sourceLinesKey),
+                lloc = getData(logicalLinesKey),
+                cloc = getData(commentLinesKey),
+                findings = findings.entries
+            )
+        }
+    }
 }

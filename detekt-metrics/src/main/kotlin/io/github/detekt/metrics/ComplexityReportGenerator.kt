@@ -47,6 +47,6 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
 
     companion object Factory {
         fun create(detektion: Detektion): ComplexityReportGenerator =
-            ComplexityReportGenerator(ComplexityMetric(detektion))
+            ComplexityReportGenerator(ComplexityMetric.create(detektion))
     }
 }

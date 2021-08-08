@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 @Suppress("TooManyFunctions")
 class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
 
-    class Config(
+    data class Config(
         var ignoreSimpleWhenEntries: Boolean = false,
         var ignoreNestingFunctions: Boolean = false,
         var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
