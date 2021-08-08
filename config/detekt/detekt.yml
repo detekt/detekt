@@ -173,7 +173,7 @@ style:
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
   MagicNumber:
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
@@ -188,7 +188,7 @@ style:
     active: true
   MaxLineLength:
     active: true
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
   NestedClassesVisibility:
     active: true
