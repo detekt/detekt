@@ -71,16 +71,6 @@ object DetektAndroidSpec : Spek({
                     )
                 }
             }
-
-            it("task :app:check") {
-                gradleRunner.runTasksAndCheckResult(":app:check") { buildResult ->
-                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                    assertThat(buildResult.task(":app:detekt")).isNotNull
-                    assertThat(buildResult.output).contains("--report xml:")
-                    assertThat(buildResult.output).contains("--report sarif:")
-                    assertThat(buildResult.output).doesNotContain("--report txt:")
-                }
-            }
         }
 
         describe("does not configures android tasks if user opts out") {
@@ -173,16 +163,6 @@ object DetektAndroidSpec : Spek({
                             ":lib:detektDebugAndroidTest"
                         )
                     )
-                }
-            }
-
-            it(":lib:check") {
-                gradleRunner.runTasksAndCheckResult(":lib:check") { buildResult ->
-                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                    assertThat(buildResult.task(":lib:detekt")).isNotNull
-                    assertThat(buildResult.output).contains("--report xml:")
-                    assertThat(buildResult.output).contains("--report sarif:")
-                    assertThat(buildResult.output).doesNotContain("--report txt:")
                 }
             }
         }
