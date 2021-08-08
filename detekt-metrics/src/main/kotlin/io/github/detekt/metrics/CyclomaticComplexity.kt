@@ -94,7 +94,7 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
     override fun visitCallExpression(expression: KtCallExpression) {
         if (!config.ignoreNestingFunctions && expression.isUsedForNesting()) {
             val lambdaExpression = expression.lambdaArguments.firstOrNull()?.getLambdaExpression()
-            lambdaExpression?.bodyExpression?.let {
+            if (lambdaExpression?.bodyExpression != null) {
                 complexity++
             }
         }
