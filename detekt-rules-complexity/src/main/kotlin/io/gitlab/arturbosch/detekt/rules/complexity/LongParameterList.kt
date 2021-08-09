@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -44,12 +45,14 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of parameters required to trigger the rule")
     private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
+    @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
     private val functionThreshold: Int by configWithFallback(
         fallbackPropertyName = "threshold",
         defaultValue = DEFAULT_FUNCTION_THRESHOLD
     )
 
+    @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
     private val constructorThreshold: Int by configWithFallback(
         fallbackPropertyName = "threshold",
