@@ -360,7 +360,9 @@ More information on type resolution are available on the [type resolution](type-
 #### Groovy DSL
 
 ```groovy
-tasks.detekt.jvmTarget = "1.8"
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 ```
 
 #### Kotlin DSL
