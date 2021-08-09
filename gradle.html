@@ -809,7 +809,9 @@ or when implementing a custom detekt task with the <code class="language-plainte
 
 <h4 id="groovy-dsl-4">Groovy DSL</h4>
 
-<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
+    <span class="n">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 id="kotlin-dsl-4">Kotlin DSL</h4>
@@ -943,7 +945,7 @@ exclude detekt from the check task.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 8, 2021 <br />
+ Site last generated: Aug 9, 2021 <br />
                 </div>
             </div>
 </footer>
