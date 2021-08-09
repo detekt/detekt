@@ -116,6 +116,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
            - 'NotificationReport'
         #  - 'FindingsReport'
            - 'FileBasedFindingsReport'
+           - 'ReadableFindingsReport'
     """.trimIndent()
 
     private fun defaultOutputReportsConfiguration(): String = """
