@@ -10,7 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class ReadableFindingsReportSpec : Spek({
+class LiteFindingsReportSpec : Spek({
 
     val subject by memoized { createFindingsReport() }
 
@@ -48,6 +48,6 @@ class ReadableFindingsReportSpec : Spek({
     }
 })
 
-private fun createFindingsReport() = ReadableFindingsReport().apply {
+private fun createFindingsReport() = LiteFindingsReport().apply {
     init(Config.empty)
 }
