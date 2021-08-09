@@ -20,7 +20,7 @@ data class ComplexityMetric(
 ) {
 
     companion object Factory {
-        fun create(detektion: Detektion): ComplexityMetric = detektion.run {
+        fun create(detektion: Detektion): ComplexityMetric = with(detektion) {
             ComplexityMetric(
                 mcc = getData(complexityKey),
                 cognitiveComplexity = getData(CognitiveComplexity.KEY),
