@@ -98,7 +98,7 @@ console-reports:
   #  - 'NotificationReport'
   #  - 'FindingsReport'
   #  - 'FileBasedFindingsReport'
-  #  - 'ReadableFindingsReport'
+  #  - 'LiteFindingsReport'
 ```
 
 **ProjectStatisticsReport** contains metrics and statistics concerning the analyzed project sorted by priority.

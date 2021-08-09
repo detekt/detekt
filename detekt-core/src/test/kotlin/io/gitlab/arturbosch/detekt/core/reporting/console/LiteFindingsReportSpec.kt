@@ -24,7 +24,7 @@ class LiteFindingsReportSpec : Spek({
                             createFinding("UnnecessarySafeCall")
                         )
                     )
-            ).isEqualTo(readResourceContent("/reporting/readable-findings-report.txt"))
+            ).isEqualTo(readResourceContent("/reporting/lite-findings-report.txt"))
         }
 
         it("reports no findings") {

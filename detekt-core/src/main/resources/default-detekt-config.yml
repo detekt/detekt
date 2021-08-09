@@ -38,7 +38,7 @@ console-reports:
      - 'NotificationReport'
   #  - 'FindingsReport'
      - 'FileBasedFindingsReport'
-     - 'ReadableFindingsReport'
+     - 'LiteFindingsReport'
 
 output-reports:
   active: true
