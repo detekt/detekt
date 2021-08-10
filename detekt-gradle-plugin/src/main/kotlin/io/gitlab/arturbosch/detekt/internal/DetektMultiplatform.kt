@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
@@ -38,7 +37,7 @@ internal class DetektMultiplatform(private val project: Project) {
                         .map { it.kotlin.sourceDirectories }
                         .fold(evaluatedProject.files() as FileCollection) { collection, next -> collection.plus(next) }
 
-                    val detektTaskProvider = evaluatedProject.registerDetektTask(
+                    evaluatedProject.registerDetektTask(
                         DetektPlugin.DETEKT_TASK_NAME + taskSuffix,
                         extension
                     ) {
@@ -65,9 +64,6 @@ internal class DetektMultiplatform(private val project: Project) {
                             description = "EXPERIMENTAL: $description with type resolution."
                         }
                     }
-
-                    tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }
-                        .configureEach { it.dependsOn(detektTaskProvider) }
 
                     evaluatedProject.registerCreateBaselineTask(
                         DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension

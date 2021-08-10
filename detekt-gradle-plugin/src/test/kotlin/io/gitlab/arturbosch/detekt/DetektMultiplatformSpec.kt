@@ -42,12 +42,6 @@ class DetektMultiplatformSpec : Spek({
                 assertDetektWithoutClasspath(it)
             }
         }
-
-        it("configures check tasks") {
-            gradleRunner.runTasksAndCheckResult(":shared:check") { buildResult ->
-                assertThat(buildResult.task(":shared:detektMetadataMain")).isNotNull
-            }
-        }
     }
 
     describe("multiplatform projects - detekt plain only if user opts out") {
@@ -129,15 +123,6 @@ class DetektMultiplatformSpec : Spek({
                 assertDetektWithClasspath(it)
             }
         }
-
-        it("configures check tasks") {
-            gradleRunner.runTasksAndCheckResult(":shared:check") { buildResult ->
-                assertThat(buildResult.task(":shared:detektJvmBackendMain")).isNotNull
-                assertThat(buildResult.task(":shared:detektJvmBackendTest")).isNotNull
-                assertThat(buildResult.task(":shared:detektJvmEmbeddedMain")).isNotNull
-                assertThat(buildResult.task(":shared:detektJvmEmbeddedMain")).isNotNull
-            }
-        }
     }
 
     describe(
@@ -202,12 +187,6 @@ class DetektMultiplatformSpec : Spek({
                 assertDetektWithClasspath(it)
             }
         }
-
-        it("configures check tasks") {
-            // Investigate KMM setup for Android, currently running `check` would result in failure
-            // Could not determine the dependencies of task ':shared:detektAndroidDebugAndroidTest'
-            gradleRunner.runTasksAndExpectFailure(":shared:check") {}
-        }
     }
 
     describe("multiplatform projects - JS target") {
@@ -250,13 +229,6 @@ class DetektMultiplatformSpec : Spek({
             gradleRunner.runTasksAndCheckResult(":shared:detektJsTest") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
                 assertDetektWithoutClasspath(it)
-            }
-        }
-
-        it("configures check tasks") {
-            gradleRunner.runTasksAndCheckResult(":shared:check") { buildResult ->
-                assertThat(buildResult.task(":shared:detektJsMain")).isNotNull
-                assertThat(buildResult.task(":shared:detektJsTest")).isNotNull
             }
         }
     }
@@ -315,15 +287,6 @@ class DetektMultiplatformSpec : Spek({
             gradleRunner.runTasksAndCheckResult(":shared:detektIosX64Test") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
                 assertDetektWithoutClasspath(it)
-            }
-        }
-
-        it("configures check tasks") {
-            gradleRunner.runTasksAndCheckResult(":shared:check") { buildResult ->
-                assertThat(buildResult.task(":shared:detektIosArm64Main")).isNotNull
-                assertThat(buildResult.task(":shared:detektIosArm64Test")).isNotNull
-                assertThat(buildResult.task(":shared:detektIosX64Main")).isNotNull
-                assertThat(buildResult.task(":shared:detektIosX64Test")).isNotNull
             }
         }
     }
