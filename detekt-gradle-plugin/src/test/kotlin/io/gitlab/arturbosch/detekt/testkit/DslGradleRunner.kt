@@ -55,7 +55,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)
         writeProjectFile(SETTINGS_FILENAME, settingsContent)
-        configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
+        configFileOrNone?.let { writeProjectFile(it, configFileContent) }
         baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
             repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) { srcFileIndex ->
@@ -126,7 +126,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             withProjectDir(rootDir)
             withPluginClasspath()
             withArguments(args)
-            gradleVersionOrNone?.let { withGradleVersion(gradleVersionOrNone) }
+            gradleVersionOrNone?.let(::withGradleVersion)
         }
     }
 

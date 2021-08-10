@@ -215,6 +215,8 @@ style:
     active: true
   UnnecessaryFilter:
     active: true
+  UnnecessaryLet:
+    active: true
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
