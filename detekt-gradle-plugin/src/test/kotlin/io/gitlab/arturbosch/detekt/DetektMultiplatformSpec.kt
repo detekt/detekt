@@ -143,6 +143,7 @@ class DetektMultiplatformSpec : Spek({
                         }
                         android {
                             compileSdkVersion 30
+                            sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
                             buildTypes {
                                 release {
                                 }
@@ -175,6 +176,12 @@ class DetektMultiplatformSpec : Spek({
         it("configures baseline task") {
             gradleRunner.runTasks(":shared:detektBaselineAndroidDebug")
             gradleRunner.runTasks(":shared:detektBaselineAndroidRelease")
+        }
+
+        it("configures test tasks") {
+            gradleRunner.runTasks(":shared:detektAndroidDebugAndroidTest")
+            gradleRunner.runTasks(":shared:detektAndroidDebugUnitTest")
+            gradleRunner.runTasks(":shared:detektAndroidReleaseUnitTest")
         }
 
         it("configures detekt task with type resolution") {
