@@ -73,10 +73,10 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
             "Error",
             "Exception",
             "IllegalMonitorStateException",
-            "NullPointerException",
             "IndexOutOfBoundsException",
+            "NullPointerException",
             "RuntimeException",
-            "Throwable"
+            "Throwable",
         )
     }
 }

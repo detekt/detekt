@@ -49,7 +49,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
-    private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckReturnValue", "*.CheckResult")) {
+    private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckResult", "*.CheckReturnValue")) {
         it.map(String::simplePatternToRegex)
     }
 

@@ -38,7 +38,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden comment strings")
-    private val values: List<String> by config(listOf("TODO:", "FIXME:", "STOPSHIP:"))
+    private val values: List<String> by config(listOf("FIXME:", "STOPSHIP:", "TODO:"))
 
     @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")
     private val allowedPatterns: Regex by config("", String::toRegex)
