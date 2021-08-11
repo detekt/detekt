@@ -789,7 +789,7 @@ development. Offending code comments will then be reported.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">values</code> (default: <code class="language-plaintext highlighter-rouge">['TODO:', 'FIXME:', 'STOPSHIP:']</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">values</code> (default: <code class="language-plaintext highlighter-rouge">['FIXME:', 'STOPSHIP:', 'TODO:']</code>)</p>
 
     <p>forbidden comment strings</p>
   </li>
@@ -856,7 +856,7 @@ Detekt will then report all methods invocation that are forbidden.</p>
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">methods</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.io.println', 'kotlin.io.print']</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">methods</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.io.print', 'kotlin.io.println']</code>)</p>
 
     <p>Comma separated list of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature.</p>
   </li>
@@ -2620,7 +2620,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 10, 2021 <br />
+ Site last generated: Aug 11, 2021 <br />
                 </div>
             </div>
 </footer>
