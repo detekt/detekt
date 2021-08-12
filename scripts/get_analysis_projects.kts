@@ -18,10 +18,6 @@ val githubProjects = listOf(
     "kotest/kotest",
     "tipsy/javalin",
 )
-val HELP_MESSAGE = """
-Usage: ./get_analysis_projects.kts [/path/to/storing/folder]
-or kotlinc -script get_analysis_projects.kts [/path/to/storing/folder]
-"""
 
 class Downloader(private val basePath: Path, private val project: String) {
 
@@ -39,7 +35,11 @@ class Downloader(private val basePath: Path, private val project: String) {
             .directory(basePath.toFile())
             .inheritIO()
             .start()
-            .waitFor(5, MINUTES)
+            .waitFor(MAX_CLONE_WAIT_MINUTES, MINUTES)
+    }
+
+    companion object {
+        const val MAX_CLONE_WAIT_MINUTES: Long = 5
     }
 }
 
@@ -53,7 +53,12 @@ fun downloadAnalysisProjects(basePath: Path) {
 }
 
 if (args.size != 1) {
-    println(HELP_MESSAGE)
+    println(
+        """
+        Usage: ./get_analysis_projects.kts [/path/to/storing/folder]
+        or kotlinc -script get_analysis_projects.kts [/path/to/storing/folder]
+        """.trimIndent()
+    )
     System.exit(1)
 }
 
