@@ -241,22 +241,22 @@ detekt {
         // Enable/Disable XML report (default: true)
         xml {
             enabled = true                                
-            destination = file("build/reports/detekt.xml")
+            destination = file("build/reports/detekt/detekt.xml")
         }
         // Enable/Disable HTML report (default: true)
         html {
             enabled = true
-            destination = file("build/reports/detekt.html")
+            destination = file("build/reports/detekt/detekt.html")
         }
         // Enable/Disable TXT report (default: true)
         txt {
             enabled = true                                
-            destination = file("build/reports/detekt.txt")
+            destination = file("build/reports/detekt/detekt.txt")
         }
         // Enable/Disable SARIF report (default: false)
         sarif {
             enabled = true                                
-            destination = file("build/reports/detekt.sarif")
+            destination = file("build/reports/detekt/detekt.sarif")
         }
         custom {
             // The simple class name of your custom report.
@@ -324,22 +324,22 @@ detekt {
         // Enable/Disable XML report (default: true)
         xml {
             enabled = true
-            destination = file("build/reports/detekt.xml")
+            destination = file("build/reports/detekt/detekt.xml")
         }
         // Enable/Disable HTML report (default: true)
         html {
             enabled = true
-            destination = file("build/reports/detekt.html")
+            destination = file("build/reports/detekt/detekt.html")
         }
         // Enable/Disable TXT report (default: true)
         txt {
             enabled = true
-            destination = file("build/reports/detekt.txt")
+            destination = file("build/reports/detekt/detekt.txt")
         }
         // Enable/Disable SARIF report (default: false)
         sarif {
             enabled = true                                
-            destination = file("build/reports/detekt.sarif")
+            destination = file("build/reports/detekt/detekt.sarif")
         }
         custom {
             // The simple class name of your custom report.
