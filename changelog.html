@@ -464,7 +464,13 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1180-rc3---2021-08-05">1.18.0-RC3 - 2021-08-05</h4>
+  <h4 id="1180---2021-08-12">1.18.0 - 2021-08-12</h4>
+
+<p>We’re more than excited to introduce you a next stable release of Detekt: <code class="language-plaintext highlighter-rouge">1.18.0</code> 🎉
+This release is coming with a lot of changes, new rules, evolution in the API and stability improvements.</p>
+
+<p>We want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt.</p>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
@@ -477,6 +483,7 @@ $('#toc').on('click', 'a', function() {
   <li>We now use multi-line format for list options in the default detekt config file - <a href="https://github.com/detekt/detekt/pull/3827">#3827</a></li>
   <li>The rule <code class="language-plaintext highlighter-rouge">VarCouldBeVal</code> has been updated and now works only with type resolution to provide more precise findings - <a href="https://github.com/detekt/detekt/pull/3880">#3880</a></li>
   <li>We removed all the references to <code class="language-plaintext highlighter-rouge">Extensions.getRootArea</code> that is now deprecated from our codebase. This was affecting users with sporadic crashes. - <a href="https://github.com/detekt/detekt/pull/3848">#3848</a></li>
+  <li>For <em>detekt</em> rule authors: We created a Github Template that you can use to bootstrap your custom rule project: <a href="https://github.com/detekt/detekt-custom-rule-template">detekt-custom-rule-template</a>. You can use JitPack to host it and share your rule easily with other members of the community.</li>
   <li>For <em>detekt</em> rule authors: We finished the rework to use the annotations instead of kdoc tags in rules. Specifically configurations must be configured using <code class="language-plaintext highlighter-rouge">@Configuration</code> while auto-correction capability should be specified with the <code class="language-plaintext highlighter-rouge">@AutoCorrectable</code> annotation <a href="https://github.com/detekt/detekt/pull/3820">#3820</a>.</li>
 </ul>
 
@@ -549,6 +556,13 @@ private val allowedPattern: Regex by config("", String::toRegex)
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>[KMP] Fix resolution of Android test classpaths - <a href="https://github.com/detekt/detekt/pull/4026">#4026</a></li>
+  <li>Sort config lists - <a href="https://github.com/detekt/detekt/pull/4014">#4014</a></li>
+  <li>Multiplatform tasks should not depend on check - <a href="https://github.com/detekt/detekt/pull/4025">#4025</a></li>
+  <li>mark configWithFallback as unstable - <a href="https://github.com/detekt/detekt/pull/4028">#4028</a></li>
+  <li>UseDataClass: fix false positive on value classes - <a href="https://github.com/detekt/detekt/pull/4016">#4016</a></li>
+  <li>ImplicitUnitReturnType: don’t report when expression body is ‘Unit’ - <a href="https://github.com/detekt/detekt/pull/4011">#4011</a></li>
+  <li>Fix false positive with UnusedPrivateMember on parameter of a protected function - <a href="https://github.com/detekt/detekt/pull/4007">#4007</a></li>
   <li>ClassNaming: Don’t treat Kotlin syntax ` as part of class name - <a href="https://github.com/detekt/detekt/pull/3977">#3977</a></li>
   <li>IgnoredReturnValue: fix false negative when annotation is on the class - <a href="https://github.com/detekt/detekt/pull/3979">#3979</a></li>
   <li>NoNameShadowing: fix false positive with nested lambda has implicit parameter - <a href="https://github.com/detekt/detekt/pull/3991">#3991</a></li>
@@ -611,6 +625,14 @@ private val allowedPattern: Regex by config("", String::toRegex)
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Enable UnnecessaryLet rule for detekt code base - <a href="https://github.com/detekt/detekt/pull/4024">#4024</a></li>
+  <li>enable PreferToOverPairSyntax rule for detekt code base - <a href="https://github.com/detekt/detekt/pull/4023">#4023</a></li>
+  <li>Add IllegalArgumentException and IllegalStateException to ThrowingExceptionsWithoutMessageOrCause - <a href="https://github.com/detekt/detekt/pull/4013">#4013</a></li>
+  <li>enable more potential-bugs rules for detekt code base - <a href="https://github.com/detekt/detekt/pull/3997">#3997</a></li>
+  <li>enable more exception rules for detekt code base - <a href="https://github.com/detekt/detekt/pull/3995">#3995</a></li>
+  <li>Enable UseOrEmpty for detekt code base - <a href="https://github.com/detekt/detekt/pull/3999">#3999</a></li>
+  <li>enable those rules from the style rule set that have not violation or obvious fixes - <a href="https://github.com/detekt/detekt/pull/3998">#3998</a></li>
+  <li>Enable more rules from naming rule set for detekt code base - <a href="https://github.com/detekt/detekt/pull/3996">#3996</a></li>
   <li>Enable UseEmptyCounterpart for detekt code base - <a href="https://github.com/detekt/detekt/pull/4000">#4000</a></li>
   <li>enable coroutine rules for detekt code base - <a href="https://github.com/detekt/detekt/pull/3994">#3994</a></li>
   <li>Remove “plugin” suffix from version catalog aliases - <a href="https://github.com/detekt/detekt/pull/3987">#3987</a></li>
@@ -2553,7 +2575,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 11, 2021 <br />
+ Site last generated: Aug 12, 2021 <br />
                 </div>
             </div>
 </footer>
