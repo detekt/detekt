@@ -642,7 +642,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     
     <span class="c1">// The directories where detekt looks for source files. </span>
     <span class="c1">// Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.</span>
-    <span class="n">input</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">files</span><span class="o">(</span>
         <span class="s2">"src/main/kotlin"</span><span class="o">,</span>
         <span class="s2">"gensrc/main/kotlin"</span>
     <span class="o">)</span>
@@ -727,7 +727,7 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     
     <span class="c1">// The directories where detekt looks for source files. </span>
     <span class="c1">// Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.</span>
-    <span class="n">input</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     
+    <span class="n">source</span> <span class="p">=</span> <span class="nf">files</span><span class="p">(</span><span class="s">"src/main/java"</span><span class="p">,</span> <span class="s">"src/main/kotlin"</span><span class="p">)</span>     
     
     <span class="c1">// Builds the AST in parallel. Rules are always executed in parallel. </span>
     <span class="c1">// Can lead to speedups in larger projects. `false` by default.</span>
