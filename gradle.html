@@ -692,22 +692,22 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
         <span class="c1">// Enable/Disable XML report (default: true)</span>
         <span class="n">xml</span> <span class="o">{</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.xml"</span><span class="o">)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.xml"</span><span class="o">)</span>
         <span class="o">}</span>
         <span class="c1">// Enable/Disable HTML report (default: true)</span>
         <span class="n">html</span> <span class="o">{</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.html"</span><span class="o">)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.html"</span><span class="o">)</span>
         <span class="o">}</span>
         <span class="c1">// Enable/Disable TXT report (default: true)</span>
         <span class="n">txt</span> <span class="o">{</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.txt"</span><span class="o">)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.txt"</span><span class="o">)</span>
         <span class="o">}</span>
         <span class="c1">// Enable/Disable SARIF report (default: false)</span>
         <span class="n">sarif</span> <span class="o">{</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
-            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.sarif"</span><span class="o">)</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.sarif"</span><span class="o">)</span>
         <span class="o">}</span>
         <span class="n">custom</span> <span class="o">{</span>
             <span class="c1">// The simple class name of your custom report.</span>
@@ -774,22 +774,22 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
         <span class="c1">// Enable/Disable XML report (default: true)</span>
         <span class="nf">xml</span> <span class="p">{</span>
             <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.xml"</span><span class="p">)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.xml"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="c1">// Enable/Disable HTML report (default: true)</span>
         <span class="nf">html</span> <span class="p">{</span>
             <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.html"</span><span class="p">)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.html"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="c1">// Enable/Disable TXT report (default: true)</span>
         <span class="nf">txt</span> <span class="p">{</span>
             <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.txt"</span><span class="p">)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.txt"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="c1">// Enable/Disable SARIF report (default: false)</span>
         <span class="nf">sarif</span> <span class="p">{</span>
             <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                
-            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.sarif"</span><span class="p">)</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.sarif"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="nf">custom</span> <span class="p">{</span>
             <span class="c1">// The simple class name of your custom report.</span>
@@ -945,7 +945,7 @@ exclude detekt from the check task.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 12, 2021 <br />
+ Site last generated: Aug 13, 2021 <br />
                 </div>
             </div>
 </footer>
