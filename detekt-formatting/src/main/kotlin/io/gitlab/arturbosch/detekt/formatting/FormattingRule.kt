@@ -81,7 +81,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val (line, column) = positionByOffset(offset)
             val location = Location(
                 SourceLocation(line, column),
-                TextLocation(node.startOffset, node.psi.endOffset),
+                getTextLocationForViolation(node, offset),
                 root.toFilePath()
             )
 
@@ -97,6 +97,9 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }
+
+    open fun getTextLocationForViolation(node: ASTNode, offset: Int) =
+        TextLocation(node.startOffset, node.psi.endOffset)
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
         wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode
