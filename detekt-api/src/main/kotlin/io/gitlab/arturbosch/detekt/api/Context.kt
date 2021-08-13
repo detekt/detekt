@@ -50,7 +50,7 @@ open class DefaultContext : Context {
     override val findings: List<Finding>
         get() = _findings.toList()
 
-    private var _findings: MutableList<Finding> = mutableListOf()
+    private val _findings: MutableList<Finding> = mutableListOf()
 
     /**
      * Reports a single code smell finding.
@@ -66,6 +66,6 @@ open class DefaultContext : Context {
     }
 
     final override fun clearFindings() {
-        _findings = mutableListOf()
+        _findings.clear()
     }
 }

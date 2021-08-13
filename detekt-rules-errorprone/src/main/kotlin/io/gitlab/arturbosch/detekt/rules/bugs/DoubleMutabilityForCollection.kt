@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "DoubleMutabilityInCollection",
+        "DoubleMutabilityForCollection",
         Severity.CodeSmell,
         "Using var with mutable collections leads to double mutability. " +
             "Consider using val or immutable collection types.",
