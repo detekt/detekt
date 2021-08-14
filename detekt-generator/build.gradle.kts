@@ -13,6 +13,8 @@ dependencies {
     implementation(libs.jcommander)
 
     testImplementation(projects.detektTestUtils)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"

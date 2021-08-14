@@ -8,6 +8,8 @@ dependencies {
     api(libs.kotlin.compilerEmbeddable)
     implementation(projects.detektPsiUtils)
     testImplementation(projects.detektTestUtils)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 tasks.withType<Test> {

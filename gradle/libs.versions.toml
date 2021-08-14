@@ -50,3 +50,5 @@ shadow = { id = "com.github.johnrengelman.shadow", version = "7.0.0" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
 
 [bundles]
+testImplementation = ["assertj", "spek-dsl"]
+testRuntime = ["junitLauncher", "spek-runner"]

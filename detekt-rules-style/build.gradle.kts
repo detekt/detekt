@@ -8,4 +8,6 @@ dependencies {
     testImplementation(projects.detektMetrics)
     testImplementation(projects.detektTest)
     testImplementation(libs.mockk)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }

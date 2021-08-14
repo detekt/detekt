@@ -12,6 +12,9 @@ dependencies {
     api(projects.detektPsiUtils)
 
     testImplementation(projects.detektTest)
+    testImplementation(libs.bundles.testImplementation)
+
+    testRuntimeOnly(libs.bundles.testRuntime)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
 

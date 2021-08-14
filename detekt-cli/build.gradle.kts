@@ -16,6 +16,8 @@ dependencies {
     runtimeOnly(projects.detektRules)
 
     testImplementation(projects.detektTest)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
