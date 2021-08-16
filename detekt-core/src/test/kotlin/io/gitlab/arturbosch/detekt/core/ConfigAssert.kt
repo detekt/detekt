@@ -66,7 +66,7 @@ class ConfigAssert(
         return getRuleSetProviderInPackageOrNull()
             ?.instance(Config.empty)
             ?.rules
-            ?: emptyList()
+            .orEmpty()
     }
 
     private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? = Reflections(packageName)
