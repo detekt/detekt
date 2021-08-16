@@ -2,6 +2,9 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -26,7 +29,9 @@ class ConfigAssert(
         val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key !in allowedOptions }
         assertThat(ymlDeclarations).isNotEmpty
 
-        val ruleClasses = getRuleClasses()
+        checkRulesDefinedByRuleSetProvider()
+
+        val ruleClasses = getRuleClassesInPackage()
         val foundRulesClassNames = ruleClasses.map { it.simpleName }
         val ruleNamesInConfig = ymlDeclarations.keys
         assertThat(foundRulesClassNames).containsExactlyInAnyOrderElementsOf(ruleNamesInConfig)
@@ -43,10 +48,34 @@ class ConfigAssert(
         }
     }
 
+    private fun checkRulesDefinedByRuleSetProvider() {
+        getRulesDefinedByRuleSet().forEach(::verifyIssueIdMatchesName)
+    }
+
+    private fun verifyIssueIdMatchesName(rule: BaseRule) {
+        val clazz = rule::class.java
+        assertThat(rule.ruleId)
+            .withFailMessage { "rule $clazz declares the rule id ${rule.ruleId} instead of ${clazz.simpleName}" }
+            .isEqualTo(clazz.simpleName)
+    }
+
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
         ?: error("yaml config expected but got ${config.javaClass}")
 
-    private fun getRuleClasses(): List<Class<out Rule>> {
+    private fun getRulesDefinedByRuleSet(): List<BaseRule> {
+        return getRuleSetProviderInPackageOrNull()
+            ?.instance(Config.empty)
+            ?.rules
+            ?: emptyList()
+    }
+
+    private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? = Reflections(packageName)
+        .getSubTypesOf(DefaultRuleSetProvider::class.java)
+        .firstOrNull()
+        ?.getDeclaredConstructor()
+        ?.newInstance()
+
+    private fun getRuleClassesInPackage(): List<Class<out Rule>> {
         return Reflections(packageName)
             .getSubTypesOf(Rule::class.java)
             .filter { !Modifier.isAbstract(it.modifiers) }
