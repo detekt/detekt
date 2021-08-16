@@ -91,6 +91,7 @@ internal class DetektMultiplatform(private val project: Project) {
         }
     }
 
+    @Suppress("LongMethod")
     private fun Project.registerMultiplatformTasksForNonAndroidTarget(
         compilation: KotlinCompilation<KotlinCommonOptions>,
         target: KotlinTarget,

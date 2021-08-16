@@ -23,7 +23,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         get() = reportsDir
 
     @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
-    val reports = objects.newInstance(DetektReports::class.java)
+    val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
     var input: ConfigurableFileCollection

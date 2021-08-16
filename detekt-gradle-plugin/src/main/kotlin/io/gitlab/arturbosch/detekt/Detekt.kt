@@ -159,7 +159,7 @@ open class Detekt @Inject constructor(
         set(value) = basePathProp.set(value)
 
     @get:Internal
-    var reports = objects.newInstance(DetektReports::class.java)
+    var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)

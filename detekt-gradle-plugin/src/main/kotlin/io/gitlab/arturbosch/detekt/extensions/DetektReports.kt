@@ -12,13 +12,13 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 open class DetektReports @Inject constructor(val objects: ObjectFactory) {
 
-    val xml = objects.newInstance(DetektReport::class.java, XML)
+    val xml: DetektReport = objects.newInstance(DetektReport::class.java, XML)
 
-    val html = objects.newInstance(DetektReport::class.java, HTML)
+    val html: DetektReport = objects.newInstance(DetektReport::class.java, HTML)
 
-    val txt = objects.newInstance(DetektReport::class.java, TXT)
+    val txt: DetektReport = objects.newInstance(DetektReport::class.java, TXT)
 
-    val sarif = objects.newInstance(DetektReport::class.java, SARIF)
+    val sarif: DetektReport = objects.newInstance(DetektReport::class.java, SARIF)
 
     val custom = mutableListOf<CustomDetektReport>()
 
