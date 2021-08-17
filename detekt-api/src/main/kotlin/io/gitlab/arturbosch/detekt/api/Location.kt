@@ -52,7 +52,7 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         file: String
     ) : this(source, text, file)
 
-    override fun compact(): String = "${filePath.absolutePath}:$source"
+    override fun compact(): String = "file://${filePath.absolutePath}:$source"
 
     companion object {
         /**

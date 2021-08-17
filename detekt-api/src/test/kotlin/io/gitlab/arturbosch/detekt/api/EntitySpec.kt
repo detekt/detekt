@@ -53,7 +53,7 @@ class EntitySpec : Spek({
                 val memberFunction = functions.first { it.name == "memberFun" }
 
                 assertThat(Entity.atName(memberFunction).compact())
-                    .isEqualTo("[memberFun] at $path:5:17")
+                    .isEqualTo("[memberFun] at file://$path:5:17")
             }
         }
 
@@ -65,7 +65,7 @@ class EntitySpec : Spek({
             }
 
             it("includes class name in entity compact") {
-                assertThat(Entity.atName(clazz).compact()).isEqualTo("[C] at $path:3:7")
+                assertThat(Entity.atName(clazz).compact()).isEqualTo("[C] at file://$path:3:7")
             }
         }
 
@@ -77,7 +77,7 @@ class EntitySpec : Spek({
             }
 
             it("includes file name in entity compact") {
-                val expectedResult = "[Test.kt] at $path:1:1"
+                val expectedResult = "[Test.kt] at file://$path:1:1"
 
                 assertThat(Entity.from(code).compact()).isEqualTo(expectedResult)
                 assertThat(Entity.atPackageOrFirstDecl(code).compact()).isEqualTo(expectedResult)
