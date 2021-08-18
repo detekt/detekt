@@ -17,6 +17,9 @@ interface ValidatableConfiguration {
  * in the configuration and we want to validate the config by default.
  */
 val DEFAULT_PROPERTY_EXCLUDES = setOf(
+    ".*>excludes",
+    ".*>includes",
+    ".*>active",
     ".*>.*>excludes",
     ".*>.*>includes",
     ".*>.*>active",
