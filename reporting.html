@@ -551,7 +551,7 @@ run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMe
 
   <span class="n">plugins</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">DetektPlugin</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">)</span> <span class="o">{</span> <span class="n">detektTask</span> <span class="o">-&gt;</span>
-      <span class="n">finalizedBy</span><span class="o">(</span><span class="n">mergeTask</span><span class="o">)</span>
+      <span class="n">finalizedBy</span><span class="o">(</span><span class="n">reportMerge</span><span class="o">)</span>
 
       <span class="n">reportMerge</span><span class="o">.</span><span class="na">configure</span> <span class="o">{</span> <span class="n">mergeTask</span> <span class="o">-&gt;</span>
         <span class="n">mergeTask</span><span class="o">.</span><span class="na">input</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">detektTask</span><span class="o">.</span><span class="na">xmlReportFile</span><span class="o">)</span> <span class="c1">// or detektTask.sarifReportFile</span>
