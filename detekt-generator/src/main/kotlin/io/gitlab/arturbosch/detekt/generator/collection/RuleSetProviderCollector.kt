@@ -19,8 +19,8 @@ data class RuleSetProvider(
     val name: String,
     val description: String,
     val defaultActivationStatus: DefaultActivationStatus,
-    val rules: List<String> = listOf(),
-    val configuration: List<Configuration> = listOf()
+    val rules: List<String> = emptyList(),
+    val configuration: List<Configuration> = emptyList()
 )
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
@@ -65,13 +65,13 @@ class RuleSetProviderVisitor : DetektVisitor() {
         val superTypes = list.entries
             ?.map { it.typeAsUserType?.referencedName }
             ?.toSet()
-            ?: emptySet()
+            .orEmpty()
         containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
         super.visitSuperTypeList(list)
     }
 
     override fun visitClass(ktClass: KtClass) {
-        description = ktClass.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
+        description = ktClass.docComment?.getDefaultSection()?.getContent()?.trim().orEmpty()
         if (ktClass.isAnnotatedWith(ActiveByDefault::class)) {
             defaultActivationStatus = Active(since = ktClass.firstAnnotationParameter(ActiveByDefault::class))
         }
@@ -91,12 +91,16 @@ class RuleSetProviderVisitor : DetektVisitor() {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
                     "RuleSetProvider class " +
-                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules."
+                        "${property.containingClass()?.name.orEmpty()} doesn't provide list of rules."
                 )
         }
         if (property.isAnnotatedWith(ConfigAnnotation::class)) {
-            val defaultValue = checkNotNull(property.delegate?.expression as? KtCallExpression)
-                .valueArguments.first().text.let(::formatDefaultValue)
+            val defaultValue = formatDefaultValue(
+                checkNotNull(property.delegate?.expression as? KtCallExpression)
+                    .valueArguments
+                    .first()
+                    .text
+            )
             configurations.add(
                 Configuration(
                     name = checkNotNull(property.name),
@@ -122,7 +126,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
                 ?.valueArguments
                 ?.mapNotNull { it.getArgumentExpression() }
                 ?.mapNotNull { it.referenceExpression()?.text }
-                ?: emptyList()
+                .orEmpty()
 
             ruleNames.addAll(ruleArgumentNames)
         }
