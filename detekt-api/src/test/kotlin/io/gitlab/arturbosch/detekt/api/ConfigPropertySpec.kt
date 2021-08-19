@@ -258,7 +258,7 @@ class ConfigPropertySpec : Spek({
                     object : TestConfigAware() {
                         val defaultValue: List<String> = emptyList()
                         val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
-                        val prop2: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
+                        val prop2: List<Int> by config(emptyList<String>()) { it.map(String::toInt) }
                     }
                 }
                 it("can be defined as variable") {
@@ -290,6 +290,7 @@ class ConfigPropertySpec : Spek({
                 }
             }
         }
+        @OptIn(UnstableApi::class)
         context("configWithFallback") {
             context("primitive") {
                 val configValue = 99

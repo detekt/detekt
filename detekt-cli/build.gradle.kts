@@ -23,6 +23,12 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
+publishing {
+    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
+        artifact(tasks.shadowJar)
+    }
+}
+
 tasks.shadowJar {
     mergeServiceFiles()
 }

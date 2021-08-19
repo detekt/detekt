@@ -105,6 +105,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 	public static final fun isOpen (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isOperator (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isOverride (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
+	public static final fun isProtected (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isPublicNotOverridden (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 }
 

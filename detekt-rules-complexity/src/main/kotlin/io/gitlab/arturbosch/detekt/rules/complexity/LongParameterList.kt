@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -44,12 +45,14 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of parameters required to trigger the rule")
     private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
+    @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
     private val functionThreshold: Int by configWithFallback(
         fallbackPropertyName = "threshold",
         defaultValue = DEFAULT_FUNCTION_THRESHOLD
     )
 
+    @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
     private val constructorThreshold: Int by configWithFallback(
         fallbackPropertyName = "threshold",
@@ -68,7 +71,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
             "the most common cases are for dependency injection where constructors are annotated with `@Inject` " +
             "or parameters are annotated with `@Value` and should not be counted for the rule to trigger"
     )
-    private val ignoreAnnotated: List<String> by config(listOf<String>()) { list ->
+    private val ignoreAnnotated: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
 
@@ -134,7 +137,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private fun KtParameterList.parameterCount(): Int {
         val preFilteredParameters = parameters.filter { !it.isIgnored() }
         return if (ignoreDefaultParameters) {
-            preFilteredParameters.filter { !it.hasDefaultValue() }.size
+            preFilteredParameters.count { !it.hasDefaultValue() }
         } else {
             preFilteredParameters.size
         }

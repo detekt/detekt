@@ -34,9 +34,9 @@ class QualifiedNameProcessorSpec : Spek({
 
 private val result = object : Detektion {
 
-    override val findings: Map<String, List<Finding>> = mapOf()
-    override val notifications: Collection<Notification> = listOf()
-    override val metrics: Collection<ProjectMetric> = listOf()
+    override val findings: Map<String, List<Finding>> = emptyMap()
+    override val notifications: Collection<Notification> = emptyList()
+    override val metrics: Collection<ProjectMetric> = emptyList()
 
     private var userData = KeyFMap.EMPTY_MAP
     override fun <V> getData(key: Key<V>): V? = userData.get(key)

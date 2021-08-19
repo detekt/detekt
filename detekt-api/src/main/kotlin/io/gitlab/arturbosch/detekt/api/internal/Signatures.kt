@@ -64,7 +64,7 @@ internal fun PsiElement.buildFullSignature(): String {
 }
 
 private fun PsiElement.extractClassName() =
-    this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString() ?: ""
+    this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString().orEmpty()
 
 private fun PsiElement.searchSignature(): String {
     return when (this) {
@@ -87,7 +87,7 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
     }
     val extendedEntries = classOrObject.superTypeListEntries
     if (extendedEntries.isNotEmpty()) baseName += " : "
-    extendedEntries.forEach { baseName += it.typeAsUserType?.referencedName ?: "" }
+    extendedEntries.forEach { baseName += it.typeAsUserType?.referencedName.orEmpty() }
     return baseName
 }
 

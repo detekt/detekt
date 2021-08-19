@@ -150,7 +150,7 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        return ComplexityReportGenerator.create(detektion).generate() ?: emptyList()
+        return ComplexityReportGenerator.create(detektion).generate().orEmpty()
     }
 }
 

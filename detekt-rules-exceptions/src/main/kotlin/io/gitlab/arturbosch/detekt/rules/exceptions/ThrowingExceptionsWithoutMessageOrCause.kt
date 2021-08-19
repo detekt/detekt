@@ -54,11 +54,13 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
             "ArrayIndexOutOfBoundsException",
             "Error",
             "Exception",
+            "IllegalArgumentException",
             "IllegalMonitorStateException",
-            "NullPointerException",
+            "IllegalStateException",
             "IndexOutOfBoundsException",
+            "NullPointerException",
             "RuntimeException",
-            "Throwable"
+            "Throwable",
         )
     )
 

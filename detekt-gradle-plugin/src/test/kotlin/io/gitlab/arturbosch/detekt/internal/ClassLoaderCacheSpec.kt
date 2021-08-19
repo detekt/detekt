@@ -21,7 +21,7 @@ internal class ClassLoaderCacheSpec : Spek({
             val initialClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
             val secondClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
 
-            assertThat(initialClassLoader === secondClassLoader)
+            assertThat(initialClassLoader === secondClassLoader).isTrue()
         }
 
         it("different classloaders are returned for different files") {
@@ -29,7 +29,7 @@ internal class ClassLoaderCacheSpec : Spek({
             val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
             val secondClassLoader = cache.getOrCreate(TestFileCollection(File("c/b/a")))
 
-            assertThat(firstClassLoader !== secondClassLoader)
+            assertThat(firstClassLoader === secondClassLoader).isFalse()
         }
 
         it("same classloader for the same files in different order") {
@@ -37,7 +37,7 @@ internal class ClassLoaderCacheSpec : Spek({
             val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c"), File("d/e/f")))
             val secondClassLoader = cache.getOrCreate(TestFileCollection(File("d/e/f"), File("a/b/c")))
 
-            assertThat(firstClassLoader === secondClassLoader)
+            assertThat(firstClassLoader === secondClassLoader).isTrue()
         }
 
         it("resolves files without synchronization") {

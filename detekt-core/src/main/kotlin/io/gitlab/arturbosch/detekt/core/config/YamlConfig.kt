@@ -20,7 +20,7 @@ class YamlConfig internal constructor(
 ) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
-        val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
+        val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() }
         return YamlConfig(
             subProperties as Map<String, Any>,
             if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
@@ -68,10 +68,10 @@ class YamlConfig internal constructor(
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config = reader.buffered().use {
+        fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
             val map: Map<*, *>? = runCatching {
                 @Suppress("USELESS_CAST") // runtime inference bug
-                Yaml().loadAs(it, Map::class.java) as Map<*, *>?
+                Yaml().loadAs(bufferedReader, Map::class.java) as Map<*, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
             if (map == null) {
                 YamlConfig(emptyMap())

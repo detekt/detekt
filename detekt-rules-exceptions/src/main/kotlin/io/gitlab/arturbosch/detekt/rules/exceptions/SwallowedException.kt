@@ -165,10 +165,10 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         internal val EXCEPTIONS_IGNORED_BY_DEFAULT = listOf(
-            "NumberFormatException",
             "InterruptedException",
+            "MalformedURLException",
+            "NumberFormatException",
             "ParseException",
-            "MalformedURLException"
         )
     }
 }

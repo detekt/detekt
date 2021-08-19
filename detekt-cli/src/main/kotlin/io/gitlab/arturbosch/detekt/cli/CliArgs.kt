@@ -205,7 +205,7 @@ class CliArgs {
     }
 
     val reportPaths: List<ReportPath> by lazy {
-        reports?.map { ReportPath.from(it) } ?: emptyList()
+        reports?.map { ReportPath.from(it) }.orEmpty()
     }
 
     companion object {

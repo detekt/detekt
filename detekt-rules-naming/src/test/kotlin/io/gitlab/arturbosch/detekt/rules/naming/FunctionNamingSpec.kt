@@ -68,7 +68,7 @@ class FunctionNamingSpec : Spek({
             fun Foo(): Foo = FooImpl()
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).compileAndLint(code))
+            assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
         it("flags functions with bad names inside overridden functions by default") {
@@ -95,6 +95,13 @@ class FunctionNamingSpec : Spek({
                 SourceLocation(2, 18),
                 SourceLocation(4, 19)
             )
+        }
+
+        it("allow functions with backtick") {
+            val code = """
+                fun `7his is a function name _`() = Unit
+            """
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
         describe("annotated functions") {

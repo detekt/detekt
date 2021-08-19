@@ -59,7 +59,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
 
             return Files.newBufferedReader(templateFile)
                 .use(BufferedReader::readText)
-                .let(StringUtilRt::convertLineSeparators)
+                .convertLineSeparators()
         }
 
         fun cacheLicence(dir: Path, isRegexTemplate: Boolean) {
@@ -82,6 +82,8 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
         }
     }
 }
+
+private fun String.convertLineSeparators() = StringUtilRt.convertLineSeparators(this)
 
 internal val LICENCE_KEY = Key.create<String>("LICENCE_HEADER")
 internal val LICENCE_REGEX_KEY = Key.create<Regex>("LICENCE_HEADER_REGEX")

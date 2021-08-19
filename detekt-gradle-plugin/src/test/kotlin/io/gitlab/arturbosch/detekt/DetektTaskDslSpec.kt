@@ -85,7 +85,7 @@ internal object DetektTaskDslSpec : Spek({
                 }
 
                 describe("with custom baseline file") {
-                    val baselineFilename = "detekt-baseline.xml"
+                    val baselineFilename = "custom-baseline.xml"
 
                     beforeGroup {
 
@@ -131,7 +131,7 @@ internal object DetektTaskDslSpec : Spek({
                     }
                 }
 
-                describe("with custom input directories") {
+                describe("[deprecated] with custom input directories using input") {
                     val customSrc1 = "gensrc/kotlin"
                     val customSrc2 = "src/main/kotlin"
 
@@ -140,6 +140,38 @@ internal object DetektTaskDslSpec : Spek({
                         val config = """
                         |detekt {
                         |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+                        |}
+                        """
+
+                        val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
+                        gradleRunner = builder
+                            .withProjectLayout(projectLayout)
+                            .withDetektConfig(config)
+                            .build()
+                        result = gradleRunner.runDetektTask()
+                    }
+
+                    it("sets input parameter to absolute filenames of all source files") {
+                        val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
+                        val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
+                        val expectedInputParam = "--input $file1,$file2"
+                        assertThat(result.output).contains(expectedInputParam)
+                    }
+
+                    it("ignores input directories that do not exist") {
+                        assertThat(result.output).doesNotContain("folder_that_does_not_exist")
+                    }
+                }
+
+                describe("with custom input directories") {
+                    val customSrc1 = "gensrc/kotlin"
+                    val customSrc2 = "src/main/kotlin"
+
+                    beforeGroup {
+
+                        val config = """
+                        |detekt {
+                        |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
                         |}
                         """
 

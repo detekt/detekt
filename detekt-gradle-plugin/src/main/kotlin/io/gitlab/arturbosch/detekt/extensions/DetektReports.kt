@@ -20,19 +20,19 @@ class DetektReports {
 
     val custom = mutableListOf<CustomDetektReport>()
 
-    fun xml(configure: DetektReport.() -> Unit) = xml.configure()
+    fun xml(configure: DetektReport.() -> Unit): Unit = xml.configure()
     fun xml(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, xml)
 
-    fun html(configure: DetektReport.() -> Unit) = html.configure()
+    fun html(configure: DetektReport.() -> Unit): Unit = html.configure()
     fun html(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, html)
 
-    fun txt(configure: DetektReport.() -> Unit) = txt.configure()
+    fun txt(configure: DetektReport.() -> Unit): Unit = txt.configure()
     fun txt(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, txt)
 
-    fun sarif(configure: DetektReport.() -> Unit) = sarif.configure()
+    fun sarif(configure: DetektReport.() -> Unit): Unit = sarif.configure()
     fun sarif(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, sarif)
 
-    fun custom(configure: CustomDetektReport.() -> Unit) = createAndAddCustomReport().configure()
+    fun custom(configure: CustomDetektReport.() -> Unit): Unit = createAndAddCustomReport().configure()
     fun custom(closure: Closure<*>): CustomDetektReport = ConfigureUtil.configure(closure, createAndAddCustomReport())
 
     private fun createAndAddCustomReport() = CustomDetektReport().apply { custom.add(this) }

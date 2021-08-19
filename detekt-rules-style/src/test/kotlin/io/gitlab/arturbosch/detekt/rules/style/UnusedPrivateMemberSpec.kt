@@ -6,10 +6,12 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
+import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
@@ -122,6 +124,18 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report parameters in external functions") {
             val code = "external fun foo(bar: String)"
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    describe("protected functions") {
+
+        it("should not report parameters in protected functions") {
+            val code = """
+                open class Foo {
+                    protected fun fee(bar: String) {}
+                }
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -1078,15 +1092,15 @@ class UnusedPrivateMemberSpec : Spek({
             val code = """
                 class Test {
                     val value = 1.f()
-                
+
                     private fun f(): Int {
                         return 5
                     }
-                
+
                     private fun Int.f(): Int {
                         return this
                     }
-                
+
                     private fun String.f(): Int {
                         return toInt()
                     }
@@ -1102,7 +1116,7 @@ class UnusedPrivateMemberSpec : Spek({
             val code = """
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
-                
+
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -1116,7 +1130,7 @@ class UnusedPrivateMemberSpec : Spek({
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
                     private operator fun Foo.minus(other: Foo): Foo = Foo(value - other.value)
-                
+
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -1136,18 +1150,18 @@ class UnusedPrivateMemberSpec : Spek({
                 class A
                 class B
                 class C(val elements: Set<B>, val flag: Boolean)
-                
+
                 class Test {
                     private fun A.someMethod(
                           param1: B,
                           param2: Boolean = true
                       ) = someMethod(setOf(param1), param2)
-                    
+
                     private fun A.someMethod(
                           param1: Set<B>,
                           param2: Boolean = true
                       ) = C(param1, param2)
-                    
+
                     fun main() {
                         val aInstance = A()
                         aInstance.someMethod(B(), true)
@@ -1164,14 +1178,14 @@ class UnusedPrivateMemberSpec : Spek({
         it("does not report used private getValue/setValue operator functions") {
             val code = """
                 import kotlin.reflect.KProperty
-                
+
                 class Test {
                     var delegated by "Hello"
 
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-                    
+
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -1200,12 +1214,12 @@ class UnusedPrivateMemberSpec : Spek({
         it("reports unused private getValue/setValue operator functions") {
             val code = """
                 import kotlin.reflect.KProperty
-                
+
                 class Test {
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-                    
+
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -1257,6 +1271,124 @@ class UnusedPrivateMemberSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    describe("list get overloaded operator function - #3640") {
+        it("report used private list get operator function - declared in a class - called by operator") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class TestWrapper {
+                    private operator fun List<StringWrapper>.get(s: String) =
+                        this.firstOrNull { it.s == s }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+        it("doesn't report used private list get operator function - declared in a class - called by operator") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class TestWrapper(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(s: String) = strings[s]
+
+                    private operator fun List<StringWrapper>.get(s: String) =
+                        this.firstOrNull { it.s == s }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+        it("doesn't report used private list get operator function - declared in a class - called by operator - multiple parameters") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class TestWrapper(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(a: String, b: String) = strings[a, b]
+
+                    private operator fun List<StringWrapper>.get(a: String, b: String) =
+                        this.firstOrNull { it.s == b }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+        it("doesn't report used private list get operator function - declared in a class - called directly") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class TestWrapper(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(s: String) = strings.get(s)
+
+                    private operator fun List<StringWrapper>.get(s: String) =
+                        this.firstOrNull { it.s == s }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
+        it("report used private list get operator function - declared in a file - called by operator") {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                private operator fun List<StringWrapper>.get(s: String) =
+                    this.firstOrNull { it.s == s }
+            """
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+        it(
+            description = "doesn't report used private list get operator function - declared in a file - called by operator",
+            skip = Skip.Yes("This is a known false-positive tracked (https://github.com/detekt/detekt/issues/3640)")
+        ) {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class Test(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(s: String) = strings[s]
+                }
+
+                private operator fun List<StringWrapper>.get(s: String) =
+                    this.firstOrNull { it.s == s }
+            """
+            assertThat(subject.lintWithContext(env, code)).hasSize(0)
+        }
+        it(
+            description = "doesn't report used private list get operator function - declared in a file - called directly",
+            skip = Skip.Yes("This is a known false-positive tracked (https://github.com/detekt/detekt/issues/3640)")
+        ) {
+            val code = """
+                class StringWrapper(
+                    val s: String
+                )
+
+                class Test(
+                    private val strings: List<StringWrapper>
+                ) {
+                    fun getWrapperForString(s: String) = strings.get(s)
+                }
+
+                private operator fun List<StringWrapper>.get(s: String) =
+                    this.firstOrNull { it.s == s }
+            """
+            assertThat(subject.lintWithContext(env, code)).hasSize(0)
         }
     }
 })

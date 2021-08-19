@@ -64,7 +64,7 @@ class HtmlOutputReportSpec : Spek({
         it("contains no findings") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("EmptyRuleset", emptyList())
+                    "EmptyRuleset" to emptyList()
                 )
             }
             val result = htmlReport.render(detektion)
@@ -112,7 +112,7 @@ class HtmlOutputReportSpec : Spek({
         it("renders a metric report correctly") {
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
-                    ProjectMetric("M1", 10000),
+                    ProjectMetric("M1", 10_000),
                     ProjectMetric("M2", 2)
                 )
             }

@@ -191,7 +191,7 @@ detekt {
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
-    input = files(
+    source = files(
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
@@ -241,22 +241,22 @@ detekt {
         // Enable/Disable XML report (default: true)
         xml {
             enabled = true                                
-            destination = file("build/reports/detekt.xml")
+            destination = file("build/reports/detekt/detekt.xml")
         }
         // Enable/Disable HTML report (default: true)
         html {
             enabled = true
-            destination = file("build/reports/detekt.html")
+            destination = file("build/reports/detekt/detekt.html")
         }
         // Enable/Disable TXT report (default: true)
         txt {
             enabled = true                                
-            destination = file("build/reports/detekt.txt")
+            destination = file("build/reports/detekt/detekt.txt")
         }
         // Enable/Disable SARIF report (default: false)
         sarif {
             enabled = true                                
-            destination = file("build/reports/detekt.sarif")
+            destination = file("build/reports/detekt/detekt.sarif")
         }
         custom {
             // The simple class name of your custom report.
@@ -277,7 +277,7 @@ detekt {
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
-    input = files("src/main/java", "src/main/kotlin")     
+    source = files("src/main/java", "src/main/kotlin")     
     
     // Builds the AST in parallel. Rules are always executed in parallel. 
     // Can lead to speedups in larger projects. `false` by default.
@@ -324,22 +324,22 @@ detekt {
         // Enable/Disable XML report (default: true)
         xml {
             enabled = true
-            destination = file("build/reports/detekt.xml")
+            destination = file("build/reports/detekt/detekt.xml")
         }
         // Enable/Disable HTML report (default: true)
         html {
             enabled = true
-            destination = file("build/reports/detekt.html")
+            destination = file("build/reports/detekt/detekt.html")
         }
         // Enable/Disable TXT report (default: true)
         txt {
             enabled = true
-            destination = file("build/reports/detekt.txt")
+            destination = file("build/reports/detekt/detekt.txt")
         }
         // Enable/Disable SARIF report (default: false)
         sarif {
             enabled = true                                
-            destination = file("build/reports/detekt.sarif")
+            destination = file("build/reports/detekt/detekt.sarif")
         }
         custom {
             // The simple class name of your custom report.
@@ -360,7 +360,9 @@ More information on type resolution are available on the [type resolution](type-
 #### Groovy DSL
 
 ```groovy
-tasks.detekt.jvmTarget = "1.8"
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 ```
 
 #### Kotlin DSL
