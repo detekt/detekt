@@ -5,8 +5,8 @@ plugins {
     packaging
     releasing
     detekt
-    id("com.github.ben-manes.versions")
-    id("org.sonarqube")
+    alias(libs.plugins.gradleVersionz)
+    alias(libs.plugins.sonarqube)
 }
 
 allprojects {

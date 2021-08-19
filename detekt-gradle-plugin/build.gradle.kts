@@ -1,7 +1,7 @@
 plugins {
     module
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish")
+    alias(libs.plugins.pluginPublishing)
 }
 
 repositories {
