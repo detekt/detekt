@@ -6,15 +6,10 @@ ktlint = "0.41.0"
 spek = "2.0.15"
 
 [libraries]
-binaryCompatibilityValidator-gradle = "org.jetbrains.kotlinx:binary-compatibility-validator:0.4.0"
 detekt-gradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.0"
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
-gradleVersions-gradle = "com.github.ben-manes:gradle-versions-plugin:0.28.0"
 nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
-pluginPublishing-gradle = "com.gradle.publish:plugin-publish-plugin:0.14.0"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
-shadow-gradle = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
-sonarqube-gradle = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -34,7 +29,6 @@ ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standar
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 
 dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "dokka"}
-dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek" }
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
@@ -46,5 +40,13 @@ mockk = "io.mockk:mockk:1.12.0"
 junitLauncher = "org.junit.platform:junit-platform-launcher:1.7.1"
 snakeyaml = "org.yaml:snakeyaml:1.29"
 jcommander = "com.beust:jcommander:1.81"
+
+[plugins]
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.4.0" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.28.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.14.0" }
+shadow = { id = "com.github.johnrengelman.shadow", version = "7.0.0" }
+sonarqube = { id = "org.sonarqube", version = "2.8" }
 
 [bundles]
