@@ -42,7 +42,7 @@ snakeyaml = "org.yaml:snakeyaml:1.29"
 jcommander = "com.beust:jcommander:1.81"
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.4.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.7.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.28.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.14.0" }
