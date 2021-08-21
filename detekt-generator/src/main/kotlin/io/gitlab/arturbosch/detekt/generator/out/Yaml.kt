@@ -66,8 +66,8 @@ inline fun YamlNode.yaml(yaml: () -> String): Unit = append(yaml())
 private fun String.quotedForList(): String {
     return when {
         isBlank() -> quoted()
-        startsWith(SINGLE_QUOTE) && endsWith(SINGLE_QUOTE)
-            || startsWith(DOUBLE_QUOTE) && endsWith(DOUBLE_QUOTE) -> this
+        startsWith(SINGLE_QUOTE) && endsWith(SINGLE_QUOTE) ||
+            startsWith(DOUBLE_QUOTE) && endsWith(DOUBLE_QUOTE) -> this
         else -> quoted()
     }
 }
