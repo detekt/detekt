@@ -6,6 +6,19 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.18.1 - 2021-08-30    
+
+This is a point release for Detekt `1.18.0` containing bugfixes for problems that got discovered just after the release.
+
+##### Notable Changes
+
+- MultiRule should pass correctly the BindingContext - [#4071](https://github.com/detekt/detekt/pull/4071) 
+- Allow active, excludes and includes in the rule-set configuration - [#4045](https://github.com/detekt/detekt/pull/4045)
+- Remove Error from ThrowingExceptionsWithoutMessageOrCause because is a common name - [#4046](https://github.com/detekt/detekt/pull/4046)
+- Fix issue IDs for ReferentialEquality and DoubleMutability - [#4040](https://github.com/detekt/detekt/pull/4040)
+
+See all issues at: [1.18.1](https://github.com/detekt/detekt/milestone/84)
+
 #### 1.18.0 - 2021-08-12
 
 We're more than excited to introduce you a next stable release of Detekt: `1.18.0` 🎉
