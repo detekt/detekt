@@ -48,7 +48,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output
     )
-    main = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
         ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",

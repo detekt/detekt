@@ -1,9 +1,9 @@
 [versions]
-dokka = "1.4.32"
+dokka = "1.5.0"
 jacoco = "0.8.7"
 kotlin = "1.5.21"
-ktlint = "0.41.0"
-spek = "2.0.15"
+ktlint = "0.42.1"
+spek = "2.0.17"
 
 [libraries]
 detekt-gradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.0"
@@ -37,16 +37,16 @@ sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.9.12"
 mockk = "io.mockk:mockk:1.12.0"
-junitLauncher = "org.junit.platform:junit-platform-launcher:1.7.1"
+junitLauncher = "org.junit.platform:junit-platform-launcher:1.7.2"
 snakeyaml = "org.yaml:snakeyaml:1.29"
 jcommander = "com.beust:jcommander:1.81"
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.4.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.7.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.28.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.14.0" }
+gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.39.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.15.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.0.0" }
-sonarqube = { id = "org.sonarqube", version = "2.8" }
+sonarqube = { id = "org.sonarqube", version = "3.3" }
 
 [bundles]
