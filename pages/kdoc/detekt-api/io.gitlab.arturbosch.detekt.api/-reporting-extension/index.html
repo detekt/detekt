@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>ReportingExtension - | A static code analyzer for Kotlin</title>
+<title>ReportingExtension | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="ReportingExtension -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="ReportingExtension">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">ReportingExtension -</h1>
+   <h1 class="post-title-main">ReportingExtension</h1>
 </div>
 
 
@@ -464,10 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">ReportingExtension</a></p>
 
 <h1 id="reportingextension">ReportingExtension</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">ReportingExtension</a> : <a href="../-extension/index.html">Extension</a></p>
 
 <p>Allows to intercept detekt’s result container by listening to the initial and final state and manipulate the reported findings.</p>
 
@@ -482,20 +484,20 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(config: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>)  <br />More info  <br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.  <br /><br /><br />[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(context: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a>)  <br />More info  <br />Setup extension by querying common paths and config options.  <br /><br /><br /></td>
+      <td><a href="../-extension/init.html">init</a></td>
+      <td>[jvm]<br />open fun <a href="../-extension/init.html">init</a>(config: <a href="../-config/index.html">Config</a>)<br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.<br />[jvm]<br />open fun <a href="../-extension/init.html">init</a>(context: <a href="../-setup-context/index.html">SetupContext</a>)<br />Setup extension by querying common paths and config options.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/onFinalResult/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-final-result.html">onFinalResult</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/onFinalResult/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-final-result.html">onFinalResult</a>(result: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a>)  <br />More info  <br />Is called after all extensions’s <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/transform-findings.html">transformFindings</a> were called.  <br /><br /><br /></td>
+      <td><a href="on-final-result.html">onFinalResult</a></td>
+      <td>[jvm]<br />open fun <a href="on-final-result.html">onFinalResult</a>(result: <a href="../-detektion/index.html">Detektion</a>)<br />Is called after all extensions’s <a href="transform-findings.html">transformFindings</a> were called.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/onRawResult/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-raw-result.html">onRawResult</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/onRawResult/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/on-raw-result.html">onRawResult</a>(result: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a>)  <br />More info  <br />Is called before any <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/transform-findings.html">transformFindings</a> calls were executed.  <br /><br /><br /></td>
+      <td><a href="on-raw-result.html">onRawResult</a></td>
+      <td>[jvm]<br />open fun <a href="on-raw-result.html">onRawResult</a>(result: <a href="../-detektion/index.html">Detektion</a>)<br />Is called before any <a href="transform-findings.html">transformFindings</a> calls were executed.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/transformFindings/#kotlin.collections.Map[kotlin.String,kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Finding]]/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/transform-findings.html">transformFindings</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/transformFindings/#kotlin.collections.Map[kotlin.String,kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Finding]]/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/transform-findings.html">transformFindings</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>»): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>»  <br />More info  <br />Allows to transform the reported findings e.g.  <br /><br /><br /></td>
+      <td><a href="transform-findings.html">transformFindings</a></td>
+      <td>[jvm]<br />open fun <a href="transform-findings.html">transformFindings</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»<br />Allows to transform the reported findings e.g.</td>
     </tr>
   </tbody>
 </table>
@@ -511,12 +513,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/id/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/#-1733603692%2FProperties%2F-879243379">id</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/id/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/#-1733603692%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>Name of the extension.   <br /></td>
+      <td><a href="index.html#-1733603692%2FProperties%2F-879243379">id</a></td>
+      <td>[jvm]<br />open val <a href="index.html#-1733603692%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/priority/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/#80046251%2FProperties%2F-879243379">priority</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension/priority/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/#80046251%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>Is used to run extensions in a specific order.   <br /></td>
+      <td><a href="index.html#80046251%2FProperties%2F-879243379">priority</a></td>
+      <td>[jvm]<br />open val <a href="index.html#80046251%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
     </tr>
   </tbody>
 </table>
@@ -538,7 +540,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>ConfigValidator - | A static code analyzer for Kotlin</title>
+<title>ConfigValidator | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="ConfigValidator -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="ConfigValidator">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">ConfigValidator -</h1>
+   <h1 class="post-title-main">ConfigValidator</h1>
 </div>
 
 
@@ -464,10 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">ConfigValidator</a></p>
 
 <h1 id="configvalidator">ConfigValidator</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">ConfigValidator</a> : <a href="../-extension/index.html">Extension</a></p>
 
 <p>An extension which allows users to validate parts of the configuration.</p>
 
@@ -484,12 +486,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(config: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>)  <br />More info  <br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.  <br /><br /><br />[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(context: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a>)  <br />More info  <br />Setup extension by querying common paths and config options.  <br /><br /><br /></td>
+      <td><a href="../-extension/init.html">init</a></td>
+      <td>[jvm]<br />open fun <a href="../-extension/init.html">init</a>(config: <a href="../-config/index.html">Config</a>)<br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.<br />[jvm]<br />open fun <a href="../-extension/init.html">init</a>(context: <a href="../-setup-context/index.html">SetupContext</a>)<br />Setup extension by querying common paths and config options.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/validate/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/validate.html">validate</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/validate/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/validate.html">validate</a>(config: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a>&gt;  <br />More info  <br />Executes queries on given config and reports any warnings or errors via <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a>s.  <br /><br /><br /></td>
+      <td><a href="validate.html">validate</a></td>
+      <td>[jvm]<br />abstract fun <a href="validate.html">validate</a>(config: <a href="../-config/index.html">Config</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../-notification/index.html">Notification</a>&gt;<br />Executes queries on given config and reports any warnings or errors via <a href="../-notification/index.html">Notification</a>s.</td>
     </tr>
   </tbody>
 </table>
@@ -505,12 +507,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/id/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/#1970000563%2FProperties%2F-879243379">id</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/id/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/#1970000563%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>Name of the extension.   <br /></td>
+      <td><a href="index.html#1970000563%2FProperties%2F-879243379">id</a></td>
+      <td>[jvm]<br />open val <a href="index.html#1970000563%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/priority/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/#1878268298%2FProperties%2F-879243379">priority</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator/priority/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/#1878268298%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>Is used to run extensions in a specific order.   <br /></td>
+      <td><a href="index.html#1878268298%2FProperties%2F-879243379">priority</a></td>
+      <td>[jvm]<br />open val <a href="index.html#1878268298%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
     </tr>
   </tbody>
 </table>
@@ -532,7 +534,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

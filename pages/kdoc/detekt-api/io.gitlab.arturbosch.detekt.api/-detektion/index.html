@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Detektion - | A static code analyzer for Kotlin</title>
+<title>Detektion | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Detektion -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Detektion">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">Detektion -</h1>
+   <h1 class="post-title-main">Detektion</h1>
 </div>
 
 
@@ -464,10 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">Detektion</a></p>
 
 <h1 id="detektion">Detektion</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">Detektion</a></p>
 
 <p>Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.</p>
 
@@ -482,16 +484,16 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/add/#io.gitlab.arturbosch.detekt.api.Notification/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add.html">add</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/add/#io.gitlab.arturbosch.detekt.api.Notification/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add.html">add</a>(notification: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a>)  <br />More info  <br />Stores a notification in the result.  <br /><br /><br />[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add.html">add</a>(projectMetric: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/">ProjectMetric</a>)  <br />More info  <br />Stores a metric calculated for the whole project in the result.  <br /><br /><br /></td>
+      <td><a href="add.html">add</a></td>
+      <td>[jvm]<br />abstract fun <a href="add.html">add</a>(notification: <a href="../-notification/index.html">Notification</a>)<br />Stores a notification in the result.<br />[jvm]<br />abstract fun <a href="add.html">add</a>(projectMetric: <a href="../-project-metric/index.html">ProjectMetric</a>)<br />Stores a metric calculated for the whole project in the result.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/addData/#org.jetbrains.kotlin.com.intellij.openapi.util.Key[TypeParam(bounds=[kotlin.Any?])]#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html">addData</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/addData/#org.jetbrains.kotlin.com.intellij.openapi.util.Key[TypeParam(bounds=[kotlin.Any?])]#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html">V</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html">addData</a>(key: Key&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html">V</a>&gt;, value: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/add-data.html">V</a>)  <br />More info  <br />Stores an arbitrary value inside the result bound to the given key.  <br /><br /><br /></td>
+      <td><a href="add-data.html">addData</a></td>
+      <td>[jvm]<br />abstract fun &lt;<a href="add-data.html">V</a>&gt; <a href="add-data.html">addData</a>(key: Key&lt;<a href="add-data.html">V</a>&gt;, value: <a href="add-data.html">V</a>)<br />Stores an arbitrary value inside the result bound to the given key.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/getData/#org.jetbrains.kotlin.com.intellij.openapi.util.Key[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html">getData</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/getData/#org.jetbrains.kotlin.com.intellij.openapi.util.Key[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html">V</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html">getData</a>(key: Key&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html">V</a>&gt;): <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/get-data.html">V</a>?  <br />More info  <br />Retrieves a value stored by the given key of the result.  <br /><br /><br /></td>
+      <td><a href="get-data.html">getData</a></td>
+      <td>[jvm]<br />abstract fun &lt;<a href="get-data.html">V</a>&gt; <a href="get-data.html">getData</a>(key: Key&lt;<a href="get-data.html">V</a>&gt;): <a href="get-data.html">V</a>?<br />Retrieves a value stored by the given key of the result.</td>
     </tr>
   </tbody>
 </table>
@@ -507,16 +509,16 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/findings/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/findings.html">findings</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/findings/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/findings.html">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a>»   <br /></td>
+      <td><a href="findings.html">findings</a></td>
+      <td>[jvm]<br />abstract val <a href="findings.html">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/metrics/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/metrics.html">metrics</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/metrics/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/metrics.html">metrics</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/">ProjectMetric</a>&gt;   <br /></td>
+      <td><a href="metrics.html">metrics</a></td>
+      <td>[jvm]<br />abstract val <a href="metrics.html">metrics</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../-project-metric/index.html">ProjectMetric</a>&gt;</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/notifications/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/notifications.html">notifications</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Detektion/notifications/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/notifications.html">notifications</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a>&gt;   <br /></td>
+      <td><a href="notifications.html">notifications</a></td>
+      <td>[jvm]<br />abstract val <a href="notifications.html">notifications</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../-notification/index.html">Notification</a>&gt;</td>
     </tr>
   </tbody>
 </table>
@@ -538,7 +540,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

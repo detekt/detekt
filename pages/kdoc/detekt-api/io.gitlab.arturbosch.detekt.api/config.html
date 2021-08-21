@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>config - | A static code analyzer for Kotlin</title>
+<title>config | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="config -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="config">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">config -</h1>
+   <h1 class="post-title-main">config</h1>
 </div>
 
 
@@ -464,15 +464,14 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">config</a></p>
+  <p>//<a href="../../index.html">detekt-api</a>/<a href="index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="config.html">config</a></p>
 
 <h1 id="config">config</h1>
-<p>[jvm]<br />
-Content<br />
-fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">config</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a>&gt;<br />
-More info</p>
 
-<p>Creates a delegated read-only property that can be used in <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated only once.</p>
+<p>[jvm]<br />
+fun &lt;<a href="config.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="config.html">config</a>(defaultValue: <a href="config.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="-config-aware/index.html">ConfigAware</a>, <a href="config.html">T</a>&gt;</p>
+
+<p>Creates a delegated read-only property that can be used in <a href="-config-aware/index.html">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated only once.</p>
 
 <h2 id="parameters">Parameters</h2>
 
@@ -487,18 +486,16 @@ More info</p>
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a>defaultValue</td>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.<br /><br /></String></td>
+      <td>defaultValue</td>
+      <td>the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="config.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.</String></td>
     </tr>
   </tbody>
 </table>
 
 <p>[jvm]<br />
-Content<br />
-fun &lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">U</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">config</a>(defaultValue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a>, transformer: (<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a>) -&gt; <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">U</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a>, <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">U</a>&gt;<br />
-More info</p>
+fun &lt;<a href="config.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, <a href="config.html">U</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="config.html">config</a>(defaultValue: <a href="config.html">T</a>, transformer: (<a href="config.html">T</a>) -&gt; <a href="config.html">U</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="-config-aware/index.html">ConfigAware</a>, <a href="config.html">U</a>&gt;</p>
 
-<p>Creates a delegated read-only property that can be used in <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated and transformed only once.</p>
+<p>Creates a delegated read-only property that can be used in <a href="-config-aware/index.html">ConfigAware</a> objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated and transformed only once.</p>
 
 <h2 id="parameters-1">Parameters</h2>
 
@@ -513,12 +510,12 @@ More info</p>
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a>defaultValue</td>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a><br /><br />the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.<br /><br /></String></td>
+      <td>defaultValue</td>
+      <td>the value that the property evaluates to when there is no key with the name of the property in the config. Although <a href="config.html">T</a> is defined as <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, only <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> and List<String> are supported.</String></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a>transformer</td>
-      <td><a name="io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/"></a><br /><br />a function that transforms the value from the configuration (or the default) into its final value. A typical use case for this is a conversion from a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> into a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a>.<br /><br /></td>
+      <td>transformer</td>
+      <td>a function that transforms the value from the configuration (or the default) into its final value. A typical use case for this is a conversion from a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> into a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a>.</td>
     </tr>
   </tbody>
 </table>
@@ -540,7 +537,7 @@ More info</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

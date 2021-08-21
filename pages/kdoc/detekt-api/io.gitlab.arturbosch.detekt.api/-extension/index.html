@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Extension - | A static code analyzer for Kotlin</title>
+<title>Extension | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Extension -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Extension">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">Extension -</h1>
+   <h1 class="post-title-main">Extension</h1>
 </div>
 
 
@@ -464,14 +464,16 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">Extension</a></p>
 
 <h1 id="extension">Extension</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">Extension</a></p>
 
 <p>Defines extension points in detekt. Currently supported extensions are:</p>
 
-<ul><li>[FileProcessListener](/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/)</li><li>[ConsoleReport](/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/)</li><li>[OutputReport](/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/)</li><li>[ConfigValidator](/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/)</li><li>[ReportingExtension](/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/)</li></ul>
+<ul><li>[FileProcessListener](../-file-process-listener/index.html)</li><li>[ConsoleReport](../-console-report/index.html)</li><li>[OutputReport](../-output-report/index.html)</li><li>[ConfigValidator](../-config-validator/index.html)</li><li>[ReportingExtension](../-reporting-extension/index.html)</li></ul>
 
 <h2 id="functions">Functions</h2>
 
@@ -484,8 +486,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(config: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>)  <br />More info  <br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.  <br /><br /><br />[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(context: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a>)  <br />More info  <br />Setup extension by querying common paths and config options.  <br /><br /><br /></td>
+      <td><a href="init.html">init</a></td>
+      <td>[jvm]<br />open fun <a href="init.html">init</a>(config: <a href="../-config/index.html">Config</a>)<br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.<br />[jvm]<br />open fun <a href="init.html">init</a>(context: <a href="../-setup-context/index.html">SetupContext</a>)<br />Setup extension by querying common paths and config options.</td>
     </tr>
   </tbody>
 </table>
@@ -501,12 +503,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/id/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/id.html">id</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/id/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>Name of the extension.   <br /></td>
+      <td><a href="id.html">id</a></td>
+      <td>[jvm]<br />open val <a href="id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/priority/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/priority.html">priority</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/priority/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/priority.html">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>Is used to run extensions in a specific order.   <br /></td>
+      <td><a href="priority.html">priority</a></td>
+      <td>[jvm]<br />open val <a href="priority.html">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
     </tr>
   </tbody>
 </table>
@@ -521,19 +523,19 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConfigValidator///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/">ConfigValidator</a></td>
+      <td><a href="../-config-validator/index.html">ConfigValidator</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a></td>
+      <td><a href="../-console-report/index.html">ConsoleReport</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/FileProcessListener///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-file-process-listener/">FileProcessListener</a></td>
+      <td><a href="../-file-process-listener/index.html">FileProcessListener</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/OutputReport///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/">OutputReport</a></td>
+      <td><a href="../-output-report/index.html">OutputReport</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ReportingExtension///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-reporting-extension/">ReportingExtension</a></td>
+      <td><a href="../-reporting-extension/index.html">ReportingExtension</a></td>
     </tr>
   </tbody>
 </table>
@@ -555,7 +557,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

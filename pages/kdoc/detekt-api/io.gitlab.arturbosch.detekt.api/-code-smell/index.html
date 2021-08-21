@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>CodeSmell - | A static code analyzer for Kotlin</title>
+<title>CodeSmell | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="CodeSmell -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="CodeSmell">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">CodeSmell -</h1>
+   <h1 class="post-title-main">CodeSmell</h1>
 </div>
 
 
@@ -464,16 +464,18 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">CodeSmell</a></p>
 
 <h1 id="codesmell">CodeSmell</h1>
-<p>[jvm] open class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/">CodeSmell</a>(<strong>issue</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, <strong>entity</strong>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, <strong>message</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>metrics</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt;, <strong>references</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;) : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-finding/">Finding</a></p>
 
-<p>A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>.</p>
+<p>[jvm]<br />
+open class <a href="index.html">CodeSmell</a>(<strong>issue</strong>: <a href="../-issue/index.html">Issue</a>, <strong>entity</strong>: <a href="../-entity/index.html">Entity</a>, <strong>message</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <strong>metrics</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt;, <strong>references</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt;) : <a href="../-finding/index.html">Finding</a></p>
 
-<p>If the design problem results from metric violations, a list of <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>’s can describe further the kind of metrics.</p>
+<p>A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="../-issue/index.html">Issue</a>.</p>
 
-<p>If the design problem manifests by different source locations, references to these locations can be stored in additional <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>’s.</p>
+<p>If the design problem results from metric violations, a list of <a href="../-metric/index.html">Metric</a>’s can describe further the kind of metrics.</p>
+
+<p>If the design problem manifests by different source locations, references to these locations can be stored in additional <a href="../-entity/index.html">Entity</a>’s.</p>
 
 <h2 id="constructors">Constructors</h2>
 
@@ -486,8 +488,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/CodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Metric]#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/-code-smell.html">CodeSmell</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/CodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Metric]#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/"></a> [jvm] fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/-code-smell.html">CodeSmell</a>(issue: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>, entity: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt; = emptyList(), references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt; = emptyList())   <br /></td>
+      <td><a href="-code-smell.html">CodeSmell</a></td>
+      <td>[jvm]<br />fun <a href="-code-smell.html">CodeSmell</a>(issue: <a href="../-issue/index.html">Issue</a>, entity: <a href="../-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt; = emptyList(), references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt; = emptyList())</td>
     </tr>
   </tbody>
 </table>
@@ -503,24 +505,24 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/compact/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html">compact</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/compact/#/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html">compact</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br />More info  <br />Contract to format implementing object to a string representation.  <br /><br /><br /></td>
+      <td><a href="compact.html">compact</a></td>
+      <td>[jvm]<br />open override fun <a href="compact.html">compact</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Contract to format implementing object to a string representation.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/compactWithSignature/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact-with-signature.html">compactWithSignature</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/compactWithSignature/#/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact-with-signature.html">compactWithSignature</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br />More info  <br />Same as <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html">compact</a> except the content should contain a substring which represents this exact findings via a custom identifier.  <br /><br /><br /></td>
+      <td><a href="compact-with-signature.html">compactWithSignature</a></td>
+      <td>[jvm]<br />open override fun <a href="compact-with-signature.html">compactWithSignature</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Same as <a href="compact.html">compact</a> except the content should contain a substring which represents this exact findings via a custom identifier.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/messageOrDescription/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html">messageOrDescription</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/messageOrDescription/#/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html">messageOrDescription</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br />More info  <br />Explanation why this finding was raised.  <br /><br /><br /></td>
+      <td><a href="message-or-description.html">messageOrDescription</a></td>
+      <td>[jvm]<br />open override fun <a href="message-or-description.html">messageOrDescription</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Explanation why this finding was raised.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/HasMetrics/metricByType/#kotlin.String/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/metric-by-type.html">metricByType</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/HasMetrics/metricByType/#kotlin.String/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/metric-by-type.html">metricByType</a>(type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>?  <br />More info  <br />Finds the first metric matching given <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/metric-by-type.html">type</a>.  <br /><br /><br /></td>
+      <td><a href="../-has-metrics/metric-by-type.html">metricByType</a></td>
+      <td>[jvm]<br />open fun <a href="../-has-metrics/metric-by-type.html">metricByType</a>(type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="../-metric/index.html">Metric</a>?<br />Finds the first metric matching given <a href="../-has-metrics/metric-by-type.html">type</a>.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/toString/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html">toString</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/toString/#/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open override fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>  <br /><br /><br /></td>
+      <td><a href="to-string.html">toString</a></td>
+      <td>[jvm]<br />open override fun <a href="to-string.html">toString</a>(): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
   </tbody>
 </table>
@@ -536,52 +538,52 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/charPosition/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#946012637%2FProperties%2F-879243379">charPosition</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/charPosition/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#946012637%2FProperties%2F-879243379">charPosition</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/">TextLocation</a>   <br /></td>
+      <td><a href="index.html#946012637%2FProperties%2F-879243379">charPosition</a></td>
+      <td>[jvm]<br />open val <a href="index.html#946012637%2FProperties%2F-879243379">charPosition</a>: <a href="../-text-location/index.html">TextLocation</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/entity/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/entity.html">entity</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/entity/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/entity.html">entity</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>   <br /></td>
+      <td><a href="entity.html">entity</a></td>
+      <td>[jvm]<br />open override val <a href="entity.html">entity</a>: <a href="../-entity/index.html">Entity</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/file/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#-398444384%2FProperties%2F-879243379">file</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/file/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#-398444384%2FProperties%2F-879243379">file</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="index.html#-398444384%2FProperties%2F-879243379">file</a></td>
+      <td>[jvm]<br />open val <a href="index.html#-398444384%2FProperties%2F-879243379">file</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/id/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/id.html">id</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/id/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="id.html">id</a></td>
+      <td>[jvm]<br />open override val <a href="id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/issue/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/issue.html">issue</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/issue/#/PointingToDeclaration/"></a> [jvm] override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/issue.html">issue</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/">Issue</a>   <br /></td>
+      <td><a href="issue.html">issue</a></td>
+      <td>[jvm]<br />override val <a href="issue.html">issue</a>: <a href="../-issue/index.html">Issue</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/location/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#790284551%2FProperties%2F-879243379">location</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/location/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#790284551%2FProperties%2F-879243379">location</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-location/">Location</a>   <br /></td>
+      <td><a href="index.html#790284551%2FProperties%2F-879243379">location</a></td>
+      <td>[jvm]<br />open val <a href="index.html#790284551%2FProperties%2F-879243379">location</a>: <a href="../-location/index.html">Location</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/message/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message.html">message</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/message/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message.html">message</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="message.html">message</a></td>
+      <td>[jvm]<br />open override val <a href="message.html">message</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/metrics/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/metrics.html">metrics</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/metrics/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/metrics.html">metrics</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/">Metric</a>&gt;   <br /></td>
+      <td><a href="metrics.html">metrics</a></td>
+      <td>[jvm]<br />open override val <a href="metrics.html">metrics</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt;</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/references/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/references.html">references</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/references/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/references.html">references</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/">Entity</a>&gt;   <br /></td>
+      <td><a href="references.html">references</a></td>
+      <td>[jvm]<br />open override val <a href="references.html">references</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt;</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/severity/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/severity.html">severity</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/severity/#/PointingToDeclaration/"></a> [jvm] open override val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/severity.html">severity</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/">SeverityLevel</a>   <br /></td>
+      <td><a href="severity.html">severity</a></td>
+      <td>[jvm]<br />open override val <a href="severity.html">severity</a>: <a href="../-severity-level/index.html">SeverityLevel</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/signature/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#618829446%2FProperties%2F-879243379">signature</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/signature/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#618829446%2FProperties%2F-879243379">signature</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="index.html#618829446%2FProperties%2F-879243379">signature</a></td>
+      <td>[jvm]<br />open val <a href="index.html#618829446%2FProperties%2F-879243379">signature</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/startPosition/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#-2009174413%2FProperties%2F-879243379">startPosition</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CodeSmell/startPosition/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/#-2009174413%2FProperties%2F-879243379">startPosition</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/">SourceLocation</a>   <br /></td>
+      <td><a href="index.html#-2009174413%2FProperties%2F-879243379">startPosition</a></td>
+      <td>[jvm]<br />open val <a href="index.html#-2009174413%2FProperties%2F-879243379">startPosition</a>: <a href="../-source-location/index.html">SourceLocation</a></td>
     </tr>
   </tbody>
 </table>
@@ -596,10 +598,10 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/">CorrectableCodeSmell</a></td>
+      <td><a href="../-correctable-code-smell/index.html">CorrectableCodeSmell</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/">ThresholdedCodeSmell</a></td>
+      <td><a href="../-thresholded-code-smell/index.html">ThresholdedCodeSmell</a></td>
     </tr>
   </tbody>
 </table>
@@ -621,7 +623,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

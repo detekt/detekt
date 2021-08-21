@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Severity - | A static code analyzer for Kotlin</title>
+<title>Severity | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Severity -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Severity">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">Severity -</h1>
+   <h1 class="post-title-main">Severity</h1>
 </div>
 
 
@@ -464,12 +464,14 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">Severity</a></p>
 
 <h1 id="severity">Severity</h1>
-<p>[jvm] enum <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/">Severity</a>&gt;</p>
 
-<p>Note: This will be replaced by <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity-level/">SeverityLevel</a> in future versions of Detekt.</p>
+<p>[jvm]<br />
+enum <a href="index.html">Severity</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a>&lt;<a href="index.html">Severity</a>&gt;</p>
+
+<p>Note: This will be replaced by <a href="../-severity-level/index.html">SeverityLevel</a> in future versions of Detekt.</p>
 
 <p>Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.</p>
 
@@ -484,36 +486,36 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Performance///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-performance/">Performance</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Performance///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-performance/">Performance</a>()  <br />Places in the source code which degrade the performance of the application.   <br /></td>
+      <td><a href="-performance/index.html">Performance</a></td>
+      <td>[jvm]<br /><a href="-performance/index.html">Performance</a>()<br />Places in the source code which degrade the performance of the application.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Security///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-security/">Security</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Security///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-security/">Security</a>()  <br />Places in the source code that can be exploited and possibly result in significant damage.   <br /></td>
+      <td><a href="-security/index.html">Security</a></td>
+      <td>[jvm]<br /><a href="-security/index.html">Security</a>()<br />Places in the source code that can be exploited and possibly result in significant damage.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Maintainability///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-maintainability/">Maintainability</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Maintainability///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-maintainability/">Maintainability</a>()  <br />Issues in this category make the source code confusing and difficult to maintain.   <br /></td>
+      <td><a href="-maintainability/index.html">Maintainability</a></td>
+      <td>[jvm]<br /><a href="-maintainability/index.html">Maintainability</a>()<br />Issues in this category make the source code confusing and difficult to maintain.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Minor///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-minor/">Minor</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Minor///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-minor/">Minor</a>()  <br />Represents code quality issues which only slightly impact the code quality.   <br /></td>
+      <td><a href="-minor/index.html">Minor</a></td>
+      <td>[jvm]<br /><a href="-minor/index.html">Minor</a>()<br />Represents code quality issues which only slightly impact the code quality.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Defect///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-defect/">Defect</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Defect///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-defect/">Defect</a>()  <br />Corresponds to coding mistakes which could lead to unwanted behavior.   <br /></td>
+      <td><a href="-defect/index.html">Defect</a></td>
+      <td>[jvm]<br /><a href="-defect/index.html">Defect</a>()<br />Corresponds to coding mistakes which could lead to unwanted behavior.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Warning///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-warning/">Warning</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Warning///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-warning/">Warning</a>()  <br />Corresponds to issues that do not prevent the code from working, but may nevertheless represent coding inefficiencies.   <br /></td>
+      <td><a href="-warning/index.html">Warning</a></td>
+      <td>[jvm]<br /><a href="-warning/index.html">Warning</a>()<br />Corresponds to issues that do not prevent the code from working, but may nevertheless represent coding inefficiencies.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Style///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-style/">Style</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.Style///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-style/">Style</a>()  <br />Inspections in this category detect violations of code syntax styles.   <br /></td>
+      <td><a href="-style/index.html">Style</a></td>
+      <td>[jvm]<br /><a href="-style/index.html">Style</a>()<br />Inspections in this category detect violations of code syntax styles.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.CodeSmell///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-code-smell/">CodeSmell</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity.CodeSmell///PointingToDeclaration/"></a> [jvm] <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-code-smell/">CodeSmell</a>()  <br />Represents clean coding violations which may lead to maintainability issues.   <br /></td>
+      <td><a href="-code-smell/index.html">CodeSmell</a></td>
+      <td>[jvm]<br /><a href="-code-smell/index.html">CodeSmell</a>()<br />Represents clean coding violations which may lead to maintainability issues.</td>
     </tr>
   </tbody>
 </table>
@@ -529,12 +531,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity/name/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/#1128819440%2FProperties%2F-879243379">name</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity/name/#/PointingToDeclaration/"></a> [jvm] val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/#1128819440%2FProperties%2F-879243379">name</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="index.html#1128819440%2FProperties%2F-879243379">name</a></td>
+      <td>[jvm]<br />val <a href="index.html#1128819440%2FProperties%2F-879243379">name</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity/ordinal/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/#-1459661234%2FProperties%2F-879243379">ordinal</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Severity/ordinal/#/PointingToDeclaration/"></a> [jvm] val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/#-1459661234%2FProperties%2F-879243379">ordinal</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>   <br /></td>
+      <td><a href="index.html#-1459661234%2FProperties%2F-879243379">ordinal</a></td>
+      <td>[jvm]<br />val <a href="index.html#-1459661234%2FProperties%2F-879243379">ordinal</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></td>
     </tr>
   </tbody>
 </table>
@@ -556,7 +558,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

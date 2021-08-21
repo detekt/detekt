@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Notification - | A static code analyzer for Kotlin</title>
+<title>Notification | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Notification -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Notification">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">Notification -</h1>
+   <h1 class="post-title-main">Notification</h1>
 </div>
 
 
@@ -464,10 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">Notification</a></p>
 
 <h1 id="notification">Notification</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/">Notification</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">Notification</a></p>
 
 <p>Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.</p>
 
@@ -482,8 +484,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification.Level///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/">Level</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification.Level///PointingToDeclaration/"></a>[jvm]  <br />Content  <br />enum <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/">Level</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a>&lt;<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/">Notification.Level</a>&gt;   <br />More info  <br />Level of severity of the notification  <br /><br /><br /></td>
+      <td><a href="-level/index.html">Level</a></td>
+      <td>[jvm]<br />enum <a href="-level/index.html">Level</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a>&lt;<a href="-level/index.html">Notification.Level</a>&gt; <br />Level of severity of the notification</td>
     </tr>
   </tbody>
 </table>
@@ -499,16 +501,16 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/is-error.html">isError</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/isError/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/is-error.html">isError</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>   <br /></td>
+      <td><a href="is-error.html">isError</a></td>
+      <td>[jvm]<br />open val <a href="is-error.html">isError</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/level.html">level</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/level/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/level.html">level</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/">Notification.Level</a>   <br /></td>
+      <td><a href="level.html">level</a></td>
+      <td>[jvm]<br />abstract val <a href="level.html">level</a>: <a href="-level/index.html">Notification.Level</a></td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/message.html">message</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/message.html">message</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>   <br /></td>
+      <td><a href="message.html">message</a></td>
+      <td>[jvm]<br />abstract val <a href="message.html">message</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></td>
     </tr>
   </tbody>
 </table>
@@ -523,7 +525,7 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api.internal/SimpleNotification///PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/">SimpleNotification</a></td>
+      <td><a href="../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html">SimpleNotification</a></td>
     </tr>
   </tbody>
 </table>
@@ -545,7 +547,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

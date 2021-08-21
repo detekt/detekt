@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>ConsoleReport - | A static code analyzer for Kotlin</title>
+<title>ConsoleReport | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="ConsoleReport -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="ConsoleReport">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">ConsoleReport -</h1>
+   <h1 class="post-title-main">ConsoleReport</h1>
 </div>
 
 
@@ -464,14 +464,16 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">ConsoleReport</a></p>
 
 <h1 id="consolereport">ConsoleReport</h1>
-<p>[jvm] abstract class <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/">Extension</a></p>
+
+<p>[jvm]<br />
+abstract class <a href="index.html">ConsoleReport</a> : <a href="../-extension/index.html">Extension</a></p>
 
 <p>Extension point which describes how findings should be printed on the console.</p>
 
-<p>Additional <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/">ConsoleReport</a>’s can be made available through the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">java.util.ServiceLoader</a> pattern. If the default reporting mechanism should be turned off, exclude the entry ‘FindingsReport’ in the ‘console-reports’ property of a detekt yaml config.</p>
+<p>Additional <a href="index.html">ConsoleReport</a>’s can be made available through the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">java.util.ServiceLoader</a> pattern. If the default reporting mechanism should be turned off, exclude the entry ‘FindingsReport’ in the ‘console-reports’ property of a detekt yaml config.</p>
 
 <h2 id="constructors">Constructors</h2>
 
@@ -484,8 +486,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/ConsoleReport/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/-console-report.html">ConsoleReport</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/ConsoleReport/#/PointingToDeclaration/"></a> [jvm] fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/-console-report.html">ConsoleReport</a>()   <br /></td>
+      <td><a href="-console-report.html">ConsoleReport</a></td>
+      <td>[jvm]<br />fun <a href="-console-report.html">ConsoleReport</a>()</td>
     </tr>
   </tbody>
 </table>
@@ -501,16 +503,16 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/Extension/init/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(config: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>)  <br />More info  <br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.  <br /><br /><br />[jvm]  <br />Content  <br />open fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/init.html">init</a>(context: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a>)  <br />More info  <br />Setup extension by querying common paths and config options.  <br /><br /><br /></td>
+      <td><a href="../-extension/init.html">init</a></td>
+      <td>[jvm]<br />open fun <a href="../-extension/init.html">init</a>(config: <a href="../-config/index.html">Config</a>)<br />Allows to read any or even user defined properties from the detekt yaml config to setup this extension.<br />[jvm]<br />open fun <a href="../-extension/init.html">init</a>(context: <a href="../-setup-context/index.html">SetupContext</a>)<br />Setup extension by querying common paths and config options.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/print/#java.io.PrintStream#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/print.html">print</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/print/#java.io.PrintStream#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a>[jvm]  <br />Content  <br /><del>fun</del> <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/print.html"><del>print</del></a><del>(</del><del>printer</del><del>:</del> <a href="https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html">PrintStream</a><del>,</del> <del>detektion</del><del>:</del> <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a><del>)</del>  <br />More info  <br />Prints the rendered report to the given printer if anything was rendered at all.  <br /><br /><br /></td>
+      <td><a href="print.html">print</a></td>
+      <td>[jvm]<br /><del>fun</del> <a href="print.html"><del>print</del></a><del>(</del><del>printer</del><del>:</del> <a href="https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html">PrintStream</a><del>,</del> <del>detektion</del><del>:</del> <a href="../-detektion/index.html">Detektion</a><del>)</del><br />Prints the rendered report to the given printer if anything was rendered at all.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/render/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/render.html">render</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/render/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/render.html">render</a>(detektion: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/">Detektion</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?  <br />More info  <br />Converts the given <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/render.html">detektion</a> into a string representation to present it to the client.  <br /><br /><br /></td>
+      <td><a href="render.html">render</a></td>
+      <td>[jvm]<br />abstract fun <a href="render.html">render</a>(detektion: <a href="../-detektion/index.html">Detektion</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Converts the given <a href="render.html">detektion</a> into a string representation to present it to the client.</td>
     </tr>
   </tbody>
 </table>
@@ -526,12 +528,12 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/id/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/#956684142%2FProperties%2F-879243379">id</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/id/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/#956684142%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>Name of the extension.   <br /></td>
+      <td><a href="index.html#956684142%2FProperties%2F-879243379">id</a></td>
+      <td>[jvm]<br />open val <a href="index.html#956684142%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/priority/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/#-718772731%2FProperties%2F-879243379">priority</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/ConsoleReport/priority/#/PointingToDeclaration/"></a> [jvm] open val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/#-718772731%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>Is used to run extensions in a specific order.   <br /></td>
+      <td><a href="index.html#-718772731%2FProperties%2F-879243379">priority</a></td>
+      <td>[jvm]<br />open val <a href="index.html#-718772731%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
     </tr>
   </tbody>
 </table>
@@ -553,7 +555,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>

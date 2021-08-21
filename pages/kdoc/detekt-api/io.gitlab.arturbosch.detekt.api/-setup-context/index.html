@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>SetupContext - | A static code analyzer for Kotlin</title>
+<title>SetupContext | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="SetupContext -">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="SetupContext">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">SetupContext -</h1>
+   <h1 class="post-title-main">SetupContext</h1>
 </div>
 
 
@@ -464,10 +464,12 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>//<a href="/detekt/pages/kdoc/">detekt-api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/">io.gitlab.arturbosch.detekt.api</a>/<a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">SetupContext</a></p>
 
 <h1 id="setupcontext">SetupContext</h1>
-<p>[jvm] interface <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/">SetupContext</a> : <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/">PropertiesAware</a></p>
+
+<p>[jvm]<br />
+interface <a href="index.html">SetupContext</a> : <a href="../-properties-aware/index.html">PropertiesAware</a></p>
 
 <p>Context providing useful processing settings to initialize extensions.</p>
 
@@ -482,8 +484,8 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/PropertiesAware/register/#kotlin.String#kotlin.Any/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/register.html">register</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/PropertiesAware/register/#kotlin.String#kotlin.Any/PointingToDeclaration/"></a>[jvm]  <br />Content  <br />abstract fun <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/register.html">register</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>)  <br />More info  <br />Binds a given value with given key and stores it for later use.  <br /><br /><br /></td>
+      <td><a href="../-properties-aware/register.html">register</a></td>
+      <td>[jvm]<br />abstract fun <a href="../-properties-aware/register.html">register</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>)<br />Binds a given value with given key and stores it for later use.</td>
     </tr>
   </tbody>
 </table>
@@ -499,24 +501,24 @@ $('#toc').on('click', 'a', function() {
   </thead>
   <tbody>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/config/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/config.html">config</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/config/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/config.html">config</a>: <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-config/">Config</a>Configuration which is used to setup detekt.   <br /></td>
+      <td><a href="config.html">config</a></td>
+      <td>[jvm]<br />abstract val <a href="config.html">config</a>: <a href="../-config/index.html">Config</a><br />Configuration which is used to setup detekt.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/configUris/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/config-uris.html">configUris</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/configUris/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/config-uris.html">configUris</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a>&gt;All config locations which where used to create <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/config.html">config</a>.   <br /></td>
+      <td><a href="config-uris.html">configUris</a></td>
+      <td>[jvm]<br />abstract val <a href="config-uris.html">configUris</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a>&gt;<br />All config locations which where used to create <a href="../config.html">config</a>.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/errorChannel/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/error-channel.html">errorChannel</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/errorChannel/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/error-channel.html">errorChannel</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html">Appendable</a>The channel to log all the errors.   <br /></td>
+      <td><a href="error-channel.html">errorChannel</a></td>
+      <td>[jvm]<br />abstract val <a href="error-channel.html">errorChannel</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html">Appendable</a><br />The channel to log all the errors.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/outputChannel/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/output-channel.html">outputChannel</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/outputChannel/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/output-channel.html">outputChannel</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html">Appendable</a>The channel to log all the output.   <br /></td>
+      <td><a href="output-channel.html">outputChannel</a></td>
+      <td>[jvm]<br />abstract val <a href="output-channel.html">outputChannel</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-appendable/index.html">Appendable</a><br />The channel to log all the output.</td>
     </tr>
     <tr>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/properties/#/PointingToDeclaration/"></a><a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/#656015805%2FProperties%2F-879243379">properties</a></td>
-      <td><a name="io.gitlab.arturbosch.detekt.api/SetupContext/properties/#/PointingToDeclaration/"></a> [jvm] abstract val <a href="/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-setup-context/#656015805%2FProperties%2F-879243379">properties</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?&gt;Raw properties.   <br /></td>
+      <td><a href="index.html#656015805%2FProperties%2F-879243379">properties</a></td>
+      <td>[jvm]<br />abstract val <a href="index.html#656015805%2FProperties%2F-879243379">properties</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?&gt;<br />Raw properties.</td>
     </tr>
   </tbody>
 </table>
@@ -538,7 +540,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 20, 2021 <br />
+ Site last generated: Aug 21, 2021 <br />
                 </div>
             </div>
 </footer>
