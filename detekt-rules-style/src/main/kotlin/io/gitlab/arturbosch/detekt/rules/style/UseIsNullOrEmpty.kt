@@ -89,7 +89,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtDotQualifiedExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
-        if (!selectorExpression.isCalling(isEmptyFunctions)) return null
+        if (!selectorExpression.isCalling(emptyCheckFunctions)) return null
         return receiverExpression.safeAs<KtSimpleNameExpression>()?.takeIf { it.isCollectionOrArrayOrString() }
     }
 
@@ -168,7 +168,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
 
         private val stringClass = StandardNames.FqNames.string.toSafe()
 
-        private val isEmptyFunctions = collectionClasses.map { FqName("$it.isEmpty") } +
+        private val emptyCheckFunctions = collectionClasses.map { FqName("$it.isEmpty") } +
             listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
 
         private val countFunctions = listOf("kotlin.collections.count", "kotlin.text.count").map(::FqName)
