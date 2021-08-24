@@ -12,6 +12,33 @@ internal fun Project.registerDetektTask(
     configuration: Detekt.() -> Unit
 ): TaskProvider<Detekt> =
     tasks.register(name, Detekt::class.java) {
+        with(extension.reports) {
+            if (xml.outputLocation.isPresent) {
+                logger.warn(
+                    "XML report location set on detekt {} extension will be ignored for $name task. See " +
+                        "https://detekt.github.io/detekt/gradle.html#reports"
+                )
+            }
+            if (sarif.outputLocation.isPresent) {
+                logger.warn(
+                    "SARIF report location set on detekt {} extension will be ignored for $name task. See " +
+                        "https://detekt.github.io/detekt/gradle.html#reports"
+                )
+            }
+            if (txt.outputLocation.isPresent) {
+                logger.warn(
+                    "TXT report location set on detekt {} extension will be ignored for $name task. See " +
+                        "https://detekt.github.io/detekt/gradle.html#reports"
+                )
+            }
+            if (html.outputLocation.isPresent) {
+                logger.warn(
+                    "HTML report location set on detekt {} extension will be ignored for $name task. See " +
+                        "https://detekt.github.io/detekt/gradle.html#reports"
+                )
+            }
+        }
+
         it.debugProp.set(provider { extension.debug })
         it.parallelProp.set(provider { extension.parallel })
         it.disableDefaultRuleSetsProp.set(provider { extension.disableDefaultRuleSets })
