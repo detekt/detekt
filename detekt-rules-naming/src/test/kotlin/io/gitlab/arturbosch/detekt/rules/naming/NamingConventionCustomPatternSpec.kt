@@ -23,7 +23,7 @@ class NamingConventionCustomPatternSpec : Spek({
                     TopLevelPropertyNaming.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
                     EnumNaming.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
                     PackageNaming.PACKAGE_PATTERN -> "^(package_1)$" as T
-                    FunctionNameMaxLength.MAXIMUM_FUNCTION_NAME_LENGTH -> 50 as T
+                    FunctionMaxLength.MAXIMUM_FUNCTION_NAME_LENGTH -> 50 as T
                     else -> default
                 }
         }
@@ -34,7 +34,7 @@ class NamingConventionCustomPatternSpec : Spek({
             override fun subConfig(key: String): TestConfig =
                 when (key) {
                     FunctionNaming::class.simpleName -> configCustomRules
-                    FunctionNameMaxLength::class.simpleName -> configCustomRules
+                    FunctionMaxLength::class.simpleName -> configCustomRules
                     ClassNaming::class.simpleName -> configCustomRules
                     VariableNaming::class.simpleName -> configCustomRules
                     TopLevelPropertyNaming::class.simpleName -> configCustomRules

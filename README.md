@@ -225,7 +225,6 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Andre Paz](https://github.com/andrepaz) - Rule improvement: LongParameterList
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyNaming
 - [Vladislav Yundin](https://github.com/Yundin) - Rule fix: Indentation
-- [Mohamed Elmahdi](https://github.com/mohamed-elmahdi) - Rule improvement: Rename FunctionMinLength/FunctionMaxLength
 
 ### Mentions
 

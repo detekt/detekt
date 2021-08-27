@@ -13,33 +13,29 @@ import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * Reports when very long function names are used.
+ * Reports when very short function names are used.
  */
-class FunctionNameMaxLength(config: Config = Config.empty) : Rule(config) {
+class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Function names should not be longer than the maximum set in the project configuration.",
+        "Function names should not be shorter than the minimum defined in the configuration.",
         debt = Debt.FIVE_MINS
     )
 
-    @Configuration("maximum name length")
-    private val maximumFunctionNameLength: Int by config(30)
+    @Configuration("minimum name length")
+    private val minimumFunctionNameLength: Int by config(3)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.identifierName().length > maximumFunctionNameLength) {
+        if (function.identifierName().length < minimumFunctionNameLength) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atName(function),
-                    message = "Function names should be at most $maximumFunctionNameLength characters long."
+                    message = "Function names should be at least $minimumFunctionNameLength characters long."
                 )
             )
         }
-    }
-
-    companion object {
-        const val MAXIMUM_FUNCTION_NAME_LENGTH = "maximumFunctionNameLength"
     }
 }
