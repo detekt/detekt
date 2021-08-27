@@ -22,7 +22,7 @@ internal class ConfigValidationSpec : Spek({
             assertThat(result).isEmpty()
         }
 
-        it("passes for properties which may appear on rules but may be not present in default config") {
+        it("passes for properties which may appear on rules and rule sets but may be not present in default config") {
             val result = validateConfig(
                 yamlConfig("config_validation/default-excluded-properties.yml"),
                 baseline

@@ -13,7 +13,6 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public fun getFile ()Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
-	public final fun getInternalSeverity$detekt_api ()Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public fun getMessage ()Ljava/lang/String;
@@ -24,7 +23,6 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public fun messageOrDescription ()Ljava/lang/String;
 	public fun metricByType (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
-	public final fun setInternalSeverity$detekt_api (Lio/gitlab/arturbosch/detekt/api/SeverityLevel;)V
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -446,10 +444,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware 
 	public abstract fun register (Ljava/lang/String;Ljava/lang/Object;)V
 }
 
-public final class io/gitlab/arturbosch/detekt/api/PropertiesAwareKt {
-	public static final synthetic fun getOrNull (Lio/gitlab/arturbosch/detekt/api/PropertiesAware;Ljava/lang/String;)Ljava/lang/Object;
-}
-
 public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtension : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public abstract fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
@@ -479,7 +473,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public fun getParentPath ()Ljava/lang/String;
 	public final fun getRuleId ()Ljava/lang/String;
 	public fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public final fun getRuleSetId$detekt_api ()Ljava/lang/String;
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
 	public final fun report (Ljava/util/List;)V
 	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
@@ -487,9 +480,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
 	public fun withAutoCorrect (Lkotlin/jvm/functions/Function0;)V
-}
-
-public final class io/gitlab/arturbosch/detekt/api/RuleKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
@@ -500,9 +490,6 @@ public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public final fun getPathFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public final fun getRules ()Ljava/util/List;
 	public final fun setPathFilters (Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;)V
-}
-
-public final class io/gitlab/arturbosch/detekt/api/RuleSetKt {
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {

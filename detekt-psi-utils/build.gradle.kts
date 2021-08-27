@@ -1,6 +1,6 @@
 plugins {
     module
-    id("binary-compatibility-validator")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 dependencies {

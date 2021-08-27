@@ -17,6 +17,9 @@ abstract class MultiRule : BaseRule() {
 
     override fun preVisit(root: KtFile) {
         activeRules = rules.filterTo(HashSet(rules.size)) { it.visitCondition(root) }
+        activeRules.forEach { singleRule ->
+            singleRule.bindingContext = this.bindingContext
+        }
     }
 
     override fun postVisit(root: KtFile) {
