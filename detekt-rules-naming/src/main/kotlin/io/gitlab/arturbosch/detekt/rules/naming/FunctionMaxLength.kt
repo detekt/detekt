@@ -24,6 +24,9 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
+    override val defaultRuleIdAliases: Set<String>
+        get() = setOf("FunctionMaxNameLength")
+
     @Configuration("maximum name length")
     private val maximumFunctionNameLength: Int by config(30)
 
