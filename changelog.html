@@ -464,7 +464,22 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1180---2021-08-12">1.18.0 - 2021-08-12</h4>
+  <h4 id="1181---2021-08-30">1.18.1 - 2021-08-30</h4>
+
+<p>This is a point release for Detekt <code class="language-plaintext highlighter-rouge">1.18.0</code> containing bugfixes for problems that got discovered just after the release.</p>
+
+<h5 id="notable-changes">Notable Changes</h5>
+
+<ul>
+  <li>MultiRule should pass correctly the BindingContext - <a href="https://github.com/detekt/detekt/pull/4071">#4071</a></li>
+  <li>Allow active, excludes and includes in the rule-set configuration - <a href="https://github.com/detekt/detekt/pull/4045">#4045</a></li>
+  <li>Remove Error from ThrowingExceptionsWithoutMessageOrCause because is a common name - <a href="https://github.com/detekt/detekt/pull/4046">#4046</a></li>
+  <li>Fix issue IDs for ReferentialEquality and DoubleMutability - <a href="https://github.com/detekt/detekt/pull/4040">#4040</a></li>
+</ul>
+
+<p>See all issues at: <a href="https://github.com/detekt/detekt/milestone/84">1.18.1</a></p>
+
+<h4 id="1180---2021-08-12">1.18.0 - 2021-08-12</h4>
 
 <p>We’re more than excited to introduce you a next stable release of Detekt: <code class="language-plaintext highlighter-rouge">1.18.0</code> 🎉
 This release is coming with a lot of changes, new rules, evolution in the API and stability improvements.</p>
@@ -472,7 +487,7 @@ This release is coming with a lot of changes, new rules, evolution in the API an
 <p>We want to take the opportunity to thank our contributors for testing, bug reporting and helping
 us release this new version of Detekt.</p>
 
-<h5 id="notable-changes">Notable Changes</h5>
+<h5 id="notable-changes-1">Notable Changes</h5>
 
 <ul>
   <li>We’ve added two new rules: <code class="language-plaintext highlighter-rouge">AvoidReferentialEquality</code> and <code class="language-plaintext highlighter-rouge">BooleanPropertyNaming</code> (see <a href="https://github.com/detekt/detekt/pull/3924">#3924</a> and <a href="https://github.com/detekt/detekt/pull/3795">#3795</a>)</li>
@@ -663,7 +678,7 @@ private val allowedPattern: Regex by config("", String::toRegex)
 
 <h4 id="1171---2021-05-19">1.17.1 - 2021-05-19</h4>
 
-<h5 id="notable-changes-1">Notable Changes</h5>
+<h5 id="notable-changes-2">Notable Changes</h5>
 
 <p>This is a patch release for Detekt <code class="language-plaintext highlighter-rouge">1.17.0</code> including fixes that we considered worth a point release.</p>
 
@@ -681,7 +696,7 @@ private val allowedPattern: Regex by config("", String::toRegex)
 
 <h4 id="1170---2021-05-15">1.17.0 - 2021-05-15</h4>
 
-<h5 id="notable-changes-2">Notable Changes</h5>
+<h5 id="notable-changes-3">Notable Changes</h5>
 
 <ul>
   <li>We’re introducing our new Project logo :). See <a href="https://github.com/detekt/detekt/pull/3726">#3726</a></li>
@@ -952,7 +967,7 @@ private val allowedPattern: Regex by config("", String::toRegex)
 
 <h4 id="1150---2020-12-18">1.15.0 - 2020-12-18</h4>
 
-<h5 id="notable-changes-3">Notable Changes</h5>
+<h5 id="notable-changes-4">Notable Changes</h5>
 
 <p>detekt 1.15.0 bundles Kotlin 1.4.10.<br />
 You may experience some known issues when your project already uses 1.4.20</p>
@@ -1147,7 +1162,7 @@ Rule authors can use <code class="language-plaintext highlighter-rouge">TestConf
 
 <h4 id="1140---2020-09-26">1.14.0 - 2020-09-26</h4>
 
-<h5 id="notable-changes-4">Notable Changes</h5>
+<h5 id="notable-changes-5">Notable Changes</h5>
 
 <ul>
   <li>New standard rules: <code class="language-plaintext highlighter-rouge">ReplaceSafeCallChainWithRun</code>, <code class="language-plaintext highlighter-rouge">ClassOrdering</code>, <code class="language-plaintext highlighter-rouge">SuspendFunWithFlowReturnType</code></li>
@@ -1196,7 +1211,7 @@ Rule authors can use <code class="language-plaintext highlighter-rouge">TestConf
 
 <h4 id="1131---2020-09-13">1.13.1 - 2020-09-13</h4>
 
-<h5 id="notable-changes-5">Notable Changes</h5>
+<h5 id="notable-changes-6">Notable Changes</h5>
 
 <p>We now publish directly to maven central.
 The 1.13.0 release got corrupted and should not be used.</p>
@@ -1249,7 +1264,7 @@ The 1.13.0 release got corrupted and should not be used.</p>
 
 <h4 id="1120---2020-08-25">1.12.0 - 2020-08-25</h4>
 
-<h5 id="notable-changes-6">Notable Changes</h5>
+<h5 id="notable-changes-7">Notable Changes</h5>
 
 <ul>
   <li>Kotlin 1.4 support</li>
@@ -1327,7 +1342,7 @@ We will include test sources by default in detekt <code class="language-plaintex
 
 <h4 id="1120-rc1---2020-08-20">1.12.0-RC1 - 2020-08-20</h4>
 
-<h5 id="notable-changes-7">Notable Changes</h5>
+<h5 id="notable-changes-8">Notable Changes</h5>
 
 <p>The Gradle plugin now requires at least Gradle 5.4. This aligns with Kotlin’s Gradle plugin.</p>
 
@@ -1499,7 +1514,7 @@ See all issues at: <a href="https://github.com/detekt/detekt/milestone/69">1.11.
 
 <h4 id="1100">1.10.0</h4>
 
-<h5 id="notable-changes-8">Notable Changes</h5>
+<h5 id="notable-changes-9">Notable Changes</h5>
 
 <ul>
   <li>New rules: <code class="language-plaintext highlighter-rouge">IgnoredReturnValue</code>, <code class="language-plaintext highlighter-rouge">ImplictUnitReturnType</code></li>
@@ -1693,7 +1708,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 <h4 id="180">1.8.0</h4>
 
-<h5 id="notable-changes-9">Notable Changes</h5>
+<h5 id="notable-changes-10">Notable Changes</h5>
 
 <ul>
   <li>Most rule properties now support yaml lists next to string’s with comma-separated-entries.</li>
@@ -1755,7 +1770,7 @@ There are alternative ways to run these scripts: https://www.jetbrains.com/help/
 
 <h4 id="174">1.7.4</h4>
 
-<h5 id="notable-changes-10">Notable Changes</h5>
+<h5 id="notable-changes-11">Notable Changes</h5>
 
 <p>The last Gradle plugin version was referencing 1.7.2 instead of 1.7.3.
 This was fixed and specifying the <code class="language-plaintext highlighter-rouge">toolVersion</code> is not necessary anymore.</p>
@@ -1874,7 +1889,7 @@ This was fixed and specifying the <code class="language-plaintext highlighter-ro
 
 <h4 id="170">1.7.0</h4>
 
-<h5 id="notable-changes-11">Notable Changes</h5>
+<h5 id="notable-changes-12">Notable Changes</h5>
 
 <ul>
   <li>The Gradle plugin should be on par with the CLI performance-wise</li>
@@ -2041,7 +2056,7 @@ This will be done by default now.</p>
 
 <h4 id="150">1.5.0</h4>
 
-<h5 id="notable-changes-12">Notable Changes</h5>
+<h5 id="notable-changes-13">Notable Changes</h5>
 
 <ul>
   <li>detekt is now <em>silent</em> by default. It only prints something if issues are found.
@@ -2107,7 +2122,7 @@ Remove the following excludes if you want the old behavior back.</li>
 
 <h4 id="140">1.4.0</h4>
 
-<h5 id="notable-changes-13">Notable Changes</h5>
+<h5 id="notable-changes-14">Notable Changes</h5>
 
 <p>New rule set <code class="language-plaintext highlighter-rouge">coroutines</code> with two specialized rules was added.<br />
 As always new rules must be activated by the user until they get stable.</p>
@@ -2200,7 +2215,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="130">1.3.0</h4>
 
-<h5 id="notable-changes-14">Notable changes</h5>
+<h5 id="notable-changes-15">Notable changes</h5>
 
 <ul>
   <li>Minimal Gradle version increased to 5.0</li>
@@ -2239,7 +2254,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="122">1.2.2</h4>
 
-<h5 id="notable-changes-15">Notable Changes</h5>
+<h5 id="notable-changes-16">Notable Changes</h5>
 
 <ul>
   <li>1.2.1 introduced breaking changes for users of Gradle &lt; 5. This was reverted.</li>
@@ -2266,7 +2281,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="121">1.2.1</h4>
 
-<h5 id="notable-changes-16">Notable changes</h5>
+<h5 id="notable-changes-17">Notable changes</h5>
 
 <ul>
   <li>Supports Kotlin 1.3.60</li>
@@ -2305,7 +2320,7 @@ As always new rules must be activated by the user until they get stable.</p>
 
 <h4 id="120">1.2.0</h4>
 
-<h5 id="notable-changes-17">Notable changes</h5>
+<h5 id="notable-changes-18">Notable changes</h5>
 
 <ul>
   <li>The HTML report now includes the complexity metrics and previews of the code locations.</li>
@@ -2480,7 +2495,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
 
 <h4 id="101">1.0.1</h4>
 
-<h5 id="notable-changes-18">Notable changes</h5>
+<h5 id="notable-changes-19">Notable changes</h5>
 
 <ul>
   <li><a href="https://detekt.github.io/detekt/howto-silent-reports.html">detekt runs can be completely silent on absence of findings</a></li>
@@ -2575,7 +2590,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Aug 24, 2021 <br />
+ Site last generated: Aug 30, 2021 <br />
                 </div>
             </div>
 </footer>
