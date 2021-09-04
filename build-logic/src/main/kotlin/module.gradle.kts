@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("packaging")
     kotlin("jvm")
     `maven-publish`
     jacoco
@@ -108,10 +109,4 @@ java {
     withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-publishing {
-    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
-        from(components["java"])
-    }
 }

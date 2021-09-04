@@ -13,5 +13,4 @@ dependencies {
     implementation(libs.detekt.gradle)
     implementation(libs.githubRelease.gradle)
     implementation(libs.semver4j.gradle)
-    implementation(libs.nexusStaging.gradle)
 }
