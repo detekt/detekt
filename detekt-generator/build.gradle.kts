@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    module
+    id("module")
 }
 
 dependencies {

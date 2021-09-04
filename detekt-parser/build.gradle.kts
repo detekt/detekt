@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 
 plugins {
-    module
+    id("module")
 }
 
 dependencies {

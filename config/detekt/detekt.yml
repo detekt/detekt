@@ -107,7 +107,7 @@ formatting:
 naming:
   InvalidPackageDeclaration:
     active: true
-    excludes: ['**/buildSrc/**/*.kt', '**/*.kts']
+    excludes: ['**/build-logic/**/*.kt', '**/*.kts']
   NoNameShadowing:
     active: true
   NonBooleanPropertyPrefixedWithIs:

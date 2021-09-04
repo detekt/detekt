@@ -32,7 +32,7 @@ project.afterEvaluate {
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {
-    val versionsFile = file("${rootProject.rootDir}/buildSrc/src/main/kotlin/Versions.kt")
+    val versionsFile = file("${rootProject.rootDir}/build-logic/src/main/kotlin/Versions.kt")
     val newContent = versionsFile.readLines()
         .joinToString("\n") {
             if (it.contains("const val DETEKT: String")) {
