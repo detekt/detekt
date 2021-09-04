@@ -1,5 +1,5 @@
 plugins {
-    module
+    id("module")
     alias(libs.plugins.binaryCompatibilityValidator)
 }
 

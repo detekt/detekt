@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.shadow)
-    module
+    id("module")
     application
 }
 

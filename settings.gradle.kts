@@ -1,4 +1,9 @@
 rootProject.name = "detekt"
+
+pluginManagement {
+    includeBuild("build-logic")
+}
+
 include(
     "code-coverage-report",
     "custom-checks",

@@ -1,5 +1,5 @@
 plugins {
-    module
+    id("module")
     `java-gradle-plugin`
     alias(libs.plugins.pluginPublishing)
 }
