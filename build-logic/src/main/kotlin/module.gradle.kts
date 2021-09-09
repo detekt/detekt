@@ -8,7 +8,6 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     jacoco
-    id("detekt")
 }
 
 // bundle detekt's version for all jars to use it at runtime

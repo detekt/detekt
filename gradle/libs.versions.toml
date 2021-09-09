@@ -6,7 +6,6 @@ ktlint = "0.42.1"
 spek = "2.0.17"
 
 [libraries]
-detekt-gradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.1"
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 
@@ -41,6 +40,7 @@ jcommander = "com.beust:jcommander:1.81"
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.7.0" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.18.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.39.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.15.0" }
