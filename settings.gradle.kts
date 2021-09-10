@@ -9,7 +9,6 @@ include(
     "custom-checks",
     "detekt-api",
     "detekt-cli",
-    "detekt-bom",
     "detekt-core",
     "detekt-formatting",
     "detekt-generator",

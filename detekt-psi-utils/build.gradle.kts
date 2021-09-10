@@ -5,4 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.kotlin.compilerEmbeddable)
+
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }

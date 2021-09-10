@@ -15,6 +15,9 @@ dependencies {
     }
 
     testImplementation(projects.detektTest)
+    testImplementation(libs.bundles.testImplementation)
+
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
