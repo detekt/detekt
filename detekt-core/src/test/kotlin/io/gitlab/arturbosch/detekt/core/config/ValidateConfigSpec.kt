@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class ConfigValidationSpec : Spek({
+internal class ValidateConfigSpec : Spek({
 
     describe("validate configuration file") {
 
