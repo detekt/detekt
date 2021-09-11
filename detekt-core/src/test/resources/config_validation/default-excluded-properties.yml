@@ -7,3 +7,4 @@ style:
     autoCorrect: true
     excludes: []
     includes: []
+    ignoreAnnotated: []

@@ -68,6 +68,17 @@ class AnalyzerSpec : Spek({
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
         }
+
+        it("with findings but ignored") {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct-ignore-annotated.yml")
+            )
+            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
+
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
+        }
     }
 })
 
