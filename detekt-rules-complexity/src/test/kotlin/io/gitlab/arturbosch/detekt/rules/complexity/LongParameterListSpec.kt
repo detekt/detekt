@@ -99,7 +99,7 @@ class LongParameterListSpec : Spek({
             val config by memoized {
                 TestConfig(
                     mapOf(
-                        "ignoreAnnotated" to listOf(
+                        "ignoreAnnotatedParameter" to listOf(
                             "Generated",
                             "kotlin.Deprecated",
                             "kotlin.jvm.JvmName",
