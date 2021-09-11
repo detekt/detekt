@@ -1,11 +1,10 @@
-package io.gitlab.arturbosch.detekt.generator.printer
+package io.gitlab.arturbosch.detekt.generator
 
-import io.gitlab.arturbosch.detekt.generator.GeneratorArgs
+import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
 import io.gitlab.arturbosch.detekt.generator.out.YamlWriter
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrinter
+import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
+import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
 

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
+package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 
