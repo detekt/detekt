@@ -34,6 +34,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                     abstract class A {
                         abstract val i: Int
                         abstract fun f()
+                        public abstract fun f2()
                     }
                 """
                 val findings = subject.compileAndLintWithContext(env, code)
@@ -53,6 +54,23 @@ class UnnecessaryAbstractClassSpec : Spek({
                     abstract class B : A() {
                         abstract fun g()
                     } 
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report an abstract class with a internal abstract member") {
+                val code = """
+                    abstract class A {
+                        internal abstract fun f()
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+            it("does not report an abstract class with a protected abstract member") {
+                val code = """
+                    abstract class A {
+                        protected abstract fun f()
+                    }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
