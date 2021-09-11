@@ -108,6 +108,7 @@ class BaselineResultMappingSpec : Spek({
         it("should update an existing baseline file if a file is configured") {
             val existing = Baseline.load(existingBaselineFile)
             val mapping = resultMapping(
+
                 baselineFile = existingBaselineFile,
                 createBaseline = true,
             )

@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt.generator
 
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
+import io.gitlab.arturbosch.detekt.generator.out.PropertiesWriter
 import io.gitlab.arturbosch.detekt.generator.out.YamlWriter
+import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 
@@ -10,6 +12,7 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
 
     private val markdownWriter = MarkdownWriter()
     private val yamlWriter = YamlWriter()
+    private val propertiesWriter = PropertiesWriter()
 
     fun print(pages: List<RuleSetPage>) {
         pages.forEach {
@@ -18,6 +21,7 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
             }
         }
         yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
+        propertiesWriter.write(arguments.configPath, "deprecation") { DeprecatedPrinter.print(pages) }
     }
 
     private fun jekyllHeader(ruleSet: String): String {
