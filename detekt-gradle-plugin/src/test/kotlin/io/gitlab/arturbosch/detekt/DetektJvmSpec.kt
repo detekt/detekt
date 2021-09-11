@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.triggerEvaluation
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.repositories
@@ -37,7 +38,7 @@ object DetektJvmSpec : Spek({
             it("configures detekt type resolution task main") {
                 val project = gradleRunner.buildProject()
 
-                project.getTasksByName("detektMain", true) // trigger project evaluation
+                project.triggerEvaluation()
 
                 val detektTask = project.tasks.getByPath("detektMain") as Detekt
                 val argumentString = detektTask.arguments.flatMap(CliArgument::toArgument).joinToString(" ")
@@ -52,7 +53,7 @@ object DetektJvmSpec : Spek({
             it("configures detekt type resolution task test") {
                 val project = gradleRunner.buildProject()
 
-                project.getTasksByName("detektTest", true) // trigger project evaluation
+                project.triggerEvaluation()
 
                 val detektTask = project.tasks.getByPath("detektTest") as Detekt
                 val argumentString = detektTask.arguments.flatMap(CliArgument::toArgument).joinToString(" ")
