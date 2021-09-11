@@ -57,6 +57,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("allows to provide a list of annotations that disable this check")
+    @Deprecated("Use `ignoreAnnotated` instead")
     private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
         classes.map { it.removePrefix("*").removeSuffix("*") }
     }
@@ -66,7 +67,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
+        val annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedClasses)
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 
