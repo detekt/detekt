@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
+import java.util.Properties
 
 /**
  * Known existing properties on rule's which my be absent in the default-detekt-config.yml.
@@ -23,13 +24,6 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>severity",
     "build>weights.*",
 ).joinToString(",")
-
-private val DEPRECATED_PROPERTIES = setOf(
-    "complexity>LongParameterList>threshold" to "Use 'functionThreshold' and 'constructorThreshold' instead",
-    "empty-blocks>EmptyFunctionBlock>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
-    "naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
-    "naming>MemberNameEqualsClassName>ignoreOverriddenFunction" to "Use 'ignoreOverridden' instead"
-).map { (first, second) -> first.toRegex() to second }
 
 fun validateConfig(
     config: Config,
@@ -70,11 +64,21 @@ internal fun validateConfig(
     val (warningsAsErrors, excludePatterns) = settings
     val notifications = mutableListOf<Notification>()
 
+    fun getDeprecatedProperties(): List<Pair<Regex, String>> {
+        return settings.javaClass.classLoader.getResourceAsStream("deprecation.properties")!!.use { inputStream ->
+            val prop = Properties().apply { load(inputStream) }
+
+            prop.entries.map { entry ->
+                (entry.key as String).toRegex() to (entry.value as String)
+            }
+        }
+    }
+
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {
         for (prop in current.keys) {
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
 
-            val deprecationWarning = DEPRECATED_PROPERTIES
+            val deprecationWarning = getDeprecatedProperties()
                 .find { (regex, _) -> regex.matches(propertyPath) }
                 ?.second
             val isExcluded = excludePatterns.any { it.matches(propertyPath) }
