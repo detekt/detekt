@@ -81,6 +81,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             apiVersion = args.apiVersion?.versionString
             classpath = args.classpath?.trim()
             jdkHome = args.jdkHome
+            freeCompilerArgs = args.freeCompilerArgs
         }
     }
 }

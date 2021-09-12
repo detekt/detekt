@@ -11,8 +11,10 @@ class CompilerSpecBuilder : Builder<CompilerSpec> {
     var apiVersion: String? = null
     var classpath: String? = null
     var jdkHome: Path? = null
+    var freeCompilerArgs: List<String> = emptyList()
 
-    override fun build(): CompilerSpec = CompilerModel(jvmTarget, languageVersion, apiVersion, classpath, jdkHome)
+    override fun build(): CompilerSpec =
+        CompilerModel(jvmTarget, languageVersion, apiVersion, classpath, jdkHome, freeCompilerArgs)
 }
 
 private data class CompilerModel(
@@ -21,4 +23,5 @@ private data class CompilerModel(
     override val apiVersion: String?,
     override val classpath: String?,
     override val jdkHome: Path?,
+    override val freeCompilerArgs: List<String>,
 ) : CompilerSpec

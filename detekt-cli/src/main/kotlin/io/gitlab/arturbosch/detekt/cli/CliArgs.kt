@@ -221,6 +221,9 @@ class CliArgs {
     )
     var showVersion: Boolean = false
 
+    @Parameter(description = "Options to pass to the Kotlin compiler.", hidden = true)
+    var freeCompilerArgs: List<String> = mutableListOf()
+
     val failurePolicy: RulesSpec.FailurePolicy
         get() {
             return when (val minSeverity = failOnSeverity) {

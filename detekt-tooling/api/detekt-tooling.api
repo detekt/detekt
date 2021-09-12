@@ -100,6 +100,7 @@ public abstract interface class io/github/detekt/tooling/api/spec/BaselineSpec {
 public abstract interface class io/github/detekt/tooling/api/spec/CompilerSpec {
 	public abstract fun getApiVersion ()Ljava/lang/String;
 	public abstract fun getClasspath ()Ljava/lang/String;
+	public abstract fun getFreeCompilerArgs ()Ljava/util/List;
 	public abstract fun getJdkHome ()Ljava/nio/file/Path;
 	public abstract fun getJvmTarget ()Ljava/lang/String;
 	public abstract fun getLanguageVersion ()Ljava/lang/String;
@@ -237,11 +238,13 @@ public final class io/github/detekt/tooling/dsl/CompilerSpecBuilder : io/github/
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getApiVersion ()Ljava/lang/String;
 	public final fun getClasspath ()Ljava/lang/String;
+	public final fun getFreeCompilerArgs ()Ljava/util/List;
 	public final fun getJdkHome ()Ljava/nio/file/Path;
 	public final fun getJvmTarget ()Ljava/lang/String;
 	public final fun getLanguageVersion ()Ljava/lang/String;
 	public final fun setApiVersion (Ljava/lang/String;)V
 	public final fun setClasspath (Ljava/lang/String;)V
+	public final fun setFreeCompilerArgs (Ljava/util/List;)V
 	public final fun setJdkHome (Ljava/nio/file/Path;)V
 	public final fun setJvmTarget (Ljava/lang/String;)V
 	public final fun setLanguageVersion (Ljava/lang/String;)V
