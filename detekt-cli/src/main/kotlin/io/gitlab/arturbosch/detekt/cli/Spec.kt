@@ -68,6 +68,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             jvmTarget = args.jvmTarget.description
             languageVersion = args.languageVersion?.versionString
             classpath = args.classpath?.trim()
+            freeCompilerArgs = args.freeCompilerArgs
         }
     }
 }

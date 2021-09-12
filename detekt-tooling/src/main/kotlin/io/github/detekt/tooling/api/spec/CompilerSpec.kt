@@ -19,4 +19,9 @@ interface CompilerSpec {
      * Paths to class files and jars separated by a path separator.
      */
     val classpath: String?
+
+    /**
+     * Options to pass to the Kotlin compiler.
+     */
+    val freeCompilerArgs: List<String>
 }

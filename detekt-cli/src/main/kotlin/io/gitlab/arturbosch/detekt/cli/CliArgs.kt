@@ -200,6 +200,9 @@ class CliArgs {
     )
     var showVersion: Boolean = false
 
+    @Parameter(description = "Options to pass to the Kotlin compiler.", hidden = true)
+    var freeCompilerArgs: MutableList<String> = mutableListOf()
+
     val inputPaths: List<Path> by lazy {
         MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
     }
