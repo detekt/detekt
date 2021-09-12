@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import java.io.Closeable
 import java.io.File
 
@@ -41,7 +42,13 @@ internal class EnvironmentFacade(
             compilerSpec.parseLanguageVersion(),
             compilerSpec.parseJvmTarget()
         )
-        createKotlinCoreEnvironment(compilerConfiguration, disposable)
+
+        val env = createKotlinCoreEnvironment(compilerConfiguration, disposable)
+
+        val visibilityManager = ModuleVisibilityManager.SERVICE.getInstance(env.project)
+        compilerArguments.friendPaths?.forEach(visibilityManager::addFriendPath)
+
+        env
     }
 
     override fun close() {
