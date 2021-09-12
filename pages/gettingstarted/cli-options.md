@@ -42,7 +42,7 @@ Usage: detekt [options]
       Disables default rule sets.
       Default: false
     --excludes, -ex
-      Globing patterns describing paths to exclude from the analysis.
+      Globbing patterns describing paths to exclude from the analysis.
     --fail-fast
       DEPRECATED: please use '--build-upon-default-config' together with 
       '--all-rules'. Same as 'build-upon-default-config' but explicitly 
@@ -58,7 +58,7 @@ Usage: detekt [options]
     --help, -h
       Shows the usage.
     --includes, -in
-      Globing patterns describing paths to include in the analysis. Useful in 
+      Globbing patterns describing paths to include in the analysis. Useful in 
       combination with 'excludes' patterns.
     --input, -i
       Input paths to analyze. Multiple paths are separated by comma. If not 
