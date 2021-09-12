@@ -55,6 +55,7 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
+	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
@@ -80,6 +81,7 @@ public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
+	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
