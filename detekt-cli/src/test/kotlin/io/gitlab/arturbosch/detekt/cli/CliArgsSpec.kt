@@ -88,11 +88,6 @@ internal class CliArgsSpec : Spek({
             assertThatExceptionOfType(HelpRequest::class.java)
                 .isThrownBy { parseArguments(arrayOf("--help")) }
         }
-
-        it("throws HandledArgumentViolation on wrong options") {
-            assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { parseArguments(arrayOf("--unknown-to-us-all")) }
-        }
     }
 
     describe("--all-rules and --fail-fast lead to all rules being activated") {

@@ -6,6 +6,7 @@ import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
+import org.jetbrains.kotlin.cli.common.arguments.validateArguments
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -35,6 +36,8 @@ internal class EnvironmentFacade(
         val compilerArguments = K2JVMCompilerArguments().apply {
             parseCommandLineArguments(compilerSpec.freeCompilerArgs, this)
         }
+
+        validateArguments(compilerArguments.errors)?.let { throw IllegalStateException(it) }
 
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
