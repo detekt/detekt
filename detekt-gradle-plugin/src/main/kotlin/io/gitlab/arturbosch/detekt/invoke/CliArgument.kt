@@ -71,6 +71,10 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
+internal data class FreeArgs(val args: List<String>) : CliArgument() {
+    override fun toArgument(): List<String> = args
+}
+
 internal data class BasePathArgument(val basePath: String?) : CliArgument() {
     override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) }.orEmpty()
 }

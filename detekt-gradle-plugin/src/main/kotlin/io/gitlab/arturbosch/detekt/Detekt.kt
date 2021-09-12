@@ -17,18 +17,21 @@ import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
+import io.gitlab.arturbosch.detekt.invoke.FreeArgs
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.Action
+import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
@@ -184,6 +187,9 @@ open class Detekt @Inject constructor(
         @Optional
         get() = getTargetFileProvider(reports.sarif)
 
+    @Input @Incubating
+    val freeCompilerArgs: ListProperty<String> = objects.listProperty(String::class.java)
+
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
         @Optional
@@ -220,7 +226,7 @@ open class Detekt @Inject constructor(
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
-        ) + convertCustomReportsToArguments()
+        ) + convertCustomReportsToArguments() + FreeArgs(freeCompilerArgs.get())
 
     @InputFiles
     @SkipWhenEmpty
