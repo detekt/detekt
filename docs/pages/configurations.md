@@ -34,7 +34,7 @@ To read about all supported rule sets and rules, use the side navigation `Rule S
 
 ### Path Filters / Excludes / Includes
 
-Fine grained path filters can be defined for each rule or rule set through globing patterns.
+Fine grained path filters can be defined for each rule or rule set through globbing patterns.
 This gives the user more freedom in analyzing only specific files
 and rule authors the ability to write *library only* rules.
 

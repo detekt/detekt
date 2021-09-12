@@ -18,12 +18,12 @@ interface ProjectSpec {
     val inputPaths: Collection<Path>
 
     /**
-     * Globing patterns to exclude sub paths of [inputPaths].
+     * Globbing patterns to exclude sub paths of [inputPaths].
      */
     val excludes: Collection<String>
 
     /**
-     * Globing patterns which apply after paths get excluded by [excludes].
+     * Globbing patterns which apply after paths get excluded by [excludes].
      */
     val includes: Collection<String>
 }
