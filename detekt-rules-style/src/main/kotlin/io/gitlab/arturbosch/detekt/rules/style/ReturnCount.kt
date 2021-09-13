@@ -102,13 +102,12 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         val statements = if (excludeGuardClauses) {
             function.yieldStatementsSkippingGuardClauses<KtReturnExpression>()
         } else {
-            function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
+            function.bodyBlockExpression?.statements?.asSequence().orEmpty()
         }
 
         return statements.flatMap { it.collectDescendantsOfType<KtReturnExpression>().asSequence() }
             .filterNot { it.isExcluded() }
-            .filter { it.getParentOfType<KtNamedFunction>(true) == function }
-            .count()
+            .count { it.getParentOfType<KtNamedFunction>(true) == function }
     }
 
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {

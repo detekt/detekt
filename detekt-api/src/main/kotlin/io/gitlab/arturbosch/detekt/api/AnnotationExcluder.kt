@@ -20,7 +20,7 @@ class AnnotationExcluder(
             .mapNotNull { it.importedFqName?.asString() }
             .map { it.substringAfterLast('.') to it }
             .toMap()
-    } ?: emptyMap()
+    }.orEmpty()
 
     constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
 

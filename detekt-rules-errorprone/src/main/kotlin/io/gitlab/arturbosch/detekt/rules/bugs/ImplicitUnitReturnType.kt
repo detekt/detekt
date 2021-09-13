@@ -10,9 +10,12 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
  * Functions using expression statements have an implicit return type.
@@ -54,6 +57,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     @Configuration("if functions with explicit 'Unit' return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
 
+    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (BindingContext.EMPTY == bindingContext) {
@@ -64,9 +68,12 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
             return
         }
 
-        val isExpressionBody = function.bodyExpression != null
+        val bodyExpression = function.bodyExpression
+        if (bodyExpression == null || bodyExpression.isUnitExpression()) {
+            return
+        }
 
-        if (isExpressionBody && function.hasImplicitUnitReturnType()) {
+        if (function.hasImplicitUnitReturnType()) {
             val message = buildString {
                 append("'${function.name}'  has the implicit return type 'Unit'.")
                 append(" Prefer using a block statement")
@@ -85,10 +92,8 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
         }
     }
 
-    private fun KtNamedFunction.hasImplicitUnitReturnType(): Boolean {
-        val returnType = bodyExpression.getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.returnType
-        return returnType?.toString() == "Unit"
-    }
+    private fun KtExpression.isUnitExpression() = text == StandardNames.FqNames.unit.shortName().asString()
+
+    private fun KtNamedFunction.hasImplicitUnitReturnType() =
+        bodyExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType?.isUnit() == true
 }

@@ -31,19 +31,14 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        val name = classOrObject.name
-        val forbiddenEntries = name?.let { forbiddenName.filter { name.contains(it, ignoreCase = true) } }
+        val name = classOrObject.name ?: return
+        val forbiddenEntries = forbiddenName.filter { name.contains(it, ignoreCase = true) }
 
-        if (forbiddenEntries?.isNotEmpty() == true) {
-            var message = "Class name $name is forbidden as it contains:"
-            forbiddenEntries.forEach { message += " $it," }
-            message.trimEnd { it == ',' }
-
-            report(CodeSmell(issue, Entity.atName(classOrObject), message))
+        if (forbiddenEntries.isEmpty()) {
+            return
         }
-    }
 
-    companion object {
-        const val FORBIDDEN_NAME = "forbiddenName"
+        val message = "Class name $name is forbidden as it contains: ${forbiddenEntries.joinToString(", ")}"
+        report(CodeSmell(issue, Entity.atName(classOrObject), message))
     }
 }

@@ -44,6 +44,7 @@ fun <T : Any, U : Any> config(
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
+@UnstableApi("fallback property handling is still under discussion")
 fun <T : Any> configWithFallback(
     fallbackProperty: KProperty0<T>,
     defaultValue: T
@@ -65,6 +66,7 @@ fun <T : Any> configWithFallback(
  * @param transformer a function that transforms the value from the configuration (or the default) into its final
  * value.
  */
+@UnstableApi("fallback property handling is still under discussion")
 fun <T : Any, U : Any> configWithFallback(
     fallbackProperty: KProperty0<U>,
     defaultValue: T,

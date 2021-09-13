@@ -54,8 +54,8 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     )
     private val methods: List<Pair<String, List<String>?>> by config(
         listOf(
+            "kotlin.io.print",
             "kotlin.io.println",
-            "kotlin.io.print"
         )
     ) { it.map(::extractMethodNameAndParams) }
 
@@ -100,7 +100,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                             CodeSmell(
                                 issue,
                                 Entity.from(expression),
-                                "The method ${it.first}(${expectedParamTypes?.joinToString() ?: ""}) " +
+                                "The method ${it.first}(${expectedParamTypes?.joinToString().orEmpty()}) " +
                                     "has been forbidden in the Detekt config."
                             )
                         )

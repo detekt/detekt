@@ -116,7 +116,7 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
         private fun insideLambdaDo(lambdaArguments: List<KtLambdaArgument>, function: () -> Unit) {
             if (lambdaArguments.isNotEmpty()) {
                 val lambdaArgument = lambdaArguments[0]
-                lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
+                if (lambdaArgument.getLambdaExpression()?.bodyExpression != null) {
                     function()
                 }
             }

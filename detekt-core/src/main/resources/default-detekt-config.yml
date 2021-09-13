@@ -92,15 +92,15 @@ complexity:
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
     nestingFunctions:
-      - 'run'
-      - 'let'
-      - 'apply'
-      - 'with'
       - 'also'
-      - 'use'
+      - 'apply'
       - 'forEach'
       - 'isNotNull'
       - 'ifNull'
+      - 'let'
+      - 'run'
+      - 'use'
+      - 'with'
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -199,10 +199,10 @@ exceptions:
   ExceptionRaisedInUnexpectedLocation:
     active: true
     methodNames:
-      - 'toString'
-      - 'hashCode'
       - 'equals'
       - 'finalize'
+      - 'hashCode'
+      - 'toString'
   InstanceOfCheckForException:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -220,10 +220,10 @@ exceptions:
   SwallowedException:
     active: true
     ignoredExceptionTypes:
-      - 'NumberFormatException'
       - 'InterruptedException'
-      - 'ParseException'
       - 'MalformedURLException'
+      - 'NumberFormatException'
+      - 'ParseException'
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   ThrowingExceptionFromFinally:
     active: true
@@ -234,11 +234,12 @@ exceptions:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
-      - 'Error'
       - 'Exception'
+      - 'IllegalArgumentException'
       - 'IllegalMonitorStateException'
-      - 'NullPointerException'
+      - 'IllegalStateException'
       - 'IndexOutOfBoundsException'
+      - 'NullPointerException'
       - 'RuntimeException'
       - 'Throwable'
   ThrowingNewInstanceOfSameException:
@@ -251,8 +252,8 @@ exceptions:
       - 'Error'
       - 'Exception'
       - 'IllegalMonitorStateException'
-      - 'NullPointerException'
       - 'IndexOutOfBoundsException'
+      - 'NullPointerException'
       - 'RuntimeException'
       - 'Throwable'
     allowedExceptionNameRegex: '_|(ignore|expected).*'
@@ -261,8 +262,8 @@ exceptions:
     exceptionNames:
       - 'Error'
       - 'Exception'
-      - 'Throwable'
       - 'RuntimeException'
+      - 'Throwable'
 
 formatting:
   active: true
@@ -536,8 +537,8 @@ potential-bugs:
     active: false
     restrictToAnnotatedMethods: true
     returnValueAnnotations:
-      - '*.CheckReturnValue'
       - '*.CheckResult'
+      - '*.CheckReturnValue'
     ignoreReturnValueAnnotations:
       - '*.CanIgnoreReturnValue'
   ImplicitDefaultLocale:
@@ -614,9 +615,9 @@ style:
   ForbiddenComment:
     active: true
     values:
-      - 'TODO:'
       - 'FIXME:'
       - 'STOPSHIP:'
+      - 'TODO:'
     allowedPatterns: ''
   ForbiddenImport:
     active: false
@@ -625,8 +626,8 @@ style:
   ForbiddenMethodCall:
     active: false
     methods:
-      - 'kotlin.io.println'
       - 'kotlin.io.print'
+      - 'kotlin.io.println'
   ForbiddenPublicDataClass:
     active: true
     excludes: ['**']

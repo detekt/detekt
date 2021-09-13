@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * <noncompliant>
  * class Foo {
- *     @JvmField lateinit var i1: Int
- *     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
+ *     private lateinit var i1: Int
+ *     lateinit var i2: Int
  * }
  * </noncompliant>
  */

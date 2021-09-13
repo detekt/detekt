@@ -125,7 +125,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             klass.isEnum() ||
             klass.isAnnotation() ||
             klass.isSealed() ||
-            klass.isInline()
+            klass.isInline() ||
+            klass.isValue()
 
     private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
         val primaryConstructor = klass.primaryConstructor

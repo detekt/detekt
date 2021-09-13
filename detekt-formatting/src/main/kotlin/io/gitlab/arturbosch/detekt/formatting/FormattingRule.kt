@@ -55,7 +55,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         val editorConfigProperties = overrideEditorConfigProperties()
 
         if (!editorConfigProperties.isNullOrEmpty()) {
-            val userData = (root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY) ?: emptyMap())
+            val userData = (root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY).orEmpty())
                 .toMutableMap()
             editorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
                 userData[editorConfigProperty.type.name] = Property.builder()
@@ -81,7 +81,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val (line, column) = positionByOffset(offset)
             val location = Location(
                 SourceLocation(line, column),
-                TextLocation(node.startOffset, node.psi.endOffset),
+                getTextLocationForViolation(node, offset),
                 root.toFilePath()
             )
 
@@ -92,11 +92,14 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val packageName = root.packageFqName.asString()
                 .takeIf { it.isNotEmpty() }
                 ?.plus(".")
-                ?: ""
+                .orEmpty()
             val entity = Entity("", "$packageName${root.fileName}:$line", location, root)
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }
+
+    open fun getTextLocationForViolation(node: ASTNode, offset: Int) =
+        TextLocation(node.startOffset, node.psi.endOffset)
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
         wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode

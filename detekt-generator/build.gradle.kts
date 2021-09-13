@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    module
+    id("module")
 }
 
 dependencies {
@@ -13,6 +13,8 @@ dependencies {
     implementation(libs.jcommander)
 
     testImplementation(projects.detektTestUtils)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
@@ -48,7 +50,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output
     )
-    main = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
         ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
@@ -69,10 +71,13 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
     commandLine = listOf("git", "diff", defaultConfigFile)
     standardOutput = configDiff
 
-    if (configDiff.toString().isNotEmpty()) {
-        throw GradleException(
-            "The default-detekt-config.yml is not up-to-date. " +
-                "You can execute the generateDocumentation Gradle task to update it and commit the changed files."
-        )
+    doLast {
+        if (configDiff.toString().isNotEmpty()) {
+            throw GradleException(
+                "The default-detekt-config.yml is not up-to-date. " +
+                    "You can execute the generateDocumentation Gradle task " +
+                    "to update it and commit the changed files."
+            )
+        }
     }
 }

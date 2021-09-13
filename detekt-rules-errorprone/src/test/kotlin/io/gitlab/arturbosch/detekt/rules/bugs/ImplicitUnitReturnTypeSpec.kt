@@ -57,5 +57,13 @@ class ImplicitUnitReturnTypeSpec : Spek({
 
             assertThat(findings).isEmpty()
         }
+
+        it("does not report for Unit expression") {
+            val code = """
+                fun foo() = Unit
+            """
+            val findings = rule.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })

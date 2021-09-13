@@ -290,6 +290,7 @@ class ConfigPropertySpec : Spek({
                 }
             }
         }
+        @OptIn(UnstableApi::class)
         context("configWithFallback") {
             context("primitive") {
                 val configValue = 99

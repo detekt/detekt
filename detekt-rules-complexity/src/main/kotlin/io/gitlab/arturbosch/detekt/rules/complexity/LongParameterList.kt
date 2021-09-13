@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -44,10 +45,12 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
     @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
     private val functionThreshold: Int by configWithFallback(::threshold, DEFAULT_FUNCTION_THRESHOLD)
 
     @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
     private val constructorThreshold: Int by configWithFallback(::threshold, DEFAULT_CONSTRUCTOR_THRESHOLD)
 
@@ -129,7 +132,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private fun KtParameterList.parameterCount(): Int {
         val preFilteredParameters = parameters.filter { !it.isIgnored() }
         return if (ignoreDefaultParameters) {
-            preFilteredParameters.filter { !it.hasDefaultValue() }.size
+            preFilteredParameters.count { !it.hasDefaultValue() }
         } else {
             preFilteredParameters.size
         }

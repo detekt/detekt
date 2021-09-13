@@ -41,7 +41,14 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     )
 
     @Configuration("methods which should not throw exceptions")
-    private val methodNames: List<String> by config(listOf("toString", "hashCode", "equals", "finalize"))
+    private val methodNames: List<String> by config(
+        listOf(
+            "equals",
+            "finalize",
+            "hashCode",
+            "toString",
+        )
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {

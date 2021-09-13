@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -40,6 +41,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverriddenFunctions: Boolean by config(true)
 
     @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 

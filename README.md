@@ -43,7 +43,7 @@ Visit [the project website](https://detekt.github.io/detekt/) for installation g
 - [Suppressing issues via baseline file](https://detekt.github.io/detekt/baseline.html)
 - [Configuring detekt](https://detekt.github.io/detekt/configurations.html)
 - Sample Gradle integrations examples:
-    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/buildSrc/src/main/kotlin/detekt.gradle.kts)
+    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/build-logic/src/main/kotlin/detekt.gradle.kts)
     - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/main/build.gradle)
     - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/main/pom.xml)
     - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
@@ -110,7 +110,7 @@ Gradle 6.1+ is the minimum requirement. However, the recommended versions togeth
 
 | Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
 | -------------- | ------ | ------ | --- | ----------------- | --------------- |
-| `1.17.0` | `7.0.1` | `1.4.32` | `4.2.0` | `1.8` | `15` |
+| `1.18.0` | `7.0.1` | `1.5.21` | `4.2.0` | `1.8` | `16` |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
 
@@ -224,6 +224,8 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dominik Labuda](https://github.com/Dominick1993) - Gradle plugin improvement
 - [Andre Paz](https://github.com/andrepaz) - Rule improvement: LongParameterList
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyNaming
+- [Vladislav Yundin](https://github.com/Yundin) - Rule fix: Indentation
+- [George Poothicottu Jacob](https://github.com/geojakes) - Bug fix: Rule deactivation
 
 ### Mentions
 
@@ -235,6 +237,7 @@ As mentioned in...
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)
+- [Integrating detekt in the Workflow](https://www.raywenderlich.com/24470020-integrating-detekt-in-the-workflow)
 - [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
 - [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
 - [Free Continuous Integration for modern Android apps with CircleCI](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)

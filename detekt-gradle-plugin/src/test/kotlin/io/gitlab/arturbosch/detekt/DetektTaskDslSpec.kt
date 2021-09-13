@@ -85,7 +85,7 @@ internal object DetektTaskDslSpec : Spek({
                 }
 
                 describe("with custom baseline file") {
-                    val baselineFilename = "detekt-baseline.xml"
+                    val baselineFilename = "custom-baseline.xml"
 
                     beforeGroup {
 

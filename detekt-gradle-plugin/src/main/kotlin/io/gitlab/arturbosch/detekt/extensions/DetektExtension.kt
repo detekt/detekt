@@ -78,7 +78,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
      */
     var ignoredFlavors: List<String> = emptyList()
 
-    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
+    fun reports(configure: Action<DetektReports>) {
+        configure.execute(reports)
+    }
 
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"

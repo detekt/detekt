@@ -44,7 +44,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
-        val import = importDirective.importedFqName?.asString() ?: ""
+        val import = importDirective.importedFqName?.asString().orEmpty()
         if (imports.any { it.matches(import) } || containsForbiddenPattern(import)) {
             report(
                 CodeSmell(
