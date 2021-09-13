@@ -33,11 +33,11 @@ internal class EnvironmentFacade(
     override val classpath: List<String> = compilerSpec.classpathEntries()
 
     override val environment: KotlinCoreEnvironment by lazy {
-        val compilerArguments = K2JVMCompilerArguments().apply {
+        val jvmCompilerArguments = K2JVMCompilerArguments().apply {
             parseCommandLineArguments(compilerSpec.freeCompilerArgs, this)
         }
 
-        validateArguments(compilerArguments.errors)?.let { throw IllegalStateException(it) }
+        validateArguments(jvmCompilerArguments.errors)?.let { throw IllegalStateException(it) }
 
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
@@ -49,7 +49,7 @@ internal class EnvironmentFacade(
         val env = createKotlinCoreEnvironment(compilerConfiguration, disposable)
 
         val visibilityManager = ModuleVisibilityManager.SERVICE.getInstance(env.project)
-        compilerArguments.friendPaths?.forEach(visibilityManager::addFriendPath)
+        jvmCompilerArguments.friendPaths?.forEach(visibilityManager::addFriendPath)
 
         env
     }
