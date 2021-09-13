@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.Inactive
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 
 internal fun createRuleSetPage(): RuleSetPage {
     val rules = createRules()

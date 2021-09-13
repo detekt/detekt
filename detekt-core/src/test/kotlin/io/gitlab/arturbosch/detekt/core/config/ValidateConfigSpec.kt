@@ -201,7 +201,7 @@ internal class ValidateConfigSpec : Spek({
                     assertThat(result).contains(
                         propertyIsDeprecated(
                             "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
-                            "Use 'ignoreOverridden' instead",
+                            "Use `ignoreOverridden` instead",
                             reportAsError = warningsAsErrors
                         )
                     )
