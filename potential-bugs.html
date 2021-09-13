@@ -990,8 +990,8 @@ guaranteed. Try using constructor injection or delegation to initialize properti
 <h4 id="noncompliant-code-16">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
-    <span class="nd">@JvmField</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">i1</span><span class="p">:</span> <span class="nc">Int</span>
-    <span class="nd">@JvmField</span> <span class="nd">@SinceKotlin</span><span class="p">(</span><span class="s">"1.0.0"</span><span class="p">)</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">i2</span><span class="p">:</span> <span class="nc">Int</span>
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">i1</span><span class="p">:</span> <span class="nc">Int</span>
+    <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">i2</span><span class="p">:</span> <span class="nc">Int</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
