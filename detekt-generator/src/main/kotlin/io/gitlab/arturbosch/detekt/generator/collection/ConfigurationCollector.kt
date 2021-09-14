@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.C
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isFallbackConfigDelegate
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
@@ -140,25 +141,29 @@ class ConfigurationCollector {
 
     private object ConfigWithFallbackSupport {
         const val FALLBACK_DELEGATE_NAME = "configWithFallback"
-        private const val FALLBACK_ARGUMENT_NAME = "fallbackPropertyName"
+        private const val FALLBACK_ARGUMENT_NAME = "fallbackProperty"
 
         fun KtProperty.isFallbackConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text == FALLBACK_DELEGATE_NAME
 
         fun KtProperty.checkUsingInvalidFallbackReference(properties: List<KtProperty>) {
-            val fallbackPropertyName = getValueArgument(
+            val fallbackPropertyReference = getValueArgument(
                 name = FALLBACK_ARGUMENT_NAME,
                 actionForPositionalMatch = { it.first() }
-            )?.getArgumentExpression()?.text?.withoutQuotes()
-            val hasInvalidFallbackReference = properties
-                .filter { it.isInitializedWithConfigDelegate() }
-                .none { it.name == fallbackPropertyName }
-            if (hasInvalidFallbackReference) {
+            )?.getReferenceIdentifierOrNull()
+
+            val fallbackProperty = properties.find { it.name == fallbackPropertyReference }
+            if (fallbackProperty == null || !fallbackProperty.isInitializedWithConfigDelegate()) {
                 invalidDocumentation {
-                    "The fallback property '$fallbackPropertyName' is missing for property '$name'"
+                    "The fallback property '$fallbackPropertyReference' of property '$name' " +
+                        "must also be defined using a config property delegate "
                 }
             }
         }
+
+        private fun KtValueArgument.getReferenceIdentifierOrNull(): String? =
+            (getArgumentExpression() as? KtCallableReferenceExpression)
+                ?.callableReference?.getIdentifier()?.text
     }
 
     private object ConfigWithAndroidVariantsSupport {
