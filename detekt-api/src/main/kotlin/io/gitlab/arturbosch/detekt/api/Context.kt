@@ -42,6 +42,7 @@ interface Context {
 /**
  * Default [Context] implementation.
  */
+@Deprecated("You should not use this class directly. Use or extend Context instead.")
 open class DefaultContext : Context {
 
     /**
