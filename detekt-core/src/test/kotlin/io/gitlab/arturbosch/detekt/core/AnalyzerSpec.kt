@@ -21,15 +21,6 @@ import java.util.concurrent.CompletionException
 class AnalyzerSpec : Spek({
 
     describe("exceptions during analyze()") {
-
-        it("analyze successfully when config has correct value type in config") {
-            val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
-
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
-        }
-
         it("throw error explicitly when config has wrong value type in config") {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-wrong.yml"))
@@ -59,19 +50,38 @@ class AnalyzerSpec : Spek({
                 .hasCauseInstanceOf(IllegalStateException::class.java)
         }
     }
+
+    describe("analyze successfully when config has correct value type in config") {
+
+        it("no findings") {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
+
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
+        }
+
+        it("with findings") {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
+
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
+        }
+    }
 })
 
-private class StyleRuleSetProvider : RuleSetProvider {
+private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSetProvider {
     override val ruleSetId: String = "style"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(MaxLineLength(config)))
+    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(MaxLineLength(config, threshold)))
 }
 
-private class MaxLineLength(config: Config) : Rule(config) {
+private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
     override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
-    private val lengthThreshold: Int = valueOrDefault("maxLineLength", 100)
+    private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        for (line in file.text.splitToSequence(NL)) {
+        for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
                 report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
             }
