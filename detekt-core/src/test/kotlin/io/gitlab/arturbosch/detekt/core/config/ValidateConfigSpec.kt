@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class ConfigValidationSpec : Spek({
+internal class ValidateConfigSpec : Spek({
 
     describe("validate configuration file") {
 
@@ -22,7 +22,7 @@ internal class ConfigValidationSpec : Spek({
             assertThat(result).isEmpty()
         }
 
-        it("passes for properties which may appear on rules but may be not present in default config") {
+        it("passes for properties which may appear on rules and rule sets but may be not present in default config") {
             val result = validateConfig(
                 yamlConfig("config_validation/default-excluded-properties.yml"),
                 baseline
@@ -201,7 +201,7 @@ internal class ConfigValidationSpec : Spek({
                     assertThat(result).contains(
                         propertyIsDeprecated(
                             "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
-                            "Use 'ignoreOverridden' instead",
+                            "Use `ignoreOverridden` instead",
                             reportAsError = warningsAsErrors
                         )
                     )

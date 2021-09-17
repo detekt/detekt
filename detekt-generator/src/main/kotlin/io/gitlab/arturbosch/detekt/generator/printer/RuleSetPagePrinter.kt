@@ -1,7 +1,8 @@
-package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
+package io.gitlab.arturbosch.detekt.generator.printer
 
 import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownContent
 import io.gitlab.arturbosch.detekt.generator.out.bold
 import io.gitlab.arturbosch.detekt.generator.out.code
@@ -14,7 +15,6 @@ import io.gitlab.arturbosch.detekt.generator.out.item
 import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.markdown
 import io.gitlab.arturbosch.detekt.generator.out.paragraph
-import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
 object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
@@ -69,7 +69,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 list {
                     rule.configuration.forEach {
                         val defaultValues = formatDefaultValues(it.defaultValue)
-                        val defaultAndroidValues = it.defaultAndroidValue?.let(::formatDefaultValues)
+                        val defaultAndroidValues = it.defaultAndroidValue?.let(RuleSetPagePrinter::formatDefaultValues)
                         val defaultString = if (defaultAndroidValues != null) {
                             "(default: ${code { defaultValues }}) (android default: ${code { defaultAndroidValues }})"
                         } else {

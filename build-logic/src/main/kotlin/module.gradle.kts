@@ -100,15 +100,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    implementation(platform(project(":detekt-bom")))
     compileOnly(kotlin("stdlib-jdk8"))
-
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.spekframework.spek2:spek-dsl-jvm")
-    testImplementation("org.reflections:reflections")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5")
 }
 
 java {

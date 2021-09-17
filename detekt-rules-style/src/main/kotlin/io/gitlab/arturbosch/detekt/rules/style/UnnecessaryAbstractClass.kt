@@ -13,15 +13,14 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import io.gitlab.arturbosch.detekt.rules.isInternal
+import io.gitlab.arturbosch.detekt.rules.isProtected
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -61,7 +60,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
-    private val excludeAnnotatedClasses: List<String> by config(listOf("dagger.Module")) { classes ->
+    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
         classes.map { it.removePrefix("*").removeSuffix("*") }
     }
 
@@ -76,10 +75,10 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         if (!klass.isInterface() && klass.isAbstract()) {
             val body = klass.body
             if (body != null) {
-                val namedMembers = body.children.filter { it is KtProperty || it is KtNamedFunction }
+                val namedMembers = body.children.filterIsInstance<KtNamedDeclaration>()
                 val namedClassMembers = NamedClassMembers(klass, namedMembers)
                 namedClassMembers.detectAbstractAndConcreteType()
-            } else if (klass.superTypeListEntries.isEmpty() && !hasNoConstructorParameter(klass)) {
+            } else if (klass.superTypeListEntries.isEmpty() && klass.hasConstructorParameter()) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }
         }
@@ -92,29 +91,24 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun hasNoConstructorParameter(klass: KtClass): Boolean {
-        val primaryConstructor = klass.primaryConstructor
-        return primaryConstructor == null || !primaryConstructor.valueParameters.any()
-    }
+    private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private inner class NamedClassMembers(val klass: KtClass, val namedMembers: List<PsiElement>) {
+    private inner class NamedClassMembers(val klass: KtClass, val members: List<KtNamedDeclaration>) {
 
         fun detectAbstractAndConcreteType() {
-            val firstAbstractMemberIndex = indexOfFirstMember(true)
-            if (firstAbstractMemberIndex == -1 && !hasInheritedMember(true)) {
+            val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+
+            if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-            } else if (isAbstractClassWithoutConcreteMembers(firstAbstractMemberIndex) && !hasInheritedMember(false)) {
+                return
+            }
+
+            if (abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter()) return
+
+            if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
                 report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
             }
         }
-
-        private fun indexOfFirstMember(isAbstract: Boolean, members: List<PsiElement> = this.namedMembers) =
-            members.indexOfFirst { it is KtNamedDeclaration && it.isAbstract() == isAbstract }
-
-        private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int) =
-            indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
-
-        private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
 
         private fun hasInheritedMember(isAbstract: Boolean): Boolean {
             return when {

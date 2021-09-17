@@ -1,10 +1,10 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
-    module
-    id("org.jetbrains.dokka")
+    id("module")
+    alias(libs.plugins.dokka)
     `java-test-fixtures`
-    id("binary-compatibility-validator")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 dependencies {
@@ -12,6 +12,9 @@ dependencies {
     api(projects.detektPsiUtils)
 
     testImplementation(projects.detektTest)
+    testImplementation(libs.bundles.testImplementation)
+
+    testRuntimeOnly(libs.bundles.testRuntime)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
 

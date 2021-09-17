@@ -32,11 +32,36 @@ internal class DetektJvm(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(sourceSet.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-            reports = extension.reports
-            reports.xml.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".xml"))
-            reports.html.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".html"))
-            reports.txt.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".txt"))
-            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, sourceSet.name + ".sarif"))
+
+            reports.xml.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, sourceSet.name + ".xml").absolutePath
+                    }
+                )
+            )
+            reports.html.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, sourceSet.name + ".html").absolutePath
+                    }
+                )
+            )
+            reports.txt.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, sourceSet.name + ".txt").absolutePath
+                    }
+                )
+            )
+            reports.sarif.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, sourceSet.name + ".sarif").absolutePath
+                    }
+                )
+            )
+
             description = "EXPERIMENTAL: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }

@@ -6,6 +6,77 @@ permalink: changelog.html
 toc: true
 ---
 
+#### SNAPSHOT (unreleased)
+
+##### Notable Changes
+
+- Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
+  deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
+
+##### Migration
+
+Configuring reports in the Gradle plugin should be done at the task level instead of at the extension (or global) level.
+The previous recommendation resulted in the report output for multiple tasks overwriting each other when multiple detekt
+tasks were executed in the same Gradle run.
+
+Before this release the recommended way to configure reports was using the `detekt` extension:
+```kotlin
+detekt {
+    reports {
+        xml {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.xml")
+        }
+    }
+}
+```
+
+This meant all detekt tasks would output the report to the same destination. From this detekt release you should enable
+and disable reports for all tasks using the `withType` Gradle method:
+
+```kotlin
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+```groovy
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+To customize the report output location configure the task individually:
+```kotlin
+tasks.detektMain {
+    reports {
+        xml {
+            outputLocation.set(file("build/reports/detekt/customPath.xml"))
+            required.set(true) // reports can also be enabled and disabled at the task level as needed
+        }
+    }
+}
+```
+
+#### 1.18.1 - 2021-08-30    
+
+This is a point release for Detekt `1.18.0` containing bugfixes for problems that got discovered just after the release.
+
+##### Notable Changes
+
+- MultiRule should pass correctly the BindingContext - [#4071](https://github.com/detekt/detekt/pull/4071) 
+- Allow active, excludes and includes in the rule-set configuration - [#4045](https://github.com/detekt/detekt/pull/4045)
+- Remove Error from ThrowingExceptionsWithoutMessageOrCause because is a common name - [#4046](https://github.com/detekt/detekt/pull/4046)
+- Fix issue IDs for ReferentialEquality and DoubleMutability - [#4040](https://github.com/detekt/detekt/pull/4040)
+
+See all issues at: [1.18.1](https://github.com/detekt/detekt/milestone/84)
+
 #### 1.18.0 - 2021-08-12
 
 We're more than excited to introduce you a next stable release of Detekt: `1.18.0` 🎉

@@ -52,7 +52,6 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
     private val exceptions: List<String> by config(
         listOf(
             "ArrayIndexOutOfBoundsException",
-            "Error",
             "Exception",
             "IllegalArgumentException",
             "IllegalMonitorStateException",

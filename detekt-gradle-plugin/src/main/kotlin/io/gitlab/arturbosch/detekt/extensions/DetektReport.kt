@@ -1,15 +1,35 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFile
 import java.io.File
+import javax.inject.Inject
 
-class DetektReport(val type: DetektReportType) {
+open class DetektReport @Inject constructor(val type: DetektReportType, objects: ObjectFactory) {
 
-    var enabled: Boolean? = null
+    @Deprecated("Use required.set(value)")
+    var enabled: Boolean?
+        get() = required.get()
+        set(value) = required.set(value)
 
-    var destination: File? = null
+    @Deprecated("Use outputLocation.set(value)")
+    var destination: File?
+        get() = outputLocation.asFile.getOrNull()
+        set(value) {
+            outputLocation.set(value)
+        }
+
+    @Input
+    val required: Property<Boolean> = objects.property(Boolean::class.java)
+
+    @OutputFile
+    val outputLocation: RegularFileProperty = objects.fileProperty()
 
     override fun toString(): String {
-        return "DetektReport(type='$type', enabled=$enabled, destination=$destination)"
+        return "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
     }
 
     companion object {

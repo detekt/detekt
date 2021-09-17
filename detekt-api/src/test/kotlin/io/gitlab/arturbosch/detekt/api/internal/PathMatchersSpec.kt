@@ -11,7 +11,7 @@ class PathMatchersSpec : Spek({
     val expectedMatch = Paths.get("/detekt/api/Issue.kt")
     val nonMatchingPath = Paths.get("/detekt/cli/Issue.kt")
 
-    describe("supports globing") {
+    describe("supports globbing") {
 
         val libraryPattern = "**/detekt/api/**"
         val matcher by memoized { pathMatcher("glob:$libraryPattern") }

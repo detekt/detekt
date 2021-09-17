@@ -28,6 +28,7 @@ Consider **aligning** your Gradle plugin versions with the one listed below, as 
 
 | Detekt Version | Gradle Version | Kotlin Version | AGP Version | Java Target Level | JDK Version |
 | -------------- | -------------- | -------------- | ----------- | ----------------- | ----------- |
+| `1.18.0`       | `7.0.1`        | `1.5.21`       | `4.2.0`     | `1.8`             | `16`        |
 | `1.17.0`       | `7.0.1`        | `1.4.32`       | `4.2.0`     | `1.8`             | `15`        |
 | `1.16.0`       | `6.8.0`        | `1.4.21`       | `4.1.2`     | `1.8`             | `15`        |
 | `1.15.0`       | `6.8.0`        | `1.4.10`       | `4.0.1`     | `1.8`             | `15`        |
