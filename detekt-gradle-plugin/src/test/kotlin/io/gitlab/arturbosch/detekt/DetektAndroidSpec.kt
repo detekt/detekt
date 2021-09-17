@@ -23,7 +23,7 @@ object DetektAndroidSpec : Spek({
                     buildFileContent = """
                         $APP_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                     baselineFiles = listOf(
@@ -71,16 +71,6 @@ object DetektAndroidSpec : Spek({
                     )
                 }
             }
-
-            it("task :app:check") {
-                gradleRunner.runTasksAndCheckResult(":app:check") { buildResult ->
-                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                    assertThat(buildResult.task(":app:detekt")).isNotNull
-                    assertThat(buildResult.output).contains("--report xml:")
-                    assertThat(buildResult.output).contains("--report sarif:")
-                    assertThat(buildResult.output).doesNotContain("--report txt:")
-                }
-            }
         }
 
         describe("does not configures android tasks if user opts out") {
@@ -92,7 +82,7 @@ object DetektAndroidSpec : Spek({
                     buildFileContent = """
                         $APP_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
@@ -127,7 +117,7 @@ object DetektAndroidSpec : Spek({
                     buildFileContent = """
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                     baselineFiles = listOf(
@@ -175,16 +165,6 @@ object DetektAndroidSpec : Spek({
                     )
                 }
             }
-
-            it(":lib:check") {
-                gradleRunner.runTasksAndCheckResult(":lib:check") { buildResult ->
-                    assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                    assertThat(buildResult.task(":lib:detekt")).isNotNull
-                    assertThat(buildResult.output).contains("--report xml:")
-                    assertThat(buildResult.output).contains("--report sarif:")
-                    assertThat(buildResult.output).doesNotContain("--report txt:")
-                }
-            }
         }
 
         describe("configures android tasks for different build variants") {
@@ -197,7 +177,7 @@ object DetektAndroidSpec : Spek({
                     buildFileContent = """
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_FLAVOR
-                        $DETEKT_BLOCK
+                        $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
@@ -439,8 +419,8 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
     }
 """.trimIndent()
 
-private val DETEKT_BLOCK = """
-    detekt {
+private val DETEKT_REPORTS_BLOCK = """
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
         reports {
             txt.enabled = false
         }

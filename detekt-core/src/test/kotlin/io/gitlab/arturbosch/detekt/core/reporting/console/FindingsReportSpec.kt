@@ -22,9 +22,9 @@ class FindingsReportSpec : Spek({
             val detektion by memoized {
                 object : TestDetektion() {
                     override val findings: Map<String, List<Finding>> = mapOf(
-                        Pair("Ruleset1", listOf(createFinding(), createFinding())),
-                        Pair("EmptyRuleset", emptyList()),
-                        Pair("Ruleset2", listOf(createFinding()))
+                        "Ruleset1" to listOf(createFinding(), createFinding()),
+                        "EmptyRuleset" to emptyList(),
+                        "Ruleset2" to listOf(createFinding())
                     )
                 }
             }
@@ -52,7 +52,7 @@ class FindingsReportSpec : Spek({
         it("reports no findings with rule set containing no smells") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("Ruleset", emptyList())
+                    "Ruleset" to emptyList()
                 )
             }
             assertThat(subject.render(detektion)).isNull()

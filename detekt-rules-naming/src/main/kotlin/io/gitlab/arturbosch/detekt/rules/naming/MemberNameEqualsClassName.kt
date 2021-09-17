@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -67,13 +68,14 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val objectMessage = "A member is named after the object. " +
         "This might result in confusion. Please rename the member."
 
-    @Suppress("unused")
     @Configuration("if overridden functions and properties should be ignored")
     @Deprecated("Use `ignoreOverridden` instead")
     private val ignoreOverriddenFunction: Boolean by config(true)
 
+    @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
     @Configuration("if overridden functions and properties should be ignored")
-    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunction", true)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunction, true)
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {

@@ -43,7 +43,9 @@ private val suppressionAnnotations = setOf("Suppress", "SuppressWarnings")
  */
 fun KtAnnotated.isSuppressedBy(id: RuleId, aliases: Set<String>, ruleSetId: RuleSetId? = null): Boolean {
     val acceptedSuppressionIds = mutableSetOf(id, "ALL", "all", "All")
-    ruleSetId?.let { acceptedSuppressionIds.addAll(listOf(ruleSetId, "$ruleSetId.$id", "$ruleSetId:$id")) }
+    if (ruleSetId != null) {
+        acceptedSuppressionIds.addAll(listOf(ruleSetId, "$ruleSetId.$id", "$ruleSetId:$id"))
+    }
     acceptedSuppressionIds.addAll(aliases)
     return annotationEntries
         .find { it.typeReference?.text in suppressionAnnotations }

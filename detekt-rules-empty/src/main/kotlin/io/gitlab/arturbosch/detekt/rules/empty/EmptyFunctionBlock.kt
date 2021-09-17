@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -22,13 +23,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 @ActiveByDefault(since = "1.0.0")
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
-    @Suppress("unused")
     @Configuration("Excludes all the overridden functions")
     @Deprecated("Use `ignoreOverridden` instead")
     private val ignoreOverriddenFunctions: Boolean by config(false)
 
+    @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
     @Configuration("Excludes all the overridden functions")
-    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunctions", false)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

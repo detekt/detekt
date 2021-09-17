@@ -56,7 +56,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private val excludedFunctions: SplitPattern by config("") { SplitPattern(it) }
 
     @Configuration("allows to provide a list of annotations that disable this check")
-    private val excludeAnnotatedFunction: List<String> by config(listOf("dagger.Provides")) { functions ->
+    private val excludeAnnotatedFunction: List<String> by config(emptyList<String>()) { functions ->
         functions.map { it.removePrefix("*").removeSuffix("*") }
     }
 

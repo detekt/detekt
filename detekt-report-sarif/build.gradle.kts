@@ -1,5 +1,5 @@
 plugins {
-    module
+    id("module")
 }
 
 dependencies {
@@ -9,4 +9,6 @@ dependencies {
     testImplementation(projects.detektTooling)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }

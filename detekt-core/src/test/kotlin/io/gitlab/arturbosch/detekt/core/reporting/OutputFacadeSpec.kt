@@ -19,7 +19,7 @@ internal class OutputFacadeSpec : Spek({
     test("Running the output facade with multiple reports") {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
-        val defaultResult = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+        val defaultResult = DetektResult(mapOf("Key" to listOf(createFinding())))
         val plainOutputPath = createTempFileForTest("detekt", ".txt")
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")

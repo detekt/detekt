@@ -6,7 +6,84 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.18.0-RC3 - 2021-08-05
+#### SNAPSHOT (unreleased)
+
+##### Notable Changes
+
+- Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
+  deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
+
+##### Migration
+
+Configuring reports in the Gradle plugin should be done at the task level instead of at the extension (or global) level.
+The previous recommendation resulted in the report output for multiple tasks overwriting each other when multiple detekt
+tasks were executed in the same Gradle run.
+
+Before this release the recommended way to configure reports was using the `detekt` extension:
+```kotlin
+detekt {
+    reports {
+        xml {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.xml")
+        }
+    }
+}
+```
+
+This meant all detekt tasks would output the report to the same destination. From this detekt release you should enable
+and disable reports for all tasks using the `withType` Gradle method:
+
+```kotlin
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+```groovy
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+To customize the report output location configure the task individually:
+```kotlin
+tasks.detektMain {
+    reports {
+        xml {
+            outputLocation.set(file("build/reports/detekt/customPath.xml"))
+            required.set(true) // reports can also be enabled and disabled at the task level as needed
+        }
+    }
+}
+```
+
+#### 1.18.1 - 2021-08-30    
+
+This is a point release for Detekt `1.18.0` containing bugfixes for problems that got discovered just after the release.
+
+##### Notable Changes
+
+- MultiRule should pass correctly the BindingContext - [#4071](https://github.com/detekt/detekt/pull/4071) 
+- Allow active, excludes and includes in the rule-set configuration - [#4045](https://github.com/detekt/detekt/pull/4045)
+- Remove Error from ThrowingExceptionsWithoutMessageOrCause because is a common name - [#4046](https://github.com/detekt/detekt/pull/4046)
+- Fix issue IDs for ReferentialEquality and DoubleMutability - [#4040](https://github.com/detekt/detekt/pull/4040)
+
+See all issues at: [1.18.1](https://github.com/detekt/detekt/milestone/84)
+
+#### 1.18.0 - 2021-08-12
+
+We're more than excited to introduce you a next stable release of Detekt: `1.18.0` 🎉
+This release is coming with a lot of changes, new rules, evolution in the API and stability improvements.
+
+We want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt.
 
 ##### Notable Changes
 
@@ -18,6 +95,7 @@ toc: true
 - We now use multi-line format for list options in the default detekt config file - [#3827](https://github.com/detekt/detekt/pull/3827)
 - The rule `VarCouldBeVal` has been updated and now works only with type resolution to provide more precise findings - [#3880](https://github.com/detekt/detekt/pull/3880)
 - We removed all the references to `Extensions.getRootArea` that is now deprecated from our codebase. This was affecting users with sporadic crashes. - [#3848](https://github.com/detekt/detekt/pull/3848)
+- For _detekt_ rule authors: We created a Github Template that you can use to bootstrap your custom rule project: [detekt-custom-rule-template](https://github.com/detekt/detekt-custom-rule-template). You can use JitPack to host it and share your rule easily with other members of the community.
 - For _detekt_ rule authors: We finished the rework to use the annotations instead of kdoc tags in rules. Specifically configurations must be configured using `@Configuration` while auto-correction capability should be specified with the `@AutoCorrectable` annotation [#3820](https://github.com/detekt/detekt/pull/3820).
 
 ##### Migration
@@ -84,6 +162,13 @@ private val allowedPattern: Regex by config("", String::toRegex)
 
 ##### Changelog
 
+- [KMP] Fix resolution of Android test classpaths - [#4026](https://github.com/detekt/detekt/pull/4026)
+- Sort config lists - [#4014](https://github.com/detekt/detekt/pull/4014)
+- Multiplatform tasks should not depend on check - [#4025](https://github.com/detekt/detekt/pull/4025)
+- mark configWithFallback as unstable - [#4028](https://github.com/detekt/detekt/pull/4028)
+- UseDataClass: fix false positive on value classes - [#4016](https://github.com/detekt/detekt/pull/4016)
+- ImplicitUnitReturnType: don't report when expression body is 'Unit' - [#4011](https://github.com/detekt/detekt/pull/4011)
+- Fix false positive with UnusedPrivateMember on parameter of a protected function - [#4007](https://github.com/detekt/detekt/pull/4007)
 - ClassNaming: Don't treat Kotlin syntax ` as part of class name - [#3977](https://github.com/detekt/detekt/pull/3977)
 - IgnoredReturnValue: fix false negative when annotation is on the class - [#3979](https://github.com/detekt/detekt/pull/3979) 
 - NoNameShadowing: fix false positive with nested lambda has implicit parameter - [#3991](https://github.com/detekt/detekt/pull/3991)
@@ -142,6 +227,14 @@ private val allowedPattern: Regex by config("", String::toRegex)
 
 ##### Housekeeping & Refactorings
 
+- Enable UnnecessaryLet rule for detekt code base - [#4024](https://github.com/detekt/detekt/pull/4024)
+- enable PreferToOverPairSyntax rule for detekt code base - [#4023](https://github.com/detekt/detekt/pull/4023)
+- Add IllegalArgumentException and IllegalStateException to ThrowingExceptionsWithoutMessageOrCause - [#4013](https://github.com/detekt/detekt/pull/4013)
+- enable more potential-bugs rules for detekt code base - [#3997](https://github.com/detekt/detekt/pull/3997)
+- enable more exception rules for detekt code base - [#3995](https://github.com/detekt/detekt/pull/3995)
+- Enable UseOrEmpty for detekt code base - [#3999](https://github.com/detekt/detekt/pull/3999)
+- enable those rules from the style rule set that have not violation or obvious fixes - [#3998](https://github.com/detekt/detekt/pull/3998)
+- Enable more rules from naming rule set for detekt code base - [#3996](https://github.com/detekt/detekt/pull/3996)
 - Enable UseEmptyCounterpart for detekt code base - [#4000](https://github.com/detekt/detekt/pull/4000) 
 - enable coroutine rules for detekt code base - [#3994](https://github.com/detekt/detekt/pull/3994)
 - Remove "plugin" suffix from version catalog aliases - [#3987](https://github.com/detekt/detekt/pull/3987)

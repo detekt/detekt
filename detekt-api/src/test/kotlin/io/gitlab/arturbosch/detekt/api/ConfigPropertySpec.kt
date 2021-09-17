@@ -290,6 +290,7 @@ class ConfigPropertySpec : Spek({
                 }
             }
         }
+        @OptIn(UnstableApi::class)
         context("configWithFallback") {
             context("primitive") {
                 val configValue = 99
@@ -297,9 +298,11 @@ class ConfigPropertySpec : Spek({
                 val fallbackValue = -1
                 val subject by memoized {
                     object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
-                        val present: Int by configWithFallback("fallback", defaultValue)
-                        val notPresentWithFallback: Int by configWithFallback("fallback", defaultValue)
-                        val notPresentFallbackMissing: Int by configWithFallback("missing", defaultValue)
+                        private val fallback: Int by config(42)
+                        private val missing: Int by config(42)
+                        val present: Int by configWithFallback(::fallback, defaultValue)
+                        val notPresentWithFallback: Int by configWithFallback(::fallback, defaultValue)
+                        val notPresentFallbackMissing: Int by configWithFallback(::missing, defaultValue)
                     }
                 }
                 it("uses the value provided in config if present") {
@@ -316,15 +319,18 @@ class ConfigPropertySpec : Spek({
                 val configValue = 99
                 val defaultValue = 0
                 val fallbackValue = -1
+                val fallbackOffset = 10
                 val subject by memoized {
                     object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
-                        val present: String by configWithFallback("fallback", defaultValue) { v ->
+                        private val fallback: String by config(42) { (it + fallbackOffset).toString() }
+                        private val missing: String by config(42) { (it + fallbackOffset).toString() }
+                        val present: String by configWithFallback(::fallback, defaultValue) { v ->
                             v.toString()
                         }
-                        val notPresentWithFallback: String by configWithFallback("fallback", defaultValue) { v ->
+                        val notPresentWithFallback: String by configWithFallback(::fallback, defaultValue) { v ->
                             v.toString()
                         }
-                        val notPresentFallbackMissing: String by configWithFallback("missing", defaultValue) { v ->
+                        val notPresentFallbackMissing: String by configWithFallback(::missing, defaultValue) { v ->
                             v.toString()
                         }
                     }
@@ -332,8 +338,8 @@ class ConfigPropertySpec : Spek({
                 it("uses the value provided in config if present") {
                     assertThat(subject.present).isEqualTo("$configValue")
                 }
-                it("uses the value from fallback property if value is missing and fallback exists") {
-                    assertThat(subject.notPresentWithFallback).isEqualTo("$fallbackValue")
+                it("transforms the value from fallback property if value is missing and fallback exists") {
+                    assertThat(subject.notPresentWithFallback).isEqualTo("${fallbackValue + fallbackOffset}")
                 }
                 it("uses the default value if not present") {
                     assertThat(subject.notPresentFallbackMissing).isEqualTo("$defaultValue")

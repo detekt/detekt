@@ -101,15 +101,15 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         val DEFAULT_NESTING_FUNCTIONS = listOf(
-            "run",
-            "let",
-            "apply",
-            "with",
             "also",
-            "use",
+            "apply",
             "forEach",
             "isNotNull",
-            "ifNull"
+            "ifNull",
+            "let",
+            "run",
+            "use",
+            "with",
         )
     }
 }

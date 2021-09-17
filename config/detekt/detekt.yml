@@ -107,7 +107,7 @@ formatting:
 naming:
   InvalidPackageDeclaration:
     active: true
-    excludes: ['**/buildSrc/**/*.kt', '**/*.kts']
+    excludes: ['**/build-logic/**/*.kt', '**/*.kts']
   NoNameShadowing:
     active: true
   NonBooleanPropertyPrefixedWithIs:
@@ -123,7 +123,7 @@ potential-bugs:
   DontDowncastCollectionTypes:
     active: true
   DoubleMutabilityForCollection:
-    active: true
+    active: false
   ExitOutsideMain:
     active: false
   HasPlatformType:
@@ -173,7 +173,7 @@ style:
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
   MagicNumber:
-    excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
@@ -194,6 +194,8 @@ style:
     active: true
   ObjectLiteralToLambda:
     active: true
+  PreferToOverPairSyntax:
+    active: true
   RedundantExplicitType:
     active: true
   RedundantHigherOrderMapUsage:
@@ -212,6 +214,8 @@ style:
   UnnecessaryAnnotationUseSiteTarget:
     active: true
   UnnecessaryFilter:
+    active: true
+  UnnecessaryLet:
     active: true
   UntilInsteadOfRangeTo:
     active: true

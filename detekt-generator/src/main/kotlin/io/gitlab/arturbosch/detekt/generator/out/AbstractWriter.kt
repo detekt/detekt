@@ -28,3 +28,8 @@ internal class YamlWriter : AbstractWriter() {
 
     override val ending = "yml"
 }
+
+internal class PropertiesWriter : AbstractWriter() {
+
+    override val ending = "properties"
+}

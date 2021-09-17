@@ -122,13 +122,6 @@ class FunctionNamingSpec : Spek({
 
             """
 
-            it("Ignores default annotated functions") {
-                assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(
-                    SourceLocation(4, 9),
-                    SourceLocation(8, 9)
-                )
-            }
-
             it("Ignores annotated functions if ignoreAnnotated includes the given annotation class") {
                 val config = TestConfig(mapOf(FunctionNaming.IGNORE_ANNOTATED to listOf("Suppress")))
                 assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(

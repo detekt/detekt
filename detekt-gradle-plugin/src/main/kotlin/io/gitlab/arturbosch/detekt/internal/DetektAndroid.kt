@@ -106,38 +106,67 @@ internal class DetektAndroid(private val project: Project) {
         ignoredVariants.contains(variant.name) ||
             ignoredBuildTypes.contains(variant.buildType.name) ||
             ignoredFlavors.contains(variant.flavorName)
-
-    private fun Project.registerAndroidDetektTask(
-        bootClasspath: FileCollection,
-        extension: DetektExtension,
-        variant: BaseVariant
-    ): TaskProvider<Detekt> =
-        registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize(), extension) {
-            setSource(variant.sourceSets.map { it.javaDirectories })
-            classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
-            // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
-            // We try to find the configured baseline or alternatively a specific variant matching this task.
-            extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
-                baseline.set(layout.file(project.provider { baselineFile }))
-            }
-            reports = extension.reports
-            reports.xml.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".xml"))
-            reports.html.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".html"))
-            reports.txt.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".txt"))
-            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, variant.name + ".sarif"))
-            description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
-        }
-
-    private fun Project.registerAndroidCreateBaselineTask(
-        bootClasspath: FileCollection,
-        extension: DetektExtension,
-        variant: BaseVariant
-    ): TaskProvider<DetektCreateBaselineTask> =
-        registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(), extension) {
-            setSource(variant.sourceSets.map { it.javaDirectories })
-            classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
-            val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
-            baseline.set(project.layout.file(project.provider { variantBaselineFile }))
-            description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
-        }
 }
+
+internal fun Project.registerAndroidDetektTask(
+    bootClasspath: FileCollection,
+    extension: DetektExtension,
+    variant: BaseVariant,
+    taskName: String = DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize(),
+    extraInputSource: FileCollection? = null
+): TaskProvider<Detekt> =
+    registerDetektTask(taskName, extension) {
+        setSource(variant.sourceSets.map { it.javaDirectories })
+        extraInputSource?.let { source(it) }
+        classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
+        // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
+        // We try to find the configured baseline or alternatively a specific variant matching this task.
+        extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
+            baseline.set(layout.file(project.provider { baselineFile }))
+        }
+        reports.xml.outputLocation.convention(
+            layout.projectDirectory.file(
+                providers.provider {
+                    File(extension.reportsDir, variant.name + ".xml").absolutePath
+                }
+            )
+        )
+        reports.html.outputLocation.convention(
+            layout.projectDirectory.file(
+                providers.provider {
+                    File(extension.reportsDir, variant.name + ".html").absolutePath
+                }
+            )
+        )
+        reports.txt.outputLocation.convention(
+            layout.projectDirectory.file(
+                providers.provider {
+                    File(extension.reportsDir, variant.name + ".txt").absolutePath
+                }
+            )
+        )
+        reports.sarif.outputLocation.convention(
+            layout.projectDirectory.file(
+                providers.provider {
+                    File(extension.reportsDir, variant.name + ".sarif").absolutePath
+                }
+            )
+        )
+        description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
+    }
+
+internal fun Project.registerAndroidCreateBaselineTask(
+    bootClasspath: FileCollection,
+    extension: DetektExtension,
+    variant: BaseVariant,
+    taskName: String = DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(),
+    extraInputSource: FileCollection? = null
+): TaskProvider<DetektCreateBaselineTask> =
+    registerCreateBaselineTask(taskName, extension) {
+        setSource(variant.sourceSets.map { it.javaDirectories })
+        extraInputSource?.let { source(it) }
+        classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
+        val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
+        baseline.set(project.layout.file(project.provider { variantBaselineFile }))
+        description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
+    }
