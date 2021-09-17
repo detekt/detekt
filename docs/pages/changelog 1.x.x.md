@@ -6,6 +6,64 @@ permalink: changelog.html
 toc: true
 ---
 
+#### SNAPSHOT (unreleased)
+
+##### Notable Changes
+
+- Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
+  deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
+
+##### Migration
+
+Configuring reports in the Gradle plugin should be done at the task level instead of at the extension (or global) level.
+The previous recommendation resulted in the report output for multiple tasks overwriting each other when multiple detekt
+tasks were executed in the same Gradle run.
+
+Before this release the recommended way to configure reports was using the `detekt` extension:
+```kotlin
+detekt {
+    reports {
+        xml {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.xml")
+        }
+    }
+}
+```
+
+This meant all detekt tasks would output the report to the same destination. From this detekt release you should enable
+and disable reports for all tasks using the `withType` Gradle method:
+
+```kotlin
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+```groovy
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    reports {
+        xml.required.set(true)
+    }
+}
+```
+
+To customize the report output location configure the task individually:
+```kotlin
+tasks.detektMain {
+    reports {
+        xml {
+            outputLocation.set(file("build/reports/detekt/customPath.xml"))
+            required.set(true) // reports can also be enabled and disabled at the task level as needed
+        }
+    }
+}
+```
+
 #### 1.18.1 - 2021-08-30    
 
 This is a point release for Detekt `1.18.0` containing bugfixes for problems that got discovered just after the release.

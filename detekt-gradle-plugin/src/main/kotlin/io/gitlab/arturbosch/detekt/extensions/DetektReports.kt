@@ -5,18 +5,20 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
+import org.gradle.api.model.ObjectFactory
 import org.gradle.util.ConfigureUtil
+import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
-class DetektReports {
+open class DetektReports @Inject constructor(val objects: ObjectFactory) {
 
-    val xml = DetektReport(XML)
+    val xml: DetektReport = objects.newInstance(DetektReport::class.java, XML)
 
-    val html = DetektReport(HTML)
+    val html: DetektReport = objects.newInstance(DetektReport::class.java, HTML)
 
-    val txt = DetektReport(TXT)
+    val txt: DetektReport = objects.newInstance(DetektReport::class.java, TXT)
 
-    val sarif = DetektReport(SARIF)
+    val sarif: DetektReport = objects.newInstance(DetektReport::class.java, SARIF)
 
     val custom = mutableListOf<CustomDetektReport>()
 
@@ -35,5 +37,6 @@ class DetektReports {
     fun custom(configure: CustomDetektReport.() -> Unit): Unit = createAndAddCustomReport().configure()
     fun custom(closure: Closure<*>): CustomDetektReport = ConfigureUtil.configure(closure, createAndAddCustomReport())
 
-    private fun createAndAddCustomReport() = CustomDetektReport().apply { custom.add(this) }
+    private fun createAndAddCustomReport() =
+        objects.newInstance(CustomDetektReport::class.java).apply { custom.add(this) }
 }

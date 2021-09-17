@@ -352,7 +352,7 @@ private val KMM_PLUGIN_BLOCK = """
 """.trimIndent()
 
 private val DETEKT_BLOCK = """
-    detekt {
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
         reports.txt.enabled = false
     }
 """.trimIndent()
