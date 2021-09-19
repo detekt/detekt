@@ -11,7 +11,7 @@ import org.spekframework.spek2.style.specification.describe
 import java.io.PrintStream
 import java.net.URI
 
-@UnstableApi
+@OptIn(UnstableApi::class)
 class LicenceHeaderLoaderExtensionSpec : Spek({
 
     describe("Licence header extension - #2503") {
