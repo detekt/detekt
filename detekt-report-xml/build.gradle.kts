@@ -6,5 +6,5 @@ dependencies {
     implementation(projects.detektApi)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
 }

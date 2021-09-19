@@ -14,7 +14,7 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
