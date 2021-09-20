@@ -1,12 +1,14 @@
 package io.gitlab.arturbosch.detekt.core.extensions
 
 import io.gitlab.arturbosch.detekt.api.Extension
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.util.ServiceLoader
 
 val LIST_ITEM_SPACING = "$NL    "
 
+@OptIn(UnstableApi::class)
 inline fun <reified T : Extension> loadExtensions(
     settings: ProcessingSettings,
     predicate: (T) -> Boolean = { true }
