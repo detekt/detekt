@@ -138,6 +138,9 @@ potential-bugs:
     active: true
   UnreachableCatchBlock:
     active: true
+  UnsafeCallOnNullableType:
+    active: true
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UnsafeCast:
     active: true
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
