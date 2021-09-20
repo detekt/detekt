@@ -495,11 +495,11 @@ interface <a href="index.html">ConfigAware</a> : <a href="../-config/index.html"
     </tr>
     <tr>
       <td><a href="value-or-default.html">valueOrDefault</a></td>
-      <td>[jvm]<br />open override fun &lt;<a href="value-or-default.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="value-or-default.html">T</a>): <a href="value-or-default.html">T</a><br />Retrieves a sub configuration or value based on given key.</td>
+      <td>[jvm]<br />open override fun &lt;<a href="value-or-default.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="value-or-default.html">T</a>): <a href="value-or-default.html">T</a><br />Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.</td>
     </tr>
     <tr>
       <td><a href="value-or-null.html">valueOrNull</a></td>
-      <td>[jvm]<br />open override fun &lt;<a href="value-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-null.html">valueOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="value-or-null.html">T</a>?<br />Retrieves a sub configuration or value based on given key.</td>
+      <td>[jvm]<br />open override fun &lt;<a href="value-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-null.html">valueOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="value-or-null.html">T</a>?<br />Retrieves a sub configuration or value based on given key. If the configuration property cannot be found, null is returned.</td>
     </tr>
     <tr>
       <td><a href="with-auto-correct.html">withAutoCorrect</a></td>
@@ -520,15 +520,15 @@ interface <a href="index.html">ConfigAware</a> : <a href="../-config/index.html"
   <tbody>
     <tr>
       <td><a href="active.html">active</a></td>
-      <td>[jvm]<br />open val <a href="active.html">active</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Is this rule specified as active in configuration?</td>
+      <td>[jvm]<br />open val <a href="active.html">active</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Is this rule specified as active in configuration? If a rule is not specified in the underlying configuration, we assume it should not be run.</td>
     </tr>
     <tr>
       <td><a href="auto-correct.html">autoCorrect</a></td>
-      <td>[jvm]<br />open val <a href="auto-correct.html">autoCorrect</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Does this rule have auto correct specified in configuration?</td>
+      <td>[jvm]<br />open val <a href="auto-correct.html">autoCorrect</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Does this rule have auto correct specified in configuration? For auto correction to work the rule set itself enable it.</td>
     </tr>
     <tr>
-      <td><a href="index.html#1482635627%2FProperties%2F-879243379">parentPath</a></td>
-      <td>[jvm]<br />open val <a href="index.html#1482635627%2FProperties%2F-879243379">parentPath</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Keeps track of which key was taken to <a href="../-config/sub-config.html">subConfig</a> this configuration.</td>
+      <td><a href="../-config/parent-path.html">parentPath</a></td>
+      <td>[jvm]<br />open val <a href="../-config/parent-path.html">parentPath</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Keeps track of which key was taken to <a href="../-config/sub-config.html">subConfig</a> this configuration. Sub-sequential calls to <a href="../-config/sub-config.html">subConfig</a> are tracked with ‘&gt;’ as a separator.</td>
     </tr>
     <tr>
       <td><a href="rule-id.html">ruleId</a></td>
@@ -536,7 +536,7 @@ interface <a href="index.html">ConfigAware</a> : <a href="../-config/index.html"
     </tr>
     <tr>
       <td><a href="rule-set-config.html">ruleSetConfig</a></td>
-      <td>[jvm]<br />abstract val <a href="rule-set-config.html">ruleSetConfig</a>: <a href="../-config/index.html">Config</a><br />Wrapped configuration of the ruleSet this rule is in.</td>
+      <td>[jvm]<br />abstract val <a href="rule-set-config.html">ruleSetConfig</a>: <a href="../-config/index.html">Config</a><br />Wrapped configuration of the ruleSet this rule is in. Use <a href="value-or-default.html">valueOrDefault</a> function to retrieve properties specified for the rule implementing this interface instead. Only use this property directly if you need a specific rule set property.</td>
     </tr>
   </tbody>
 </table>

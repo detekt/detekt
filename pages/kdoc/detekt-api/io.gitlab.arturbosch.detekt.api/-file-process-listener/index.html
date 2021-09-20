@@ -491,19 +491,19 @@ interface <a href="index.html">FileProcessListener</a> : <a href="../-extension/
     </tr>
     <tr>
       <td><a href="on-finish.html">onFinish</a></td>
-      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-finish.html"><del>onFinish</del></a><del>(</del><del>files</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><KtFile>~~,~~ ~~result~~~~:~~ [Detektion](../-detektion/index.html)~~)~~<br />open fun [onFinish](on-finish.html)(files: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<KtFile>, result: [Detektion](../-detektion/index.html), bindingContext: BindingContext)<br />Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.</KtFile></KtFile></td>
+      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-finish.html"><del>onFinish</del></a><del>(</del><del>files</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;KtFile&gt;<del>,</del> <del>result</del><del>:</del> <a href="../-detektion/index.html">Detektion</a><del>)</del><br />open fun <a href="on-finish.html">onFinish</a>(files: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;KtFile&gt;, result: <a href="../-detektion/index.html">Detektion</a>, bindingContext: BindingContext)<br />Mainly use this method to save computed metrics from KtFile’s to the {@link Detektion} container. Do not do heavy computations here as this method is called from the main thread.</td>
     </tr>
     <tr>
       <td><a href="on-process.html">onProcess</a></td>
-      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-process.html"><del>onProcess</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>)</del><br />open fun <a href="on-process.html">onProcess</a>(file: KtFile, bindingContext: BindingContext)<br />Called when processing of a file begins.</td>
+      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-process.html"><del>onProcess</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>)</del><br />open fun <a href="on-process.html">onProcess</a>(file: KtFile, bindingContext: BindingContext)<br />Called when processing of a file begins. This method is called from a thread pool thread. Heavy computations allowed.</td>
     </tr>
     <tr>
       <td><a href="on-process-complete.html">onProcessComplete</a></td>
-      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-process-complete.html"><del>onProcessComplete</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>,</del> <del>findings</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»<del>)</del><br />open fun <a href="on-process-complete.html">onProcessComplete</a>(file: KtFile, findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>», bindingContext: BindingContext)<br />Called when processing of a file completes.</td>
+      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-process-complete.html"><del>onProcessComplete</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>,</del> <del>findings</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;&gt;<del>)</del><br />open fun <a href="on-process-complete.html">onProcessComplete</a>(file: KtFile, findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;&gt;, bindingContext: BindingContext)<br />Called when processing of a file completes. This method is called from a thread pool thread. Heavy computations allowed.</td>
     </tr>
     <tr>
       <td><a href="on-start.html">onStart</a></td>
-      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-start.html"><del>onStart</del></a><del>(</del><del>files</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><KtFile>~~)~~<br />open fun [onStart](on-start.html)(files: [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)<KtFile>, bindingContext: BindingContext)<br />Use this to gather some additional information for the real onProcess function.</KtFile></KtFile></td>
+      <td>[jvm]<br /><del>open</del> <del>fun</del> <a href="on-start.html"><del>onStart</del></a><del>(</del><del>files</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;KtFile&gt;<del>)</del><br />open fun <a href="on-start.html">onStart</a>(files: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;KtFile&gt;, bindingContext: BindingContext)<br />Use this to gather some additional information for the real onProcess function. This calculation should be lightweight as this method is called from the main thread.</td>
     </tr>
   </tbody>
 </table>
@@ -519,12 +519,12 @@ interface <a href="index.html">FileProcessListener</a> : <a href="../-extension/
   </thead>
   <tbody>
     <tr>
-      <td><a href="index.html#-206695638%2FProperties%2F-879243379">id</a></td>
-      <td>[jvm]<br />open val <a href="index.html#-206695638%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
+      <td><a href="../-extension/id.html">id</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a href="index.html#-628366143%2FProperties%2F-879243379">priority</a></td>
-      <td>[jvm]<br />open val <a href="index.html#-628366143%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
+      <td><a href="../-extension/priority.html">priority</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/priority.html">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order. The higher the priority the sooner the extension will run in detekt’s lifecycle.</td>
     </tr>
   </tbody>
 </table>

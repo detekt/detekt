@@ -512,7 +512,7 @@ abstract class <a href="index.html">ConsoleReport</a> : <a href="../-extension/i
     </tr>
     <tr>
       <td><a href="render.html">render</a></td>
-      <td>[jvm]<br />abstract fun <a href="render.html">render</a>(detektion: <a href="../-detektion/index.html">Detektion</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Converts the given <a href="render.html">detektion</a> into a string representation to present it to the client.</td>
+      <td>[jvm]<br />abstract fun <a href="render.html">render</a>(detektion: <a href="../-detektion/index.html">Detektion</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Converts the given <a href="render.html">detektion</a> into a string representation to present it to the client. The implementation specifies which parts of the report are important to the user.</td>
     </tr>
   </tbody>
 </table>
@@ -528,12 +528,12 @@ abstract class <a href="index.html">ConsoleReport</a> : <a href="../-extension/i
   </thead>
   <tbody>
     <tr>
-      <td><a href="index.html#956684142%2FProperties%2F-879243379">id</a></td>
-      <td>[jvm]<br />open val <a href="index.html#956684142%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
+      <td><a href="../-extension/id.html">id</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a href="index.html#-718772731%2FProperties%2F-879243379">priority</a></td>
-      <td>[jvm]<br />open val <a href="index.html#-718772731%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
+      <td><a href="../-extension/priority.html">priority</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/priority.html">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order. The higher the priority the sooner the extension will run in detekt’s lifecycle.</td>
     </tr>
   </tbody>
 </table>

@@ -502,11 +502,11 @@ class <a href="index.html">SingleAssign</a>&lt;<a href="index.html">T</a> : <a h
   <tbody>
     <tr>
       <td><a href="get-value.html">getValue</a></td>
-      <td>[jvm]<br />operator fun <a href="get-value.html">getValue</a>(thisRef: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?, property: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html">KProperty</a>&lt;*&gt;): <a href="index.html">T</a><br />Returns the _value if it was set before.</td>
+      <td>[jvm]<br />operator fun <a href="get-value.html">getValue</a>(thisRef: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?, property: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html">KProperty</a>&lt;*&gt;): <a href="index.html">T</a><br />Returns the _value if it was set before. Else an error is thrown.</td>
     </tr>
     <tr>
       <td><a href="set-value.html">setValue</a></td>
-      <td>[jvm]<br />operator fun <a href="set-value.html">setValue</a>(thisRef: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?, property: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html">KProperty</a>&lt;*&gt;, value: <a href="index.html">T</a>)<br />Sets _value to the given <a href="set-value.html">value</a>.</td>
+      <td>[jvm]<br />operator fun <a href="set-value.html">setValue</a>(thisRef: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?, property: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-property/index.html">KProperty</a>&lt;*&gt;, value: <a href="index.html">T</a>)<br />Sets _value to the given <a href="set-value.html">value</a>. If it was set before, an error is thrown.</td>
     </tr>
   </tbody>
 </table>

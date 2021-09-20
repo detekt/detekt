@@ -469,7 +469,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="annotationexcluder">AnnotationExcluder</h1>
 
 <p>[jvm]<br />
-class <a href="index.html">AnnotationExcluder</a>(<strong>root</strong>: KtFile, <strong>excludes</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;)</p>
+class <a href="index.html">AnnotationExcluder</a>(root: KtFile, excludes: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;)</p>
 
 <p>Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.</p>
 
@@ -506,7 +506,7 @@ class <a href="index.html">AnnotationExcluder</a>(<strong>root</strong>: KtFile,
   <tbody>
     <tr>
       <td><a href="should-exclude.html">shouldExclude</a></td>
-      <td>[jvm]<br />fun <a href="should-exclude.html">shouldExclude</a>(annotations: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><KtAnnotationEntry>): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br />Is true if any given annotation name is declared in the SplitPattern which basically describes entries to exclude.</KtAnnotationEntry></td>
+      <td>[jvm]<br />fun <a href="should-exclude.html">shouldExclude</a>(annotations: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;KtAnnotationEntry&gt;): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Is true if any given annotation name is declared in the SplitPattern which basically describes entries to exclude.</td>
     </tr>
   </tbody>
 </table>

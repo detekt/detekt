@@ -469,7 +469,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="debt">Debt</h1>
 
 <p>[jvm]<br />
-data class <a href="index.html">Debt</a>(<strong>days</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>hours</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, <strong>mins</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)</p>
+data class <a href="index.html">Debt</a>(days: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, hours: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, mins: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)</p>
 
 <p>Debt describes the estimated amount of work needed to fix a given issue.</p>
 
@@ -519,7 +519,7 @@ data class <a href="index.html">Debt</a>(<strong>days</strong>: <a href="https:/
   <tbody>
     <tr>
       <td><a href="plus.html">plus</a></td>
-      <td>[jvm]<br />operator fun <a href="plus.html">plus</a>(other: <a href="index.html">Debt</a>): <a href="index.html">Debt</a><br />Adds the other debt to this debt.</td>
+      <td>[jvm]<br />operator fun <a href="plus.html">plus</a>(other: <a href="index.html">Debt</a>): <a href="index.html">Debt</a><br />Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.</td>
     </tr>
     <tr>
       <td><a href="to-string.html">toString</a></td>

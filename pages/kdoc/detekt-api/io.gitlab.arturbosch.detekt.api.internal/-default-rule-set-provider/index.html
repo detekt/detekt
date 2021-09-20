@@ -487,7 +487,7 @@ interface <a href="index.html">DefaultRuleSetProvider</a> : <a href="../../io.gi
   <tbody>
     <tr>
       <td><a href="../../io.gitlab.arturbosch.detekt.api/-rule-set-provider/instance.html">instance</a></td>
-      <td>[jvm]<br />abstract fun <a href="../../io.gitlab.arturbosch.detekt.api/-rule-set-provider/instance.html">instance</a>(config: <a href="../../io.gitlab.arturbosch.detekt.api/-config/index.html">Config</a>): <a href="../../io.gitlab.arturbosch.detekt.api/-rule-set/index.html">RuleSet</a><br />This function must be implemented to provide custom rule sets.</td>
+      <td>[jvm]<br />abstract fun <a href="../../io.gitlab.arturbosch.detekt.api/-rule-set-provider/instance.html">instance</a>(config: <a href="../../io.gitlab.arturbosch.detekt.api/-config/index.html">Config</a>): <a href="../../io.gitlab.arturbosch.detekt.api/-rule-set/index.html">RuleSet</a><br />This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.</td>
     </tr>
   </tbody>
 </table>
@@ -503,8 +503,8 @@ interface <a href="index.html">DefaultRuleSetProvider</a> : <a href="../../io.gi
   </thead>
   <tbody>
     <tr>
-      <td><a href="index.html#-1326253358%2FProperties%2F-879243379">ruleSetId</a></td>
-      <td>[jvm]<br />abstract val <a href="index.html#-1326253358%2FProperties%2F-879243379">ruleSetId</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Every rule set must be pre-configured with an ID to validate if this rule set must be created for current analysis.</td>
+      <td><a href="../../io.gitlab.arturbosch.detekt.api/-rule-set-provider/rule-set-id.html">ruleSetId</a></td>
+      <td>[jvm]<br />abstract val <a href="../../io.gitlab.arturbosch.detekt.api/-rule-set-provider/rule-set-id.html">ruleSetId</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Every rule set must be pre-configured with an ID to validate if this rule set must be created for current analysis.</td>
     </tr>
   </tbody>
 </table>

@@ -497,7 +497,7 @@ interface <a href="index.html">ReportingExtension</a> : <a href="../-extension/i
     </tr>
     <tr>
       <td><a href="transform-findings.html">transformFindings</a></td>
-      <td>[jvm]<br />open fun <a href="transform-findings.html">transformFindings</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>»<br />Allows to transform the reported findings e.g.</td>
+      <td>[jvm]<br />open fun <a href="transform-findings.html">transformFindings</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;&gt;): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;&gt;<br />Allows to transform the reported findings e.g. apply custom filtering.</td>
     </tr>
   </tbody>
 </table>
@@ -513,12 +513,12 @@ interface <a href="index.html">ReportingExtension</a> : <a href="../-extension/i
   </thead>
   <tbody>
     <tr>
-      <td><a href="index.html#-1733603692%2FProperties%2F-879243379">id</a></td>
-      <td>[jvm]<br />open val <a href="index.html#-1733603692%2FProperties%2F-879243379">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
+      <td><a href="../-extension/id.html">id</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/id.html">id</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><br />Name of the extension.</td>
     </tr>
     <tr>
-      <td><a href="index.html#80046251%2FProperties%2F-879243379">priority</a></td>
-      <td>[jvm]<br />open val <a href="index.html#80046251%2FProperties%2F-879243379">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order.</td>
+      <td><a href="../-extension/priority.html">priority</a></td>
+      <td>[jvm]<br />open val <a href="../-extension/priority.html">priority</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><br />Is used to run extensions in a specific order. The higher the priority the sooner the extension will run in detekt’s lifecycle.</td>
     </tr>
   </tbody>
 </table>

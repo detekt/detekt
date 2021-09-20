@@ -489,7 +489,7 @@ interface <a href="index.html">Config</a></p>
     </tr>
     <tr>
       <td><a href="-invalid-configuration-error/index.html">InvalidConfigurationError</a></td>
-      <td>[jvm]<br />class <a href="-invalid-configuration-error/index.html">InvalidConfigurationError</a>(<strong>throwable</strong>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>?) : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html">RuntimeException</a><br />Is thrown when loading a configuration results in errors.</td>
+      <td>[jvm]<br />class <a href="-invalid-configuration-error/index.html">InvalidConfigurationError</a>(throwable: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html">Throwable</a>?) : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html">RuntimeException</a><br />Is thrown when loading a configuration results in errors.</td>
     </tr>
   </tbody>
 </table>
@@ -510,11 +510,11 @@ interface <a href="index.html">Config</a></p>
     </tr>
     <tr>
       <td><a href="value-or-default.html">valueOrDefault</a></td>
-      <td>[jvm]<br />open fun &lt;<a href="value-or-default.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="value-or-default.html">T</a>): <a href="value-or-default.html">T</a><br />Retrieves a sub configuration or value based on given key.</td>
+      <td>[jvm]<br />open fun &lt;<a href="value-or-default.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-default.html">valueOrDefault</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="value-or-default.html">T</a>): <a href="value-or-default.html">T</a><br />Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.</td>
     </tr>
     <tr>
       <td><a href="value-or-null.html">valueOrNull</a></td>
-      <td>[jvm]<br />abstract fun &lt;<a href="value-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-null.html">valueOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="value-or-null.html">T</a>?<br />Retrieves a sub configuration or value based on given key.</td>
+      <td>[jvm]<br />abstract fun &lt;<a href="value-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="value-or-null.html">valueOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="value-or-null.html">T</a>?<br />Retrieves a sub configuration or value based on given key. If the configuration property cannot be found, null is returned.</td>
     </tr>
   </tbody>
 </table>
@@ -531,7 +531,7 @@ interface <a href="index.html">Config</a></p>
   <tbody>
     <tr>
       <td><a href="parent-path.html">parentPath</a></td>
-      <td>[jvm]<br />open val <a href="parent-path.html">parentPath</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Keeps track of which key was taken to <a href="sub-config.html">subConfig</a> this configuration.</td>
+      <td>[jvm]<br />open val <a href="parent-path.html">parentPath</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?<br />Keeps track of which key was taken to <a href="sub-config.html">subConfig</a> this configuration. Sub-sequential calls to <a href="sub-config.html">subConfig</a> are tracked with ‘&gt;’ as a separator.</td>
     </tr>
   </tbody>
 </table>
