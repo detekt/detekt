@@ -10,5 +10,5 @@ dependencies {
     // e.g. io.gitlab.arturbosch.detekt:detekt-test:1.x.x
     testImplementation(projects.detektTest)
     testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
 }

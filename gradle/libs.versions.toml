@@ -37,7 +37,6 @@ sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.9.12"
 mockk = "io.mockk:mockk:1.12.0"
-junitLauncher = "org.junit.platform:junit-platform-launcher:1.7.2"
 snakeyaml = "org.yaml:snakeyaml:1.29"
 jcommander = "com.beust:jcommander:1.81"
 
@@ -51,4 +50,3 @@ sonarqube = { id = "org.sonarqube", version = "3.3" }
 
 [bundles]
 testImplementation = ["assertj", "spek-dsl"]
-testRuntime = ["junitLauncher", "spek-runner"]

@@ -14,7 +14,7 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.bundles.testImplementation)
 
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
 

@@ -20,7 +20,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.kotlin.gradle)
     testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
     intTest(libs.kotlin.gradle)
     intTest(libs.android.gradle)
 }

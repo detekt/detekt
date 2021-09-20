@@ -9,7 +9,7 @@ dependencies {
     implementation(projects.detektPsiUtils)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.bundles.testRuntime)
+    testRuntimeOnly(libs.spek.runner)
 }
 
 tasks.withType<Test> {
