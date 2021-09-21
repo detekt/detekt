@@ -1,7 +1,7 @@
 ---
 name: Feature request (not related to rules)
 about: Suggest new features/changes to detekt
-
+labels: feature
 ---
 
 Your feature request may already be reported!

@@ -1,7 +1,7 @@
 ---
 name: New Rule or changes to existing rules
 about: Suggest new rules for detekt or suggest changes to existing rules
-
+labels: rules
 ---
 
 The rule or changes you're looking for might have already been suggested!
