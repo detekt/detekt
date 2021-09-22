@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Help make detekt better by reporting bugs, false positives and other issues
-
+labels: bug
 ---
 
 <!-- The bug you're experiencing might have already be reported! -->
