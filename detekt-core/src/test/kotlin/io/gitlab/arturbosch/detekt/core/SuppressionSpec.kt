@@ -292,7 +292,6 @@ private class TestRule(config: Config = Config.empty) : Rule(config) {
 private class TestLM : Rule() {
     override val issue = Issue("LongMethod", Severity.CodeSmell, "", Debt.TWENTY_MINS)
     override fun visitNamedFunction(function: KtNamedFunction) {
-        @Suppress("UnsafeCallOnNullableType")
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
         val offset = end - start
