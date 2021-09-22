@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 dependencies {
@@ -7,4 +8,8 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.bundles.testImplementation)
     testRuntimeOnly(libs.spek.runner)
+}
+
+apiValidation {
+    ignoredPackages.add("io.github.detekt.tooling.internal")
 }
