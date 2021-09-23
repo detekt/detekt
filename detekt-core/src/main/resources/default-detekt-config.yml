@@ -619,6 +619,7 @@ style:
       - 'STOPSHIP:'
       - 'TODO:'
     allowedPatterns: ''
+    customMessage: ''
   ForbiddenImport:
     active: false
     imports: []
