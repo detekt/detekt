@@ -8,6 +8,7 @@ import org.spekframework.spek2.style.specification.describe
 
 private const val VALUES = "values"
 private const val ALLOWED_PATTERNS = "allowedPatterns"
+private const val MESSAGE = "customMessage"
 
 class ForbiddenCommentSpec : Spek({
 
@@ -144,6 +145,42 @@ class ForbiddenCommentSpec : Spek({
                 val comment = "// Comment Ticket:123 Task:456 comment."
                 val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
                 assertThat(findings).isEmpty()
+            }
+        }
+
+        context("custom message is configured") {
+            val messageConfig by memoized {
+                TestConfig(
+                    mapOf(
+                        VALUES to "Comment",
+                        MESSAGE to "Custom Message"
+                    )
+                )
+            }
+
+            it("should report a Finding with message 'Custom Message'") {
+                val comment = "// Comment"
+                val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo("Custom Message")
+            }
+        }
+
+        context("custom message is not configured") {
+            val messageConfig by memoized {
+                TestConfig(
+                    mapOf(
+                        VALUES to "Comment"
+                    )
+                )
+            }
+
+            it("should report a Finding with default Message") {
+                val comment = "// Comment"
+                val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+                val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
+                assertThat(findings).hasSize(1)
+                assertThat(findings.first().message).isEqualTo(expectedMessage)
             }
         }
     }
