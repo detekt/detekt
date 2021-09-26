@@ -48,7 +48,7 @@ abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
                 parameters.arguments.get(),
                 parameters.classpath,
                 parameters.taskName.get(),
-                parameters.ignoreFailures.get()
+                parameters.ignoreFailures.getOrElse(false)
             )
             return
         }
