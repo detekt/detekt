@@ -40,7 +40,8 @@ private object TestExclusions : Exclusions() {
         "ThrowingExceptionsWithoutMessageOrCause",
         "UndocumentedPublicClass",
         "UndocumentedPublicFunction",
-        "UndocumentedPublicProperty"
+        "UndocumentedPublicProperty",
+        "UnsafeCallOnNullableType",
     )
 }
 
