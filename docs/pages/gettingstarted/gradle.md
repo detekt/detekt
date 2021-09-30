@@ -125,7 +125,7 @@ repositories {
 
 ### <a name="gradleandroid">Configuration for Android projects</a>
 
-When using Android make sure to have detekt configured in the project level build.gradle file.
+When using Android make sure to have detekt configured in the app/module level `build.gradle` file.
 
 You can configure the plugin in the same way as indicated above.
 
