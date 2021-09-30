@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
+import io.gitlab.arturbosch.detekt.rules.safeAs
 
 /**
  * Properties holder. Allows to store and retrieve any data.

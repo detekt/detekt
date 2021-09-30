@@ -32,8 +32,8 @@ fun main(args: Array<String>) {
                 else -> cause.printStackTrace()
             }
         }
+        else -> exitProcess(result.exitCode())
     }
-    exitProcess(result.exitCode())
 }
 
 @NotApiButProbablyUsedByUsers
