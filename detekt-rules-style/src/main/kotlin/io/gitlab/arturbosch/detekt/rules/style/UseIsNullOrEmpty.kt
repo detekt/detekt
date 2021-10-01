@@ -77,7 +77,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             right.isNullKeyword() -> left
             left.isNullKeyword() -> right
             else -> null
-        }.safeAs<KtSimpleNameExpression>()?.takeIf { it.getType(bindingContext)?.isNullable() == true }
+        }?.safeAs<KtSimpleNameExpression>()?.takeIf { it.getType(bindingContext)?.isNullable() == true }
     }
 
     private fun KtExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
@@ -131,8 +131,8 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression?.isEmptyString() = this?.text == "\"\""
 
     private fun KtExpression?.isCalling(fqNames: List<FqName>): Boolean {
-        val callExpression = safeAs()
-            ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression.safeAs<KtCallExpression>()
+        val callExpression = this?.safeAs()
+            ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression?.safeAs<KtCallExpression>()
             ?: return false
         return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
             callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
