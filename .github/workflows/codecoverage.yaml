@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoMergedReport --no-build-cache
+        run: ./gradlew jacocoMergedReport
 
       - name: Publish Coverage
         if: success()
