@@ -18,7 +18,6 @@ jobs:
         jdk: [8, 11, 17]
     runs-on: ${{ matrix.os }}
     env:
-      JDK_VERSION:  ${{ matrix.jdk }}
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
