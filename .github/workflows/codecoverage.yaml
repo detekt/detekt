@@ -25,7 +25,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoMergedReport
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: jacocoMergedReport
 
       - name: Publish Coverage
         if: success()

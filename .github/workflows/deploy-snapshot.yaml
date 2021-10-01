@@ -15,16 +15,6 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v2
 
-    - name: Cache Gradle Folders
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches/
-          ~/.gradle/wrapper/
-        key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
-        restore-keys: |
-          cache-gradle-
-
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
@@ -32,11 +22,15 @@ jobs:
         distribution: 'temurin'
 
     - name: Build detekt
-      run: ./gradlew build
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
 
     - name: Deploy Snapshot
+      uses: gradle/gradle-build-action@v2
       env:
         MAVEN_CENTRAL_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
         MAVEN_CENTRAL_PW: ${{ secrets.MAVEN_CENTRAL_PW }}
-      run: ./gradlew publishAllPublicationsToSonatypeSnapshotRepository -Dsnapshot=true --stacktrace
+      with:
+        arguments: publishAllPublicationsToSonatypeSnapshotRepository -Dsnapshot=true --stacktrace
       if: ${{ github.repository == 'detekt/detekt'}}
