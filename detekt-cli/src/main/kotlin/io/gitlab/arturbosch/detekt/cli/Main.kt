@@ -32,8 +32,9 @@ fun main(args: Array<String>) {
                 else -> cause.printStackTrace()
             }
         }
-        else -> exitProcess(result.exitCode())
+        else -> Unit // print nothing extra when there is no error
     }
+    exitProcess(result.exitCode())
 }
 
 @NotApiButProbablyUsedByUsers
