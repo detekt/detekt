@@ -691,11 +691,6 @@ Prefer smaller methods with clear names that describe their functionality clearl
 
     <p>number of lines in a method to trigger the rule</p>
   </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> (default: <code class="language-plaintext highlighter-rouge">[]</code>)</p>
-
-    <p>ignore long methods in the context of these annotation class names</p>
-  </li>
 </ul>
 
 <h3 id="longparameterlist">LongParameterList</h3>
@@ -737,9 +732,9 @@ Prefer smaller methods with clear names that describe their functionality clearl
     <p>ignore long constructor parameters list for data classes</p>
   </li>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> (default: <code class="language-plaintext highlighter-rouge">[]</code>)</p>
+    <p><code class="language-plaintext highlighter-rouge">ignoreAnnotatedParameter</code> (default: <code class="language-plaintext highlighter-rouge">[]</code>)</p>
 
-    <p>ignore long parameters list for constructors, functions or their parameters in the context of these annotation class names; (e.g. [‘Inject’, ‘Module’, ‘Suppress’, ‘Value’]); the most common cases are for dependency injection where constructors are annotated with <code class="language-plaintext highlighter-rouge">@Inject</code> or parameters are annotated with <code class="language-plaintext highlighter-rouge">@Value</code> and should not be counted for the rule to trigger</p>
+    <p>ignore the annotated parameters for the count (e.g. <code class="language-plaintext highlighter-rouge">fun foo(@Value bar: Int)</code> would not be counted</p>
   </li>
 </ul>
 
