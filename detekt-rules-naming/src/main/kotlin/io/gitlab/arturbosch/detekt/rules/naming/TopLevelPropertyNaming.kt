@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * Reports when top level constant names which do not follow the specified naming convention are used.
+ * Reports top level constant that which do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {

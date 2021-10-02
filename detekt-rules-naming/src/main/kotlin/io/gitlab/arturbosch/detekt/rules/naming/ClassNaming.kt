@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
- * Reports when class or object names which do not follow the specified naming convention are used.
+ * Reports class or object names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class ClassNaming(config: Config = Config.empty) : Rule(config) {

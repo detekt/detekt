@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
- * Reports when variable names which do not follow the specified naming convention are used.
+ * Reports variable names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
