@@ -37,11 +37,11 @@ jobs:
     - name: Run detekt-cli --help
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: :detekt-cli:runWithHelpFlag
+        arguments: --configuration-cache :detekt-cli:runWithHelpFlag
     - name: Run detekt-cli with argsfile
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: :detekt-cli:runWithArgsFile
+        arguments: --configuration-cache :detekt-cli:runWithArgsFile
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
@@ -73,4 +73,4 @@ jobs:
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true
+          arguments: --configuration-cache test -x :detekt-gradle-plugin:test -Pcompile-test-snippets=true
