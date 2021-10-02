@@ -19,7 +19,7 @@ object FunctionParameterNamingSpec : Spek({
                     fun someStuff(param: String) {}
                 }
             """
-            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should not detect violations in overridden function by default") {
@@ -68,7 +68,7 @@ object FunctionParameterNamingSpec : Spek({
 
         it("should not detect constructor parameter") {
             val code = "class Excluded(val PARAM: Int) {}"
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
         }
     }
 })
