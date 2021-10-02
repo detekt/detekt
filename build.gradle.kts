@@ -6,18 +6,6 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.gradleVersionz)
     alias(libs.plugins.sonarqube)
-    alias(libs.plugins.nexusStaging)
-}
-
-nexusStaging {
-    packageGroup = "io.gitlab.arturbosch"
-    stagingProfileId = "1d8efc8232c5c"
-    username = findProperty("sonatypeUsername")
-        ?.toString()
-        ?: System.getenv("MAVEN_CENTRAL_USER")
-    password = findProperty("sonatypePassword")
-        ?.toString()
-        ?: System.getenv("MAVEN_CENTRAL_PW")
 }
 
 allprojects {

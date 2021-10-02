@@ -2,6 +2,18 @@ import com.vdurmont.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
+    id("io.codearte.nexus-staging")
+}
+
+nexusStaging {
+    packageGroup = "io.gitlab.arturbosch"
+    stagingProfileId = "1d8efc8232c5c"
+    username = findProperty("sonatypeUsername")
+        ?.toString()
+        ?: System.getenv("MAVEN_CENTRAL_USER")
+    password = findProperty("sonatypePassword")
+        ?.toString()
+        ?: System.getenv("MAVEN_CENTRAL_PW")
 }
 
 project.afterEvaluate {
@@ -46,6 +58,7 @@ fun updateVersion(increment: (Semver) -> Semver) {
         }
     versionsFile.writeText("$newContent\n")
 }
+
 tasks {
     register("incrementPatch") { doLast { updateVersion { it.nextPatch() } } }
     register("incrementMinor") { doLast { updateVersion { it.nextMinor() } } }
