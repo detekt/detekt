@@ -24,6 +24,7 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>severity",
     "build>weights.*",
     ".*>.*>ignoreAnnotated",
+    ".*>.*>ignoreFunction",
 ).joinToString(",")
 
 fun validateConfig(
