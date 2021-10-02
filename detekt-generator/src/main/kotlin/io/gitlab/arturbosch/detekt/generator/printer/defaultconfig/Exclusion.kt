@@ -48,7 +48,7 @@ private object TestExclusions : Exclusions() {
 private object KotlinScriptExclusions : Exclusions() {
 
     override val pattern = "['**/*.kts']"
-    override val rules = setOf("InvalidPackageDeclaration")
+    override val rules = setOf("MissingPackageDeclaration")
 }
 
 private object LibraryExclusions : Exclusions() {
