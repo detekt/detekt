@@ -60,6 +60,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
+    @Deprecated("Use `ignoreAnnotated` instead")
     private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
         classes.map { it.removePrefix("*").removeSuffix("*") }
     }
@@ -67,7 +68,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, excludeAnnotatedClasses)
+        annotationExcluder = AnnotationExcluder(file, @Suppress("DEPRECATION") excludeAnnotatedClasses)
         super.visitKtFile(file)
     }
 
