@@ -1,26 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.github.detekt.psi.FilePath
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ConfigAware
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RuleId
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -28,7 +13,6 @@ import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class AnnotationSuppressorSpec : Spek({
     setupKotlinEnvironment()
@@ -437,23 +421,3 @@ class AnnotationSuppressorSpec : Spek({
         }
     }
 })
-
-private fun buildFinding(element: KtElement?): Finding = CodeSmell(
-    issue = Issue("RuleName", Severity.CodeSmell, "", Debt.FIVE_MINS),
-    entity = element?.let { Entity.from(element) } ?: buildEmptyEntity(),
-    message = "",
-)
-
-private fun buildEmptyEntity(): Entity = Entity(
-    name = "",
-    signature = "",
-    location = Location(SourceLocation(0, 0), TextLocation(0, 0), FilePath.fromAbsolute(Paths.get("/"))),
-    ktElement = null,
-)
-
-private fun buildConfigAware(
-    vararg pairs: Pair<String, Any>
-) = object : ConfigAware {
-    override val ruleId: RuleId = "ruleId"
-    override val ruleSetConfig: Config = TestConfig(*pairs)
-}
