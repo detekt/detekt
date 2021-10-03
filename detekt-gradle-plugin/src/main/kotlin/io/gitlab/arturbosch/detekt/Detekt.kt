@@ -199,6 +199,29 @@ open class Detekt @Inject constructor(
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
+    @get:Internal
+    internal val arguments
+        get() = mutableListOf(
+            InputArgument(source),
+            ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersionProp.orNull),
+            JvmTargetArgument(jvmTargetProp.orNull),
+            ConfigArgument(config),
+            BaselineArgument(baseline.orNull),
+            DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
+            DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
+            DebugArgument(debugProp.getOrElse(false)),
+            ParallelArgument(parallelProp.getOrElse(false)),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
+            FailFastArgument(failFastProp.getOrElse(false)),
+            AllRulesArgument(allRulesProp.getOrElse(false)),
+            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            BasePathArgument(basePathProp.orNull),
+            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+        ) + convertCustomReportsToArguments()
+
     @InputFiles
     @SkipWhenEmpty
     @PathSensitive(PathSensitivity.RELATIVE)
@@ -220,28 +243,6 @@ open class Detekt @Inject constructor(
         if (failFastProp.getOrElse(false)) {
             logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
         }
-
-        val arguments = mutableListOf(
-            InputArgument(source),
-            ClasspathArgument(classpath),
-            LanguageVersionArgument(languageVersionProp.orNull),
-            JvmTargetArgument(jvmTargetProp.orNull),
-            ConfigArgument(config),
-            BaselineArgument(baseline.orNull),
-            DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
-            DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
-            DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
-            DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
-            DebugArgument(debugProp.getOrElse(false)),
-            ParallelArgument(parallelProp.getOrElse(false)),
-            BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
-            FailFastArgument(failFastProp.getOrElse(false)),
-            AllRulesArgument(allRulesProp.getOrElse(false)),
-            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
-            BasePathArgument(basePathProp.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
-        )
-        arguments.addAll(convertCustomReportsToArguments())
 
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
             arguments = arguments.toList(),
