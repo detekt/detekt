@@ -26,12 +26,12 @@ public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
-	public static final fun compileAndLint (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Ljava/lang/String;)Ljava/util/List;
-	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Ljava/lang/String;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Ljava/nio/file/Path;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/util/List;
-	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/internal/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;)Ljava/util/List;
+	public static final fun compileAndLint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/lang/String;)Ljava/util/List;
+	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/lang/String;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/nio/file/Path;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/util/List;
+	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;)Ljava/util/List;
 }
 
 public class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {

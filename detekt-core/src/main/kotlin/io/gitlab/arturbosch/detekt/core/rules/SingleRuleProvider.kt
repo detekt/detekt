@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 
 internal class SingleRuleProvider(
     private val ruleId: RuleId,
