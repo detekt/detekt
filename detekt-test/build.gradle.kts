@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 dependencies {

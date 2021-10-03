@@ -1,0 +1,53 @@
+public final class io/github/detekt/test/utils/CompileExtensionsKt {
+	public static final fun compileContentForTest (Ljava/lang/String;Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
+}
+
+public final class io/github/detekt/test/utils/FileExtensionKt {
+	public static final fun createTempDirectoryForTest (Ljava/lang/String;)Ljava/nio/file/Path;
+	public static final fun createTempFileForTest (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
+}
+
+public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
+	public fun <init> (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Lorg/jetbrains/kotlin/com/intellij/openapi/Disposable;)V
+	public final fun dispose ()V
+	public final fun getEnv ()Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;
+}
+
+public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapperKt {
+	public static final fun createEnvironment (Ljava/util/List;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;ILjava/lang/Object;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+	public static final fun createPsiFactory ()Lorg/jetbrains/kotlin/psi/KtPsiFactory;
+}
+
+public final class io/github/detekt/test/utils/KotlinScriptEngine {
+	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinScriptEngine;
+	public final fun compile (Ljava/lang/String;)V
+}
+
+public final class io/github/detekt/test/utils/KotlinScriptException : java/lang/RuntimeException {
+	public fun <init> (Ljavax/script/ScriptException;)V
+}
+
+public final class io/github/detekt/test/utils/NullPrintStream : java/io/PrintStream {
+	public fun <init> ()V
+}
+
+public final class io/github/detekt/test/utils/ResourcesKt {
+	public static final fun readResourceContent (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun resource (Ljava/lang/String;)Ljava/net/URI;
+	public static final fun resourceAsFile (Ljava/lang/String;)Ljava/io/File;
+	public static final fun resourceAsPath (Ljava/lang/String;)Ljava/nio/file/Path;
+	public static final fun resourceUrl (Ljava/lang/String;)Ljava/net/URL;
+}
+
+public final class io/github/detekt/test/utils/StringPrintStream : java/io/PrintStream {
+	public fun <init> ()V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/rules/KotlinEnvironmentTestSetupKt {
+	public static final fun setupKotlinEnvironment (Lorg/spekframework/spek2/dsl/Root;)V
+}
+
