@@ -87,12 +87,13 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     private val allowedExceptionNameRegex: Regex by config("_|(ignore|expected).*", String::toRegex)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        val exceptionType = catchClause.catchParameter?.typeReference?.text
+        val catchParameter = catchClause.catchParameter ?: return
+        val exceptionType = catchParameter.typeReference?.text
         if (!ignoredExceptionTypes.any { exceptionType?.contains(it, ignoreCase = true) == true } &&
             isExceptionSwallowedOrUnused(catchClause) &&
             !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
         ) {
-            report(CodeSmell(issue, Entity.from(catchClause), issue.description))
+            report(CodeSmell(issue, Entity.from(catchParameter), issue.description))
         }
     }
 

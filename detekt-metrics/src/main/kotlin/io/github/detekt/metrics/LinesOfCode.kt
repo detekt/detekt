@@ -45,10 +45,9 @@ fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
         .distinct()
         .count()
 
-@Suppress("SwallowedException", "TooGenericExceptionCaught")
 fun ASTNode.line(inFile: KtFile): Int = try {
     DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
-} catch (e: IndexOutOfBoundsException) {
+} catch (@Suppress("SwallowedException", "TooGenericExceptionCaught") e: IndexOutOfBoundsException) {
     // When auto-correctable rules performs actual mutation, KtFile.text is updated but
     // KtFile.viewProvider.document is not updated. This will cause crash in subsequent rules
     // if they are using any function relying on the KtFile.viewProvider.document.
