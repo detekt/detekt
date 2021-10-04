@@ -33,7 +33,7 @@ internal class DetektMultiplatform(private val project: Project) {
             val kmpExtension = evaluatedProject.extensions.getByType(KotlinMultiplatformExtension::class.java)
 
             kmpExtension.targets.all { target ->
-                target.compilations.forEach { compilation ->
+                target.compilations.all { compilation ->
                     val inputSource = compilation.kotlinSourceSets
                         .map { it.kotlin.sourceDirectories }
                         .fold(evaluatedProject.files() as FileCollection) { collection, next -> collection.plus(next) }
