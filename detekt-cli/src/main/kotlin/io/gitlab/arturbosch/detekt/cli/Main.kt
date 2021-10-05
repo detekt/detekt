@@ -32,6 +32,7 @@ fun main(args: Array<String>) {
                 else -> cause.printStackTrace()
             }
         }
+        else -> Unit // print nothing extra when there is no error
     }
     exitProcess(result.exitCode())
 }

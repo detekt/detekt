@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow")
-    module
+    alias(libs.plugins.shadow)
+    id("module")
     application
 }
 
@@ -16,6 +16,8 @@ dependencies {
     runtimeOnly(projects.detektRules)
 
     testImplementation(projects.detektTest)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.spek.runner)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

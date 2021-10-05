@@ -18,7 +18,7 @@ import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtParameter
 
 /**
- * Reports function parameter names which do not follow the specified naming convention are used.
+ * Reports function parameter names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
@@ -36,14 +36,14 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores variables in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
 
-    @Suppress("unused")
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     @Deprecated("Use `ignoreOverridden` instead")
     private val ignoreOverriddenFunctions: Boolean by config(true)
 
+    @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
     @Configuration("ignores overridden functions with parameters not matching the pattern")
-    private val ignoreOverridden: Boolean by configWithFallback("ignoreOverriddenFunctions", true)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isContainingExcludedClass(excludeClassPattern)) {

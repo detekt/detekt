@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
@@ -27,6 +28,7 @@ internal interface Lifecycle {
     val processorsProvider: () -> List<FileProcessListener>
     val ruleSetsProvider: () -> List<RuleSetProvider>
 
+    @OptIn(UnstableApi::class)
     private fun <R> measure(phase: Phase, block: () -> R): R = settings.getOrCreateMonitor().measure(phase, block)
 
     fun analyze(): Detektion {

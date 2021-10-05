@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    module
+    id("module")
 }
 
 dependencies {
@@ -13,12 +13,15 @@ dependencies {
     implementation(libs.jcommander)
 
     testImplementation(projects.detektTestUtils)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.spek.runner)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
 val cliOptionsFile = "${rootProject.rootDir}/docs/pages/gettingstarted/cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
+val deprecationFile = "$configDir/deprecation.properties"
 
 val ruleModules = rootProject.subprojects
     .filter { "rules" in it.name }
@@ -34,21 +37,22 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     inputs.files(
         ruleModules.map { fileTree(it) },
         fileTree("${rootProject.rootDir}/detekt-formatting/src/main/kotlin"),
-        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar")
+        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"),
     )
 
     outputs.files(
         fileTree(documentationDir),
         file(defaultConfigFile),
-        file(cliOptionsFile)
+        file(deprecationFile),
+        file(cliOptionsFile),
     )
 
     classpath(
         configurations.runtimeClasspath.get(),
         configurations.compileClasspath.get(),
-        sourceSets.main.get().output
+        sourceSets.main.get().output,
     )
-    main = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
         ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
@@ -57,7 +61,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         "--config",
         configDir,
         "--cli-options",
-        cliOptionsFile
+        cliOptionsFile,
     )
 }
 
@@ -66,7 +70,7 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
     description = "Verifies that the default-detekt-config.yml is up-to-date"
     val configDiff = ByteArrayOutputStream()
 
-    commandLine = listOf("git", "diff", defaultConfigFile)
+    commandLine = listOf("git", "diff", defaultConfigFile, deprecationFile)
     standardOutput = configDiff
 
     doLast {

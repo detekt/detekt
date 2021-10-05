@@ -1,8 +1,9 @@
-package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
+package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
@@ -116,6 +117,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
            - 'NotificationReport'
         #  - 'FindingsReport'
            - 'FileBasedFindingsReport'
+           - 'LiteFindingsReport'
     """.trimIndent()
 
     private fun defaultOutputReportsConfiguration(): String = """

@@ -25,6 +25,7 @@ internal class DetektMultiplatform(private val project: Project) {
         }
     }
 
+    @Suppress("LongMethod")
     private fun Project.registerMultiplatformTasks(extension: DetektExtension) {
         // We need another project.afterEvaluate as the Android target is attached on
         // a project.afterEvaluate inside AGP. We should further investigate and potentially remove this.
@@ -90,6 +91,7 @@ internal class DetektMultiplatform(private val project: Project) {
         }
     }
 
+    @Suppress("LongMethod")
     private fun Project.registerMultiplatformTasksForNonAndroidTarget(
         compilation: KotlinCompilation<KotlinCommonOptions>,
         target: KotlinTarget,
@@ -116,11 +118,34 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.set(layout.file(provider { baselineFile }))
             }
-            reports = extension.reports
-            reports.xml.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".xml"))
-            reports.html.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".html"))
-            reports.txt.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".txt"))
-            reports.sarif.setDefaultIfUnset(File(extension.reportsDir, compilation.name + ".sarif"))
+            reports.xml.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, compilation.name + ".xml").absolutePath
+                    }
+                )
+            )
+            reports.html.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, compilation.name + ".html").absolutePath
+                    }
+                )
+            )
+            reports.txt.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, compilation.name + ".txt").absolutePath
+                    }
+                )
+            )
+            reports.sarif.outputLocation.convention(
+                layout.projectDirectory.file(
+                    providers.provider {
+                        File(extension.reportsDir, compilation.name + ".sarif").absolutePath
+                    }
+                )
+            )
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {

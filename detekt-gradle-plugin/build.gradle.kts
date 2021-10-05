@@ -1,7 +1,7 @@
 plugins {
-    module
+    id("module")
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish")
+    alias(libs.plugins.pluginPublishing)
 }
 
 repositories {
@@ -13,12 +13,16 @@ val intTest: Configuration by configurations.creating
 
 dependencies {
     implementation(libs.kotlin.gradlePluginApi)
-    implementation("io.github.detekt.sarif4k:sarif4k")
+    implementation(libs.sarif4k)
     compileOnly(libs.android.gradle)
     compileOnly(libs.kotlin.gradle)
+    compileOnly(gradleKotlinDsl())
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.kotlin.gradle)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.spek.runner)
+    testImplementation(gradleKotlinDsl())
     intTest(libs.kotlin.gradle)
     intTest(libs.android.gradle)
 }

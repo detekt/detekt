@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -17,21 +19,17 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import java.util.Locale
 
 /**
- * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
+ * This rule detects and reports base 10 numbers above a certain length that should be underscore
  * separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
- * under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
- * explicitly ignored. For floats and doubles, anything to the right of the decimal is ignored.
+ * under the `acceptableLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
+ * explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.
  *
  * <noncompliant>
- * object Money {
- *     const val DEFAULT_AMOUNT = 1000000
- * }
+ * const val DEFAULT_AMOUNT = 1000000
  * </noncompliant>
  *
  * <compliant>
- * object Money {
- *     const val DEFAULT_AMOUNT = 1_000_000
- * }
+ * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
@@ -39,14 +37,20 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
+        "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
             "should be underscore separated to increase readability. Underscores that do not make groups of " +
             "3 digits are also reported.",
         Debt.FIVE_MINS
     )
 
-    @Configuration("Length under which decimal base 10 literals are not required to have underscores")
-    private val acceptableDecimalLength: Int by config(DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
+    @Configuration("Length under which base 10 numbers are not required to have underscores")
+    @Deprecated("Use `acceptableLength` instead")
+    private val acceptableDecimalLength: Int by config(5) { it - 1 }
+
+    @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
+    @Configuration("Maximum number of digits that a number can have and not use underscores")
+    private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val normalizedText = normalizeForMatching(expression.text)
@@ -57,7 +61,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
         val numberString = normalizedText.split('.').first()
 
-        if (numberString.length >= acceptableDecimalLength || numberString.contains('_')) {
+        if (numberString.length > acceptableLength || numberString.contains('_')) {
             reportIfInvalidUnderscorePattern(expression, numberString)
         }
     }
@@ -68,8 +72,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "This numeric literal should be separated " +
-                        "by underscores in order to increase readability."
+                    "This number should be separated by underscores in order to increase readability."
                 )
             )
         }
@@ -98,7 +101,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
-            .toLowerCase(Locale.US)
+            .toLowerCase(Locale.ROOT)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
@@ -110,6 +113,5 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"
         private const val SERIAL_UID_PROPERTY_NAME = "serialVersionUID"
-        private const val DEFAULT_ACCEPTABLE_DECIMAL_LENGTH = 5
     }
 }

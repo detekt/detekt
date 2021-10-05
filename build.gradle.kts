@@ -2,11 +2,11 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
-    packaging
-    releasing
-    detekt
-    id("com.github.ben-manes.versions")
-    id("org.sonarqube")
+    id("packaging")
+    id("releasing")
+    id("detekt")
+    alias(libs.plugins.gradleVersionz)
+    alias(libs.plugins.sonarqube)
 }
 
 allprojects {

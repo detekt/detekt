@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * <noncompliant>
  * class Foo {
- *     @JvmField lateinit var i1: Int
- *     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
+ *     private lateinit var i1: Int
+ *     lateinit var i2: Int
  * }
  * </noncompliant>
  */
@@ -39,6 +39,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
+    @Deprecated("Use `ignoreAnnotated` instead")
     private val excludeAnnotatedProperties: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
@@ -59,7 +60,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
+        val annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedProperties)
 
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
             .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }

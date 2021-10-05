@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
+package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 
@@ -40,7 +40,8 @@ private object TestExclusions : Exclusions() {
         "ThrowingExceptionsWithoutMessageOrCause",
         "UndocumentedPublicClass",
         "UndocumentedPublicFunction",
-        "UndocumentedPublicProperty"
+        "UndocumentedPublicProperty",
+        "UnsafeCallOnNullableType",
     )
 }
 

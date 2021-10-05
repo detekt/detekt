@@ -93,7 +93,7 @@ subprojects {
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
     tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
-      finalizedBy(mergeTask)
+      finalizedBy(reportMerge)
 
       reportMerge.configure { mergeTask ->
         mergeTask.input.from(detektTask.xmlReportFile) // or detektTask.sarifReportFile

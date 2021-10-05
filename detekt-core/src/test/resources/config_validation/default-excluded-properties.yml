@@ -1,6 +1,10 @@
 style:
+  active: true
+  excludes: []
+  includes: []
   MagicNumber:
     active: true
     autoCorrect: true
     excludes: []
     includes: []
+    ignoreAnnotated: []

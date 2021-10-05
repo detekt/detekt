@@ -54,12 +54,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("Define a list of package names that should be allowed to be imported with wildcard imports.")
-    private val excludeImports: List<String> by config(
-        listOf(
-            "java.util.*",
-            "kotlinx.android.synthetic.*"
-        )
-    ) { imports ->
+    private val excludeImports: List<String> by config(listOf("java.util.*")) { imports ->
         imports.map { it.removePrefix("*").removeSuffix("*") }
     }
 

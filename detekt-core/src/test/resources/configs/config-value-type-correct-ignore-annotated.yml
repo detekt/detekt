@@ -1,0 +1,6 @@
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    ignoreAnnotated:
+      - "AnAnnotation"

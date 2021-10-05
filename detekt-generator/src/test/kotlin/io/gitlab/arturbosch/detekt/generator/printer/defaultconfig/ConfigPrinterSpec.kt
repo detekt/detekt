@@ -1,7 +1,6 @@
-package io.gitlab.arturbosch.detekt.generator.printer
+package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.github.detekt.test.utils.readResourceContent
-import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.util.createRuleSetPage
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

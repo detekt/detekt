@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -39,14 +38,9 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of lines in a method to trigger the rule")
     private val threshold: Int by config(defaultValue = 60)
 
-    @Configuration("ignore long methods in the context of these annotation class names")
-    private val ignoreAnnotated: List<String> by config(emptyList())
-
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
     private val nestedFunctionTracking = IdentityHashMap<KtNamedFunction, HashSet<KtNamedFunction>>()
-
-    private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun preVisit(root: KtFile) {
         functionToLinesCache.clear()
@@ -77,8 +71,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (annotationExcluder.shouldExclude(function.annotationEntries)) return
-
         val parentMethods = function.getStrictParentOfType<KtNamedFunction>()
         val bodyEntity = function.bodyBlockExpression ?: function.bodyExpression
         val lines = (if (parentMethods != null) function else bodyEntity)?.linesOfCode() ?: 0
@@ -90,11 +82,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
             .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
             .takeIf { it > 0 }
             ?.let { functionToLinesCache[function] = lines - it }
-    }
-
-    override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated)
-        super.visitKtFile(file)
     }
 
     private fun findAllNestedFunctions(startFunction: KtNamedFunction): Sequence<KtNamedFunction> = sequence {

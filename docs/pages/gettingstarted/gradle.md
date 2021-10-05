@@ -125,7 +125,7 @@ repositories {
 
 ### <a name="gradleandroid">Configuration for Android projects</a>
 
-When using Android make sure to have detekt configured in the project level build.gradle file.
+When using Android make sure to have detekt configured in the app/module level `build.gradle` file.
 
 You can configure the plugin in the same way as indicated above.
 
@@ -139,13 +139,13 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath "com.android.tools.build:gradle:<agp_version>"
     }
 }
 
 plugins {
     id "com.android.application"
-    id "org.jetbrains.kotlin.android" version "1.4.0"
+    id "org.jetbrains.kotlin.android" version "<kotlin_version>"
     id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
 }
 
@@ -164,13 +164,13 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.0.0")
+        classpath("com.android.tools.build:gradle:<agp_version>")
     }
 }
 
 plugins {
     id("com.android.application")
-    kotlin("android") version "1.4.0"
+    kotlin("android") version "<kotlin_version>"
     id("io.gitlab.arturbosch.detekt") version "{{ site.detekt_version }}"
 }
 

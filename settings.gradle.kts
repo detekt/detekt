@@ -1,10 +1,14 @@
 rootProject.name = "detekt"
+
+pluginManagement {
+    includeBuild("build-logic")
+}
+
 include(
     "code-coverage-report",
     "custom-checks",
     "detekt-api",
     "detekt-cli",
-    "detekt-bom",
     "detekt-core",
     "detekt-formatting",
     "detekt-generator",
@@ -37,7 +41,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.6.1"
+    id("com.gradle.enterprise") version "3.6.4"
 }
 
 gradleEnterprise {

@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import io.gitlab.arturbosch.detekt.core.suppressors.getSuppressors
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -119,7 +120,7 @@ internal class Analyzer(
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
-                for (finding in rule.findings) {
+                for (finding in filterSuppressedFindings(rule)) {
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
                         "Mapping for '${finding.id}' expected."
                     }
@@ -133,6 +134,15 @@ internal class Analyzer(
         executeRules(otherRules)
 
         return result
+    }
+}
+
+private fun filterSuppressedFindings(rule: BaseRule): List<Finding> {
+    val suppressors = getSuppressors(rule)
+    return if (suppressors.isNotEmpty()) {
+        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor(finding) } }
+    } else {
+        rule.findings
     }
 }
 

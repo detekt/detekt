@@ -18,10 +18,12 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             isIgnoreFailures = value
         }
 
+    @Deprecated("Use reportsDir which is equivalent", ReplaceWith("reportsDir"))
     val customReportsDir: File?
         get() = reportsDir
 
-    val reports = DetektReports()
+    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
+    val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
     var input: ConfigurableFileCollection
@@ -78,6 +80,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
      */
     var ignoredFlavors: List<String> = emptyList()
 
+    @Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
+    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
     fun reports(configure: Action<DetektReports>) {
         configure.execute(reports)
     }

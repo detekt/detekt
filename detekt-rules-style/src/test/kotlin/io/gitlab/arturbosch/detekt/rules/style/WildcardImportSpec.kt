@@ -78,7 +78,6 @@ class WildcardImportSpec : Spek({
             it("ignores the default values") {
                 val code2 = """
                     import java.util.*
-                    import kotlinx.android.synthetic.*
                 """
 
                 val findings = WildcardImport().lint(code2)

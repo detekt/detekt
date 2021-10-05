@@ -1,5 +1,5 @@
 plugins {
-    module
+    id("module")
 }
 
 dependencies {
@@ -7,4 +7,6 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.mockk)
+    testImplementation(libs.bundles.testImplementation)
+    testRuntimeOnly(libs.spek.runner)
 }

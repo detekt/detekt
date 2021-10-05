@@ -38,6 +38,7 @@ console-reports:
      - 'NotificationReport'
   #  - 'FindingsReport'
      - 'FileBasedFindingsReport'
+     - 'LiteFindingsReport'
 
 output-reports:
   active: true
@@ -110,14 +111,13 @@ complexity:
   LongMethod:
     active: true
     threshold: 60
-    ignoreAnnotated: []
   LongParameterList:
     active: true
     functionThreshold: 6
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
-    ignoreAnnotated: []
+    ignoreAnnotatedParameter: []
   MethodOverloading:
     active: false
     threshold: 6
@@ -234,7 +234,6 @@ exceptions:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
-      - 'Error'
       - 'Exception'
       - 'IllegalArgumentException'
       - 'IllegalMonitorStateException'
@@ -440,8 +439,6 @@ naming:
     functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
     excludeClassPattern: '$^'
     ignoreOverridden: true
-    ignoreAnnotated:
-      - 'Composable'
   FunctionParameterNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -556,7 +553,6 @@ potential-bugs:
   LateinitUsage:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    excludeAnnotatedProperties: []
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: false
@@ -579,6 +575,7 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   UnsafeCast:
     active: true
   UnusedUnaryOperator:
@@ -644,8 +641,6 @@ style:
     ignoreOverridableFunction: true
     ignoreActualFunction: true
     excludedFunctions: ''
-    excludeAnnotatedFunction:
-      - 'dagger.Provides'
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**']
@@ -734,11 +729,9 @@ style:
     active: false
   UnderscoresInNumericLiterals:
     active: false
-    acceptableDecimalLength: 5
+    acceptableLength: 4
   UnnecessaryAbstractClass:
     active: true
-    excludeAnnotatedClasses:
-      - 'dagger.Module'
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
@@ -768,7 +761,6 @@ style:
     active: false
   UseDataClass:
     active: false
-    excludeAnnotatedClasses: []
     allowVars: false
   UseEmptyCounterpart:
     active: false
@@ -795,4 +787,3 @@ style:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     excludeImports:
       - 'java.util.*'
-      - 'kotlinx.android.synthetic.*'

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Context
-import io.gitlab.arturbosch.detekt.api.DefaultContext
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule

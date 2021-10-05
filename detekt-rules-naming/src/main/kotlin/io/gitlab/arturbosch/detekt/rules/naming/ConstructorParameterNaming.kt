@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * Reports constructor parameter names which do not follow the specified naming convention are used.
+ * Reports constructor parameter names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {

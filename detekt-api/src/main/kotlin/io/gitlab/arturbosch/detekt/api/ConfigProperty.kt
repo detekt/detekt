@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+import kotlin.reflect.KProperty0
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -32,34 +33,34 @@ fun <T : Any, U : Any> config(
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
  * key that is used during configuration lookup. If there is no such property, the value of the
- * supplied [fallbackPropertyName] is also considered before using the [defaultValue].
+ * supplied [fallbackProperty] is also considered before using the [defaultValue].
  * The value of the property is evaluated only once.
  *
  * This method is only intended to be used in migration scenarios where there is no way to update all configuration
  * files immediately.
  *
- * @param fallbackPropertyName the configuration key that is checked when there is no key that matches the property
- * name before falling back to the default value.
+ * @param fallbackProperty The reference to the configuration key to fall back to. This property must be defined as a
+ * configuration delegate.
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
 @UnstableApi("fallback property handling is still under discussion")
 fun <T : Any> configWithFallback(
-    fallbackPropertyName: String,
+    fallbackProperty: KProperty0<T>,
     defaultValue: T
-): ReadOnlyProperty<ConfigAware, T> = configWithFallback(fallbackPropertyName, defaultValue) { it }
+): ReadOnlyProperty<ConfigAware, T> = configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
  * key that is used during configuration lookup. If there is no such property, the value of the
- * supplied [fallbackPropertyName] is also considered before using the [defaultValue].
- * The value of the property is evaluated and transfored only once.
+ * supplied [fallbackProperty] is also considered before using the [defaultValue].
+ * The value of the property is evaluated and transformed only once.
  *
  * This method is only intended to be used in migration scenarios where there is no way to update all configuration
  * files immediately.
  *
- * @param fallbackPropertyName the configuration key that is checked when there is no key that matches the property
- * name before falling back to the default value.
+ * @param fallbackProperty The reference to the configuration key to fall back to. This property must be defined as a
+ * configuration delegate.
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  * @param transformer a function that transforms the value from the configuration (or the default) into its final
@@ -67,10 +68,11 @@ fun <T : Any> configWithFallback(
  */
 @UnstableApi("fallback property handling is still under discussion")
 fun <T : Any, U : Any> configWithFallback(
-    fallbackPropertyName: String,
+    fallbackProperty: KProperty0<U>,
     defaultValue: T,
     transformer: (T) -> U
-): ReadOnlyProperty<ConfigAware, U> = FallbackConfigProperty(fallbackPropertyName, defaultValue, transformer)
+): ReadOnlyProperty<ConfigAware, U> =
+    FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -159,12 +161,19 @@ private class TransformedConfigProperty<T : Any, U : Any>(
 }
 
 private class FallbackConfigProperty<T : Any, U : Any>(
-    private val fallbackPropertyName: String,
+    private val fallbackProperty: KProperty0<U>,
     private val defaultValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
-        val fallbackValue = getValueOrDefault(thisRef, fallbackPropertyName, defaultValue)
-        return transform(getValueOrDefault(thisRef, property.name, fallbackValue))
+        if (thisRef.isConfigured(property.name)) {
+            return transform(getValueOrDefault(thisRef, property.name, defaultValue))
+        }
+        if (thisRef.isConfigured(fallbackProperty.name)) {
+            return fallbackProperty.get()
+        }
+        return transform(defaultValue)
     }
+
+    private fun ConfigAware.isConfigured(propertyName: String) = valueOrNull<Any>(propertyName) != null
 }

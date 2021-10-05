@@ -381,6 +381,8 @@ class MagicNumberSpec : Spek({
             class A {
                 val boringNumber = 42
                 const val BORING_CONSTANT = 93871
+                val duration = Duration.seconds(10)
+                val durationWithStdlibFunction = 10.toDuration(DurationUnit.MILLISECONDS)
 
                 override fun hashCode(): Int {
                     val iAmSoMagic = 7328672
@@ -389,8 +391,12 @@ class MagicNumberSpec : Spek({
                 companion object {
                     val anotherBoringNumber = 43
                     const val anotherBoringConstant = 93872
+                    val color = Color(0x66000000)
+                    val colorWithExplicitParameter = Color(color = 0x66000000)
                 }
             }
+
+            data class Color(val color: Int)
         """
 
             it("should report all without ignore flags") {
@@ -411,9 +417,12 @@ class MagicNumberSpec : Spek({
                         SourceLocation(1, 17),
                         SourceLocation(3, 24),
                         SourceLocation(4, 33),
-                        SourceLocation(7, 26),
-                        SourceLocation(11, 35),
-                        SourceLocation(12, 43)
+                        SourceLocation(5, 37),
+                        SourceLocation(9, 26),
+                        SourceLocation(13, 35),
+                        SourceLocation(14, 43),
+                        SourceLocation(15, 27),
+                        SourceLocation(16, 56)
                     )
             }
 
@@ -702,6 +711,11 @@ class MagicNumberSpec : Spek({
                 val code = "class SomeClassWithDefault constructor(val defaultValue: Int = 10)"
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
+
+            it("reports no finding for a function expression") {
+                val code = "class SomeClassWithDefault constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS))"
+                assertThat(MagicNumber().lint(code)).isEmpty()
+            }
         }
 
         context("default parameters in secondary constructor") {
@@ -713,12 +727,25 @@ class MagicNumberSpec : Spek({
                 }"""
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
+
+            it("reports no finding for a function expression") {
+                val code = """
+                class SomeClassWithDefault {
+                    constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
+                }"""
+                assertThat(MagicNumber().lint(code)).isEmpty()
+            }
         }
 
         context("default parameters in function") {
 
             it("reports no finding") {
                 val code = "fun f(p: Int = 100)"
+                assertThat(MagicNumber().lint(code)).isEmpty()
+            }
+
+            it("reports no finding for a function expression") {
+                val code = "fun f(p: Duration = 10.toDuration(DurationUnit.MILLISECONDS))"
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
         }
