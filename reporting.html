@@ -606,11 +606,11 @@ You can follow to the <a href="https://docs.github.com/en/github/finding-securit
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run detekt</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">./gradlew detekt</span>
 
-      <span class="c1"># Make sure we always run this upload task, because the previous step fails if there are</span>
-      <span class="c1"># findings.</span>
+      <span class="c1"># Make sure we always run this upload task,</span>
+      <span class="c1"># because the previous step may fail if there are findings.</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Upload SARIF to Github using the upload-sarif action</span>
         <span class="na">uses</span><span class="pi">:</span> <span class="s">github/codeql-action/upload-sarif@v1</span>
-        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">success() || failure()</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">sarif_file</span><span class="pi">:</span> <span class="s">build/detekt.sarif</span>
 </code></pre></div></div>
@@ -631,7 +631,7 @@ You can follow to the <a href="https://docs.github.com/en/github/finding-securit
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Oct 4, 2021 <br />
+ Site last generated: Oct 5, 2021 <br />
                 </div>
             </div>
 </footer>
