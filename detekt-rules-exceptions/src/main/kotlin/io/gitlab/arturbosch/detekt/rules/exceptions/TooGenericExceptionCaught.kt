@@ -53,11 +53,12 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     private val allowedExceptionNameRegex: Regex by config("_|(ignore|expected).*", String::toRegex)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        val catchParameter = catchClause.catchParameter ?: return
-        if (isTooGenericException(catchParameter.typeReference) &&
-            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
-        ) {
-            report(CodeSmell(issue, Entity.from(catchParameter), issue.description))
+        catchClause.catchParameter?.let { catchParameter ->
+            if (isTooGenericException(catchParameter.typeReference) &&
+                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
+            ) {
+                report(CodeSmell(issue, Entity.from(catchParameter), issue.description))
+            }
         }
         super.visitCatchSection(catchClause)
     }
