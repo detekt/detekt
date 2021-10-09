@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -30,14 +31,15 @@ class AnnotationSuppressorSpec : Spek({
 
     describe("AnnotationSuppressorFactory") {
         it("Factory returns null if ignoreAnnotated is not set") {
-            val suppressor = annotationSuppressorFactory(buildConfigAware(/* empty */))
+            val suppressor = annotationSuppressorFactory(buildConfigAware(/* empty */), BindingContext.EMPTY)
 
             assertThat(suppressor).isNull()
         }
 
         it("Factory returns null if ignoreAnnotated is set to empty") {
             val suppressor = annotationSuppressorFactory(
-                buildConfigAware("ignoreAnnotated" to emptyList<String>())
+                buildConfigAware("ignoreAnnotated" to emptyList<String>()),
+                BindingContext.EMPTY,
             )
 
             assertThat(suppressor).isNull()
@@ -45,7 +47,8 @@ class AnnotationSuppressorSpec : Spek({
 
         it("Factory returns not null if ignoreAnnotated is set to a not empty list") {
             val suppressor = annotationSuppressorFactory(
-                buildConfigAware("ignoreAnnotated" to listOf("Composable"))
+                buildConfigAware("ignoreAnnotated" to listOf("Composable")),
+                BindingContext.EMPTY,
             )
 
             assertThat(suppressor).isNotNull()
@@ -54,7 +57,10 @@ class AnnotationSuppressorSpec : Spek({
 
     describe("AnnotationSuppressor") {
         val suppressor by memoized {
-            annotationSuppressorFactory(buildConfigAware("ignoreAnnotated" to listOf("Composable")))!!
+            annotationSuppressorFactory(
+                buildConfigAware("ignoreAnnotated" to listOf("Composable")),
+                BindingContext.EMPTY,
+            )!!
         }
 
         it("If KtElement is null it returns false") {

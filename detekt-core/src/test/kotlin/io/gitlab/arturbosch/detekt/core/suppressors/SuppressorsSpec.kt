@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -37,14 +38,14 @@ class SuppressorsSpec : Spek({
 
         it("A finding that should be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule)
+            val suppress = getSuppressors(rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
             assertThat(suppress).isFalse()
         }
         it("A finding that should not be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule)
+            val suppress = getSuppressors(rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
             assertThat(suppress).isTrue()
@@ -53,14 +54,14 @@ class SuppressorsSpec : Spek({
         context("MultiRule") {
             it("A finding that should be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule)
+                val suppress = getSuppressors(rule, BindingContext.EMPTY)
                     .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
                 assertThat(suppress).isFalse()
             }
             it("A finding that should not be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule)
+                val suppress = getSuppressors(rule, BindingContext.EMPTY)
                     .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
                 assertThat(suppress).isTrue()
