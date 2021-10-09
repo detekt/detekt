@@ -39,6 +39,7 @@ class MethodSignatureSpec : Spek({
                 expectedParams = listOf("kotlin.String")
             )
         ).forEach { testCase ->
+            @Suppress("DEPRECATION")
             it(testCase.testDescription) {
                 val (methodName, params) = extractMethodNameAndParams(testCase.methodSignature)
 
