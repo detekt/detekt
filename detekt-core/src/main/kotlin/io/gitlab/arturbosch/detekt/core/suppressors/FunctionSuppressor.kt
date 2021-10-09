@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ConfigAware
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /*
  * Possible improvement: don't only check name but also check for parameters.
@@ -15,26 +16,33 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * ```
  * This would not be a breaking change.
  */
-internal fun functionSuppressorFactory(rule: ConfigAware): Suppressor? {
+internal fun functionSuppressorFactory(rule: ConfigAware, bindingContext: BindingContext): Suppressor? {
     val names = rule.valueOrDefault("ignoreFunction", emptyList<String>())
     return if (names.isNotEmpty()) {
         Suppressor { finding ->
             val element = finding.entity.ktElement
-            element != null && functionSuppressor(element, names)
+            element != null && functionSuppressor(element, bindingContext, names)
         }
     } else {
         null
     }
 }
 
-private fun functionSuppressor(element: KtElement, names: List<String>): Boolean {
-    return element.isInFunctionNamed(names)
+private fun functionSuppressor(
+    element: KtElement,
+    bindingContext: BindingContext,
+    names: List<String>,
+): Boolean {
+    return element.isInFunctionNamed(bindingContext, names)
 }
 
-private fun KtElement.isInFunctionNamed(names: List<String>): Boolean {
+private fun KtElement.isInFunctionNamed(
+    bindingContext: BindingContext,
+    names: List<String>,
+): Boolean {
     return if (this is KtNamedFunction && name in names) {
         true
     } else {
-        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(names) ?: false
+        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(bindingContext, names) ?: false
     }
 }
