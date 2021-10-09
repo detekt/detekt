@@ -1,17 +1,25 @@
 package io.github.detekt.tooling.api
 
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 sealed class FunctionMatcher {
     abstract fun match(call: ResolvedCall<*>): Boolean
 
+    abstract fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean
+
     internal data class NameOnly(
         private val fullyQualifiedName: String
     ) : FunctionMatcher() {
         override fun match(call: ResolvedCall<*>): Boolean {
             return call.resultingDescriptor.fqNameOrNull()?.asString() == fullyQualifiedName
+        }
+
+        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
+            return function.name == fullyQualifiedName
         }
 
         override fun toString(): String {
@@ -30,6 +38,16 @@ sealed class FunctionMatcher {
                 .map { it.type.fqNameOrNull()?.asString() }
 
             return encounteredParamTypes == parameters
+        }
+
+        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
+            if (bindingContext == BindingContext.EMPTY) return false
+            if (function.name != fullyQualifiedName) return false
+
+            val encounteredParameters = function.valueParameters
+                .map { bindingContext[BindingContext.TYPE, it.typeReference]?.fqNameOrNull()?.toString() }
+
+            return encounteredParameters == parameters
         }
 
         override fun toString(): String {
