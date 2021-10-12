@@ -312,7 +312,7 @@ formatting:
     active: true
     autoCorrect: true
   MultiLineIfElse:
-    active: true
+    active: false
     autoCorrect: true
   NoBlankLineBeforeRbrace:
     active: true

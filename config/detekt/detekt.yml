@@ -85,6 +85,8 @@ formatting:
     active: true
   MaximumLineLength:
     active: false
+  MultiLineIfElse:
+    active: true
   NoEmptyFirstLineInMethodBlock:
     active: true
   SpacingAroundAngleBrackets:
