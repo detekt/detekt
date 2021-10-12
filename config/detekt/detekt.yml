@@ -83,8 +83,6 @@ formatting:
     active: true
   EnumEntryNameCase:
     active: true
-  ImportOrdering:
-    active: true
   MaximumLineLength:
     active: false
   NoEmptyFirstLineInMethodBlock:
