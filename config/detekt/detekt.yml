@@ -85,8 +85,6 @@ formatting:
     active: true
   ImportOrdering:
     active: true
-  Indentation:
-    active: true
   MaximumLineLength:
     active: false
   NoEmptyFirstLineInMethodBlock:
