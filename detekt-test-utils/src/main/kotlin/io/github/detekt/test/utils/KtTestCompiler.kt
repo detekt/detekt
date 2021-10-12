@@ -23,7 +23,12 @@ import java.nio.file.Path
  */
 internal object KtTestCompiler : KtCompiler() {
 
-    private val root = resourceAsPath("/")
+    /*
+     * If tests are executed through Bazel, there is no File based resource path as all classpath elements
+     * are JAR files, which leads to crashes. By initializing the root on demand, it's at least possible to
+     * use String based input from Bazel.
+     */
+    private val root by lazy { resourceAsPath("/") }
 
     fun compile(path: Path) = compile(root, path)
 
