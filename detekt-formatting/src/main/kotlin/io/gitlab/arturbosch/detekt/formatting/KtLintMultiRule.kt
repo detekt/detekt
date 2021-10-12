@@ -59,23 +59,18 @@ import java.util.LinkedList
 class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
     override val rules: List<Rule> = listOf(
-        AnnotationOnSeparateLine(config),
-        AnnotationSpacing(config),
-        ArgumentListWrapping(config),
+        // Wrappers for ktlint-ruleset-standard rules. Enabled by default.
         ChainWrapping(config),
         CommentSpacing(config),
-        EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
         ImportOrdering(config),
         Indentation(config),
         MaximumLineLength(config),
         ModifierOrdering(config),
-        MultiLineIfElse(config),
         NoBlankLineBeforeRbrace(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
-        NoEmptyFirstLineInMethodBlock(config),
         NoLineBreakAfterElse(config),
         NoLineBreakBeforeAssignment(config),
         NoMultipleSpaces(config),
@@ -84,22 +79,30 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         NoUnitReturn(config),
         NoUnusedImports(config),
         NoWildcardImports(config),
-        PackageName(config),
         ParameterListWrapping(config),
-        SpacingAroundAngleBrackets(config),
         SpacingAroundColon(config),
         SpacingAroundComma(config),
         SpacingAroundCurly(config),
-        SpacingAroundDoubleColon(config),
         SpacingAroundDot(config),
         SpacingAroundKeyword(config),
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
+        StringTemplate(config),
+
+        // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+        AnnotationOnSeparateLine(config),
+        AnnotationSpacing(config),
+        ArgumentListWrapping(config),
+        EnumEntryNameCase(config),
+        MultiLineIfElse(config),
+        NoEmptyFirstLineInMethodBlock(config),
+        PackageName(config),
+        SpacingAroundAngleBrackets(config),
+        SpacingAroundDoubleColon(config),
         SpacingAroundUnaryOperator(config),
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
-        StringTemplate(config)
     )
 
     override fun visit(root: KtFile) {
