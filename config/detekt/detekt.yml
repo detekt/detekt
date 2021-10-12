@@ -89,6 +89,8 @@ formatting:
     active: true
   NoEmptyFirstLineInMethodBlock:
     active: true
+  PackageName:
+    active: true
   SpacingAroundAngleBrackets:
     active: true
   SpacingAroundDoubleColon:

@@ -350,7 +350,7 @@ formatting:
   NoWildcardImports:
     active: true
   PackageName:
-    active: true
+    active: false
     autoCorrect: true
   ParameterListWrapping:
     active: true
