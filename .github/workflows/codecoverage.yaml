@@ -29,5 +29,4 @@ jobs:
 
       - name: Publish Coverage
         if: success()
-        run: bash <(curl -s https://codecov.io/bash)
-        shell: bash
+        uses: codecov/codecov-action@v2
