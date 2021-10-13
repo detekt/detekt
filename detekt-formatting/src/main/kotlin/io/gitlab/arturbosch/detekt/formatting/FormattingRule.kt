@@ -35,7 +35,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      * This property is read from the ruleSet config.
      */
     protected val isAndroid
-        get() = ruleSetConfig.valueOrDefault("android", false)
+        get() = FormattingProvider.android.value(ruleSetConfig)
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()

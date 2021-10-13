@@ -35,7 +35,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     @Suppress("ComplexMethod") // preserving the declarative structure while building the dsl
     private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
         node(ruleSet.name) {
-            keyValue { "active" to "${ruleSet.defaultActivationStatus.active}" }
+            keyValue { Config.ACTIVE_KEY to "${ruleSet.defaultActivationStatus.active}" }
             val ruleSetExclusion = exclusions.singleOrNull { ruleSet.name in it.ruleSets }
             if (ruleSetExclusion != null) {
                 keyValue { Config.EXCLUDES_KEY to ruleSetExclusion.pattern }
