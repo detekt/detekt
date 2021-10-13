@@ -18,7 +18,6 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(gradleKotlinDsl())
 
-    testImplementation(projects.detektTestUtils)
     testImplementation(libs.kotlin.gradle)
     testImplementation(libs.bundles.testImplementation)
     testRuntimeOnly(libs.spek.runner)

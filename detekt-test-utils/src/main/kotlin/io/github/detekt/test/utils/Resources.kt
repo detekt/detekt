@@ -1,6 +1,5 @@
 package io.github.detekt.test.utils
 
-import java.io.File
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
@@ -19,8 +18,6 @@ fun resourceUrl(name: String): URL {
 fun resource(name: String): URI = resourceUrl(name).toURI()
 
 fun resourceAsPath(name: String): Path = Paths.get(resource(name))
-
-fun resourceAsFile(name: String): File = File(resourceUrl(name).path)
 
 fun readResourceContent(name: String): String {
     val path = resourceAsPath(name)
