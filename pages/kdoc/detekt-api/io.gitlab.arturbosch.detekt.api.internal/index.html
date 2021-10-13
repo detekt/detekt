@@ -500,7 +500,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-configuration/index.html">Configuration</a></td>
-      <td>[jvm]<br />@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-target/index.html">Target</a>(allowedTargets = [<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-annotation-target/-p-r-o-p-e-r-t-y/index.html">AnnotationTarget.PROPERTY</a>])<br />annotation class <a href="-configuration/index.html">Configuration</a>(description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)</td>
+      <td>[jvm]<br />@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-target/index.html">Target</a>(allowedTargets = [<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-annotation-target/-p-r-o-p-e-r-t-y/index.html">AnnotationTarget.PROPERTY</a>])<br />annotation class <a href="-configuration/index.html">Configuration</a>(description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)<br />Annotate the target to specify a configuration for <a href="../io.gitlab.arturbosch.detekt.api/-rule/index.html">io.gitlab.arturbosch.detekt.api.Rule</a> or <a href="../io.gitlab.arturbosch.detekt.api/-rule-set-provider/index.html">io.gitlab.arturbosch.detekt.api.RuleSetProvider</a>.</td>
     </tr>
     <tr>
       <td><a href="-default-rule-set-provider/index.html">DefaultRuleSetProvider</a></td>
@@ -513,6 +513,10 @@ $('#toc').on('click', 'a', function() {
     <tr>
       <td><a href="-requires-type-resolution/index.html">RequiresTypeResolution</a></td>
       <td>[jvm]<br />@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-target/index.html">Target</a>(allowedTargets = [<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.annotation/-annotation-target/-c-l-a-s-s/index.html">AnnotationTarget.CLASS</a>])<br />annotation class <a href="-requires-type-resolution/index.html">RequiresTypeResolution</a><br />Annotated <a href="../io.gitlab.arturbosch.detekt.api/-rule/index.html">io.gitlab.arturbosch.detekt.api.Rule</a> requires type resolution to work.</td>
+    </tr>
+    <tr>
+      <td><a href="-rule-set-config-property/index.html">RuleSetConfigProperty</a></td>
+      <td>[jvm]<br />class <a href="-rule-set-config-property/index.html">RuleSetConfigProperty</a>&lt;<a href="-rule-set-config-property/index.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt;(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, defaultValue: <a href="-rule-set-config-property/index.html">T</a>)</td>
     </tr>
     <tr>
       <td><a href="-simple-glob/index.html">SimpleGlob</a></td>
@@ -546,6 +550,10 @@ $('#toc').on('click', 'a', function() {
     <tr>
       <td><a href="path-matcher.html">pathMatcher</a></td>
       <td>[jvm]<br />fun <a href="path-matcher.html">pathMatcher</a>(pattern: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/PathMatcher.html">PathMatcher</a><br />Converts given <a href="path-matcher.html">pattern</a> into a <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/PathMatcher.html">PathMatcher</a> specified by <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-kotlin.String-">FileSystem.getPathMatcher</a>. We only support the “glob:” syntax to stay os independently. Internally a globbing pattern is transformed to a regex respecting the Windows file system.</td>
+    </tr>
+    <tr>
+      <td><a href="rule-set-config.html">ruleSetConfig</a></td>
+      <td>[jvm]<br />fun &lt;<a href="rule-set-config.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="rule-set-config.html">ruleSetConfig</a>(defaultValue: <a href="rule-set-config.html">T</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?, <a href="-rule-set-config-property/index.html">RuleSetConfigProperty</a>&lt;<a href="rule-set-config.html">T</a>&gt;&gt;</td>
     </tr>
     <tr>
       <td><a href="value-or-default-comma-separated.html">valueOrDefaultCommaSeparated</a></td>
