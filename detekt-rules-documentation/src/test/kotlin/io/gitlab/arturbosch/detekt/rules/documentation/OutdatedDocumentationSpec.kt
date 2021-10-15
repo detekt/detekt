@@ -100,6 +100,18 @@ class OutdatedDocumentationSpec : Spek({
             it("should report when doc mismatch class params and match props") {
                 assertThat(subject.compileAndLint(incorrectParamCorrectProp)).hasSize(1)
             }
+
+            val incorrectConstructorDoc = """
+                class MyClass {
+                    /**
+                     * @param someParam
+                     */
+                    constructor(otherParam: String)
+                }
+                """
+            it("should report when doc for constructor is incorrect") {
+                assertThat(subject.compileAndLint(incorrectConstructorDoc)).hasSize(1)
+            }
         }
 
         describe("class with type params") {

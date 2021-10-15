@@ -14,7 +14,9 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -30,6 +32,11 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     override fun visitClass(klass: KtClass) {
         reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
         super.visitClass(klass)
+    }
+
+    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+        reportIfDocumentationIsOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }
+        super.visitSecondaryConstructor(constructor)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -59,8 +66,16 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): Declarations {
-        val valueParams = constructor.valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
-        val props = constructor.valueParameters.filter { it.isPropertyParameter() }.mapNotNull { it.name }
+        return getDeclarationsForValueParameters(constructor.valueParameters)
+    }
+
+    private fun getSecondaryConstructorDeclarations(constructor: KtSecondaryConstructor): Declarations {
+        return getDeclarationsForValueParameters(constructor.valueParameters)
+    }
+
+    private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): Declarations {
+        val valueParams = valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
+        val props = valueParameters.filter { it.isPropertyParameter() }.mapNotNull { it.name }
         return Declarations(
             params = valueParams,
             props = props
