@@ -32,6 +32,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             IteratorNotThrowingNoSuchElementException(config),
             LateinitUsage(config),
             MapGetWithNotNullAssertionOperator(config),
+            MissingPackageDeclaration(config),
             MissingWhenCase(config),
             RedundantElseInWhen(config),
             UnconditionalJumpStatementInLoop(config),
