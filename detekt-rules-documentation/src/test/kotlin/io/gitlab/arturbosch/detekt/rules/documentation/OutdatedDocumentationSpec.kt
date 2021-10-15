@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -151,7 +152,7 @@ class OutdatedDocumentationSpec : Spek({
 
             val incorrectTypeParamName = """
                 /**
-                 * @param S
+                 * @param S Description of type param
                  * @param someParam Description of param
                  */
                 class MyClass<T>(someParam: String)
@@ -163,7 +164,7 @@ class OutdatedDocumentationSpec : Spek({
 
             val incorrectTypeParamList = """
                 /**
-                 * @param T
+                 * @param T Description of type param
                  * @param someParam Description of param
                  */
                 class MyClass<T, S>(someParam: String)
@@ -225,7 +226,7 @@ class OutdatedDocumentationSpec : Spek({
 
             val incorrectTypeParamName = """
                 /**
-                 * @param S
+                 * @param S Description of type param
                  * @param someParam Description of param
                  */
                 fun myFun<T>(someParam: String)
@@ -237,7 +238,7 @@ class OutdatedDocumentationSpec : Spek({
 
             val incorrectTypeParamList = """
                 /**
-                 * @param T
+                 * @param T Description of type param
                  * @param someParam Description of param
                  */
                 fun myFun<T, S>(someParam: String)
@@ -291,6 +292,62 @@ class OutdatedDocumentationSpec : Spek({
 
             it("should report for every class and function with incorrect doc") {
                 assertThat(subject.compileAndLint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
+            }
+        }
+
+        describe("configuration matchTypeParameters") {
+            val configuredSubject = OutdatedDocumentation(TestConfig(mapOf("matchTypeParameters" to "false")))
+
+            val incorrectClassTypeParams = """
+                /**
+                 * @param someParam Description of param
+                 */
+                class MyClass<T, S>(someParam: String)
+                """
+
+            it("should not report when class type parameters mismatch and configuration is off") {
+                assertThat(configuredSubject.compileAndLint(incorrectClassTypeParams)).isEmpty()
+            }
+
+            val incorrectFunctionTypeParams = """
+                /**
+                 * @param someParam Description of param
+                 */
+                fun myFun<T, S>(someParam: String)
+                """
+
+            it("should not report when function type parameters mismatch and configuration is off") {
+                assertThat(configuredSubject.compileAndLint(incorrectFunctionTypeParams)).isEmpty()
+            }
+        }
+
+        describe("configuration matchDeclarationsOrder") {
+            val configuredSubject = OutdatedDocumentation(TestConfig(mapOf("matchDeclarationsOrder" to "false")))
+
+            val incorrectDeclarationsOrder = """
+                /**
+                 * @param someParam Description of param
+                 * @param otherParam Description of param
+                 */
+                class MyClass(otherParam: String, someParam: String)
+                """
+
+            it("should not report when declarations order mismatch and configuration is off") {
+                assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+            }
+
+            val incorrectDeclarationsOrderWithType = """
+                /**
+                 * @param S Description of type param
+                 * @param someParam Description of param
+                 * @param otherParam Description of param
+                 * @param T Description of param
+                 */
+                fun myFun<T, S>(otherParam: String, someParam: String)
+                """
+
+            it("should not report when declarations with types order mismatch and configuration is off") {
+                assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
             }
         }
     }

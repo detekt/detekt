@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -23,6 +25,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 /**
  * This rule will report any class, function or constructor with KDoc that does not match declaration signature.
  * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
+ * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
+ * turn off these features using configuration options.
  */
 @Suppress("TooManyFunctions")
 class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
@@ -33,6 +37,12 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         "KDoc should match actual function or class signature",
         Debt.TWENTY_MINS
     )
+
+    @Configuration("if type parameters should be matched")
+    private val matchTypeParameters: Boolean by config(true)
+
+    @Configuration("if the order of declarations should be preserved")
+    private val matchDeclarationsOrder: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
         reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
@@ -53,7 +63,9 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         val constructor = klass.primaryConstructor
         return if (constructor != null) {
             val constructorDeclarations = getPrimaryConstructorDeclarations(constructor)
-            val typeParams = klass.typeParameters.mapNotNull { it.name }
+            val typeParams = if (matchTypeParameters) {
+                klass.typeParameters.mapNotNull { it.name }
+            } else listOf()
             return Declarations(
                 params = typeParams + constructorDeclarations.params,
                 props = constructorDeclarations.props
@@ -64,7 +76,9 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getFunctionDeclarations(function: KtNamedFunction): Declarations {
-        val typeParams = function.typeParameters.mapNotNull { it.name }
+        val typeParams = if (matchTypeParameters) {
+            function.typeParameters.mapNotNull { it.name }
+        } else listOf()
         val valueParams = function.valueParameters.mapNotNull { it.name }
         val params = typeParams + valueParams
         return Declarations(params = params.toMutableList())
@@ -128,10 +142,19 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
             val docDeclarations = getDocDeclarations(doc)
             if (docDeclarations.params.isNotEmpty() || docDeclarations.props.isNotEmpty()) {
                 val elementDeclarations = elementDeclarationsProvider()
-                if (docDeclarations != elementDeclarations) {
+                if (!declarationsMatch(docDeclarations, elementDeclarations)) {
                     reportCodeSmell(element)
                 }
             }
+        }
+    }
+
+    private fun declarationsMatch(doc: Declarations, element: Declarations): Boolean {
+        return if (matchDeclarationsOrder) {
+            doc == element
+        } else {
+            doc.props.sorted() == element.props.sorted() &&
+                doc.params.sorted() == element.params.sorted()
         }
     }
 
