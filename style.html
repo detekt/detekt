@@ -858,7 +858,7 @@ Detekt will then report all methods invocation that are forbidden.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">methods</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.io.print', 'kotlin.io.println']</code>)</p>
 
-    <p>Comma separated list of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature.</p>
+    <p>List of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature.</p>
   </li>
 </ul>
 
