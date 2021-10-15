@@ -37,26 +37,33 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         super.visitNamedFunction(function)
     }
 
-    private fun getClassDeclarations(element: KtClass): Declarations {
-        val constructor = element.primaryConstructor
+    private fun getClassDeclarations(klass: KtClass): Declarations {
+        val constructor = klass.primaryConstructor
         return if (constructor != null) {
-            getPrimaryConstructorDeclarations(constructor)
+            val constructorDeclarations = getPrimaryConstructorDeclarations(constructor)
+            val typeParams = klass.typeParameters.mapNotNull { it.name }
+            return Declarations(
+                params = typeParams + constructorDeclarations.params,
+                props = constructorDeclarations.props
+            )
         } else {
             Declarations()
         }
     }
 
-    private fun getFunctionDeclarations(element: KtNamedFunction): Declarations {
-        val params = element.valueParameters.mapNotNull { it.name }
+    private fun getFunctionDeclarations(function: KtNamedFunction): Declarations {
+        val typeParams = function.typeParameters.mapNotNull { it.name }
+        val valueParams = function.valueParameters.mapNotNull { it.name }
+        val params = typeParams + valueParams
         return Declarations(params = params.toMutableList())
     }
 
     private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): Declarations {
-        val params = constructor.valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
+        val valueParams = constructor.valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
         val props = constructor.valueParameters.filter { it.isPropertyParameter() }.mapNotNull { it.name }
         return Declarations(
-            params = params.toMutableList(),
-            props = props.toMutableList()
+            params = valueParams,
+            props = props
         )
     }
 
@@ -100,6 +107,8 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         if (doc != null) {
             val elementDeclarations = elementDeclarationsProvider()
             val docDeclarations = getDocDeclarations(doc)
+            println(elementDeclarations)
+            println(docDeclarations)
             if (docDeclarations != elementDeclarations) {
                 reportCodeSmell(element)
             }
