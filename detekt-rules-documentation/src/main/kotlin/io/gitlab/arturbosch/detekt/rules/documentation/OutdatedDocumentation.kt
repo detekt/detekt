@@ -107,8 +107,6 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         if (doc != null) {
             val elementDeclarations = elementDeclarationsProvider()
             val docDeclarations = getDocDeclarations(doc)
-            println(elementDeclarations)
-            println(docDeclarations)
             if (docDeclarations != elementDeclarations) {
                 reportCodeSmell(element)
             }
