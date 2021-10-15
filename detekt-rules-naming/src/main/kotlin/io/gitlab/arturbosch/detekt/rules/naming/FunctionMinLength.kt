@@ -24,6 +24,9 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
+    override val defaultRuleIdAliases: Set<String>
+        get() = setOf("FunctionMinNameLength")
+
     @Configuration("minimum name length")
     private val minimumFunctionNameLength: Int by config(3)
 
