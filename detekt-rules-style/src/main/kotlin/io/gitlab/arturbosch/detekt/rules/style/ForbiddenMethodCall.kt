@@ -46,7 +46,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration(
-        "Comma separated list of fully qualified method signatures which are forbidden. " +
+        "List of fully qualified method signatures which are forbidden. " +
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
             "calls of all methods with this name or with full signature " +
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
