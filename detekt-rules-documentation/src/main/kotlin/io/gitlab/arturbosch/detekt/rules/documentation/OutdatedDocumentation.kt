@@ -20,6 +20,10 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
+/**
+ * This rule will report any class, function or constructor with KDoc that does not match declaration signature.
+ * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
+ */
 @Suppress("TooManyFunctions")
 class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
