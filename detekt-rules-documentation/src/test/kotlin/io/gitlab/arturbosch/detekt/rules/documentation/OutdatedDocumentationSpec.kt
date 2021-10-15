@@ -10,8 +10,7 @@ class OutdatedDocumentationSpec : Spek({
 
     describe("OutdatedDocumentation rule") {
 
-        describe("class") {
-
+        describe("general") {
             val withoutDoc = """
                 class MyClass(someParam: String, val someProp: String)
                 """
@@ -19,6 +18,18 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(withoutDoc)).isEmpty()
             }
 
+            val docWithoutParamAndPropertyTags = """
+                /**
+                 * Some class description without referring to tags or properties
+                 */
+                class MyClass(someParam: String, val someProp: String)
+                """
+            it("should not report when doc does not contain any property or param tags") {
+                assertThat(subject.compileAndLint(docWithoutParamAndPropertyTags)).isEmpty()
+            }
+        }
+
+        describe("class") {
             val correctParam = """
                 /**
                  * @param someParam Description of param

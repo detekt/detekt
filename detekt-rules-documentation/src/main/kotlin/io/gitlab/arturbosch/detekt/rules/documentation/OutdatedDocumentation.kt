@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
+@Suppress("TooManyFunctions")
 class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
@@ -120,10 +121,12 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     ) {
         val doc = element.docComment
         if (doc != null) {
-            val elementDeclarations = elementDeclarationsProvider()
             val docDeclarations = getDocDeclarations(doc)
-            if (docDeclarations != elementDeclarations) {
-                reportCodeSmell(element)
+            if (docDeclarations.params.isNotEmpty() || docDeclarations.props.isNotEmpty()) {
+                val elementDeclarations = elementDeclarationsProvider()
+                if (docDeclarations != elementDeclarations) {
+                    reportCodeSmell(element)
+                }
             }
         }
     }
