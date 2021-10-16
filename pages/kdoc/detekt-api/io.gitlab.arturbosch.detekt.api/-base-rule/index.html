@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>MultiRule | A static code analyzer for Kotlin</title>
+<title>BaseRule | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="MultiRule">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="BaseRule">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -420,7 +420,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">MultiRule</h1>
+   <h1 class="post-title-main">BaseRule</h1>
 </div>
 
 
@@ -457,21 +457,27 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-base-rule/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">MultiRule</a></p>
+  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">BaseRule</a></p>
 
-<h1 id="multirule">MultiRule</h1>
+<h1 id="baserule">BaseRule</h1>
 
 <p>[jvm]<br />
-abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index.html">BaseRule</a></p>
+abstract class <a href="index.html">BaseRule</a>(context: <a href="../-context/index.html">Context</a>) : <a href="../-detekt-visitor/index.html">DetektVisitor</a>, <a href="../-context/index.html">Context</a></p>
 
-<p>Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.</p>
+<p>Defines the visiting mechanism for KtFile’s.</p>
+
+<p>Custom rule implementations should actually use <a href="../-rule/index.html">Rule</a> as base class.</p>
+
+<p>The extraction of this class from <a href="../-rule/index.html">Rule</a> actually resulted from the need of running many different checks on the same KtFile but within a single potential costly visiting process, see <a href="../-multi-rule/index.html">MultiRule</a>.</p>
+
+<p>This base rule class abstracts over single and multi rules and allows the detekt core engine to only care about a single type.</p>
 
 <h2 id="constructors">Constructors</h2>
 
@@ -484,8 +490,8 @@ abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index
   </thead>
   <tbody>
     <tr>
-      <td><a href="-multi-rule.html">MultiRule</a></td>
-      <td>[jvm]<br />fun <a href="-multi-rule.html">MultiRule</a>()</td>
+      <td><a href="-base-rule.html">BaseRule</a></td>
+      <td>[jvm]<br />fun <a href="-base-rule.html">BaseRule</a>(context: <a href="../-context/index.html">Context</a> = DefaultContext())</td>
     </tr>
   </tbody>
 </table>
@@ -509,12 +515,8 @@ abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index
       <td>[jvm]<br />open override fun <a href="../-context/report.html">report</a>(finding: <a href="../-finding/index.html">Finding</a>, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>?)<br />Reports a single new violation. By contract the implementation can check if this finding is already suppressed and should not get reported. An alias set can be given to additionally check if an alias was used when suppressing. Additionally suppression by rule set id is supported.<br />[jvm]<br />open override fun <a href="../-context/report.html">report</a>(findings: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;, aliases: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, ruleSetId: <a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>?)<br />Same as report but reports a list of findings.</td>
     </tr>
     <tr>
-      <td><a href="run-if-active.html">runIfActive</a></td>
-      <td>[jvm]<br />fun &lt;<a href="run-if-active.html">T</a> : <a href="../-rule/index.html">Rule</a>&gt; <a href="run-if-active.html">T</a>.<a href="run-if-active.html">runIfActive</a>(block: <a href="run-if-active.html">T</a>.() -&gt; <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a>)<br />Preferred way to run child rules because this composite rule takes care of evaluating if a specific child should be run at all.</td>
-    </tr>
-    <tr>
-      <td><a href="../-base-rule/visit.html">visit</a></td>
-      <td>[jvm]<br />open fun <a href="../-base-rule/visit.html">visit</a>(root: KtFile)<br />Init function to start visiting the KtFile. Can be overridden to start a different visiting process.</td>
+      <td><a href="visit.html">visit</a></td>
+      <td>[jvm]<br />open fun <a href="visit.html">visit</a>(root: KtFile)<br />Init function to start visiting the KtFile. Can be overridden to start a different visiting process.</td>
     </tr>
     <tr>
       <td><a href="../-threshold-rule/index.html#-1587397638%2FFunctions%2F-879243379">visitAnnotatedExpression</a></td>
@@ -610,7 +612,7 @@ abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index
     </tr>
     <tr>
       <td><a href="visit-condition.html">visitCondition</a></td>
-      <td>[jvm]<br />open override fun <a href="visit-condition.html">visitCondition</a>(root: KtFile): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Basic mechanism to decide if a rule should run or not.</td>
+      <td>[jvm]<br />abstract fun <a href="visit-condition.html">visitCondition</a>(root: KtFile): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><br />Basic mechanism to decide if a rule should run or not.</td>
     </tr>
     <tr>
       <td><a href="../-threshold-rule/index.html#-1233260278%2FFunctions%2F-879243379">visitConstantExpression</a></td>
@@ -694,7 +696,7 @@ abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index
     </tr>
     <tr>
       <td><a href="../-threshold-rule/index.html#1724806482%2FFunctions%2F-879243379">visitFile</a></td>
-      <td>[jvm]<br />open fun <a href="../-threshold-rule/index.html#1724806482%2FFunctions%2F-879243379">visitFile</a>(@NotNullp0: @NotNullPsiFile)<br />[jvm]<br />fun <a href="../-base-rule/visit-file.html">visitFile</a>(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY, compilerResources: <a href="../../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html">CompilerResources</a>? = null)<br />Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.</td>
+      <td>[jvm]<br />open fun <a href="../-threshold-rule/index.html#1724806482%2FFunctions%2F-879243379">visitFile</a>(@NotNullp0: @NotNullPsiFile)<br />[jvm]<br />fun <a href="visit-file.html">visitFile</a>(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY, compilerResources: <a href="../../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html">CompilerResources</a>? = null)<br />Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.</td>
     </tr>
     <tr>
       <td><a href="../-threshold-rule/index.html#995250913%2FFunctions%2F-879243379">visitFileAnnotationList</a></td>
@@ -1006,28 +1008,38 @@ abstract class <a href="index.html">MultiRule</a> : <a href="../-base-rule/index
   </thead>
   <tbody>
     <tr>
-      <td><a href="active-rules.html">activeRules</a></td>
-      <td>[jvm]<br />var <a href="active-rules.html">activeRules</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a>&lt;<a href="../-rule/index.html">Rule</a>&gt;</td>
+      <td><a href="binding-context.html">bindingContext</a></td>
+      <td>[jvm]<br />var <a href="binding-context.html">bindingContext</a>: BindingContext</td>
     </tr>
     <tr>
-      <td><a href="../-base-rule/binding-context.html">bindingContext</a></td>
-      <td>[jvm]<br />var <a href="../-base-rule/binding-context.html">bindingContext</a>: BindingContext</td>
-    </tr>
-    <tr>
-      <td><a href="../-base-rule/compiler-resources.html">compilerResources</a></td>
-      <td>[jvm]<br />var <a href="../-base-rule/compiler-resources.html">compilerResources</a>: <a href="../../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html">CompilerResources</a>? = null</td>
+      <td><a href="compiler-resources.html">compilerResources</a></td>
+      <td>[jvm]<br />var <a href="compiler-resources.html">compilerResources</a>: <a href="../../io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html">CompilerResources</a>? = null</td>
     </tr>
     <tr>
       <td><a href="../-context/findings.html">findings</a></td>
       <td>[jvm]<br />open override val <a href="../-context/findings.html">findings</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;</td>
     </tr>
     <tr>
-      <td><a href="../-base-rule/rule-id.html">ruleId</a></td>
-      <td>[jvm]<br />open val <a href="../-base-rule/rule-id.html">ruleId</a>: <a href="../index.html#-1624699926%2FClasslikes%2F-879243379">RuleId</a></td>
+      <td><a href="rule-id.html">ruleId</a></td>
+      <td>[jvm]<br />open val <a href="rule-id.html">ruleId</a>: <a href="../index.html#-1624699926%2FClasslikes%2F-879243379">RuleId</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="inheritors">Inheritors</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="../-multi-rule/index.html">MultiRule</a></td>
     </tr>
     <tr>
-      <td><a href="rules.html">rules</a></td>
-      <td>[jvm]<br />abstract val <a href="rules.html">rules</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-rule/index.html">Rule</a>&gt;</td>
+      <td><a href="../-rule/index.html">Rule</a></td>
     </tr>
   </tbody>
 </table>

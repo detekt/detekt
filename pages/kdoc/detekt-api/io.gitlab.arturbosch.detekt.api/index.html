@@ -483,6 +483,10 @@ $('#toc').on('click', 'a', function() {
       <td>[jvm]<br />class <a href="-annotation-excluder/index.html">AnnotationExcluder</a>(root: KtFile, excludes: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;)<br />Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.</td>
     </tr>
     <tr>
+      <td><a href="-base-rule/index.html">BaseRule</a></td>
+      <td>[jvm]<br />abstract class <a href="-base-rule/index.html">BaseRule</a>(context: <a href="-context/index.html">Context</a>) : <a href="-detekt-visitor/index.html">DetektVisitor</a>, <a href="-context/index.html">Context</a><br />Defines the visiting mechanism for KtFile’s.</td>
+    </tr>
+    <tr>
       <td><a href="-code-smell/index.html">CodeSmell</a></td>
       <td>[jvm]<br />open class <a href="-code-smell/index.html">CodeSmell</a>(issue: <a href="-issue/index.html">Issue</a>, entity: <a href="-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-metric/index.html">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt;) : <a href="-finding/index.html">Finding</a><br />A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="-issue/index.html">Issue</a>.</td>
     </tr>
@@ -572,7 +576,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-multi-rule/index.html">MultiRule</a></td>
-      <td>[jvm]<br />abstract class <a href="-multi-rule/index.html">MultiRule</a> : <a href="../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html">BaseRule</a><br />Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.</td>
+      <td>[jvm]<br />abstract class <a href="-multi-rule/index.html">MultiRule</a> : <a href="-base-rule/index.html">BaseRule</a><br />Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.</td>
     </tr>
     <tr>
       <td><a href="-notification/index.html">Notification</a></td>
@@ -596,7 +600,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-rule/index.html">Rule</a></td>
-      <td>[jvm]<br />abstract class <a href="-rule/index.html">Rule</a>(ruleSetConfig: <a href="-config/index.html">Config</a>, ruleContext: <a href="-context/index.html">Context</a>) : <a href="../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html">BaseRule</a>, <a href="-config-aware/index.html">ConfigAware</a><br />A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</td>
+      <td>[jvm]<br />abstract class <a href="-rule/index.html">Rule</a>(ruleSetConfig: <a href="-config/index.html">Config</a>, ruleContext: <a href="-context/index.html">Context</a>) : <a href="-base-rule/index.html">BaseRule</a>, <a href="-config-aware/index.html">ConfigAware</a><br />A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</td>
     </tr>
     <tr>
       <td><a href="index.html#-1624699926%2FClasslikes%2F-879243379">RuleId</a></td>
@@ -604,7 +608,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-rule-set/index.html">RuleSet</a></td>
-      <td>[jvm]<br />class <a href="-rule-set/index.html">RuleSet</a>(id: <a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html">BaseRule</a>&gt;)<br />A rule set is a collection of rules and must be defined within a rule set provider implementation.</td>
+      <td>[jvm]<br />class <a href="-rule-set/index.html">RuleSet</a>(id: <a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-base-rule/index.html">BaseRule</a>&gt;)<br />A rule set is a collection of rules and must be defined within a rule set provider implementation.</td>
     </tr>
     <tr>
       <td><a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a></td>
