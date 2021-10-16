@@ -83,13 +83,13 @@ formatting:
     active: true
   EnumEntryNameCase:
     active: true
-  ImportOrdering:
-    active: true
-  Indentation:
-    active: true
   MaximumLineLength:
     active: false
+  MultiLineIfElse:
+    active: true
   NoEmptyFirstLineInMethodBlock:
+    active: true
+  PackageName:
     active: true
   SpacingAroundAngleBrackets:
     active: true
