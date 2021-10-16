@@ -36,9 +36,3 @@ tasks.jar {
             .map { if (it.isDirectory) it else zipTree(it) }
     })
 }
-
-tasks.register<Copy>("moveJarForIntegrationTest") {
-    from(tasks.jar)
-    into(rootProject.buildDir)
-    rename { "detekt-formatting.jar" }
-}
