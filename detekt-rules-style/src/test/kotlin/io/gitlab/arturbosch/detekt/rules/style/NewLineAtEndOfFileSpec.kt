@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -19,6 +19,7 @@ class NewLineAtEndOfFileSpec : Spek({
         it("should flag a kt file not containing new line at the end") {
             val code = "class Test"
             assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasSourceLocation(1, 11)
         }
 
         it("should not flag an empty kt file") {

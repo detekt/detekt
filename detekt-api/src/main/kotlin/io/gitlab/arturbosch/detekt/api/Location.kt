@@ -93,7 +93,7 @@ data class SourceLocation(val line: Int, val column: Int) {
 }
 
 /**
- * Stores character start and end positions of an text file.
+ * Stores character start and end positions of a text file.
  */
 data class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"
