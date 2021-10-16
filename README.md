@@ -227,6 +227,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Vladislav Yundin](https://github.com/Yundin) - Rule fix: Indentation
 - [George Poothicottu Jacob](https://github.com/geojakes) - Bug fix: Rule deactivation
 - [Mohamed Elmahdi](https://github.com/mohamed-elmahdi) - Rule Improvement: Add descriptive alias
+- [Michael McCormick](https://github.com/MichaelM97) - Documentation improvement
 
 
 ### Mentions
