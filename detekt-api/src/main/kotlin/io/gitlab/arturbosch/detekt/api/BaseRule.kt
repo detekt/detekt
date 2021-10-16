@@ -1,11 +1,7 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Context
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.MultiRule
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleId
+import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
+import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -35,7 +31,7 @@ abstract class BaseRule(
      * BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that
      * rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must
      * receive the correct compile classpath for the code being analyzed otherwise the default value
-     * BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.
+     * [BindingContext.EMPTY] will be used and it will not be possible for detekt to resolve types or symbols.
      */
     fun visitFile(
         root: KtFile,
@@ -63,7 +59,7 @@ abstract class BaseRule(
     /**
      * Basic mechanism to decide if a rule should run or not.
      *
-     * By default any rule which is declared 'active' in the [Config]
+     * By default, any rule which is declared 'active' in the [Config]
      * or not suppressed by a [Suppress] annotation on file level should run.
      */
     abstract fun visitCondition(root: KtFile): Boolean
