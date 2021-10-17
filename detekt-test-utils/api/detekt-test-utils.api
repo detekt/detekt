@@ -37,7 +37,6 @@ public final class io/github/detekt/test/utils/NullPrintStream : java/io/PrintSt
 public final class io/github/detekt/test/utils/ResourcesKt {
 	public static final fun readResourceContent (Ljava/lang/String;)Ljava/lang/String;
 	public static final fun resource (Ljava/lang/String;)Ljava/net/URI;
-	public static final fun resourceAsFile (Ljava/lang/String;)Ljava/io/File;
 	public static final fun resourceAsPath (Ljava/lang/String;)Ljava/nio/file/Path;
 	public static final fun resourceUrl (Ljava/lang/String;)Ljava/net/URL;
 }
