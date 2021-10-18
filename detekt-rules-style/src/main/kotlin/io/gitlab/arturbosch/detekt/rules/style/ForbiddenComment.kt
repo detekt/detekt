@@ -43,6 +43,9 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")
     private val allowedPatterns: Regex by config("", String::toRegex)
 
+    @Configuration("error message which overrides the default one")
+    private val customMessage: String by config("")
+
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
         val text = comment.text
@@ -66,11 +69,18 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(comment),
-                        "This comment contains '$it' that has been " +
-                            "defined as forbidden in detekt."
+                        getErrorMessage(it)
                     )
                 )
             }
         }
+    }
+
+    private fun getErrorMessage(value: String): String =
+        customMessage.takeUnless { it.isEmpty() } ?: String.format(DEFAULT_ERROR_MESSAGE, value)
+
+    companion object {
+        const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
+            "that has been defined as forbidden in detekt."
     }
 }
