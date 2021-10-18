@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -27,6 +28,37 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
+ *
+ * <noncompliant>
+ * /**
+ *  * @param someParam
+ *  * @property someProp
+ *  */
+ * class MyClass(otherParam: String, val otherProp: String)
+ *
+ * /**
+ *  * @param T
+ *  * @param someParam
+ *  */
+ * fun myFun<T, S>(someParam: String)
+ *
+ * </noncompliant>
+ *
+ * <compliant>
+ * /**
+ *  * @param someParam
+ *  * @property someProp
+ *  */
+ * class MyClass(someParam: String, val someProp: String)
+ *
+ * /**
+ *  * @param T
+ *  * @param S
+ *  * @param someParam
+ *  */
+ * fun myFun<T, S>(someParam: String)
+ *
+ * </compliant>
  */
 @Suppress("TooManyFunctions")
 class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
@@ -45,24 +77,24 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private val matchDeclarationsOrder: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
-        reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
         super.visitClass(klass)
+        reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-        reportIfDocumentationIsOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }
         super.visitSecondaryConstructor(constructor)
+        reportIfDocumentationIsOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        reportIfDocumentationIsOutdated(function) { getFunctionDeclarations(function) }
         super.visitNamedFunction(function)
+        reportIfDocumentationIsOutdated(function) { getFunctionDeclarations(function) }
     }
 
     private fun getClassDeclarations(klass: KtClass): Declarations {
-        val constructor = klass.primaryConstructor
-        return if (constructor != null) {
-            val constructorDeclarations = getPrimaryConstructorDeclarations(constructor)
+        val ctor = klass.primaryConstructor
+        return if (ctor != null) {
+            val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
             val typeParams = if (matchTypeParameters) {
                 klass.typeParameters.mapNotNull { it.name }
             } else listOf()
@@ -93,43 +125,41 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): Declarations {
-        val valueParams = valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
+        val params = valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
         val props = valueParameters.filter { it.isPropertyParameter() }.mapNotNull { it.name }
         return Declarations(
-            params = valueParams,
+            params = params,
             props = props
         )
     }
 
     private fun getDocDeclarations(doc: KDoc): Declarations {
-        val result = MutableDeclarations()
-        for (child in doc.allChildren) {
-            if (child is KDocSection) {
-                processDocSection(child, result)
-            }
-        }
-        return result.toDeclarations()
+        return processDocChildren(doc.allChildren)
     }
 
-    private fun processDocSection(section: KDocSection, result: MutableDeclarations) {
-        for (child in section.allChildren) {
-            if (child is KDocSection) {
-                processDocSection(child, result)
-            } else if (child is KDocTag) {
-                processDocTag(child, result)
+    private fun processDocChildren(children: PsiChildRange): Declarations {
+        return children
+            .map {
+                when (it) {
+                    is KDocSection -> processDocChildren(it.allChildren)
+                    is KDocTag -> processDocTag(it)
+                    else -> Declarations()
+                }
             }
-        }
+            .fold(Declarations()) { acc, declarations -> acc + declarations }
     }
 
-    private fun processDocTag(docTag: KDocTag, result: MutableDeclarations) {
+    private fun processDocTag(docTag: KDocTag): Declarations {
         val knownTag = docTag.knownTag
         val subjectName = docTag.getSubjectName()
-        if (subjectName != null) {
+        return if (subjectName != null) {
             when (knownTag) {
-                KDocKnownTag.PARAM -> result.params.add(subjectName)
-                KDocKnownTag.PROPERTY -> result.props.add(subjectName)
-                else -> Unit
+                KDocKnownTag.PARAM -> Declarations(params = listOf(subjectName))
+                KDocKnownTag.PROPERTY -> Declarations(props = listOf(subjectName))
+                else -> Declarations()
             }
+        } else {
+            Declarations()
         }
     }
 
@@ -137,14 +167,12 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         element: KtNamedDeclaration,
         elementDeclarationsProvider: () -> Declarations
     ) {
-        val doc = element.docComment
-        if (doc != null) {
-            val docDeclarations = getDocDeclarations(doc)
-            if (docDeclarations.params.isNotEmpty() || docDeclarations.props.isNotEmpty()) {
-                val elementDeclarations = elementDeclarationsProvider()
-                if (!declarationsMatch(docDeclarations, elementDeclarations)) {
-                    reportCodeSmell(element)
-                }
+        val doc = element.docComment ?: return
+        val docDeclarations = getDocDeclarations(doc)
+        if (docDeclarations.params.isNotEmpty() || docDeclarations.props.isNotEmpty()) {
+            val elementDeclarations = elementDeclarationsProvider()
+            if (!declarationsMatch(docDeclarations, elementDeclarations)) {
+                reportCodeSmell(element)
             }
         }
     }
@@ -168,20 +196,15 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private data class MutableDeclarations(
-        val params: MutableList<String> = mutableListOf(),
-        val props: MutableList<String> = mutableListOf()
-    ) {
-        fun toDeclarations(): Declarations {
-            return Declarations(
-                params = params,
-                props = props
-            )
-        }
-    }
-
     private data class Declarations(
         val params: List<String> = listOf(),
         val props: List<String> = listOf()
-    )
+    ) {
+        operator fun plus(declarations: Declarations): Declarations {
+            return Declarations(
+                params = params + declarations.params,
+                props = props + declarations.props
+            )
+        }
+    }
 }
