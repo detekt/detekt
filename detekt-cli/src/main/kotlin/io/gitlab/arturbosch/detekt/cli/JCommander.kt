@@ -10,11 +10,11 @@ fun parseArguments(args: Array<out String>): CliArgs {
     val jCommander = JCommander(cli)
     jCommander.programName = "detekt"
 
-    @Suppress("SwallowedException") // Stacktrace in jCommander is likely irrelevant.
     try {
         @Suppress("SpreadOperator")
         jCommander.parse(*args)
-    } catch (ex: ParameterException) {
+    } catch (@Suppress("SwallowedException") ex: ParameterException) {
+        // Stacktrace in jCommander is likely irrelevant
         throw HandledArgumentViolation(ex.message, jCommander.usageAsString())
     }
 
