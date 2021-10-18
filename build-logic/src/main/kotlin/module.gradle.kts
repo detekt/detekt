@@ -94,7 +94,7 @@ tasks.withType<KotlinCompile>().configureEach {
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
         allWarningsAsErrors = when (project.name) {
             "detekt-gradle-plugin" -> false
-            "detekt-gradle-plugin-extension" -> false
+            "detekt-gradle-plugin-extensions" -> false
             else -> (project.findProperty("warningsAsErrors") == "true" || System.getenv("CI") == "true")
         }
     }

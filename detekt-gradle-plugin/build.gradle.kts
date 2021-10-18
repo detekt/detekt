@@ -14,7 +14,7 @@ val intTest: Configuration by configurations.creating
 dependencies {
     implementation(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
-    implementation(projects.detektGradlePluginExtension)
+    implementation(projects.detektGradlePluginExtensions)
     compileOnly(libs.android.gradle)
     compileOnly(libs.kotlin.gradle)
     compileOnly(gradleKotlinDsl())
