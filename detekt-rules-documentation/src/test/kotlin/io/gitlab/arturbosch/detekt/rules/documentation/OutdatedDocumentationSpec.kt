@@ -117,6 +117,17 @@ class OutdatedDocumentationSpec : Spek({
                 """
                 assertThat(subject.compileAndLint(incorrectConstructorDoc)).hasSize(1)
             }
+
+            it("should report when property is documented as param") {
+                val propertyAsParam = """
+                    /**
+                     * @property someParam Description of param
+                     * @param someProp Description of property
+                     */
+                    class MyClass(someParam: String, val someProp: String)
+                    """
+                assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
+            }
         }
 
         describe("class with type params") {
@@ -231,6 +242,18 @@ class OutdatedDocumentationSpec : Spek({
                 fun <T, S> myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
+            }
+
+            it("should report when not all type params are first declarations of doc") {
+                val incorrectTypeParamsOrder = """
+                    /**
+                     * @param T Description of type param
+                     * @param someParam Description of param
+                     * @param S Description of type param
+                     */
+                    fun <T, S> myFun(someParam: String) {}
+                    """
+                assertThat(subject.compileAndLint(incorrectTypeParamsOrder)).hasSize(1)
             }
         }
 
