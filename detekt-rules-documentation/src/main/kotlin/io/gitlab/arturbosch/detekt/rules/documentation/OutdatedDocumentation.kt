@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *  * @param T
  *  * @param someParam
  *  */
- * fun myFun<T, S>(someParam: String)
+ * fun <T, S> myFun(someParam: String)
  *
  * </noncompliant>
  *
@@ -56,7 +56,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *  * @param S
  *  * @param someParam
  *  */
- * fun myFun<T, S>(someParam: String)
+ * fun <T, S> myFun(someParam: String)
  *
  * </compliant>
  */
@@ -67,7 +67,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Maintainability,
         "KDoc should match actual function or class signature",
-        Debt.TWENTY_MINS
+        Debt.TEN_MINS
     )
 
     @Configuration("if type parameters should be matched")
@@ -97,7 +97,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
             val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
             val typeParams = if (matchTypeParameters) {
                 klass.typeParameters.mapNotNull { it.name }
-            } else listOf()
+            } else emptyList()
             return Declarations(
                 params = typeParams + constructorDeclarations.params,
                 props = constructorDeclarations.props
@@ -110,7 +110,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun getFunctionDeclarations(function: KtNamedFunction): Declarations {
         val typeParams = if (matchTypeParameters) {
             function.typeParameters.mapNotNull { it.name }
-        } else listOf()
+        } else emptyList()
         val valueParams = function.valueParameters.mapNotNull { it.name }
         val params = typeParams + valueParams
         return Declarations(params = params.toMutableList())
@@ -197,8 +197,8 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private data class Declarations(
-        val params: List<String> = listOf(),
-        val props: List<String> = listOf()
+        val params: List<String> = emptyList(),
+        val props: List<String> = emptyList()
     ) {
         operator fun plus(declarations: Declarations): Declarations {
             return Declarations(

@@ -172,7 +172,7 @@ class OutdatedDocumentationSpec : Spek({
                 /**
                  * @param someParam Description of param
                  */
-                fun myFun(someParam: String)
+                fun myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(correctDoc)).isEmpty()
             }
@@ -182,7 +182,7 @@ class OutdatedDocumentationSpec : Spek({
                 /**
                  * @param someParam Description of param
                  */
-                fun myFun(otherParam: String)
+                fun myFun(otherParam: String) {}
                 """
                 assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
             }
@@ -196,7 +196,7 @@ class OutdatedDocumentationSpec : Spek({
                  * @param T Description of type param
                  * @param someParam Description of param
                  */
-                fun myFun<T>(someParam: String)
+                fun <T> myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
             }
@@ -206,7 +206,7 @@ class OutdatedDocumentationSpec : Spek({
                 /**
                  * @param someParam Description of param
                  */
-                fun myFun<T>(someParam: String)
+                fun <T> myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
             }
@@ -217,7 +217,7 @@ class OutdatedDocumentationSpec : Spek({
                  * @param S Description of type param
                  * @param someParam Description of param
                  */
-                fun myFun<T>(someParam: String)
+                fun <T> myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
             }
@@ -228,7 +228,7 @@ class OutdatedDocumentationSpec : Spek({
                  * @param T Description of type param
                  * @param someParam Description of param
                  */
-                fun myFun<T, S>(someParam: String)
+                fun <T, S> myFun(someParam: String) {}
                 """
                 assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
             }
@@ -245,8 +245,7 @@ class OutdatedDocumentationSpec : Spek({
                     /**
                     * @param someParam Description of param 
                     */
-                    fun myFun(someParam: String) {
-                    }
+                    fun myFun(someParam: String) {}
                 }
                 """
                 assertThat(subject.compileAndLint(correctClassWithFunction)).isEmpty()
@@ -261,13 +260,11 @@ class OutdatedDocumentationSpec : Spek({
                     /**
                     * @param someParam Description of param 
                     */
-                    fun myFun(someParam: String, someSecondParam) {
-                    }
+                    fun myFun(someParam: String, someSecondParam: String) {}
                     /**
                     * @param someParam Description of param 
                     */
-                    fun myOtherFun(otherParam: String) {
-                    }
+                    fun myOtherFun(otherParam: String) {}
                     /**
                     * @param someParam Description of param 
                     */
@@ -279,7 +276,9 @@ class OutdatedDocumentationSpec : Spek({
         }
 
         describe("configuration matchTypeParameters") {
-            val configuredSubject = OutdatedDocumentation(TestConfig(mapOf("matchTypeParameters" to "false")))
+            val configuredSubject by memoized {
+                OutdatedDocumentation(TestConfig(mapOf("matchTypeParameters" to "false")))
+            }
 
             it("should not report when class type parameters mismatch and configuration is off") {
                 val incorrectClassTypeParams = """
@@ -296,14 +295,16 @@ class OutdatedDocumentationSpec : Spek({
                 /**
                  * @param someParam Description of param
                  */
-                fun myFun<T, S>(someParam: String)
+                fun <T, S> myFun(someParam: String) {}
                 """
                 assertThat(configuredSubject.compileAndLint(incorrectFunctionTypeParams)).isEmpty()
             }
         }
 
         describe("configuration matchDeclarationsOrder") {
-            val configuredSubject = OutdatedDocumentation(TestConfig(mapOf("matchDeclarationsOrder" to "false")))
+            val configuredSubject by memoized {
+                OutdatedDocumentation(TestConfig(mapOf("matchDeclarationsOrder" to "false")))
+            }
 
             it("should not report when declarations order mismatch and configuration is off") {
                 val incorrectDeclarationsOrder = """
@@ -324,7 +325,7 @@ class OutdatedDocumentationSpec : Spek({
                  * @param otherParam Description of param
                  * @param T Description of param
                  */
-                fun myFun<T, S>(otherParam: String, someParam: String)
+                fun <T, S> myFun(otherParam: String, someParam: String) {}
                 """
                 assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
             }
