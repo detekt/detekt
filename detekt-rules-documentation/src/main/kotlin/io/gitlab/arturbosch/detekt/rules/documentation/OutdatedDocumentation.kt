@@ -91,85 +91,73 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         reportIfDocumentationIsOutdated(function) { getFunctionDeclarations(function) }
     }
 
-    private fun getClassDeclarations(klass: KtClass): Declarations {
-        val ctor = klass.primaryConstructor
-        return if (ctor != null) {
-            val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
-            val typeParams = if (matchTypeParameters) {
-                klass.typeParameters.mapNotNull { it.name }
-            } else emptyList()
-            return Declarations(
-                params = typeParams + constructorDeclarations.params,
-                props = constructorDeclarations.props
-            )
-        } else {
-            Declarations()
+    private fun getClassDeclarations(klass: KtClass): List<Declaration> {
+        val ctor = klass.primaryConstructor ?: return emptyList()
+        val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
+        val typeParams = if (matchTypeParameters) {
+            klass.typeParameters.mapNotNull { it.name.toParamOrNull() }
+        } else emptyList()
+        return typeParams + constructorDeclarations
+    }
+
+    private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
+        val typeParams = if (matchTypeParameters) {
+            function.typeParameters.mapNotNull { it.name.toParamOrNull() }
+        } else emptyList()
+        val valueParams = function.valueParameters.mapNotNull { it.name.toParamOrNull() }
+        return typeParams + valueParams
+    }
+
+    private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): List<Declaration> {
+        return getDeclarationsForValueParameters(constructor.valueParameters)
+    }
+
+    private fun getSecondaryConstructorDeclarations(constructor: KtSecondaryConstructor): List<Declaration> {
+        return getDeclarationsForValueParameters(constructor.valueParameters)
+    }
+
+    private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
+        return valueParameters.mapNotNull {
+            it.name?.let { name ->
+                val type = if (it.isPropertyParameter()) DeclarationType.PROPERTY else DeclarationType.PARAM
+                Declaration(name, type)
+            }
         }
     }
 
-    private fun getFunctionDeclarations(function: KtNamedFunction): Declarations {
-        val typeParams = if (matchTypeParameters) {
-            function.typeParameters.mapNotNull { it.name }
-        } else emptyList()
-        val valueParams = function.valueParameters.mapNotNull { it.name }
-        val params = typeParams + valueParams
-        return Declarations(params = params.toMutableList())
-    }
-
-    private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): Declarations {
-        return getDeclarationsForValueParameters(constructor.valueParameters)
-    }
-
-    private fun getSecondaryConstructorDeclarations(constructor: KtSecondaryConstructor): Declarations {
-        return getDeclarationsForValueParameters(constructor.valueParameters)
-    }
-
-    private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): Declarations {
-        val params = valueParameters.filter { !it.isPropertyParameter() }.mapNotNull { it.name }
-        val props = valueParameters.filter { it.isPropertyParameter() }.mapNotNull { it.name }
-        return Declarations(
-            params = params,
-            props = props
-        )
-    }
-
-    private fun getDocDeclarations(doc: KDoc): Declarations {
+    private fun getDocDeclarations(doc: KDoc): List<Declaration> {
         return processDocChildren(doc.allChildren)
     }
 
-    private fun processDocChildren(children: PsiChildRange): Declarations {
+    private fun processDocChildren(children: PsiChildRange): List<Declaration> {
         return children
             .map {
                 when (it) {
                     is KDocSection -> processDocChildren(it.allChildren)
                     is KDocTag -> processDocTag(it)
-                    else -> Declarations()
+                    else -> emptyList()
                 }
             }
-            .fold(Declarations()) { acc, declarations -> acc + declarations }
+            .fold(emptyList()) { acc, declarations -> acc + declarations }
     }
 
-    private fun processDocTag(docTag: KDocTag): Declarations {
+    private fun processDocTag(docTag: KDocTag): List<Declaration> {
         val knownTag = docTag.knownTag
-        val subjectName = docTag.getSubjectName()
-        return if (subjectName != null) {
-            when (knownTag) {
-                KDocKnownTag.PARAM -> Declarations(params = listOf(subjectName))
-                KDocKnownTag.PROPERTY -> Declarations(props = listOf(subjectName))
-                else -> Declarations()
-            }
-        } else {
-            Declarations()
+        val subjectName = docTag.getSubjectName() ?: return emptyList()
+        return when (knownTag) {
+            KDocKnownTag.PARAM -> listOf(Declaration(subjectName, DeclarationType.PARAM))
+            KDocKnownTag.PROPERTY -> listOf(Declaration(subjectName, DeclarationType.PROPERTY))
+            else -> emptyList()
         }
     }
 
     private fun reportIfDocumentationIsOutdated(
         element: KtNamedDeclaration,
-        elementDeclarationsProvider: () -> Declarations
+        elementDeclarationsProvider: () -> List<Declaration>
     ) {
         val doc = element.docComment ?: return
         val docDeclarations = getDocDeclarations(doc)
-        if (docDeclarations.params.isNotEmpty() || docDeclarations.props.isNotEmpty()) {
+        if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
             if (!declarationsMatch(docDeclarations, elementDeclarations)) {
                 reportCodeSmell(element)
@@ -177,12 +165,11 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun declarationsMatch(doc: Declarations, element: Declarations): Boolean {
+    private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
         return if (matchDeclarationsOrder) {
             doc == element
         } else {
-            doc.props.sorted() == element.props.sorted() &&
-                doc.params.sorted() == element.params.sorted()
+            doc.sortedBy { it.name } == element.sortedBy { it.name }
         }
     }
 
@@ -196,15 +183,16 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private data class Declarations(
-        val params: List<String> = emptyList(),
-        val props: List<String> = emptyList()
-    ) {
-        operator fun plus(declarations: Declarations): Declarations {
-            return Declarations(
-                params = params + declarations.params,
-                props = props + declarations.props
-            )
-        }
+    private fun String?.toParamOrNull(): Declaration? {
+        return this?.let { Declaration(it, DeclarationType.PARAM) }
+    }
+
+    data class Declaration(
+        val name: String,
+        val type: DeclarationType
+    )
+
+    enum class DeclarationType {
+        PARAM, PROPERTY
     }
 }

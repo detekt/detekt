@@ -128,6 +128,17 @@ class OutdatedDocumentationSpec : Spek({
                     """
                 assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
             }
+
+            it("should report when declarations order is incorrect") {
+                val incorrectDeclarationsOrder = """
+                /**
+                 * @property someProp Description of property
+                 * @param someParam Description of param
+                 */
+                class MyClass(someParam: String, val someProp: String)
+                """
+                assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            }
         }
 
         describe("class with type params") {
