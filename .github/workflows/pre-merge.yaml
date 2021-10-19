@@ -47,9 +47,9 @@ jobs:
         path: '**.hprof'
         if-no-files-found: ignore
     - name: Run detekt-cli --help
-      run: ./gradlew :detekt-cli:withHelpFlag
+      run: ./gradlew :detekt-cli:runWithHelpFlag
     - name: Run detekt-cli with argsfile
-      run: ./gradlew :detekt-cli:withArgsFile
+      run: ./gradlew :detekt-cli:runWithArgsFile
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}

@@ -42,12 +42,12 @@ tasks {
         mergeServiceFiles()
     }
 
-    val withHelpFlag by registering(JavaExec::class) {
+    val runWithHelpFlag by registering(JavaExec::class) {
         classpath = files(shadowJar)
         args = listOf("--help")
     }
 
-    val withArgsFile by registering(JavaExec::class) {
+    val runWithArgsFile by registering(JavaExec::class) {
         inputs.files(formattingJar) // ensures detekt-formatting JAR is built before this task is executed
         classpath = files(shadowJar)
         workingDir = rootDir
@@ -55,6 +55,6 @@ tasks {
     }
 
     check {
-        dependsOn(withHelpFlag, withArgsFile)
+        dependsOn(runWithHelpFlag, runWithArgsFile)
     }
 }

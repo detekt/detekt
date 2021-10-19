@@ -34,7 +34,7 @@ jobs:
           java-version: 11
 
       - name: Run detekt-cli with argsfile
-        run: ./gradlew :detekt-cli:withArgsFile
+        run: ./gradlew :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
