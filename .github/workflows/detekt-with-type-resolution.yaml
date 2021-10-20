@@ -33,11 +33,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: Package executable jar
-        run: ./gradlew moveJarForIntegrationTest
-
       - name: Run detekt-cli with argsfile
-        run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
+        run: ./gradlew :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1

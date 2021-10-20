@@ -40,16 +40,16 @@ jobs:
         java-version: ${{ matrix.jdk }}
         distribution: 'adopt'
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest -x detekt
+      run: ./gradlew build -x detekt
     - uses: actions/upload-artifact@v2
       with:
         name: heap-dump
         path: '**.hprof'
         if-no-files-found: ignore
     - name: Run detekt-cli --help
-      run: java -jar ./build/detekt-cli-all.jar --help
+      run: ./gradlew :detekt-cli:runWithHelpFlag
     - name: Run detekt-cli with argsfile
-      run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
+      run: ./gradlew :detekt-cli:runWithArgsFile
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
