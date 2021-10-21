@@ -182,7 +182,7 @@ class CliArgs {
         names = ["--language-version"],
         converter = LanguageVersionConverter::class,
         description = "EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports errors for all " +
-            "language features that came out later (1.0, 1.1, 1.2, 1.3, 1.4 or 1.5)"
+            "language features that came out later"
     )
     var languageVersion: LanguageVersion? = null
 
