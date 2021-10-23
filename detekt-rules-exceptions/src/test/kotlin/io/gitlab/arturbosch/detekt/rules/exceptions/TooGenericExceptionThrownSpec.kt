@@ -22,7 +22,7 @@ class TooGenericExceptionThrownSpec : Spek({
         tooGenericExceptions.forEach { exceptionName ->
             it("should report $exceptionName") {
                 val config = TestConfig(mapOf(EXCEPTION_NAMES to "[$exceptionName]"))
-                val rule = TooGenericExceptionCaught(config)
+                val rule = TooGenericExceptionThrown(config)
 
                 val findings = rule.compileAndLint(tooGenericExceptionCode)
 
@@ -32,7 +32,7 @@ class TooGenericExceptionThrownSpec : Spek({
 
         it("should not report thrown exceptions") {
             val config = TestConfig(mapOf(EXCEPTION_NAMES to "['MyException', Bar]"))
-            val rule = TooGenericExceptionCaught(config)
+            val rule = TooGenericExceptionThrown(config)
 
             val findings = rule.compileAndLint(tooGenericExceptionCode)
 
