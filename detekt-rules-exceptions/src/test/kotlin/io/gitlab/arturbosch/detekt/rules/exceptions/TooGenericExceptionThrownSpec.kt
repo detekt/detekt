@@ -38,5 +38,33 @@ class TooGenericExceptionThrownSpec : Spek({
 
             assertThat(findings).isEmpty()
         }
+
+        it("should not report caught exceptions") {
+            val config = TestConfig(mapOf(EXCEPTION_NAMES to "['Exception']"))
+            val rule = TooGenericExceptionThrown(config)
+
+            val code = """
+                fun f() {
+                    try {
+                        throw Throwable()
+                    } catch (caught: Exception) {
+                        throw Error()
+                    }
+                }
+            """
+            val findings = rule.compileAndLint(code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        it("should not report initialize exceptions") {
+            val config = TestConfig(mapOf(EXCEPTION_NAMES to "['Exception']"))
+            val rule = TooGenericExceptionThrown(config)
+
+            val code = """fun f() { val ex = Exception() }"""
+            val findings = rule.compileAndLint(code)
+
+            assertThat(findings).isEmpty()
+        }
     }
 })
