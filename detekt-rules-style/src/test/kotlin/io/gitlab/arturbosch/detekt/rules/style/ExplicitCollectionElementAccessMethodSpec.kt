@@ -34,7 +34,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("reports map set method usage") {
+        it("reports map set method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = mutableMapOf<String, String>() 
@@ -43,13 +43,31 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports map put method usage") {
+        it("reports map put method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report map put method usage with variable assignment") {
+            val code = """
+                    fun f() {
+                        val map = mapOf<String, String>() 
+                        val oldValue = map.put("key", "val") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report map put method with used return value") {
+            val code = """
+                    fun f() {
+                        val map = mapOf<String, String>()
+                        if (map.put("key", "val") == null) return true
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports map element access with get method of non-abstract map") {
@@ -65,7 +83,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             val code = """
                     fun f() {
                         val map = hashMapOf<String, String>() 
-                        val value = map.put("key", "value") 
+                        map.put("key", "value") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
@@ -156,7 +174,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports map set method usage") {
+        it("reports map set method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
@@ -165,7 +183,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports map put method usage") {
+        it("reports map put method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
@@ -224,7 +242,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("reports custom set operator") {
+        it("reports custom set operator with unused return value") {
             val code = """
                     class Custom { operator fun set(key: String, value: String) {} }
                     fun f() {

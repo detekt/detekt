@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -44,12 +45,14 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         )
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        val isSafeCall = expression.parent is KtSafeQualifiedExpression
+        super.visitCallExpression(expression)
 
-        if (!isSafeCall && (isIndexableGetter(expression) || isIndexableSetter(expression))) {
+        // Safe calls can't be replaced with index accessor.
+        if (expression.parent is KtSafeQualifiedExpression) return
+
+        if (isIndexableGetter(expression) || (isIndexableSetter(expression) && unusedReturnValue(expression))) {
             report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
         }
-        super.visitCallExpression(expression)
     }
 
     private fun isIndexableGetter(expression: KtCallExpression): Boolean =
@@ -58,20 +61,25 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     private fun isIndexableSetter(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
             "set" -> isOperatorFunction(expression)
-            "put" -> {
-                // Verify whether caller is Map; `put` isn't an operator function, but can be replaced with indexer.
-                val caller = (expression.parent as? KtDotQualifiedExpression)?.firstChild as? KtElement
-                val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-                val mapName = "kotlin.collections.Map"
-                type?.fqNameOrNull()?.asString() == mapName ||
-                    type?.supertypes()?.any { it.fqNameOrNull()?.asString() == mapName } ?: false
-            }
+            // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
+            "put" -> isCallerMap(expression)
             else -> false
         }
 
-    private fun isOperatorFunction(expression: KtCallExpression): Boolean
-    {
+    private fun isOperatorFunction(expression: KtCallExpression): Boolean {
         val function = (expression.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)
         return function?.isOperator == true
     }
+
+    private fun isCallerMap(expression: KtCallExpression): Boolean {
+        val caller = (expression.parent as? KtDotQualifiedExpression)?.firstChild as? KtElement
+        val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return false
+
+        val mapName = "kotlin.collections.Map"
+        return type.fqNameOrNull()?.asString() == mapName ||
+            type.supertypes().any { it.fqNameOrNull()?.asString() == mapName }
+    }
+
+    private fun unusedReturnValue(expression: KtCallExpression): Boolean =
+        expression.parent.parent is KtBlockExpression
 }
