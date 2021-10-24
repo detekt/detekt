@@ -55,7 +55,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         it("does not report map put method usage with variable assignment") {
             val code = """
                     fun f() {
-                        val map = mapOf<String, String>() 
+                        val map = mutableMapOf<String, String>() 
                         val oldValue = map.put("key", "val") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -63,9 +63,9 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
 
         it("does not report map put method with used return value") {
             val code = """
-                    fun f() {
-                        val map = mapOf<String, String>()
-                        if (map.put("key", "val") == null) return true
+                    fun f(): Boolean {
+                        val map = mutableMapOf<String, String>()
+                        return map.put("key", "val") == null
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
