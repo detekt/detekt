@@ -34,6 +34,15 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
+        it("reports map set method usage") {
+            val code = """
+                    fun f() {
+                        val map = mutableMapOf<String, String>() 
+                        map.set("key", "value") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
         it("reports map put method usage") {
             val code = """
                     fun f() {
@@ -147,6 +156,15 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
+        it("reports map set method usage") {
+            val code = """
+                    fun f() {
+                        val map = java.util.HashMap<String, String>() 
+                        map.set("key", "val") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
         it("reports map put method usage") {
             val code = """
                     fun f() {
@@ -181,6 +199,49 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val value = listOf("1", "2").associateBy { it }.get("1") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+    }
+
+    describe("custom operators") {
+
+        it("reports custom get operator") {
+            val code = """
+                    class Custom { operator fun get(i: Int) = 42 }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get(0)
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report non-operator get method") {
+            val code = """
+                    class Custom { fun get(i: Int) = 42 }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get(0)
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports custom set operator") {
+            val code = """
+                    class Custom { operator fun set(key: String, value: String) {} }
+                    fun f() {
+                        val custom = Custom()
+                        custom.set("key", "value")
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report non-operator set method") {
+            val code = """
+                    class Custom { fun set(key: String, value: String) {} }
+                    fun f() {
+                        val custom = Custom()
+                        custom.set("key", "value")
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
