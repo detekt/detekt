@@ -205,8 +205,6 @@ style:
     excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
     active: true
-  TrailingWhitespace:
-    active: true
   UnderscoresInNumericLiterals:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
