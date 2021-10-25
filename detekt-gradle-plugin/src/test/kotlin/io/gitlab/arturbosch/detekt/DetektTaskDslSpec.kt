@@ -484,6 +484,18 @@ internal object DetektTaskDslSpec : Spek({
                     }
                 }
 
+                describe("with cmdline args") {
+
+                    beforeGroup {
+                        gradleRunner = builder.build()
+                        result = gradleRunner.runDetektTask("--auto-correct")
+                    }
+
+                    it("enables auto correcting") {
+                        assertThat(result.output).contains("--auto-correct")
+                    }
+                }
+
                 describe("with an additional plugin") {
                     beforeGroup {
                         val config = """

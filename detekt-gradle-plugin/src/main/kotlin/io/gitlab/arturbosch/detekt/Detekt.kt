@@ -48,6 +48,7 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
+import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 import javax.inject.Inject
@@ -142,6 +143,8 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    @set:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
     var autoCorrect: Boolean
         @Input
         get() = autoCorrectProp.getOrElse(false)

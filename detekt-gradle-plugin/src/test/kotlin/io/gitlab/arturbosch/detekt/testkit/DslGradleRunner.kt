@@ -153,7 +153,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         runTasksAndCheckResult(DETEKT_TASK) { this.doAssert(it) }
     }
 
-    fun runDetektTask(): BuildResult = runTasks(DETEKT_TASK)
+    fun runDetektTask(vararg args: String): BuildResult = runTasks(DETEKT_TASK, *args)
 
     fun runDetektTaskAndExpectFailure(doAssert: DslGradleRunner.(BuildResult) -> Unit = {}) {
         val result = buildGradleRunner(listOf(DETEKT_TASK)).buildAndFail()
