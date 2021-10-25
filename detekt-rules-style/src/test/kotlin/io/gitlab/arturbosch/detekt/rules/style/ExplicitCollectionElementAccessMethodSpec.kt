@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -284,7 +285,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
     }
 
-    describe("getters") {
+    describe("edge cases") {
 
         it("does not crash for getter") {
             val code = """
@@ -295,14 +296,31 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
-    }
-
-    describe("fluent api doesn't crash") {
 
         it("does not crash for fluent api") {
             val code = """
                 val string = ""
                     .toString()
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report for unresolvable code") {
+            val code = """
+                 fun f() {
+                    val unknownType = UnknownType()
+                    val value = unknownType.put("answer", 42)
+                 }
+            """
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report for put functions without caller") {
+            val code = """
+                fun put() { }
+                fun f() {
+                    put()
+                }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }

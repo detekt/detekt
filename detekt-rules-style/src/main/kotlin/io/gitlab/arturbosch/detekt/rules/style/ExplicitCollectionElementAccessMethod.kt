@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
@@ -73,7 +74,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
         val caller = (expression.parent as? KtDotQualifiedExpression)?.firstChild as? KtElement
-        val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return false
+        val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
+        if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
 
         val mapName = "kotlin.collections.Map"
         return type.fqNameOrNull()?.asString() == mapName ||
