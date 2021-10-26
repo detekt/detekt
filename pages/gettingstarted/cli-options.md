@@ -67,12 +67,10 @@ Usage: detekt [options]
       EXPERIMENTAL: Target version of the generated JVM bytecode that was 
       generated during compilation and is now being used for type resolution 
       (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15 or 16)
-      Default: JVM_1_8
-      Possible Values: [JVM_1_6, JVM_1_8, JVM_9, JVM_10, JVM_11, JVM_12, JVM_13, JVM_14, JVM_15, JVM_16]
+      Default: 1.8
     --language-version
       EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, 
-      reports errors for all language features that came out later (1.0, 1.1, 
-      1.2, 1.3, 1.4 or 1.5)
+      reports errors for all language features that came out later
       Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7]
     --max-issues
       Return exit code 0 only when found issues count does not exceed 
