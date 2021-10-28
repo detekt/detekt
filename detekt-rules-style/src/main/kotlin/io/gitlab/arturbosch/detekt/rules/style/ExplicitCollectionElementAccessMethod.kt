@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -35,6 +37,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *  val value = map["key"]
  * </compliant>
  */
+@RequiresTypeResolution
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue =
@@ -46,6 +49,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         )
 
     override fun visitCallExpression(expression: KtCallExpression) {
+        if (bindingContext == BindingContext.EMPTY) return
         super.visitCallExpression(expression)
 
         // Safe calls can't be replaced with index accessor.
