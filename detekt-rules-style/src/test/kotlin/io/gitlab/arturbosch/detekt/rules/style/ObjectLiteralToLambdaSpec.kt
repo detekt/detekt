@@ -360,15 +360,44 @@ class ObjectLiteralToLambdaSpec : Spek({
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("override default method") {
+            it("has other default methods") {
                 val code = """
+                import ObjectLiteralToLambda.*
+                
                 fun main() {
-                    object: ObjectLiteralToLambdaDefaultMethod {
+                    val x = object : SamWithDefaultMethods {
                         override fun foo() {
                             println()
                         }
                     }
-                }
+                } 
+                """
+                subject.lintWithContext(env, code).assert().hasSize(1)
+            }
+
+            it("has only default methods") {
+                val code = """
+                import ObjectLiteralToLambda.*
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                    }
+                } 
+                """
+                subject.lintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("implements a default method") {
+                val code = """
+                import ObjectLiteralToLambda.*
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                        override fun foo() {
+                            println()
+                        }
+                    }
+                } 
                 """
                 subject.lintWithContext(env, code).assert().isEmpty()
             }
