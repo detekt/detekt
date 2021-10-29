@@ -16,8 +16,8 @@ public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapperKt {
-	public static final fun createEnvironment (Ljava/util/List;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
-	public static synthetic fun createEnvironment$default (Ljava/util/List;ILjava/lang/Object;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
 	public static final fun createPsiFactory ()Lorg/jetbrains/kotlin/psi/KtPsiFactory;
 }
 
@@ -47,6 +47,7 @@ public final class io/github/detekt/test/utils/StringPrintStream : java/io/Print
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KotlinEnvironmentTestSetupKt {
-	public static final fun setupKotlinEnvironment (Lorg/spekframework/spek2/dsl/Root;)V
+	public static final fun setupKotlinEnvironment (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;)V
+	public static synthetic fun setupKotlinEnvironment$default (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;ILjava/lang/Object;)V
 }
 

@@ -1,16 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ObjectLiteralToLambdaSpec : Spek({
-    setupKotlinEnvironment()
+    setupKotlinEnvironment(additionalJavaSourceRootPath = resourceAsPath("java"))
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { ObjectLiteralToLambda() }
@@ -356,6 +358,48 @@ class ObjectLiteralToLambdaSpec : Spek({
                 }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("has other default methods") {
+                val code = """
+                import ObjectLiteralToLambda.*
+                
+                fun main() {
+                    val x = object : SamWithDefaultMethods {
+                        override fun foo() {
+                            println()
+                        }
+                    }
+                } 
+                """
+                subject.lintWithContext(env, code).assert().hasSize(1)
+            }
+
+            it("has only default methods") {
+                val code = """
+                import ObjectLiteralToLambda.*
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                    }
+                } 
+                """
+                subject.lintWithContext(env, code).assert().isEmpty()
+            }
+
+            it("implements a default method") {
+                val code = """
+                import ObjectLiteralToLambda.*
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                        override fun foo() {
+                            println()
+                        }
+                    }
+                } 
+                """
+                subject.lintWithContext(env, code).assert().isEmpty()
             }
         }
 

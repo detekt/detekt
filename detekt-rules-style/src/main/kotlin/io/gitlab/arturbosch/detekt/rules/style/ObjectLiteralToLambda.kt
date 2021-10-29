@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.load.java.sam.JavaSingleAbstractMethodUtils
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -52,9 +52,7 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
     )
 
     private val KotlinType.couldBeSamInterface
-        get() = (constructor.declarationDescriptor as ClassDescriptor)
-            .isDefinitelyNotSamInterface
-            .not()
+        get() = JavaSingleAbstractMethodUtils.isSamType(this)
 
     private fun KotlinType.singleSuperTypeOrNull(): KotlinType? =
         constructor.supertypes.singleOrNull()
