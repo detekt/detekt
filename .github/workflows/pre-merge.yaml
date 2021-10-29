@@ -18,7 +18,6 @@ jobs:
         jdk: [8, 11, 17]
     runs-on: ${{ matrix.os }}
     env:
-      JDK_VERSION:  ${{ matrix.jdk }}
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repo
@@ -38,18 +37,18 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.jdk }}
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Build detekt
-      run: ./gradlew build moveJarForIntegrationTest -x detekt
+      run: ./gradlew build -x detekt
     - uses: actions/upload-artifact@v2
       with:
         name: heap-dump
         path: '**.hprof'
         if-no-files-found: ignore
     - name: Run detekt-cli --help
-      run: java -jar ./build/detekt-cli-all.jar --help
+      run: ./gradlew :detekt-cli:runWithHelpFlag
     - name: Run detekt-cli with argsfile
-      run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
+      run: ./gradlew :detekt-cli:runWithArgsFile
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
@@ -75,7 +74,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 11
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Verify Generated Detekt Config File
       run: ./gradlew verifyGeneratorOutput
 
@@ -103,6 +102,6 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-          distribution: 'adopt'
+          distribution: 'temurin'
       - name: Build and compile test snippets
         run: ./gradlew test -x ":detekt-gradle-plugin:test" -Pcompile-test-snippets=true

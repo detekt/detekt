@@ -15,7 +15,5 @@ xml:./build/detekt-report.xml
 txt:./build/detekt-report.txt
 -r
 sarif:./build/detekt-report.sarif
--p
-./build/detekt-formatting.jar
 -bp
 .

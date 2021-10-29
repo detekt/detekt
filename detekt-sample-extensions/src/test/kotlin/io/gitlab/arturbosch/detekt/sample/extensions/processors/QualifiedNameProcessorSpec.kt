@@ -39,7 +39,7 @@ private val result = object : Detektion {
     override val metrics: Collection<ProjectMetric> = emptyList()
 
     private var userData = KeyFMap.EMPTY_MAP
-    override fun <V> getData(key: Key<V>): V? = userData.get(key)
+    override fun <V> getData(key: Key<V>): V? = userData[key]
 
     override fun <V> addData(key: Key<V>, value: V) {
         userData = userData.plus(key, requireNotNull(value))

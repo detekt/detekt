@@ -29,15 +29,13 @@ jobs:
             cache-gradle-
 
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 11
-
-      - name: Package executable jar
-        run: ./gradlew moveJarForIntegrationTest
+          distribution: 'temurin'
 
       - name: Run detekt-cli with argsfile
-        run: java -jar ./build/detekt-cli-all.jar "@./config/detekt/argsfile"
+        run: ./gradlew :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
@@ -64,11 +62,10 @@ jobs:
         key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
         restore-keys: |
           cache-gradle-
-
     - name: Setup Java
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 11
-
+        distribution: 'temurin'
     - name: Run analysis
       run: ./gradlew detektMain detektTest

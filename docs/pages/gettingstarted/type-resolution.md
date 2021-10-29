@@ -89,11 +89,10 @@ If you're using [Detekt via CLI](cli.md), type resolution will be enabled only i
       EXPERIMENTAL: Paths where to find user class files and depending jar
       files. Used for type resolution.
     --jvm-target
-      EXPERIMENTAL: Target version of the generated JVM bytecode that was
-      generated during compilation and is now being used for type resolution
-      (1.6, 1.8, 9, 10, 11 or 12)
-      Default: JVM_1_6
-      Possible Values: [JVM_1_6, JVM_1_8, JVM_9, JVM_10, JVM_11, JVM_12, JVM_13]
+      EXPERIMENTAL: Target version of the generated JVM bytecode that was 
+      generated during compilation and is now being used for type resolution 
+      (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15 or 16)
+      Default: 1.8
 ```
 
 ## Writing a rule that uses type resolution
