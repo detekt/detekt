@@ -82,30 +82,24 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     private fun check(expression: KtExpression) {
         if (bindingContext == BindingContext.EMPTY) return
 
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val methodName = resolvedCall.resultingDescriptor.fqNameOrNull()?.asString()
-        val encounteredParamTypes = resolvedCall.candidateDescriptor.valueParameters
-            .map { it.type.fqNameOrNull()?.asString() }
+        val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
+            listOf(it) + it.overriddenDescriptors
+        } ?: return
 
-        if (methodName != null) {
-            methods
-                .filter { methodName == it.first }
-                .forEach {
-                    val expectedParamTypes = it.second
-                    val noParamsProvided = expectedParamTypes == null
-                    val paramsMatch = expectedParamTypes == encounteredParamTypes
-
-                    if (noParamsProvided || paramsMatch) {
-                        report(
-                            CodeSmell(
-                                issue,
-                                Entity.from(expression),
-                                "The method ${it.first}(${expectedParamTypes?.joinToString().orEmpty()}) " +
-                                    "has been forbidden in the Detekt config."
-                            )
-                        )
-                    }
-                }
+        for (descriptor in descriptors) {
+            val methodName = descriptor.fqNameOrNull()?.asString()
+            val methodParamTypes = descriptor.valueParameters.mapNotNull { it.type.fqNameOrNull()?.asString() }
+            val isForbiddenMethodCall = methods.any { (forbiddenMethodName, forbiddenMethodParamTypes) ->
+                forbiddenMethodName == methodName && forbiddenMethodParamTypes.isNullOrEquals(methodParamTypes)
+            }
+            if (isForbiddenMethodCall) {
+                val method = "$methodName(${methodParamTypes.joinToString()}"
+                val message = "The method $method has been forbidden in the Detekt config."
+                report(CodeSmell(issue, Entity.from(expression), message))
+                break
+            }
         }
     }
+
+    private fun List<String>?.isNullOrEquals(other: List<String>) = this == null || this == other
 }
