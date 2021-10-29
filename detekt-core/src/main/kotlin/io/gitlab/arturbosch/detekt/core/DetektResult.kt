@@ -27,7 +27,7 @@ data class DetektResult(override val findings: Map<RuleSetId, List<Finding>>) : 
         _notifications.add(notification)
     }
 
-    override fun <V> getData(key: Key<V>): V? = userData.get(key)
+    override fun <V> getData(key: Key<V>): V? = userData[key]
 
     override fun <V> addData(key: Key<V>, value: V) {
         userData = userData.plus(key, requireNotNull(value))
