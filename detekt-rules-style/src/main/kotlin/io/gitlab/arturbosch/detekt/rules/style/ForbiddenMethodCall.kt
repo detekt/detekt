@@ -80,39 +80,15 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     private fun check(expression: KtExpression) {
         if (bindingContext == BindingContext.EMPTY) return
 
-<<<<<<< HEAD
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        methods
-            .find { it.match(resolvedCall) }
-            ?.let {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(expression),
-                        "The method $it has been forbidden in the Detekt config."
-                    )
-                )
-            }
-=======
         val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
             listOf(it) + it.overriddenDescriptors
         } ?: return
 
         for (descriptor in descriptors) {
-            val methodName = descriptor.fqNameOrNull()?.asString()
-            val methodParamTypes = descriptor.valueParameters.mapNotNull { it.type.fqNameOrNull()?.asString() }
-            val isForbiddenMethodCall = methods.any { (forbiddenMethodName, forbiddenMethodParamTypes) ->
-                forbiddenMethodName == methodName && forbiddenMethodParamTypes.isNullOrEquals(methodParamTypes)
-            }
-            if (isForbiddenMethodCall) {
-                val method = "$methodName(${methodParamTypes.joinToString()}"
-                val message = "The method $method has been forbidden in the Detekt config."
+            methods.find { it.match(descriptor) }?.let { functionMatcher ->
+                val message = "The method $functionMatcher has been forbidden in the Detekt config."
                 report(CodeSmell(issue, Entity.from(expression), message))
-                break
             }
         }
->>>>>>> detekt/main
     }
-
-    private fun List<String>?.isNullOrEquals(other: List<String>) = this == null || this == other
 }

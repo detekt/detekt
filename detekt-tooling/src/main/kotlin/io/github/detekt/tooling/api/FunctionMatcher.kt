@@ -1,21 +1,22 @@
 package io.github.detekt.tooling.api
 
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 sealed class FunctionMatcher {
-    abstract fun match(call: ResolvedCall<*>): Boolean
+
+    abstract fun match(callableDescriptor: CallableDescriptor): Boolean
 
     abstract fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean
 
     internal data class NameOnly(
         private val fullyQualifiedName: String
     ) : FunctionMatcher() {
-        override fun match(call: ResolvedCall<*>): Boolean {
-            return call.resultingDescriptor.fqNameOrNull()?.asString() == fullyQualifiedName
+        override fun match(callableDescriptor: CallableDescriptor): Boolean {
+            return callableDescriptor.fqNameOrNull()?.asString() == fullyQualifiedName
         }
 
         override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
@@ -31,10 +32,10 @@ sealed class FunctionMatcher {
         private val fullyQualifiedName: String,
         private val parameters: List<String>
     ) : FunctionMatcher() {
-        override fun match(call: ResolvedCall<*>): Boolean {
-            if (call.resultingDescriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
+        override fun match(callableDescriptor: CallableDescriptor): Boolean {
+            if (callableDescriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
 
-            val encounteredParamTypes = call.candidateDescriptor.valueParameters
+            val encounteredParamTypes = callableDescriptor.valueParameters
                 .map { it.type.fqNameOrNull()?.asString() }
 
             return encounteredParamTypes == parameters
