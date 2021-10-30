@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * returns a `Flow`, should not have any side effects. Only once collection begins against the
  * returned `Flow`, should work actually be done.
  *
- * See https://kotlinlang.org/docs/reference/coroutines/flow.html#flows-are-cold
+ * See https://kotlinlang.org/docs/flow.html#flows-are-cold
  *
  * <noncompliant>
  * suspend fun observeSignals(): Flow<Unit> {
