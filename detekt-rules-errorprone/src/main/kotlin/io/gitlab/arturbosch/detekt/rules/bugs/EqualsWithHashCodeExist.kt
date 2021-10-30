@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -63,9 +63,9 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
         fun violation() = equals && !hashCode || !equals && hashCode
     }
 
-    override fun visitFile(file: PsiFile) {
+    override fun visitKtFile(file: KtFile) {
         queue.clear()
-        super.visitFile(file)
+        super.visitKtFile(file)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {

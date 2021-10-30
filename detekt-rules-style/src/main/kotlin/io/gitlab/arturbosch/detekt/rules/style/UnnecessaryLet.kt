@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
 import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -122,7 +121,7 @@ private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNul
 
 private fun KtBlockExpression.hasOnlyOneStatement() = this.children.size == 1
 
-private fun PsiElement.countVarRefs(parameter: CallableDescriptor, context: BindingContext): Int =
+private fun KtBlockExpression.countVarRefs(parameter: CallableDescriptor, context: BindingContext): Int =
     collectDescendantsOfType<KtSimpleNameExpression> {
         it.getResolvedCall(context)?.resultingDescriptor == parameter
     }.count()

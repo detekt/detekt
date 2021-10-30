@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
@@ -31,9 +32,10 @@ fun PsiElement.hasCommentInside(): Boolean {
     return getUserData(commentKey) == true
 }
 
-fun getIntValueForPsiElement(element: PsiElement): Int? {
-    return (element as? KtConstantExpression)?.text?.toIntOrNull()
-}
+@Deprecated("Use getIntValueForKtExpression")
+fun getIntValueForPsiElement(element: PsiElement): Int? = (element as? KtConstantExpression)?.text?.toIntOrNull()
+
+fun getIntValueForKtExpression(element: KtExpression): Int? = (element as? KtConstantExpression)?.text?.toIntOrNull()
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 

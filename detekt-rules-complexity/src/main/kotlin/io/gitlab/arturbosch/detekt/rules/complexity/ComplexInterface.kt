@@ -11,9 +11,9 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.companionObject
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassBody
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
@@ -78,13 +78,13 @@ class ComplexInterface(
     }
 
     private fun calculateMembers(body: KtClassBody): Int {
-        fun PsiElement.considerPrivate() = includePrivateDeclarations ||
+        fun KtDeclaration.considerPrivate() = includePrivateDeclarations ||
             this is KtTypeParameterListOwner && !this.isPrivate()
 
-        fun PsiElement.isMember() = this is KtNamedFunction || this is KtProperty
+        fun KtDeclaration.isMember() = this is KtNamedFunction || this is KtProperty
 
-        return body.children
-            .filter(PsiElement::considerPrivate)
-            .count(PsiElement::isMember)
+        return body.declarations
+            .filter(KtDeclaration::considerPrivate)
+            .count(KtDeclaration::isMember)
     }
 }

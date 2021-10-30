@@ -8,9 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import io.gitlab.arturbosch.detekt.rules.getIntValueForKtExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * Reports ranges which are empty.
@@ -45,7 +46,7 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
     private val minimumSize = 3
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        val range = expression.children
+        val range = expression.getChildrenOfType<KtExpression>()
         if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
             report(
                 CodeSmell(
@@ -58,9 +59,9 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
         super.visitBinaryExpression(expression)
     }
 
-    private fun hasInvalidLoopRange(range: Array<PsiElement>): Boolean {
-        val lowerValue = getIntValueForPsiElement(range[0])
-        val upperValue = getIntValueForPsiElement(range[2])
+    private fun hasInvalidLoopRange(range: Array<KtExpression>): Boolean {
+        val lowerValue = getIntValueForKtExpression(range[0])
+        val upperValue = getIntValueForKtExpression(range[2])
         if (lowerValue == null || upperValue == null) {
             return false
         }

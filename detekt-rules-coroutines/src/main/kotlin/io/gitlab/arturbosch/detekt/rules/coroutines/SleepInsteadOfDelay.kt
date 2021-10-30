@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -66,7 +65,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         super.visitQualifiedExpression(expression)
     }
 
-    private fun PsiElement.checkDescendants(message: String) {
+    private fun KtExpression.checkDescendants(message: String) {
         forEachDescendantOfType<KtCallExpression> { it.verifyExpression(message) }
     }
 

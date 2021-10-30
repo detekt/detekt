@@ -58,6 +58,7 @@ public final class io/gitlab/arturbosch/detekt/rules/IsPartOfUtilsKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
 	public static final fun companionObject (Lorg/jetbrains/kotlin/psi/KtClass;)Lorg/jetbrains/kotlin/psi/KtObjectDeclaration;
+	public static final fun getIntValueForKtExpression (Lorg/jetbrains/kotlin/psi/KtExpression;)Ljava/lang/Integer;
 	public static final fun getIntValueForPsiElement (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Ljava/lang/Integer;
 	public static final fun hasCommentInside (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
 	public static final fun hasCommentInside (Lorg/jetbrains/kotlin/psi/KtClassOrObject;)Z

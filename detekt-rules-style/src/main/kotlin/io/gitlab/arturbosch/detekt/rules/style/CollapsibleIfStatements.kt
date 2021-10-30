@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -60,7 +59,7 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
         return statement != null && isLoneIfExpression(statement)
     }
 
-    private fun isLoneIfExpression(statement: PsiElement): Boolean {
+    private fun isLoneIfExpression(statement: KtExpression): Boolean {
         val ifExpression = statement as? KtIfExpression
         return ifExpression != null && ifExpression.`else` == null
     }

@@ -8,12 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import io.gitlab.arturbosch.detekt.rules.getIntValueForKtExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
 /**
@@ -71,17 +72,17 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isRangeOperator(binaryExpression: KtBinaryExpression): Boolean {
-        val range = binaryExpression.children
+        val range = binaryExpression.getChildrenOfType<KtExpression>()
         if (range.size >= minimumRangeSize) {
             val hasCorrectLowerValue = hasCorrectLowerValue(range[0])
-            val hasCorrectUpperValue = getIntValueForPsiElement(range[2]) != null
+            val hasCorrectUpperValue = getIntValueForKtExpression(range[2]) != null
             return hasCorrectLowerValue && hasCorrectUpperValue && rangeOperators.contains(range[1].text)
         }
         return false
     }
 
-    private fun hasCorrectLowerValue(element: PsiElement): Boolean {
-        var lowerValue = getIntValueForPsiElement(element) != null
+    private fun hasCorrectLowerValue(element: KtExpression): Boolean {
+        var lowerValue = getIntValueForKtExpression(element) != null
         if (!lowerValue) {
             val expression = element as? KtBinaryExpression
             if (expression != null) {

@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtElement
 
 /**
  * This rule reports mutable properties inside data classes.
@@ -52,7 +52,7 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
-    private fun report(element: PsiElement, className: String?, propertyName: String?) {
+    private fun report(element: KtElement, className: String?, propertyName: String?) {
         report(
             CodeSmell(
                 issue,
