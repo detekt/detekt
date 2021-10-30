@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Restrict the number of return methods allowed in methods.
@@ -107,18 +107,15 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
         return statements.flatMap { it.collectDescendantsOfType<KtReturnExpression>().asSequence() }
             .filterNot { it.isExcluded() }
-            .count { it.getParentOfType<KtNamedFunction>(true) == function }
+            .count { it.getStrictParentOfType<KtNamedFunction>() == function }
     }
 
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
-        val label = this.labeledExpression
-        if (label != null) {
-            return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
-                .map { it.calleeExpression }
-                .filterIsInstance<KtNameReferenceExpression>()
-                .map { it.text }
-                .any { it in label.text }
-        }
-        return false
+        val label = labeledExpression ?: return false
+        return parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
+            .map { it.calleeExpression }
+            .filterIsInstance<KtNameReferenceExpression>()
+            .map { it.text }
+            .any { it in label.text }
     }
 }

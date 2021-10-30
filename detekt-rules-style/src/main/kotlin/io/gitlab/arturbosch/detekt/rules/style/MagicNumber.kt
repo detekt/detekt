@@ -121,7 +121,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         val elementType = expression.elementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
 
-        if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
+        if (expression.isIgnoredByConfig() || expression.isPartOfFunctionReturnConstant() ||
             expression.isPartOfConstructorOrFunctionConstant()
         ) {
             return
@@ -146,22 +146,22 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isIgnoredByConfig(expression: KtConstantExpression) = when {
-        ignorePropertyDeclaration && expression.isProperty() -> true
-        ignoreLocalVariableDeclaration && expression.isLocalProperty() -> true
-        ignoreConstantDeclaration && expression.isConstantProperty() -> true
-        ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
-        ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> true
-        ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-        ignoreEnums && expression.isPartOf<KtEnumEntry>() -> true
-        ignoreNamedArgument && expression.isNamedArgument() -> true
-        ignoreRanges && expression.isPartOfRange() -> true
-        ignoreExtensionFunctions && expression.isSubjectOfExtensionFunction() -> true
+    private fun KtConstantExpression.isIgnoredByConfig() = when {
+        ignorePropertyDeclaration && isProperty() -> true
+        ignoreLocalVariableDeclaration && isLocalProperty() -> true
+        ignoreConstantDeclaration && isConstantProperty() -> true
+        ignoreCompanionObjectPropertyDeclaration && isCompanionObjectProperty() -> true
+        ignoreAnnotation && isPartOf<KtAnnotationEntry>() -> true
+        ignoreHashCodeFunction && isPartOfHashCode() -> true
+        ignoreEnums && isPartOf<KtEnumEntry>() -> true
+        ignoreNamedArgument && isNamedArgument() -> true
+        ignoreRanges && isPartOfRange() -> true
+        ignoreExtensionFunctions && isSubjectOfExtensionFunction() -> true
         else -> false
     }
 
-    private fun parseAsDoubleOrNull(rawToken: String?): Double? = try {
-        rawToken?.let { parseAsDouble(it) }
+    private fun parseAsDoubleOrNull(rawToken: String): Double? = try {
+        parseAsDouble(rawToken)
     } catch (e: NumberFormatException) {
         null
     }
@@ -169,10 +169,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun parseAsDouble(rawNumber: String): Double {
         val normalizedText = normalizeForParsingAsDouble(rawNumber)
         return when {
-            normalizedText.startsWith("0x") || normalizedText.startsWith("0X") ->
-                normalizedText.substring(2).toLong(HEX_RADIX).toDouble()
-            normalizedText.startsWith("0b") || normalizedText.startsWith("0B") ->
-                normalizedText.substring(2).toLong(BINARY_RADIX).toDouble()
+            normalizedText.startsWith("0x") -> normalizedText.substring(2).toLong(HEX_RADIX).toDouble()
+            normalizedText.startsWith("0b") -> normalizedText.substring(2).toLong(BINARY_RADIX).toDouble()
             else -> normalizedText.toDouble()
         }
     }
@@ -202,13 +200,12 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
         parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
 
-    private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
-        return parent is KtParameter &&
+    private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant() =
+        parent is KtParameter &&
             when (parent.parent.parent) {
                 is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
                 else -> false
             }
-    }
 
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
@@ -221,14 +218,10 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean {
-        return parent is KtDotQualifiedExpression
-    }
+    private fun KtConstantExpression.isSubjectOfExtensionFunction() = parent is KtDotQualifiedExpression
 
-    private fun KtConstantExpression.isPartOfHashCode(): Boolean {
-        val containingFunction = getNonStrictParentOfType<KtNamedFunction>()
-        return containingFunction?.isHashCodeFunction() == true
-    }
+    private fun KtConstantExpression.isPartOfHashCode() =
+        getNonStrictParentOfType<KtNamedFunction>()?.isHashCodeFunction() == true
 
     private fun KtConstantExpression.isLocalProperty() =
         getNonStrictParentOfType<KtProperty>()?.isLocal ?: false

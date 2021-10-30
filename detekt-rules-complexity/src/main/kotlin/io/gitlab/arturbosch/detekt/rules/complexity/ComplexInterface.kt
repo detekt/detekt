@@ -53,8 +53,7 @@ class ComplexInterface(
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {
-            val body = klass.body ?: return
-            var size = calculateMembers(body)
+            var size = klass.body?.calculateMembers() ?: return
             if (includeStaticDeclarations) {
                 size += countStaticDeclarations(klass.companionObject())
             }
@@ -72,18 +71,16 @@ class ComplexInterface(
         super.visitClass(klass)
     }
 
-    private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
-        val body = companionObject?.body
-        return if (body != null) calculateMembers(body) else 0
-    }
+    private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int =
+        companionObject?.body?.calculateMembers() ?: 0
 
-    private fun calculateMembers(body: KtClassBody): Int {
+    private fun KtClassBody.calculateMembers(): Int {
         fun KtDeclaration.considerPrivate() = includePrivateDeclarations ||
             this is KtTypeParameterListOwner && !this.isPrivate()
 
         fun KtDeclaration.isMember() = this is KtNamedFunction || this is KtProperty
 
-        return body.declarations
+        return declarations
             .filter(KtDeclaration::considerPrivate)
             .count(KtDeclaration::isMember)
     }

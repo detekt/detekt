@@ -100,8 +100,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
 
     private fun KtFinallySection.typeEqualsTo(type: KotlinType?): Boolean {
-        val finallyExpression = finalExpression
-        if (finallyExpression.statements.isEmpty()) return false
+        if (finalExpression.statements.isEmpty()) return false
 
         return finalExpression.getType(bindingContext) == type
     }

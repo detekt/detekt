@@ -56,11 +56,8 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
     private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
         val statement = expression.then?.getChildrenOfType<KtExpression>()?.singleOrNull()
-        return statement != null && isLoneIfExpression(statement)
+        return statement != null && statement.isLoneIfExpression()
     }
 
-    private fun isLoneIfExpression(statement: KtExpression): Boolean {
-        val ifExpression = statement as? KtIfExpression
-        return ifExpression != null && ifExpression.`else` == null
-    }
+    private fun KtExpression.isLoneIfExpression() = this is KtIfExpression && `else` == null
 }

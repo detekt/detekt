@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperTypeListEntry
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
@@ -79,9 +78,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
             !annotationExcluder.shouldExclude(klass.annotationEntries)
         ) {
-            val declarations = klass.body?.declarations.orEmpty()
-            val properties = declarations.filterIsInstance<KtProperty>()
-            val functions = declarations.filterIsInstance<KtNamedFunction>()
+            val properties = klass.body?.properties.orEmpty()
+            val functions = klass.body?.functions.orEmpty()
 
             val propertyParameters = klass.extractConstructorPropertyParameters()
 

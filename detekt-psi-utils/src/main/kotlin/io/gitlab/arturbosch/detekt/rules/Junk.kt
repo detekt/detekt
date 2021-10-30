@@ -15,10 +15,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 
-fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-    "run", "let", "apply", "with", "use", "forEach" -> true
-    else -> false
-}
+fun KtCallExpression.isUsedForNesting(): Boolean =
+    getCallNameExpression()?.text in setOf("run", "let", "apply", "with", "use", "forEach")
 
 fun KtClassOrObject.hasCommentInside() = this.body?.hasCommentInside() ?: false
 

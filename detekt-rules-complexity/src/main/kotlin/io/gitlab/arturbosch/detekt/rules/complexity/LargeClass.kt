@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
@@ -64,7 +64,7 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         val lines = classOrObject.linesOfCode()
         classToLinesCache[classOrObject] = lines
-        classOrObject.getStrictParentOfType<KtClassOrObject>()
+        classOrObject.containingClassOrObject
             ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
         super.visitClassOrObject(classOrObject)
         findAllNestedClasses(classOrObject)

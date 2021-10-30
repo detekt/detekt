@@ -39,8 +39,9 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -147,14 +148,13 @@ private class UnusedFunctionVisitor(
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!isDeclaredInsideAnInterface(function) && function.isPrivate()) {
+        if (!function.isDeclaredInsideAnInterface() && function.isPrivate()) {
             collectFunction(function)
         }
         super.visitNamedFunction(function)
     }
 
-    private fun isDeclaredInsideAnInterface(function: KtNamedFunction) =
-        function.getStrictParentOfType<KtClass>()?.isInterface() == true
+    private fun KtNamedFunction.isDeclaredInsideAnInterface() = containingClass()?.isInterface() == true
 
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier
@@ -217,7 +217,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isRelevant()) {
+        if (function.isAllowedToHaveUnusedParameters()) {
             return
         }
 
@@ -235,25 +235,17 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
             }
         }
 
-        function.accept(object : DetektVisitor() {
-            override fun visitProperty(property: KtProperty) {
-                if (property.isLocal) {
-                    val name = property.nameAsSafeName.identifier
-                    parameters.remove(name)
-                }
-                super.visitProperty(property)
+        function.forEachDescendantOfType<KtProperty> { property ->
+            if (property.isLocal) {
+                val name = property.nameAsSafeName.identifier
+                parameters.remove(name)
             }
+        }
 
-            override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                parameters.remove(expression.text)
-                super.visitReferenceExpression(expression)
-            }
-        })
+        function.forEachDescendantOfType<KtReferenceExpression> { parameters.remove(it.text) }
 
         unusedParameters.addAll(parameters.values)
     }
-
-    private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
         isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() ||

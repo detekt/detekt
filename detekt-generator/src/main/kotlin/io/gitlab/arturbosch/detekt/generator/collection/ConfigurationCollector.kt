@@ -52,17 +52,16 @@ class ConfigurationCollector {
         return constantOrNull?.let { propertyName to it }
     }
 
-    private fun KtProperty.getConstantValueAsStringOrNull(): String? {
+    private fun KtProperty.getConstantValueAsStringOrNull(): String? =
         if (hasListDeclaration()) {
-            return getListDeclaration()
+            getListDeclaration()
                 .valueArguments
                 .map { "'${it.text.withoutQuotes()}'" }
                 .toString()
+        } else {
+            findDescendantOfType<KtConstantExpression>()?.text
+                ?: findDescendantOfType<KtStringTemplateExpression>()?.text?.withoutQuotes()
         }
-
-        return findDescendantOfType<KtConstantExpression>()?.text
-            ?: findDescendantOfType<KtStringTemplateExpression>()?.text?.withoutQuotes()
-    }
 
     private fun KtProperty.parseConfigurationAnnotation(): Configuration? = when {
         isAnnotatedWith(ConfigAnnotation::class) -> toConfiguration()

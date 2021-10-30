@@ -126,18 +126,18 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
             node.elementType == KtNodeTypes.FLOAT_CONSTANT ||
             topLevelConstants.contains(text) ||
             companionObjectConstants.contains(text) ||
-            isBinaryExpression(this) ||
-            isParenthesizedExpression(this)
+            isBinaryExpression() ||
+            isParenthesizedExpression()
     }
 
-    private fun isParenthesizedExpression(expression: KtExpression) =
-        (expression as? KtParenthesizedExpression)?.expression?.isConstantExpression() == true
+    private fun KtExpression.isParenthesizedExpression() =
+        (this as? KtParenthesizedExpression)?.expression?.isConstantExpression() == true
 
-    private fun isBinaryExpression(expression: KtExpression): Boolean {
-        return expression is KtBinaryExpression &&
-            expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
-            binaryTokens.contains(expression.operationToken) &&
-            expression.left?.isConstantExpression() == true &&
-            expression.right?.isConstantExpression() == true
+    private fun KtExpression.isBinaryExpression(): Boolean {
+        return this is KtBinaryExpression &&
+            node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
+            binaryTokens.contains(operationToken) &&
+            left?.isConstantExpression() == true &&
+            right?.isConstantExpression() == true
     }
 }

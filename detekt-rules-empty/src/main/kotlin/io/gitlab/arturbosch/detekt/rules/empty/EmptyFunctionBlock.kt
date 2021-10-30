@@ -8,9 +8,8 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
  * Reports empty functions. Empty blocks of code serve no purpose and should be removed.
@@ -49,6 +48,5 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
         }
     }
 
-    private fun KtNamedFunction.isDefaultFunction() =
-        getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
+    private fun KtNamedFunction.isDefaultFunction() = containingClass()?.isInterface() == true && hasBody()
 }

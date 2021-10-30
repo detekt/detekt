@@ -45,7 +45,7 @@ private fun String.formatElementName(): String =
 internal fun PsiElement.buildFullSignature(): String {
     var fullSignature = this.searchSignature()
     val parentSignatures = this.parents
-        .filter { it is KtClassOrObject }
+        .filterIsInstance<KtClassOrObject>()
         .map { it.extractClassName() }
         .toList()
         .reversed()

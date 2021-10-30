@@ -42,9 +42,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
-            klass.body?.declarations
-                ?.filterIsInstance<KtNamedFunction>()
-                ?.forEach { checkFunction(klass, it) }
+            klass.body?.functions?.forEach { checkFunction(klass, it) }
         }
         super.visitClass(klass)
     }

@@ -45,16 +45,15 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     private val searchInInnerInterface: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
-        if (requiresDocumentation(klass)) {
+        if (klass.requiresDocumentation()) {
             reportIfUndocumented(klass)
         }
 
         super.visitClass(klass)
     }
 
-    private fun requiresDocumentation(
-        klass: KtClass
-    ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+    private fun KtClass.requiresDocumentation() =
+        isTopLevel() || isInnerClass() || isNestedClass() || isInnerInterface()
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (declaration.isCompanionWithoutName() || declaration.isLocal || !searchInInnerObject) {
@@ -66,7 +65,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun reportIfUndocumented(element: KtClassOrObject) {
-        if (isPublicAndPublicInherited(element) &&
+        if (element.isPublicAndPublicInherited() &&
             element.notEnumEntry() &&
             element.docComment == null
         ) {
@@ -80,8 +79,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isPublicAndPublicInherited(element: KtClassOrObject) =
-        element.isPublicInherited() && element.isPublicNotOverridden()
+    private fun KtClassOrObject.isPublicAndPublicInherited() = isPublicInherited() && isPublicNotOverridden()
 
     private fun KtObjectDeclaration.isCompanionWithoutName() =
         isCompanion() && nameAsSafeName.asString() == "Companion"

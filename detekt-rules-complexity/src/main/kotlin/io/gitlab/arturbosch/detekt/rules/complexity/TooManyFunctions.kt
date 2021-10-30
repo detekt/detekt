@@ -82,7 +82,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isTopLevel && !isIgnoredFunction(function)) {
+        if (function.isTopLevel && !function.isIgnored()) {
             amountOfTopLevelFunctions++
         }
     }
@@ -151,19 +151,13 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         super.visitObjectDeclaration(declaration)
     }
 
-    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body
-        ?.run {
-            declarations
-                .filterIsInstance<KtNamedFunction>()
-                .count { !isIgnoredFunction(it) }
-        } ?: 0
+    private fun calcFunctions(classOrObject: KtClassOrObject): Int =
+        classOrObject.body?.functions.orEmpty().count { !it.isIgnored() }
 
-    private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-        ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
-        ignorePrivate && function.isPrivate() -> true
-        ignoreOverridden && function.isOverride() -> true
-        else -> false
-    }
+    private fun KtNamedFunction.isIgnored() =
+        ignoreDeprecated && hasAnnotation(DEPRECATED) ||
+            ignorePrivate && isPrivate() ||
+            ignoreOverridden && isOverride()
 
     companion object {
         const val DEFAULT_THRESHOLD = 11

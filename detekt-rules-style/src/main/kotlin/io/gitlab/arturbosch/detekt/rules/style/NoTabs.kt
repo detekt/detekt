@@ -40,6 +40,5 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
         return (!isPartOfString() || isStringInterpolated()) && text.contains('\t')
     }
 
-    private fun PsiWhiteSpace.isStringInterpolated(): Boolean =
-        this.isPartOf<KtStringTemplateEntryWithExpression>()
+    private fun PsiWhiteSpace.isStringInterpolated() = isPartOf<KtStringTemplateEntryWithExpression>()
 }

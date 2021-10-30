@@ -50,11 +50,10 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtThrowExpression.isOnlyExpressionInBlock(): Boolean {
-        return when (val p = parent) {
+    private fun KtThrowExpression.isOnlyExpressionInBlock() =
+        when (val p = parent) {
             is KtBlockExpression -> p.statements.size == 1
             is KtNamedFunction -> true
             else -> false
         }
-    }
 }
