@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.util.ArrayDeque
 
 /**
  * When a class overrides the equals() method it should also override the hashCode() method.
@@ -72,9 +71,9 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject is KtClass && classOrObject.isData()) return
 
-        queue.push(ViolationHolder())
+        queue.addFirst(ViolationHolder())
         super.visitClassOrObject(classOrObject)
-        if (queue.pop().violation()) {
+        if (queue.removeFirst().violation()) {
             report(
                 CodeSmell(
                     issue,
@@ -88,8 +87,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!function.isTopLevel) {
-            if (function.isEqualsFunction()) queue.peek().equals = true
-            if (function.isHashCodeFunction()) queue.peek().hashCode = true
+            if (function.isEqualsFunction()) queue.first().equals = true
+            if (function.isHashCodeFunction()) queue.first().hashCode = true
         }
     }
 }
