@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
 /**
  * Expensive setup code can slow down test discovery.
- * Make sure to use memoization when declaring non trivial types.
+ * Make sure to use memoization when declaring non-trivial types.
  *
  * <noncompliant>
  * class MyTest : Spek({

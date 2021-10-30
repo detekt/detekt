@@ -42,7 +42,7 @@ interface RulesSpec {
         object NoneAllowed : MaxIssuePolicy()
 
         /**
-         * Define a specific amount of issues which are allowed to find before returning non zero exit code.
+         * Define a specific amount of issues which are allowed to find before returning non-zero exit code.
          */
         class AllowAmount(val amount: Int) : MaxIssuePolicy()
     }
@@ -55,7 +55,7 @@ interface RulesSpec {
     /**
      * Allows to programmatically restrict the execution of certain rules.
      *
-     * By default there are no restrictions which means all loaded rule sets and rules are considered to be executed.
+     * By default, there are no restrictions which means all loaded rule sets and rules are considered to be executed.
      */
     val runPolicy: RunPolicy
 

@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
- * but sometimes their usage should be replaced with a ordinary method/extension function call
- * to reduce visual complexity
+ * but sometimes their usage should be replaced with an ordinary method/extension function call
+ * to reduce visual complexity.
  *
  * <noncompliant>
  * a.let { print(it) } // can be replaced with `print(a)`
