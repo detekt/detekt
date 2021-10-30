@@ -140,8 +140,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "This expression contains a magic number." +
-                        " Consider defining it to a well named constant."
+                    "This expression contains a magic number. Consider defining it to a well named constant."
                 )
             )
         }

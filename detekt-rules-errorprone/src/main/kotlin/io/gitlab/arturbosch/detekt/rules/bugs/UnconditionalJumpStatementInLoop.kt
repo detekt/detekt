@@ -37,8 +37,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "An unconditional jump statement in a loop is useless. " +
-            "The loop itself is only executed once.",
+        "An unconditional jump statement in a loop is useless. The loop itself is only executed once.",
         Debt.TEN_MINS
     )
 
@@ -48,8 +47,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
                 CodeSmell(
                     issue,
                     Entity.from(loopExpression),
-                    "This loop contains an unconditional " +
-                        "jump expression which " +
+                    "This loop contains an unconditional jump expression which " +
                         "essentially renders it useless as it will exit the loop during the first iteration."
                 )
             )

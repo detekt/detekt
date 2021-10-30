@@ -68,8 +68,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue = issue,
                     entity = Entity.Companion.from(finallyBlock),
-                    message = "Contents of the finally block do not affect " +
-                        "the result of the expression."
+                    message = "Contents of the finally block do not affect the result of the expression."
                 )
             )
         }
