@@ -179,7 +179,7 @@ private class UnusedFunctionVisitor(
 
     /*
      * We need to collect all private function declarations and references to these functions
-     * for the whole file as Kotlin allows to access private and internal object declarations
+     * for the whole file as Kotlin allows access to private and internal object declarations
      * from everywhere in the file.
      */
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
