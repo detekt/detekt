@@ -21,13 +21,12 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
-import java.util.ArrayDeque
 
 fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<ASTNode> = sequence {
     val queue = ArrayDeque<ASTNode>()
     queue.add(this@tokenSequence)
     do {
-        val curr = queue.pop()
+        val curr = queue.removeFirst()
         if (curr.psi::class.java !in skipTreesOf) {
             // Yields only tokens which can be identified in the source code.
             // Composite elements, e.g. classes or files, are abstractions over many leaf nodes.
