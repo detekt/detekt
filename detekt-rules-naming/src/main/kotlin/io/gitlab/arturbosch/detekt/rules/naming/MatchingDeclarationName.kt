@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * The name of the file should describe what the code in the file does.
  * Therefore, you should avoid using meaningless words such as "Util" in file names." - Official Kotlin Style Guide
  *
- * More information at: http://kotlinlang.org/docs/reference/coding-conventions.html
+ * More information at: https://kotlinlang.org/docs/coding-conventions.html
  *
  * <noncompliant>
  *
