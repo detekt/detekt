@@ -58,8 +58,8 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression?.isMinusOneExpression() = this is KtBinaryExpression &&
         left != null && operationToken == KtTokens.MINUS && (right as? KtConstantExpression)?.text == "1"
 
-    private fun report(expression: KtExpression, rageTo: String) {
-        report(CodeSmell(issue, Entity.from(expression), "'$rageTo' call can be replaced with 'until'"))
+    private fun report(expression: KtExpression, rangeTo: String) {
+        report(CodeSmell(issue, Entity.from(expression), "'$rangeTo' call can be replaced with 'until'"))
     }
 
     companion object {
