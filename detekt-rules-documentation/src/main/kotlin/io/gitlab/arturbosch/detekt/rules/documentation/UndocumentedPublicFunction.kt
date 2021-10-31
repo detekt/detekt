@@ -28,9 +28,7 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isLocal) return
-
-        if (function.docComment == null && function.shouldBeDocumented()) {
+        if (!function.isLocal && function.docComment == null && function.shouldBeDocumented()) {
             report(
                 CodeSmell(
                     issue,
