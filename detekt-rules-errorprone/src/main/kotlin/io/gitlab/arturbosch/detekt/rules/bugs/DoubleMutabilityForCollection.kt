@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -52,8 +51,7 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
 
         if (bindingContext == BindingContext.EMPTY) return
 
-        val type =
-            (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? VariableDescriptor)?.type ?: return
+        val type = (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
         val standardType = type.fqNameOrNull()
         if (property.isVar && standardType in mutableTypes) {
             report(
