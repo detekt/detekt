@@ -20,11 +20,14 @@ object InjectDispatcherSpec : Spek({
 
         it("reports when dispatchers is used inside a function") {
             val code = """
-                import kotlinx.coroutines.coroutineScope
+                import kotlinx.coroutines.launch
+                import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
 
-                suspend fun useDispatchers() {
-                    coroutineScope(Dispatchers.IO).launch()
+                fun useDispatchers() {
+                    runBlocking {
+                        launch(Dispatchers.IO) { }
+                    }
                 }
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -32,12 +35,15 @@ object InjectDispatcherSpec : Spek({
 
         it("does not report when dispatcher is used as a function parameter") {
             val code = """
-                import kotlinx.coroutines.coroutineScope
+                import kotlinx.coroutines.launch
+                import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
 
-                suspend fun useDispatchers(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-                    coroutineScope(dispatcher).launch()
+                fun useDispatchers(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+                    runBlocking {
+                        launch(dispatcher) { }
+                    }
                 }
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -65,11 +71,14 @@ object InjectDispatcherSpec : Spek({
 
         it("does not report when dispatcher main is used") {
             val code = """
-                import kotlinx.coroutines.coroutineScope
+                import kotlinx.coroutines.launch
+                import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
 
-                suspend fun useDispatchers() {
-                    coroutineScope(Dispatchers.Main).launch()
+                fun useDispatchers() {
+                    runBlocking {
+                        launch(Dispatchers.Main) { }
+                    }
                 }
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -82,11 +91,14 @@ object InjectDispatcherSpec : Spek({
 
         it("reports when dispatcher main is used") {
             val code = """
-                import kotlinx.coroutines.coroutineScope
+                import kotlinx.coroutines.launch
+                import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
 
                 fun useDispatchers() {
-                    coroutineScope(Dispatchers.Main).launch()
+                    runBlocking {
+                        launch(Dispatchers.Main) { }
+                    }
                 }
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
