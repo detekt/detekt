@@ -517,8 +517,8 @@ code style guidelines.</p>
 
 <p>This rule detects <code class="language-plaintext highlighter-rouge">if</code> statements which can be collapsed. This can reduce nesting and help improve readability.</p>
 
-<p>However it should be carefully considered if merging the if statements actually does improve readability or if it
-hides some edge-cases from the reader.</p>
+<p>However, carefully consider whether merging the if statements actually improves readability, as collapsing the
+statements may hide some edge cases from the reader.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
@@ -851,7 +851,7 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.</p>
 
 <p>This rule allows to set a list of forbidden methods. This can be used to discourage the use of unstable, experimental
 or deprecated methods, especially for methods imported from external libraries.
-Detekt will then report all methods invocation that are forbidden.</p>
+Detekt will then report all method invocations that are forbidden.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
@@ -879,10 +879,9 @@ Detekt will then report all methods invocation that are forbidden.</p>
 
 <h3 id="forbiddenpublicdataclass">ForbiddenPublicDataClass</h3>
 
-<p>The data classes are bad for the binary compatibility in public APIs. Avoid to use it.</p>
+<p>Data classes are bad for binary compatibility in public APIs. Avoid using them.</p>
 
-<p>This rule is aimed to library maintainers. If you are developing a final application you don’t need to care about
-this issue.</p>
+<p>This rule is aimed at library maintainers. If you are developing a final application you can ignore this issue.</p>
 
 <p>More info: https://jakewharton.com/public-api-challenges-in-kotlin/</p>
 
@@ -951,7 +950,7 @@ and has only one value - the <code class="language-plaintext highlighter-rouge">
 
 <h3 id="functiononlyreturningconstant">FunctionOnlyReturningConstant</h3>
 
-<p>A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
+<p>A function that only returns a single constant can be misleading. Instead, prefer declaring the constant
 as a <code class="language-plaintext highlighter-rouge">const val</code>.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
@@ -1247,7 +1246,7 @@ Adding braces would improve readability and avoid possible errors.</p>
 
 <p>This rule reports lines of code which exceed a defined maximum line length.</p>
 
-<p>Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
+<p>Long lines might be hard to read on smaller screens or printouts. Additionally, having a maximum line length
 in the codebase will help make the code more uniform.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
@@ -1322,10 +1321,10 @@ taken from: https://kotlinlang.org/docs/coding-conventions.html#modifiers-order<
 
 <h3 id="multilinelambdaitparameter">MultilineLambdaItParameter</h3>
 
-<p>Lambda expressions are very useful in a lot of cases and they often include very small chunks of
+<p>Lambda expressions are very useful in a lot of cases, and they often include very small chunks of
 code using only one parameter. In this cases Kotlin can supply the implicit <code class="language-plaintext highlighter-rouge">it</code> parameter
 to make code more concise. However, when you are dealing with lambdas that contain multiple statements,
-you might end up with a code that is hard to read if you don’t specify a readable, descriptive parameter name
+you might end up with code that is hard to read if you don’t specify a readable, descriptive parameter name
 explicitly.</p>
 
 <p><strong>Active by default</strong>: No</p>
@@ -1494,7 +1493,7 @@ of a lone Unit statement.</p>
 <h4 id="noncompliant-code-28">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">():</span> <span class="nc">Unit</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nc">Unit</span><span class="err"> </span>
+    <span class="k">return</span> <span class="nc">Unit</span>
 <span class="p">}</span>
 <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">=</span> <span class="nc">Unit</span>
 
@@ -1505,7 +1504,7 @@ of a lone Unit statement.</p>
 
 <h4 id="compliant-code-23">Compliant Code:</h4>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span><span class="err"> </span><span class="p">}</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
 
 <span class="c1">// overridden no-op functions are allowed</span>
 <span class="k">override</span> <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">=</span> <span class="nc">Unit</span>
@@ -1832,7 +1831,7 @@ declarations.</p>
 <h3 id="throwscount">ThrowsCount</h3>
 
 <p>Functions should have clear <code class="language-plaintext highlighter-rouge">throw</code> statements. Functions with many <code class="language-plaintext highlighter-rouge">throw</code> statements can be harder to read and lead
-to confusion. Instead prefer to limit the amount of <code class="language-plaintext highlighter-rouge">throw</code> statements in a function.</p>
+to confusion. Instead, prefer limiting the number of <code class="language-plaintext highlighter-rouge">throw</code> statements in a function.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
@@ -1883,9 +1882,9 @@ to confusion. Instead prefer to limit the amount of <code class="language-plaint
 
 <h3 id="underscoresinnumericliterals">UnderscoresInNumericLiterals</h3>
 
-<p>This rule detects and reports base 10 numbers above a certain length that should be underscore
-separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
-under the <code class="language-plaintext highlighter-rouge">acceptableLength</code>. For <code class="language-plaintext highlighter-rouge">Serializable</code> classes or objects, the field <code class="language-plaintext highlighter-rouge">serialVersionUID</code> is
+<p>This rule detects and reports long base 10 numbers which should be separated with underscores
+for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
+under the configured <code class="language-plaintext highlighter-rouge">acceptableLength</code>. For <code class="language-plaintext highlighter-rouge">Serializable</code> classes or objects, the field <code class="language-plaintext highlighter-rouge">serialVersionUID</code> is
 explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.</p>
 
 <p><strong>Active by default</strong>: No</p>
@@ -2053,8 +2052,8 @@ removed.</p>
 <h3 id="unnecessarylet">UnnecessaryLet</h3>
 
 <p><code class="language-plaintext highlighter-rouge">let</code> expressions are used extensively in our code for null-checking and chaining functions,
-but sometimes their usage should be replaced with a ordinary method/extension function call
-to reduce visual complexity</p>
+but sometimes their usage should be replaced with an ordinary method/extension function call
+to reduce visual complexity.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
@@ -2147,8 +2146,7 @@ from destructuring declarations (componentN imports).</p>
 
 <h3 id="unusedprivateclass">UnusedPrivateClass</h3>
 
-<p>Reports unused private classes.
-If private classes are unused they should be removed. Otherwise this dead code
+<p>Reports unused private classes. If private classes are unused they should be removed. Otherwise, this dead code
 can lead to confusion and potential bugs.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
@@ -2160,7 +2158,7 @@ can lead to confusion and potential bugs.</p>
 <h3 id="unusedprivatemember">UnusedPrivateMember</h3>
 
 <p>Reports unused private properties, function parameters and functions.
-If these private elements are unused they should be removed. Otherwise this dead code
+If these private elements are unused they should be removed. Otherwise, this dead code
 can lead to confusion and potential bugs.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
@@ -2220,7 +2218,7 @@ The latter should be preferred as it is more readable.</p>
 
 <h3 id="usecheckorerror">UseCheckOrError</h3>
 
-<p>Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
+<p>Kotlin provides a concise way to check invariants as well as pre- and post-conditions.
 Prefer them instead of manually throwing an IllegalStateException.</p>
 
 <p><strong>Active by default</strong>: No</p>
@@ -2501,7 +2499,7 @@ the value is null or not.</p>
 <h3 id="utilityclasswithpublicconstructor">UtilityClassWithPublicConstructor</h3>
 
 <p>A class which only contains utility variables and functions with no concrete implementation can be refactored
-into an <code class="language-plaintext highlighter-rouge">object</code> or an class with a non-public constructor.
+into an <code class="language-plaintext highlighter-rouge">object</code> or a class with a non-public constructor.
 Furthermore, this rule reports utility classes which are not final.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
