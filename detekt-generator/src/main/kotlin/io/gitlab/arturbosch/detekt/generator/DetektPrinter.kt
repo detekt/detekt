@@ -20,7 +20,7 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
     fun print(pages: List<RuleSetPage>) {
         pages.forEach {
             markdownWriter.write(arguments.documentationPath, it.ruleSet.name) {
-                jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
+                markdownHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
             }
         }
         yamlWriter.write(arguments.configPath, "default-detekt-config") {
@@ -38,13 +38,13 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
-    private fun jekyllHeader(ruleSet: String): String {
+    private fun markdownHeader(ruleSet: String): String {
         check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
         return """
             |---
             |title: ${ruleSet[0].toUpperCase()}${ruleSet.substring(1)} Rule Set
             |sidebar: home_sidebar
-            |keywords: rules, $ruleSet
+            |keywords: [rules, $ruleSet]
             |permalink: $ruleSet.html
             |toc: true
             |folder: documentation

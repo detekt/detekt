@@ -18,9 +18,9 @@ dependencies {
     testImplementation(libs.reflections)
 }
 
-val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
+val documentationDir = "${rootProject.rootDir}/website/docs/rules"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
-val cliOptionsFile = "${rootProject.rootDir}/docs/pages/gettingstarted/cli-options.md"
+val cliOptionsFile = "${rootProject.rootDir}/website/docs/gettingstarted/cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 
@@ -31,7 +31,7 @@ val ruleModules = rootProject.subprojects
     .map { "${rootProject.rootDir}/$it/src/main/kotlin" }
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
-    dependsOn(tasks.assemble, ":detekt-api:dokkaJekyll")
+    dependsOn(tasks.assemble, ":detekt-api:dokkaHtml")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
