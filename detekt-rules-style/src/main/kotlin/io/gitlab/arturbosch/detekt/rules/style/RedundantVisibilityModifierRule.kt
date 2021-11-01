@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * This rule checks for redundant visibility modifiers.
 
  * One exemption is the
- * [explicit API mode](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
+ * [explicit API mode](https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors)
  * In this mode, the visibility modifier should be defined explicitly even if it is public.
  * Hence, the rule ignores the visibility modifiers in explicit API mode.
  *
@@ -66,7 +66,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
      * Explicit API mode was added in Kotlin 1.4
      * It prevents libraries' authors from making APIs public unintentionally.
      * In this mode, the visibility modifier should be defined explicitly even if it is public.
-     * See: https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors
+     * See: https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors
      */
     private fun isExplicitApiModeActive(): Boolean {
         val resources = compilerResources ?: return false
