@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -99,7 +99,5 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
-        getParentOfTypesAndPredicate(true, KtLambdaExpression::class.java) {
-            it.implicitParameter(bindingContext) != null
-        } != null
+        getStrictParentOfType<KtLambdaExpression>()?.implicitParameter(bindingContext) != null
 }
