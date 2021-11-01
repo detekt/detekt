@@ -15,7 +15,7 @@ toc: true
   deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
 - The `ExplicitCollectionElementAccessMethod` rule is now a type-resolution only rule - [#4201](https://github.com/detekt/detekt/pull/4201)
 - The `InvalidPackageDeclaration` rule has been split to create the `MissingPackageDeclaration` rule - [#4149](https://github.com/detekt/detekt/pull/4149)
-- The `ForbiddenComment` rule now offer a `customMessage` configuration key - [#4126](https://github.com/detekt/detekt/pull/4126)
+- The `ForbiddenComment` rule now offers a `customMessage` configuration key - [#4126](https://github.com/detekt/detekt/pull/4126)
 - We bumped ktlint and updated the default enabled rules to mirror what ktlint is doing - [#4179](https://github.com/detekt/detekt/pull/4179)
 - Add a new ConsoleReport format - [#4027](https://github.com/detekt/detekt/pull/4027)
 - Gradle: We removed the `afterEvaluate` wrapper from the Android and KMM plugin - [#4159](https://github.com/detekt/detekt/pull/4159)
