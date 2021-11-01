@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
- * A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
+ * A function that only returns a single constant can be misleading. Instead, prefer declaring the constant
  * as a `const val`.
  *
  * <noncompliant>

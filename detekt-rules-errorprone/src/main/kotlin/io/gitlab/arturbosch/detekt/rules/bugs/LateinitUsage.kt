@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 /**
  * Turn on this rule to flag usages of the lateinit modifier.
  *
- * Using lateinit for property initialization can be error prone and the actual initialization is not
+ * Using lateinit for property initialization can be error-prone and the actual initialization is not
  * guaranteed. Try using constructor injection or delegation to initialize properties.
  *
  * <noncompliant>

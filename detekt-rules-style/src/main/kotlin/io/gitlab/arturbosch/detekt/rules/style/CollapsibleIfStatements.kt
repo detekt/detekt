@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 /**
  * This rule detects `if` statements which can be collapsed. This can reduce nesting and help improve readability.
  *
- * However it should be carefully considered if merging the if statements actually does improve readability or if it
- * hides some edge-cases from the reader.
+ * However, carefully consider whether merging the if statements actually improves readability, as collapsing the
+ * statements may hide some edge cases from the reader.
  *
  * <noncompliant>
  * val i = 1

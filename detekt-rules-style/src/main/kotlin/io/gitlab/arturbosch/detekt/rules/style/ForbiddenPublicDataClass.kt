@@ -16,10 +16,9 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 
 /**
- * The data classes are bad for the binary compatibility in public APIs. Avoid to use it.
+ * Data classes are bad for binary compatibility in public APIs. Avoid using them.
  *
- * This rule is aimed to library maintainers. If you are developing a final application you don't need to care about
- * this issue.
+ * This rule is aimed at library maintainers. If you are developing a final application you can ignore this issue.
  *
  * More info: https://jakewharton.com/public-api-challenges-in-kotlin/
  *

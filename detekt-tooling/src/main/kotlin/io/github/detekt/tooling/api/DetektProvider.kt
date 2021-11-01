@@ -16,7 +16,7 @@ interface DetektProvider {
     companion object {
 
         /**
-         * Looks for an provider on the classpath which is able to load [Detekt] instances.
+         * Looks for a provider on the classpath which is able to load [Detekt] instances.
          */
         fun load(
             classLoader: ClassLoader = DetektProvider::class.java.classLoader

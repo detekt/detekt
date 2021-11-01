@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 /**
  * This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
  * This leads to confusion as a reader of the code might think the value will be incremented/decremented.
- * However the value is replaced with the original value which might lead to bugs.
+ * However, the value is replaced with the original value which might lead to bugs.
  *
  * <noncompliant>
  * var i = 0
@@ -78,7 +78,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
             report(postfixExpression)
         }
 
-        getPostfixExpressionChilds(expression.returnedExpression)
+        getPostfixExpressionChildren(expression.returnedExpression)
             ?.forEach { report(it) }
     }
 
@@ -86,7 +86,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         val postfixExpression = expression.right?.asPostFixExpression()
         val leftIdentifierText = expression.left?.text
         checkPostfixExpression(postfixExpression, leftIdentifierText)
-        getPostfixExpressionChilds(expression.right)
+        getPostfixExpressionChildren(expression.right)
             ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
@@ -118,7 +118,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getPostfixExpressionChilds(expression: KtExpression?) =
+    private fun getPostfixExpressionChildren(expression: KtExpression?) =
         expression?.getChildrenOfType<KtPostfixExpression>()
             ?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }
