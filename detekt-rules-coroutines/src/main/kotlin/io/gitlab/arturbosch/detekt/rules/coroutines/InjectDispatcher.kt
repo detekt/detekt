@@ -47,7 +47,7 @@ class InjectDispatcher(config: Config) : Rule(config) {
     override val issue = Issue(
         "InjectDispatcher",
         Severity.Defect,
-        "Don't hardcode dispatchers when creating new coroutines or calling withContext. " +
+        "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier.",
         Debt.FIVE_MINS
     )
