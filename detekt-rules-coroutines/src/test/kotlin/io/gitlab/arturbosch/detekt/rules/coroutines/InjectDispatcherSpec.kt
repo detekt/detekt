@@ -23,7 +23,7 @@ object InjectDispatcherSpec : Spek({
                 import kotlinx.coroutines.coroutineScope
                 import kotlinx.coroutines.Dispatchers
 
-                fun useDispatchers() {
+                suspend fun useDispatchers() {
                     coroutineScope(Dispatchers.IO).launch()
                 }
                 """
@@ -36,7 +36,7 @@ object InjectDispatcherSpec : Spek({
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
 
-                fun useDispatchers(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+                suspend fun useDispatchers(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
                     coroutineScope(dispatcher).launch()
                 }
                 """
@@ -68,7 +68,7 @@ object InjectDispatcherSpec : Spek({
                 import kotlinx.coroutines.coroutineScope
                 import kotlinx.coroutines.Dispatchers
 
-                fun useDispatchers() {
+                suspend fun useDispatchers() {
                     coroutineScope(Dispatchers.Main).launch()
                 }
                 """
