@@ -14,6 +14,8 @@ toc: true
 - Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
   deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
 - The `ExplicitCollectionElementAccessMethod` rule is now a type-resolution only rule - [#4201](https://github.com/detekt/detekt/pull/4201)
+- The `InvalidPackageDeclaration` rule has been split to create the `MissingPackageDeclaration` rule - [#4149](https://github.com/detekt/detekt/pull/4149)
+- The `ForbiddenComment` rule now offer a `customMessage` configuration key - [#4126](https://github.com/detekt/detekt/pull/4126)
 - We bumped ktlint and updated the default enabled rules to mirror what ktlint is doing - [#4179](https://github.com/detekt/detekt/pull/4179)
 - Add a new ConsoleReport format - [#4027](https://github.com/detekt/detekt/pull/4027)
 - Gradle: We removed the `afterEvaluate` wrapper from the Android and KMM plugin - [#4159](https://github.com/detekt/detekt/pull/4159)
@@ -88,9 +90,7 @@ tasks.detektMain {
 - Report SwallowedException on catchParameter - [#4158](https://github.com/detekt/detekt/pull/4158)
 - Enable binary compatibility validator for detekt-test and detekt-test-api - [#4157](https://github.com/detekt/detekt/pull/4157)
 - Fix issues with Elvis operator in UnconditionalJumpStatementInLoop - [#4150](https://github.com/detekt/detekt/pull/4150)
-- Split InvalidPackageDeclaration to create MissingPackageDeclaration - [#4149](https://github.com/detekt/detekt/pull/4149)
 - Improve documentation for naming rules - [#4146](https://github.com/detekt/detekt/pull/4146)
-- Add customMessage to ForbiddenComment Rule - [#4126](https://github.com/detekt/detekt/pull/4126)
 - Disable `UnsafeCallOnNullableType` on tests - [#4123](https://github.com/detekt/detekt/pull/4123)
 - Remove annotations from LateinitUsage noncompliant block - [#4100](https://github.com/detekt/detekt/pull/4100)
 - UnnecessaryAbstractClass: false positive when the abstract class has internal/protected abstract members - [#4099](https://github.com/detekt/detekt/pull/4099)
