@@ -525,7 +525,7 @@ so if you want to prevent those cases, turn on this rule.</p>
 
 <h3 id="deprecation">Deprecation</h3>
 
-<p>Deprecated elements are expected to be removed in the future. Alternatives should be found if possible.</p>
+<p>Deprecated elements are expected to be removed in future. Alternatives should be found if possible.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
@@ -598,7 +598,7 @@ declaring your variable with <code class="language-plaintext highlighter-rouge">
 
 <p>Flags duplicate case statements in when expressions.</p>
 
-<p>If a when expression contains the same case statement multiple times they should be merged. Otherwise, it might be
+<p>If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
@@ -686,7 +686,7 @@ clarification.</p>
 
 <h3 id="exitoutsidemain">ExitOutsideMain</h3>
 
-<p>Flags use of System.exit() and Kotlin’s exitProcess() when used outside the <code class="language-plaintext highlighter-rouge">main</code> function. This makes code more
+<p>Flags use of System.exit() and Kotlin’s exitProcess() when used outside of the <code class="language-plaintext highlighter-rouge">main</code> function. This makes code more
 difficult to test, causes unexpected behaviour on Android, and is a poor way to signal a failure in the program. In
 almost all cases it is more appropriate to throw an exception.</p>
 
@@ -812,9 +812,9 @@ fun returnsNoValue() {}</p>
 <p>Prefer passing [java.util.Locale] explicitly than using implicit default value when formatting
 strings or performing a case conversion.</p>
 
-<p>The default locale is almost always inappropriate for machine-readable text like HTTP headers.
+<p>The default locale is almost always not appropriate for machine-readable text like HTTP headers.
 For example, if locale with tag <code class="language-plaintext highlighter-rouge">ar-SA-u-nu-arab</code> is a current default then <code class="language-plaintext highlighter-rouge">%d</code> placeholders
-will be evaluated to a number consisting of Eastern-Arabic (non-ASCII) digits.
+will be evaluated to numbers consisting of Eastern-Arabic (non-ASCII) digits.
 [java.util.Locale.US] is recommended for machine-readable output.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
@@ -965,7 +965,7 @@ NoSuchElementException.</p>
 
 <p>Turn on this rule to flag usages of the lateinit modifier.</p>
 
-<p>Using lateinit for property initialization can be error-prone and the actual initialization is not
+<p>Using lateinit for property initialization can be error prone and the actual initialization is not
 guaranteed. Try using constructor injection or delegation to initialize properties.</p>
 
 <p><strong>Active by default</strong>: No</p>
@@ -1406,7 +1406,7 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p>This rule reports postfix expressions (++, –) which are unused and thus unnecessary.
 This leads to confusion as a reader of the code might think the value will be incremented/decremented.
-However, the value is replaced with the original value which might lead to bugs.</p>
+However the value is replaced with the original value which might lead to bugs.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
