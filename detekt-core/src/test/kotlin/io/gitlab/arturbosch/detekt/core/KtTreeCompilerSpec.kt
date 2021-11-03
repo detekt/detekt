@@ -52,14 +52,16 @@ class KtTreeCompilerSpec : Spek({
 
         it("does not compile a folder with a css file") {
             val cssPath = resourceAsPath("css")
-            val (ktFiles, _) = fixture { compile(cssPath) }
+            val (ktFiles, output) = fixture { compile(cssPath) }
             assertThat(ktFiles).isEmpty()
+            assertThat(output).isEmpty()
         }
 
         it("does not compile a css file") {
             val cssPath = resourceAsPath("css").resolve("test.css")
-            val (ktFiles, _) = fixture { compile(cssPath) }
+            val (ktFiles, output) = fixture { compile(cssPath) }
             assertThat(ktFiles).isEmpty()
+            assertThat(output).matches("Ignoring a file detekt cannot handle: .*css/test.css\n")
         }
     }
 })
