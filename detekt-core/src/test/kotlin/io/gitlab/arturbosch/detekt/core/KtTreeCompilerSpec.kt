@@ -5,6 +5,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -61,11 +62,11 @@ class KtTreeCompilerSpec : Spek({
     }
 })
 
-internal inline fun <reified T> fixture(
+internal inline fun fixture(
     vararg filters: String,
     assertIgnoreMessage: Boolean = false,
-    crossinline block: KtTreeCompiler.() -> T
-): T {
+    crossinline block: KtTreeCompiler.() -> List<KtFile>
+): List<KtFile> {
     val channel = if (assertIgnoreMessage) StringBuilder() else NullPrintStream()
     val spec = createNullLoggingSpec {
         project {
