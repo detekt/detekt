@@ -61,7 +61,14 @@ class KtTreeCompilerSpec : Spek({
             val cssPath = resourceAsPath("css").resolve("test.css")
             val (ktFiles, output) = fixture { compile(cssPath) }
             assertThat(ktFiles).isEmpty()
-            assertThat(output).matches("Ignoring a file detekt cannot handle: .*css/test.css\n")
+            assertThat(output).isEmpty()
+        }
+
+        it("does not compile a css file but show log if debug is enabled") {
+            val cssPath = resourceAsPath("css").resolve("test.css")
+            val (ktFiles, output) = fixture(loggingDebug = true) { compile(cssPath) }
+            assertThat(ktFiles).isEmpty()
+            assertThat(output).contains("Ignoring a file detekt cannot handle: ")
         }
     }
 })
