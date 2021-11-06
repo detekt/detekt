@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtEnumEntry
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -32,6 +33,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
     private val forbiddenClassNameRule = ForbiddenClassName(config)
     private val constructorParameterNamingRule = ConstructorParameterNaming(config)
     private val functionParameterNamingRule = FunctionParameterNaming(config)
+    private val lambdaParameterNamingRule = LambdaParameterNaming(config)
     private val booleanPropertyNamingRule = BooleanPropertyNaming(config)
 
     override val rules: List<Rule> = listOf(
@@ -50,7 +52,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
         forbiddenClassNameRule,
         constructorParameterNamingRule,
         functionParameterNamingRule,
-        booleanPropertyNamingRule
+        lambdaParameterNamingRule,
+        booleanPropertyNamingRule,
     )
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -103,6 +106,12 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
             is KtConstructor<*> -> constructorParameterNamingRule.runIfActive { visitParameter(declaration) }
             is KtNamedFunction -> functionParameterNamingRule.runIfActive { visitParameter(declaration) }
         }
+    }
+
+    override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
+        super.visitLambdaExpression(lambdaExpression)
+        lambdaExpression.valueParameters
+            .forEach { lambdaParameterNamingRule.runIfActive { visitParameter(it) } }
     }
 
     private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
