@@ -20,6 +20,10 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 	public static final fun assertThat (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 }
 
+public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
+	public static final fun getContextForPaths (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+}
+
 public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
 	public static final fun yamlConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public static final fun yamlConfigFromContent (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
