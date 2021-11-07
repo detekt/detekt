@@ -22,3 +22,4 @@ jobs:
           stale-pr-label: stale
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
+          exempt-milestones: Future Breaking Changes in Major Versions
