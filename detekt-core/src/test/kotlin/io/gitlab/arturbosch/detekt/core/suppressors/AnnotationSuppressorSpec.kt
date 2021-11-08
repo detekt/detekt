@@ -328,6 +328,50 @@ class AnnotationSuppressorSpec : Spek({
 
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
             }
+
+            it("With glob doesn't match because * doesn't match .") {
+                val suppressor = annotationSuppressorFactory(
+                    buildConfigAware("ignoreAnnotated" to listOf("*.Composable")),
+                    binding,
+                )!!
+
+                val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isFalse()
+            }
+
+            it("With glob2") {
+                val suppressor = annotationSuppressorFactory(
+                    buildConfigAware("ignoreAnnotated" to listOf("**.Composable")),
+                    binding,
+                )!!
+
+                val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+            }
+
+            it("With glob3") {
+                val suppressor = annotationSuppressorFactory(
+                    buildConfigAware("ignoreAnnotated" to listOf("Compo*")),
+                    binding,
+                )!!
+
+                val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+            }
+
+            it("With glob4") {
+                val suppressor = annotationSuppressorFactory(
+                    buildConfigAware("ignoreAnnotated" to listOf("*")),
+                    binding,
+                )!!
+
+                val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+            }
         }
 
         it("Doesn't mix annotations") {
