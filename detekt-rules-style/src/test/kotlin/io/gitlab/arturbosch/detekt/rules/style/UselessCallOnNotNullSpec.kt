@@ -156,8 +156,8 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with spread operator") {
             val code = """
-                val nullableList = arrayOf("string", null)
-                val strings = listOfNotNull(*nullableList)
+                val nullableArray = arrayOf("string", null)
+                val strings = listOfNotNull(*nullableArray)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -165,8 +165,8 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull with spread operator on all non-nullable arguments") {
             val code = """
-                val nonNullableList = arrayOf("string", "bar")
-                val strings = listOfNotNull(*nonNullableList)
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull(*nonNullableArray)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
@@ -175,9 +175,9 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with a mix of null spread and non-null non-spread") {
             val code = """
-                val nullableList = arrayOf("string", null)
-                val nonNullableList = arrayOf("string", "bar")
-                val strings = listOfNotNull("string", *nonNullableList, "foo", *nullableList)
+                val nullableArray = arrayOf("string", null)
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull("string", *nonNullableArray, "foo", *nullableArray)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -185,8 +185,8 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with a mix of non-null spread and null non-spread") {
             val code = """
-                val nonNullableList = arrayOf("string", "bar")
-                val strings = listOfNotNull("string", *nonNullableList, null)
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull("string", *nonNullableArray, null)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -194,9 +194,9 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull with a mix of spread and non-spread, all non-null") {
             val code = """
-                val nonNullableList = arrayOf("string", "bar")
-                val otherNonNullableList = arrayOf("foobar")
-                val strings = listOfNotNull("string", *nonNullableList, "foo", *otherNonNullableList)
+                val nonNullableArray = arrayOf("string", "bar")
+                val otherNonNullableArray = arrayOf("foobar")
+                val strings = listOfNotNull("string", *nonNullableArray, "foo", *otherNonNullableArray)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
