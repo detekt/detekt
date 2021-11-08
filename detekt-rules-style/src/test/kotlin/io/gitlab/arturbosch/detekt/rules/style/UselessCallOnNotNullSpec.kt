@@ -156,7 +156,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with spread operator") {
             val code = """
-                val nullableList = listOf("string", null)
+                val nullableList = arrayOf("string", null)
                 val strings = listOfNotNull(*nullableList)
             """
             val findings = subject.compileAndLintWithContext(env, code)
@@ -165,7 +165,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull with spread operator on all non-nullable arguments") {
             val code = """
-                val nonNullableList = listOf("string", "bar")
+                val nonNullableList = arrayOf("string", "bar")
                 val strings = listOfNotNull(*nonNullableList)
             """
             val findings = subject.compileAndLintWithContext(env, code)
@@ -175,8 +175,8 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with a mix of null spread and non-null non-spread") {
             val code = """
-                val nullableList = listOf("string", null)
-                val nonNullableList = listOf("string", "bar")
+                val nullableList = arrayOf("string", null)
+                val nonNullableList = arrayOf("string", "bar")
                 val strings = listOfNotNull("string", *nonNullableList, "foo", *nullableList)
             """
             val findings = subject.compileAndLintWithContext(env, code)
@@ -185,7 +185,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull with a mix of non-null spread and null non-spread") {
             val code = """
-                val nonNullableList = listOf("string", "bar")
+                val nonNullableList = arrayOf("string", "bar")
                 val strings = listOfNotNull("string", *nonNullableList, null)
             """
             val findings = subject.compileAndLintWithContext(env, code)
@@ -194,8 +194,8 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull with a mix of spread and non-spread, all non-null") {
             val code = """
-                val nonNullableList = listOf("string", "bar")
-                val otherNonNullableList = listOf("foobar")
+                val nonNullableList = arrayOf("string", "bar")
+                val otherNonNullableList = arrayOf("foobar")
                 val strings = listOfNotNull("string", *nonNullableList, "foo", *otherNonNullableList)
             """
             val findings = subject.compileAndLintWithContext(env, code)
