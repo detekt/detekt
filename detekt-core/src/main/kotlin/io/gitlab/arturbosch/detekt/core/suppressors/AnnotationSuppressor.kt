@@ -1,8 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.gitlab.arturbosch.detekt.api.ConfigAware
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -26,10 +29,21 @@ private fun annotationSuppressor(
     return element.isAnnotatedWith(annotations, bindingContext)
 }
 
+@Suppress("ReturnCount")
 private fun KtElement.isAnnotatedWith(annotationNames: Iterable<String>, bindingContext: BindingContext): Boolean {
-    return if (this is KtAnnotated && annotationEntries.find { it.typeReference?.text in annotationNames } != null) {
-        true
-    } else {
-        getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(annotationNames, bindingContext) ?: false
+    if (this is KtAnnotated) {
+        val references = annotationEntries.mapNotNull { it.typeReference }
+        if (references.any { it.text in annotationNames }) {
+            return true
+        } else if (bindingContext != BindingContext.EMPTY) {
+            if (references.any { it.fqNameOrNull(bindingContext)?.toString() in annotationNames }) {
+                return true
+            }
+        }
     }
+    return getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(annotationNames, bindingContext) ?: false
+}
+
+private fun KtTypeReference.fqNameOrNull(bindingContext: BindingContext): FqName? {
+    return bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
 }
