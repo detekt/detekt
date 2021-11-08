@@ -49,8 +49,29 @@ class SuppressorsSpec : Spek({
 
             assertThat(suppress).isTrue()
         }
+
+        context("MultiRule") {
+            it("A finding that should be suppressed") {
+                val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+                val suppress = getSuppressors(rule)
+                    .fold(false) { acc, suppressor -> acc || suppressor(noIgnorableCodeSmell) }
+
+                assertThat(suppress).isFalse()
+            }
+            it("A finding that should not be suppressed") {
+                val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+                val suppress = getSuppressors(rule)
+                    .fold(false) { acc, suppressor -> acc || suppressor(ignorableCodeSmell) }
+
+                assertThat(suppress).isTrue()
+            }
+        }
     }
 })
+
+private class AMultiRule(config: Config) : MultiRule() {
+    override val rules: List<Rule> = listOf(ARule(config))
+}
 
 private class ARule(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("IssueId", Severity.CodeSmell, "", Debt.TWENTY_MINS)
