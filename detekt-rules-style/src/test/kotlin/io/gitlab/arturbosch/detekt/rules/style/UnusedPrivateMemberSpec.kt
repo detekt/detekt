@@ -1034,6 +1034,32 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
+        it("does not report `contains` operator function that is used as `in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report `contains` operator function that is used as `!in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" !in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
         it("report unused minus operator") {
             val code = """
                 import java.util.Date
