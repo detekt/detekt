@@ -61,7 +61,7 @@ class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        private val functionNames = listOf("find", "firstOrNull")
+        private val functionNames = listOf("find", "firstOrNull", "lastOrNull")
         private val functionFqNames =
             listOf("kotlin.collections", "kotlin.sequences", "kotlin.text").flatMap { packageName ->
                 functionNames.map { functionName -> FqName("$packageName.$functionName") }

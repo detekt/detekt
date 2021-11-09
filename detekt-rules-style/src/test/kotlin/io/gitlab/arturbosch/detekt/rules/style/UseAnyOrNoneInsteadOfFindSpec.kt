@@ -68,10 +68,11 @@ class UseAnyOrNoneInsteadOfFindSpec : Spek({
             Assertions.assertThat(actual).hasSize(1)
         }
 
-        it("Does not reports collections.lastOrNull != null") {
+        it("Reports collections.lastOrNull != null") {
             val code = "val x = listOf(1, 2, 3).lastOrNull { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
-            Assertions.assertThat(actual).hasSize(0)
+            Assertions.assertThat(actual).hasSize(1)
+            Assertions.assertThat(actual[0].message).isEqualTo("Use 'any' instead of 'lastOrNull'")
         }
     }
 })
