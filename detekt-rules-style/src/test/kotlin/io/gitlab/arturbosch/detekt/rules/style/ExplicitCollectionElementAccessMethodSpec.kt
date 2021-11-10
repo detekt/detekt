@@ -124,6 +124,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
+
+        it("does not report calls on implicit receiver") {
+            val code = """
+                fun f() {
+                    val map = mapOf<String, Int>()
+                    with(map) { get("a") }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
     }
 
     describe("Kotlin list") {
@@ -161,6 +171,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                         val value = list.get(0) 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report calls on implicit receiver") {
+            val code = """
+                fun f() {
+                    val list = listOf<String>()
+                    val value = with(list) { get(0) }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
     }
 
