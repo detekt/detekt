@@ -43,7 +43,7 @@ jcommander = "com.beust:jcommander:1.81"
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.7.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.18.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersionz = { id = "com.github.ben-manes.versions", version = "0.39.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.39.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.15.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.0.0" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
