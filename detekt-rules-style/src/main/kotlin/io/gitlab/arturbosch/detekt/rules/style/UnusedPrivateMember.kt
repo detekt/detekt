@@ -119,7 +119,12 @@ private class UnusedFunctionVisitor(
                             KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
                             else -> emptyList()
                         }
-                        directReferences + assignmentReferences
+                        val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
+                            listOf(KtTokens.IN_KEYWORD, KtTokens.NOT_IN).flatMap {
+                                functionReferences[it.value].orEmpty()
+                            }
+                        } else emptyList()
+                        directReferences + assignmentReferences + containingReferences
                     } else {
                         emptyList()
                     }
