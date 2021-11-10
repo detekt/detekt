@@ -38,14 +38,14 @@ class SuppressorsSpec : Spek({
         it("A finding that should be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
             val suppress = getSuppressors(rule)
-                .fold(false) { acc, suppressor -> acc || suppressor(noIgnorableCodeSmell) }
+                .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
             assertThat(suppress).isFalse()
         }
         it("A finding that should not be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
             val suppress = getSuppressors(rule)
-                .fold(false) { acc, suppressor -> acc || suppressor(ignorableCodeSmell) }
+                .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
             assertThat(suppress).isTrue()
         }
@@ -54,14 +54,14 @@ class SuppressorsSpec : Spek({
             it("A finding that should be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
                 val suppress = getSuppressors(rule)
-                    .fold(false) { acc, suppressor -> acc || suppressor(noIgnorableCodeSmell) }
+                    .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
                 assertThat(suppress).isFalse()
             }
             it("A finding that should not be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
                 val suppress = getSuppressors(rule)
-                    .fold(false) { acc, suppressor -> acc || suppressor(ignorableCodeSmell) }
+                    .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
                 assertThat(suppress).isTrue()
             }

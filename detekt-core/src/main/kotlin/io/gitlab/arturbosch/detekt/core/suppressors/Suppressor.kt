@@ -6,10 +6,12 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 
-/**
- * Given a Finding it decides if it should be suppressed (`true`) or not (`false`)
- */
-typealias Suppressor = (Finding) -> Boolean
+fun interface Suppressor {
+    /**
+     * Given a Finding it decides if it should be suppressed (`true`) or not (`false`)
+     */
+    fun shouldSuppress(finding: Finding): Boolean
+}
 
 private fun buildSuppressors(rule: ConfigAware): List<Suppressor> {
     return listOfNotNull(
@@ -31,9 +33,9 @@ private class InnerSuppressor(
     private val rule: Rule,
     private val suppressor: Suppressor
 ) : Suppressor {
-    override fun invoke(finding: Finding): Boolean {
+    override fun shouldSuppress(finding: Finding): Boolean {
         return if (finding.id == rule.issue.id) {
-            suppressor(finding)
+            suppressor.shouldSuppress(finding)
         } else {
             false
         }

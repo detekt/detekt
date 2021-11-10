@@ -58,7 +58,7 @@ class AnnotationSuppressorSpec : Spek({
         }
 
         it("If KtElement is null it returns false") {
-            assertThat(suppressor(buildFinding(element = null))).isFalse()
+            assertThat(suppressor.shouldSuppress(buildFinding(element = null))).isFalse()
         }
 
         context("If annotation is at file level") {
@@ -79,20 +79,20 @@ class AnnotationSuppressorSpec : Spek({
             }
 
             it("If reports root it returns true") {
-                assertThat(suppressor(buildFinding(element = root))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isTrue()
             }
 
             it("If reports class it returns true") {
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktClass))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isTrue()
             }
 
             it("If reports function in class it returns true") {
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("function")!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
             it("If reports parameter in function in class it returns true") {
@@ -100,13 +100,13 @@ class AnnotationSuppressorSpec : Spek({
                     .findFunctionByName("function")!!
                     .findDescendantOfType<KtParameter>()!!
 
-                assertThat(suppressor(buildFinding(element = ktParameter))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
             }
 
             it("If reports top level function it returns true") {
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
         }
 
@@ -127,20 +127,20 @@ class AnnotationSuppressorSpec : Spek({
             }
 
             it("If reports root it returns false") {
-                assertThat(suppressor(buildFinding(element = root))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
             it("If reports class it returns false") {
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktClass))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
             }
 
             it("If reports function in class it returns true") {
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("function")!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
             it("If reports parameter in function in class it returns true") {
@@ -148,13 +148,13 @@ class AnnotationSuppressorSpec : Spek({
                     .findFunctionByName("function")!!
                     .findDescendantOfType<KtParameter>()!!
 
-                assertThat(suppressor(buildFinding(element = ktParameter))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
             }
 
             it("If reports top level function it returns false") {
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
             }
         }
 
@@ -174,20 +174,20 @@ class AnnotationSuppressorSpec : Spek({
             }
 
             it("If reports root it returns false") {
-                assertThat(suppressor(buildFinding(element = root))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
             it("If reports class it returns false") {
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktClass))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
             }
 
             it("If reports function in class it returns false") {
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("function")!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
             }
 
             it("If reports parameter in function in class it returns false") {
@@ -195,13 +195,13 @@ class AnnotationSuppressorSpec : Spek({
                     .findFunctionByName("function")!!
                     .findDescendantOfType<KtParameter>()!!
 
-                assertThat(suppressor(buildFinding(element = ktParameter))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isFalse()
             }
 
             it("If reports top level function it returns false") {
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
             }
         }
 
@@ -227,20 +227,20 @@ class AnnotationSuppressorSpec : Spek({
             }
 
             it("If reports root it returns false") {
-                assertThat(suppressor(buildFinding(element = root))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
             it("If reports class it returns false") {
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktClass))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
             }
 
             it("If reports function in class it returns true") {
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("function")!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
             it("If reports parameter in function in class it returns true") {
@@ -248,13 +248,13 @@ class AnnotationSuppressorSpec : Spek({
                     .findFunctionByName("function")!!
                     .findDescendantOfType<KtParameter>()!!
 
-                assertThat(suppressor(buildFinding(element = ktParameter))).isTrue()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
             }
 
             it("If reports top level function it returns false") {
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
-                assertThat(suppressor(buildFinding(element = ktFunction))).isFalse()
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
             }
         }
     }
