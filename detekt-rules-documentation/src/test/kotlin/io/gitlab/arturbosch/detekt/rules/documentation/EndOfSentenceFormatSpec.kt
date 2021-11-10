@@ -118,11 +118,11 @@ class EndOfSentenceFormatSpec : Spek({
             /**
              *
              * <noncompliant>
-             * fun foo(): Unit { }
+             * fun foo(): Unit { }
              * </noncompliant>
              *
              * <compliant>
-             * fun foo() { }
+             * fun foo() { }
              * </compliant>
              *
              */

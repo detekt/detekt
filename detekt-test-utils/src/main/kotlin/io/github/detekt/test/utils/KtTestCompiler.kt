@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
@@ -42,7 +43,10 @@ internal object KtTestCompiler : KtCompiler() {
      * Not sure why but this function only works from this context.
      * Somehow the Kotlin language was not yet initialized.
      */
-    fun createEnvironment(additionalRootPaths: List<File> = emptyList()): KotlinCoreEnvironmentWrapper {
+    fun createEnvironment(
+        additionalRootPaths: List<File> = emptyList(),
+        additionalJavaSourceRootPaths: List<File> = emptyList()
+    ): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
@@ -53,6 +57,7 @@ internal object KtTestCompiler : KtCompiler() {
             addJvmClasspathRoot(kotlinStdLibPath())
             addJvmClasspathRoot(kotlinxCoroutinesCorePath())
             addJvmClasspathRoots(additionalRootPaths)
+            addJavaSourceRoots(additionalJavaSourceRootPaths)
         }
 
         val parentDisposable = Disposer.newDisposable()

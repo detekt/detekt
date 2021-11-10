@@ -279,5 +279,28 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(6, 13)
         }
+
+        it("should report overriding method calls") {
+            val code = """
+                package org.example.com
+                
+                interface I {
+                    fun f()
+                }
+                
+                class C : I {
+                    override fun f() {}
+                }
+                
+                fun foo(i: I, c: C) {
+                    i.f()
+                    c.f()
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(METHODS to listOf("org.example.com.I.f")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
     }
 })

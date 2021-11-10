@@ -8,7 +8,7 @@ interface LoggingSpec {
     val debug: Boolean
 
     /**
-     * Channel where detekt should write it's normal output to.
+     * Channel where detekt should write its normal output to.
      */
     val outputChannel: Appendable
 

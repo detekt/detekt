@@ -110,7 +110,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling orEmpty on a nullable sequence") {
             val code = """
-                val testSequence: Sequence<Int>? = listOf(1).asSequence()                
+                val testSequence: Sequence<Int>? = listOf(1).asSequence()
                 val nonNullableTestSequence = testSequence.orEmpty()
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -130,7 +130,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull on all non-nullable arguments") {
             val code = """
-                val strings = listOfNotNull("string")                
+                val strings = listOfNotNull("string")
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
@@ -139,7 +139,7 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("reports when calling listOfNotNull with no arguments") {
             val code = """
-                val strings = listOfNotNull<String>()                
+                val strings = listOfNotNull<String>()
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
@@ -148,10 +148,59 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("does not report when calling listOfNotNull on at least one nullable argument") {
             val code = """
-                val strings = listOfNotNull("string", null)                
+                val strings = listOfNotNull("string", null)
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
+        }
+
+        it("does not report when calling listOfNotNull with spread operator") {
+            val code = """
+                val nullableArray = arrayOf("string", null)
+                val strings = listOfNotNull(*nullableArray)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("reports when calling listOfNotNull with spread operator on all non-nullable arguments") {
+            val code = """
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull(*nonNullableArray)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        }
+
+        it("does not report when calling listOfNotNull with a mix of null spread and non-null non-spread") {
+            val code = """
+                val nullableArray = arrayOf("string", null)
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull("string", *nonNullableArray, "foo", *nullableArray)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report when calling listOfNotNull with a mix of non-null spread and null non-spread") {
+            val code = """
+                val nonNullableArray = arrayOf("string", "bar")
+                val strings = listOfNotNull("string", *nonNullableArray, null)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("reports when calling listOfNotNull with a mix of spread and non-spread, all non-null") {
+            val code = """
+                val nonNullableArray = arrayOf("string", "bar")
+                val otherNonNullableArray = arrayOf("foobar")
+                val strings = listOfNotNull("string", *nonNullableArray, "foo", *otherNonNullableArray)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
         }
 
         it("does not report when calling custom function named listOfNotNull on all non-nullable arguments") {

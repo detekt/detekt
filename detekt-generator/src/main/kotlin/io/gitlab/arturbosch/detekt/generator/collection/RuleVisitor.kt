@@ -147,7 +147,7 @@ internal class RuleVisitor : DetektVisitor() {
             val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
             if (debtDeclaration != null) {
                 debtDeclaration.isAccessible = true
-                debt = debtDeclaration.get(Debt::class.java).toString()
+                debt = debtDeclaration[Debt::class.java].toString()
             }
         }
     }

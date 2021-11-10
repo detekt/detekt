@@ -8,13 +8,13 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class DoubleMutabilityInCollectionSpec : Spek({
+class DoubleMutabilityForCollectionSpec : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { DoubleMutabilityForCollection(Config.empty) }
 
-    describe("DoubleMutabilityInCollection rule") {
+    describe("DoubleMutabilityForCollection rule") {
 
         describe("local variables") {
 

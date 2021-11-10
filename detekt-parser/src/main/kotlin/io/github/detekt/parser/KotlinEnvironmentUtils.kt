@@ -114,7 +114,7 @@ internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
             val clazz = classLoader.loadClass("kotlin.KotlinVersion")
             val field = clazz.getField("CURRENT")
             field.isAccessible = true
-            val versionObj = field.get(null)
+            val versionObj = field[null]
             val versionString = versionObj?.toString()
             versionString?.let { LanguageVersion.fromFullVersionString(it) }
         }.getOrNull()

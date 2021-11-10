@@ -8,13 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
-import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.nio.file.Path
 
 private val shouldCompileTestSnippets: Boolean =
@@ -46,7 +43,7 @@ fun BaseRule.lintWithContext(
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent.trimIndent(), "AdditionalTest$index.kt")
     }
-    val bindingContext = getContextForPaths(environment, listOf(ktFile) + additionalKtFiles)
+    val bindingContext = environment.getContextForPaths(listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
 
     @Suppress("DEPRECATION")
@@ -64,16 +61,6 @@ fun BaseRule.compileAndLintWithContext(
     }
     return lintWithContext(environment, content)
 }
-
-private fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =
-    TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-        environment.project,
-        paths,
-        NoScopeRecordCliBindingTrace(),
-        environment.configuration,
-        environment::createPackagePartProvider,
-        ::FileBasedDeclarationProviderFactory
-    ).bindingContext
 
 fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
 

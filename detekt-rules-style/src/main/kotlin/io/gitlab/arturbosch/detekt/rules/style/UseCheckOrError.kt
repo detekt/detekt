@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
- * Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
+ * Kotlin provides a concise way to check invariants as well as pre- and post-conditions.
  * Prefer them instead of manually throwing an IllegalStateException.
  *
  * <noncompliant>

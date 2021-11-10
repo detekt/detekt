@@ -6,12 +6,23 @@ permalink: changelog.html
 toc: true
 ---
 
-#### SNAPSHOT (unreleased)
+#### 1.19.0-RC1 - 2021-10-31
 
 ##### Notable Changes
 
+- We now offer an `ignoreAnnotated` configuration key that you can use on all your rules to suppress findings if inside an annotated block (e.g. `@Composable`) - [#4102](https://github.com/detekt/detekt/pull/4102)
 - Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
   deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
+- The `ExplicitCollectionElementAccessMethod` rule is now a type-resolution only rule - [#4201](https://github.com/detekt/detekt/pull/4201)
+- The `InvalidPackageDeclaration` rule has been split to create the `MissingPackageDeclaration` rule - [#4149](https://github.com/detekt/detekt/pull/4149)
+- The `ForbiddenComment` rule now offers a `customMessage` configuration key - [#4126](https://github.com/detekt/detekt/pull/4126)
+- We bumped ktlint and updated the default enabled rules to mirror what ktlint is doing - [#4179](https://github.com/detekt/detekt/pull/4179)
+- Add a new ConsoleReport format - [#4027](https://github.com/detekt/detekt/pull/4027)
+- Gradle: We removed the `afterEvaluate` wrapper from the Android and KMM plugin - [#4159](https://github.com/detekt/detekt/pull/4159)
+- We now test against Java 17 and stopped testing against Java 16 - [#4136](https://github.com/detekt/detekt/pull/4136)
+- Remove library specific configurations like Jetpack Compose and Dagger from the default config - [#4101](https://github.com/detekt/detekt/pull/4101)
+- Remove detekt-bom module - [#4043](https://github.com/detekt/detekt/pull/4043)
+- Use reference in fallback property delegate - [#3982](https://github.com/detekt/detekt/pull/3982)
 
 ##### Migration
 
@@ -63,6 +74,72 @@ tasks.detektMain {
     }
 }
 ```
+
+##### Changelog
+
+- ForbiddenMethodCall: report overriding method calls - [#4205](https://github.com/detekt/detekt/pull/4205)
+- ObjectLiteralToLambda: fix false positive when using Java interfaces with default methods - [#4203](https://github.com/detekt/detekt/pull/4203)
+- Unit tests for TooGenericExceptionThrown - [#4198](https://github.com/detekt/detekt/pull/4198)
+- Display correct --jvm-target values when using --help flag - [#4195](https://github.com/detekt/detekt/pull/4195)
+- Improved `MaximumLineLength` documentation - [#4188](https://github.com/detekt/detekt/pull/4188)
+- Report NewLineAtEndOfFile source location at end of file - [#4187](https://github.com/detekt/detekt/pull/4187)
+- #4169 OutdatedDocumentation rule - [#4185](https://github.com/detekt/detekt/pull/4185)
+- Don't report on platform types in NullableToStringCall - [#4180](https://github.com/detekt/detekt/pull/4180)
+- Fix #4140: Allow Bazel based tests to run with string test input - [#4170](https://github.com/detekt/detekt/pull/4170)
+- Improve ForbiddenMethodCall documentation - [#4166](https://github.com/detekt/detekt/pull/4166)
+- Report SwallowedException on catchParameter - [#4158](https://github.com/detekt/detekt/pull/4158)
+- Enable binary compatibility validator for detekt-test and detekt-test-api - [#4157](https://github.com/detekt/detekt/pull/4157)
+- Fix issues with Elvis operator in UnconditionalJumpStatementInLoop - [#4150](https://github.com/detekt/detekt/pull/4150)
+- Improve documentation for naming rules - [#4146](https://github.com/detekt/detekt/pull/4146)
+- Disable `UnsafeCallOnNullableType` on tests - [#4123](https://github.com/detekt/detekt/pull/4123)
+- Remove annotations from LateinitUsage noncompliant block - [#4100](https://github.com/detekt/detekt/pull/4100)
+- UnnecessaryAbstractClass: false positive when the abstract class has internal/protected abstract members - [#4099](https://github.com/detekt/detekt/pull/4099)
+- Deprecate DefaultContext - [#4098](https://github.com/detekt/detekt/pull/4098)
+- Fix confusing message when breaking the MultilineLambdaItParameter rule - [#4089](https://github.com/detekt/detekt/pull/4089)
+- Remove deprecated KotlinExtension - [#4063](https://github.com/detekt/detekt/pull/4063)
+- Add an alias for FunctionMinLength/FunctionMaxLength rules to be more descriptive - [#4050](https://github.com/detekt/detekt/pull/4050)
+- fix report path, default path is reports/detekt/... - [#4034](https://github.com/detekt/detekt/pull/4034)
+- Fix TextLocation of Indentation rule - [#4030](https://github.com/detekt/detekt/pull/4030)
+- detekt-bom is going away after 1.18.0 - [#3988](https://github.com/detekt/detekt/issues/3988)
+- UnderscoresInNumericLiterals acceptableDecimalLength is off by one - [#3972](https://github.com/detekt/detekt/pull/3972)
+- Create rule set configurations in a safe way - [#3964](https://github.com/detekt/detekt/pull/3964)
+- Remove UnnecessarySafeCall safeguard against ErrorType - [#3439](https://github.com/detekt/detekt/pull/3439)
+
+##### Dependency Updates
+
+- Dokka 1.5.30 - [#4114](https://github.com/detekt/detekt/pull/4114)
+- Kotlin 1.5.31 - [#4113](https://github.com/detekt/detekt/pull/4113)
+- Update dependencies - [#4065](https://github.com/detekt/detekt/pull/4065)
+
+##### Housekeeping & Refactorings
+
+- Simplify where casts used unnecessarily - [#4213](https://github.com/detekt/detekt/pull/4213)
+- Don't specify Gradle Enterprise Gradle Plugin version - [#4210](https://github.com/detekt/detekt/pull/4210)
+- Fix baserule import in tests - [#4189](https://github.com/detekt/detekt/pull/4189)
+- Run CLI sanity checks with Gradle - [#4186](https://github.com/detekt/detekt/pull/4186)
+- Use Codecov GitHub Action to upload coverage - [#4184](https://github.com/detekt/detekt/pull/4184)
+- Enable ParameterListWrapping rule on detekt codebase - [#4178](https://github.com/detekt/detekt/pull/4178)
+- Add test cases for MagicNumber - [#4152](https://github.com/detekt/detekt/pull/4152)
+- Fix FunctionParameterNamingSpec - [#4145](https://github.com/detekt/detekt/pull/4145)
+- Address feedback on #4139 - [#4143](https://github.com/detekt/detekt/pull/4143)
+- Don't skip tests that now pass - [#4142](https://github.com/detekt/detekt/pull/4142)
+- Fixes for Kotlin 1.6.0-M1 - [#4139](https://github.com/detekt/detekt/pull/4139)
+- Don't unnecessarily propogate opt-in requirement - [#4116](https://github.com/detekt/detekt/pull/4116)
+- Drop junit-platform-launcher dependency - [#4115](https://github.com/detekt/detekt/pull/4115)
+- Ensure detekt-tooling public API is stable - [#4112](https://github.com/detekt/detekt/pull/4112)
+- Fix globing typo - [#4107](https://github.com/detekt/detekt/pull/4107)
+- Rename and split ValidateConfig files - [#4105](https://github.com/detekt/detekt/pull/4105)
+- Dynamic deprecation - [#4104](https://github.com/detekt/detekt/pull/4104)
+- Fix indent issues with continuation indent - [#4103](https://github.com/detekt/detekt/pull/4103)
+- Refactor so detekt-gradle-plugin can be added as an included build - [#4094](https://github.com/detekt/detekt/pull/4094)
+- Migrate buildSrc to composite build - [#4090](https://github.com/detekt/detekt/pull/4090)
+- Fix broken `applySelfAnalysisVersion` task - [#4082](https://github.com/detekt/detekt/pull/4082)
+- Convert DetektJvmSpec to use ProjectBuilder - [#4075](https://github.com/detekt/detekt/pull/4075)
+- Upscale JVM settings - [#4057](https://github.com/detekt/detekt/pull/4057)
+- Gradle 7.2 - [#4056](https://github.com/detekt/detekt/pull/4056)
+- Verify at compile time that issue id matches rule name - [#4047](https://github.com/detekt/detekt/pull/4047)
+
+See all issues at: [1.19.0](https://github.com/detekt/detekt/milestone/83)
 
 #### 1.18.1 - 2021-08-30    
 

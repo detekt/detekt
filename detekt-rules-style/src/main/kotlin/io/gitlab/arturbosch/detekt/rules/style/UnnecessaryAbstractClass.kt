@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
@@ -116,7 +115,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 klass.superTypeListEntries.isEmpty() -> false
                 bindingContext == BindingContext.EMPTY -> true
                 else -> {
-                    val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass] as? ClassDescriptor
+                    val descriptor = bindingContext[BindingContext.CLASS, klass]
                     descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
                         (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
                     }

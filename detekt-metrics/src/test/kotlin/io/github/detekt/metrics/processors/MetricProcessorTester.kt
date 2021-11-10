@@ -35,7 +35,7 @@ private class MetricResults : Detektion {
 
     private var data = KeyFMap.EMPTY_MAP
 
-    override fun <V> getData(key: Key<V>): V? = data.get(key)
+    override fun <V> getData(key: Key<V>): V? = data[key]
 
     override fun <V> addData(key: Key<V>, value: V) {
         data = data.plus(key, requireNotNull(value))

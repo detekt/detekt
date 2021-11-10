@@ -230,6 +230,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Michael McCormick](https://github.com/MichaelM97) - Documentation improvement
 - [Hans-Martin Schuller](https://github.com/hmSchuller) - Rule Improvement: ForbiddenComment
 - [Lukasz Osowicki](https://github.com/lukaszosowicki) - New rule: OutdatedDocumentation
+- [Luan Nico](https://github.com/luanpotter) - Bug fix for the UselessCallOnNotNull rule
 
 ### Mentions
 
