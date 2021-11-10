@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.report
 
-import io.gitlab.arturbosch.detekt.MANIFEST_CONTENT
+import io.gitlab.arturbosch.detekt.getJdkVersion
+import io.gitlab.arturbosch.detekt.manifestContent
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
@@ -16,14 +17,16 @@ class ReportMergeSpec : Spek({
         it("for jvm detekt") {
             val builder = DslTestBuilder.groovy()
             val projectLayout = ProjectLayout(0).apply {
-                addSubmodule("child1",
+                addSubmodule(
+                    "child1",
                     numberOfSourceFilesPerSourceDir = 2,
                     buildFileContent = """
                         ${builder.gradleSubprojectsApplyPlugins}
                         |apply plugin: 'java-library'
                     """.trimMargin()
                 )
-                addSubmodule("child2",
+                addSubmodule(
+                    "child2",
                     numberOfSourceFilesPerSourceDir = 2,
                     buildFileContent = """
                         ${builder.gradleSubprojectsApplyPlugins}
@@ -63,8 +66,11 @@ class ReportMergeSpec : Spek({
                 |    }
                 |}""".trimMargin()
 
-            val gradleRunner =
-                DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            val gradleRunner = DslGradleRunner(
+                projectLayout = projectLayout,
+                buildFileName = builder.gradleBuildName,
+                mainBuildFileContent = mainBuildFileContent
+            )
 
             gradleRunner.setupProject()
             gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
@@ -150,12 +156,29 @@ class ReportMergeSpec : Spek({
                 |    }
                 |}""".trimMargin()
 
-            val gradleRunner =
-                DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            val jvmArgs = if (getJdkVersion() < 9) {
+                "-Xmx2g -XX:MaxMetaspaceSize=1g"
+            } else {
+                // Manifest merger uses a reflective GSON API https://issuetracker.google.com/issues/193919814
+                "-Xmx2g -XX:MaxMetaspaceSize=1g --add-opens=java.base/java.io=ALL-UNNAMED"
+            }
+
+            val gradleRunner = DslGradleRunner(
+                projectLayout = projectLayout,
+                buildFileName = builder.gradleBuildName,
+                mainBuildFileContent = mainBuildFileContent,
+                jvmArgs = jvmArgs
+            )
 
             gradleRunner.setupProject()
-            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile(
+                "app/src/main/AndroidManifest.xml",
+                manifestContent("io.github.detekt.app")
+            )
+            gradleRunner.writeProjectFile(
+                "lib/src/main/AndroidManifest.xml",
+                manifestContent("io.github.detekt.lib")
+            )
             gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
                 projectLayout.submodules.forEach { submodule ->
                     assertThat(result.task(":${submodule.name}:detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -164,7 +187,7 @@ class ReportMergeSpec : Spek({
                 projectLayout.submodules.forEach {
                     assertThat(projectFile("${it.name}/build/reports/detekt/debug.xml")).exists()
                 }
-                // TODO: #4192 this should exist by default
+                // #4192 this should exist by default
                 assertThat(projectFile("build/reports/detekt/merge.xml")).doesNotExist()
             }
         }
