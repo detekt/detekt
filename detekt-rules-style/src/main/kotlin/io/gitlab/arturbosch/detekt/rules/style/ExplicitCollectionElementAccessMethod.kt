@@ -13,8 +13,7 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.ErrorType
@@ -48,14 +47,11 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             Debt.FIVE_MINS
         )
 
-    override fun visitCallExpression(expression: KtCallExpression) {
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        super.visitDotQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
-        super.visitCallExpression(expression)
-
-        // Safe calls can't be replaced with index accessor.
-        if (expression.parent is KtSafeQualifiedExpression) return
-
-        if (isIndexableGetter(expression) || (isIndexableSetter(expression) && unusedReturnValue(expression))) {
+        val call = expression.selectorExpression as? KtCallExpression ?: return
+        if (isIndexableGetter(call) || (isIndexableSetter(call) && unusedReturnValue(call))) {
             report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
         }
     }
@@ -77,7 +73,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     }
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
-        val caller = (expression.parent as? KtDotQualifiedExpression)?.firstChild as? KtElement
+        val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
         val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
         if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
 
