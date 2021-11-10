@@ -2,6 +2,7 @@ plugins {
     id("module")
     `java-gradle-plugin`
     `java-test-fixtures`
+    idea
     alias(libs.plugins.pluginPublishing)
 }
 
