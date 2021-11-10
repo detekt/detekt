@@ -764,6 +764,8 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
+  UseAnyOrNoneInsteadOfFind:
+    active: false
   UseArrayLiteralsInAnnotations:
     active: false
   UseCheckNotNull:
