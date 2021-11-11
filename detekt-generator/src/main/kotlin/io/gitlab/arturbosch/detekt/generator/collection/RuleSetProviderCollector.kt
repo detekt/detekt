@@ -136,25 +136,11 @@ class RuleSetProviderVisitor : DetektVisitor() {
     }
 
     companion object {
-
-        private val IS_INT = """^\d+$""".toRegex()
-        private val IS_ENCLOSED_IN_DOUBLE_QUOTES = """^".*"$""".toRegex()
-        private const val DOUBLE_QUOTE = '"'
-
-        @Suppress("UnusedPrivateMember")
-        private operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
-
         private fun toDefaultValue(providerName: String, defaultValueText: String): DefaultValue =
-            when (defaultValueText) {
-                "true", "false" -> DefaultValue.of(defaultValueText.toBoolean())
-                in IS_INT -> DefaultValue.of(defaultValueText.toInt())
-                in IS_ENCLOSED_IN_DOUBLE_QUOTES -> DefaultValue.of(
-                    defaultValueText.removeSurrounding("$DOUBLE_QUOTE")
-                )
-                else -> throw InvalidDocumentationException(
+            createDefaultValueIfLiteral(defaultValueText)
+                ?: throw InvalidDocumentationException(
                     "Unsupported default value format '$defaultValueText' " +
                         "in $providerName. Please use a Boolean, Int or String literal instead."
                 )
-            }
     }
 }
