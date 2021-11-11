@@ -12,8 +12,6 @@ jobs:
   publish-code-coverage:
     if: ${{ !contains(github.event.head_commit.message, 'coverage skip') }}
     runs-on: ubuntu-latest
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -25,7 +23,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoMergedReport
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: --configuration-cache jacocoMergedReport
 
       - name: Publish Coverage
         if: success()
