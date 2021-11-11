@@ -13,9 +13,11 @@ import java.io.File
 
 internal class DetektJvm(private val project: Project) {
     fun registerTasks(extension: DetektExtension) {
-        project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
-            project.registerJvmDetektTask(extension, sourceSet)
-            project.registerJvmCreateBaselineTask(extension, sourceSet)
+        project.afterEvaluate {
+            project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
+                project.registerJvmDetektTask(extension, sourceSet)
+                project.registerJvmCreateBaselineTask(extension, sourceSet)
+            }
         }
     }
 

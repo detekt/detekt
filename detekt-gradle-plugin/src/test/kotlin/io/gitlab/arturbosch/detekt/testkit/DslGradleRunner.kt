@@ -165,3 +165,5 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         private const val DETEKT_TASK = "detekt"
     }
 }
+
+fun Project.triggerEvaluation() { this.getTasksByName("tasks", true) }

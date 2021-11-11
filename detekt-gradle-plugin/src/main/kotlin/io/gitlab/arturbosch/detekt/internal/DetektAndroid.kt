@@ -67,35 +67,38 @@ internal class DetektAndroid(private val project: Project) {
     fun registerTasks(extension: DetektExtension) {
         // There is not a single Android plugin, but each registers an extension based on BaseExtension,
         // so we catch them all by looking for this one
-        project.extensions.findByType(BaseExtension::class.java)?.let { baseExtension ->
-            val bootClasspath = project.files(baseExtension.bootClasspath)
-            baseExtension.variants
-                ?.matching { !extension.matchesIgnoredConfiguration(it) }
-                ?.all { variant ->
-                    project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
-                        mainTaskProvider.dependsOn(provider)
+        project.afterEvaluate { evaluatedProject ->
+            val baseExtensionOrNull = evaluatedProject.extensions.findByType(BaseExtension::class.java)
+            baseExtensionOrNull?.let { baseExtension ->
+                val bootClasspath = evaluatedProject.files(baseExtension.bootClasspath)
+                baseExtension.variants
+                    ?.matching { !extension.matchesIgnoredConfiguration(it) }
+                    ?.all { variant ->
+                        evaluatedProject.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
+                            mainTaskProvider.dependsOn(provider)
+                        }
+                        evaluatedProject.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
+                            .also { provider ->
+                                mainBaselineTaskProvider.dependsOn(provider)
+                            }
+                        variant.testVariants
+                            .filter { !extension.matchesIgnoredConfiguration(it) }
+                            .forEach { testVariant ->
+                                evaluatedProject.registerAndroidDetektTask(bootClasspath, extension, testVariant)
+                                    .also { provider ->
+                                        testTaskProvider.dependsOn(provider)
+                                    }
+                                evaluatedProject.registerAndroidCreateBaselineTask(
+                                    bootClasspath,
+                                    extension,
+                                    testVariant
+                                )
+                                    .also { provider ->
+                                        testBaselineTaskProvider.dependsOn(provider)
+                                    }
+                            }
                     }
-                    project.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
-                        .also { provider ->
-                            mainBaselineTaskProvider.dependsOn(provider)
-                        }
-                    variant.testVariants
-                        .filter { !extension.matchesIgnoredConfiguration(it) }
-                        .forEach { testVariant ->
-                            project.registerAndroidDetektTask(bootClasspath, extension, testVariant)
-                                .also { provider ->
-                                    testTaskProvider.dependsOn(provider)
-                                }
-                            project.registerAndroidCreateBaselineTask(
-                                bootClasspath,
-                                extension,
-                                testVariant
-                            )
-                                .also { provider ->
-                                    testBaselineTaskProvider.dependsOn(provider)
-                                }
-                        }
-                }
+            }
         }
     }
 
