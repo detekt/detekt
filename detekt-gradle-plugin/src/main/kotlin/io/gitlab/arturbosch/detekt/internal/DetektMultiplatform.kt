@@ -20,30 +20,39 @@ import java.io.File
 internal class DetektMultiplatform(private val project: Project) {
 
     fun registerTasks(extension: DetektExtension) {
-        project.registerMultiplatformTasks(extension)
+        project.afterEvaluate {
+            project.registerMultiplatformTasks(extension)
+        }
     }
 
+    @Suppress("LongMethod")
     private fun Project.registerMultiplatformTasks(extension: DetektExtension) {
-        project.extensions.getByType(KotlinMultiplatformExtension::class.java).targets.all { target ->
-            target.compilations.all { compilation ->
-                val inputSource = compilation.kotlinSourceSets
-                    .map { it.kotlin.sourceDirectories }
-                    .fold(project.files() as FileCollection) { collection, next -> collection.plus(next) }
+        // We need another project.afterEvaluate as the Android target is attached on
+        // a project.afterEvaluate inside AGP. We should further investigate and potentially remove this.
+        project.afterEvaluate { evaluatedProject ->
+            val kmpExtension = evaluatedProject.extensions.getByType(KotlinMultiplatformExtension::class.java)
 
-                if (compilation is KotlinJvmAndroidCompilation) {
-                    project.registerMultiplatformTasksForAndroidTarget(
-                        compilation = compilation,
-                        target = target,
-                        extension = extension,
-                        inputSource = inputSource
-                    )
-                } else {
-                    project.registerMultiplatformTasksForNonAndroidTarget(
-                        compilation = compilation,
-                        target = target,
-                        extension = extension,
-                        inputSource = inputSource
-                    )
+            kmpExtension.targets.all { target ->
+                target.compilations.forEach { compilation ->
+                    val inputSource = compilation.kotlinSourceSets
+                        .map { it.kotlin.sourceDirectories }
+                        .fold(evaluatedProject.files() as FileCollection) { collection, next -> collection.plus(next) }
+
+                    if (compilation is KotlinJvmAndroidCompilation) {
+                        evaluatedProject.registerMultiplatformTasksForAndroidTarget(
+                            compilation = compilation,
+                            target = target,
+                            extension = extension,
+                            inputSource = inputSource
+                        )
+                    } else {
+                        evaluatedProject.registerMultiplatformTasksForNonAndroidTarget(
+                            compilation = compilation,
+                            target = target,
+                            extension = extension,
+                            inputSource = inputSource
+                        )
+                    }
                 }
             }
         }
@@ -57,7 +66,8 @@ internal class DetektMultiplatform(private val project: Project) {
     ) {
         // For Android targets we delegate to DetektAndroid as we need to access
         // BaseVariant and other AGP apis to properly setup the classpath.
-        extensions.findByType(BaseExtension::class.java)?.let {
+        val androidExtension = extensions.findByType(BaseExtension::class.java)
+        androidExtension?.let {
             val bootClasspath = files(it.bootClasspath)
             val variant = compilation.androidVariant
             val detektTaskName = DetektPlugin.DETEKT_TASK_NAME +
