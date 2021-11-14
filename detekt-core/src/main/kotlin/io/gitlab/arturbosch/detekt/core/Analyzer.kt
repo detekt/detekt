@@ -140,7 +140,7 @@ internal class Analyzer(
 private fun filterSuppressedFindings(rule: BaseRule): List<Finding> {
     val suppressors = getSuppressors(rule)
     return if (suppressors.isNotEmpty()) {
-        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor(finding) } }
+        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
         rule.findings
     }
