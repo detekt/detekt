@@ -34,7 +34,7 @@ spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.r
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
-reflections = "org.reflections:reflections:0.9.12"
+reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.0"
 snakeyaml = "org.yaml:snakeyaml:1.29"
 jcommander = "com.beust:jcommander:1.81"
