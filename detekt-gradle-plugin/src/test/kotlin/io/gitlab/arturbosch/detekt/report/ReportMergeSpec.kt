@@ -58,9 +58,8 @@ class ReportMergeSpec : Spek({
                 |    }
                 |    
                 |    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
-                |        tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+                |        tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach { detektTask ->
                 |            finalizedBy(reportMerge)
-                |            println(detektTask.xmlReportFile)
                 |            reportMerge.configure { mergeTask -> mergeTask.input.from(detektTask.xmlReportFile) }
                 |        }
                 |    }
@@ -81,7 +80,8 @@ class ReportMergeSpec : Spek({
                 projectLayout.submodules.forEach {
                     assertThat(projectFile("${it.name}/build/reports/detekt/main.xml")).exists()
                 }
-                assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
+                // #4192 this should exist by default
+                assertThat(projectFile("build/reports/detekt/merge.xml")).doesNotExist()
             }
         }
 
@@ -148,9 +148,8 @@ class ReportMergeSpec : Spek({
                 |    }
                 |    
                 |    plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
-                |        tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+                |        tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach { detektTask ->
                 |            finalizedBy(reportMerge)
-                |            println(detektTask.xmlReportFile)
                 |            reportMerge.configure { mergeTask -> mergeTask.input.from(detektTask.xmlReportFile) }
                 |        }
                 |    }
