@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 internal fun annotationSuppressorFactory(rule: ConfigAware): Suppressor? {
     val annotations = rule.valueOrDefault("ignoreAnnotated", emptyList<String>())
     return if (annotations.isNotEmpty()) {
-        { finding ->
+        Suppressor { finding ->
             val element = finding.entity.ktElement
             element != null && annotationSuppressor(element, annotations)
         }
