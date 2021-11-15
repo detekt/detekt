@@ -506,6 +506,44 @@ of GlobalScope is highly discouraged.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="injectdispatcher">InjectDispatcher</h3>
+
+<p>Always use dependency injection to inject dispatchers for easier testing.
+This rule is based on the recommendation
+https://developer.android.com/kotlin/coroutines/coroutines-best-practices#inject-dispatchers</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="configuration-options">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dispatcherNames</code> (default: <code class="language-plaintext highlighter-rouge">['IO', 'Default', 'Unconfined']</code>)</p>
+
+    <p>The names of dispatchers to detect by this rule</p>
+  </li>
+</ul>
+
+<h4 id="noncompliant-code-1">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">myFunc</span><span class="p">()</span> <span class="p">{</span>
+<span class="nf">coroutineScope</span><span class="p">(</span><span class="nc">Dispatchers</span><span class="p">.</span><span class="nc">IO</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-1">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">myFunc</span><span class="p">(</span><span class="n">dispatcher</span><span class="p">:</span> <span class="nc">CoroutineDispatcher</span> <span class="p">=</span> <span class="nc">Dispatchers</span><span class="p">.</span><span class="nc">IO</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">coroutineScope</span><span class="p">(</span><span class="n">dispatcher</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">MyRepository</span><span class="p">(</span><span class="n">dispatchers</span><span class="p">:</span> <span class="nc">CoroutineDispatcher</span> <span class="p">=</span> <span class="nc">Dispatchers</span><span class="p">.</span><span class="nc">IO</span><span class="p">)</span>
+</code></pre></div></div>
+
 <h3 id="redundantsuspendmodifier">RedundantSuspendModifier</h3>
 
 <p><code class="language-plaintext highlighter-rouge">suspend</code> modifier should only be used where needed, otherwise the function can only be used from other suspending
@@ -518,14 +556,14 @@ where it’s not needed.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-1">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-2">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nf">normalFunction</span><span class="p">()</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="s">"string"</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-1">Compliant Code:</h4>
+<h4 id="compliant-code-2">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">normalFunction</span><span class="p">()</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="s">"string"</span><span class="p">)</span>
@@ -545,14 +583,14 @@ and cause unpredictable behavior.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-2">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-3">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="nc">Thread</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1_000L</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-2">Compliant Code:</h4>
+<h4 id="compliant-code-3">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
     <span class="nf">delay</span><span class="p">(</span><span class="mi">1_000L</span><span class="p">)</span>
@@ -574,7 +612,7 @@ returned <code class="language-plaintext highlighter-rouge">Flow</code>, should 
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-3">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-4">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nf">observeSignals</span><span class="p">():</span> <span class="nc">Flow</span><span class="p">&lt;</span><span class="nc">Unit</span><span class="p">&gt;</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">pollingInterval</span> <span class="p">=</span> <span class="nf">getPollingInterval</span><span class="p">()</span> <span class="c1">// Done outside of the flow builder block.</span>
@@ -592,7 +630,7 @@ returned <code class="language-plaintext highlighter-rouge">Flow</code>, should 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-3">Compliant Code:</h4>
+<h4 id="compliant-code-4">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">observeSignals</span><span class="p">():</span> <span class="nc">Flow</span><span class="p">&lt;</span><span class="nc">Unit</span><span class="p">&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nf">flow</span> <span class="p">{</span>
