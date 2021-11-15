@@ -17,11 +17,13 @@ import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
+import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -29,6 +31,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -110,6 +113,12 @@ open class DetektCreateBaselineTask : SourceTask() {
         set(value) = jvmTargetProp.set(value)
 
     private val isDryRun: Boolean = project.isDryRunEnabled()
+
+    @InputFiles
+    @SkipWhenEmpty
+    @IgnoreEmptyDirectories
+    @PathSensitive(PathSensitivity.RELATIVE)
+    override fun getSource(): FileTree = super.getSource()
 
     @TaskAction
     fun baseline() {
