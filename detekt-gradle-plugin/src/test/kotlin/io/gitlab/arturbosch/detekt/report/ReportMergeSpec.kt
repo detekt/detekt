@@ -80,8 +80,8 @@ class ReportMergeSpec : Spek({
                 projectLayout.submodules.forEach {
                     assertThat(projectFile("${it.name}/build/reports/detekt/main.xml")).exists()
                 }
-                // #4192 this should exist by default
-                assertThat(projectFile("build/reports/detekt/merge.xml")).doesNotExist()
+
+                assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             }
         }
 
