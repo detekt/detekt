@@ -29,7 +29,7 @@ private val FooPadding = 16.dp
 
 #### Configurations:
 
-* Set ``constantPattern`` to ``'[A-Z][_A-Za-z0-9]*'`` (default: ``'[A-Z][_A-Z0-9]*'``)
+* Set ``constantPattern`` to ``'[A-Z][A-Za-z0-9]*'`` (default: ``'[A-Z][_A-Z0-9]*'``)
 
 
 ### LongParameterList
