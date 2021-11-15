@@ -20,6 +20,9 @@ entries:
     - title: Configuration File
       url: /configurations.html
       output: web
+    - title: Configuration for Compose
+      url: /compose.html
+      output: web
     - title: Reporting
       url: /reporting.html
       output: web
@@ -37,9 +40,6 @@ entries:
       output: web
     - title: Compatibility Table
       url: /compatibility.html
-      output: web
-    - title: Customizing For Compose
-      url: /compose.html
       output: web
   - title: Getting Started
     output: web
