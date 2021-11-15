@@ -9,7 +9,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class DetektTaskMultiModuleIntegrationSpec : Spek({
+internal class DetektTaskMultiModuleSpec : Spek({
 
     describe("The Detekt Gradle plugin used in a multi module project") {
 
