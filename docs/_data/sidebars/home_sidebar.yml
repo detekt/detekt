@@ -38,6 +38,9 @@ entries:
     - title: Compatibility Table
       url: /compatibility.html
       output: web
+    - title: Customizing For Compose
+      url: /compose.html
+      output: web
   - title: Getting Started
     output: web
     folderitems:
