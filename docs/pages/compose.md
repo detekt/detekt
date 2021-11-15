@@ -1,19 +1,21 @@
 ---
-title: Customizing for Compose
+title: Configuration for Compose
 sidebar: home_sidebar
-keywords: rules, compose, jetpack-compose
+keywords: compose, config, configuration, jetpack-compose, rules
 permalink: compose.html
 toc: true
 folder: documentation
 ---
 
-Relevant rule sets and their configuration options for Compose styles & usage.
+Relevant rule sets and their configuration options for Compose styles & usage. The following are being used as reference for Compose usage:
+- [Compose API Guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md)
+- [Compose source](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose)
 
 ### TopLevelPropertyNaming
 
 See [TopLevelPropertyNaming](https://detekt.github.io/detekt/naming.html#toplevelpropertynaming).
 
-Compose [guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md#singletons-constants-sealed-class-and-enum-class-values) prescribe `CamelCase` for top-level constants.
+Compose guidelines prescribe `CamelCase` for top-level constants.
 
 ##### Default Style:
 
