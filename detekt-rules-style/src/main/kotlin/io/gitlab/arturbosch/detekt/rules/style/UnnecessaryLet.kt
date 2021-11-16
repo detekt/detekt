@@ -37,13 +37,24 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * a?.let { that -> that.plus(1) }?.let { it.plus(1) } // can be replaced with `a?.plus(1)?.plus(1)`
  * a.let { 1.plus(1) } // can be replaced with `1.plus(1)`
  * a?.let { 1.plus(1) } // can be replaced with `if (a != null) 1.plus(1)`
+ * fun foo() {
+ *   val a: Any? = getA()
+ *   a?.let { print(a) } // can be replaced by `if (a != null) println(a)`
+ *   a?.let { print(it) } // can be replaced by `if (a != null) println(a)`
+ * }
  * </noncompliant>
  *
  * <compliant>
- * a?.let { print(it) }
- * a?.let { 1.plus(it) } ?.let { msg -> print(msg) }
- * a?.let { it.plus(it) }
- * val b = a?.let { 1.plus(1) }
+ * class A {
+ *   var a: String? = null
+ *
+ *   fun foo() {
+ *     a?.let { print(it) } // needed for thread safety
+ *   }
+ * }
+ * getA()?.let { print(it) } // avoids a variable
+ * val b = a?.let { 1.plus(1) } // avoids an if/else
+ * a?.let { 1.plus(it) }?.let { msg -> print(msg) } // The first one avoids an if/else and the second avoids a variable
  * </compliant>
  *
  */

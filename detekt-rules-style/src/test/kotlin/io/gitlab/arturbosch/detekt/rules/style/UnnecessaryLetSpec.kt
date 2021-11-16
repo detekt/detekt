@@ -156,7 +156,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `does not report lets used for function calls 1`() {
+    fun `reports unnecessary lets that can be replaced with an if 2`() {
         val findings = subject.compileAndLintWithContext(
             env,
             """
@@ -167,11 +167,12 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             }
             """
         )
-        assertThat(findings).isEmpty()
+        assertThat(findings).hasSize(2)
+        assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
     }
 
     @Test
-    fun `does not report lets used for function calls 2`() {
+    fun `does not report lets that avoids if_else or an extra variable`() {
         val findings = subject.compileAndLintWithContext(
             env,
             """
@@ -229,40 +230,45 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `does not report lets with lambda body containing more than one statement`() {
+    fun `does report lets with lambda body containing more than one statement 1`() {
         val findings = subject.compileAndLintWithContext(
             env,
             """
-            fun f() {
-                val a: Int? = null
-                val b: Int = 1
-                b.let {
-                    it.plus(1)
-                    it.plus(2)
-                }
-                a?.let {
-                    it.plus(1)
-                    it.plus(2)
-                }
-                b.let { that ->
-                    that.plus(1)
-                    that.plus(2)
-                }
-                a?.let { that ->
-                    that.plus(1)
-                    that.plus(2)
-                }
-                a?.let { that ->
-                    1.plus(that)
-                }
-                ?.let {
-                    it.plus(1)
-                    it.plus(2)
-                }
-            }
-            """
+                fun f() {
+                    val a: Int = 1
+                    1.let {
+                        it.plus(1)
+                        it.plus(2)
+                    }
+                    1.let { that ->
+                        that.plus(1)
+                        that.plus(2)
+                    }
+                }"""
         )
-        assertThat(findings).isEmpty()
+        assertThat(findings).hasSize(2)
+        assertThat(findings).allMatch { it.message == MESSAGE_USE_WITH_OR_APPLY }
+    }
+
+    @Test
+    fun `does report lets with lambda body containing more than one statement 2`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                fun f() {
+                    val a: Int? = null
+                    a?.let {
+                        it.plus(1)
+                        it.plus(2)
+                    }
+                    a?.let { that ->
+                        that.plus(1)
+                        that.plus(2)
+                    }
+                }"""
+        )
+        assertThat(findings).hasSize(2)
+        assertThat(findings).allMatch { it.message == MESSAGE_USE_WITH_OR_APPLY }
     }
 
     @Test
@@ -413,7 +419,39 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
         val findings = subject.compileAndLintWithContext(env, content)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report when a null check is needed for thread safety`() {
+        val content = """
+                class A {
+                    var a: String? = null
+
+                    fun foo() {
+                        a?.let { print(it) }
+                    }
+                }
+            """
+        val findings = subject.compileAndLintWithContext(env, content)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when a null check isn't needed for thread safety`() {
+        val content = """
+                class A {
+                    val a: String? = null
+
+                    fun foo() {
+                        a?.let { print(it) }
+                    }
+                }
+            """
+        val findings = subject.compileAndLintWithContext(env, content)
+        assertThat(findings).hasSize(1)
+        assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
+    }
 }
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
 private const val MESSAGE_USE_IF = "let expression can be replaced with a simple if"
+private const val MESSAGE_USE_WITH_OR_APPLY = "let expression can be replaced with a `with` or `apply`"
