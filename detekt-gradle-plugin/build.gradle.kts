@@ -44,7 +44,7 @@ val pluginCompileOnly: Configuration by configurations.creating
 configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 
 dependencies {
-    implementation(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
 
     pluginCompileOnly(libs.android.gradle)
