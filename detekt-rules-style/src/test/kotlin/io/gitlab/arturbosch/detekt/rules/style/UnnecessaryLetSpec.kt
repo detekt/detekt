@@ -50,7 +50,8 @@ class UnnecessaryLetSpec : Spek({
                 """
                 fun f() {
                     val a: Int? = null
-                    a?.let { that -> that.plus(1) }?.let { it.plus(1) }
+                    a?.let { it?.plus(1) }
+                    a?.let { that -> that?.plus(1) }
                 }"""
             )
             assertThat(findings).hasSize(2)
@@ -58,6 +59,19 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 4") {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                fun f() {
+                    val a: Int? = null
+                    a?.let { that -> that.plus(1) }?.let { it.plus(1) }
+                }"""
+            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+        }
+
+        it("reports unnecessary lets that can be changed to ordinary method call 5") {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -71,7 +85,7 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 5") {
+        it("reports unnecessary lets that can be changed to ordinary method call 6") {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -107,20 +121,6 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a.let { print(it) }
                     a.let { that -> print(that) }
-                }"""
-            )
-            assertThat(findings).hasSize(2)
-            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
-        }
-
-        it("reports unnecessary lets that can be changed to ordinary method call 8") {
-            val findings = subject.compileAndLintWithContext(
-                env,
-                """
-                fun f() {
-                    val a: Int? = null
-                    a?.let { it?.plus(1) }
-                    a?.let { that -> that?.plus(1) }
                 }"""
             )
             assertThat(findings).hasSize(2)
