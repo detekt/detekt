@@ -31,7 +31,10 @@ class GithubMilestoneReport : CliktCommand() {
     private val user: String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
     private val project: String by option("-p", help = "Github project. Default: detekt").default("detekt")
     private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
-    private val filterExisting: Boolean by option("-f", help = "Filter issues that are already in the changelog. Default: false.").flag(default = false)
+    private val filterExisting: Boolean by option(
+        "-f",
+        help = "Filter issues that are already in the changelog. Default: false."
+    ).flag(default = false)
 
     override fun run() {
         // connect to GitHub
