@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.ConfigAware
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.resolve.BindingContext
 
 fun interface Suppressor {
     /**
@@ -13,18 +14,18 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-private fun buildSuppressors(rule: ConfigAware): List<Suppressor> {
+private fun buildSuppressors(rule: ConfigAware, bindingContext: BindingContext): List<Suppressor> {
     return listOfNotNull(
-        annotationSuppressorFactory(rule),
+        annotationSuppressorFactory(rule, bindingContext),
     )
 }
 
-internal fun getSuppressors(rule: BaseRule): List<Suppressor> {
+internal fun getSuppressors(rule: BaseRule, bindingContext: BindingContext): List<Suppressor> {
     return when (rule) {
         is MultiRule -> rule.rules.flatMap { innerRule ->
-            buildSuppressors(innerRule).map { suppressor -> InnerSuppressor(innerRule, suppressor) }
+            buildSuppressors(innerRule, bindingContext).map { suppressor -> InnerSuppressor(innerRule, suppressor) }
         }
-        is ConfigAware -> buildSuppressors(rule)
+        is ConfigAware -> buildSuppressors(rule, bindingContext)
         else -> emptyList()
     }
 }
