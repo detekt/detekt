@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>PropertiesAware | A static code analyzer for Kotlin</title>
+<meta name="keywords" content=" compose, config, configuration, jetpack-compose, rules">
+<title>Configuration for Compose | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="PropertiesAware">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Configuration for Compose">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -212,7 +212,7 @@
           
           
           
-          <li><a href="/detekt/compose.html">Configuration for Compose</a></li>
+          <li class="active"><a href="/detekt/compose.html">Configuration for Compose</a></li>
           
           
           
@@ -427,7 +427,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">PropertiesAware</h1>
+   <h1 class="post-title-main">Configuration for Compose</h1>
 </div>
 
 
@@ -464,88 +464,76 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-properties-aware/.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages/documentation/compose.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">PropertiesAware</a></p>
+  <p>Relevant rule sets and their configuration options for Compose styles &amp; usage. The following are being used as reference for Compose usage:</p>
+<ul>
+  <li><a href="https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md">Compose API Guidelines</a></li>
+  <li><a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose">Compose source</a></li>
+</ul>
 
-<h1 id="propertiesaware">PropertiesAware</h1>
+<h3 id="toplevelpropertynaming">TopLevelPropertyNaming</h3>
 
-<p>[jvm]<br />
-interface <a href="index.html">PropertiesAware</a></p>
+<p>See <a href="https://detekt.github.io/detekt/naming.html#toplevelpropertynaming">TopLevelPropertyNaming</a>.</p>
 
-<p>Properties holder. Allows to store and retrieve any data.</p>
+<p>Compose guidelines prescribe <code class="language-plaintext highlighter-rouge">CamelCase</code> for top-level constants.</p>
 
-<h2 id="functions">Functions</h2>
+<h5 id="default-style">Default Style:</h5>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Summary</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="register.html">register</a></td>
-      <td>[jvm]<br />abstract fun <a href="register.html">register</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>)<br />Binds a given value with given key and stores it for later use.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="kd">val</span> <span class="py">FOO_PADDING</span> <span class="p">=</span> <span class="mi">16</span><span class="p">.</span><span class="n">dp</span>
+</code></pre></div></div>
 
-<h2 id="properties">Properties</h2>
+<h5 id="compose-style">Compose Style:</h5>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Summary</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="properties.html">properties</a></td>
-      <td>[jvm]<br />abstract val <a href="properties.html">properties</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?&gt;<br />Raw properties.</td>
-    </tr>
-  </tbody>
-</table>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="kd">val</span> <span class="py">FooPadding</span> <span class="p">=</span> <span class="mi">16</span><span class="p">.</span><span class="n">dp</span>
+</code></pre></div></div>
 
-<h2 id="inheritors">Inheritors</h2>
+<h4 id="configurations">Configurations:</h4>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="../-setup-context/index.html">SetupContext</a></td>
-    </tr>
-  </tbody>
-</table>
+<ul>
+  <li>Set <code class="language-plaintext highlighter-rouge">constantPattern</code> to <code class="language-plaintext highlighter-rouge">'[A-Z][A-Za-z0-9]*'</code> (default: <code class="language-plaintext highlighter-rouge">'[A-Z][_A-Z0-9]*'</code>)</li>
+</ul>
 
-<h2 id="extensions">Extensions</h2>
+<h3 id="longparameterlist">LongParameterList</h3>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Summary</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="../get-or-null.html">getOrNull</a></td>
-      <td>[jvm]<br />inline fun &lt;<a href="../get-or-null.html">T</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="index.html">PropertiesAware</a>.<a href="../get-or-null.html">getOrNull</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="../get-or-null.html">T</a>?<br />Allows to retrieve stored properties in a type safe way.</td>
-    </tr>
-  </tbody>
-</table>
+<p>See <a href="https://detekt.github.io/detekt/complexity.html#longparameterlist">LongParameterList</a>.</p>
 
+<p>Composables may boast more than the typical number of function arguments (albeit mostly with default values). For example, see <a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/OutlinedTextField.kt;l=133?q=OutlinedTextFieldLayout&amp;ss=androidx%2Fplatform%2Fframeworks%2Fsupport:compose%2F">OutlinedTextField</a>.</p>
+
+<h4 id="configurations-1">Configurations:</h4>
+
+<ul>
+  <li>Set <code class="language-plaintext highlighter-rouge">functionThreshold</code> to a higher value</li>
+  <li>Additionally, can set <code class="language-plaintext highlighter-rouge">ignoreDefaultParameters = true</code></li>
+</ul>
+
+<h3 id="magicnumber">MagicNumber</h3>
+
+<p>See <a href="https://detekt.github.io/detekt/style.html#magicnumber">MagicNumber</a>.</p>
+
+<p>Class/companion object/top-level properties that declare objects such as <code class="language-plaintext highlighter-rouge">Color(0xFFEA6D7E)</code> may be considered violations if they don’t specify the named parameter (i.e. <code class="language-plaintext highlighter-rouge">Color(color = 0xFFEA6D7E)</code>).</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">color1</span> <span class="p">=</span> <span class="nc">Color</span><span class="p">(</span><span class="mh">0xFFEA6D7E</span><span class="p">)</span> <span class="c1">// Violation</span>
+
+<span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
+  <span class="kd">val</span> <span class="py">color2</span> <span class="p">=</span> <span class="nc">Color</span><span class="p">(</span><span class="mh">0xFFEA6D7E</span><span class="p">)</span> <span class="c1">// Violation</span>
+
+  <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">color3</span> <span class="p">=</span> <span class="nc">Color</span><span class="p">(</span><span class="mh">0xFFEA6D7E</span><span class="p">)</span> <span class="c1">// No violation if ignoreCompanionObjectPropertyDeclaration = true by default</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="configurations-2">Configurations:</h4>
+
+<ul>
+  <li>Set <code class="language-plaintext highlighter-rouge">ignorePropertyDeclaration = true</code>, <code class="language-plaintext highlighter-rouge">ignoreCompanionObjectPropertyDeclaration = true</code> (default)</li>
+</ul>
 
 
     <div class="tags">
