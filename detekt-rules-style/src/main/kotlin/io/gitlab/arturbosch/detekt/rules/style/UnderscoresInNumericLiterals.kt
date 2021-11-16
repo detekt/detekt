@@ -20,8 +20,7 @@ import java.util.Locale
 
 /**
  * This rule detects and reports long base 10 numbers which should be separated with underscores
- * for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
- * under the configured `acceptableLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
+ * for readability. For `Serializable` classes or objects, the field `serialVersionUID` is
  * explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.
  *
  * <noncompliant>
@@ -30,6 +29,7 @@ import java.util.Locale
  *
  * <compliant>
  * const val DEFAULT_AMOUNT = 1_000_000
+ * const val DEFAULT_AMOUNT = 10_000_00
  * </compliant>
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
@@ -38,8 +38,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         javaClass.simpleName,
         Severity.Style,
         "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
-            "should be underscore separated to increase readability. Underscores that do not make groups of " +
-            "3 digits are also reported.",
+            "should be underscore separated to increase readability. ",
         Debt.FIVE_MINS
     )
 
@@ -49,8 +48,10 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
-    @Configuration("Maximum number of digits that a number can have and not use underscores")
+    @Configuration("Maximum number of consecutive digits that a number can have without using an underscore")
     private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
+
+    private val nonCompliantRegex: Regex = "\\d{${acceptableLength + 1},}".toRegex()
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val normalizedText = normalizeForMatching(expression.text)
@@ -61,13 +62,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
         val numberString = normalizedText.split('.').first()
 
-        if (numberString.length > acceptableLength || numberString.contains('_')) {
-            reportIfInvalidUnderscorePattern(expression, numberString)
-        }
-    }
-
-    private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberString: String) {
-        if (!numberString.matches(UNDERSCORE_NUMBER_REGEX)) {
+        if (numberString.contains(nonCompliantRegex)) {
             report(
                 CodeSmell(
                     issue,
@@ -108,7 +103,6 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     companion object {
-        private val UNDERSCORE_NUMBER_REGEX = Regex("[0-9]{1,3}(_[0-9]{3})*")
         private const val HEX_PREFIX = "0x"
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"
