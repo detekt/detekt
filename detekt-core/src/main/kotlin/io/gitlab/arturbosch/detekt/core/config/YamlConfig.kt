@@ -61,7 +61,17 @@ class YamlConfig internal constructor(
         /**
          * Factory method to load a yaml configuration from a URL.
          */
-        fun loadResource(url: URL): Config = load(url.openStream().reader())
+        fun loadResource(url: URL): Config = load(
+            url.openConnection()
+                /*
+                 * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
+                 * it is necessary to disallow caches to maintain stability on JDK 8. Otherwise, simultaneous invocations of
+                 * Detekt in the same VM can fail spuriously. A similar bug is referenced in
+                 * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
+                 */
+                .apply { if (System.getProperty("java.specification.version") == "1.8") useCaches = false }
+                .getInputStream().reader()
+        )
 
         /**
          * Constructs a [YamlConfig] from any [Reader].

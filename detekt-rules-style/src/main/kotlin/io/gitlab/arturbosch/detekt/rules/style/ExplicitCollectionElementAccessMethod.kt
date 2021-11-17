@@ -7,17 +7,21 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
- * see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
+ * see https://kotlinlang.org/docs/operator-overloading.html#indexed-access-operator.
  * Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
  *
  * <noncompliant>
@@ -32,18 +36,8 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *  val value = map["key"]
  * </compliant>
  */
+@RequiresTypeResolution
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
-
-    private val ktCollections = setOf(
-        "kotlin.collections.Map",
-        "kotlin.collections.MutableMap",
-        "kotlin.collections.List",
-        "kotlin.collections.MutableList"
-    )
-
-    private val mapAccessMethods = setOf("get", "put")
-
-    private val ktAndJavaCollections = ktCollections + setOf("AbstractMap", "AbstractList")
 
     override val issue: Issue =
         Issue(
@@ -53,31 +47,41 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             Debt.FIVE_MINS
         )
 
-    override fun visitCallExpression(expression: KtCallExpression) {
-        if (isMapMethod(expression) && isGetOrPut(expression)) {
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        super.visitDotQualifiedExpression(expression)
+        if (bindingContext == BindingContext.EMPTY) return
+        val call = expression.selectorExpression as? KtCallExpression ?: return
+        if (isIndexableGetter(call) || (isIndexableSetter(call) && unusedReturnValue(call))) {
             report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
         }
-        super.visitCallExpression(expression)
     }
 
-    private fun isGetOrPut(expression: KtCallExpression): Boolean {
-        return expression.calleeExpression?.text in mapAccessMethods
-    }
+    private fun isIndexableGetter(expression: KtCallExpression): Boolean =
+        expression.calleeExpression?.text == "get" && isOperatorFunction(expression)
 
-    private fun isMapMethod(expression: KtCallExpression): Boolean {
-        val dotExpression = expression.prevSibling
-        val caller = when (dotExpression?.parent) {
-            is KtDotQualifiedExpression -> dotExpression.prevSibling
-            else -> return false
+    private fun isIndexableSetter(expression: KtCallExpression): Boolean =
+        when (expression.calleeExpression?.text) {
+            "set" -> isOperatorFunction(expression)
+            // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
+            "put" -> isCallerMap(expression)
+            else -> false
         }
-        return (caller as? KtElement).getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.returnType
-            .isEligibleCollection()
+
+    private fun isOperatorFunction(expression: KtCallExpression): Boolean {
+        val function = (expression.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)
+        return function?.isOperator == true
     }
 
-    private fun KotlinType?.isEligibleCollection(): Boolean {
-        if (this?.fqNameOrNull()?.asString() in ktCollections) return true
-        return this?.supertypes()?.any { it.constructor.toString() in ktAndJavaCollections } == true
+    private fun isCallerMap(expression: KtCallExpression): Boolean {
+        val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
+        val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
+        if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
+
+        val mapName = "kotlin.collections.Map"
+        return type.fqNameOrNull()?.asString() == mapName ||
+            type.supertypes().any { it.fqNameOrNull()?.asString() == mapName }
     }
+
+    private fun unusedReturnValue(expression: KtCallExpression): Boolean =
+        expression.parent.parent is KtBlockExpression
 }

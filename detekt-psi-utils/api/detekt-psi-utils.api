@@ -76,10 +76,13 @@ public final class io/gitlab/arturbosch/detekt/rules/KtAnnotatedExtensionsKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/KtBinaryExpressionKt {
 	public static final fun isNonNullCheck (Lorg/jetbrains/kotlin/psi/KtBinaryExpression;)Z
+	public static final fun isNullCheck (Lorg/jetbrains/kotlin/psi/KtBinaryExpression;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
+	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isCalling (Lorg/jetbrains/kotlin/resolve/calls/model/ResolvedCall;Lorg/jetbrains/kotlin/name/FqName;)Z
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 

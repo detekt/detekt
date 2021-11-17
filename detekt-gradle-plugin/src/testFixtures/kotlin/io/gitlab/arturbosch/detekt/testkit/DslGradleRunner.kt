@@ -17,6 +17,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
+    val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val projectScript: Project.() -> Unit = {},
 ) {
 
@@ -123,7 +124,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             add("--stacktrace")
             add("--info")
             add("--build-cache")
-            add("-Dorg.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g")
+            add("-Dorg.gradle.jvmargs=$jvmArgs")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }

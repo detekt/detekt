@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  *
  * <noncompliant>
  * fun foo(): Unit {
- *     return Unit 
+ *     return Unit
  * }
  * fun foo() = Unit
  *
@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * </noncompliant>
  *
  * <compliant>
- * fun foo() { }
+ * fun foo() { }
  *
  * // overridden no-op functions are allowed
  * override fun foo() = Unit

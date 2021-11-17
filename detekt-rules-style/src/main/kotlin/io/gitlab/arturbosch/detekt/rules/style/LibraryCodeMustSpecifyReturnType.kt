@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * Functions/properties exposed as public APIs of a library should have an explicit return type.
  * Inferred return type can easily be changed by mistake which may lead to breaking changes.
  *
- * See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/reference/whatsnew14.html#explicit-api-mode-for-library-authors)
+ * See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors)
  *
  * <noncompliant>
  * // code from a library

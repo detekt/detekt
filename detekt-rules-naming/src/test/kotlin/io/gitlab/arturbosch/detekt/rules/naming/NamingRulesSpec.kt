@@ -7,13 +7,12 @@ import org.spekframework.spek2.style.specification.describe
 
 class NamingRulesSpec : Spek({
 
-    describe("naming like in constants is allowed for destructuring and lambdas") {
+    describe("naming like in constants is allowed for destructuring") {
         it("should not detect any") {
             val code = """
                 data class D(val i: Int, val j: Int)
                 fun doStuff() {
                     val (_, HOLY_GRAIL) = D(5, 4)
-                    emptyMap<String, String>().forEach { _, V -> println(V) }
                 }
             """
             assertThat(NamingRules().compileAndLint(code)).isEmpty()

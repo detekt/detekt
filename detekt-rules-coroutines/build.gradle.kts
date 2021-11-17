@@ -7,4 +7,5 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.bundles.testImplementation)
     testRuntimeOnly(libs.spek.runner)
+    testRuntimeOnly(libs.kotlinx.coroutines)
 }

@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Functions should have clear `throw` statements. Functions with many `throw` statements can be harder to read and lead
- * to confusion. Instead prefer to limit the amount of `throw` statements in a function.
+ * to confusion. Instead, prefer limiting the number of `throw` statements in a function.
  *
  * <noncompliant>
  * fun foo(i: Int) {

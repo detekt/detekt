@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class DetektTaskIntegrationSpec : Spek({
+internal class DetektTaskSpec : Spek({
 
     describe("When applying the detekt gradle plugin") {
         listOf(groovy(), kotlin()).forEach { builder ->

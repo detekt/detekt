@@ -380,4 +380,4 @@ class UnnecessaryLetSpec : Spek({
 })
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
-private const val MESSAGE_USE_IF = "let expression can be replaces with a simple if"
+private const val MESSAGE_USE_IF = "let expression can be replaced with a simple if"

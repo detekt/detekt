@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 
@@ -39,13 +38,11 @@ class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(co
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (isPrimitiveWrapperType(expression.calleeExpression) &&
-            isToStringMethod(expression.nextSibling?.nextSibling)
+            expression.nextSibling?.nextSibling?.text == "toString()"
         ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
     private fun isPrimitiveWrapperType(expression: KtExpression?) = types.contains(expression?.text)
-
-    private fun isToStringMethod(element: PsiElement?) = element?.text == "toString()"
 }

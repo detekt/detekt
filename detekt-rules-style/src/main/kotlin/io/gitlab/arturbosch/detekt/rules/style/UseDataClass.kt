@@ -11,8 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOpen
-import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,7 +28,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data
  * and generate `hashCode`, `equals` and `toString` implementations as well.
  *
- * Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes.html
+ * Read more about `data class`: https://kotlinlang.org/docs/data-classes.html
  *
  * <noncompliant>
  * class DataClassCandidate(val i: Int) {
@@ -85,8 +83,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
             val propertyParameters = klass.extractConstructorPropertyParameters()
 
-            val primaryConstructor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass.primaryConstructor]
-                as? ClassConstructorDescriptor
+            val primaryConstructor = bindingContext[BindingContext.CONSTRUCTOR, klass.primaryConstructor]
             val primaryConstructorParameterTypes = primaryConstructor?.valueParameters?.map { it.type }.orEmpty()
             val classType = primaryConstructor?.containingDeclaration?.defaultType
             val containsFunctions = functions.all { it.isDefaultFunction(classType, primaryConstructorParameterTypes) }
@@ -149,8 +146,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             !in DEFAULT_FUNCTION_NAMES -> false
             "copy" -> {
                 if (classType != null) {
-                    val descriptor =
-                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this] as? FunctionDescriptor
+                    val descriptor = bindingContext[BindingContext.FUNCTION, this]
                     val returnType = descriptor?.returnType
                     val parameterTypes = descriptor?.valueParameters?.map { it.type }.orEmpty()
                     returnType == classType &&
