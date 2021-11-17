@@ -29,7 +29,6 @@ import java.util.Locale
  *
  * <compliant>
  * const val DEFAULT_AMOUNT = 1_000_000
- * const val DEFAULT_AMOUNT = 10_000_00
  * </compliant>
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
@@ -48,27 +47,37 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
-    @Configuration("Maximum number of consecutive digits that a number can have without using an underscore")
+    @Configuration("Maximum number of consecutive digits that a numeric literal can have without using an underscore")
     private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
 
-    private val nonCompliantRegex: Regex = "\\d{${acceptableLength + 1},}".toRegex()
+    @Configuration("If set to false, groups of exactly three digits must be used. If set to true, 100_00 is allowed.")
+    private val allowNonStandardGrouping: Boolean by config(false)
+
+    private val nonCompliantRegex: Regex = """\d{${acceptableLength + 1},}""".toRegex()
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val normalizedText = normalizeForMatching(expression.text)
+        checkNormalized(normalizedText, expression)
+    }
 
-        if (isNotDecimalNumber(normalizedText) || expression.isSerialUidProperty()) {
+    private fun checkNormalized(normalizedText: String, expression: KtConstantExpression) {
+        if (isNotDecimalNumber(normalizedText)) {
+            return
+        }
+        if (expression.isSerialUidProperty()) {
             return
         }
 
         val numberString = normalizedText.split('.').first()
 
+        if (!allowNonStandardGrouping && numberString.hasNonStandardGrouping()) {
+            return doReport(expression, "The number contains a non standard grouping.")
+        }
+
         if (numberString.contains(nonCompliantRegex)) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "This number should be separated by underscores in order to increase readability."
-                )
+            return doReport(
+                expression,
+                "This number should be separated by underscores in order to increase readability."
             )
         }
     }
@@ -102,7 +111,14 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
             .removeSuffix("f")
     }
 
+    private fun doReport(expression: KtConstantExpression, message: String) {
+        report(CodeSmell(issue, Entity.from(expression), message))
+    }
+
+    private fun String.hasNonStandardGrouping(): Boolean = contains('_') && !matches(HAS_ONLY_STANDARD_GROUPING)
+
     companion object {
+        private val HAS_ONLY_STANDARD_GROUPING = """\d{1,3}(?:_\d{3})*""".toRegex()
         private const val HEX_PREFIX = "0x"
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"

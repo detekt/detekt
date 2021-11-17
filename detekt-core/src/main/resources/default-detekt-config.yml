@@ -741,6 +741,7 @@ style:
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
+    allowNonStandardGrouping: false
   UnnecessaryAbstractClass:
     active: true
   UnnecessaryAnnotationUseSiteTarget:

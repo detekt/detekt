@@ -9,6 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 
 private const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
 private const val ACCEPTABLE_LENGTH = "acceptableLength"
+private const val ALLOW_NON_STANDARD_GROUPING = "allowNonStandardGrouping"
 
 class UnderscoresInNumericLiteralsSpec : Spek({
 
@@ -160,19 +161,26 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    describe("an Int of 1000_00") {
-        val code = "val myInt = 1000_00"
+    describe("an Int of 1000_00_00") {
+        val code = "val myInt = 1000_00_00"
 
-        it("should not be reported by default") {
+        it("should be reported by default") {
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
-            assertThat(findings).isEmpty()
+            assertThat(findings).isNotEmpty
         }
 
-        it("should be reported if acceptableLength is 3") {
+        it("should still be reported even if acceptableLength is 99") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(ACCEPTABLE_LENGTH to "3"))
+                TestConfig(mapOf(ACCEPTABLE_LENGTH to "99"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
+        }
+
+        it("should not be reported if allowNonStandardGrouping is true") {
+            val findings = UnderscoresInNumericLiterals(
+                TestConfig(mapOf(ALLOW_NON_STANDARD_GROUPING to true))
+            ).compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
     }
 
