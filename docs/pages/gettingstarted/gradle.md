@@ -363,13 +363,18 @@ More information on type resolution are available on the [type resolution](type-
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
     jvmTarget = "1.8"
 }
+tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEach {
+    jvmTarget = "1.8"
+}
 ```
 
 #### Kotlin DSL
 
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    // Target version of the generated JVM bytecode. It is used for type resolution.
+    this.jvmTarget = "1.8"
+}
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
     this.jvmTarget = "1.8"
 }
 ```
