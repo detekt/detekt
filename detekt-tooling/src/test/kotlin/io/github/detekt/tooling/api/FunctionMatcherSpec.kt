@@ -14,7 +14,7 @@ class FunctionMatcherSpec : Spek({
     setupKotlinEnvironment()
     val env: KotlinCoreEnvironment by memoized()
 
-    describe("FunctionMatcherSpec.fromfromFunctionMatcher") {
+    describe("FunctionMatcherSpec.fromFunctionMatcher") {
         listOf(
             TestCase(
                 testDescription = "should return method name and null params list in case of simplifies signature",
@@ -66,9 +66,7 @@ class FunctionMatcherSpec : Spek({
                 cases.forEach { (code, result) ->
                     it("in case $code it returns $result") {
                         val (function, bindingContext) = buildKtFunction(env, code)
-                        assertThat(methodSignature.match(function, bindingContext)).apply {
-                            if (result) isTrue() else isFalse()
-                        }
+                        assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
                     }
                 }
             }
