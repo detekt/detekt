@@ -492,7 +492,7 @@ internal object DetektTaskDslSpec : Spek({
                     }
 
                     it("enables auto correcting") {
-                        assertThat(result.output).contains("--auto-correct")
+                        assertThat(result.output).containsPattern("""Arguments:[^\r\n]*--auto-correct""")
                     }
                 }
 
