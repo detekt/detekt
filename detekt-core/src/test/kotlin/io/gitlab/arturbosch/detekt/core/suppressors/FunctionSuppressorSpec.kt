@@ -60,6 +60,10 @@ class FunctionSuppressorSpec : Spek({
                     """
                     class OneClass {
                         fun toString(parameter: String): String {
+                            fun hello(name: String) {
+                                println("Hello " + name)
+                            }
+                            hello("World")
                             return ""
                         }
                     }
@@ -98,6 +102,41 @@ class FunctionSuppressorSpec : Spek({
                     .findDescendantOfType<KtParameter>()!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
+            }
+
+            it("If reports function in function it returns true") {
+                val suppressor = buildFunctionSuppressor(listOf("toString"), binding)
+                val ktFunction = root.findChildByClass(KtClass::class.java)!!
+                    .findFunctionByName("toString")!!
+                    .children
+                    .mapNotNull { it.findDescendantOfType<KtFunction>() }
+                    .first()
+
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
+            }
+
+            it("If reports parameter function in function it returns true") {
+                val suppressor = buildFunctionSuppressor(listOf("toString"), binding)
+                val ktFunction = root.findChildByClass(KtClass::class.java)!!
+                    .findFunctionByName("toString")!!
+                    .children
+                    .mapNotNull { it.findDescendantOfType<KtFunction>() }
+                    .first()
+                    .findDescendantOfType<KtParameter>()!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
+            }
+
+            it("If reports parameter function in function it returns true 2") {
+                val suppressor = buildFunctionSuppressor(listOf("hello"), binding)
+                val ktFunction = root.findChildByClass(KtClass::class.java)!!
+                    .findFunctionByName("toString")!!
+                    .children
+                    .mapNotNull { it.findDescendantOfType<KtFunction>() }
+                    .first()
+                    .findDescendantOfType<KtParameter>()!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
             it("If reports top level function it returns true") {
