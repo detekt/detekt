@@ -17,10 +17,13 @@ Detekt requires **Gradle 6.1** or higher. We, however, recommend using the versi
 The detekt Gradle plugin will generate multiple tasks:
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
-`detekt` closure. By default the standard rule set without any ignore list is executed on sources files located
- in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`. Reports are automatically generated in xml,
- html, txt, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively.
- Please note that the `detekt` task is automatically run when executing `gradle check`.
+`detekt` closure. 
+  - By default the standard rule set without any ignore list is executed on sources files located
+   in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
+  - Reports are automatically generated in xml,
+   html, txt, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively.
+  - Please note that the `detekt` task is automatically run when executing `gradle check`.
+  - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 
