@@ -479,10 +479,16 @@ $('#toc').on('click', 'a', function() {
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">detekt</code> - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
-<code class="language-plaintext highlighter-rouge">detekt</code> closure. By default the standard rule set without any ignore list is executed on sources files located
- in <code class="language-plaintext highlighter-rouge">src/main/java</code>, <code class="language-plaintext highlighter-rouge">src/test/java</code>, <code class="language-plaintext highlighter-rouge">src/main/kotlin</code> and <code class="language-plaintext highlighter-rouge">src/test/kotlin</code>. Reports are automatically generated in xml,
- html, txt, and sarif format and can be found in <code class="language-plaintext highlighter-rouge">build/reports/detekt/detekt.[xml|html|txt|sarif]</code> respectively.
- Please note that the <code class="language-plaintext highlighter-rouge">detekt</code> task is automatically run when executing <code class="language-plaintext highlighter-rouge">gradle check</code>.</li>
+<code class="language-plaintext highlighter-rouge">detekt</code> closure.
+    <ul>
+      <li>By default the standard rule set without any ignore list is executed on sources files located
+ in <code class="language-plaintext highlighter-rouge">src/main/java</code>, <code class="language-plaintext highlighter-rouge">src/test/java</code>, <code class="language-plaintext highlighter-rouge">src/main/kotlin</code> and <code class="language-plaintext highlighter-rouge">src/test/kotlin</code>.</li>
+      <li>Reports are automatically generated in xml,
+ html, txt, and sarif format and can be found in <code class="language-plaintext highlighter-rouge">build/reports/detekt/detekt.[xml|html|txt|sarif]</code> respectively.</li>
+      <li>Please note that the <code class="language-plaintext highlighter-rouge">detekt</code> task is automatically run when executing <code class="language-plaintext highlighter-rouge">gradle check</code>.</li>
+      <li>You may specify Gradle task CLI option for auto correction, such as <code class="language-plaintext highlighter-rouge">gradle detekt --auto-correct</code>.</li>
+    </ul>
+  </li>
   <li><code class="language-plaintext highlighter-rouge">detektGenerateConfig</code> - Generates a default detekt configuration file into your project directory.</li>
   <li><code class="language-plaintext highlighter-rouge">detektBaseline</code> - Similar to <code class="language-plaintext highlighter-rouge">detekt</code>, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.</li>
 </ul>
