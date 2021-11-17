@@ -14,7 +14,7 @@ class FunctionMatcherSpec : Spek({
     setupKotlinEnvironment()
     val env: KotlinCoreEnvironment by memoized()
 
-    describe("FunctionMatcherSpec.fromFunctionMatcher") {
+    describe("FunctionMatcher.fromFunctionSignature") {
         listOf(
             TestCase(
                 testDescription = "should return method name and null params list in case of simplifies signature",
