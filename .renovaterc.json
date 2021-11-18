@@ -1,5 +1,9 @@
 {
   "labels": ["dependencies"],
+  "packageRules": [{
+    "matchManagers": ["bundler"],
+    "enabled": false
+  }],
   "extends": [
     "config:base"
   ]
