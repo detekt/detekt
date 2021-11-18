@@ -825,12 +825,17 @@ or when implementing a custom detekt task with the <code class="language-plainte
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">Detekt</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
     <span class="n">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
 <span class="o">}</span>
+<span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">DetektCreateBaselineTask</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
+    <span class="n">jvmTarget</span> <span class="o">=</span> <span class="s2">"1.8"</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 id="kotlin-dsl-4">Kotlin DSL</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
-    <span class="c1">// Target version of the generated JVM bytecode. It is used for type resolution.</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">jvmTarget</span> <span class="p">=</span> <span class="s">"1.8"</span>
+<span class="p">}</span>
+<span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">DetektCreateBaselineTask</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="n">jvmTarget</span> <span class="p">=</span> <span class="s">"1.8"</span>
 <span class="p">}</span>
 </code></pre></div></div>
