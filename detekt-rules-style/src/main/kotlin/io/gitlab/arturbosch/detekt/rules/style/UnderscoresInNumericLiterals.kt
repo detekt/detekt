@@ -37,7 +37,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         javaClass.simpleName,
         Severity.Style,
         "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
-            "should be underscore separated to increase readability. ",
+            "should be underscore separated to increase readability.",
         Debt.FIVE_MINS
     )
 
