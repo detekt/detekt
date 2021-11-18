@@ -90,12 +90,17 @@ detekt {
 tasks.withType(Detekt).configureEach {
     jvmTarget = "1.8"
 }
+tasks.withType(DetektCreateBaselineTask).configureEach {
+    jvmTarget = "1.8"
+}
 
 // or
 
 // Kotlin DSL
 tasks.withType<Detekt>().configureEach {
-    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = "1.8"
 }
 ```
