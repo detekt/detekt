@@ -15,7 +15,6 @@ testing {
     suites {
         getByName("test", JvmTestSuite::class) {
             dependencies {
-                implementation(projects.detektTestUtils)
                 implementation(libs.assertj)
                 implementation(libs.spek.dsl)
                 implementation(libs.kotlin.gradle)
