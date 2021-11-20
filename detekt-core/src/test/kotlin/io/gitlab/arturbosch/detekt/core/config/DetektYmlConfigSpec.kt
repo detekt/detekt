@@ -1,7 +1,5 @@
-package io.gitlab.arturbosch.detekt.core
+package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
-import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
