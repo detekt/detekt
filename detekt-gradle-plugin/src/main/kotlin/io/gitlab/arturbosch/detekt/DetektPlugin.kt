@@ -120,6 +120,6 @@ const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
-    load(classLoader.getResourceAsStream("versions.properties"))
+    load(classLoader.getResourceAsStream("versions.properties")!!)
     getProperty("detektVersion")
 }
