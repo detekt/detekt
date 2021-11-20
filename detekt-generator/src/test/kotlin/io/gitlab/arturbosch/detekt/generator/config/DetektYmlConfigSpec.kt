@@ -1,14 +1,18 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.generator.config
 
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class DetektYmlConfigSpec : Spek({
 
     describe("detekt YAML config") {
-
-        val config by memoized { DefaultConfig.newInstance() }
+        val config by memoized {
+            val path = Paths.get("../detekt-core/src/main/resources/default-detekt-config.yml").toAbsolutePath()
+            YamlConfig.load(path) as YamlConfig
+        }
 
         ruleSetsNamesToPackage.forEach { (name, packageName) ->
             it("$name section") {
@@ -16,23 +20,16 @@ class DetektYmlConfigSpec : Spek({
             }
         }
 
-        it("is backed by a yaml file") {
-            assertThat(config).isInstanceOf(YamlConfig::class.java)
-        }
-
         it("contains all general config keys") {
-            val yamlConfig = config as YamlConfig
-
-            val topLevelConfigKeys = yamlConfig.properties.keys
+            val topLevelConfigKeys = config.properties.keys
 
             assertThat(topLevelConfigKeys).containsAll(generalConfigKeys)
         }
 
         it("is completely checked") {
-            val yamlConfig = config as YamlConfig
             val checkedRuleSetNames = ruleSetsNamesToPackage.map { it.first }
 
-            val topLevelConfigKeys = yamlConfig.properties.keys
+            val topLevelConfigKeys = config.properties.keys
 
             assertThat(topLevelConfigKeys - generalConfigKeys)
                 .containsExactlyInAnyOrderElementsOf(checkedRuleSetNames)

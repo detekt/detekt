@@ -1,10 +1,11 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.generator.config
 
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
@@ -41,7 +42,7 @@ class ConfigAssert(
         for (ruleClass in ruleClasses) {
             val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
             if (ymlDeclaration.keys.size != 1) {
-                fail<String>("${ruleClass.simpleName} rule is not correctly defined in ${DefaultConfig.RESOURCE_NAME}")
+                fail<String>("${ruleClass.simpleName} rule is not correctly defined in detekt-default-config.yml")
             }
         }
     }
