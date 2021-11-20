@@ -7,7 +7,7 @@ spek = "2.0.17"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
-nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
