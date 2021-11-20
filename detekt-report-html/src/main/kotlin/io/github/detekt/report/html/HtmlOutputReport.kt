@@ -47,7 +47,7 @@ class HtmlOutputReport : OutputReport() {
     override val name = "HTML report"
 
     override fun render(detektion: Detektion) =
-        javaClass.getResource("/$DEFAULT_TEMPLATE")
+        javaClass.getResource("/$DEFAULT_TEMPLATE")!!
             .openStream()
             .bufferedReader()
             .use { it.readText() }

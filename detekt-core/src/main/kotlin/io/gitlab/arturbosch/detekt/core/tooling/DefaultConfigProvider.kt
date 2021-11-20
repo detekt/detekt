@@ -12,7 +12,7 @@ class DefaultConfigProvider : DefaultConfigurationProvider {
     override fun get(): Config = DefaultConfig.newInstance()
 
     override fun copy(targetLocation: Path) {
-        val configUrl = javaClass.getResource("/${DefaultConfig.RESOURCE_NAME}")
+        val configUrl = javaClass.getResource("/${DefaultConfig.RESOURCE_NAME}")!!
         Files.copy(configUrl.openStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING)
     }
 }
