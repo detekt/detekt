@@ -16,7 +16,7 @@ class ConfigExporterSpec : Spek({
             val tmpConfig = createTempFileForTest("ConfigPrinterSpec", ".yml")
             val cliArgs = parseArguments(arrayOf("--config", tmpConfig.toString()))
 
-            ConfigExporter(cliArgs, NullPrintStream()).execute()
+            ConfigExporter(cliArgs, NullPrintStream(), NullPrintStream()).execute()
 
             assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
         }
