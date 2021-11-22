@@ -11,6 +11,22 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 - [Compose API Guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md)
 - [Compose source](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose)
 
+### FunctionNaming
+
+See [FunctionNaming](https://detekt.github.io/detekt/naming.html#functionnaming).
+
+``@Composable`` functions that return ``Unit`` are named using ``PascalCase``. Detekt may see this as a violation:
+
+``` kotlin
+@Composable
+fun FooButton(text: String, onClick: () -> Unit) { // Violation for FooButton()
+```
+
+#### Configurations:
+
+* Augment default ``functionPattern`` to ``'([A-Za-z][a-zA-Z0-9]*)|(`.*`)'`` (default: ``'([a-z][a-zA-Z0-9]*)|(`.*`)'``) OR
+* Set ``ignoreAnnotated`` to ``['Composable']``
+
 ### TopLevelPropertyNaming
 
 See [TopLevelPropertyNaming](https://detekt.github.io/detekt/naming.html#toplevelpropertynaming).
@@ -66,3 +82,21 @@ class Foo {
 #### Configurations:
 
 * Set ``ignorePropertyDeclaration = true``, ``ignoreCompanionObjectPropertyDeclaration = true`` (default)
+
+### UnusedPrivateMember
+
+See [UnusedPrivateMember](https://detekt.github.io/detekt/style.html#unusedprivatemember).
+
+Detekt may see composable preview functions, i.e. those marked with ``@Preview``, as unused.
+
+``` kotlin
+@Preview
+@Composable
+private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
+    FooLazyColumn()
+}
+```
+
+#### Configurations:
+
+* Set ``ignoreAnnotated`` to ``['Preview']``
