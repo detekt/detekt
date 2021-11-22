@@ -236,6 +236,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Hans-Martin Schuller](https://github.com/hmSchuller) - Rule Improvement: ForbiddenComment
 - [Lukasz Osowicki](https://github.com/lukaszosowicki) - New rule: OutdatedDocumentation
 - [Luan Nico](https://github.com/luanpotter) - Bug fix for the UselessCallOnNotNull rule
+- [Tasha Ramesh](https://github.com/drinkthestars) - Docs around configuring for Compose
 
 ### Mentions
 
