@@ -30,10 +30,10 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
 
 private fun parseResourceConfig(urls: Collection<URL>): Config =
     if (urls.size == 1) {
-        YamlConfig.load(urls.first().openSafeStream().reader())
+        urls.first().openSafeStream().reader().use(YamlConfig::load)
     } else {
         urls.asSequence()
-            .map { YamlConfig.load(it.openSafeStream().reader()) }
+            .map { it.openSafeStream().reader().use(YamlConfig::load) }
             .reduce { composite, config -> CompositeConfig(config, composite) }
     }
 

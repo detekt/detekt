@@ -8,7 +8,8 @@ internal object DefaultConfig {
     const val RESOURCE_NAME = "default-detekt-config.yml"
 
     fun newInstance(): Config {
-        val configReader = checkNotNull(javaClass.getSafeResourceAsStream("/$RESOURCE_NAME")).reader()
-        return YamlConfig.load(configReader)
+        return checkNotNull(javaClass.getSafeResourceAsStream("/$RESOURCE_NAME"))
+            .reader()
+            .use(YamlConfig::load)
     }
 }

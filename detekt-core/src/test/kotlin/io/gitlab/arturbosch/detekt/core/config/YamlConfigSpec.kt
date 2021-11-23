@@ -59,11 +59,11 @@ class YamlConfigSpec : Spek({
     describe("loading empty configurations") {
 
         it("empty yaml file is equivalent to empty config") {
-            YamlConfig.load(javaClass.getSafeResourceAsStream("/empty.yml")!!.reader())
+            javaClass.getSafeResourceAsStream("/empty.yml")!!.reader().use(YamlConfig::load)
         }
 
         it("single item in yaml file is valid") {
-            YamlConfig.load(javaClass.getSafeResourceAsStream("/oneitem.yml")!!.reader())
+            javaClass.getSafeResourceAsStream("/oneitem.yml")!!.reader().use(YamlConfig::load)
         }
     }
 
