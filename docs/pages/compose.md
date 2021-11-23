@@ -23,8 +23,9 @@ fun FooButton(text: String, onClick: () -> Unit) { // Violation for FooButton()
 ```
 
 #### Configurations:
+Choose _either_ of the following options:
 
-* Augment default ``functionPattern`` to ``'([A-Za-z][a-zA-Z0-9]*)|(`.*`)'`` (default: ``'([a-z][a-zA-Z0-9]*)|(`.*`)'``) OR
+* Augment default ``functionPattern`` to ``'([A-Za-z][a-zA-Z0-9]*)|(`.*`)'`` (default: ``'([a-z][a-zA-Z0-9]*)|(`.*`)'``)
 * Set ``ignoreAnnotated`` to ``['Composable']``
 
 ### TopLevelPropertyNaming
