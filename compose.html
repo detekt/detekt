@@ -477,6 +477,24 @@ $('#toc').on('click', 'a', function() {
   <li><a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose">Compose source</a></li>
 </ul>
 
+<h3 id="functionnaming">FunctionNaming</h3>
+
+<p>See <a href="https://detekt.github.io/detekt/naming.html#functionnaming">FunctionNaming</a>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">@Composable</code> functions that return <code class="language-plaintext highlighter-rouge">Unit</code> are named using <code class="language-plaintext highlighter-rouge">PascalCase</code>. Detekt may see this as a violation:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Composable</span>
+<span class="k">fun</span> <span class="nf">FooButton</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="n">onClick</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nc">Unit</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Violation for FooButton()</span>
+</code></pre></div></div>
+
+<h4 id="configurations">Configurations:</h4>
+<p>Choose <em>either</em> of the following options:</p>
+
+<ul>
+  <li>Augment default <code class="language-plaintext highlighter-rouge">functionPattern</code> to <code class="language-plaintext highlighter-rouge">'([A-Za-z][a-zA-Z0-9]*)|(`.*`)'</code> (default: <code class="language-plaintext highlighter-rouge">'([a-z][a-zA-Z0-9]*)|(`.*`)'</code>)</li>
+  <li>Set <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> to <code class="language-plaintext highlighter-rouge">['Composable']</code></li>
+</ul>
+
 <h3 id="toplevelpropertynaming">TopLevelPropertyNaming</h3>
 
 <p>See <a href="https://detekt.github.io/detekt/naming.html#toplevelpropertynaming">TopLevelPropertyNaming</a>.</p>
@@ -493,7 +511,7 @@ $('#toc').on('click', 'a', function() {
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="kd">val</span> <span class="py">FooPadding</span> <span class="p">=</span> <span class="mi">16</span><span class="p">.</span><span class="n">dp</span>
 </code></pre></div></div>
 
-<h4 id="configurations">Configurations:</h4>
+<h4 id="configurations-1">Configurations:</h4>
 
 <ul>
   <li>Set <code class="language-plaintext highlighter-rouge">constantPattern</code> to <code class="language-plaintext highlighter-rouge">'[A-Z][A-Za-z0-9]*'</code> (default: <code class="language-plaintext highlighter-rouge">'[A-Z][_A-Z0-9]*'</code>)</li>
@@ -505,7 +523,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>Composables may boast more than the typical number of function arguments (albeit mostly with default values). For example, see <a href="https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/OutlinedTextField.kt;l=133?q=OutlinedTextFieldLayout&amp;ss=androidx%2Fplatform%2Fframeworks%2Fsupport:compose%2F">OutlinedTextField</a>.</p>
 
-<h4 id="configurations-1">Configurations:</h4>
+<h4 id="configurations-2">Configurations:</h4>
 
 <ul>
   <li>Set <code class="language-plaintext highlighter-rouge">functionThreshold</code> to a higher value</li>
@@ -529,10 +547,29 @@ $('#toc').on('click', 'a', function() {
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="configurations-2">Configurations:</h4>
+<h4 id="configurations-3">Configurations:</h4>
 
 <ul>
   <li>Set <code class="language-plaintext highlighter-rouge">ignorePropertyDeclaration = true</code>, <code class="language-plaintext highlighter-rouge">ignoreCompanionObjectPropertyDeclaration = true</code> (default)</li>
+</ul>
+
+<h3 id="unusedprivatemember">UnusedPrivateMember</h3>
+
+<p>See <a href="https://detekt.github.io/detekt/style.html#unusedprivatemember">UnusedPrivateMember</a>.</p>
+
+<p>Detekt may see composable preview functions, i.e. those marked with <code class="language-plaintext highlighter-rouge">@Preview</code>, as unused.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Preview</span>
+<span class="nd">@Composable</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">FooLazyColumnPreview</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// Violation for FooLazyColumnPreview()</span>
+    <span class="nc">FooLazyColumn</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="configurations-4">Configurations:</h4>
+
+<ul>
+  <li>Set <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> to <code class="language-plaintext highlighter-rouge">['Preview']</code></li>
 </ul>
 
 
