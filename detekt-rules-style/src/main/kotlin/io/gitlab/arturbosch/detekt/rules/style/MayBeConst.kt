@@ -57,6 +57,8 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
     private val topLevelConstants = HashSet<String?>()
     private val companionObjectConstants = HashSet<String?>()
+    private val KtProperty.isActual
+        get() = hasModifier(KtTokens.ACTUAL_KEYWORD)
 
     override fun visitKtFile(file: KtFile) {
         topLevelConstants.clear()
@@ -110,6 +112,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     private fun KtProperty.cannotBeConstant(): Boolean {
         return isLocal ||
             isVar ||
+            isActual ||
             getter != null ||
             isConstant() ||
             isOverride()
