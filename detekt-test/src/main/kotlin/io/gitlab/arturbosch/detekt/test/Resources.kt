@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import java.io.StringReader
 
-fun yamlConfig(name: String) = YamlConfig.loadResource(resource(name).toURL())
+fun yamlConfig(name: String) = resource(name).toURL().openStream().reader().use(YamlConfig::load)
 
-fun yamlConfigFromContent(content: String): Config =
-    YamlConfig.load(StringReader(content.trimIndent()))
+fun yamlConfigFromContent(content: String): Config = StringReader(content.trimIndent()).use(YamlConfig::load)
