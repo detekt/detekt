@@ -164,6 +164,11 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - 'kotlin.io.print'
+      - 'kotlin.io.println'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
