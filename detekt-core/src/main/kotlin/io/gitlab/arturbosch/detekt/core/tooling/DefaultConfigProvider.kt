@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.tooling.api.DefaultConfigurationProvider
-import io.github.detekt.tooling.internal.openSafeStream
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import java.nio.file.Files
