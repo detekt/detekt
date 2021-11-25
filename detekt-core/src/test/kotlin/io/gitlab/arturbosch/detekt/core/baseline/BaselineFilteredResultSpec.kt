@@ -20,12 +20,20 @@ class BaselineFilteredResultSpec : Spek({
                     every { id }.returns("LongParameterList")
                     every { signature }.returns("Signature")
                 },
+                mockk {
+                    every { id }.returns("LongMethod")
+                    every { signature }.returns("Signature")
+                },
+                mockk {
+                    every { id }.returns("FeatureEnvy")
+                    every { signature }.returns("Signature")
+                },
             )
         }
 
         it("does return the same finding on empty baseline") {
             val actual = BaselineFilteredResult(result, Baseline(emptySet(), emptySet()))
-            assertThat(actual.findings).hasSize(1)
+            assertThat(actual.findings).hasSize(3)
         }
 
         it("filters with an existing baseline file") {
@@ -33,7 +41,7 @@ class BaselineFilteredResultSpec : Spek({
             val actual = BaselineFilteredResult(result, baseline)
             // Note: Detektion works with Map<RuleSetId, List<Finding>
             // but the TestDetektion maps the RuleId as RuleSetId
-            assertThat(actual.findings["LongParameterList"]).isEmpty()
+            actual.findings.forEach { (_, value) -> assertThat(value).isEmpty() }
         }
     }
 })
