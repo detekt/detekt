@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.mockk.every
 import io.mockk.mockk
@@ -15,14 +14,14 @@ class BaselineFilteredResultSpec : Spek({
 
         val baselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
-        val finding by memoized {
-            val issue = mockk<Finding>()
-            every { issue.id }.returns("LongParameterList")
-            every { issue.signature }.returns("Signature")
-            issue
+        val result by memoized {
+            TestDetektion(
+                mockk {
+                    every { id }.returns("LongParameterList")
+                    every { signature }.returns("Signature")
+                },
+            )
         }
-
-        val result by memoized { TestDetektion(finding) }
 
         it("does return the same finding on empty baseline") {
             val actual = BaselineFilteredResult(result, Baseline(emptySet(), emptySet()))
