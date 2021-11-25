@@ -2,6 +2,7 @@ package io.github.detekt.report.html
 
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.psi.toUnifiedString
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
@@ -48,7 +49,7 @@ class HtmlOutputReport : OutputReport() {
 
     override fun render(detektion: Detektion) =
         javaClass.getResource("/$DEFAULT_TEMPLATE")!!
-            .openStream()
+            .openSafeStream()
             .bufferedReader()
             .use { it.readText() }
             .replace(PLACEHOLDER_VERSION, renderVersion())
