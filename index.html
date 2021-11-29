@@ -522,30 +522,24 @@ slim down the configuration file to only the changes from the default configurat
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>To enable/disable detekt reports use the <code class="language-plaintext highlighter-rouge">withType</code> method to set defaults for all detekt tasks at once:</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Kotlin DSL</span>
-<span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
+<p>To enable/disable detekt reports and to configure their output directories edit the <code class="language-plaintext highlighter-rouge">detekt { }</code> closure:</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">detekt</span> <span class="p">{</span>
     <span class="nf">reports</span> <span class="p">{</span>
-        <span class="n">xml</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">html</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">txt</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">sarif</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+        <span class="nf">xml</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/destination.xml"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nf">html</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/destination.html"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nf">txt</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"path/to/destination.txt"</span><span class="p">)</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-
-<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Groovy DSL</span>
-<span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">Detekt</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
-    <span class="n">reports</span> <span class="o">{</span>
-        <span class="n">xml</span><span class="o">.</span><span class="na">required</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="n">html</span><span class="o">.</span><span class="na">required</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="n">txt</span><span class="o">.</span><span class="na">required</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="n">sarif</span><span class="o">.</span><span class="na">required</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>See <a href="https://detekt.github.io/detekt/reporting.html">reporting</a> docs for more details on configuring reports.</p>
 
 <h3 id="adding-more-rule-sets">Adding more rule sets</h3>
 

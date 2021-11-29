@@ -481,7 +481,7 @@ $('#toc').on('click', 'a', function() {
   <li><code class="language-plaintext highlighter-rouge">detekt</code> - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 <code class="language-plaintext highlighter-rouge">detekt</code> closure.
     <ul>
-      <li>By default, the standard rule set without any ignore list is executed on sources files located
+      <li>By default the standard rule set without any ignore list is executed on sources files located
  in <code class="language-plaintext highlighter-rouge">src/main/java</code>, <code class="language-plaintext highlighter-rouge">src/test/java</code>, <code class="language-plaintext highlighter-rouge">src/main/kotlin</code> and <code class="language-plaintext highlighter-rouge">src/test/kotlin</code>.</li>
       <li>Reports are automatically generated in xml,
  html, txt, and sarif format and can be found in <code class="language-plaintext highlighter-rouge">build/reports/detekt/detekt.[xml|html|txt|sarif]</code> respectively.</li>
@@ -700,6 +700,34 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     <span class="c1">// Specify the base path for file paths in the formatted reports. </span>
     <span class="c1">// If not set, all file paths reported will be absolute file path.</span>
     <span class="n">basePath</span> <span class="o">=</span> <span class="n">projectDir</span>
+    
+    <span class="n">reports</span> <span class="o">{</span>
+        <span class="c1">// Enable/Disable XML report (default: true)</span>
+        <span class="n">xml</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.xml"</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="c1">// Enable/Disable HTML report (default: true)</span>
+        <span class="n">html</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.html"</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="c1">// Enable/Disable TXT report (default: true)</span>
+        <span class="n">txt</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.txt"</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="c1">// Enable/Disable SARIF report (default: false)</span>
+        <span class="n">sarif</span> <span class="o">{</span>
+            <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span>                                
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt/detekt.sarif"</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="n">custom</span> <span class="o">{</span>
+            <span class="c1">// The simple class name of your custom report.</span>
+            <span class="n">reportId</span> <span class="o">=</span> <span class="s2">"CustomJsonReport"</span>                   
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">file</span><span class="o">(</span><span class="s2">"build/reports/detekt.json"</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
@@ -754,35 +782,32 @@ using the detekt closure as described <a href="#closure">here</a>.</p>
     <span class="c1">// Specify the base path for file paths in the formatted reports. </span>
     <span class="c1">// If not set, all file paths reported will be absolute file path.</span>
     <span class="n">basePath</span> <span class="p">=</span> <span class="n">projectDir</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="reports">Reports</h3>
-
-<p>Report output can be customized for each task. The DSL is the same in both Groovy and Kotlin:</p>
-
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tasks</span><span class="p">.</span><span class="nf">named</span><span class="p">(</span><span class="s">"detekt"</span><span class="p">).</span><span class="nf">configure</span> <span class="p">{</span>
+    
     <span class="nf">reports</span> <span class="p">{</span>
         <span class="c1">// Enable/Disable XML report (default: true)</span>
-        <span class="n">xml</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">xml</span><span class="p">.</span><span class="n">outputLocation</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.xml"</span><span class="p">))</span>
-
+        <span class="nf">xml</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.xml"</span><span class="p">)</span>
+        <span class="p">}</span>
         <span class="c1">// Enable/Disable HTML report (default: true)</span>
-        <span class="n">html</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">html</span><span class="p">.</span><span class="n">outputLocation</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.html"</span><span class="p">))</span>
-
+        <span class="nf">html</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.html"</span><span class="p">)</span>
+        <span class="p">}</span>
         <span class="c1">// Enable/Disable TXT report (default: true)</span>
-        <span class="n">txt</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">txt</span><span class="p">.</span><span class="n">outputLocation</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.txt"</span><span class="p">))</span>
-
+        <span class="nf">txt</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.txt"</span><span class="p">)</span>
+        <span class="p">}</span>
         <span class="c1">// Enable/Disable SARIF report (default: false)</span>
-        <span class="n">sarif</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-        <span class="n">sarif</span><span class="p">.</span><span class="n">outputLocation</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.sarif"</span><span class="p">))</span>
-
+        <span class="nf">sarif</span> <span class="p">{</span>
+            <span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span>                                
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt/detekt.sarif"</span><span class="p">)</span>
+        <span class="p">}</span>
         <span class="nf">custom</span> <span class="p">{</span>
             <span class="c1">// The simple class name of your custom report.</span>
             <span class="n">reportId</span> <span class="p">=</span> <span class="s">"CustomJsonReport"</span>
-            <span class="n">outputLocation</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.json"</span><span class="p">))</span>
+            <span class="n">destination</span> <span class="p">=</span> <span class="nf">file</span><span class="p">(</span><span class="s">"build/reports/detekt.json"</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>

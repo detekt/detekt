@@ -553,8 +553,7 @@ run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMe
 
 <span class="n">subprojects</span> <span class="o">{</span>
   <span class="n">detekt</span> <span class="o">{</span>
-    <span class="n">reports</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">required</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-    <span class="c1">// reports.sarif.required.set(true)</span>
+    <span class="n">reports</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">enabled</span> <span class="o">=</span> <span class="kc">true</span> <span class="c1">// reports.sarif.enabled = true</span>
   <span class="o">}</span>
 
   <span class="n">plugins</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">DetektPlugin</span><span class="o">)</span> <span class="o">{</span>
@@ -577,8 +576,7 @@ run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMe
 
 <span class="nf">subprojects</span> <span class="p">{</span>
   <span class="nf">detekt</span> <span class="p">{</span>
-    <span class="n">reports</span><span class="p">.</span><span class="n">xml</span><span class="p">.</span><span class="n">required</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="c1">// reports.sarif.required.set(true)</span>
+    <span class="n">reports</span><span class="p">.</span><span class="n">xml</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="k">true</span> <span class="c1">// reports.sarif.enabled = true</span>
   <span class="p">}</span>
   
   <span class="n">plugins</span><span class="p">.</span><span class="nf">withType</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">DetektPlugin</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span>
