@@ -8,7 +8,7 @@ toc: true
 
 #### 1.19.0 - 2021-11-29
 
-Please welcome the next upcoming stable release of Detekt: `1.18.0` 🎉
+Please welcome the next upcoming stable release of Detekt: `1.19.0` 🎉
 This release is coming with a lot of new features, new rules, evolution in the API and stability improvements.
 
 Specifically, we've shipped some features that will allow you to better adapt detekt to run on codebases
