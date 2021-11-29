@@ -6,20 +6,30 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.19.0-RC1 - 2021-10-31
+#### 1.19.0 - 2021-11-29
+
+Please welcome the next upcoming stable release of Detekt: `1.18.0` 🎉
+This release is coming with a lot of new features, new rules, evolution in the API and stability improvements.
+
+Specifically, we've shipped some features that will allow you to better adapt detekt to run on codebases
+that are using JetPack compose with features such as `ignoreAnnotated` and `ignoreFunction`. 
+
+As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
 
 ##### Notable Changes
 
 - We now offer an `ignoreAnnotated` configuration key that you can use on all your rules to suppress findings if inside an annotated block (e.g. `@Composable`) - [#4102](https://github.com/detekt/detekt/pull/4102) and [#4241](https://github.com/detekt/detekt/pull/4241)
+- Similarly, we now offer also an `ignoreFunction` configuration key that you can use to suppress findings if inside a function with a given name - [#4148](https://github.com/detekt/detekt/pull/4148)
 - Report configuration is changing in the Gradle plugin. The `reports` extension on the `detekt` extension has been
   deprecated. See the Migration section below for steps to migrate to the new recommended configuration - [#3687](https://github.com/detekt/detekt/pull/3687)
 - The `ExplicitCollectionElementAccessMethod` rule is now a type-resolution only rule - [#4201](https://github.com/detekt/detekt/pull/4201)
 - The `InvalidPackageDeclaration` rule has been split to create the `MissingPackageDeclaration` rule - [#4149](https://github.com/detekt/detekt/pull/4149)
 - The `ForbiddenComment` rule now offers a `customMessage` configuration key - [#4126](https://github.com/detekt/detekt/pull/4126)
 - We bumped ktlint and updated the default enabled rules to mirror what ktlint is doing - [#4179](https://github.com/detekt/detekt/pull/4179)
-- Added a new LambdaParameterNaming rule, to enfornce a naming convention of paramter inside lambdas - [#4147](https://github.com/detekt/detekt/pull/4147)
-- Added a new InjectDispatcher rule, to check if dispatchers are injectable - [#4222](https://github.com/detekt/detekt/pull/4222)
-- Added a new ConsoleReport format - [#4027](https://github.com/detekt/detekt/pull/4027)
+- Added a new `LambdaParameterNaming` rule, to enforce a naming convention of parameter inside lambdas - [#4147](https://github.com/detekt/detekt/pull/4147)
+- Added a new `InjectDispatcher` rule, to check if dispatchers are injectable - [#4222](https://github.com/detekt/detekt/pull/4222)
+- Added a new `ConsoleReport` format - [#4027](https://github.com/detekt/detekt/pull/4027)
 - Gradle: We added the `--auto-correct` cmdline option to gradle tasks - [#4202](https://github.com/detekt/detekt/pull/4202)
 - Gradle: We removed the `afterEvaluate` wrapper from the Android and KMM plugin - [#4159](https://github.com/detekt/detekt/pull/4159) and [#4271](https://github.com/detekt/detekt/pull/4271)
 - We now test against Java 17 and stopped testing against Java 16 - [#4136](https://github.com/detekt/detekt/pull/4136)
@@ -80,6 +90,12 @@ tasks.detektMain {
 
 ##### Changelog
 
+- trim values when parsing the baseline - [#4335](https://github.com/detekt/detekt/pull/4335)
+- Fix #4332 by widening the scope to all JDKs - [#4333](https://github.com/detekt/detekt/pull/4333)
+- Bugfix provided by #4225 needs wider scope - [#4332](https://github.com/detekt/detekt/issues/4332)
+- Avoid false positives in MemberNameEqualsClassName - [#4329](https://github.com/detekt/detekt/pull/4329)
+- Add two new config steps for Compose - [#4322](https://github.com/detekt/detekt/pull/4322)
+- Set DetektJvm task source with SourceDirectorySet instead of file list - [#4151](https://github.com/detekt/detekt/pull/4151)
 - Add documentation about how to configure Baseline task with type resolution - [#4285](https://github.com/detekt/detekt/pull/4285)
 - Remove kotlin-gradle-plugin-api from runtime classpath - [#4275](https://github.com/detekt/detekt/pull/4275)
 - Use appropriate annotations on source properties in Gradle tasks - [#4264](https://github.com/detekt/detekt/pull/4264)
@@ -125,6 +141,9 @@ tasks.detektMain {
 
 ##### Dependency Updates
 
+- Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.5.2 - [#4302](https://github.com/detekt/detekt/pull/4302)
+- Update dependency io.mockk:mockk to v1.12.1 - [#4297](https://github.com/detekt/detekt/pull/4297)
+- Update dependency com.android.tools.build:gradle to v4.2.2 - [#4296](https://github.com/detekt/detekt/pull/4296)
 - Gradle Publishing Plugin 0.17.0 - [#4270](https://github.com/detekt/detekt/pull/4270)
 - Shadow 7.1.0 - [#4269](https://github.com/detekt/detekt/pull/4269)
 - Dokka 1.5.31 - [#4268](https://github.com/detekt/detekt/pull/4268)
@@ -137,6 +156,10 @@ tasks.detektMain {
 
 ##### Housekeeping & Refactorings
 
+- Simplify YamlConfig - [#4316](https://github.com/detekt/detekt/pull/4316)
+- Move tests to the correct module - [#4314](https://github.com/detekt/detekt/pull/4314)
+- Don't hide null issues - [#4313](https://github.com/detekt/detekt/pull/4313)
+- Add functional test for type resolution for JVM - [#4307](https://github.com/detekt/detekt/pull/4307)
 - Minor typo fix and code refactoring - [#4284](https://github.com/detekt/detekt/pull/4284)
 - Improve Tests of UnnecesaryLet - [#4282](https://github.com/detekt/detekt/pull/4282)
 - Fix typo in UnnecessaryLet - [#4281](https://github.com/detekt/detekt/pull/4281)
