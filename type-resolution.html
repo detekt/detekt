@@ -547,17 +547,8 @@ Gradle plugins from configuring Android-specific gradle tasks.</p>
 
 <h2 id="enabling-on-detekt-cli">Enabling on Detekt CLI</h2>
 
-<p>If you’re using <a href="/detekt/cli.html">Detekt via CLI</a>, type resolution will be enabled only if you provide the following flags:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    --classpath, -cp
-      EXPERIMENTAL: Paths where to find user class files and depending jar
-      files. Used for type resolution.
-    --jvm-target
-      EXPERIMENTAL: Target version of the generated JVM bytecode that was 
-      generated during compilation and is now being used for type resolution 
-      (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15 or 16)
-      Default: 1.8
-</code></pre></div></div>
+<p>If you’re using <a href="/detekt/cli.html">Detekt via CLI</a>, type resolution will be enabled only if you provide the <code class="language-plaintext highlighter-rouge">--classpath</code> and
+<code class="language-plaintext highlighter-rouge">--jvm-target</code> flags. See the list of <a href="/detekt/pages/gettingstarted/cli-options.html">CLI options</a> for details.</p>
 
 <h2 id="writing-a-rule-that-uses-type-resolution">Writing a rule that uses type resolution</h2>
 
