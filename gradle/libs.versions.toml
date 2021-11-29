@@ -41,7 +41,7 @@ jcommander = "com.beust:jcommander:1.81"
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.8.0" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.18.1" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.19.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.39.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.18.0" }
