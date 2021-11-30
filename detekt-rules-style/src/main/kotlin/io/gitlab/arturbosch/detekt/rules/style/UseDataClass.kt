@@ -124,7 +124,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             klass.isAnnotation() ||
             klass.isSealed() ||
             klass.isInline() ||
-            klass.isValue()
+            klass.isValue() ||
+            klass.isInner()
 
     private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
         val primaryConstructor = klass.primaryConstructor
