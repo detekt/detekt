@@ -482,7 +482,11 @@ interface <a href="index.html">ConfigAware</a> : <a href="../-config/index.html"
 
 <p>Be aware that there are three config levels by default:</p>
 
-<ul><li>the top level config layer specifies rule sets and detekt engine properties</li><li>the rule set level specifies properties concerning the whole rule set and rules</li><li>the rule level provides additional properties which are used to configure rules</li></ul>
+<ul>
+  <li>the top level config layer specifies rule sets and detekt engine properties</li>
+  <li>the rule set level specifies properties concerning the whole rule set and rules</li>
+  <li>the rule level provides additional properties which are used to configure rules</li>
+</ul>
 
 <p>This interface operates on the rule set level as the rule set config is passed to each rule in the #RuleSetProvider interface. This is due the fact that users create the rule set and all rules upfront and letting them ‘sub config’ the rule set config would be error-prone.</p>
 
