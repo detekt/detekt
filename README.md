@@ -21,7 +21,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
 - Highly configurable rule sets
 - Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specification of quality gates which will break your build 
+- Specification of quality gates which will break your build
 - Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
@@ -159,7 +159,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
 - [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
 - [Matthew Haughton](https://github.com/3flex) - Added type resolution, Dependency updates, Coding + Documentation improvements
-- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
+- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 - [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements
 - [Olivier PEREZ](https://github.com/olivierperez) - Fixed Typo in Readme
@@ -237,10 +237,11 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Lukasz Osowicki](https://github.com/lukaszosowicki) - New rule: OutdatedDocumentation
 - [Luan Nico](https://github.com/luanpotter) - Bug fix for the UselessCallOnNotNull rule
 - [Tasha Ramesh](https://github.com/drinkthestars) - Docs around configuring for Compose
+- [Renato Turic](https://github.com/Aksi0m) - Rule fix: UseDataClass for inner class
 
 ### Mentions
 
-[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
+[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![androidweekly](https://img.shields.io/badge/androidweekly.cn-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
 
 As mentioned in...
