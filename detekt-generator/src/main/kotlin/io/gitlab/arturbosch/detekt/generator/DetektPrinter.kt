@@ -20,8 +20,12 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
                 jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
             }
         }
-        yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
-        propertiesWriter.write(arguments.configPath, "deprecation") { DeprecatedPrinter.print(pages) }
+        yamlWriter.write(arguments.configPath, "default-detekt-config") {
+            ConfigPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
+        }
+        propertiesWriter.write(arguments.configPath, "deprecation") {
+            DeprecatedPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
+        }
     }
 
     private fun jekyllHeader(ruleSet: String): String {
