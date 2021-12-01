@@ -133,19 +133,9 @@ class UnusedPrivateMemberSpec : Spek({
             val code = """
                 external class Bugsnag {
                     companion object {
-                        fun start()
-                        fun notify()
+                        fun start(value: Int)
+                        fun notify(error: String)
                     }
-                }
-                """
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        it("should not report functions in external interfaces") {
-            val code = """
-                external interface BugsnagParams {
-                    val apiKey: String
-                    val appVersion: String
                 }
                 """
             assertThat(subject.lint(code)).isEmpty()
