@@ -6,6 +6,10 @@ import io.github.detekt.utils.getSafeResourceAsStream
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
+import io.gitlab.arturbosch.detekt.core.settings.ExtensionFacade
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -20,15 +24,32 @@ class DefaultConfigProvider : DefaultConfigurationProvider {
     override fun get(): Config = spec.getDefaultConfiguration()
 
     override fun copy(targetLocation: Path) {
-        val configUrl = javaClass.getResource(DEFAULT_CONFIG_RESOURCES_PATH)!!
-        Files.copy(configUrl.openSafeStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(configInputStream(spec), targetLocation, StandardCopyOption.REPLACE_EXISTING)
     }
 }
 
-fun ProcessingSpec.getDefaultConfiguration(): Config {
-    return requireNotNull(javaClass.getSafeResourceAsStream(DEFAULT_CONFIG_RESOURCES_PATH))
-        .reader()
-        .use(YamlConfig::load)
+private fun configInputStream(spec: ProcessingSpec): InputStream {
+    val outputStream = ByteArrayOutputStream()
+
+    requireNotNull(spec.javaClass.getSafeResourceAsStream("/default-detekt-config.yml"))
+        .use { it.copyTo(outputStream) }
+
+    ExtensionFacade(spec.extensionsSpec).pluginLoader
+        .getResourcesAsStream("config/config.yml")
+        .forEach { inputStream ->
+            outputStream.bufferedWriter().append('\n').flush()
+            inputStream.use { it.copyTo(outputStream) }
+        }
+
+    return ByteArrayInputStream(outputStream.toByteArray())
 }
 
-private const val DEFAULT_CONFIG_RESOURCES_PATH = "/default-detekt-config.yml"
+private fun ClassLoader.getResourcesAsStream(name: String): Sequence<InputStream> {
+    return getResources(name)
+        .asSequence()
+        .map { it.openSafeStream() }
+}
+
+fun ProcessingSpec.getDefaultConfiguration(): Config {
+    return YamlConfig.load(configInputStream(this).reader())
+}
