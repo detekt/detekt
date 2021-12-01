@@ -8,6 +8,11 @@ import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 
+/**
+ * Underlying code logic for both [EmptyIfBlock] and [EmptyElseBlock].
+ * Both the extending classes have been left as declarations to maintain
+ * backwards compatibility.
+ */
 abstract class EmptyIfElseBlock(
     config: Config,
     private val expressionExtractor: (KtIfExpression) -> KtExpression?
