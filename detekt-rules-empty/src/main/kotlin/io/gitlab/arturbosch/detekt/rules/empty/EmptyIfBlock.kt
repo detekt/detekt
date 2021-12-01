@@ -24,4 +24,3 @@ class EmptyIfBlock(config: Config) : EmptyRule(config) {
         }
     }
 }
-
