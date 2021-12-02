@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
 
-    private val markdownWriter = MarkdownWriter()
-    private val yamlWriter = YamlWriter()
-    private val propertiesWriter = PropertiesWriter()
+    private val markdownWriter = MarkdownWriter(System.out)
+    private val yamlWriter = YamlWriter(System.out)
+    private val propertiesWriter = PropertiesWriter(System.out)
 
     fun print(pages: List<RuleSetPage>) {
         pages.forEach {

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.tooling.internal.openSafeStream
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import java.net.URI
 import java.net.URL
