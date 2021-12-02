@@ -87,7 +87,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
     override fun visitProperty(property: KtProperty) {
         if (property.isVar) {
             property.name?.let { propName ->
-                val containerName = property.containingClassOrObject?.name ?: "" // A root-level property
+                val containerName = property.containingClassOrObject?.name.orEmpty() // A root-level property if empty.
                 mutableProperties.getOrPut(
                     containerName
                 ) { mutableSetOf() }.add(propName)
