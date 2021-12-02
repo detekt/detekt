@@ -575,6 +575,8 @@ potential-bugs:
   MissingWhenCase:
     active: true
     allowElseExpression: true
+  NullCheckOnMutableProperty:
+    active: false
   NullableToStringCall:
     active: false
   RedundantElseInWhen:
