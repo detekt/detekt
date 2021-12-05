@@ -19,14 +19,16 @@ class AnnotationSuppressorSpec : Spek({
     val env: KotlinCoreEnvironment by memoized()
 
     describe("AnnotationSuppressorFactory") {
+        val file by memoized { compileContentForTest("") }
         it("Factory returns null if ignoreAnnotated is not set") {
-            val suppressor = annotationSuppressorFactory(buildConfigAware(/* empty */), BindingContext.EMPTY)
+            val suppressor = annotationSuppressorFactory(file, buildConfigAware(/* empty */), BindingContext.EMPTY)
 
             assertThat(suppressor).isNull()
         }
 
         it("Factory returns null if ignoreAnnotated is set to empty") {
             val suppressor = annotationSuppressorFactory(
+                file,
                 buildConfigAware("ignoreAnnotated" to emptyList<String>()),
                 BindingContext.EMPTY,
             )
@@ -36,6 +38,7 @@ class AnnotationSuppressorSpec : Spek({
 
         it("Factory returns not null if ignoreAnnotated is set to a not empty list") {
             val suppressor = annotationSuppressorFactory(
+                file,
                 buildConfigAware("ignoreAnnotated" to listOf("Composable")),
                 BindingContext.EMPTY,
             )
@@ -45,8 +48,10 @@ class AnnotationSuppressorSpec : Spek({
     }
 
     describe("AnnotationSuppressor") {
+        val file by memoized { compileContentForTest("") }
         val suppressor by memoized {
             annotationSuppressorFactory(
+                file,
                 buildConfigAware("ignoreAnnotated" to listOf("Composable")),
                 BindingContext.EMPTY,
             )!!
@@ -293,6 +298,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("Just name") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("Composable")),
                     binding,
                 )!!
@@ -304,6 +310,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("Full qualified name name") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
                     binding,
                 )!!
@@ -315,6 +322,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("With glob doesn't match because * doesn't match .") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("*.Composable")),
                     binding,
                 )!!
@@ -326,6 +334,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("With glob2") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("**.Composable")),
                     binding,
                 )!!
@@ -337,6 +346,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("With glob3") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("Compo*")),
                     binding,
                 )!!
@@ -348,6 +358,7 @@ class AnnotationSuppressorSpec : Spek({
 
             it("With glob4") {
                 val suppressor = annotationSuppressorFactory(
+                    root,
                     buildConfigAware("ignoreAnnotated" to listOf("*")),
                     binding,
                 )!!
@@ -369,6 +380,7 @@ class AnnotationSuppressorSpec : Spek({
             )
 
             val suppressor = annotationSuppressorFactory(
+                root,
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
                 env.getContextForPaths(listOf(root, *composableFiles)),
             )!!
@@ -389,6 +401,7 @@ class AnnotationSuppressorSpec : Spek({
             )
 
             val suppressor = annotationSuppressorFactory(
+                root,
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
                 env.getContextForPaths(listOf(root, *composableFiles)),
             )!!
@@ -396,6 +409,29 @@ class AnnotationSuppressorSpec : Spek({
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
             assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+        }
+
+        it("Works when using imports") {
+            val root = compileContentForTest(
+                """
+                package foo.bar
+
+                import dagger.Module
+
+                @Module
+                abstract class FooModule{}
+                """.trimIndent()
+            )
+
+            val suppressor = annotationSuppressorFactory(
+                root,
+                buildConfigAware("ignoreAnnotated" to listOf("dagger.Module")),
+                env.getContextForPaths(listOf(root, *composableFiles)),
+            )!!
+
+            val ktClass = root.findChildByClass(KtClass::class.java)!!
+
+            assertThat(suppressor.shouldSuppress(buildFinding(ktClass))).isTrue()
         }
 
         it("Works when using import alias") {
@@ -411,6 +447,7 @@ class AnnotationSuppressorSpec : Spek({
             )
 
             val suppressor = annotationSuppressorFactory(
+                root,
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
                 env.getContextForPaths(listOf(root, *composableFiles)),
             )!!

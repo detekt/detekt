@@ -120,7 +120,7 @@ internal class Analyzer(
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
-                for (finding in filterSuppressedFindings(rule, bindingContext)) {
+                for (finding in filterSuppressedFindings(file, rule, bindingContext)) {
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
                         "Mapping for '${finding.id}' expected."
                     }
@@ -137,8 +137,8 @@ internal class Analyzer(
     }
 }
 
-private fun filterSuppressedFindings(rule: BaseRule, bindingContext: BindingContext): List<Finding> {
-    val suppressors = getSuppressors(rule, bindingContext)
+private fun filterSuppressedFindings(file: KtFile, rule: BaseRule, bindingContext: BindingContext): List<Finding> {
+    val suppressors = getSuppressors(file, rule, bindingContext)
     return if (suppressors.isNotEmpty()) {
         rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {

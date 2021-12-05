@@ -18,34 +18,38 @@ import org.spekframework.spek2.style.specification.describe
 class SuppressorsSpec : Spek({
 
     describe("test getSuppressors") {
-        val noIgnorableCodeSmell by memoized {
-            val root = compileContentForTest(
+        val noIgnorableFile by memoized {
+            compileContentForTest(
                 """
                 fun foo() = Unit
                 """.trimIndent()
             )
-            CodeSmell(ARule().issue, Entity.from(root), "")
         }
+
+        val noIgnorableCodeSmell by memoized {
+            CodeSmell(ARule().issue, Entity.from(noIgnorableFile), "")
+        }
+
+        val ignorableFile = compileContentForTest(
+            """
+            @file:Composable
+            fun foo() = Unit
+            """.trimIndent()
+        )
         val ignorableCodeSmell by memoized {
-            val root = compileContentForTest(
-                """
-                @file:Composable
-                fun foo() = Unit
-                """.trimIndent()
-            )
-            CodeSmell(ARule().issue, Entity.from(root), "")
+            CodeSmell(ARule().issue, Entity.from(ignorableFile), "")
         }
 
         it("A finding that should be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule, BindingContext.EMPTY)
+            val suppress = getSuppressors(noIgnorableFile, rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
             assertThat(suppress).isFalse()
         }
         it("A finding that should not be suppressed") {
             val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule, BindingContext.EMPTY)
+            val suppress = getSuppressors(ignorableFile, rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
             assertThat(suppress).isTrue()
@@ -54,14 +58,14 @@ class SuppressorsSpec : Spek({
         context("MultiRule") {
             it("A finding that should be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule, BindingContext.EMPTY)
+                val suppress = getSuppressors(noIgnorableFile, rule, BindingContext.EMPTY)
                     .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
                 assertThat(suppress).isFalse()
             }
             it("A finding that should not be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule, BindingContext.EMPTY)
+                val suppress = getSuppressors(ignorableFile, rule, BindingContext.EMPTY)
                     .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
                 assertThat(suppress).isTrue()
