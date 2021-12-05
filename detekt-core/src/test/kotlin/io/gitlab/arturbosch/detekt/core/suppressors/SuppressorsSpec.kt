@@ -90,6 +90,6 @@ private class ARule(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("IssueId", Severity.CodeSmell, "", Debt.TWENTY_MINS)
 }
 
-private class ABaseRule() : BaseRule() {
+private class ABaseRule : BaseRule() {
     override fun visitCondition(root: KtFile) = false
 }
