@@ -30,12 +30,14 @@ class SuppressorsSpec : Spek({
             CodeSmell(ARule().issue, Entity.from(noIgnorableFile), "")
         }
 
-        val ignorableFile = compileContentForTest(
-            """
+        val ignorableFile by memoized {
+            compileContentForTest(
+                """
             @file:Composable
             fun foo() = Unit
             """.trimIndent()
-        )
+            )
+        }
         val ignorableCodeSmell by memoized {
             CodeSmell(ARule().issue, Entity.from(ignorableFile), "")
         }
