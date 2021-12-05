@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -11,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -57,6 +59,10 @@ class SuppressorsSpec : Spek({
             assertThat(suppress).isTrue()
         }
 
+        it("should not produce suppressors for an invalid rule") {
+            assertThat(getSuppressors(ignorableFile, ABaseRule(), BindingContext.EMPTY)).isEmpty()
+        }
+
         context("MultiRule") {
             it("A finding that should be suppressed") {
                 val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
@@ -82,4 +88,8 @@ private class AMultiRule(config: Config) : MultiRule() {
 
 private class ARule(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("IssueId", Severity.CodeSmell, "", Debt.TWENTY_MINS)
+}
+
+private class ABaseRule() : BaseRule() {
+    override fun visitCondition(root: KtFile) = false
 }
