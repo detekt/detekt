@@ -33,9 +33,9 @@ class SuppressorsSpec : Spek({
         val ignorableFile by memoized {
             compileContentForTest(
                 """
-            @file:Composable
-            fun foo() = Unit
-            """.trimIndent()
+                @file:Composable
+                fun foo() = Unit
+                """.trimIndent()
             )
         }
         val ignorableCodeSmell by memoized {
