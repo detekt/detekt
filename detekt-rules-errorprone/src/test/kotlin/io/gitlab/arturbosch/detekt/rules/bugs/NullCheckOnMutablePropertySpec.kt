@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -106,6 +107,62 @@ class NullCheckOnMutablePropertySpec : Spek({
                     fun foo() {
                         if (a != null) {
                             println(2 + a)
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("should not report a null-check when there is no binding context") {
+            val code = """
+                class A(private var a: Int?) {
+                    fun foo() {
+                        if (a != null) {
+                            println(2 + a!!)
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it ("should report a null-check when null is the first element in the if-statement") {
+            val code = """
+                class A(private var a: Int?) {
+                    fun foo() {
+                        if (null != a) {
+                            println(2 + a!!)
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it ("should not report when the if-expression has no explicit null value") {
+            val code = """
+                class A(private var a: Int?) {
+                    fun foo() {
+                        val otherA = null
+                        if (a != otherA) {
+                            println(2 + a!!)
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it ("should not report a null-check on a function") {
+            val code = """
+                class A {
+                    private fun otherFoo(): Int? {
+                        return null
+                    }
+                    fun foo() {
+                        if (otherFoo() != null) {
+                            println(2 + otherFoo()!!)
                         } 
                     }
                 }
