@@ -49,6 +49,21 @@ class AnalyzerSpec : Spek({
                 .isInstanceOf(CompletionException::class.java)
                 .hasCauseInstanceOf(IllegalStateException::class.java)
         }
+
+        it("throw error explicitly when created issue's id does not exist in configuration") {
+            val createdIssueId = "BAD_ID"
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val analyzer = Analyzer(
+                settings,
+                listOf(StyleRuleSetProvider(18, createdIssueId = createdIssueId)),
+                emptyList(),
+            )
+
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .isInstanceOf(IllegalStateException::class.java)
+                .hasMessageContaining("Mapping for '$createdIssueId' expected.")
+        }
     }
 
     describe("analyze successfully when config has correct value type in config") {
@@ -82,19 +97,35 @@ class AnalyzerSpec : Spek({
     }
 })
 
-private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSetProvider {
+private class StyleRuleSetProvider(
+    private val threshold: Int? = null,
+    private val createdIssueId: String? = null,
+) : RuleSetProvider {
     override val ruleSetId: String = "style"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(MaxLineLength(config, threshold)))
+    override fun instance(config: Config) = RuleSet(
+        ruleSetId,
+        listOf(MaxLineLength(config, threshold, createdIssueId))
+    )
 }
 
-private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
+private class MaxLineLength(
+    config: Config,
+    threshold: Int?,
+    createdIssueId: String?
+) : Rule(config) {
     override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+    // Using a separate Issue instance - with a potentially different Issue ID - for
+    // passing into the reporting mechanism for the case where the Analyzer cannot
+    // correlate an Issue's ID with the existing set of rules.
+    private val createdIssue = createdIssueId?.let {
+        Issue(createdIssueId, Severity.Style, "", Debt.FIVE_MINS)
+    } ?: issue
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
+                report(CodeSmell(createdIssue, Entity.atPackageOrFirstDecl(file), createdIssue.description))
             }
         }
     }
