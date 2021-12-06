@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
@@ -69,7 +70,10 @@ class AnnotationSuppressorSpec : Spek({
 
                     class OneClass {
                         fun function(parameter: String) {
-                            val a = 0
+                            var a = 0
+                            if (a != 0) {
+                                a = 0
+                            }
                         }
                     }
 
@@ -99,6 +103,14 @@ class AnnotationSuppressorSpec : Spek({
                 val ktParameter = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("function")!!
                     .findDescendantOfType<KtParameter>()!!
+
+                assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
+            }
+
+            it("If reports if-statement in function in class it returns true") {
+                val ktParameter = root.findChildByClass(KtClass::class.java)!!
+                    .findFunctionByName("function")!!
+                    .findDescendantOfType<KtIfExpression>()!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
             }

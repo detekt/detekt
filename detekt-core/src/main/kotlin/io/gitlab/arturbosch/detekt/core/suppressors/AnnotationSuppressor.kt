@@ -17,14 +17,12 @@ internal class AnnotationSuppressor(
     private val bindingContext: BindingContext
 ) : Suppressor {
 
-    private val resolvedAnnotations = root.importList?.run {
-        imports
-            .asSequence()
-            .filterNot { it.isAllUnder }
-            .mapNotNull { it.importedFqName?.asString() }
-            .map { it.substringAfterLast('.') to it }
-            .toMap()
-    }.orEmpty()
+    private val resolvedAnnotations = root.importDirectives
+        .asSequence()
+        .filterNot { it.isAllUnder }
+        .mapNotNull { it.importedFqName?.asString() }
+        .map { it.substringAfterLast('.') to it }
+        .toMap()
 
     override fun shouldSuppress(finding: Finding): Boolean {
         val element = finding.entity.ktElement
@@ -51,7 +49,11 @@ internal class AnnotationSuppressor(
             ) {
                 return true
             } else if (bindingContext != BindingContext.EMPTY) {
-                if (references.any { it.fqNameOrNull(bindingContext)?.toString() in annotationNames }) {
+                if (
+                    references.any { reference ->
+                        reference.fqNameOrNull(bindingContext)?.let { it.toString() in annotationNames } == true
+                    }
+                ) {
                     return true
                 }
             }
@@ -64,10 +66,7 @@ internal class AnnotationSuppressor(
     }
 
     @Suppress("UnusedPrivateMember")
-    private operator fun Iterable<Regex>.contains(a: String?): Boolean {
-        if (a == null) return false
-        return any { it.matches(a) }
-    }
+    private operator fun Iterable<Regex>.contains(a: String) = any { it.matches(a) }
 }
 
 internal fun annotationSuppressorFactory(
