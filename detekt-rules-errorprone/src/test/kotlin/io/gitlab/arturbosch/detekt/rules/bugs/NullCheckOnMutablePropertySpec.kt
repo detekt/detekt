@@ -127,7 +127,7 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it ("should report a null-check when null is the first element in the if-statement") {
+        it("should report a null-check when null is the first element in the if-statement") {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -140,7 +140,7 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it ("should not report when the if-expression has no explicit null value") {
+        it("should not report when the if-expression has no explicit null value") {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -154,7 +154,7 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it ("should not report a null-check on a function") {
+        it("should not report a null-check on a function") {
             val code = """
                 class A {
                     private fun otherFoo(): Int? {
