@@ -114,6 +114,7 @@ private class MaxLineLength(
     createdIssueId: String?
 ) : Rule(config) {
     override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+
     // Using a separate Issue instance - with a potentially different Issue ID - for
     // passing into the reporting mechanism for the case where the Analyzer cannot
     // correlate an Issue's ID with the existing set of rules.
