@@ -29,7 +29,7 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it ("should report on a mutable property that is not subject to a double-bang") {
+        it("should report on a mutable property that is not subject to a double-bang") {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {

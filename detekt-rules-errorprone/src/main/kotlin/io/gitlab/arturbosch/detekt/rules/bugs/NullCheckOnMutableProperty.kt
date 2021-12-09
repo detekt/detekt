@@ -106,23 +106,24 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
             val condition = expression.condition
             if (condition is KtBinaryExpression && condition.isNonNullCheck()) {
                 // Determine which of the two sides of the condition is the null constant and use the other.
-                val candidateFqName = if (condition.left is KtConstantExpression) {
+                if (condition.left is KtConstantExpression) {
                     condition.right as? KtNameReferenceExpression
                 } else {
                     condition.left as? KtNameReferenceExpression
                 }?.let { referenceExpression ->
-                    referenceExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
-                        it.fqNameOrNull()?.takeIf(mutableProperties::contains)
-                    }
-                }
-
-                if (candidateFqName != null) {
+                    referenceExpression.getResolvedCall(bindingContext)
+                        ?.resultingDescriptor
+                        ?.let {
+                            it.fqNameOrNull()?.takeIf(mutableProperties::contains)
+                        }
+                }?.let { candidateFqName ->
                     // If a candidate mutable property is present, attach the current
                     // if-expression to it and proceed within the if-expression.
-                    candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.add(expression)
+                    val ifExpressionStack = candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }
+                    ifExpressionStack.add(expression)
                     super.visitIfExpression(expression)
                     // Remove the if-expression after having iterated out of its code block.
-                    candidateProperties[candidateFqName]?.pop()
+                    ifExpressionStack.pop()
                     return
                 }
             }
