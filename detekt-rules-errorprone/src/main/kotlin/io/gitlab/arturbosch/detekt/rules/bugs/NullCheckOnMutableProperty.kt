@@ -3,12 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
+import org.jetbrains.kotlin.backend.common.peek
+import org.jetbrains.kotlin.backend.common.pop
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -16,7 +20,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -34,6 +38,16 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     }
  *   }
  * }
+ *
+ * class A(private var a: Int?) {
+ *   inner class B {
+ *     fun foo() {
+ *       if (a != null) {
+ *         println(a)
+ *       }
+ *     }
+ *   }
+ * }
  * </noncompliant>
  *
  * <compliant>
@@ -44,9 +58,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     }
  *   }
  * }
- * </compliant>
  *
- * <compliant>
  * class A(private var a: Int?) {
  *   fun foo() {
  *     val a = a
@@ -60,7 +72,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 @RequiresTypeResolution
 class NullCheckOnMutableProperty(config: Config) : Rule(config) {
-    private val mutableProperties = mutableMapOf<String?, MutableSet<String>>()
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
@@ -71,66 +82,72 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (bindingContext == BindingContext.EMPTY) return
-        super.visitKtFile(file)
-        mutableProperties.clear()
+        NullCheckVisitor().visitKtFile(file)
     }
 
-    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-        val containerName = constructor.getContainingClassOrObject().name
-        constructor.valueParameters.asSequence()
-            .filter { it.isMutable }
-            .mapNotNull { it.name }
-            .forEach { mutableProperties.getOrPut(containerName) { mutableSetOf() }.add(it) }
-        super.visitPrimaryConstructor(constructor)
-    }
+    private inner class NullCheckVisitor : DetektVisitor() {
+        private val mutableProperties = mutableSetOf<FqName>()
+        private val candidateProperties = mutableMapOf<FqName, ArrayDeque<KtIfExpression>>()
 
-    override fun visitProperty(property: KtProperty) {
-        if (property.isVar) {
-            property.name?.let { propName ->
-                val containerName = property.containingClassOrObject?.name.orEmpty() // A root-level property if empty.
-                mutableProperties.getOrPut(
-                    containerName
-                ) { mutableSetOf() }.add(propName)
-            }
+        override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+            constructor.valueParameters.asSequence()
+                .filter { it.isMutable }
+                .mapNotNull { it.fqName }
+                .forEach(mutableProperties::add)
+            super.visitPrimaryConstructor(constructor)
         }
-        super.visitProperty(property)
-    }
 
-    override fun visitIfExpression(expression: KtIfExpression) {
-        val condition = expression.condition
-        if (condition is KtBinaryExpression && condition.isNonNullCheck()) {
-            // Determine which of the two sides of the condition is the null constant and use the other.
-            if (condition.left is KtConstantExpression) {
-                condition.right
+        override fun visitProperty(property: KtProperty) {
+            if (property.isVar) property.fqName?.let(mutableProperties::add)
+            super.visitProperty(property)
+        }
+
+        override fun visitIfExpression(expression: KtIfExpression) {
+            val condition = expression.condition
+            if (condition is KtBinaryExpression && condition.isNonNullCheck()) {
+                // Determine which of the two sides of the condition is the null constant and use the other.
+                val candidateFqName = if (condition.left is KtConstantExpression) {
+                    condition.right as? KtNameReferenceExpression
+                } else {
+                    condition.left as? KtNameReferenceExpression
+                }?.let { referenceExpression ->
+                    referenceExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
+                        it.fqNameOrNull()?.takeIf(mutableProperties::contains)
+                    }
+                }
+                // If a candidate mutable property is present, attach the current
+                // if-expression to it and proceed within the if-expression.
+                if (candidateFqName != null) {
+                    candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.add(expression)
+                }
+                super.visitIfExpression(expression)
+                // Remove the if-expression after having iterated out of its code block.
+                if (candidateFqName != null) candidateProperties[candidateFqName]?.pop()
             } else {
-                condition.left
-            }?.let {
-                // Only proceed with evaluating if the checked expression is for a variable.
-                it as? KtNameReferenceExpression
-            }?.let {
-                evaluateNameReferenceExpression(expression, it)
+                super.visitIfExpression(expression)
             }
         }
-        super.visitIfExpression(expression)
-    }
 
-    private fun evaluateNameReferenceExpression(
-        expression: KtIfExpression,
-        referenceExpression: KtNameReferenceExpression
-    ) {
-        val resolvedCall = referenceExpression.getResolvedCall(bindingContext) ?: return
-        val containingDeclaration = resolvedCall.resultingDescriptor.containingDeclaration
-        if (
-            mutableProperties[containingDeclaration.fqNameOrNull()?.asString()]
-                ?.contains(referenceExpression.text) == true
-        ) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "Null-check is being called on a mutable property."
-                )
-            )
+        override fun visitReferenceExpression(expression: KtReferenceExpression) {
+            val fqName = expression.getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.fqNameOrNull()
+            // Don't check the reference expression if it's being invoked in the if-expression
+            // where it's being null-checked.
+            if (expression.parent !is KtBinaryExpression && fqName != null) {
+                // If there's an if-expression attached to the candidate property, a null-checked
+                // mutable property is being referenced.
+                candidateProperties[fqName]?.peek()?.let { ifExpression ->
+                    report(
+                        CodeSmell(
+                            issue,
+                            Entity.from(ifExpression),
+                            "Null-check is being called on a mutable property."
+                        )
+                    )
+                }
+            }
+            super.visitReferenceExpression(expression)
         }
     }
 }
