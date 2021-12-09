@@ -53,7 +53,7 @@ class AnnotationExcluderSpec : Spek({
         }
 
         it("should exclude when the annotation was found with SplitPattern") {
-            @Suppress("Deprecation")
+            @Suppress("DEPRECATION")
             val excluder = AnnotationExcluder(file, SplitPattern("JvmField"))
             assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isTrue()
         }

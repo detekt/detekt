@@ -22,6 +22,7 @@ class AnnotationExcluder(
             .toMap()
     }.orEmpty()
 
+    @Deprecated("Use AnnotationExclude(KtFile, List<String>) instead")
     constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
 
     /**
