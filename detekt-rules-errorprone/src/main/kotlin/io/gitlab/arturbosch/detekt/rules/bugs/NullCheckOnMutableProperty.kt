@@ -115,17 +115,18 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                         it.fqNameOrNull()?.takeIf(mutableProperties::contains)
                     }
                 }
-                // If a candidate mutable property is present, attach the current
-                // if-expression to it and proceed within the if-expression.
+
                 if (candidateFqName != null) {
+                    // If a candidate mutable property is present, attach the current
+                    // if-expression to it and proceed within the if-expression.
                     candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.add(expression)
+                    super.visitIfExpression(expression)
+                    // Remove the if-expression after having iterated out of its code block.
+                    candidateProperties[candidateFqName]?.pop()
+                    return
                 }
-                super.visitIfExpression(expression)
-                // Remove the if-expression after having iterated out of its code block.
-                if (candidateFqName != null) candidateProperties[candidateFqName]?.pop()
-            } else {
-                super.visitIfExpression(expression)
             }
+            super.visitIfExpression(expression)
         }
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
