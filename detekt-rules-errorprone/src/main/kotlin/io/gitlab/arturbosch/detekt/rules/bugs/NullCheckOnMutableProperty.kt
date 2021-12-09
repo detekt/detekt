@@ -87,7 +87,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
 
     private inner class NullCheckVisitor : DetektVisitor() {
         private val mutableProperties = mutableSetOf<FqName>()
-        private val candidateProperties = mutableMapOf<FqName, ArrayDeque<KtIfExpression>>()
+        private val candidateProperties = mutableMapOf<FqName, MutableList<KtIfExpression>>()
 
         override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
             constructor.valueParameters.asSequence()
