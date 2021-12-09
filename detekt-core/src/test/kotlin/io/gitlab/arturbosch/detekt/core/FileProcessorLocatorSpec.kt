@@ -25,7 +25,7 @@ class FileProcessorLocatorSpec : Spek({
 
             assertThat(processorClasses).isNotEmpty
             processorClasses
-                .filter { clazz -> processors.firstOrNull { clazz == it.javaClass } == null }
+                .filter { clazz -> processors.none { clazz == it.javaClass } }
                 .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
         }
 
