@@ -7,4 +7,5 @@ dependencies {
     implementation(libs.kotlin.compilerEmbeddable)
 
     testImplementation(libs.assertj)
+    testImplementation(projects.detektTest)
 }

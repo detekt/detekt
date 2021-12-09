@@ -20,6 +20,11 @@ public final class io/github/detekt/psi/FilePath$Companion {
 	public final fun fromRelative (Ljava/nio/file/Path;Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
 }
 
+public final class io/github/detekt/psi/FullQualifiedNameGuesser {
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public final fun getFullQualifiedName (Ljava/lang/String;)Ljava/util/Set;
+}
+
 public final class io/github/detekt/psi/KeysKt {
 	public static final fun getBASE_PATH ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
 	public static final fun getLINE_SEPARATOR ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
