@@ -33,8 +33,8 @@ class AnnotationExcluder(
         annotations.firstOrNull(::isExcluded) != null
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
-        val annotationText = annotation.typeReference?.text
+        val annotationText = annotation.typeReference?.text ?: return false
         val value = resolvedAnnotations[annotationText] ?: annotationText
-        return if (value == null) false else excludes.any { value.contains(it, ignoreCase = true) }
+        return excludes.any { value.contains(it, ignoreCase = true) }
     }
 }
