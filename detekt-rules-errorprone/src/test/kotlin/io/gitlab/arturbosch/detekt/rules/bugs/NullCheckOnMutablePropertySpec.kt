@@ -29,6 +29,32 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
+        it("should report a null-check on a mutable property in non-initial clauses in an if-statement") {
+            val code = """
+                class A(private var a: Int?, private val b: Int) {
+                    fun foo() {
+                        if (b == 5 && a != null) {
+                            println(2 + a!!)
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("should report a null-check on a mutable property used in the same if-statement") {
+            val code = """
+                class A(private var a: Int?) {
+                    fun foo() {
+                        if (a != null && a == 2) {
+                            println("a is 2")
+                        } 
+                    }
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
         it("should report on a mutable property that is not subject to a double-bang") {
             val code = """
                 class A(private var a: Int?) {

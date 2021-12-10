@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
+import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import org.jetbrains.kotlin.backend.common.peek
 import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.name.FqName
@@ -103,13 +104,16 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            val condition = expression.condition
-            if (condition is KtBinaryExpression && condition.isNonNullCheck()) {
-                // Determine which of the two sides of the condition is the null constant and use the other.
-                if (condition.left is KtConstantExpression) {
-                    condition.right as? KtNameReferenceExpression
+            // Extract all possible null-checks within the if-expression.
+            val nonNullChecks = (expression.condition as? KtBinaryExpression)
+                ?.collectNonNullChecks()
+                ?: emptyList()
+
+            val modifiedCandidateQueues = nonNullChecks.mapNotNull { nonNullCondition ->
+                if (nonNullCondition.left is KtConstantExpression) {
+                    nonNullCondition.right as? KtNameReferenceExpression
                 } else {
-                    condition.left as? KtNameReferenceExpression
+                    nonNullCondition.left as? KtNameReferenceExpression
                 }?.let { referenceExpression ->
                     referenceExpression.getResolvedCall(bindingContext)
                         ?.resultingDescriptor
@@ -117,39 +121,53 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                             it.fqNameOrNull()?.takeIf(mutableProperties::contains)
                         }
                 }?.let { candidateFqName ->
-                    // If a candidate mutable property is present, attach the current
-                    // if-expression to it and proceed within the if-expression.
-                    val ifExpressionStack = candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }
-                    ifExpressionStack.add(expression)
-                    super.visitIfExpression(expression)
-                    // Remove the if-expression after having iterated out of its code block.
-                    ifExpressionStack.pop()
-                    return
+                    // A candidate mutable property is present, so attach the current
+                    // if-expression to it in the property candidates map.
+                    candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.apply { add(expression) }
                 }
             }
             super.visitIfExpression(expression)
+            // Remove the if-expression after having iterated out of its code block.
+            modifiedCandidateQueues.forEach { it.pop() }
         }
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
-            val fqName = expression.getResolvedCall(bindingContext)
+            expression.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
                 ?.fqNameOrNull()
-            // Don't check the reference expression if it's being invoked in the if-expression
-            // where it's being null-checked.
-            if (expression.parent !is KtBinaryExpression && fqName != null) {
-                // If there's an if-expression attached to the candidate property, a null-checked
-                // mutable property is being referenced.
-                candidateProperties[fqName]?.peek()?.let { ifExpression ->
-                    report(
-                        CodeSmell(
-                            issue,
-                            Entity.from(ifExpression),
-                            "Null-check is being called on a mutable property."
-                        )
-                    )
+                ?.let { fqName ->
+                    val expressionParent = expression.parent
+                    // Don't check the reference expression if it's being invoked in the if-expression
+                    // where it's being null-checked.
+                    if (
+                        expressionParent !is KtBinaryExpression ||
+                        (!expressionParent.isNonNullCheck() && !expressionParent.isNullCheck())
+                    ) {
+                        // If there's an if-expression attached to the candidate property, a null-checked
+                        // mutable property is being referenced.
+                        candidateProperties[fqName]?.peek()?.let { ifExpression ->
+                            report(
+                                CodeSmell(
+                                    issue,
+                                    Entity.from(ifExpression),
+                                    "Null-check is being called on a mutable property."
+                                )
+                            )
+                        }
+                    }
                 }
-            }
             super.visitReferenceExpression(expression)
+        }
+
+        private fun KtBinaryExpression.collectNonNullChecks(): List<KtBinaryExpression> {
+            return if (isNonNullCheck()) {
+                listOf(this)
+            } else {
+                val nonNullChecks = mutableListOf<KtBinaryExpression>()
+                (left as? KtBinaryExpression)?.let { nonNullChecks.addAll(it.collectNonNullChecks()) }
+                (right as? KtBinaryExpression)?.let { nonNullChecks.addAll(it.collectNonNullChecks()) }
+                nonNullChecks
+            }
         }
     }
 }
