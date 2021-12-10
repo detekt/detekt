@@ -107,7 +107,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
             // Extract all possible null-checks within the if-expression.
             val nonNullChecks = (expression.condition as? KtBinaryExpression)
                 ?.collectNonNullChecks()
-                ?: emptyList()
+                .orEmpty()
 
             val modifiedCandidateQueues = nonNullChecks.mapNotNull { nonNullCondition ->
                 if (nonNullCondition.left is KtConstantExpression) {
