@@ -217,6 +217,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) return
+        if (klass.isExternal()) return
 
         super.visitClass(klass)
     }
