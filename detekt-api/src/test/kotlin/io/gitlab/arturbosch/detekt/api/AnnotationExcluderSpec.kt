@@ -52,21 +52,21 @@ class AnnotationExcluderSpec : Spek({
                 Case("Factory", "@Factory") to true,
                 Case("Factory", "@Component.Factory") to true,
                 Case("Factory", "@dagger.Component.Factory") to true,
-                Case("dagger.", "@Component") to true,
-                Case("dagger.", "@dagger.Component") to true,
-                Case("dagger.", "@Factory") to true,
-                Case("dagger.", "@Component.Factory") to false, // false positive
-                Case("dagger.", "@dagger.Component.Factory") to true,
-                Case(".Component.Factory", "@Component") to false,
-                Case(".Component.Factory", "@dagger.Component") to false,
-                Case(".Component.Factory", "@Factory") to true,
-                Case(".Component.Factory", "@Component.Factory") to false, // false negative
-                Case(".Component.Factory", "@dagger.Component.Factory") to true,
-                Case(".Component.", "@Component") to false,
-                Case(".Component.", "@dagger.Component") to false,
-                Case(".Component.", "@Factory") to true,
-                Case(".Component.", "@Component.Factory") to false, // false negative
-                Case(".Component.", "@dagger.Component.Factory") to true,
+                Case("dagger.*", "@Component") to true,
+                Case("dagger.*", "@dagger.Component") to true,
+                Case("dagger.*", "@Factory") to true,
+                Case("dagger.*", "@Component.Factory") to false, // false positive
+                Case("dagger.*", "@dagger.Component.Factory") to true,
+                Case("*.Component.Factory", "@Component") to false,
+                Case("*.Component.Factory", "@dagger.Component") to false,
+                Case("*.Component.Factory", "@Factory") to true,
+                Case("*.Component.Factory", "@Component.Factory") to false, // false positive
+                Case("*.Component.Factory", "@dagger.Component.Factory") to true,
+                Case("*.Component.*", "@Component") to false,
+                Case("*.Component.*", "@dagger.Component") to false,
+                Case("*.Component.*", "@Factory") to true,
+                Case("*.Component.*", "@Component.Factory") to false, // false positive
+                Case("*.Component.*", "@dagger.Component.Factory") to true,
                 Case("foo.Component", "@Component") to false,
                 Case("foo.Component", "@dagger.Component") to false,
                 Case("foo.Component", "@Factory") to false,

@@ -62,9 +62,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     @Configuration(
         "ignore the annotated parameters for the count (e.g. `fun foo(@Value bar: Int)` would not be counted"
     )
-    private val ignoreAnnotatedParameter: List<String> by config(emptyList<String>()) { list ->
-        list.map { it.removePrefix("*").removeSuffix("*") }
-    }
+    private val ignoreAnnotatedParameter: List<String> by config(emptyList())
 
     private lateinit var annotationExcluder: AnnotationExcluder
 

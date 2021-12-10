@@ -57,9 +57,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedFunction: List<String> by config(emptyList<String>()) { functions ->
-        functions.map { it.removePrefix("*").removeSuffix("*") }
-    }
+    private val excludeAnnotatedFunction: List<String> by config(emptyList())
 
     private lateinit var annotationExcluder: AnnotationExcluder
 

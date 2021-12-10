@@ -60,9 +60,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
-        classes.map { it.removePrefix("*").removeSuffix("*") }
-    }
+    private val excludeAnnotatedClasses: List<String> by config(emptyList())
 
     private lateinit var annotationExcluder: AnnotationExcluder
 

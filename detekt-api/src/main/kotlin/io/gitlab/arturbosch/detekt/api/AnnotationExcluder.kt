@@ -10,8 +10,11 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class AnnotationExcluder(
     root: KtFile,
-    private val excludes: List<String>
+    excludes: List<String>,
 ) {
+    private val excludes = excludes.map {
+        it.removePrefix("*").removeSuffix("*")
+    }
 
     private val resolvedAnnotations = root.importList?.run {
         imports
