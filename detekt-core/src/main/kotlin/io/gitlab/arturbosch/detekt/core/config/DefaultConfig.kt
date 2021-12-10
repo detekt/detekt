@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.github.detekt.tooling.internal.getSafeResourceAsStream
+import io.github.detekt.utils.getSafeResourceAsStream
 import io.gitlab.arturbosch.detekt.api.Config
 
 internal object DefaultConfig {

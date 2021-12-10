@@ -8,8 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.hasCommentInside
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
  * Rule to detect empty blocks of code.
@@ -34,6 +37,13 @@ abstract class EmptyRule(
 
     fun KtExpression.addFindingIfBlockExprIsEmptyAndNotCommented() {
         checkBlockExpr(true)
+    }
+
+    protected fun checkThenBodyForLoneSemicolon(expression: KtIfExpression, reportBlock: (KtIfExpression) -> Unit) {
+        val valueOfNextSibling = (expression.nextSibling as? LeafPsiElement)?.elementType as? KtSingleValueToken
+        if (valueOfNextSibling?.value?.trim() == ";") {
+            reportBlock(expression)
+        }
     }
 
     private fun KtExpression.checkBlockExpr(skipIfCommented: Boolean = false) {

@@ -127,6 +127,21 @@ class UnusedPrivateMemberSpec : Spek({
         }
     }
 
+    describe("external classes") {
+
+        it("should not report functions in external classes") {
+            val code = """
+                external class Bugsnag {
+                    companion object {
+                        fun start(value: Int)
+                        fun notify(error: String)
+                    }
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
     describe("protected functions") {
 
         it("should not report parameters in protected functions") {

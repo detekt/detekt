@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Extension
 import java.net.URL
 import java.util.jar.Manifest
@@ -18,7 +19,7 @@ fun whichJava(): String = System.getProperty("java.runtime.version")
  * Returns the bundled detekt version.
  */
 fun whichDetekt(): String? {
-    fun readVersion(resource: URL): String? = resource.openStream()
+    fun readVersion(resource: URL): String? = resource.openSafeStream()
         .use { Manifest(it).mainAttributes.getValue("DetektVersion") }
 
     return Extension::class.java.classLoader.getResources("META-INF/MANIFEST.MF")

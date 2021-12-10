@@ -17,6 +17,7 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     val result = CliRunner().run(args)
+    @Suppress("ForbiddenMethodCall")
     when (val error = result.error) {
         is InvalidConfig, is MaxIssuesReached -> println(error.message)
         is UnexpectedError -> {

@@ -47,8 +47,7 @@ class CompositeConfigSpec : Spek({
                 "is not of required type Boolean"
 
             assertThatThrownBy {
-                val value: Boolean = config.valueOrDefault("active", true)
-                println(value)
+                config.valueOrDefault("active", true)
             }.isInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining(expectedErrorMessage)
         }

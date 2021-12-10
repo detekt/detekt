@@ -1,9 +1,12 @@
 package io.gitlab.arturbosch.detekt.generator.out
 
+import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 
-internal abstract class AbstractWriter {
+internal abstract class AbstractWriter(
+    private val outputPrinter: PrintStream,
+) {
 
     protected abstract val ending: String
 
@@ -15,21 +18,21 @@ internal abstract class AbstractWriter {
             }
         }
         Files.write(filePath, content().toByteArray())
-        println("Wrote: $filePath")
+        outputPrinter.println("Wrote: $filePath")
     }
 }
 
-internal class MarkdownWriter : AbstractWriter() {
+internal class MarkdownWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {
 
     override val ending = "md"
 }
 
-internal class YamlWriter : AbstractWriter() {
+internal class YamlWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {
 
     override val ending = "yml"
 }
 
-internal class PropertiesWriter : AbstractWriter() {
+internal class PropertiesWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {
 
     override val ending = "properties"
 }

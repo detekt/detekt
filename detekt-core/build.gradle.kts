@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.detektReportTxt)
     implementation(projects.detektReportXml)
     implementation(projects.detektReportSarif)
+    implementation(projects.detektUtils)
 
     testRuntimeOnly(projects.detektRules)
     testRuntimeOnly(projects.detektFormatting)
