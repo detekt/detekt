@@ -78,7 +78,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 val namedMembers = body.children.filterIsInstance<KtNamedDeclaration>()
                 val namedClassMembers = NamedClassMembers(klass, namedMembers)
                 namedClassMembers.detectAbstractAndConcreteType()
-            } else if (klass.superTypeListEntries.isEmpty() && klass.hasConstructorParameter()) {
+            } else if (klass.superTypeListEntries.isEmpty()) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }
         }
