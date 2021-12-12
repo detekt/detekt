@@ -113,7 +113,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction, typeReference: KtTypeReference) {
         val typeElementText = typeReference.typeElement?.text
         if (typeElementText == UNIT) {
-            if (function.initializer.isGenericOrNothingType()) return
+            val initializer = function.initializer
+            if (initializer?.isGenericOrNothingType() == true) return
             report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
         }
     }
@@ -128,10 +129,10 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
         "defines a return type of Unit. This is unnecessary and can safely be removed."
 
-    private fun KtExpression?.isGenericOrNothingType(): Boolean {
+    private fun KtExpression.isGenericOrNothingType(): Boolean {
         if (bindingContext == BindingContext.EMPTY) return false
-        val isGenericType = this?.getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
-        val isNothingType = this?.getType(bindingContext)?.isNothing() == true
+        val isGenericType = getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
+        val isNothingType = getType(bindingContext)?.isNothing() == true
         // Either the function initializer returns Nothing or it is a generic function
         // into which Unit is passed, but not both.
         return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)
