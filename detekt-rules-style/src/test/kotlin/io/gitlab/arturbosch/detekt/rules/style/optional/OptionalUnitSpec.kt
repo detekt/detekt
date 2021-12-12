@@ -305,5 +305,19 @@ class OptionalUnitSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("should not report when the function initializer requires a type") {
+            val code = """
+                fun <T> foo(block: (List<T>) -> Unit): T {
+                    val list = listOf<T>()
+                    block(list)
+                    return list.first()
+                }
+
+                fun doFoo(): Unit = foo {}
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })
