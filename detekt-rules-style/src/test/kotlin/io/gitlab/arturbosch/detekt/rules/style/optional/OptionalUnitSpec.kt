@@ -333,5 +333,13 @@ class OptionalUnitSpec : Spek({
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        it("should report when a function has an explicit Unit return type with context") {
+            val code = """
+                fun foo(): Unit { }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 })
