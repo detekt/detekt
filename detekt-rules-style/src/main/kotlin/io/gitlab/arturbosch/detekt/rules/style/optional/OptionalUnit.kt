@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -59,8 +60,9 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.hasDeclaredReturnType()) {
-            checkFunctionWithExplicitReturnType(function)
+        val typeReference = function.typeReference
+        if (typeReference != null) {
+            checkFunctionWithExplicitReturnType(function, typeReference)
         } else if (!function.isOverride()) {
             checkFunctionWithInferredReturnType(function)
         }
@@ -108,9 +110,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
-        val typeReference = function.typeReference
-        val typeElementText = typeReference?.typeElement?.text
+    private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction, typeReference: KtTypeReference) {
+        val typeElementText = typeReference.typeElement?.text
         if (typeElementText == UNIT) {
             if (function.initializer.isGenericOrNothingType()) return
             report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
@@ -131,7 +132,9 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return false
         val isGenericType = this?.getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
         val isNothingType = this?.getType(bindingContext)?.isNothing() == true
-        return isGenericType || isNothingType
+        // Either the function initializer returns Nothing or it is a generic function
+        // into which Unit is passed, but not both.
+        return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)
     }
 
     companion object {
