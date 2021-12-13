@@ -346,6 +346,14 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
+            it("should report when it cannot resolve the initializer call") {
+                val code = """
+                    fun doFoo(): Unit = unknownCall {}
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
             it("should report on function initializers when there is no context") {
                 val code = """
                     fun test(): Unit = throw UnsupportedOperationException()
