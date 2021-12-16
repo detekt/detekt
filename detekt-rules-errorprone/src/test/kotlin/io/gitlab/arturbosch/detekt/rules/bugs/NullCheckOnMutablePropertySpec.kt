@@ -159,7 +159,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                         get() = _a
                     fun foo() {
                         if (a != null) {
-                            println(2 + a)
+                            println(2 + a!!)
                         } 
                     }
                 }
@@ -179,7 +179,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                         }
                     fun foo() {
                         if (a != null) {
-                            println(2 + a)
+                            println(2 + a!!)
                         } 
                     }
                 }
@@ -199,7 +199,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                         }
                     fun foo() {
                         if (a != null) {
-                            println(2 + a)
+                            println(2 + a!!)
                         } 
                     }
                 }
@@ -216,7 +216,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                         get() = genA()
                     fun foo() {
                         if (a != null) {
-                            println(2 + a)
+                            println(2 + a!!)
                         } 
                     }
                     private fun genA(): Int? {
@@ -237,7 +237,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                         get() = genA()
                     fun foo() {
                         if (a != null) {
-                            println(2 + a)
+                            println(2 + a!!)
                         } 
                     }
                     private fun genA(): Int {
