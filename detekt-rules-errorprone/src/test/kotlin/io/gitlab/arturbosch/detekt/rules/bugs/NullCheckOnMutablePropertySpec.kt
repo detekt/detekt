@@ -152,62 +152,7 @@ class NullCheckOnMutablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should report a null-check on a val property with a getter tha points to a nullable var property") {
-            val code = """
-                class A(private var _a: Int?) {
-                    val a: Int?
-                        get() = _a
-                    fun foo() {
-                        if (a != null) {
-                            println(2 + a!!)
-                        } 
-                    }
-                }
-                """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("should report a null-check on a val property with a getter that returns a nullable") {
-            val code = """
-                import kotlin.random.Random
-                
-                class A {
-                    private val a: Int?
-                        get() {
-                            val randInt = Random.nextInt()
-                            return if (randInt % 2 == 0) randInt else null
-                        }
-                    fun foo() {
-                        if (a != null) {
-                            println(2 + a!!)
-                        } 
-                    }
-                }
-                """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("should report a null-check on a val property with a getter that returns a non-nullable") {
-            val code = """
-                import kotlin.random.Random
-                
-                class A {
-                    private val a: Int?
-                        get() {
-                            val randInt = Random.nextInt()
-                            return if (randInt % 2 == 0) randInt else 0
-                        }
-                    fun foo() {
-                        if (a != null) {
-                            println(2 + a!!)
-                        } 
-                    }
-                }
-                """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        it("should report a null-check on a val property with an initialized getter that returns a nullable") {
+        it("should report a null-check on a val property with a getter") {
             val code = """
                 import kotlin.random.Random
                 
@@ -226,27 +171,6 @@ class NullCheckOnMutablePropertySpec : Spek({
                 }
                 """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        it("should report a null-check on a val property with an initialized getter that returns a non-nullable") {
-            val code = """
-                import kotlin.random.Random
-                
-                class A {
-                    private val a: Int?
-                        get() = genA()
-                    fun foo() {
-                        if (a != null) {
-                            println(2 + a!!)
-                        } 
-                    }
-                    private fun genA(): Int {
-                        val randInt = Random.nextInt()
-                        return if (randInt % 2 == 0) randInt else 0
-                    }
-                }
-                """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should report a null-check conducted within an inner class") {

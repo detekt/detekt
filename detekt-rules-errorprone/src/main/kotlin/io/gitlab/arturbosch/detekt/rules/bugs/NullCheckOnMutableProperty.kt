@@ -16,21 +16,15 @@ import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.isNullable
 
 /**
  * Reports null-checks on mutable properties, as these properties' value can be
@@ -106,7 +100,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
 
         override fun visitProperty(property: KtProperty) {
             val fqName = property.fqName
-            if (fqName != null && (property.isVar || property.getter?.producesNullable() == true)) {
+            if (fqName != null && (property.isVar || property.getter != null)) {
                 mutableProperties.add(fqName)
             }
             super.visitProperty(property)
@@ -176,26 +170,6 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                 (left as? KtBinaryExpression)?.let { nonNullChecks.addAll(it.collectNonNullChecks()) }
                 (right as? KtBinaryExpression)?.let { nonNullChecks.addAll(it.collectNonNullChecks()) }
                 nonNullChecks
-            }
-        }
-
-        private fun KtPropertyAccessor.producesNullable(): Boolean {
-            val nullableInitializer = initializer
-                ?.getType(bindingContext)
-                ?.isMarkedNullable == true
-
-            val nullableBody = bodyExpression
-                ?.collectDescendantsOfType<KtReturnExpression>()
-                ?.any { it.returnedExpression.returnsNullable() } == true
-
-            return nullableInitializer || nullableBody
-        }
-
-        private fun KtExpression?.returnsNullable(): Boolean {
-            return if (this is KtIfExpression) {
-                this.then.returnsNullable() || this.`else`.returnsNullable()
-            } else {
-                this?.getType(bindingContext)?.isNullable() == true
             }
         }
     }
