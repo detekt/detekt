@@ -79,7 +79,8 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
             val hasNoBraces = expression.rightParenthesis
                 ?.siblings(forward = true, withItself = false)
                 ?.filterIsInstance<PsiWhiteSpace>()
-                ?.firstOrNull { it.textContains('\n') } != null
+                ?.any { it.textContains('\n') }
+                ?: false
             if (hasNoBraces) {
                 report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
             }
@@ -92,7 +93,7 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
             val hasNoBraces = expression.siblings(forward = true, withItself = false)
                 .takeWhile { it != expression.whileKeyword }
                 .filterIsInstance<PsiWhiteSpace>()
-                .firstOrNull { it.textContains('\n') } != null
+                .any { it.textContains('\n') }
             if (hasNoBraces) {
                 report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
             }

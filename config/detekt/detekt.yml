@@ -227,6 +227,8 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
+  UseAnyOrNoneInsteadOfFind:
+    active: true
   UseCheckOrError:
     active: true
   UseEmptyCounterpart:
