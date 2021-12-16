@@ -106,10 +106,8 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
 
         override fun visitProperty(property: KtProperty) {
             val fqName = property.fqName
-            if (fqName != null) {
-                if (property.isVar || property.getter?.producesNullable() == true) {
-                    mutableProperties.add(fqName)
-                }
+            if (fqName != null && (property.isVar || property.getter?.producesNullable() == true)) {
+                mutableProperties.add(fqName)
             }
             super.visitProperty(property)
         }
