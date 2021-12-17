@@ -68,7 +68,6 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-@ActiveByDefault(since = "1.20.0")
 class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
