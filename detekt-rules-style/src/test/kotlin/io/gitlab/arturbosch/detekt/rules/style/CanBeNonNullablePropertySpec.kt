@@ -28,21 +28,12 @@ class CanBeNonNullablePropertySpec : Spek({
             Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports private vars that are never assigned nullable values") {
-            val code = """
-                private var fileA: Int? = 5
-                private var fileB: Int? = 5
-
-                fun fileFoo() {
-                    fileB = 6
-                }
-
+        context("evaluating private vars") {
+            it("reports when class-level vars are never assigned nullable values") {
+                val code = """
                 class A(bVal: Int) {
                     private var a: Int? = 5
                     private var b: Int?
-                    private var c: Int? by lazy {
-                        5
-                    }
                     
                     init {
                         b = bVal
@@ -57,20 +48,43 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(5)
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            }
 
-        it("does not report private vars that are assigned nullable values") {
-            val code = """
-                import kotlin.random.Random
+            it("reports when vars utilize non-nullable delegate values") {
+                val code = """
+                class A {
+                    private var a: Int? by lazy {
+                        5
+                    }
+                    
+                    fun foo(): Int {
+                        val b = a
+                        a = b + 1
+                        fileA = a + 1
+                        val a = null
+                        return b
+                    }
+                }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
 
+            it("reports when file-level vars are never assigned nullable values") {
+                val code = """
                 private var fileA: Int? = 5
-                private var fileB: Int? = null
-                private var fileC: Int? = 5
+                private var fileB: Int? = 5
 
                 fun fileFoo() {
-                    fileC = null
+                    fileB = 6
                 }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            }
+
+            it("does not report when class-level vars are assigned nullable values") {
+                val code = """
+                import kotlin.random.Random
 
                 class A(fVal: Int?) {
                     private var a: Int? = 0
@@ -79,10 +93,6 @@ class CanBeNonNullablePropertySpec : Spek({
                     private var d: Int? = 0
                     private var e: Int? = null
                     private var f: Int?
-                    private var g: Int? by lazy {
-                        val randVal = Random.nextInt()
-                        if (randVal % 2 == 0) randVal else null
-                    }
                     
                     init {
                         f = fVal
@@ -102,11 +112,46 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("reports vars with private setters that are never assigned nullable values") {
-            val code = """
+            it("does not report vars that utilize nullable delegate values") {
+                val code = """
+                import kotlin.random.Random
+
+                class A {
+                    private var a: Int? by lazy {
+                        val randVal = Random.nextInt()
+                        if (randVal % 2 == 0) randVal else null
+                    }
+                }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when file-level vars are assigned nullable values") {
+                val code = """
+                import kotlin.random.Random
+
+                private var fileA: Int? = 5
+                private var fileB: Int? = null
+                private var fileC: Int? = 5
+
+                fun fileFoo() {
+                    fileC = null
+                }
+
+                class A {
+                    fun foo() {
+                        fileA = null
+                    }
+                }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("reports when vars with private setters are never assigned nullable values") {
+                val code = """
                 class A {
                     var a: Int? = 5
                         private set
@@ -115,11 +160,11 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
 
-        it("does not vars with private setters that are assigned nullable values") {
-            val code = """
+            it("does not report when vars with private setters are assigned nullable values") {
+                val code = """
                 class A {
                     var a: Int? = 5
                         private set
@@ -128,11 +173,11 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("does not report non-private vars with non-private setters") {
-            val code = """
+            it("does not report non-private vars with non-private setters") {
+                val code = """
                 class A {
                     var a: Int? = 5
                     fun foo() {
@@ -140,31 +185,28 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("does not report private vars that are declared in the constructor") {
-            val code = """
+            it("does not report when private vars are declared in the constructor") {
+                val code = """
                 class A(private var a: Int?) {
                     fun foo() {
                         a = 6
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
 
-        it("reports vals that are set to non-nullable values") {
-            val code = """
-                val fileA: Int? = 5
-
+        context("evaluating private vars") {
+            it("reports when class-level vals are set to non-nullable values") {
+                val code = """
                 class A(cVal: Int) {
                     val a: Int? = 5
                     val b: Int?
                     val c: Int?
-                    val d: Int? by lazy {
-                        5
-                    }
                     
                     init {
                         b = 5
@@ -172,23 +214,35 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(5)
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+            }
 
-        it("does not report vals that are assigned a nullable value") {
-            val code = """
+            it("reports when vals utilize non-nullable delegate values") {
+                val code = """
+                class A {
+                    val a: Int? by lazy {
+                        5
+                    }
+                }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
+
+            it("reports when file-level vals are set to non-nullable values") {
+                val code = """
+                val fileA: Int? = 5
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
+
+            it("does not report when class-level vals are assigned a nullable value") {
+                val code = """
                 import kotlin.random.Random
-
-                val fileA: Int? = null
 
                 class A(cVal: Int?) {
                     val a: Int? = null
                     val b: Int?
                     val c: Int?
-                    val d: Int? by lazy {
-                        val randVal = Random.nextInt()
-                        if (randVal % 2 == 0) randVal else null
-                    }
                     
                     init {
                         b = null
@@ -196,27 +250,48 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("does not report vals that are declared non-nullable") {
-            val code = """
+            it("reports when vals utilize non-nullable delegate values") {
+                val code = """
+                import kotlin.random.Random
+
+                class A {
+                    val d: Int? by lazy {
+                        val randVal = Random.nextInt()
+                        if (randVal % 2 == 0) randVal else null
+                    }
+                }
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when file-level vals are assigned a nullable value") {
+                val code = """
+                val fileA: Int? = null
+                """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when vals are declared non-nullable") {
+                val code = """
                 class A {
                     val a: Int = 5
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("does not report vals that are declared in the constructor") {
-            val code = """
+            it("does not report when vals are declared in the constructor") {
+                val code = """
                 class A(private val a: Int?)
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
 
-        it("reports vals with getters that never return nullable values") {
-            val code = """
+            it("reports when vals with getters never return nullable values") {
+                val code = """
                 class A {
                     val a: Int?
                         get() = 5
@@ -232,11 +307,11 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
-        }
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+            }
 
-        it("does not report vals with getters that return potentially-nullable values") {
-            val code = """
+            it("does not report when vals with getters return potentially-nullable values") {
+                val code = """
                 import kotlin.random.Random
                 
                 class A {
@@ -255,7 +330,8 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
             """.trimIndent()
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
 
         it("does not report open properties") {
@@ -265,6 +341,20 @@ class CanBeNonNullablePropertySpec : Spek({
                     open var b: Int? = 5
                 }
             """.trimIndent()
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report properties whose initial assignment derives from unsafe non-Java code") {
+            val code = """
+                class A(msg: String?) {
+                    private val e = Exception(msg)
+                    // e.localizedMessage is marked as String! by Kotlin, meaning Kotlin
+                    // cannot guarantee that it will be non-null, even though it is treated
+                    // as non-null in Kotlin code.
+                    private var a: String?
+                        get() = e.localizedMessage
+                }
+                """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

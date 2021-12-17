@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -65,6 +66,7 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  */
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.20.0")
 class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
@@ -77,6 +79,7 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
     override fun visitKtFile(file: KtFile) {
         if (bindingContext == BindingContext.EMPTY) return
         NonNullableCheckVisitor().visitKtFile(file)
+        super.visitKtFile(file)
     }
 
     private inner class NonNullableCheckVisitor : DetektVisitor() {
@@ -97,7 +100,7 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(property),
-                        "A nullable property can be made non-nullable."
+                        "The nullable property '${property.name}' can be made non-nullable."
                     )
                 )
             }
@@ -161,7 +164,7 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
                     this.then.isNullableType() || this.`else`.isNullableType()
                 }
                 is KtPropertyAccessor -> {
-                    (initializer?.getType(bindingContext)?.isMarkedNullable == true) ||
+                    (initializer?.getType(bindingContext)?.isNullable() == true) ||
                         (
                             bodyExpression
                                 ?.collectDescendantsOfType<KtReturnExpression>()
