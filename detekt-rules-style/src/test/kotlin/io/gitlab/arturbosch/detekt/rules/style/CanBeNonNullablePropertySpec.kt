@@ -357,5 +357,15 @@ class CanBeNonNullablePropertySpec : Spek({
                 """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        it("does not report interface properties") {
+            val code = """
+                interface A {
+                    val a: Int?
+                    var b: Int?
+                }
+                """
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
     }
 })

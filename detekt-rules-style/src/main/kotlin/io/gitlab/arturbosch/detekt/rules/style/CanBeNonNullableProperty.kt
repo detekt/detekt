@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -103,6 +104,12 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
                         "The nullable property '${property.name}' can be made non-nullable."
                     )
                 )
+            }
+        }
+
+        override fun visitClass(klass: KtClass) {
+            if (!klass.isInterface()) {
+                super.visitClass(klass)
             }
         }
 
