@@ -40,6 +40,9 @@ class CanBeNonNullablePropertySpec : Spek({
                 class A(bVal: Int) {
                     private var a: Int? = 5
                     private var b: Int?
+                    private var c: Int? by lazy {
+                        5
+                    }
                     
                     init {
                         b = bVal
@@ -54,11 +57,13 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(5)
         }
 
         it("does not report private vars that are assigned nullable values") {
             val code = """
+                import kotlin.random.Random
+
                 private var fileA: Int? = 5
                 private var fileB: Int? = null
                 private var fileC: Int? = 5
@@ -74,6 +79,10 @@ class CanBeNonNullablePropertySpec : Spek({
                     private var d: Int? = 0
                     private var e: Int? = null
                     private var f: Int?
+                    private var g: Int? by lazy {
+                        val randVal = Random.nextInt()
+                        if (randVal % 2 == 0) randVal else null
+                    }
                     
                     init {
                         f = fVal
@@ -153,6 +162,9 @@ class CanBeNonNullablePropertySpec : Spek({
                     val a: Int? = 5
                     val b: Int?
                     val c: Int?
+                    val d: Int? by lazy {
+                        5
+                    }
                     
                     init {
                         b = 5
@@ -160,17 +172,23 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(5)
         }
 
         it("does not report vals that are assigned a nullable value") {
             val code = """
+                import kotlin.random.Random
+
                 val fileA: Int? = null
 
                 class A(cVal: Int?) {
                     val a: Int? = null
                     val b: Int?
                     val c: Int?
+                    val d: Int? by lazy {
+                        val randVal = Random.nextInt()
+                        if (randVal % 2 == 0) randVal else null
+                    }
                     
                     init {
                         b = null
@@ -235,6 +253,16 @@ class CanBeNonNullablePropertySpec : Spek({
                         val randInt = Random.nextInt()
                         return if (randInt % 2 == 0) randInt else null
                     }
+                }
+            """.trimIndent()
+            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report open properties") {
+            val code = """
+                abstract class A {
+                    open val a: Int? = 5
+                    open var b: Int? = 5
                 }
             """.trimIndent()
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

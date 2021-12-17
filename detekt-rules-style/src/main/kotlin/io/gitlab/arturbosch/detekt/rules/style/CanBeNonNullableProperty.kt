@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.rules.isOpen
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -18,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
+import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -129,9 +132,24 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
         }
 
         private fun KtProperty.isCandidate(): Boolean {
-            val isSetToNonNullable = initializer?.isNullableType() != true && getter?.isNullableType() != true
+            if (isOpen()) return false
+            val isSetToNonNullable = initializer?.isNullableType() != true
+                && getter?.isNullableType() != true
+                && delegate?.returnsNullable() != true
             val cannotSetViaNonPrivateMeans = !isVar || (isPrivate() || (setter?.isPrivate() == true))
             return isSetToNonNullable && cannotSetViaNonPrivateMeans
+        }
+
+        private fun KtPropertyDelegate?.returnsNullable(): Boolean {
+            val property = this?.parent as? KtProperty ?: return false
+            val propertyDescriptor =
+                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
+            return listOfNotNull(propertyDescriptor?.getter, propertyDescriptor?.setter).any {
+                bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]
+                    ?.resultingDescriptor
+                    ?.returnType
+                    ?.isNullable() == true
+            }
         }
 
         private fun KtExpression?.isNullableType(): Boolean {
