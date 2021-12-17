@@ -312,24 +312,24 @@ class CanBeNonNullablePropertySpec : Spek({
 
             it("does not report when vals with getters return potentially-nullable values") {
                 val code = """
-                import kotlin.random.Random
-                
-                class A {
-                    val a: Int?
-                        get() = Random.nextInt()?.let { if (it % 2 == 0) it else null }
-                    val b: Int?
-                        get() {
-                            return Random.nextInt()?.let { if (it % 2 == 0) it else null }
-                        }
-                    val c: Int?
-                        get() = foo()
+                    import kotlin.random.Random
                     
-                    private fun foo(): Int? {
-                        val randInt = Random.nextInt()
-                        return if (randInt % 2 == 0) randInt else null
+                    class A {
+                        val a: Int?
+                            get() = Random.nextInt()?.let { if (it % 2 == 0) it else null }
+                        val b: Int?
+                            get() {
+                                return Random.nextInt()?.let { if (it % 2 == 0) it else null }
+                            }
+                        val c: Int?
+                            get() = foo()
+                        
+                        private fun foo(): Int? {
+                            val randInt = Random.nextInt()
+                            return if (randInt % 2 == 0) randInt else null
+                        }
                     }
-                }
-            """.trimIndent()
+                    """
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -340,7 +340,7 @@ class CanBeNonNullablePropertySpec : Spek({
                     open val a: Int? = 5
                     open var b: Int? = 5
                 }
-            """.trimIndent()
+                """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 

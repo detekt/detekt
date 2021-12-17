@@ -136,9 +136,9 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
 
         private fun KtProperty.isCandidate(): Boolean {
             if (isOpen()) return false
-            val isSetToNonNullable = initializer?.isNullableType() != true
-                && getter?.isNullableType() != true
-                && delegate?.returnsNullable() != true
+            val isSetToNonNullable = initializer?.isNullableType() != true &&
+                getter?.isNullableType() != true &&
+                delegate?.returnsNullable() != true
             val cannotSetViaNonPrivateMeans = !isVar || (isPrivate() || (setter?.isPrivate() == true))
             return isSetToNonNullable && cannotSetViaNonPrivateMeans
         }
