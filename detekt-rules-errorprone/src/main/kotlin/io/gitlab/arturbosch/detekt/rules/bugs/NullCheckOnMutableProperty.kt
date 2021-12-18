@@ -39,16 +39,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     }
  *   }
  * }
- *
- * class A(private var a: Int?) {
- *   inner class B {
- *     fun foo() {
- *       if (a != null) {
- *         println(a)
- *       }
- *     }
- *   }
- * }
  * </noncompliant>
  *
  * <compliant>
@@ -59,18 +49,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *     }
  *   }
  * }
- *
- * class A(private var a: Int?) {
- *   fun foo() {
- *     val a = a
- *     if (a != null) {
- *       println(2 + a)
- *     }
- *   }
- * }
  * </compliant>
  */
-
 @RequiresTypeResolution
 class NullCheckOnMutableProperty(config: Config) : Rule(config) {
     override val issue = Issue(
@@ -83,6 +63,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (bindingContext == BindingContext.EMPTY) return
+        super.visitKtFile(file)
         NullCheckVisitor().visitKtFile(file)
     }
 
@@ -91,19 +72,19 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
         private val candidateProperties = mutableMapOf<FqName, MutableList<KtIfExpression>>()
 
         override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+            super.visitPrimaryConstructor(constructor)
             constructor.valueParameters.asSequence()
                 .filter { it.isMutable }
                 .mapNotNull { it.fqName }
                 .forEach(mutableProperties::add)
-            super.visitPrimaryConstructor(constructor)
         }
 
         override fun visitProperty(property: KtProperty) {
+            super.visitProperty(property)
             val fqName = property.fqName
             if (fqName != null && (property.isVar || property.getter != null)) {
                 mutableProperties.add(fqName)
             }
-            super.visitProperty(property)
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
@@ -129,12 +110,15 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                     candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.apply { add(expression) }
                 }
             }
+            // Visit descendent expressions to see whether candidate properties
+            // identified in this if-expression are being referenced.
             super.visitIfExpression(expression)
             // Remove the if-expression after having iterated out of its code block.
             modifiedCandidateQueues.forEach { it.pop() }
         }
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
+            super.visitReferenceExpression(expression)
             expression.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
                 ?.fqNameOrNull()
@@ -153,13 +137,12 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                                 CodeSmell(
                                     issue,
                                     Entity.from(ifExpression),
-                                    "Null-check is being called on a mutable property."
+                                    "Null-check is being called on mutable property '$fqName'."
                                 )
                             )
                         }
                     }
                 }
-            super.visitReferenceExpression(expression)
         }
 
         private fun KtBinaryExpression.collectNonNullChecks(): List<KtBinaryExpression> {
