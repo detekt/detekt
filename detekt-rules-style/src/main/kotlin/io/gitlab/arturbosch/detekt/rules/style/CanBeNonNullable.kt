@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.types.isNullable
 
 /**
- * This rule inspects properties marked as nullable and reports which could be
+ * This rule inspects variables marked as nullable and reports which could be
  * declared as non-nullable instead.
  *
  * <noncompliant>
@@ -67,11 +67,11 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
+class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Property can be changed to non-nullable, as it is never set to null.",
+        "Variable can be changed to non-nullable, as it is never set to null.",
         Debt.TEN_MINS
     )
 
@@ -99,7 +99,7 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(property),
-                        "The nullable property '${property.name}' can be made non-nullable."
+                        "The nullable variable '${property.name}' can be made non-nullable."
                     )
                 )
             }
@@ -152,12 +152,12 @@ class CanBeNonNullableProperty(config: Config = Config.empty) : Rule(config) {
             val property = this?.parent as? KtProperty ?: return false
             val propertyDescriptor =
                 bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
-            return listOfNotNull(propertyDescriptor?.getter, propertyDescriptor?.setter).any {
+            return propertyDescriptor?.getter?.let {
                 bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]
                     ?.resultingDescriptor
                     ?.returnType
                     ?.isNullable() == true
-            }
+            } ?: false
         }
 
         private fun KtExpression?.isNullableType(): Boolean {

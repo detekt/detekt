@@ -603,7 +603,7 @@ potential-bugs:
 
 style:
   active: true
-  CanBeNonNullableProperty:
+  CanBeNonNullable:
     active: false
   ClassOrdering:
     active: false

@@ -9,13 +9,13 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class CanBeNonNullablePropertySpec : Spek({
+class CanBeNonNullableSpec : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { CanBeNonNullableProperty(Config.empty) }
+    val subject by memoized { CanBeNonNullable(Config.empty) }
 
-    describe("CanBeNonNullableProperty Rule") {
+    describe("CanBeNonNullable Rule") {
         it("does not report when there is no context") {
             val code = """
                 class A {
@@ -40,9 +40,8 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                     
                     fun foo(): Int {
-                        val b = a
+                        val b = a!!
                         a = b + 1
-                        fileA = a + 1
                         val a = null
                         return b
                     }
@@ -53,20 +52,31 @@ class CanBeNonNullablePropertySpec : Spek({
 
             it("reports when vars utilize non-nullable delegate values") {
                 val code = """
-                class A {
-                    private var a: Int? by lazy {
-                        5
+                    import kotlin.reflect.KProperty
+                    
+                    class A {
+                        private var a: Int? by PropDelegate()
+                    
+                        fun foo(): Int {
+                            val b = a!!
+                            a = b + 1
+                            val a = null
+                            return b
+                        }
                     }
                     
-                    fun foo(): Int {
-                        val b = a
-                        a = b + 1
-                        fileA = a + 1
-                        val a = null
-                        return b
+                    class PropDelegate(private var propVal: Int = 0) {
+                        operator fun getValue(thisRef: A, property: KProperty<*>): Int {
+                            return propVal
+                        }
+                    
+                        operator fun setValue(thisRef: A, property: KProperty<*>, value: Any?) {
+                            if (value is Int) {
+                                propVal = value
+                            }
+                        }
                     }
-                }
-                """
+                    """
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -103,7 +113,6 @@ class CanBeNonNullablePropertySpec : Spek({
                         b = if (fizz % 2 == 0) fizz else null
                         c = buzz(fizz)
                         d = a
-                        fileA = null
                         return fizz
                     }
 
@@ -117,15 +126,10 @@ class CanBeNonNullablePropertySpec : Spek({
 
             it("does not report vars that utilize nullable delegate values") {
                 val code = """
-                import kotlin.random.Random
-
-                class A {
-                    private var a: Int? by lazy {
-                        val randVal = Random.nextInt()
-                        if (randVal % 2 == 0) randVal else null
+                    class A(private var aDelegate: Int?) {
+                        private var a: Int? by this::aDelegate
                     }
-                }
-                """
+                    """
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -176,7 +180,7 @@ class CanBeNonNullablePropertySpec : Spek({
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report non-private vars with non-private setters") {
+            it("does not report when vars use public setters") {
                 val code = """
                 class A {
                     var a: Int? = 5
@@ -185,6 +189,19 @@ class CanBeNonNullablePropertySpec : Spek({
                     }
                 }
                 """
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when vars use non-private setters") {
+                val code = """
+                    class A {
+                        var a: Int? = 5
+                            internal set
+                        fun foo() {
+                            a = 6
+                        }
+                    }
+                    """
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -253,7 +270,7 @@ class CanBeNonNullablePropertySpec : Spek({
                 Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("reports when vals utilize non-nullable delegate values") {
+            it("does not report when vals utilize nullable delegate values") {
                 val code = """
                 import kotlin.random.Random
 
@@ -351,8 +368,7 @@ class CanBeNonNullablePropertySpec : Spek({
                     // e.localizedMessage is marked as String! by Kotlin, meaning Kotlin
                     // cannot guarantee that it will be non-null, even though it is treated
                     // as non-null in Kotlin code.
-                    private var a: String?
-                        get() = e.localizedMessage
+                    private var a: String? = e.localizedMessage
                 }
                 """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

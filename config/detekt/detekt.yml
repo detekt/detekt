@@ -143,8 +143,8 @@ potential-bugs:
     active: true
 
 style:
-  CanBeNonNullableProperty:
-    active: false
+  CanBeNonNullable:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:
