@@ -110,7 +110,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                     candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.apply { add(expression) }
                 }
             }
-            // Visit descendent expressions to see whether candidate properties
+            // Visit descendant expressions to see whether candidate properties
             // identified in this if-expression are being referenced.
             super.visitIfExpression(expression)
             // Remove the if-expression after having iterated out of its code block.
