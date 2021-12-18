@@ -171,6 +171,7 @@ style:
       - 'kotlin.io.println'
       - 'java.net.URL.openStream'
       - 'java.lang.Class.getResourceAsStream'
+      - 'java.lang.ClassLoader.getResourceAsStream'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:

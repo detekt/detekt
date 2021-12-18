@@ -45,6 +45,7 @@ configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
+    implementation(projects.detektUtils)
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
