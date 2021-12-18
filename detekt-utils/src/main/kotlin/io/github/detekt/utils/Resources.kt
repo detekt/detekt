@@ -19,3 +19,7 @@ fun URL.openSafeStream(): InputStream {
 fun <T> Class<T>.getSafeResourceAsStream(name: String): InputStream? {
     return getResource(name)?.openSafeStream()
 }
+
+fun ClassLoader.getSafeResourceAsStream(name: String): InputStream? {
+    return getResource(name)?.openSafeStream()
+}

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
@@ -120,6 +121,6 @@ const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
-    load(classLoader.getResourceAsStream("versions.properties")!!)
+    load(classLoader.getResource("versions.properties")!!.openSafeStream())
     getProperty("detektVersion")
 }

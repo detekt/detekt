@@ -169,8 +169,9 @@ style:
     methods:
       - 'kotlin.io.print'
       - 'kotlin.io.println'
-      - 'java.net.URL.openStream()'
-      - 'java.lang.Class.getResourceAsStream()'
+      - 'java.net.URL.openStream'
+      - 'java.lang.Class.getResourceAsStream'
+      - 'java.lang.ClassLoader.getResourceAsStream'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
