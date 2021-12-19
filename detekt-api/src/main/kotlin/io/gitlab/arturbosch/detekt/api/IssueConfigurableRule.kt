@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import java.util.*
+import java.util.Locale
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
