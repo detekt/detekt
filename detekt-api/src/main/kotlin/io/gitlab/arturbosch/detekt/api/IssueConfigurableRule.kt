@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import java.util.Locale
 import org.jetbrains.kotlin.psi.KtFile
+import java.util.Locale
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -43,9 +43,6 @@ abstract class IssueConfigurableRule(
      */
     val issue: Issue by lazy { Issue(ruleId, severity, description, debt) }
 
-    /**
-     * The amount of debt time that is to be assigned to infractions of the rule.
-     */
     private val debt: Debt
         get() = valueOrNull<Int>("debt")
             ?.let { Debt(mins = it) }
