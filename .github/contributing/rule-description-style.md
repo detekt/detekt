@@ -20,7 +20,7 @@ that Detekt identified in the code rather than what the rule itself did to come 
 
 ## b) Components to incorporate
 
-There are three categories of information that might be incoporated into a rule description:
+There are three categories of information that might be incorporated into a rule description:
 
 1. **Violation**: What exactly is it that Detekt identified in the codebase
    and, under consideration of the given Detekt configuration, recognizes as a violation of the considered rule?
