@@ -632,7 +632,11 @@ a better logging solution should be used.</p>
 <h3 id="rethrowcaughtexception">RethrowCaughtException</h3>
 
 <p>This rule reports all exceptions that are caught and then later re-thrown without modification.
-It ignores caught exceptions that are rethrown if there is work done before that.</p>
+It ignores cases:</p>
+<ol>
+  <li>When caught exceptions that are rethrown if there is work done before that.</li>
+  <li>When there are more than one catch in try block and at least one of them has some work.</li>
+</ol>
 
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 
@@ -668,6 +672,14 @@ It ignores caught exceptions that are rethrown if there is work done before that
     <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">IOException</span><span class="p">)</span> <span class="p">{</span>
         <span class="nf">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">message</span><span class="p">)</span>
         <span class="k">throw</span> <span class="n">e</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">IOException</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="n">e</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">Exception</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">message</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -980,7 +992,7 @@ exceptions to the case that has currently occurred.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Dec 18, 2021 <br />
+ Site last generated: Dec 21, 2021 <br />
                 </div>
             </div>
 </footer>
