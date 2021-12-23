@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -88,15 +87,6 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
             candidateClasses.remove(klass)
         }
         classChain.pop()
-    }
-
-    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-        super.visitPrimaryConstructor(constructor)
-        checkForOuterUsage { parentClasses ->
-            constructor.valueParameters.any {
-                it.defaultValue.belongsToParentClass(parentClasses)
-            }
-        }
     }
 
     override fun visitProperty(property: KtProperty) {
