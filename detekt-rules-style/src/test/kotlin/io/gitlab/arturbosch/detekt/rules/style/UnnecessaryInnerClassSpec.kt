@@ -301,5 +301,29 @@ class UnnecessaryInnerClassSpec : Spek({
 
             Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        it("does not report anonymous inner classes") {
+            val code = """
+                interface FooInterface {
+                    fun doFoo()
+                }
+
+                class Foo {
+                    fun runFoo(fi: FooInterface) {
+                        fi.doFoo()
+                    }
+                    
+                    fun run() {
+                        runFoo(object : FooInterface {
+                            override fun doFoo() {
+                                println("FOO")
+                            }
+                        })
+                    }
+                }
+            """.trimIndent()
+
+            Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 })

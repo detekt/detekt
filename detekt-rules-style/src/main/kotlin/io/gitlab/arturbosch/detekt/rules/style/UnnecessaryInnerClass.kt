@@ -48,6 +48,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
  * }
  * </noncompliant>
  */
+@Suppress("TooManyFunctions")
 @RequiresTypeResolution
 class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
 
@@ -69,16 +70,13 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
     override fun visitClass(klass: KtClass) {
         classChain.add(klass)
         if (klass.isInner()) {
-            // Replace with buildSet() when Kotlin is upgraded to 1.6
-            candidateClasses[klass] = HashSet<ClassId>().apply {
-                var containingClass = klass.containingClass()
-                while (containingClass != null) {
-                    containingClass.getClassId()?.let { add(it) }
-                    containingClass = containingClass.containingClass()
-                }
-            }
+            candidateClasses[klass] = buildParentClassChain(klass)
         }
+
+        // Visit the class to determine whether it contains any references
+        // to outer class members.
         super.visitClass(klass)
+
         if (candidateClasses.contains(klass)) {
             report(
                 CodeSmell(
@@ -152,6 +150,15 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         super.visitDotQualifiedExpression(expression)
         checkForOuterUsage { parentClasses ->
             expression.receiverExpression.belongsToParentClass(parentClasses)
+        }
+    }
+
+    // Replace this "contructor().apply{}" pattern with buildSet() when Kotlin is upgraded to 1.6
+    private fun buildParentClassChain(klass: KtClass) = HashSet<ClassId>().apply {
+        var containingClass = klass.containingClass()
+        while (containingClass != null) {
+            containingClass.getClassId()?.let { add(it) }
+            containingClass = containingClass.containingClass()
         }
     }
 
