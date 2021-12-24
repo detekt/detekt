@@ -122,7 +122,7 @@ The following list contains some positive and negative examples:
 A code smell message should be dynamically created to describe a
 *specific violation*. It should be regarded as an extension of the more generic
 violation part of the issue description. More specifically, it should explicitly
-reference identifiers, file names, or similar from the codebase. If it makes
+reference identifiers or similar from the codebase. If it makes
 sense in the specific context, it might be worthwhile to add a more detailed
 version of the recommendation as well. If this is the case, add this extension
 after the more specific description of the violation.
