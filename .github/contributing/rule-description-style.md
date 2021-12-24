@@ -137,7 +137,14 @@ messages:
 - :heavy_check_mark: (*with specific recommendation*): ``Non-boolean property `hasXyz` suggests a boolean type. Remove the `has` prefix.``
 - :heavy_check_mark: (*with usage-aware recommendation*): ``Magic number `4` passed to `abc`. Pass it as a named argument.``
 
+*Note*: The recommendation given in the last example is usage-aware since
+it is limited to cases in which a Kotlin function is called. Named
+arguments [cannot be used when calling Java functions][5]. Since this
+specific recommendation cannot be given for all encountered magic numbers,
+it is not possible to incorporate it into the generic issue description.
+
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
 [2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
+[5]: https://kotlinlang.org/docs/functions.html#named-arguments
