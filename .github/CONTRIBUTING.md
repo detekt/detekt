@@ -12,8 +12,8 @@
 
 ### When implementing new rules ...
 
-- ... do not forget to add the new rule to a `RuleSetProvider` (e.g. StyleGuideProvider)
-- ... do not forget to write a description for the issue of the new rule.
+- ... add the new rule to a `RuleSetProvider` (e.g. StyleGuideProvider).
+- ... compose an issue description and code smell messages according to [this style guide](contributing/rule-description-style.md).
 - ... add the [correct KDoc](#contents-and-structure-of-a-rules-kdoc) and [annotations](#rule-annotations) to your `Rule` class. This is used to generate documentation pages and the `default-detekt-config.yml` automatically.
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule. Run detekt on itself and other
   kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation. Make use of
@@ -31,8 +31,11 @@ After some time and testing there is a chance this rule will become active on de
 
 ```kotlin
 /**
-  * This is a nice description for the rule explaining what it checks, why it
-  * exists and how violations can be solved.
+  * Summary of the violation that this rule is concerned with,
+  * potentially extended by a brief description on why it is
+  * bad practice and what is usually done to eliminate it.
+  *
+  * Add more details if applicable...
   *
   * <noncompliant>
   * // add the non-compliant code example here
@@ -47,8 +50,9 @@ class SomeRule(config: Config = Config.empty) : Rule(config) {
 }
 ```
 
-The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
-references that explain the rationale for the rule if possible.
+The description should be as detailed as possible as it will act as the documentation of the rule.
+Adhere to the [guidelines on authoring documentation strings](contributing/rule-description-style.md#guidelines-for-documentation-strings).
+Add links to references that explain the rationale for the rule if possible.
 
 The `<noncompliant>` and `<compliant>` code examples should be added right after the description of the rule.
 
