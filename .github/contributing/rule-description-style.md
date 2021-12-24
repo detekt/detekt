@@ -84,14 +84,14 @@ smell messages:
    - :x:: `Non-boolean property with prefix suggesting boolean type.\nThis might mislead clients of the API.`
 4. Surround inline code (or code symbols) with `` ` `` characters (as in
    [Markdown][4]):
-   - :x:: `map.get() used with non-null assertion operator (!!).`
    - :heavy_check_mark:: `` `map.get()` used with non-null assertion operator `!!`.``
+   - :x:: `map.get() used with non-null assertion operator (!!).`
 
 *Note*: `non-null` is a borderline case. While `null` itself can be seen as
 code, the prefix turns it into a conventional word.
 
 The above-mentioned guidelines tell you *how* to formulate issue descriptions
-and and code smell messages. To learn *what to include* in each of the texts,
+and code smell messages. To learn *what to include* in each of the texts,
 refer to the following subsections.
 
 ### Components of issue descriptions
