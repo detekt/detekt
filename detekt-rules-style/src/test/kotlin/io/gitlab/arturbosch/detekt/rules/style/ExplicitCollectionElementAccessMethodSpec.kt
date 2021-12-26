@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -10,7 +11,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ExplicitCollectionElementAccessMethodSpec : Spek({
-    setupKotlinEnvironment()
+    setupKotlinEnvironment(additionalJavaSourceRootPath = resourceAsPath("java"))
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { ExplicitCollectionElementAccessMethod(Config.empty) }
@@ -343,6 +344,18 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report if the function has 3 or more arguments and it's defined in java - #4288") {
+            val code = """
+                import com.example.fromjava.Rect
+
+                fun foo() {
+                    val rect = Rect()
+                    rect.set(0, 1, 2)
+                }
+            """
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 })
