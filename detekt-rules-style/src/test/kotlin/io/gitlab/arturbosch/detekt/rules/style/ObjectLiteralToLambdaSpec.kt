@@ -362,7 +362,7 @@ class ObjectLiteralToLambdaSpec : Spek({
 
             it("has other default methods") {
                 val code = """
-                import ObjectLiteralToLambda.*
+                import com.example.fromjava.SamWithDefaultMethods
                 
                 fun main() {
                     val x = object : SamWithDefaultMethods {
@@ -377,7 +377,7 @@ class ObjectLiteralToLambdaSpec : Spek({
 
             it("has only default methods") {
                 val code = """
-                import ObjectLiteralToLambda.*
+                import com.example.fromjava.OnlyDefaultMethods
                 
                 fun main() {
                     val x = object : OnlyDefaultMethods {
@@ -389,7 +389,7 @@ class ObjectLiteralToLambdaSpec : Spek({
 
             it("implements a default method") {
                 val code = """
-                import ObjectLiteralToLambda.*
+                import com.example.fromjava.OnlyDefaultMethods
                 
                 fun main() {
                     val x = object : OnlyDefaultMethods {
