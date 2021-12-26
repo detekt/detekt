@@ -62,29 +62,29 @@ class UnnecessaryAbstractClassSpec : Spek({
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertThat(findings).hasSize(1)
                 }
-            }
 
-            it("does not report a completely-empty abstract class that inherits from an interface") {
-                val code = """
-                    interface A {
-                        val i: Int
-                    }
-                    abstract class B : A
-                """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
+                it("that inherits from an interface") {
+                    val code = """
+                        interface A {
+                            val i: Int
+                        }
+                        abstract class B : A
+                    """.trimIndent()
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
 
-            it("that inherits from another abstract class") {
-                val code = """
-                    @Deprecated("We don't care about this first class")
-                    abstract class A {
-                        abstract val i: Int
-                    }
-                    abstract class B : A()
-                """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                it("that inherits from another abstract class") {
+                    val code = """
+                        @Deprecated("We don't care about this first class")
+                        abstract class A {
+                            abstract val i: Int
+                        }
+                        abstract class B : A()
+                    """.trimIndent()
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
             }
 
             it("does not report an abstract class with concrete members derived from a base class") {

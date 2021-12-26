@@ -73,12 +73,11 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface() && klass.isAbstract()) {
-            val body = klass.body
-            if (body != null) {
-                val namedMembers = body.children.filterIsInstance<KtNamedDeclaration>()
-                val namedClassMembers = NamedClassMembers(klass, namedMembers)
-                namedClassMembers.detectAbstractAndConcreteType()
-            } else if (klass.superTypeListEntries.isEmpty()) {
+            val namedMembers = klass.body?.children.orEmpty().filterIsInstance<KtNamedDeclaration>()
+            if (namedMembers.isNotEmpty()) {
+                NamedClassMembers(klass, namedMembers)
+                    .detectAbstractAndConcreteType()
+            } else {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }
         }
