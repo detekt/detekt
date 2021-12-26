@@ -94,7 +94,9 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     fun writeProjectFile(filename: String, content: String) {
-        File(rootDir, filename).writeText(content)
+        File(rootDir, filename)
+            .also { it.parentFile.mkdirs() }
+            .writeText(content)
     }
 
     fun writeKtFile(srcDir: String, className: String) {
