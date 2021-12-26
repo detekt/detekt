@@ -14,9 +14,7 @@ class KtFileCountVisitorSpec : Spek({
                 compileContentForTest(default),
                 compileContentForTest(complexClass)
             )
-            val count = files
-                .map { getData(it) }
-                .sum()
+            val count = files.sumOf { getData(it) }
             assertThat(count).isEqualTo(2)
         }
     }
