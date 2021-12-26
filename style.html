@@ -1890,8 +1890,7 @@ to confusion. Instead, prefer limiting the number of <code class="language-plain
 <h3 id="underscoresinnumericliterals">UnderscoresInNumericLiterals</h3>
 
 <p>This rule detects and reports long base 10 numbers which should be separated with underscores
-for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
-under the configured <code class="language-plaintext highlighter-rouge">acceptableLength</code>. For <code class="language-plaintext highlighter-rouge">Serializable</code> classes or objects, the field <code class="language-plaintext highlighter-rouge">serialVersionUID</code> is
+for readability. For <code class="language-plaintext highlighter-rouge">Serializable</code> classes or objects, the field <code class="language-plaintext highlighter-rouge">serialVersionUID</code> is
 explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.</p>
 
 <p><strong>Active by default</strong>: No</p>
@@ -1911,7 +1910,12 @@ explicitly ignored. For floats and doubles, anything to the right of the decimal
   <li>
     <p><code class="language-plaintext highlighter-rouge">acceptableLength</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
 
-    <p>Maximum number of digits that a number can have and not use underscores</p>
+    <p>Maximum number of consecutive digits that a numeric literal can have without using an underscore</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">allowNonStandardGrouping</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
+
+    <p>If set to false, groups of exactly three digits must be used. If set to true, 100_00 is allowed.</p>
   </li>
 </ul>
 
@@ -2663,7 +2667,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Dec 22, 2021 <br />
+ Site last generated: Dec 26, 2021 <br />
                 </div>
             </div>
 </footer>
