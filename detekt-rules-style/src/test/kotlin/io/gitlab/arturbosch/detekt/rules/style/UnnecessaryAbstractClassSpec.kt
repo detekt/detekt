@@ -67,7 +67,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                             val i: Int
                         }
                         abstract class B : A
-                    """.trimIndent()
+                    """
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
@@ -79,7 +79,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                             abstract val i: Int
                         }
                         abstract class B : A()
-                    """.trimIndent()
+                    """
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
