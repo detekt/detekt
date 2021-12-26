@@ -14,7 +14,7 @@ internal class DefaultConfigProviderSpec : Spek({
             createNullLoggingSpec {}
         }
 
-        it("get") {
+        it("gets") {
             val config = DefaultConfigProvider().apply { init(spec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -22,7 +22,7 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
-        it("copy") {
+        it("copies") {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(spec) }.copy(path)
 
@@ -40,7 +40,7 @@ internal class DefaultConfigProviderSpec : Spek({
             }
         }
 
-        it("get") {
+        it("gets") {
             val config = DefaultConfigProvider().apply { init(spec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -48,7 +48,7 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 
-        it("copy") {
+        it("copies") {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(spec) }.copy(path)
 
