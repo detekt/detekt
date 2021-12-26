@@ -16,13 +16,7 @@ class UnnecessaryAbstractClassSpec : Spek({
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized {
-        UnnecessaryAbstractClass(
-            TestConfig(
-                mapOf(
-                    EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")
-                )
-            )
-        )
+        UnnecessaryAbstractClass(TestConfig(mapOf(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated"))))
     }
 
     describe("UnnecessaryAbstractClass rule") {
@@ -44,12 +38,30 @@ class UnnecessaryAbstractClassSpec : Spek({
                 )
             }
 
-            it("reports completely-empty abstract classes") {
-                val code = """
-                    abstract class A
-                    abstract class B()
-                """
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            context("reports completely-empty abstract classes") {
+                it("case 1") {
+                    val code = "abstract class A"
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+
+                it("case 2") {
+                    val code = "abstract class A()"
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+
+                it("case 3") {
+                    val code = "abstract class A {}"
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+
+                it("case 4") {
+                    val code = "abstract class A() {}"
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
             }
 
             it("does not report a completely-empty abstract class that inherits from an interface") {
@@ -59,7 +71,20 @@ class UnnecessaryAbstractClassSpec : Spek({
                     }
                     abstract class B : A
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("that inherits from another abstract class") {
+                val code = """
+                    @Deprecated("We don't care about this first class")
+                    abstract class A {
+                        abstract val i: Int
+                    }
+                    abstract class B : A()
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
             }
 
             it("does not report an abstract class with concrete members derived from a base class") {
