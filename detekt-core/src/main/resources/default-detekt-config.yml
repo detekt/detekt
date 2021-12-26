@@ -603,6 +603,8 @@ potential-bugs:
 
 style:
   active: true
+  CanBeNonNullable:
+    active: false
   ClassOrdering:
     active: false
   CollapsibleIfStatements:
