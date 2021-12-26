@@ -77,6 +77,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             if (namedMembers.isNotEmpty()) {
                 NamedClassMembers(klass, namedMembers)
                     .detectAbstractAndConcreteType()
+            } else if (!klass.hasConstructorParameter()) {
+                report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
             } else {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }

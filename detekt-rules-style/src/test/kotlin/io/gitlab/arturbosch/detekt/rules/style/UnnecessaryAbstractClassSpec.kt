@@ -22,6 +22,7 @@ class UnnecessaryAbstractClassSpec : Spek({
     describe("UnnecessaryAbstractClass rule") {
 
         context("abstract classes with no concrete members") {
+            val message = "An abstract class without a concrete member can be refactored to an interface."
 
             it("reports an abstract class with no concrete member") {
                 val code = """
@@ -32,35 +33,32 @@ class UnnecessaryAbstractClassSpec : Spek({
                     }
                 """
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertFindingMessage(
-                    findings,
-                    "An abstract class without a concrete member can be refactored to an interface."
-                )
+                assertFindingMessage(findings, message)
             }
 
             context("reports completely-empty abstract classes") {
                 it("case 1") {
                     val code = "abstract class A"
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
 
                 it("case 2") {
                     val code = "abstract class A()"
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
 
                 it("case 3") {
                     val code = "abstract class A {}"
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
 
                 it("case 4") {
                     val code = "abstract class A() {}"
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
 
                 it("that inherits from an interface") {
@@ -71,7 +69,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         abstract class B : A
                     """.trimIndent()
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
 
                 it("that inherits from another abstract class") {
@@ -83,7 +81,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                         abstract class B : A()
                     """.trimIndent()
                     val findings = subject.compileAndLintWithContext(env, code)
-                    assertThat(findings).hasSize(1)
+                    assertFindingMessage(findings, message)
                 }
             }
 
