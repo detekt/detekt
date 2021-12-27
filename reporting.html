@@ -546,7 +546,7 @@ the merging makes most sense in a multi-module project. In this spirit, only Gra
 <p>At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
 run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMerge --continue</code> to execute detekt tasks and merge the corresponding reports.</p>
 
-<h4 id="groovy-dsl">Groovy DSL</h4>
+<h3 id="groovy-dsl">Groovy DSL</h3>
 <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">task</span> <span class="nf">reportMerge</span><span class="o">(</span><span class="nl">type:</span> <span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">report</span><span class="o">.</span><span class="na">ReportMergeTask</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">output</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">buildDirectory</span><span class="o">.</span><span class="na">file</span><span class="o">(</span><span class="s2">"reports/detekt/merge.xml"</span><span class="o">)</span> <span class="c1">// or "reports/detekt/merge.sarif"</span>
 <span class="o">}</span>
@@ -569,7 +569,7 @@ run <code class="language-plaintext highlighter-rouge">./gradlew detekt reportMe
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h4 id="kotlin-dsl">Kotlin DSL</h4>
+<h3 id="kotlin-dsl">Kotlin DSL</h3>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">reportMerge</span> <span class="k">by</span> <span class="n">tasks</span><span class="p">.</span><span class="nf">registering</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="n">report</span><span class="p">.</span><span class="nc">ReportMergeTask</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span> 
   <span class="n">output</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="n">rootProject</span><span class="p">.</span><span class="n">buildDir</span><span class="p">.</span><span class="nf">resolve</span><span class="p">(</span><span class="s">"reports/detekt/merge.xml"</span><span class="p">))</span> <span class="c1">// or "reports/detekt/merge.sarif"</span>
