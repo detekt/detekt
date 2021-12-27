@@ -47,7 +47,7 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "ArrayPrimitive",
         Severity.Performance,
-        "Using Array<Primitive> leads to implicit boxing and a performance hit",
+        "Using `Array<Primitive>` leads to implicit boxing and a performance hit.",
         Debt.FIVE_MINS
     )
 
