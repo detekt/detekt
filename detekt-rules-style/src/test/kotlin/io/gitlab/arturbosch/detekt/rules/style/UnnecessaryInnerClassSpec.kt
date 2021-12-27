@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -37,7 +37,7 @@ class UnnecessaryInnerClassSpec : Spek({
                 }
             """.trimIndent()
 
-            Assertions.assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         context("does not report an inner class accessing outer-class members") {
@@ -50,7 +50,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             it("as a property initializer") {
@@ -64,7 +64,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             context("in a variable assignment") {
@@ -82,7 +82,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 it("where the outer-class variable is on the right") {
@@ -99,7 +99,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 it("where the outer-class variable is in a compound statement") {
@@ -116,7 +116,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
 
@@ -135,7 +135,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 it("where the outer-class variable is on the left") {
@@ -153,7 +153,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 it("where the outer-class variable is on the right") {
@@ -171,7 +171,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 it("where the outer-class variable is in a compound statement") {
@@ -190,7 +190,7 @@ class UnnecessaryInnerClassSpec : Spek({
                         }
                     """.trimIndent()
 
-                    Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
 
@@ -207,7 +207,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             it("as a function call") {
@@ -225,7 +225,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             it("as a function argument") {
@@ -241,7 +241,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             it("as a default value in a function signature") {
@@ -257,7 +257,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             it("to call a function of the member") {
@@ -279,7 +279,7 @@ class UnnecessaryInnerClassSpec : Spek({
                     }
                 """.trimIndent()
 
-                Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -299,7 +299,7 @@ class UnnecessaryInnerClassSpec : Spek({
                 }
             """.trimIndent()
 
-            Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         it("does not report anonymous inner classes") {
@@ -323,7 +323,7 @@ class UnnecessaryInnerClassSpec : Spek({
                 }
             """.trimIndent()
 
-            Assertions.assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 })
