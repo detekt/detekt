@@ -24,7 +24,7 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = RULE_NAME,
         severity = Severity.Maintainability,
-        description = "License text for the given source code file is absent or incorrect.",
+        description = "License text is absent or incorrect.",
         debt = Debt.FIVE_MINS
     )
 
