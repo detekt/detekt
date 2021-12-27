@@ -31,7 +31,7 @@ internal class DefaultConfigProviderSpec : Spek({
         }
     }
 
-    describe("defaultConfigProvider without plugins") {
+    describe("defaultConfigProvider with plugins") {
         val spec by memoized {
             createNullLoggingSpec {
                 extensions {
