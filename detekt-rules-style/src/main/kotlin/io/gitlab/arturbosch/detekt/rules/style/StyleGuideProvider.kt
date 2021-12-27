@@ -23,6 +23,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
+            CanBeNonNullable(config),
             ClassOrdering(config),
             CollapsibleIfStatements(config),
             DestructuringDeclarationWithTooManyEntries(config),
@@ -91,7 +92,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIfEmptyOrIfBlank(config),
             MultilineLambdaItParameter(config),
             UseIsNullOrEmpty(config),
-            UseOrEmpty(config)
+            UseOrEmpty(config),
+            UseAnyOrNoneInsteadOfFind(config),
         )
     )
 }

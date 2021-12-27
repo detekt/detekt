@@ -10,10 +10,14 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtTryExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule reports all exceptions that are caught and then later re-thrown without modification.
- * It ignores caught exceptions that are rethrown if there is work done before that.
+ * It ignores cases:
+ * 1. When caught exceptions that are rethrown if there is work done before that.
+ * 2. When there are more than one catch in try block and at least one of them has some work.
  *
  * <noncompliant>
  * fun foo() {
@@ -44,6 +48,14 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *         print(e.message)
  *         throw e
  *     }
+ *
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         throw e
+ *     } catch (e: Exception) {
+ *         print(e.message)
+ *     }
  * }
  * </compliant>
  */
@@ -57,13 +69,24 @@ class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitCatchSection(catchClause: KtCatchClause) {
-        val exceptionName = catchClause.catchParameter?.name ?: return
-        val statements = catchClause.catchBody?.children ?: return
-        val throwExpression = statements.firstOrNull() as? KtThrowExpression
-        if (throwExpression != null && throwExpression.thrownExpression?.text == exceptionName) {
-            report(CodeSmell(issue, Entity.from(throwExpression), issue.description))
+    override fun visitTryExpression(tryExpr: KtTryExpression) {
+        val catchClauses = tryExpr.getChildrenOfType<KtCatchClause>()
+        catchClauses.map { violatingThrowExpressionFrom(it) }
+            .takeLastWhile { it != null }
+            .forEach { violation ->
+                violation?.let {
+                    report(CodeSmell(issue, Entity.from(it), issue.description))
+                }
+            }
+        super.visitTryExpression(tryExpr)
+    }
+
+    private fun violatingThrowExpressionFrom(catchClause: KtCatchClause): KtThrowExpression? {
+        val exceptionName = catchClause.catchParameter?.name
+        val throwExpression = catchClause.catchBody?.children?.firstOrNull() as? KtThrowExpression
+        if (throwExpression?.thrownExpression?.text == exceptionName) {
+            return throwExpression
         }
-        super.visitCatchSection(catchClause)
+        return null
     }
 }

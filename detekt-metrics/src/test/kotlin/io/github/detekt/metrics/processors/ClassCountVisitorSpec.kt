@@ -36,9 +36,7 @@ class ClassCountVisitorSpec : Spek({
 })
 
 private fun getClassCount(files: Array<KtFile>): Int {
-    return files
-        .map { getData(it) }
-        .sum()
+    return files.sumOf { getData(it) }
 }
 
 private fun getData(file: KtFile): Int {

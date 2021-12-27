@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 plugins {
     id("releasing")
     alias(libs.plugins.detekt)
-    alias(libs.plugins.gradleVersionz)
+    alias(libs.plugins.gradleVersions)
     alias(libs.plugins.sonarqube)
 }
 
@@ -39,6 +39,9 @@ allprojects {
     }
 
     tasks.withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
     }
 }

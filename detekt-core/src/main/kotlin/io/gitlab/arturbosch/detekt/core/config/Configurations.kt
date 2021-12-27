@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import java.net.URI
 import java.net.URL
@@ -29,10 +30,10 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
 
 private fun parseResourceConfig(urls: Collection<URL>): Config =
     if (urls.size == 1) {
-        YamlConfig.loadResource(urls.first())
+        urls.first().openSafeStream().reader().use(YamlConfig::load)
     } else {
         urls.asSequence()
-            .map { YamlConfig.loadResource(it) }
+            .map { it.openSafeStream().reader().use(YamlConfig::load) }
             .reduce { composite, config -> CompositeConfig(config, composite) }
     }
 

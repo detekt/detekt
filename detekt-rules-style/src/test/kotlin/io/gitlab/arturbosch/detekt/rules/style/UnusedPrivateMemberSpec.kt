@@ -127,6 +127,21 @@ class UnusedPrivateMemberSpec : Spek({
         }
     }
 
+    describe("external classes") {
+
+        it("should not report functions in external classes") {
+            val code = """
+                external class Bugsnag {
+                    companion object {
+                        fun start(value: Int)
+                        fun notify(error: String)
+                    }
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
     describe("protected functions") {
 
         it("should not report parameters in protected functions") {
@@ -1029,6 +1044,32 @@ class UnusedPrivateMemberSpec : Spek({
                     private operator fun Int?.times(other: Int) = 3
                     private operator fun Int?.div(other: Int) = 4
                     private operator fun Int?.rem(other: Int) = 5
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report `contains` operator function that is used as `in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report `contains` operator function that is used as `!in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" !in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

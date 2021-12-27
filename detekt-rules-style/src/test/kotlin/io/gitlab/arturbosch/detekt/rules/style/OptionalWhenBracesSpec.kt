@@ -1,7 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -37,6 +38,32 @@ class OptionalWhenBracesSpec : Spek({
                     }
                 }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports unnecessary braces for nested when") {
+            val code = """
+                import kotlin.random.Random
+                
+                fun main() {
+                    when(Random.nextBoolean()) {
+                        true -> {
+                            when(Random.nextBoolean()) {
+                                true -> {
+                                    println("true")
+                                }
+                                false -> {
+                                    println("false")
+                                }
+                            }
+                            println("end")
+                        }
+                        false -> println("false")
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code))
+                .hasSize(2)
+                .hasSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
         }
 
         context("the statement is a lambda expression") {

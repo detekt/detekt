@@ -41,5 +41,5 @@ class Deprecation(config: Config) : Rule(config) {
     private fun hasDeprecationCompilerWarnings(element: PsiElement) =
         bindingContext.diagnostics
             .forElement(element)
-            .firstOrNull { it.factory == Errors.DEPRECATION } != null
+            .any { it.factory == Errors.DEPRECATION }
 }

@@ -255,7 +255,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("doesn't report a body-less factory function") {
+            context("doesn't report a body-less factory function") {
                 val code = """
                     open class A {
                       companion object {
@@ -267,7 +267,14 @@ class MemberNameEqualsClassNameSpec : Spek({
 
                     class C: A()
                 """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+
+                it("with type solving") {
+                    assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("without type solving") {
+                    assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+                }
             }
         }
     }

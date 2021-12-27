@@ -50,7 +50,8 @@ class UnnecessaryLetSpec : Spek({
                 """
                 fun f() {
                     val a: Int? = null
-                    a?.let { that -> that.plus(1) }?.let { it.plus(1) }
+                    a?.let { it?.plus(1) }
+                    a?.let { that -> that?.plus(1) }
                 }"""
             )
             assertThat(findings).hasSize(2)
@@ -58,6 +59,19 @@ class UnnecessaryLetSpec : Spek({
         }
 
         it("reports unnecessary lets that can be changed to ordinary method call 4") {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                fun f() {
+                    val a: Int? = null
+                    a?.let { that -> that.plus(1) }?.let { it.plus(1) }
+                }"""
+            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
+        }
+
+        it("reports unnecessary lets that can be changed to ordinary method call 5") {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -71,7 +85,7 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 5") {
+        it("reports unnecessary lets that can be changed to ordinary method call 6") {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -107,20 +121,6 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a.let { print(it) }
                     a.let { that -> print(that) }
-                }"""
-            )
-            assertThat(findings).hasSize(2)
-            assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
-        }
-
-        it("reports unnecessary lets that can be changed to ordinary method call 8") {
-            val findings = subject.compileAndLintWithContext(
-                env,
-                """
-                fun f() {
-                    val a: Int? = null
-                    a?.let { it?.plus(1) }
-                    a?.let { that -> that?.plus(1) }
                 }"""
             )
             assertThat(findings).hasSize(2)
@@ -344,40 +344,40 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
             }
+        }
 
-            it("reports when implicit parameter isn't used") {
-                val content = """
-                    fun test(value: Int?) {
-                        value?.let {
-                          listOf(1).map { it }
+        it("reports when implicit parameter isn't used") {
+            val content = """
+                fun test(value: Int?) {
+                    value?.let {
+                        listOf(1).map { it }
+                    }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, content)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
+        }
+
+        it("does not report when an implicit parameter is used in an inner lambda") {
+            val content = """
+                fun callMe(callback: () -> Unit) {
+                    callback()
+                }
+                
+                fun test(value: Int?) {
+                    value?.let { 
+                        callMe {
+                            println(it)
                         }
                     }
-                """
-                val findings = subject.compileAndLintWithContext(env, content)
-                assertThat(findings).hasSize(1)
-                assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
-            }
-
-            it("does not report when an implicit parameter is used in an inner lambda") {
-                val content = """
-                    fun callMe(callback: () -> Unit) {
-                        callback()
-                    }
-                    
-                    fun test(value: Int?) {
-                        value?.let { 
-                            callMe {
-                                println(it)
-                            }
-                         }
-                    }
-                """
-                val findings = subject.compileAndLintWithContext(env, content)
-                assertThat(findings).isEmpty()
-            }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, content)
+            assertThat(findings).isEmpty()
         }
     }
 })
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
-private const val MESSAGE_USE_IF = "let expression can be replaces with a simple if"
+private const val MESSAGE_USE_IF = "let expression can be replaced with a simple if"

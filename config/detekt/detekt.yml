@@ -143,6 +143,8 @@ potential-bugs:
     active: true
 
 style:
+  CanBeNonNullable:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:
@@ -164,6 +166,14 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - 'kotlin.io.print'
+      - 'kotlin.io.println'
+      - 'java.net.URL.openStream'
+      - 'java.lang.Class.getResourceAsStream'
+      - 'java.lang.ClassLoader.getResourceAsStream'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
@@ -220,6 +230,8 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
+  UseAnyOrNoneInsteadOfFind:
+    active: true
   UseCheckOrError:
     active: true
   UseEmptyCounterpart:

@@ -17,6 +17,7 @@ class CoroutinesProvider : DefaultRuleSetProvider {
         ruleSetId,
         listOf(
             GlobalCoroutineUsage(config),
+            InjectDispatcher(config),
             RedundantSuspendModifier(config),
             SleepInsteadOfDelay(config),
             SuspendFunWithFlowReturnType(config)

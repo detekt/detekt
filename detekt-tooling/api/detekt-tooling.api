@@ -51,6 +51,16 @@ public final class io/github/detekt/tooling/api/DetektProvider$Companion {
 	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DetektProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DetektProvider;
 }
 
+public abstract class io/github/detekt/tooling/api/FunctionMatcher {
+	public static final field Companion Lio/github/detekt/tooling/api/FunctionMatcher$Companion;
+	public abstract fun match (Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;)Z
+	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+}
+
+public final class io/github/detekt/tooling/api/FunctionMatcher$Companion {
+	public final fun fromFunctionSignature (Ljava/lang/String;)Lio/github/detekt/tooling/api/FunctionMatcher;
+}
+
 public final class io/github/detekt/tooling/api/InvalidConfig : io/github/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/String;)V
 }

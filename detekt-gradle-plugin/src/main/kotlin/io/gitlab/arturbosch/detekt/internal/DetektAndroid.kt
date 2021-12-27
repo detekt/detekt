@@ -68,7 +68,7 @@ internal class DetektAndroid(private val project: Project) {
         // There is not a single Android plugin, but each registers an extension based on BaseExtension,
         // so we catch them all by looking for this one
         project.extensions.findByType(BaseExtension::class.java)?.let { baseExtension ->
-            val bootClasspath = project.files(baseExtension.bootClasspath)
+            val bootClasspath = project.files(project.provider { baseExtension.bootClasspath })
             baseExtension.variants
                 ?.matching { !extension.matchesIgnoredConfiguration(it) }
                 ?.all { variant ->

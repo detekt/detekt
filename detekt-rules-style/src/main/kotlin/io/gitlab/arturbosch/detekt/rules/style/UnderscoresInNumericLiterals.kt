@@ -20,8 +20,7 @@ import java.util.Locale
 
 /**
  * This rule detects and reports long base 10 numbers which should be separated with underscores
- * for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
- * under the configured `acceptableLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
+ * for readability. For `Serializable` classes or objects, the field `serialVersionUID` is
  * explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.
  *
  * <noncompliant>
@@ -38,8 +37,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         javaClass.simpleName,
         Severity.Style,
         "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
-            "should be underscore separated to increase readability. Underscores that do not make groups of " +
-            "3 digits are also reported.",
+            "should be underscore separated to increase readability.",
         Debt.FIVE_MINS
     )
 
@@ -49,31 +47,37 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
-    @Configuration("Maximum number of digits that a number can have and not use underscores")
+    @Configuration("Maximum number of consecutive digits that a numeric literal can have without using an underscore")
     private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
+
+    @Configuration("If set to false, groups of exactly three digits must be used. If set to true, 100_00 is allowed.")
+    private val allowNonStandardGrouping: Boolean by config(false)
+
+    private val nonCompliantRegex: Regex = """\d{${acceptableLength + 1},}""".toRegex()
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         val normalizedText = normalizeForMatching(expression.text)
+        checkNormalized(normalizedText, expression)
+    }
 
-        if (isNotDecimalNumber(normalizedText) || expression.isSerialUidProperty()) {
+    private fun checkNormalized(normalizedText: String, expression: KtConstantExpression) {
+        if (isNotDecimalNumber(normalizedText)) {
+            return
+        }
+        if (expression.isSerialUidProperty()) {
             return
         }
 
         val numberString = normalizedText.split('.').first()
 
-        if (numberString.length > acceptableLength || numberString.contains('_')) {
-            reportIfInvalidUnderscorePattern(expression, numberString)
+        if (!allowNonStandardGrouping && numberString.hasNonStandardGrouping()) {
+            return doReport(expression, "The number contains a non standard grouping.")
         }
-    }
 
-    private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberString: String) {
-        if (!numberString.matches(UNDERSCORE_NUMBER_REGEX)) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "This number should be separated by underscores in order to increase readability."
-                )
+        if (numberString.contains(nonCompliantRegex)) {
+            return doReport(
+                expression,
+                "This number should be separated by underscores in order to increase readability."
             )
         }
     }
@@ -107,8 +111,14 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
             .removeSuffix("f")
     }
 
+    private fun doReport(expression: KtConstantExpression, message: String) {
+        report(CodeSmell(issue, Entity.from(expression), message))
+    }
+
+    private fun String.hasNonStandardGrouping(): Boolean = contains('_') && !matches(HAS_ONLY_STANDARD_GROUPING)
+
     companion object {
-        private val UNDERSCORE_NUMBER_REGEX = Regex("[0-9]{1,3}(_[0-9]{3})*")
+        private val HAS_ONLY_STANDARD_GROUPING = """\d{1,3}(?:_\d{3})*""".toRegex()
         private const val HEX_PREFIX = "0x"
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"

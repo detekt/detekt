@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -10,8 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.rules.extractMethodNameAndParams
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -19,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * This rule allows to set a list of forbidden methods. This can be used to discourage the use of unstable, experimental
@@ -52,12 +50,12 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
             "with this concrete signature."
     )
-    private val methods: List<Pair<String, List<String>?>> by config(
+    private val methods: List<FunctionMatcher> by config(
         listOf(
             "kotlin.io.print",
             "kotlin.io.println",
         )
-    ) { it.map(::extractMethodNameAndParams) }
+    ) { it.map(FunctionMatcher::fromFunctionSignature) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -87,19 +85,10 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         } ?: return
 
         for (descriptor in descriptors) {
-            val methodName = descriptor.fqNameOrNull()?.asString()
-            val methodParamTypes = descriptor.valueParameters.mapNotNull { it.type.fqNameOrNull()?.asString() }
-            val isForbiddenMethodCall = methods.any { (forbiddenMethodName, forbiddenMethodParamTypes) ->
-                forbiddenMethodName == methodName && forbiddenMethodParamTypes.isNullOrEquals(methodParamTypes)
-            }
-            if (isForbiddenMethodCall) {
-                val method = "$methodName(${methodParamTypes.joinToString()}"
-                val message = "The method $method has been forbidden in the Detekt config."
+            methods.find { it.match(descriptor) }?.let { functionMatcher ->
+                val message = "The method $functionMatcher has been forbidden in the Detekt config."
                 report(CodeSmell(issue, Entity.from(expression), message))
-                break
             }
         }
     }
-
-    private fun List<String>?.isNullOrEquals(other: List<String>) = this == null || this == other
 }

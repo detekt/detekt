@@ -10,11 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.load.java.isFromJava
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.ErrorType
@@ -48,36 +48,35 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             Debt.FIVE_MINS
         )
 
-    override fun visitCallExpression(expression: KtCallExpression) {
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        super.visitDotQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
-        super.visitCallExpression(expression)
-
-        // Safe calls can't be replaced with index accessor.
-        if (expression.parent is KtSafeQualifiedExpression) return
-
-        if (isIndexableGetter(expression) || (isIndexableSetter(expression) && unusedReturnValue(expression))) {
+        val call = expression.selectorExpression as? KtCallExpression ?: return
+        if (isIndexableGetter(call) || (isIndexableSetter(call) && unusedReturnValue(call))) {
             report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
         }
     }
 
     private fun isIndexableGetter(expression: KtCallExpression): Boolean =
-        expression.calleeExpression?.text == "get" && isOperatorFunction(expression)
+        expression.calleeExpression?.text == "get" && expression.getFunctionDescriptor()?.isOperator == true
 
     private fun isIndexableSetter(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
-            "set" -> isOperatorFunction(expression)
+            "set" -> {
+                val function = expression.getFunctionDescriptor()
+                when {
+                    function == null -> false
+                    !function.isOperator -> false
+                    else -> !(function.isFromJava && function.valueParameters.size > 2)
+                }
+            }
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
         }
 
-    private fun isOperatorFunction(expression: KtCallExpression): Boolean {
-        val function = (expression.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)
-        return function?.isOperator == true
-    }
-
     private fun isCallerMap(expression: KtCallExpression): Boolean {
-        val caller = (expression.parent as? KtDotQualifiedExpression)?.firstChild as? KtElement
+        val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
         val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
         if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
 
@@ -88,4 +87,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private fun unusedReturnValue(expression: KtCallExpression): Boolean =
         expression.parent.parent is KtBlockExpression
+
+    private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? {
+        return getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
+    }
 }

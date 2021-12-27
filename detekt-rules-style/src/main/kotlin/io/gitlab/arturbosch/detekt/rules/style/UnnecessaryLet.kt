@@ -79,7 +79,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(expression),
-                        "let expression can be replaces with a simple if"
+                        "let expression can be replaced with a simple if"
                     )
                 )
             } else if (lambdaReferenceCount <= 1 && !isNullSafeOperator) {

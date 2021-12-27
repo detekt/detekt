@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -303,6 +304,12 @@ class MayBeConstSpec : Spek({
                 """
                 )
 
+                assertThat(subject.findings).isEmpty()
+            }
+
+            it("does not report actual vals") {
+                // Until the [KotlinScriptEngine] can compile KMP, we will only lint.
+                subject.lint("""actual val abc123 = "abc123" """)
                 assertThat(subject.findings).isEmpty()
             }
         }

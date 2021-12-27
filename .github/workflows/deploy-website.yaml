@@ -8,22 +8,9 @@ on:
 jobs:
   build-detekt-docs:
     runs-on: ubuntu-latest
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-
-      - name: Cache Gradle Folders
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches/
-            ~/.gradle/wrapper/
-          key: cache-gradle-${{ hashFiles('gradle/libs.versions.toml') }}
-          restore-keys: |
-            cache-gradle-
 
       - name: Setup Java
         uses: actions/setup-java@v2
@@ -32,7 +19,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Detekt Documentation
-        run: ./gradlew :detekt-generator:generateDocumentation
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :detekt-generator:generateDocumentation
 
       - name: Upload Generated Rules documentation
         uses: actions/upload-artifact@v2
@@ -109,8 +98,7 @@ jobs:
       working-directory: docs/
 
     - name: Deploy Github Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+      uses: JamesIves/github-pages-deploy-action@4.1.8
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: docs/_site/
+        branch: gh-pages
+        folder: docs/_site/

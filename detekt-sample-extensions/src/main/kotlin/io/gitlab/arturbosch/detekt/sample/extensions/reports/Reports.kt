@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.sample.extensions.processors.fqNamesKey
 
 fun qualifiedNamesReport(detektion: Detektion): String? {
     val fqNames = detektion.getData(fqNamesKey)
-    println("fqNames: $fqNames")
     if (fqNames.isNullOrEmpty()) return null
 
     return with(StringBuilder()) {

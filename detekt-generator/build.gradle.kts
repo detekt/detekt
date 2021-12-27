@@ -12,9 +12,11 @@ dependencies {
     implementation(projects.detektCli)
     implementation(libs.jcommander)
 
+    testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.bundles.testImplementation)
     testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.reflections)
 }
 
 val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
