@@ -104,7 +104,7 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
-        
+
         it("reports nested swallowed exceptions") {
             val code = """
                 fun f(condition: Boolean) {
