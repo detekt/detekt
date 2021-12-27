@@ -50,9 +50,10 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UselessCallOnNotNull",
         Severity.Performance,
-        "This call on non-null reference may be reduced or removed. Some calls are intended to be called on nullable " +
-            "collection or text types (e.g. String?). When this call is used on a reference to a non-null type " +
-            "(e.g. String) it is redundant and will have no effect, so it can be removed.",
+        "This call on a non-null reference may be reduced or removed. " +
+            "Some calls are intended to be called on nullable  collection or text types (e.g. `String?`)." +
+            "When this call is used on a reference to a non-null type " +
+            "(e.g. `String`) it is redundant and will have no effect, so it can be removed.",
         Debt.FIVE_MINS
     )
 

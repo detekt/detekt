@@ -41,7 +41,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Reports vals that can be const val instead.",
+        "Usage of `vals` that can be `const val` detected.",
         Debt.FIVE_MINS
     )
 

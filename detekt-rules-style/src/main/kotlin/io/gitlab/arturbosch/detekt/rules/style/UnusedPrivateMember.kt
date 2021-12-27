@@ -63,7 +63,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedPrivateMember",
         Severity.Maintainability,
-        "Private member is unused.",
+        "Private member is unused and should be removed.",
         Debt.FIVE_MINS
     )
 

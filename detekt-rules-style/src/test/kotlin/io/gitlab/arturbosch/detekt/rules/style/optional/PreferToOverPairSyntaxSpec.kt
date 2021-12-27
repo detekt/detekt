@@ -25,7 +25,7 @@ object PreferToOverPairSyntaxSpec : Spek({
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(5)
-            assertThat(findings[0].message).endsWith("`1 to 2`")
+            assertThat(findings[0].message).endsWith("`1 to 2`.")
         }
 
         it("reports if pair is created using a function that uses pair constructor") {
@@ -35,7 +35,7 @@ object PreferToOverPairSyntaxSpec : Spek({
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).endsWith("`1 to 2`")
+            assertThat(findings[0].message).endsWith("`1 to 2`.")
         }
 
         it("does not report if it is created using the to syntax") {

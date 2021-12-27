@@ -53,7 +53,7 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfEmptyOrIfBlank",
         Severity.Style,
-        "Use 'ifEmpty' or 'ifBlank' instead of 'isEmpty' or 'isBlank' to assign default value.",
+        "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value.",
         Debt.FIVE_MINS
     )
 

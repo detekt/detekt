@@ -69,7 +69,7 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Multiline lambdas should not use `it` as a parameter name",
+        "Multiline lambdas should not use `it` as a parameter name.",
         Debt.FIVE_MINS
     )
 

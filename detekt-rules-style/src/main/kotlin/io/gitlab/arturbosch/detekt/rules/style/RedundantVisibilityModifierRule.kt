@@ -51,7 +51,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
     override val issue: Issue = Issue(
         "RedundantVisibilityModifierRule",
         Severity.Style,
-        "Checks for redundant visibility modifiers.",
+        "Redundant visibility modifiers detected, which can be safely removed.",
         Debt.FIVE_MINS
     )
 

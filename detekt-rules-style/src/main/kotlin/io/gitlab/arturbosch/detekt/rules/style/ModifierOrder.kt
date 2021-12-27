@@ -57,7 +57,7 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Modifiers are not in the correct order.",
+        "Modifiers are not in the correct order. Consider to reorder these modifiers.",
         Debt.FIVE_MINS
     )
 
