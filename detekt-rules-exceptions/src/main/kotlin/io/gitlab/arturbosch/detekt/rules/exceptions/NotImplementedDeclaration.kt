@@ -32,9 +32,9 @@ class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "NotImplementedDeclaration",
         Severity.CodeSmell,
-        "The NotImplementedDeclaration should only be used when a method stub is necessary. " +
+        "The `NotImplementedDeclaration` should only be used when a method stub is necessary. " +
             "This defers the development of the functionality of this function. " +
-            "Hence, the NotImplementedDeclaration should only serve as a temporary declaration. " +
+            "Hence, the `NotImplementedDeclaration` should only serve as a temporary declaration. " +
             "Before releasing, this type of declaration should be removed.",
         Debt.TWENTY_MINS
     )
