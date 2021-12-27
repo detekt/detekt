@@ -39,7 +39,7 @@ class MultiRuleCollector : Collector<MultiRule> {
 class MultiRuleVisitor : DetektVisitor() {
     val containsMultiRule
         get() = classesMap.any { it.value }
-    private var classesMap = mutableMapOf<String, Boolean>()
+    private val classesMap = mutableMapOf<String, Boolean>()
     private var name = ""
     private val rulesVisitor = RuleListVisitor()
     private val properties: MutableMap<String, String> = mutableMapOf()
@@ -102,10 +102,8 @@ class MultiRuleVisitor : DetektVisitor() {
 }
 
 class RuleListVisitor : DetektVisitor() {
-    var ruleNames: MutableSet<String> = mutableSetOf()
-        private set
-    var ruleProperties: MutableSet<String> = mutableSetOf()
-        private set
+    val ruleNames: MutableSet<String> = mutableSetOf()
+    val ruleProperties: MutableSet<String> = mutableSetOf()
 
     override fun visitValueArgumentList(list: KtValueArgumentList) {
         super.visitValueArgumentList(list)
