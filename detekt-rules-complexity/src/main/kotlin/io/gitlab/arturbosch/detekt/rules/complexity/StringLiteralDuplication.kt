@@ -49,7 +49,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Maintainability,
         "Multiple occurrences of the same string literal within a single file detected. " +
-            "Prefer extracting the String literal into a property or constant.",
+            "Prefer extracting the string literal into a property or constant.",
         Debt.FIVE_MINS
     )
 
