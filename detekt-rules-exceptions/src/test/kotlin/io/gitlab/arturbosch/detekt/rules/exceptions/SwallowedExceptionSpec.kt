@@ -104,6 +104,23 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
+        
+        it("reports nested swallowed exceptions") {
+            val code = """
+                fun f(condition: Boolean) {
+                    try {
+                        println()
+                    } catch (e: IllegalStateException) {
+                        try {
+                        } catch (nested: Exception) {
+                            throw IllegalArgumentException()
+                        }
+                        throw IllegalArgumentException(e)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
         it("reports a swallowed exception that is not logged") {
             val code = """
