@@ -42,7 +42,7 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "This unary operator is not used",
+        "This unary operator is unused.",
         Debt.FIVE_MINS
     )
 

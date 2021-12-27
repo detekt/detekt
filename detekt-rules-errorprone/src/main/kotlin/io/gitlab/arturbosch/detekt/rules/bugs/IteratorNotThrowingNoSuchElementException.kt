@@ -50,8 +50,8 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
     override val issue = Issue(
         "IteratorNotThrowingNoSuchElementException",
         Severity.Defect,
-        "The next() method of an Iterator implementation should throw a NoSuchElementException " +
-            "when there are no more elements to return",
+        "The `next()` method of an Iterator implementation should throw a NoSuchElementException " +
+            "when there are no more elements to return.",
         Debt.TEN_MINS
     )
 
