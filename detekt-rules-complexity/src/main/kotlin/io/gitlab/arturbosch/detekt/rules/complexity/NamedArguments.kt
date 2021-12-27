@@ -37,7 +37,7 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "NamedArguments",
         Severity.Maintainability,
-        "Parameters of function invocation must all be named",
+        "Function invocations with have many parameters should be named.",
         Debt.FIVE_MINS
     )
 
