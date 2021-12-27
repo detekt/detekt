@@ -48,7 +48,7 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue(
         "InstanceOfCheckForException",
         Severity.CodeSmell,
-        "Instead of catching for a general exception type and checking for a specific exception type " +
+        "Instead of catching for a general exception type and checking for a specific exception type, " +
             "use multiple catch blocks.",
         Debt.TWENTY_MINS
     )
