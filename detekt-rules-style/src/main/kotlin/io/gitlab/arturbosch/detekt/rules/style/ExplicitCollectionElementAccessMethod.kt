@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.load.java.isFromJava
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -57,20 +58,22 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     }
 
     private fun isIndexableGetter(expression: KtCallExpression): Boolean =
-        expression.calleeExpression?.text == "get" && isOperatorFunction(expression)
+        expression.calleeExpression?.text == "get" && expression.getFunctionDescriptor()?.isOperator == true
 
     private fun isIndexableSetter(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
-            "set" -> isOperatorFunction(expression)
+            "set" -> {
+                val function = expression.getFunctionDescriptor()
+                when {
+                    function == null -> false
+                    !function.isOperator -> false
+                    else -> !(function.isFromJava && function.valueParameters.size > 2)
+                }
+            }
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
         }
-
-    private fun isOperatorFunction(expression: KtCallExpression): Boolean {
-        val function = (expression.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)
-        return function?.isOperator == true
-    }
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
         val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
@@ -84,4 +87,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private fun unusedReturnValue(expression: KtCallExpression): Boolean =
         expression.parent.parent is KtBlockExpression
+
+    private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? {
+        return getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
+    }
 }
