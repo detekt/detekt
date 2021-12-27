@@ -23,7 +23,7 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "Too many functions can make the maintainability of a file more costly",
+        "Too many functions can make the maintainability of a file more costly.",
         Debt(hours = 1)
     )
 
