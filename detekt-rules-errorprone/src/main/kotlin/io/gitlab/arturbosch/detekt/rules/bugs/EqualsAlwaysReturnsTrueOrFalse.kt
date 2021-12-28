@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
- * Reports equals() methods which will always return true or false.
+ * Reports `equals()` methods which will always return true or false.
  *
  * Equals methods should always report if some other object is equal to the current object.
  * See the Kotlin documentation for Any.equals(other: Any?):
@@ -43,10 +43,9 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
     override val issue = Issue(
         "EqualsAlwaysReturnsTrueOrFalse",
         Severity.Defect,
-        "Having an equals method which always returns true or false is not a good idea. " +
+        "Having an `equals()` method that always returns true or false is not a good idea. " +
             "It does not follow the contract of this method. " +
-            "Consider a good default implementation. " +
-            "For example this == other",
+            "Consider a good default implementation (e.g. `this == other`).",
         Debt.TWENTY_MINS
     )
 

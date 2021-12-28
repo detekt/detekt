@@ -35,9 +35,9 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
     override val issue = Issue(
         "IteratorHasNextCallsNextMethod",
         Severity.Defect,
-        "The hasNext() method of an Iterator implementation should not call the next() method. " +
-            "The state of the iterator should not be changed inside the hasNext() method. " +
-            "The hasNext() method is not supposed to have any side effects.",
+        "The `hasNext()` method of an Iterator implementation should not call the `next()` method. " +
+            "The state of the iterator should not be changed inside the `hasNext()` method. " +
+            "The `hasNext()` method is not supposed to have any side effects.",
         Debt.TEN_MINS
     )
 

@@ -30,7 +30,7 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
     override val issue = Issue(
         "ExplicitGarbageCollectionCall",
         Severity.Defect,
-        "Don't try to be smarter than the JVM. Your code should work independently if the garbage " +
+        "Don't try to be smarter than the JVM. Your code should work independently whether the garbage " +
             "collector is disabled or not. If you face memory issues, " +
             "try tuning the JVM options instead of relying on code itself.",
         Debt.TWENTY_MINS
