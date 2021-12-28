@@ -37,7 +37,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Warning,
-        "Only boolean property names can start with 'is' prefix.",
+        "Only boolean property names can start with `is` prefix.",
         debt = Debt.FIVE_MINS
     )
 
