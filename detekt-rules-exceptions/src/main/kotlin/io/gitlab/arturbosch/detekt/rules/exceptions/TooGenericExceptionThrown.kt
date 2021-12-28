@@ -41,7 +41,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
+        "The thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
         Debt.TWENTY_MINS
     )
 
