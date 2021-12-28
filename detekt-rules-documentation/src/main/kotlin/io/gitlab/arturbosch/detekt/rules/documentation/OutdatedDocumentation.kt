@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
- * This rule will report any class, function or constructor with KDoc that does not match declaration signature.
+ * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
  * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
@@ -66,7 +66,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "KDoc should match actual function or class signature",
+        "KDoc comments should match the actual function or class signature",
         Debt.TEN_MINS
     )
 
