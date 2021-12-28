@@ -59,7 +59,7 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
     override val issue = Issue(
         "RedundantSuspendModifier",
         Severity.Minor,
-        "`suspend` modifier is only needed for functions that contain suspending calls",
+        "The `suspend` modifier is only needed for functions that contain suspending calls.",
         Debt.FIVE_MINS
     )
 
