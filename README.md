@@ -154,29 +154,20 @@ As mentioned in...
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)
 - [Integrating detekt in the Workflow](https://www.raywenderlich.com/24470020-integrating-detekt-in-the-workflow)
-- [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
-- [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
-- [Free Continuous Integration for modern Android apps with CircleCI](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)
-- [Static code analysis for Kotlin in Android](https://blog.thefuntasty.com/static-code-analysis-for-kotlin-in-android-8676c8d6a3c5)
-- [The Art of Android DevOps](https://blog.undabot.com/the-art-of-android-devops-fa29396bc9ee)
-- [Android Basics: Continuous Integration](https://academy.realm.io/posts/360-andev-2017-mark-scheel-continuous-integration-android/)
-- [Kotlin Static Analysis — why and how?](https://proandroiddev.com/kotlin-static-analysis-why-and-how-a12042e34a98)
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
 - [Kotlin Static Analysis Tools](http://smyachenkov.com/posts/kotlin-static-analysis-tools/)
-- [Speeding up the detekt task in a multi-project Gradle build](https://madhead.me/posts/detekt-faster/) (for detekt < 1.7.0)
-- [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
+- [Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
 - [Preventing software antipatterns with Detekt](https://galler.dev/preventing-software-antipatterns-with-detekt/)
 
 Integrations:
 
-- [SonarKotlin](https://docs.sonarqube.org/display/PLUG/SonarKotlin)
 - [Codacy](https://www.codacy.com)
-- [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
-- [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
-- [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
+- [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
+- [Violations Lib](https://github.com/tomasbjerre/violations-lib) is a Java library for parsing report files like static code analysis.
+- [sputnik](https://github.com/TouK/sputnik) is a free tool for static code review and provides support for detekt
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
-- [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
-- [Bazel plugin that wraps the Detekt CLI](https://github.com/buildfoundation/bazel_rules_detekt)
+- [Detekt Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) that wraps the Detekt CLI
+- [Detekt Bazel plugin](https://github.com/buildfoundation/bazel_rules_detekt) that wraps the Detekt CLI
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
@@ -185,8 +176,8 @@ Integrations:
 
 Custom rules and reports from 3rd parties:
 
-- [cph-cachet/detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation)
-- [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
+- [detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation) by cph-cachet
+- [detekt-hint](https://github.com/mkohm/detekt-hint) by mkohm is a plugin to detekt that provides detection of design principle violations through integration with Danger
 - [GitLab report format](https://gitlab.com/cromefire_/detekt-gitlab-report)
 
 #### Credits
