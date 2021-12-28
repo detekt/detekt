@@ -509,8 +509,9 @@ likely not intentional and may case unexpected results.</p>
 
 <h3 id="casttonullabletype">CastToNullableType</h3>
 
-<p>Disallow to cast to nullable types. There are cases where <code class="language-plaintext highlighter-rouge">as String?</code> is misused as the safe cast (<code class="language-plaintext highlighter-rouge">as? String</code>),
-so if you want to prevent those cases, turn on this rule.</p>
+<p>Disallow to cast to nullable types.
+There are cases where <code class="language-plaintext highlighter-rouge">as String?</code> is misused as safe cast (<code class="language-plaintext highlighter-rouge">as? String</code>).
+So if you want to prevent those cases, turn on this rule.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
@@ -603,9 +604,9 @@ declaring your variable with <code class="language-plaintext highlighter-rouge">
 
 <h3 id="duplicatecaseinwhenexpression">DuplicateCaseInWhenExpression</h3>
 
-<p>Flags duplicate case statements in when expressions.</p>
+<p>Flags duplicate <code class="language-plaintext highlighter-rouge">case</code> statements in <code class="language-plaintext highlighter-rouge">when</code> expressions.</p>
 
-<p>If a when expression contains the same case statement multiple times they should be merged. Otherwise, it might be
+<p>If a <code class="language-plaintext highlighter-rouge">when</code> expression contains the same <code class="language-plaintext highlighter-rouge">case</code> statement multiple times they should be merged. Otherwise, it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
@@ -631,7 +632,7 @@ easy to miss one of the cases when reading the code, leading to unwanted side ef
 
 <h3 id="equalsalwaysreturnstrueorfalse">EqualsAlwaysReturnsTrueOrFalse</h3>
 
-<p>Reports equals() methods which will always return true or false.</p>
+<p>Reports <code class="language-plaintext highlighter-rouge">equals()</code> methods which will always return true or false.</p>
 
 <p>Equals methods should always report if some other object is equal to the current object.
 See the Kotlin documentation for Any.equals(other: Any?):
