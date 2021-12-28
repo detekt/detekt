@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -22,7 +23,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.types.isNullable
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 /**
  * This rule detects null or empty checks that can be replaced with `isNullOrEmpty()` call.
@@ -77,7 +77,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             right.isNullKeyword() -> left
             left.isNullKeyword() -> right
             else -> null
-        }.safeAs<KtSimpleNameExpression>()?.takeIf { it.getType(bindingContext)?.isNullable() == true }
+        }?.safeAs<KtSimpleNameExpression>()?.takeIf { it.getType(bindingContext)?.isNullable() == true }
     }
 
     private fun KtExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
@@ -131,8 +131,8 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression?.isEmptyString() = this?.text == "\"\""
 
     private fun KtExpression?.isCalling(fqNames: List<FqName>): Boolean {
-        val callExpression = safeAs()
-            ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression.safeAs<KtCallExpression>()
+        val callExpression = this?.safeAs()
+            ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression?.safeAs<KtCallExpression>()
             ?: return false
         return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
             callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames

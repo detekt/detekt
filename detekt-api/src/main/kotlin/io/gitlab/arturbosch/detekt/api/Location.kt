@@ -69,7 +69,6 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         /**
          * Determines the line and column of a [PsiElement] in the source file.
          */
-        @Suppress("TooGenericExceptionCaught", "SwallowedException")
         fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
             return try {
                 val range = element.textRange
@@ -77,7 +76,7 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
                     element.containingFile,
                     TextRange(range.startOffset + offset, range.endOffset + offset)
                 )
-            } catch (e: IndexOutOfBoundsException) {
+            } catch (@Suppress("SwallowedException", "TooGenericExceptionCaught") e: IndexOutOfBoundsException) {
                 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw exception.
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
             }
@@ -93,7 +92,7 @@ data class SourceLocation(val line: Int, val column: Int) {
 }
 
 /**
- * Stores character start and end positions of an text file.
+ * Stores character start and end positions of a text file.
  */
 data class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"

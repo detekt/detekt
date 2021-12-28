@@ -1,6 +1,5 @@
 package io.github.detekt.test.utils
 
-import java.io.File
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
@@ -11,16 +10,12 @@ internal object Resources
 
 fun resourceUrl(name: String): URL {
     val explicitName = if (name.startsWith("/")) name else "/$name"
-    val resource = Resources::class.java.getResource(explicitName)
-    requireNotNull(resource) { "Make sure the resource '$name' exists!" }
-    return resource
+    return requireNotNull(Resources::class.java.getResource(explicitName)) { "Make sure the resource '$name' exists!" }
 }
 
 fun resource(name: String): URI = resourceUrl(name).toURI()
 
 fun resourceAsPath(name: String): Path = Paths.get(resource(name))
-
-fun resourceAsFile(name: String): File = File(resourceUrl(name).path)
 
 fun readResourceContent(name: String): String {
     val path = resourceAsPath(name)

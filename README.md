@@ -21,7 +21,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
 - Highly configurable rule sets
 - Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specification of quality gates which will break your build 
+- Specification of quality gates which will break your build
 - Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
@@ -76,18 +76,22 @@ detekt {
     allRules = false // activate all available (even unstable) rules.
     config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+}
 
+tasks.withType<Detekt>().configureEach {
     reports {
-        html.enabled = true // observe findings in your browser with structure and code snippets
-        xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
-        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
-        sarif.enabled = true // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with Github Code Scanning
+        html.required.set(true) // observe findings in your browser with structure and code snippets
+        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with Github Code Scanning
     }
 }
 
-
 // Groovy DSL
 tasks.withType(Detekt).configureEach {
+    jvmTarget = "1.8"
+}
+tasks.withType(DetektCreateBaselineTask).configureEach {
     jvmTarget = "1.8"
 }
 
@@ -95,7 +99,9 @@ tasks.withType(Detekt).configureEach {
 
 // Kotlin DSL
 tasks.withType<Detekt>().configureEach {
-    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = "1.8"
 }
 ```
@@ -110,7 +116,7 @@ Gradle 6.1+ is the minimum requirement. However, the recommended versions togeth
 
 | Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
 | -------------- | ------ | ------ | --- | ----------------- | --------------- |
-| `1.18.0` | `7.0.1` | `1.5.21` | `4.2.0` | `1.8` | `16` |
+| `1.19.0`       | `7.3.0` | `1.5.31` | `4.2.2`| `1.8`       | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
 
@@ -154,7 +160,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
 - [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
 - [Matthew Haughton](https://github.com/3flex) - Added type resolution, Dependency updates, Coding + Documentation improvements
-- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
+- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 - [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements
 - [Olivier PEREZ](https://github.com/olivierperez) - Fixed Typo in Readme
@@ -226,10 +232,17 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Alina Rakhimova](https://github.com/AlinaRakhimova) - New rule: BooleanPropertyNaming
 - [Vladislav Yundin](https://github.com/Yundin) - Rule fix: Indentation
 - [George Poothicottu Jacob](https://github.com/geojakes) - Bug fix: Rule deactivation
+- [Mohamed Elmahdi](https://github.com/mohamed-elmahdi) - Rule Improvement: Add descriptive alias
+- [Michael McCormick](https://github.com/MichaelM97) - Documentation improvement
+- [Hans-Martin Schuller](https://github.com/hmSchuller) - Rule Improvement: ForbiddenComment
+- [Lukasz Osowicki](https://github.com/lukaszosowicki) - New rule: OutdatedDocumentation
+- [Luan Nico](https://github.com/luanpotter) - Bug fix for the UselessCallOnNotNull rule
+- [Tasha Ramesh](https://github.com/drinkthestars) - Docs around configuring for Compose
+- [Renato Turic](https://github.com/Aksi0m) - Rule fix: UseDataClass for inner class
 
 ### Mentions
 
-[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
+[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![androidweekly](https://img.shields.io/badge/androidweekly.cn-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
 
 As mentioned in...

@@ -9,17 +9,21 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.typeUtil.isNothing
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 
@@ -30,7 +34,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  *
  * <noncompliant>
  * fun foo(): Unit {
- *     return Unit 
+ *     return Unit
  * }
  * fun foo() = Unit
  *
@@ -40,7 +44,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * </noncompliant>
  *
  * <compliant>
- * fun foo() { }
+ * fun foo() { }
  *
  * // overridden no-op functions are allowed
  * override fun foo() = Unit
@@ -56,8 +60,9 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.hasDeclaredReturnType()) {
-            checkFunctionWithExplicitReturnType(function)
+        val typeReference = function.typeReference
+        if (typeReference != null) {
+            checkFunctionWithExplicitReturnType(function, typeReference)
         } else if (!function.isOverride()) {
             checkFunctionWithInferredReturnType(function)
         }
@@ -105,11 +110,11 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
-        val typeReference = function.typeReference
-        val typeElementText = typeReference?.typeElement?.text
+    private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction, typeReference: KtTypeReference) {
+        val typeElementText = typeReference.typeElement?.text
         if (typeElementText == UNIT) {
-            if (function.initializer.isNothingType()) return
+            val initializer = function.initializer
+            if (initializer?.isGenericOrNothingType() == true) return
             report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
         }
     }
@@ -124,8 +129,14 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
         "defines a return type of Unit. This is unnecessary and can safely be removed."
 
-    private fun KtExpression?.isNothingType() =
-        bindingContext != BindingContext.EMPTY && this?.getType(bindingContext)?.isNothing() == true
+    private fun KtExpression.isGenericOrNothingType(): Boolean {
+        if (bindingContext == BindingContext.EMPTY) return false
+        val isGenericType = getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
+        val isNothingType = getType(bindingContext)?.isNothing() == true
+        // Either the function initializer returns Nothing or it is a generic function
+        // into which Unit is passed, but not both.
+        return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)
+    }
 
     companion object {
         private const val UNIT = "Unit"

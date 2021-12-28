@@ -20,6 +20,9 @@ entries:
     - title: Configuration File
       url: /configurations.html
       output: web
+    - title: Configuration for Compose
+      url: /compose.html
+      output: web
     - title: Reporting
       url: /reporting.html
       output: web

@@ -13,6 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ *
+ * This rules overlaps with [`MaxLineLength`](https://detekt.github.io/detekt/style.html#maxlinelength) from the standard rules, make sure to enable just one or keep them aligned.
  */
 @ActiveByDefault(since = "1.0.0")
 @OptIn(FeatureInAlphaState::class)

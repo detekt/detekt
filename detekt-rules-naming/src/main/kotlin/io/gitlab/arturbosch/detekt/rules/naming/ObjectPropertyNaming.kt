@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * Reports when property names inside objects which do not follow the specified naming convention are used.
+ * Reports property names inside objects that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import org.jetbrains.kotlin.psi.KtFile
 
 /**

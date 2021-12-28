@@ -13,11 +13,9 @@ import java.io.File
 
 internal class DetektJvm(private val project: Project) {
     fun registerTasks(extension: DetektExtension) {
-        project.afterEvaluate {
-            project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
-                project.registerJvmDetektTask(extension, sourceSet)
-                project.registerJvmCreateBaselineTask(extension, sourceSet)
-            }
+        project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.all { sourceSet ->
+            project.registerJvmDetektTask(extension, sourceSet)
+            project.registerJvmCreateBaselineTask(extension, sourceSet)
         }
     }
 
@@ -25,7 +23,7 @@ internal class DetektJvm(private val project: Project) {
         val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            setSource(kotlinSourceSet.kotlin.files)
+            source = kotlinSourceSet.kotlin
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -70,7 +68,7 @@ internal class DetektJvm(private val project: Project) {
         val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            setSource(kotlinSourceSet.kotlin.files)
+            source = kotlinSourceSet.kotlin
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             val variantBaselineFile = extension.baseline?.addVariantName(sourceSet.name)
             baseline.set(project.layout.file(project.provider { variantBaselineFile }))

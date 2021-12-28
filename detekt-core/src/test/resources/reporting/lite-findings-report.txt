@@ -1,0 +1,2 @@
+TestFile.kt:1:1: TestMessage [SpacingBetweenPackageAndImports]
+TestFile.kt:1:1: TestMessage [UnnecessarySafeCall]

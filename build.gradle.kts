@@ -2,16 +2,48 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
-    id("packaging")
     id("releasing")
-    id("detekt")
-    alias(libs.plugins.gradleVersionz)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.gradleVersions)
     alias(libs.plugins.sonarqube)
 }
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
+
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    detekt {
+        source = objects.fileCollection().from(
+            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
+            "src/test/java",
+            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
+            "src/test/kotlin"
+        )
+        buildUponDefaultConfig = true
+        baseline = file("$rootDir/config/detekt/baseline.xml")
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+            txt.enabled = true
+            sarif.enabled = true
+        }
+    }
+
+    dependencies {
+        detekt(project(":detekt-cli"))
+        detektPlugins(project(":custom-checks"))
+        detektPlugins(project(":detekt-formatting"))
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8"
+    }
 }
 
 val analysisDir = file(projectDir)

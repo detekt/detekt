@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
@@ -23,6 +24,8 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>severity",
     ".*>.*>severity",
     "build>weights.*",
+    ".*>.*>ignoreAnnotated",
+    ".*>.*>ignoreFunction",
 ).joinToString(",")
 
 fun validateConfig(
@@ -65,13 +68,16 @@ internal fun validateConfig(
     val notifications = mutableListOf<Notification>()
 
     fun getDeprecatedProperties(): List<Pair<Regex, String>> {
-        return settings.javaClass.classLoader.getResourceAsStream("deprecation.properties")!!.use { inputStream ->
-            val prop = Properties().apply { load(inputStream) }
+        return settings.javaClass.classLoader
+            .getResource("deprecation.properties")!!
+            .openSafeStream()
+            .use { inputStream ->
+                val prop = Properties().apply { load(inputStream) }
 
-            prop.entries.map { entry ->
-                (entry.key as String).toRegex() to (entry.value as String)
+                prop.entries.map { entry ->
+                    (entry.key as String).toRegex() to (entry.value as String)
+                }
             }
-        }
     }
 
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {

@@ -4,44 +4,43 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-include(
-    "code-coverage-report",
-    "custom-checks",
-    "detekt-api",
-    "detekt-cli",
-    "detekt-core",
-    "detekt-formatting",
-    "detekt-generator",
-    "detekt-gradle-plugin",
-    "detekt-metrics",
-    "detekt-parser",
-    "detekt-psi-utils",
-    "detekt-report-html",
-    "detekt-report-sarif",
-    "detekt-report-txt",
-    "detekt-report-xml",
-    "detekt-rules",
-    "detekt-rules-complexity",
-    "detekt-rules-coroutines",
-    "detekt-rules-documentation",
-    "detekt-rules-empty",
-    "detekt-rules-errorprone",
-    "detekt-rules-exceptions",
-    "detekt-rules-naming",
-    "detekt-rules-performance",
-    "detekt-rules-style",
-    "detekt-sample-extensions",
-    "detekt-test",
-    "detekt-test-utils",
-    "detekt-tooling"
-)
+include("code-coverage-report")
+include("custom-checks")
+include("detekt-api")
+include("detekt-cli")
+include("detekt-core")
+include("detekt-formatting")
+include("detekt-generator")
+include("detekt-gradle-plugin")
+include("detekt-metrics")
+include("detekt-parser")
+include("detekt-psi-utils")
+include("detekt-report-html")
+include("detekt-report-sarif")
+include("detekt-report-txt")
+include("detekt-report-xml")
+include("detekt-rules")
+include("detekt-rules-complexity")
+include("detekt-rules-coroutines")
+include("detekt-rules-documentation")
+include("detekt-rules-empty")
+include("detekt-rules-errorprone")
+include("detekt-rules-exceptions")
+include("detekt-rules-naming")
+include("detekt-rules-performance")
+include("detekt-rules-style")
+include("detekt-sample-extensions")
+include("detekt-test")
+include("detekt-test-utils")
+include("detekt-tooling")
+include("detekt-utils")
 
 enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.6.4"
+    `gradle-enterprise`
 }
 
 gradleEnterprise {

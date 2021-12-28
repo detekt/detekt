@@ -1,8 +1,12 @@
 package io.github.detekt.metrics
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.getFunctionByName
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtNamed
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -224,3 +228,14 @@ class CyclomaticComplexitySpec : Spek({
         }
     }
 })
+
+private fun KtElement.getFunctionByName(name: String): KtNamedFunction {
+    val node = getChildOfType<KtNamedFunction>() ?: error("Expected node of type ${KtNamedFunction::class}")
+    val identifier = node.safeAs<KtNamed>()?.nameAsName?.identifier
+
+    require(identifier == name) {
+        "Node should be $name, but was $identifier"
+    }
+
+    return node
+}

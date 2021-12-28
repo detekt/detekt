@@ -17,7 +17,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 internal fun FlowContent.snippetCode(ruleName: String, lines: Sequence<String>, location: SourceLocation, length: Int) {
-    @Suppress("TooGenericExceptionCaught")
     try {
         pre {
             code {
@@ -41,7 +40,7 @@ internal fun FlowContent.snippetCode(ruleName: String, lines: Sequence<String>, 
                     }
             }
         }
-    } catch (ex: Throwable) {
+    } catch (@Suppress("TooGenericExceptionCaught") ex: Throwable) {
         showError(ruleName, ex)
     }
 }

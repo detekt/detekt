@@ -24,7 +24,7 @@ class KtTreeCompiler(
             path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(basePath, path))
             path.isDirectory() -> compileProject(path)
             else -> {
-                settings.info("Ignoring a file detekt cannot handle: $path")
+                settings.debug { "Ignoring a file detekt cannot handle: $path" }
                 emptyList()
             }
         }

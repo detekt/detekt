@@ -44,6 +44,24 @@ class UnnecessaryAbstractClassSpec : Spek({
                 )
             }
 
+            it("reports completely-empty abstract classes") {
+                val code = """
+                    abstract class A
+                    abstract class B()
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            }
+
+            it("does not report a completely-empty abstract class that inherits from an interface") {
+                val code = """
+                    interface A {
+                        val i: Int
+                    }
+                    abstract class B : A
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
             it("does not report an abstract class with concrete members derived from a base class") {
                 val code = """
                     abstract class A {
@@ -187,14 +205,6 @@ class UnnecessaryAbstractClassSpec : Spek({
                     interface Interface {
                         fun f()
                     }
-                """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
-
-            it("does not report empty abstract classes") {
-                val code = """
-                    abstract class A
-                    abstract class B()
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }

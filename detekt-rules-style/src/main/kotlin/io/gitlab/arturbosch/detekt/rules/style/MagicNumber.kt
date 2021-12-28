@@ -161,8 +161,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         else -> false
     }
 
-    private fun parseAsDoubleOrNull(rawToken: String?): Double? = try {
-        rawToken?.let { parseAsDouble(it) }
+    private fun parseAsDoubleOrNull(rawToken: String): Double? = try {
+        parseAsDouble(rawToken)
     } catch (e: NumberFormatException) {
         null
     }
@@ -170,10 +170,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun parseAsDouble(rawNumber: String): Double {
         val normalizedText = normalizeForParsingAsDouble(rawNumber)
         return when {
-            normalizedText.startsWith("0x") || normalizedText.startsWith("0X") ->
-                normalizedText.substring(2).toLong(HEX_RADIX).toDouble()
-            normalizedText.startsWith("0b") || normalizedText.startsWith("0B") ->
-                normalizedText.substring(2).toLong(BINARY_RADIX).toDouble()
+            normalizedText.startsWith("0x") -> normalizedText.substring(2).toLong(HEX_RADIX).toDouble()
+            normalizedText.startsWith("0b") -> normalizedText.substring(2).toLong(BINARY_RADIX).toDouble()
             else -> normalizedText.toDouble()
         }
     }
@@ -190,7 +188,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun KtConstantExpression.isNamedArgument(): Boolean {
         /**
          * The information we need is in the enclosing [KtValueArgument]. When the number being evaluated is
-         * negative, there will be an [KtPrefixExpression] in between the receiver and the [KtValueArgument].
+         * negative, there will be a [KtPrefixExpression] in between the receiver and the [KtValueArgument].
          */
         val valueArgument = when (parent) {
             is KtPrefixExpression -> parent.parent

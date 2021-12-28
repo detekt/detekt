@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.bugs.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
@@ -61,12 +61,10 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
     assertThat(packageName)
         .withFailMessage("No rules package for provider of type $providerType was defined in the ruleMap")
         .isNotNull()
-    @Suppress("UnsafeCallOnNullableType")
     return packageName!!
 }
 
 private fun getRules(provider: RuleSetProvider): List<BaseRule> {
-    @Suppress("UnsafeCallOnNullableType")
     val ruleSet = provider.instance(Config.empty)
     val rules = ruleSet.rules.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
     assertThat(rules).isNotEmpty

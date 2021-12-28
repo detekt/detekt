@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -59,7 +58,7 @@ class RedundantExplicitType(config: Config) : Rule(config) {
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
         val type =
-            (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? VariableDescriptor)?.type ?: return
+            (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
         if (type is AbbreviatedType) return
 
         when (val initializer = property.initializer) {

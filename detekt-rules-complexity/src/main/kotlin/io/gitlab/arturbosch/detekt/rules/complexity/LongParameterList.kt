@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
@@ -61,27 +60,20 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private val ignoreDataClasses: Boolean by config(true)
 
     @Configuration(
-        "ignore long parameters list for constructors, functions or their parameters in the " +
-            "context of these annotation class names; (e.g. ['Inject', 'Module', 'Suppress', 'Value']); " +
-            "the most common cases are for dependency injection where constructors are annotated with `@Inject` " +
-            "or parameters are annotated with `@Value` and should not be counted for the rule to trigger"
+        "ignore the annotated parameters for the count (e.g. `fun foo(@Value bar: Int)` would not be counted"
     )
-    private val ignoreAnnotated: List<String> by config(emptyList<String>()) { list ->
+    private val ignoreAnnotatedParameter: List<String> by config(emptyList<String>()) { list ->
         list.map { it.removePrefix("*").removeSuffix("*") }
     }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated)
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
         super.visitKtFile(file)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val owner = function.containingClassOrObject
-        if (owner is KtClass && owner.isIgnored()) {
-            return
-        }
         checkLongParameterList(function, functionThreshold, "function ${function.nameAsSafeName}")
     }
 
@@ -105,10 +97,10 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         checkLongParameterList(constructor, constructorThreshold, "constructor")
     }
 
-    private fun KtClass.isDataClassOrIgnored() = isIgnored() || ignoreDataClasses && isData()
+    private fun KtClass.isDataClassOrIgnored() = ignoreDataClasses && isData()
 
     private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
-        if (function.isOverride() || function.isIgnored() || function.containingKtFile.isIgnored()) return
+        if (function.isOverride()) return
         val parameterList = function.valueParameterList ?: return
         val parameterNumber = parameterList.parameterCount()
 

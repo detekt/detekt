@@ -1,15 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ExplicitCollectionElementAccessMethodSpec : Spek({
-    setupKotlinEnvironment()
+    setupKotlinEnvironment(additionalJavaSourceRootPath = resourceAsPath("java"))
 
     val env: KotlinCoreEnvironment by memoized()
     val subject by memoized { ExplicitCollectionElementAccessMethod(Config.empty) }
@@ -34,13 +36,40 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("reports map put method usage") {
+        it("reports map set method usage with unused return value") {
+            val code = """
+                    fun f() {
+                        val map = mutableMapOf<String, String>() 
+                        map.set("key", "value") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("reports map put method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report map put method usage with variable assignment") {
+            val code = """
+                    fun f() {
+                        val map = mutableMapOf<String, String>() 
+                        val oldValue = map.put("key", "val") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report map put method with used return value") {
+            val code = """
+                    fun f(): Boolean {
+                        val map = mutableMapOf<String, String>()
+                        return map.put("key", "val") == null
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("reports map element access with get method of non-abstract map") {
@@ -56,7 +85,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             val code = """
                     fun f() {
                         val map = hashMapOf<String, String>() 
-                        val value = map.put("key", "value") 
+                        map.put("key", "value") 
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
@@ -96,6 +125,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
+
+        it("does not report calls on implicit receiver") {
+            val code = """
+                fun f() {
+                    val map = mapOf<String, Int>()
+                    with(map) { get("a") }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
     }
 
     describe("Kotlin list") {
@@ -134,6 +173,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     }"""
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
+
+        it("does not report calls on implicit receiver") {
+            val code = """
+                fun f() {
+                    val list = listOf<String>()
+                    val value = with(list) { get(0) }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        }
     }
 
     describe("Java map") {
@@ -147,7 +196,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports map put method usage") {
+        it("reports map set method usage with unused return value") {
+            val code = """
+                    fun f() {
+                        val map = java.util.HashMap<String, String>() 
+                        map.set("key", "val") 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("reports map put method usage with unused return value") {
             val code = """
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
@@ -184,6 +242,49 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
     }
 
+    describe("custom operators") {
+
+        it("reports custom get operator") {
+            val code = """
+                    class Custom { operator fun get(i: Int) = 42 }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get(0)
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report non-operator get method") {
+            val code = """
+                    class Custom { fun get(i: Int) = 42 }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get(0)
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports custom set operator with unused return value") {
+            val code = """
+                    class Custom { operator fun set(key: String, value: String) {} }
+                    fun f() {
+                        val custom = Custom()
+                        custom.set("key", "value")
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        it("does not report non-operator set method") {
+            val code = """
+                    class Custom { fun set(key: String, value: String) {} }
+                    fun f() {
+                        val custom = Custom()
+                        custom.set("key", "value")
+                    }"""
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
+
     describe("Java list") {
 
         it("reports list element access with get method") {
@@ -205,7 +306,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
     }
 
-    describe("getters") {
+    describe("edge cases") {
 
         it("does not crash for getter") {
             val code = """
@@ -216,9 +317,6 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
-    }
-
-    describe("fluent api doesn't crash") {
 
         it("does not crash for fluent api") {
             val code = """
@@ -226,6 +324,38 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     .toString()
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report for unresolvable code") {
+            val code = """
+                 fun f() {
+                    val unknownType = UnknownType()
+                    val value = unknownType.put("answer", 42)
+                 }
+            """
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report for put functions without caller") {
+            val code = """
+                fun put() { }
+                fun f() {
+                    put()
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report if the function has 3 or more arguments and it's defined in java - #4288") {
+            val code = """
+                import com.example.fromjava.Rect
+
+                fun foo() {
+                    val rect = Rect()
+                    rect.set(0, 1, 2)
+                }
+            """
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 })

@@ -16,7 +16,9 @@ class UntilInsteadOfRangeToSpec : Spek({
                 fun f() {
                     for (i in 0 .. 10 - 1) {}
                 }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            val findings = subject.lint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'..' call can be replaced with 'until'")
         }
 
         it("does not report if rangeTo not used") {
@@ -53,6 +55,13 @@ class UntilInsteadOfRangeToSpec : Spek({
         it("does not report binary expressions without a range operator") {
             val code = "val sum = 1 + 2"
             assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("reports for 'rangeTo'") {
+            val code = "val r = 0.rangeTo(10 - 1)"
+            val findings = subject.lint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'rangeTo' call can be replaced with 'until'")
         }
     }
 })

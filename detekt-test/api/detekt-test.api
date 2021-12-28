@@ -1,0 +1,70 @@
+public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/core/api/AbstractAssert {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Finding;)V
+	public final fun getActual ()Lio/gitlab/arturbosch/detekt/api/Finding;
+	public final fun hasMessage (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
+	public fun <init> (Ljava/util/List;)V
+	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasTextLocations ([Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasTextLocations ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public synthetic fun newAbstractIterableAssert (Ljava/lang/Iterable;)Lorg/assertj/core/api/AbstractIterableAssert;
+	public synthetic fun toAssert (Ljava/lang/Object;Ljava/lang/String;)Lorg/assertj/core/api/AbstractAssert;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
+	public static final fun assert (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public static final fun assertThat (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
+	public static final fun assertThat (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
+	public static final fun getContextForPaths (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
+	public static final fun yamlConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public static final fun yamlConfigFromContent (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
+	public static final fun compileAndLint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/lang/String;)Ljava/util/List;
+	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/lang/String;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Ljava/nio/file/Path;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/util/List;
+	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;)Ljava/util/List;
+}
+
+public class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/test/TestConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getParentPath ()Ljava/lang/String;
+	protected final fun parseList (Ljava/lang/String;)Ljava/util/List;
+	public synthetic fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
+	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/TestConfig$Companion {
+	public final fun invoke ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert : org/assertj/core/api/AbstractAssert {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell;)V
+	public final fun hasThreshold (I)V
+	public final fun hasValue (I)V
+	public final fun withThreshold (I)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
+	public final fun withValue (I)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
+}
+
+public final class io/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssertKt {
+	public static final fun assertThat (Lio/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell;)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
+	public static final fun isThresholded (Lio/gitlab/arturbosch/detekt/test/FindingAssert;)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
+}
+

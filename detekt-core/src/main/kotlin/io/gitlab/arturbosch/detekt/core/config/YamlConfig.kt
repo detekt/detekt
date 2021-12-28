@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.yaml.snakeyaml.Yaml
 import java.io.Reader
-import java.net.URL
 import java.nio.file.Path
 
 /**
@@ -57,11 +56,6 @@ class YamlConfig internal constructor(
                     require(canRead()) { "Configuration must be readable: $path" }
                 }.reader()
             )
-
-        /**
-         * Factory method to load a yaml configuration from a URL.
-         */
-        fun loadResource(url: URL): Config = load(url.openStream().reader())
 
         /**
          * Constructs a [YamlConfig] from any [Reader].

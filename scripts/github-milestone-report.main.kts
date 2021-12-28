@@ -8,11 +8,12 @@
  */
 
 @file:Suppress("detekt.CommentSpacing") // for the exec line
-@file:DependsOn("org.kohsuke:github-api:1.112")
-@file:DependsOn("com.github.ajalt:clikt:2.7.1")
+@file:DependsOn("org.kohsuke:github-api:1.135")
+@file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import org.kohsuke.github.GHIssue
@@ -30,6 +31,10 @@ class GithubMilestoneReport : CliktCommand() {
     private val user: String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
     private val project: String by option("-p", help = "Github project. Default: detekt").default("detekt")
     private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
+    private val filterExisting: Boolean by option(
+        "-f",
+        help = "Filter issues that are already in the changelog. Default: false."
+    ).flag(default = false)
 
     override fun run() {
         // connect to GitHub
@@ -42,7 +47,12 @@ class GithubMilestoneReport : CliktCommand() {
         // get milestone and issue data
 
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
-        val ghIssues: MutableList<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
+        var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
+
+        if (filterExisting) {
+            val changeLogContent = File("./docs/pages/changelog 1.x.x.md").readText()
+            ghIssues = ghIssues.filter { "[#${it.number}]" !in changeLogContent }
+        }
 
         val milestoneTitle = ghMilestone.title.trim()
         val groups = ghIssues.groupBy { issue ->

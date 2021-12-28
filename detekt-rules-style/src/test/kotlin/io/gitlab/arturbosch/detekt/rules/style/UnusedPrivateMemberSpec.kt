@@ -11,7 +11,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
-import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
@@ -124,6 +123,21 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report parameters in external functions") {
             val code = "external fun foo(bar: String)"
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    describe("external classes") {
+
+        it("should not report functions in external classes") {
+            val code = """
+                external class Bugsnag {
+                    companion object {
+                        fun start(value: Int)
+                        fun notify(error: String)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -1035,6 +1049,32 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
+        it("does not report `contains` operator function that is used as `in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report `contains` operator function that is used as `!in`") {
+            val code = """
+                class C {
+                    val isInside = "bar" !in listOf("foo".toRegex())
+                    
+                    private operator fun Iterable<Regex>.contains(a: String): Boolean {
+                        return any { it.matches(a) }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
         it("report unused minus operator") {
             val code = """
                 import java.util.Date
@@ -1350,10 +1390,7 @@ class UnusedPrivateMemberSpec : Spek({
             """
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
-        it(
-            description = "doesn't report used private list get operator function - declared in a file - called by operator",
-            skip = Skip.Yes("This is a known false-positive tracked (https://github.com/detekt/detekt/issues/3640)")
-        ) {
+        it("doesn't report used private list get operator function - declared in a file - called by operator") {
             val code = """
                 class StringWrapper(
                     val s: String
@@ -1370,10 +1407,7 @@ class UnusedPrivateMemberSpec : Spek({
             """
             assertThat(subject.lintWithContext(env, code)).hasSize(0)
         }
-        it(
-            description = "doesn't report used private list get operator function - declared in a file - called directly",
-            skip = Skip.Yes("This is a known false-positive tracked (https://github.com/detekt/detekt/issues/3640)")
-        ) {
+        it("doesn't report used private list get operator function - declared in a file - called directly") {
             val code = """
                 class StringWrapper(
                     val s: String

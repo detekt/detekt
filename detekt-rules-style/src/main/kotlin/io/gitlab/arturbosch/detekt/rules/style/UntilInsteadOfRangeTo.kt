@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtExpression
 
 /**
  * Reports calls to '..' operator instead of calls to 'until'.
@@ -37,23 +37,33 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val minimumSize = 3
-
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        if (isUntilApplicable(expression.children)) {
-            report(CodeSmell(issue, Entity.from(expression), "'..' call can be replaced with 'until'"))
+        if (expression.operationReference.text == rangeToOperator &&
+            expression.right.isMinusOneExpression()
+        ) {
+            report(expression, rangeToOperator)
         }
         super.visitBinaryExpression(expression)
     }
 
-    private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
-        if (range.size >= minimumSize && range[1] is KtOperationReferenceExpression && range[1].text == "..") {
-            val expression = range[2] as? KtBinaryExpression
-            if (expression?.operationToken == KtTokens.MINUS) {
-                val rightExpressionValue = expression?.right as? KtConstantExpression
-                return rightExpressionValue?.text == "1"
-            }
+    override fun visitCallExpression(expression: KtCallExpression) {
+        if (expression.calleeExpression?.text == rangeTo &&
+            expression.valueArguments.singleOrNull()?.getArgumentExpression().isMinusOneExpression()
+        ) {
+            report(expression, rangeTo)
         }
-        return false
+        super.visitCallExpression(expression)
+    }
+
+    private fun KtExpression?.isMinusOneExpression() = this is KtBinaryExpression &&
+        left != null && operationToken == KtTokens.MINUS && (right as? KtConstantExpression)?.text == "1"
+
+    private fun report(expression: KtExpression, rangeTo: String) {
+        report(CodeSmell(issue, Entity.from(expression), "'$rangeTo' call can be replaced with 'until'"))
+    }
+
+    companion object {
+        private const val rangeToOperator = ".."
+        private const val rangeTo = "rangeTo"
     }
 }

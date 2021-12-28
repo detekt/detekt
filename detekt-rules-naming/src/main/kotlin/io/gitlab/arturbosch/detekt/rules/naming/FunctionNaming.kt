@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -16,7 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOr
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * Reports when function names which do not follow the specified naming convention are used.
+ * Reports function names that do not follow the specified naming convention.
  * One exception are factory functions used to create instances of classes.
  * These factory functions can have the same name as the class being created.
  */
@@ -41,13 +40,10 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores functions that have the override modifier")
     private val ignoreOverridden: Boolean by config(true)
 
-    @Configuration("ignore naming for functions in the context of these annotation class names")
-    private val ignoreAnnotated: List<String> by config(emptyList())
-
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
-        if (ignoreOverridden && function.isOverride() || shouldAnnotatedFunctionBeExcluded(function)) {
+        if (ignoreOverridden && function.isOverride()) {
             return
         }
 
@@ -66,15 +62,9 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun shouldAnnotatedFunctionBeExcluded(function: KtNamedFunction): Boolean {
-        val annotationExcluder = AnnotationExcluder(function.containingKtFile, ignoreAnnotated)
-        return annotationExcluder.shouldExclude(function.annotationEntries)
-    }
-
     companion object {
         const val FUNCTION_PATTERN = "functionPattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-        const val IGNORE_ANNOTATED = "ignoreAnnotated"
     }
 }

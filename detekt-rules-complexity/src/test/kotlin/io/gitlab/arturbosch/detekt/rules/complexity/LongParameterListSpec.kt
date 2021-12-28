@@ -99,7 +99,7 @@ class LongParameterListSpec : Spek({
             val config by memoized {
                 TestConfig(
                     mapOf(
-                        "ignoreAnnotated" to listOf(
+                        "ignoreAnnotatedParameter" to listOf(
                             "Generated",
                             "kotlin.Deprecated",
                             "kotlin.jvm.JvmName",
@@ -112,54 +112,6 @@ class LongParameterListSpec : Spek({
             }
 
             val rule by memoized { LongParameterList(config) }
-
-            it("does not report long parameter list for constructors if file is annotated with ignored annotation") {
-                val code = """
-                    @file:kotlin.jvm.JvmName("test")
-                    class Data(val a: Int)
-                """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            it("does not report long parameter list for functions if file is annotated with ignored annotation") {
-                val code = """
-                    @file:kotlin.jvm.JvmName("test")
-                    class Data {
-                        fun foo(a: Int) {} 
-                    }
-                """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            it("does not report long parameter list for constructors if class is annotated with ignored annotation") {
-                val code = """
-                    annotation class Generated
-                    @Generated class Data(val a: Int)
-                """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            it("does not report long parameter list for functions if class is annotated with ignored annotation") {
-                val code = """
-                    annotation class Generated
-                    @Generated class Data { 
-                        fun foo(a: Int) {} 
-                    }
-                """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            it("does not report long parameter list for constructors if constructor is annotated with ignored annotation") {
-                val code = "class Data @kotlin.Deprecated(message = \"\") constructor(val a: Int)"
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            it("does not report long parameter list for functions if function is annotated with ignored annotation") {
-                val code = """class Data {
-                    @kotlin.Deprecated(message = "") fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }
-                """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
 
             it("reports long parameter list for constructors if constructor parameters are annotated with annotation that is not ignored") {
                 val code = """

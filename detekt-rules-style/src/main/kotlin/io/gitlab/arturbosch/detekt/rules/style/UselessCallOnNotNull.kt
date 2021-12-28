@@ -97,8 +97,17 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun ValueArgument.isNullable(): Boolean =
-        getArgumentExpression()?.getType(bindingContext)?.isNullable() == true
+    private fun ValueArgument.isNullable(): Boolean {
+        val wrapperType = getArgumentExpression()?.getType(bindingContext) ?: return false
+        val type = if (getSpreadElement() != null) {
+            // in case of a spread operator (`*list`),
+            // we actually want to get the generic parameter from the collection
+            wrapperType.arguments.first().type
+        } else {
+            wrapperType
+        }
+        return type.isNullable()
+    }
 
     private data class Conversion(val replacementName: String? = null)
 

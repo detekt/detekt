@@ -28,14 +28,6 @@ internal class InvalidPackageDeclarationSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report if package declaration is missing") {
-            val ktFile = compileContentForTest("class C")
-
-            val findings = InvalidPackageDeclaration().lint(ktFile)
-
-            assertThat(findings).hasSize(1)
-        }
-
         it("should report if package declaration does not match source location") {
             val source = "package foo\n\nclass C"
 

@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("packaging")
     kotlin("jvm")
     `maven-publish`
     jacoco
-    id("detekt")
 }
 
 // bundle detekt's version for all jars to use it at runtime
@@ -83,19 +83,12 @@ configurations.create("coverageDataElements") {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
-        languageVersion = "1.5"
+        languageVersion = "1.6"
         apiVersion = "1.4"
         freeCompilerArgs = listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"
         )
-        // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
-        // Note: currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
-        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = when (project.name) {
-            "detekt-gradle-plugin" -> false
-            else -> (project.findProperty("warningsAsErrors") == "true" || System.getenv("CI") == "true")
-        }
     }
 }
 
@@ -108,10 +101,4 @@ java {
     withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-publishing {
-    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
-        from(components["java"])
-    }
 }

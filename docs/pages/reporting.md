@@ -80,7 +80,7 @@ the merging makes most sense in a multi-module project. In this spirit, only Gra
 At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
 run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
-#### Groovy DSL
+### Groovy DSL
 ```groovy
 task reportMerge(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
@@ -88,7 +88,8 @@ task reportMerge(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
 
 subprojects {
   detekt {
-    reports.xml.enabled = true // reports.sarif.enabled = true
+    reports.xml.required.set(true)
+    // reports.sarif.required.set(true)
   }
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
@@ -103,7 +104,7 @@ subprojects {
 }
 ```
 
-#### Kotlin DSL
+### Kotlin DSL
 
 ```kotlin
 val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
@@ -112,7 +113,8 @@ val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMe
 
 subprojects {
   detekt {
-    reports.xml.enabled = true // reports.sarif.enabled = true
+    reports.xml.required.set(true)
+    // reports.sarif.required.set(true)
   }
   
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
@@ -150,11 +152,11 @@ jobs:
       - name: Run detekt
         run: ./gradlew detekt
 
-      # Make sure we always run this upload task, because the previous step fails if there are
-      # findings.
+      # Make sure we always run this upload task,
+      # because the previous step may fail if there are findings.
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
-        if: ${{ always() }}
+        if: success() || failure()
         with:
           sarif_file: build/detekt.sarif
 ```

@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.types.isFlexible
 import org.jetbrains.kotlin.types.isNullable
 
 /**
@@ -94,7 +95,7 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         }
         val compilerResources = compilerResources ?: return false
         val descriptor = descriptor() ?: return false
-        val originalType = descriptor.returnType ?.takeIf { it.isNullable() } ?: return false
+        val originalType = descriptor.returnType ?.takeIf { it.isNullable() && !it.isFlexible() } ?: return false
         val dataFlowInfo =
             bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.dataFlowInfo ?: return false
         val dataFlowValue =

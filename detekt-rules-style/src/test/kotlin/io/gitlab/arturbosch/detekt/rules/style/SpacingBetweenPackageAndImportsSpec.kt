@@ -78,7 +78,7 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
             assertThat(subject.lint(code)).hasSize(2)
         }
 
-        it("has two many blank lines") {
+        it("has too many blank lines") {
             val code = "package test\n\n\nimport a.b\n\n\nclass A {}"
             assertThat(subject.lint(code)).hasSize(2)
         }

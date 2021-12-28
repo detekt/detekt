@@ -40,14 +40,15 @@ private object TestExclusions : Exclusions() {
         "ThrowingExceptionsWithoutMessageOrCause",
         "UndocumentedPublicClass",
         "UndocumentedPublicFunction",
-        "UndocumentedPublicProperty"
+        "UndocumentedPublicProperty",
+        "UnsafeCallOnNullableType",
     )
 }
 
 private object KotlinScriptExclusions : Exclusions() {
 
     override val pattern = "['**/*.kts']"
-    override val rules = setOf("InvalidPackageDeclaration")
+    override val rules = setOf("MissingPackageDeclaration")
 }
 
 private object LibraryExclusions : Exclusions() {

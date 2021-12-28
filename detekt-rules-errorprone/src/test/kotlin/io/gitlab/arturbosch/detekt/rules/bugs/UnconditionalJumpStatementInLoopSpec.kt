@@ -10,26 +10,114 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
 
     describe("UnconditionalJumpStatementInLoop rule") {
 
-        it("reports unconditional jumps") {
+        it("reports an unconditional return in for loop") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) return
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional return in while loop") {
+            val code = """
+                fun f() {
+                    while (true) { return } 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional return in do-while loop") {
+            val code = """
+                fun f() {
+                    do { return } while(true) 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional continue in for loop") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) continue
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional continue in while loop") {
+            val code = """
+                fun f() {
+                    while (true) { continue } 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional continue in do-while loop") {
+            val code = """
+                fun f() {
+                    do { continue } while(true) 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional break in for loop") {
             val code = """
                 fun f() {
                     for (i in 1..2) break
-                    for (i in 1..2) continue
-                    for (i in 1..2) return
-                    while (true) {
-                        println("")
-                        break
-                    }
-                    do {
-                        break
-                        println("")
-                    } while (true)
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(5)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports unconditional jump in nested loop") {
+        it("reports an unconditional break in while loop") {
+            val code = """
+                fun f() {
+                    while (true) { break } 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional break in do-while loop") {
+            val code = """
+                fun f() {
+                    do { break } while(true) 
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional return in a nested loop") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        for (j in 1..2) {
+                            return
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional continue in a nested loop") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        for (j in 1..2) {
+                            continue
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports an unconditional break in a nested loop") {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -42,20 +130,35 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report a conditional jump in a nested block") {
+        it("does not report a conditional return in an if-else block") {
             val code = """
                 fun f() {
                     for (i in 1..2) {
-                        try { 
-                            break
-                        } finally {
+                        if (i > 1) {
+                            return
                         }
+                        if (i > 1) println() else return
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional jump in if-else block") {
+        it("does not report a conditional continue in an if-else block") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        if (i > 1) {
+                            continue
+                        }
+                        if (i > 1) println() else continue
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional break in an if-else block") {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -64,36 +167,139 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
                         }
                         if (i > 1) println() else break
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report an conditional elvis continue") {
-            val findings = subject.compileAndLint(
-                """
+        it("reports an unconditional return after Elvis operator") {
+            val code = """
                 fun main() {
                     fun compute(i: Int) = null
-                    for (i in 1..5)  
-                        return compute(i) ?: continue
-                }
-            """
-            )
-
-            assertThat(findings).isEmpty()
-        }
-
-        it("reports conditional elvis return") {
-            val findings = subject.compileAndLint(
-                """
-                fun main() {
-                    fun compute(i: Int) = null
-                    for (i in 1..5)  
+                    for (i in 1..5)
                         return compute(i) ?: return
                 }
             """
-            )
 
-            assertThat(findings).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("does not report a conditional continue after Elvis operator") {
+            val code = """
+                fun f(): Int {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        return compute(i) ?: continue
+                    }
+                    return 0
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional break after Elvis operator") {
+            val code = """
+                fun f(): Int {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        return compute(i) ?: break
+                    }
+                    return 0
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional return after assignment with Elvis operator") {
+            val code = """
+                fun f(): Int {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        val int = compute(i) ?: return 0
+                        return int + 1
+                    }
+                    return 0
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional continue after assignment with Elvis operator") {
+            val code = """
+                fun f(): Int {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        val int = compute(i) ?: continue
+                        return int + 1
+                    }
+                    return 0
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional break after assignment with Elvis operator") {
+            val code = """
+                fun f(): Int {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        val int = compute(i) ?: break
+                        return int + 1
+                    }
+                    return 0
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional return after expression with Elvis operator") {
+            val code = """
+                fun f() {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        compute(i) ?: return
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional continue after expression with Elvis operator") {
+            val code = """
+                fun f() {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        compute(i) ?: continue
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional break after expression with Elvis operator") {
+            val code = """
+                fun f() {
+                    fun compute(i: Int): Int? = null
+                    for (i in 1..5) {
+                        compute(i) ?: break
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a conditional jump in a nested block") {
+            val code = """
+                fun f() {
+                    for (i in 1..2) {
+                        try {
+                            break
+                        } finally {
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report a return after a conditional jump") {

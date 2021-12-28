@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -13,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
  * This rule reports if tabs are used in Kotlin files.
@@ -31,20 +31,9 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
     )
 
     fun findTabs(file: KtFile) {
-        file.collectWhitespaces()
-            .filter { it.isTab() }
-            .forEach { report(CodeSmell(issue, Entity.from(it), "Tab character is in use.")) }
-    }
-
-    private fun KtFile.collectWhitespaces(): List<PsiWhiteSpace> {
-        val list = mutableListOf<PsiWhiteSpace>()
-        this.accept(object : DetektVisitor() {
-            override fun visitWhiteSpace(space: PsiWhiteSpace) {
-                list.add(space)
-                super.visitWhiteSpace(space)
-            }
-        })
-        return list
+        file.forEachDescendantOfType<PsiWhiteSpace> {
+            if (it.isTab()) report(CodeSmell(issue, Entity.from(it), "Tab character is in use."))
+        }
     }
 
     private fun PsiWhiteSpace.isTab(): Boolean {

@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
@@ -60,6 +59,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
+    @Deprecated("Use `ignoreAnnotated` instead")
     private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
         classes.map { it.removePrefix("*").removeSuffix("*") }
     }
@@ -67,7 +67,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, excludeAnnotatedClasses)
+        annotationExcluder = AnnotationExcluder(file, @Suppress("DEPRECATION") excludeAnnotatedClasses)
         super.visitKtFile(file)
     }
 
@@ -78,7 +78,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 val namedMembers = body.children.filterIsInstance<KtNamedDeclaration>()
                 val namedClassMembers = NamedClassMembers(klass, namedMembers)
                 namedClassMembers.detectAbstractAndConcreteType()
-            } else if (klass.superTypeListEntries.isEmpty() && klass.hasConstructorParameter()) {
+            } else if (klass.superTypeListEntries.isEmpty()) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }
         }
@@ -115,7 +115,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 klass.superTypeListEntries.isEmpty() -> false
                 bindingContext == BindingContext.EMPTY -> true
                 else -> {
-                    val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass] as? ClassDescriptor
+                    val descriptor = bindingContext[BindingContext.CLASS, klass]
                     descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
                         (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
                     }

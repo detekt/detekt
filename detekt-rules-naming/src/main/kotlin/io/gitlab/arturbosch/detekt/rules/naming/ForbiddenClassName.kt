@@ -12,8 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
- * Reports class names which are forbidden per configuration.
- * By default this rule does not report any classes.
+ * Reports class names which are forbidden per configuration. By default, this rule does not report any classes.
  * Examples for forbidden names might be too generic class names like `...Manager`.
  */
 class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {

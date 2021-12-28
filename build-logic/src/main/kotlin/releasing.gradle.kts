@@ -2,6 +2,18 @@ import com.vdurmont.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
+    id("io.codearte.nexus-staging")
+}
+
+nexusStaging {
+    packageGroup = "io.gitlab.arturbosch"
+    stagingProfileId = "1d8efc8232c5c"
+    username = findProperty("sonatypeUsername")
+        ?.toString()
+        ?: System.getenv("MAVEN_CENTRAL_USER")
+    password = findProperty("sonatypePassword")
+        ?.toString()
+        ?: System.getenv("MAVEN_CENTRAL_PW")
 }
 
 project.afterEvaluate {
@@ -46,6 +58,7 @@ fun updateVersion(increment: (Semver) -> Semver) {
         }
     versionsFile.writeText("$newContent\n")
 }
+
 tasks {
     register("incrementPatch") { doLast { updateVersion { it.nextPatch() } } }
     register("incrementMinor") { doLast { updateVersion { it.nextMinor() } } }
@@ -59,10 +72,9 @@ tasks {
 
     register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
         fileToUpdate.set(file("${rootProject.rootDir}/gradle/libs.versions.toml"))
-        linePartToFind.set("detekt-gradle = \"io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+        linePartToFind.set("detekt = { id = \"io.gitlab.arturbosch.detekt\"")
         lineTransformation.set(
-            "detekt-gradle = \"io.gitlab.arturbosch.detekt:" +
-                "detekt-gradle-plugin:${Versions.DETEKT}\""
+            "detekt = { id = \"io.gitlab.arturbosch.detekt\", version = \"${Versions.DETEKT}\" }"
         )
     }
 }

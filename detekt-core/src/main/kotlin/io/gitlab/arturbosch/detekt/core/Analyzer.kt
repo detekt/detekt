@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -9,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import io.gitlab.arturbosch.detekt.core.suppressors.getSuppressors
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -119,7 +120,7 @@ internal class Analyzer(
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
-                for (finding in rule.findings) {
+                for (finding in filterSuppressedFindings(rule, bindingContext)) {
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
                         "Mapping for '${finding.id}' expected."
                     }
@@ -133,6 +134,15 @@ internal class Analyzer(
         executeRules(otherRules)
 
         return result
+    }
+}
+
+private fun filterSuppressedFindings(rule: BaseRule, bindingContext: BindingContext): List<Finding> {
+    val suppressors = getSuppressors(rule, bindingContext)
+    return if (suppressors.isNotEmpty()) {
+        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
+    } else {
+        rule.findings
     }
 }
 

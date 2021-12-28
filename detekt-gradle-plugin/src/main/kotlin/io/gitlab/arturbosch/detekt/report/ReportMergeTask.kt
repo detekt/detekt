@@ -23,7 +23,9 @@ abstract class ReportMergeTask : DefaultTask() {
 
     @TaskAction
     fun merge() {
+        logger.info("Input")
         logger.info(input.files.joinToString(separator = "\n") { it.absolutePath })
+        logger.info("Output = ${output.get().asFile.absolutePath}")
         val existingFiles = input.files.filter { it.exists() }
         fun isXmlReport(file: File): Boolean = file.name.endsWith(".xml")
         if (existingFiles.any(::isXmlReport)) {

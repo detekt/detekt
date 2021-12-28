@@ -47,6 +47,7 @@ class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(entry), issue.description))
             }
         }
+        super.visitWhenExpression(expression)
     }
 
     private fun KtBlockExpression.hasUnnecessaryBraces(): Boolean {

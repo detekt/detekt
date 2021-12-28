@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * Flags use of System.exit() and Kotlin's exitProcess() when used outside of the `main` function. This makes code more
+ * Flags use of System.exit() and Kotlin's exitProcess() when used outside the `main` function. This makes code more
  * difficult to test, causes unexpected behaviour on Android, and is a poor way to signal a failure in the program. In
  * almost all cases it is more appropriate to throw an exception.
  *

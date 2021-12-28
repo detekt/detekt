@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import java.util.HashMap
 
 internal fun defaultReportMapping(reportId: String) = when (reportId) {
     TxtOutputReport::class.java.simpleName -> "txt"
@@ -20,8 +19,8 @@ internal fun defaultReportMapping(reportId: String) = when (reportId) {
     else -> reportId
 }
 
-internal fun printFindings(findings: Map<String, List<Finding>>): String? {
-    return with(StringBuilder()) {
+internal fun printFindings(findings: Map<String, List<Finding>>): String {
+    return buildString {
         val debtList = mutableListOf<Debt>()
         findings.forEach { (key, issues) ->
             val debt = issues

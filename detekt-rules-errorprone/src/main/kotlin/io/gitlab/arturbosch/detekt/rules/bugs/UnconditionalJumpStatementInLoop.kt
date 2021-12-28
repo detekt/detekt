@@ -12,11 +12,8 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
@@ -46,7 +43,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
     )
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-        if (hasJumpStatement(loopExpression.body)) {
+        if (loopExpression.hasJumpStatements()) {
             report(
                 CodeSmell(
                     issue,
@@ -60,21 +57,22 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
         super.visitLoopExpression(loopExpression)
     }
 
-    private fun hasJumpStatement(body: KtExpression?): Boolean =
-        body.isJumpStatement() || body?.children?.any { it.isJumpStatement() } == true
+    private fun KtLoopExpression.hasJumpStatements(): Boolean =
+        body?.isJumpStatement() == true || body?.children?.any { it.isJumpStatement() } == true
 
-    private fun PsiElement?.isJumpStatement() =
-        this is KtReturnExpression && !containsElvisContinue() && !isAfterConditionalJumpStatement() ||
+    private fun PsiElement.isJumpStatement(): Boolean =
+        this is KtReturnExpression && !isFollowedByElvisJump() && !isAfterConditionalJumpStatement() ||
             this is KtBreakExpression || this is KtContinueExpression
 
-    private fun KtReturnExpression.containsElvisContinue(): Boolean {
-        val expr = this.returnedExpression
-        return expr is KtBinaryExpression && expr.operationToken == KtTokens.ELVIS && expr.right is KtContinueExpression
-    }
+    private fun KtReturnExpression.isFollowedByElvisJump(): Boolean =
+        (returnedExpression as? KtBinaryExpression)?.isElvisJump() == true
+
+    private fun KtBinaryExpression.isElvisJump(): Boolean =
+        operationToken == KtTokens.ELVIS && (right is KtBreakExpression || right is KtContinueExpression)
 
     private fun PsiElement.isAfterConditionalJumpStatement(): Boolean =
         siblings(forward = false, withItself = false).any { it.isConditionalJumpStatement() }
 
     private fun PsiElement.isConditionalJumpStatement(): Boolean =
-        (this is KtIfExpression || this is KtWhenExpression) && anyDescendantOfType<PsiElement> { it.isJumpStatement() }
+        anyDescendantOfType<PsiElement> { it.isJumpStatement() }
 }

@@ -57,25 +57,32 @@ detekt {
 }
 ```
 
-To enable/disable detekt reports and to configure their output directories edit the `detekt { }` closure:
+To enable/disable detekt reports use the `withType` method to set defaults for all detekt tasks at once:
 ```kotlin
-detekt {
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
     reports {
-        xml {
-            enabled = true
-            destination = file("path/to/destination.xml")
-        }
-        html {
-            enabled = true
-            destination = file("path/to/destination.html")
-        }
-        txt {
-            enabled = true
-            destination = file("path/to/destination.txt")
-        }
+        xml.required.set(true)
+        html.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
     }
 }
 ```
+
+```groovy
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
+    }
+}
+```
+
+See [reporting](https://detekt.github.io/detekt/reporting.html) docs for more details on configuring reports.
 
 ### Adding more rule sets
 

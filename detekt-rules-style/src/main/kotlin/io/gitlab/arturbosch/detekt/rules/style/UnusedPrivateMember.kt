@@ -52,7 +52,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
 
 /**
  * Reports unused private properties, function parameters and functions.
- * If these private elements are unused they should be removed. Otherwise this dead code
+ * If these private elements are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
 @ActiveByDefault(since = "1.16.0")
@@ -119,7 +119,12 @@ private class UnusedFunctionVisitor(
                             KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
                             else -> emptyList()
                         }
-                        directReferences + assignmentReferences
+                        val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
+                            listOf(KtTokens.IN_KEYWORD, KtTokens.NOT_IN).flatMap {
+                                functionReferences[it.value].orEmpty()
+                            }
+                        } else emptyList()
+                        directReferences + assignmentReferences + containingReferences
                     } else {
                         emptyList()
                     }
@@ -179,7 +184,7 @@ private class UnusedFunctionVisitor(
 
     /*
      * We need to collect all private function declarations and references to these functions
-     * for the whole file as Kotlin allows to access private and internal object declarations
+     * for the whole file as Kotlin allows access to private and internal object declarations
      * from everywhere in the file.
      */
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
@@ -212,6 +217,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) return
+        if (klass.isExternal()) return
 
         super.visitClass(klass)
     }

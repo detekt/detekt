@@ -156,5 +156,22 @@ object NullableToStringCallSpec : Spek({
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
+
+        // https://github.com/detekt/detekt/issues/4059
+        it("ignores platform types") {
+            val code = """
+                class Foo(val a: Any) {
+                    fun test(foo: Foo?) {
+                        // getSimpleName() is not annotated with nullability information in the JDK, so compiler treats
+                        // it as a platform type with unknown nullability. IDE behavior is different as it can take
+                        // advantage of external annotations, which unfortunately isn't supported in the compiler, so we
+                        // whitelist all platform types to avoid false positives.
+                        val y = "${'$'}{javaClass.simpleName}"
+                    }
+                }
+            """.trimIndent()
+            val actual = subject.compileAndLintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
     }
 })

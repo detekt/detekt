@@ -18,6 +18,21 @@ class OptionalUnitSpec : Spek({
     val env: KotlinCoreEnvironment by memoized()
 
     describe("OptionalUnit rule") {
+        it("should report when a function has an explicit Unit return type with context") {
+            val code = """
+                fun foo(): Unit { }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        it("should not report when a function has a non-unit body expression") {
+            val code = """
+                fun foo() = String
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
 
         context("several functions which return Unit") {
 
@@ -296,14 +311,72 @@ class OptionalUnitSpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
+
+            it("another object is used as the last expression") {
+                val code = """
+                    fun foo() {
+                        String
+                    }
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
         }
 
-        it("should not report when function initializer is Nothing") {
-            val code = """
+        context("function initializers") {
+            it("should not report when function initializer is Nothing") {
+                val code = """
                     fun test(): Unit = throw UnsupportedOperationException()
                 """
-            val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).isEmpty()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report when the function initializer requires a type") {
+                val code = """
+                    fun <T> foo(block: (List<T>) -> Unit): T {
+                        val list = listOf<T>()
+                        block(list)
+                        return list.first()
+                    }
+    
+                    fun doFoo(): Unit = foo {}
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should report on function initializers when there is no context") {
+                val code = """
+                    fun test(): Unit = throw UnsupportedOperationException()
+                """
+                val findings = subject.compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should report when the function initializer takes in the type Nothing") {
+                val code = """
+                    fun <T> foo(block: (List<T>) -> Unit): T {
+                        val list = listOf<T>()
+                        block(list)
+                        return list.first()
+                    }
+    
+                    fun doFoo(): Unit = foo<Nothing> {}
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should report when the function initializer does not provide a different type") {
+                val code = """
+                    fun foo() {}
+                    
+                    fun doFoo(): Unit = foo()
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
         }
     }
 })
