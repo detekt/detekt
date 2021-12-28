@@ -40,7 +40,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Violation of the package declaration style.",
+        "Violation of the package declaration style detected.",
         Debt.FIVE_MINS
     )
 

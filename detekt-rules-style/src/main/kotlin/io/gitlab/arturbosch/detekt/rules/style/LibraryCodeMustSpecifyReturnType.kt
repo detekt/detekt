@@ -49,7 +49,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         this.javaClass.simpleName,
         Severity.Style,
         "Library functions/properties should have an explicit return type. " +
-            "Inferred return type can easily be changed by mistake which may lead to breaking changes.",
+            "Inferred return types can easily be changed by mistake which may lead to breaking changes.",
         Debt.FIVE_MINS
     )
 

@@ -50,7 +50,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIsNullOrEmpty",
         Severity.Style,
-        "Use 'isNullOrEmpty()' call instead of 'x == null || x.isEmpty()'",
+        "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`.",
         Debt.FIVE_MINS
     )
 

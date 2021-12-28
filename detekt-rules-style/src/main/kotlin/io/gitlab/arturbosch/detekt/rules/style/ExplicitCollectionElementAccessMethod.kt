@@ -44,7 +44,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         Issue(
             "ExplicitCollectionElementAccessMethod",
             Severity.Style,
-            "Prefer usage of indexed access operator [] for map element access or insert methods",
+            "Prefer usage of the indexed access operator [] for map element access or insert methods.",
             Debt.FIVE_MINS
         )
 
@@ -53,7 +53,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         if (bindingContext == BindingContext.EMPTY) return
         val call = expression.selectorExpression as? KtCallExpression ?: return
         if (isIndexableGetter(call) || (isIndexableSetter(call) && unusedReturnValue(call))) {
-            report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 

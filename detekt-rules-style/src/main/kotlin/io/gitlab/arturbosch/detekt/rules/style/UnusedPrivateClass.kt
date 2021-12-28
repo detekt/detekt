@@ -46,7 +46,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedPrivateClass",
         Severity.Maintainability,
-        "Private class is unused.",
+        "Private class is unused and should be removed.",
         Debt.FIVE_MINS
     )
 

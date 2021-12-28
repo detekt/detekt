@@ -53,7 +53,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "The `let` usage is unnecessary",
+        "The `let` usage is unnecessary.",
         Debt.FIVE_MINS
     )
 
