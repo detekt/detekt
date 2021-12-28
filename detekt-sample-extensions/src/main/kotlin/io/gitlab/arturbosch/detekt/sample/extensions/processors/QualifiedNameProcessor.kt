@@ -36,4 +36,4 @@ class QualifiedNameProcessor : FileProcessListener {
     }
 }
 
-val fqNamesKey: Key<Set<String>> = Key.create<Set<String>>("FQNames")
+val fqNamesKey: Key<Set<String>> = Key.create("FQNames")
