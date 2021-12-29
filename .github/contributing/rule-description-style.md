@@ -1,13 +1,13 @@
 # Style guide for authoring rule descriptions
 
-A rule incorporated into the Detekt framework is generally accompanied by three
+A rule incorporated into the detekt framework is generally accompanied by three
 types of descriptions:
 1. **Documentation string**: Using conventional
    Javadoc/KDoc syntax, the documentation string is associated with the `Rule`
    subclass implementing the considered rule. Documentation strings associated
-   with built-in rules are automatically pulled from the Detekt codebase and
+   with built-in rules are automatically pulled from the detekt codebase and
    used to generate the rule set overview available on the
-   [Detekt website](https://detekt.github.io/detekt).
+   [detekt website](https://detekt.github.io/detekt).
 2. **Issue description**: The issue description gives a summary of the code
    smells that the respective rule is supposed to detect. From an implementation
    point of view, it is the string that `Rule` subclasses pass to the
@@ -25,12 +25,12 @@ types of descriptions:
 When authoring these descriptions, rule developers should keep two different
 target audiences in mind:
 1. The **documentation string** is generally read by individuals who want to
-   learn about the *rule itself*. They might need to compose a Detekt
+   learn about the *rule itself*. They might need to compose a detekt
    configuration for their codebase, need to understand what the rule is
    currently checking for in order to extend it, or are just interested in the
-   available Detekt rule sets.
+   available detekt rule sets.
 2. The **issue description** as well as **code smell messages** are presented to
-   developers whose codebase violates one or more rules that Detekt checked for.
+   developers whose codebase violates one or more rules that detekt checked for.
    This audience is generally less interested in the rule itself. Instead,
    individuals reading these texts will usually expect specific references to
    *their codebase* and what can be done in order to improve it.
@@ -96,8 +96,8 @@ refer to the following subsections.
 
 ### Components of issue descriptions
 An issue description should consist of the following components (in this order):
-1. **Violation** (*required*): What type of violation is it that Detekt
-   identified in the codebase and, under consideration of the given Detekt
+1. **Violation** (*required*): What type of violation is it that detekt
+   identified in the codebase and, under consideration of the given detekt
    configuration, recognizes as a violation of the considered rule?
 2. **Rationale** (*optional*): Why is the identified violation considered an
    issue? Especially for less experienced Kotlin developers, this might not be
