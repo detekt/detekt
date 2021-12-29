@@ -48,22 +48,44 @@ class VarCouldBeValSpec : Spek({
     }
 
     describe("class-level declarations") {
-        it("does not report variables that are re-assigned") {
+        it("does not report non-private variables in non-private classes") {
             val code = """
                 class A {
-                    fun test() {
-                        var a = 1
-                        a = 2
-                    }
-                }
-                
-                
-                fun test() {
                     var a = 1
-                    a = 2
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report non-private variables in non-private objects") {
+            val code = """
+                object A {
+                    var a = 1
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report variables that are re-assigned") {
+            val code = """
+                class A {
+                    private var a = 1
+                    
+                    fun foo() {
+                        a = 2
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("reports variables that are not re-assigned") {
+            val code = """
+                class A {
+                    private var a = 1
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 

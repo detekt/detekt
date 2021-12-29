@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -80,12 +81,12 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
     private class AssignmentVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
 
-        private val declarations = mutableSetOf<KtNamedDeclaration>()
+        private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
         private val escapeCandidates = mutableMapOf<DeclarationDescriptor, List<KtProperty>>()
 
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> {
-            return declarations.filterNot { it.hasAssignments() }
+            return declarationCandidates.filterNot { it.hasAssignments() }
         }
 
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
@@ -107,8 +108,8 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         override fun visitProperty(property: KtProperty) {
             super.visitProperty(property)
-            if (property.isEligible()) {
-                declarations.add(property)
+            if (property.isDeclarationCandidate()) {
+                declarationCandidates.add(property)
             }
 
             // Check for whether the initializer contains an object literal.
@@ -149,7 +150,9 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         ) {
             when (rightExpression) {
                 is KtObjectLiteralExpression -> {
-                    escapeCandidates[descriptor] = rightExpression.collectDescendantsOfType()
+                    escapeCandidates[descriptor] = rightExpression.collectDescendantsOfType {
+                        it.isEscapeCandidate()
+                    }
                 }
                 is KtIfExpression -> {
                     evaluateAssignmentExpression(descriptor, rightExpression.then)
@@ -166,11 +169,13 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         private fun evaluateReturnExpression(returnedExpression: KtExpression?) {
             when (returnedExpression) {
                 is KtObjectLiteralExpression -> {
-                    returnedExpression.collectDescendantsOfType<KtProperty>().forEach(declarations::remove)
+                    returnedExpression.collectDescendantsOfType<KtProperty> {
+                        it.isEscapeCandidate()
+                    }.forEach(declarationCandidates::remove)
                 }
                 is KtNameReferenceExpression -> {
                     returnedExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { descriptor ->
-                        escapeCandidates[descriptor]?.forEach(declarations::remove)
+                        escapeCandidates[descriptor]?.forEach(declarationCandidates::remove)
                     }
                 }
                 is KtIfExpression -> {
@@ -185,7 +190,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        private fun KtProperty.isEligible(): Boolean {
+        private fun KtProperty.isDeclarationCandidate(): Boolean {
             return when {
                 !isVar -> false
                 isLocal || isPrivate() -> true
@@ -197,6 +202,11 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
                         ?.containingNonLocalDeclaration() != null
                 }
             }
+        }
+
+        private fun KtProperty.isEscapeCandidate(): Boolean {
+            return !isPrivate() &&
+                (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
         }
 
         private fun visitAssignment(assignedExpression: KtExpression?) {
