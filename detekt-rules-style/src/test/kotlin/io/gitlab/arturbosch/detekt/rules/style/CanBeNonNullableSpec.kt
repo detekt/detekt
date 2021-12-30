@@ -383,5 +383,107 @@ class CanBeNonNullableSpec : Spek({
                 """
             Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        context("evaluating nullable function parameters") {
+            context("reports when they are never treated as nullable") {
+                it("and use a double-bang de-nullifier") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                it("and use a double-bang qualified expression") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            val b = a!!.plus(2)
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+            }
+
+            context("does not report when they are checked with an if-statement") {
+                it("on nullity") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a == null) {
+                                println("'a' is null")
+                            }
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("on non-nullity") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a != null) {
+                                println(a + 5)
+                            }
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("in a reversed manner") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (null != a) {
+                                println(a + 5)
+                            }
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("with multiple clauses") {
+                    val code = """
+                        fun foo(a: Int?, other: Int) {
+                            if (a != null && other % 2 == 0) {
+                                println(a + 5)
+                            }
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+            }
+
+            it("does not report when they are used in an assignment with an Elvis operator") {
+                val code = """
+                    fun foo(a: Int?) {
+                        val b = (a ?: 0) + 2
+                        val c = a!! + 2
+                    }
+                """.trimIndent()
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when they are accessed using a null-safe call") {
+                val code = """
+                    fun foo(a: Int?) {
+                        val b = a?.plus(2)
+                        val c = a!! + 2
+                    }
+                """.trimIndent()
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does not report when they are accessed using a null-safe extension function") {
+                val code = """
+                    fun foo(a: List<String>?) {
+                        val b = a.orEmpty()
+                        val c = a!! + "TEST"
+                    }
+                """.trimIndent()
+                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+        }
     }
 })
