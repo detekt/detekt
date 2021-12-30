@@ -183,28 +183,27 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            expression.condition?.let { it as? KtBinaryExpression }?.evaluateIfCondition()
+            expression.condition?.let { it as? KtBinaryExpression }?.evaluateIfExpression()
             super.visitIfExpression(expression)
         }
 
-        private fun KtBinaryExpression.evaluateIfCondition() {
+        private fun KtBinaryExpression.evaluateIfExpression() {
             val leftExpression = left
             val rightExpression = right
-            if (
-                leftExpression is KtNameReferenceExpression ||
-                rightExpression is KtNameReferenceExpression &&
-                (isNullCheck() || isNonNullCheck())
-            ) {
-                if (rightExpression?.text == "null") {
-                    leftExpression
-                } else {
-                    rightExpression
-                }.getResolvedCall(bindingContext)
+            if (isNullCheck() || isNonNullCheck()) {
+                // Determine whether either side of the expression is a variable
+                // that could be removed from candidateParams
+                when {
+                    leftExpression is KtNameReferenceExpression -> leftExpression
+                    rightExpression is KtNameReferenceExpression -> rightExpression
+                    else -> null
+                }?.getResolvedCall(bindingContext)
                     ?.resultingDescriptor
                     ?.let(candidateParams::remove)
             }
-            (leftExpression as? KtBinaryExpression)?.evaluateIfCondition()
-            (rightExpression as? KtBinaryExpression)?.evaluateIfCondition()
+            // Recursively iterate into the if-check if possible
+            (leftExpression as? KtBinaryExpression)?.evaluateIfExpression()
+            (rightExpression as? KtBinaryExpression)?.evaluateIfExpression()
         }
     }
 
