@@ -137,7 +137,7 @@ the rationale, respectively, these messages do not benefit enough from the
 deviation (in comparison to the messages in the compliant examples above).
 
 In contrast, the following message does actually benefit from the implicit
-descriptionof the violation:
+description of the violation:
 - :x:: ``The `next()` method of an `Iterator` implementation does not throw a `NoSuchElementException` when there are no more elements to return. In such situations, this Exception should be thrown.`` &rarr; Unnecessarily verbose.
 - :heavy_check_mark:: ``The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` when there are no more elements to return.``
   &rarr; Recommendation and violation (given implicitly).
