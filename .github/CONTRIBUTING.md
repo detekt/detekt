@@ -213,7 +213,7 @@ An issue description should consist of the following components:
    entirely obvious. If it is not, however, it makes sense to add a suitable
    recommendation (or multiple alternative recommendations).
 
-:warning: If possible, messages should  first describe the violation, then the
+:warning: If possible, messages should first describe the violation, then the
 optional rationale, and finally the optional recommendation.
 
 *Exception*: If it makes sense in the specific case, it is also possible to deviate
