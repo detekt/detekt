@@ -110,6 +110,10 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         override fun visitKtFile(file: KtFile) {
             super.visitKtFile(file)
+            // Any candidate params that were not removed during the inspection
+            // of the Kotlin file and were not added to referenceParams were never
+            // treated as nullable params in the code, thus they can be converted
+            // to non-nullable.
             candidateParams.forEach { (descriptor, param) ->
                 if (referencedParams.contains(descriptor)) {
                     report(
