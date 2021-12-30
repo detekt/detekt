@@ -123,10 +123,15 @@ underlying violation is implicitly mentioned.
 possible!
 
 The following list gives examples of compliant issue descriptions:
-- :heavy_check_mark:: `Public library class.` &rarr; Just a violation. Compliant, but would certainly benefit from a few more details.
-- :heavy_check_mark:: ``Public library class. Reduce its visibility to the module or the file.`` &rarr; Violation and recommendation.
-- :heavy_check_mark:: `Function returns a constant. This is misleading.` &rarr; Violation and rationale.
-- :heavy_check_mark:: `Function returns a constant, which is misleading. Use a constant property instead.` &rarr; All components.
+- :heavy_check_mark:: `Public library class.`
+  &rarr; Just a violation. Compliant, but would certainly benefit from a few more
+  details.
+- :heavy_check_mark:: ``Public library class. Reduce its visibility to the module or the file.``
+  &rarr; Violation and recommendation.
+- :heavy_check_mark:: `Function returns a constant. This is misleading.`
+  &rarr; Violation and rationale.
+- :heavy_check_mark:: `Function returns a constant, which is misleading. Use a constant property instead.`
+  &rarr; All components.
 
 The following issue descriptions do not comply with this style guide:
 - :x:: `Library class should not be public.` &rarr; Recommendation and violation (given implicitly).
@@ -138,7 +143,8 @@ deviation (in comparison to the messages in the compliant examples above).
 
 In contrast, the following message does actually benefit from the implicit
 description of the violation:
-- :x:: ``The `next()` method of an `Iterator` implementation does not throw a `NoSuchElementException` when there are no more elements to return. In such situations, this Exception should be thrown.`` &rarr; Unnecessarily verbose.
+- :x:: ``The `next()` method of an `Iterator` implementation does not throw a `NoSuchElementException` when there are no more elements to return. In such situations, this Exception should be thrown.``
+  &rarr; Unnecessarily verbose.
 - :heavy_check_mark:: ``The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` when there are no more elements to return.``
   &rarr; Recommendation and violation (given implicitly).
 
