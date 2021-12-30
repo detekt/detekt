@@ -95,6 +95,7 @@ and code smell messages. To learn *what to include* in each of the texts,
 refer to the following subsections.
 
 ### Components of issue descriptions
+
 An issue description should consist of the following components (in this order):
 1. **Violation** (*required*): What type of violation is it that detekt
    identified in the codebase and, under consideration of the given detekt
@@ -119,6 +120,7 @@ The following list contains some positive and negative examples:
 - :heavy_check_mark: (*all categories*): `Function returns a constant, which is misleading. Use a constant property instead.`
 
 ### Components of code smell messages
+
 A code smell message should be dynamically created to describe a
 *specific violation*. It should be regarded as an extension of the more generic
 violation part of the issue description. More specifically, it should explicitly
