@@ -96,7 +96,7 @@ refer to the following subsections.
 
 ### Components of issue descriptions
 
-An issue description should consist of the following components (in this order):
+An issue description should consist of the following components:
 1. **Violation** (*required*): What type of violation is it that detekt
    identified in the codebase and, under consideration of the given detekt
    configuration, recognizes as a violation of the considered rule?
@@ -108,16 +108,39 @@ An issue description should consist of the following components (in this order):
    entirely obvious. If it is not, however, it makes sense to add a suitable
    recommendation (or multiple alternative recommendations).
 
+:warning: If possible, messages should  first describe the violation, then the
+optional rationale, and finally the optional recommendation.
+
+*Exception*: If it makes sense in the specific case, it is also possible to deviate
+from this order. Especially if the analyzed code contains a discouraged design
+pattern or, alternatively, can be improved by adopting an encouraged design pattern,
+the actual violation would often have to be described as 'making use of the
+discouraged pattern' or as 'not making use of an encouraged design pattern'. In this
+case, it is possible to focus on the rationale or the recommendation, while the
+underlying violation is implicitly mentioned.
+
 :warning: In any case, try to keep the description as brief and concise as
 possible!
 
-The following list contains some positive and negative examples:
-- :heavy_check_mark: (*just a violation*): `Public library class.`
-- :x: (*just a recommendation*): `Library class should not be public.`
-- :heavy_check_mark: (*violation and recommendation*): ``Public library class. Reduce its visibility to the module or the file.``
-- :x: (*just a rationale*): `A function that only returns a constant is misleading.`
-- :heavy_check_mark: (*violation and rationale*): `Function returns a constant. This is misleading.`
-- :heavy_check_mark: (*all categories*): `Function returns a constant, which is misleading. Use a constant property instead.`
+The following list gives examples of compliant issue descriptions:
+- :heavy_check_mark:: `Public library class.` &rarr; Just a violation. Compliant, but would certainly benefit from a few more details.
+- :heavy_check_mark:: ``Public library class. Reduce its visibility to the module or the file.`` &rarr; Violation and recommendation.
+- :heavy_check_mark:: `Function returns a constant. This is misleading.` &rarr; Violation and rationale.
+- :heavy_check_mark:: `Function returns a constant, which is misleading. Use a constant property instead.` &rarr; All components.
+
+The following issue descriptions do not comply with this style guide:
+- :x:: `Library class should not be public.` &rarr; Recommendation and violation (given implicitly).
+- :x:: `A function that only returns a constant is misleading.` &rarr; Rationale and violation (given implicitly).
+
+Although the violation is implicitly described as part of the recommendation and
+the rationale, respectively, these messages do not benefit enough from the
+deviation (in comparison to the messages in the compliant examples above).
+
+In contrast, the following message does actually benefit from the implicit
+descriptionof the violation:
+- :x:: ``The `next()` method of an `Iterator` implementation does not throw a `NoSuchElementException` when there are no more elements to return. In such situations, this Exception should be thrown.`` &rarr; Unnecessarily verbose.
+- :heavy_check_mark:: ``The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` when there are no more elements to return.``
+  &rarr; Recommendation and violation (given implicitly).
 
 ### Components of code smell messages
 
@@ -133,11 +156,16 @@ after the more specific description of the violation.
 
 The following list contains compliant and non-compliant examples of code smell
 messages:
-- :x: (*probably not more specific than the issue message*): ``Non-boolean property suggests a boolean type.``
-- :heavy_check_mark: (*specific violation*): ``Non-boolean property `hasXyz` suggests a boolean type.``
-- :x: (*pointless recommendation*): ``Non-boolean property `hasXyz` suggests a boolean type. Remove the prefix.``
-- :heavy_check_mark: (*with specific recommendation*): ``Non-boolean property `hasXyz` suggests a boolean type. Remove the `has` prefix.``
-- :heavy_check_mark: (*with usage-aware recommendation*): ``Magic number `4` passed to `abc`. Pass it as a named argument.``
+- :x:: ``Non-boolean property suggests a boolean type.``
+  &rarr; Probably not more specific than the issue description.
+- :heavy_check_mark:: ``Non-boolean property `hasXyz` suggests a boolean type.``
+  &rarr; With a more specific description of the violation.
+- :x:: ``Non-boolean property `hasXyz` suggests a boolean type. Remove the prefix.``
+  &rarr; Pointless recommendation.
+- :heavy_check_mark:: ``Non-boolean property `hasXyz` suggests a boolean type. Remove the `has` prefix.``
+  &rarr; Specific recommendation.
+- :heavy_check_mark:: ``Magic number `4` passed to `abc`. Pass it as a named argument.``
+  &rarr; Usage-aware recommendation.
 
 *Note*: The recommendation given in the last example is usage-aware since
 it is limited to cases in which a Kotlin function is called. Named
