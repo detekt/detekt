@@ -35,8 +35,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
-private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
-
 /**
  * Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
  * Val declarations are assign-once (read-only), which makes understanding the current state easier.
@@ -69,7 +67,6 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitKtFile(file: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
         super.visitKtFile(file)
         val assignmentVisitor = AssignmentVisitor(bindingContext)
         file.accept(assignmentVisitor)
@@ -218,5 +215,9 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }?.text ?: return
             assignments.getOrPut(name) { mutableSetOf() }.add(assignedExpression)
         }
+    }
+
+    private companion object {
+        private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
     }
 }

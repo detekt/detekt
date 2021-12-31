@@ -17,6 +17,7 @@ class VarCouldBeValSpec : Spek({
         it("does not report non-private variables") {
             val code = """
                 var a = 1
+                internal var b = 2
             """.trimIndent()
 
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -52,6 +53,11 @@ class VarCouldBeValSpec : Spek({
             val code = """
                 class A {
                     var a = 1
+                    internal var b = 1
+                }
+                internal class B {
+                    var a = 1
+                    internal var b = 1
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -61,6 +67,11 @@ class VarCouldBeValSpec : Spek({
             val code = """
                 object A {
                     var a = 1
+                    internal var b = 1
+                }
+                internal object B {
+                    var a = 1
+                    internal var b = 1
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -271,8 +282,8 @@ class VarCouldBeValSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        context("should not report anonymous objects that escape") {
-            it("when initializing a variable directly") {
+        context("anonymous objects that escape") {
+            it("does not report when an object initializes a variable directly") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -287,7 +298,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("when initializing a variable in an if-statement") {
+            it("does not report an object initializing a variable in an if-statement") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -306,7 +317,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("when assigned to a variable directly") {
+            it("does not report when an object is assigned to a variable directly") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -322,7 +333,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("when assigned to a variable in an if-statement") {
+            it("does not report when an object is assigned to a variable in an if-statement") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -342,7 +353,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("when defined in a return statement directly") {
+            it("does not report when an object is defined in a return statement directly") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -356,7 +367,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("when defined in a return statement via an if-statement") {
+            it("does not report when an object is when defined in a return statement via an if-statement") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -374,7 +385,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("as a function initializer directly") {
+            it("does not report when an object is defined as a function initializer") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
@@ -386,7 +397,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("as a function initializer via an if-statement") {
+            it("does not report when an object is defined as a function initializer via an if-statement") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
