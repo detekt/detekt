@@ -75,7 +75,6 @@ class CliArgs {
     )
     var createBaseline: Boolean = false
 
-    @Suppress("VarCouldBeVal")
     @Parameter(
         names = ["--report", "-r"],
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +

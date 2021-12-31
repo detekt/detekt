@@ -76,6 +76,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    @Suppress("TooManyFunctions")
     private class AssignmentVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()

@@ -12,7 +12,7 @@ class OutputFacade(
     private val settings: ProcessingSettings
 ) {
 
-    private var reports: Map<String, ReportsSpec.Report> =
+    private val reports: Map<String, ReportsSpec.Report> =
         settings.getOrNull<Collection<ReportsSpec.Report>>(DETEKT_OUTPUT_REPORT_PATHS_KEY)
             ?.associateBy { it.type }
             .orEmpty()

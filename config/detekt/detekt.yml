@@ -246,3 +246,6 @@ style:
     active: true
   UseRequireNotNull:
     active: true
+  VarCouldBeVal:
+    active: true
+    ignoreAnnotated: ['Parameter']
