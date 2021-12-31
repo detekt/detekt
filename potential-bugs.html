@@ -1113,6 +1113,40 @@ either handle all cases or use a default <code class="language-plaintext highlig
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="nullcheckonmutableproperty">NullCheckOnMutableProperty</h3>
+
+<p>Reports null-checks on mutable properties, as these properties’ value can be
+changed - and thus make the null-check invalid - after the execution of the
+if-statement.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 10min</p>
+
+<h4 id="noncompliant-code-19">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span><span class="p">(</span><span class="k">private</span> <span class="kd">var</span> <span class="py">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?)</span> <span class="p">{</span>
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nf">println</span><span class="p">(</span><span class="mi">2</span> <span class="p">+</span> <span class="n">a</span><span class="o">!!</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-16">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?)</span> <span class="p">{</span>
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nf">println</span><span class="p">(</span><span class="mi">2</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="nullabletostringcall">NullableToStringCall</h3>
 
 <p>Turn on this rule to flag ‘toString’ calls with a nullable receiver that may return the string “null”.</p>
@@ -1123,7 +1157,7 @@ either handle all cases or use a default <code class="language-plaintext highlig
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-19">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-20">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Any</span><span class="p">?):</span> <span class="nc">String</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="nf">toString</span><span class="p">()</span>
@@ -1134,7 +1168,7 @@ either handle all cases or use a default <code class="language-plaintext highlig
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-16">Compliant Code:</h4>
+<h4 id="compliant-code-17">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Any</span><span class="p">?):</span> <span class="nc">String</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">a</span><span class="o">?.</span><span class="nf">toString</span><span class="p">()</span> <span class="o">?:</span> <span class="s">"-"</span>
@@ -1156,7 +1190,7 @@ verified that all cases are already covered when checking cases on an enum or se
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-20">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-21">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="kd">class</span> <span class="nc">Color</span> <span class="p">{</span>
     <span class="nc">RED</span><span class="p">,</span>
@@ -1174,7 +1208,7 @@ verified that all cases are already covered when checking cases on an enum or se
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-17">Compliant Code:</h4>
+<h4 id="compliant-code-18">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="kd">class</span> <span class="nc">Color</span> <span class="p">{</span>
     <span class="nc">RED</span><span class="p">,</span>
@@ -1209,12 +1243,12 @@ loop altogether.</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-21">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-22">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="mi">2</span><span class="p">)</span> <span class="k">break</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-18">Compliant Code:</h4>
+<h4 id="compliant-code-19">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">break</span>
@@ -1231,13 +1265,13 @@ loop altogether.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-22">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-23">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="mi">1</span>
 <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">!!</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-19">Compliant Code:</h4>
+<h4 id="compliant-code-20">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="mi">1</span>
 <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span>
@@ -1253,13 +1287,13 @@ loop altogether.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-23">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-24">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="s">""</span>
 <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">?.</span><span class="n">length</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-20">Compliant Code:</h4>
+<h4 id="compliant-code-21">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
 <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">?.</span><span class="n">length</span>
@@ -1276,7 +1310,7 @@ Catch blocks can be unreachable if the exception has already been caught in the 
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-24">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-25">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -1290,7 +1324,7 @@ Catch blocks can be unreachable if the exception has already been caught in the 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-21">Compliant Code:</h4>
+<h4 id="compliant-code-22">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
@@ -1315,7 +1349,7 @@ This unreachable code should be removed as it serves no purpose.</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-25">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-26">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">break</span>
@@ -1343,14 +1377,14 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-26">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-27">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">str</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="n">str</span><span class="o">!!</span><span class="p">.</span><span class="n">length</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-22">Compliant Code:</h4>
+<h4 id="compliant-code-23">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">str</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="n">str</span><span class="o">?.</span><span class="n">length</span><span class="p">)</span>
@@ -1369,7 +1403,7 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p><strong>Aliases</strong>: UNCHECKED_CAST</p>
 
-<h4 id="noncompliant-code-27">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-28">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="n">s</span> <span class="k">as</span> <span class="nc">Int</span><span class="p">)</span>
@@ -1380,7 +1414,7 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-23">Compliant Code:</h4>
+<h4 id="compliant-code-24">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nc">Any</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">println</span><span class="p">(</span><span class="n">s</span> <span class="k">as</span> <span class="nc">Int</span><span class="p">)</span>
@@ -1397,14 +1431,14 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-28">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-29">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="mi">1</span> <span class="p">+</span> <span class="mi">2</span>
     <span class="p">+</span> <span class="mi">3</span> <span class="p">+</span> <span class="mi">4</span>
 <span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// 3</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-24">Compliant Code:</h4>
+<h4 id="compliant-code-25">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">x</span> <span class="p">=</span> <span class="mi">1</span> <span class="p">+</span> <span class="mi">2</span> <span class="p">+</span> <span class="mi">3</span> <span class="p">+</span> <span class="mi">4</span>
 <span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// 10</span>
@@ -1420,7 +1454,7 @@ However, the value is replaced with the original value which might lead to bugs.
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="noncompliant-code-29">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-30">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">0</span>
 <span class="n">i</span> <span class="p">=</span> <span class="n">i--</span>
@@ -1434,7 +1468,7 @@ However, the value is replaced with the original value which might lead to bugs.
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-25">Compliant Code:</h4>
+<h4 id="compliant-code-26">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">0</span>
 <span class="n">i--</span>
@@ -1459,7 +1493,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-30">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-31">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
 
@@ -1469,7 +1503,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-26">Compliant Code:</h4>
+<h4 id="compliant-code-27">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span> <span class="p">{</span>
 
@@ -1495,7 +1529,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2021 The detekt Team. All rights reserved. <br />
- Site last generated: Dec 30, 2021 <br />
+ Site last generated: Dec 31, 2021 <br />
                 </div>
             </div>
 </footer>
