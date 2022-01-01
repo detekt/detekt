@@ -416,16 +416,32 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("using a precondition") {
-                it("does report when a precondition is called on the param") {
-                    val code = """
-                        fun foo(a: Int?, b: Int?) {
-                            val aNonNull = requireNotNull(a)
-                            val c = aNonNull + checkNotNull(b)
+            it("does not report nullable params in an override function") {
+                val code = """
+                    abstract class A {
+                        open fun foo(a: Int?) {
+                            if (a != null) println("a not null") else println("a is null")
                         }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
-                }
+                    }
+
+                    class B : A() {
+                        override fun foo(a: Int?) {
+                            println("Other code")
+                            super.foo(a)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            it("does report when a precondition is called on the param") {
+                val code = """
+                    fun foo(a: Int?, b: Int?) {
+                        val aNonNull = requireNotNull(a)
+                        val c = aNonNull + checkNotNull(b)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
             context("when statements") {
@@ -555,6 +571,17 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
+                    it("does report when the parameter is checked in a range") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when (a) {
+                                    in Integer.MIN_VALUE..Integer.MAX_VALUE -> println("a not null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
                     it("does not report on nullable type matching") {
                         val code = """
                             fun foo(a: Int?) {
@@ -599,6 +626,25 @@ class CanBeNonNullableSpec : Spek({
                                 println("'a' is null")
                             }
                         }
+
+                        fun fizz(a: Int?) {
+                            if (null == a) {
+                                println("'a' is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("does not report when the if-check is in the else statement") {
+                    val code = """
+                        fun foo(num: Int, a: Int?) {
+                            if (num % 2 == 0) {
+                                println("'num' is even")
+                            } else if (a == null) {
+                                println("'a' is null")
+                            }
+                        }
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
@@ -610,19 +656,14 @@ class CanBeNonNullableSpec : Spek({
                                 println(a + 5)
                             }
                         }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-                }
 
-                it("does report when the parameter is only checked on non-nullity in a reversed manner") {
-                    val code = """
-                        fun foo(a: Int?) {
+                        fun fizz(a: Int?) {
                             if (null != a) {
                                 println(a + 5)
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
                 }
 
                 it("does report when the parameter is only checked on non-nullity with multiple clauses") {

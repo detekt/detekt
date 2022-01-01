@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -127,10 +128,10 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            // Operator functions - like setValue() - may require a nullable param to
-            // correspond with function type parameters, so those functions would not
-            // have the choice to mark the param as non-nullable.
-            if (!function.isOperator()) {
+            // Operator and override functions may require a nullable param to correspond
+            // with function type parameters, so those functions would not have the choice
+            // to mark the param as non-nullable.
+            if (!function.isOperator() && !function.isOverride()) {
                 function.valueParameters.asSequence()
                     .filter {
                         it.typeReference?.typeElement is KtNullableType
@@ -156,6 +157,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                         is KtWhenConditionIsPattern -> {
                             (whenCondition.typeReference.isNullable(bindingContext) || whenCondition.isNegated)
                         }
+                        // A range check doesn't work with Kotlin's contract system
+                        // for checking whether a value is null, so it's to be ignored.
                         else -> false
                     }
                 }
