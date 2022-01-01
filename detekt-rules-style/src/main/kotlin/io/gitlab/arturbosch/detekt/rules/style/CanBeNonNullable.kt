@@ -12,6 +12,8 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOperator
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -23,16 +25,20 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
+import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -79,10 +85,6 @@ import org.jetbrains.kotlin.types.isNullable
  *         get() = 5
  * }
  *
- * fun foo(a: Int?) {
- *     val b = (a ?: 0) + 2
- * }
- *
  * fun foo(a: Int) {
  *     val b = a + 2
  * }
@@ -98,15 +100,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitKtFile(file: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
+        super.visitKtFile(file)
         PropertyCheckVisitor().visitKtFile(file)
         ParameterCheckVisitor().visitKtFile(file)
-        super.visitKtFile(file)
     }
 
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val candidateParams = mutableMapOf<DeclarationDescriptor, KtParameter>()
-        private val referencedParams = mutableSetOf<DeclarationDescriptor>()
 
         override fun visitKtFile(file: KtFile) {
             super.visitKtFile(file)
@@ -114,39 +114,61 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             // of the Kotlin file and were not added to referenceParams were never
             // treated as nullable params in the code, thus they can be converted
             // to non-nullable.
-            candidateParams.forEach { (descriptor, param) ->
-                if (referencedParams.contains(descriptor)) {
-                    report(
-                        CodeSmell(
-                            issue,
-                            Entity.from(param),
-                            "The nullable parameter '${param.name}' can be made non-nullable."
-                        )
+            candidateParams.forEach { (_, param) ->
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(param),
+                        "The nullable parameter '${param.name}' can be made non-nullable."
                     )
-                }
+                )
             }
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            function.valueParameters.asSequence()
-                .filter {
-                    it.typeReference?.typeElement is KtNullableType
-                }.mapNotNull { parameter ->
-                    bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
-                        it to parameter
-                    }
-                }.forEach { (k, v) -> candidateParams[k] = v }
+            // Operator functions - like setValue() - may require a nullable param to
+            // correspond with function type parameters, so those functions would not
+            // have the choice to mark the param as non-nullable.
+            if (!function.isOperator()) {
+                function.valueParameters.asSequence()
+                    .filter {
+                        it.typeReference?.typeElement is KtNullableType
+                    }.mapNotNull { parameter ->
+                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
+                            it to parameter
+                        }
+                    }.forEach { (k, v) -> candidateParams[k] = v }
+            }
             super.visitNamedFunction(function)
         }
 
-        override fun visitPostfixExpression(expression: KtPostfixExpression) {
-            val descriptor = expression.baseExpression
+        override fun visitWhenExpression(expression: KtWhenExpression) {
+            val subjectDescriptor = expression.subjectExpression
+                ?.let { it as? KtNameReferenceExpression }
                 ?.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
-            if (descriptor != null && expression.operationToken == KtTokens.EXCLEXCL) {
-                referencedParams.add(descriptor)
+            val whenConditions = expression.entries.flatMap { it.conditions.asList() }
+            if (subjectDescriptor != null) {
+                val isNullCheck = whenConditions.any { whenCondition ->
+                    when (whenCondition) {
+                        is KtWhenConditionWithExpression -> whenCondition.expression?.text == "null"
+                        is KtWhenConditionIsPattern -> {
+                            (whenCondition.typeReference.isNullable(bindingContext) || whenCondition.isNegated)
+                        }
+                        else -> false
+                    }
+                }
+                if (isNullCheck || expression.elseExpression.isValidElseExpression()) {
+                    candidateParams.remove(subjectDescriptor)
+                }
+            } else {
+                whenConditions.forEach { whenCondition ->
+                    if (whenCondition is KtWhenConditionWithExpression) {
+                        whenCondition.expression.evaluateCheckStatement(expression.elseExpression)
+                    }
+                }
             }
-            super.visitPostfixExpression(expression)
+            super.visitWhenExpression(expression)
         }
 
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
@@ -183,27 +205,69 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            expression.condition?.let { it as? KtBinaryExpression }?.evaluateIfExpression()
+            expression.condition.evaluateCheckStatement(expression.`else`)
             super.visitIfExpression(expression)
         }
 
-        private fun KtBinaryExpression.evaluateIfExpression() {
+        private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
+            return when (this) {
+                is KtBinaryExpression -> evaluateBinaryExpression()
+                is KtIsExpression -> evaluateIsExpression()
+                else -> null
+            }
+        }
+
+        private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
+            this.getNonNullChecks()?.let { nonNullChecks ->
+                if (elseExpression.isValidElseExpression()) {
+                    nonNullChecks.forEach(candidateParams::remove)
+                }
+            }
+        }
+
+        private fun KtExpression?.isValidElseExpression(): Boolean {
+            return this != null && this !is KtIfExpression && this !is KtWhenExpression
+        }
+
+        private fun KtBinaryExpression.evaluateBinaryExpression(): List<CallableDescriptor> {
             val leftExpression = left
             val rightExpression = right
-            if (isNullCheck() || isNonNullCheck()) {
-                // Determine whether either side of the expression is a variable
-                // that could be removed from candidateParams
-                when {
+            val nonNullChecks = mutableListOf<CallableDescriptor>()
+
+            fun getDescriptor(leftExpression: KtExpression?, rightExpression: KtExpression?): CallableDescriptor? {
+                return when {
                     leftExpression is KtNameReferenceExpression -> leftExpression
                     rightExpression is KtNameReferenceExpression -> rightExpression
                     else -> null
                 }?.getResolvedCall(bindingContext)
                     ?.resultingDescriptor
-                    ?.let(candidateParams::remove)
             }
+
+            if (isNullCheck()) {
+                getDescriptor(leftExpression, rightExpression)?.let(candidateParams::remove)
+            } else if (isNonNullCheck()) {
+                getDescriptor(leftExpression, rightExpression)?.let(nonNullChecks::add)
+            }
+
             // Recursively iterate into the if-check if possible
-            (leftExpression as? KtBinaryExpression)?.evaluateIfExpression()
-            (rightExpression as? KtBinaryExpression)?.evaluateIfExpression()
+            leftExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
+            rightExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
+            return nonNullChecks
+        }
+
+        private fun KtIsExpression.evaluateIsExpression(): List<CallableDescriptor> {
+            val descriptor = this.leftHandSide.getResolvedCall(bindingContext)?.resultingDescriptor
+                ?: return emptyList()
+            return if (typeReference.isNullable(bindingContext) || isNegated) {
+                candidateParams.remove(descriptor)
+                emptyList()
+            } else {
+                listOf(descriptor)
+            }
+        }
+
+        private fun KtTypeReference?.isNullable(bindingContext: BindingContext): Boolean {
+            return this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
         }
     }
 
