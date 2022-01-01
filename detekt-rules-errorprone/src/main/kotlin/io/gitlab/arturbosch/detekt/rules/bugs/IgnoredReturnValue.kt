@@ -59,7 +59,10 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(String::simplePatternToRegex)
     }
 
-    @Configuration("List of fully-qualified function names that should be skipped by this check. Example: 'package.class.fun1'")
+    @Configuration(
+        "List of fully-qualified function names that should be skipped by this check. " +
+            "Example: 'package.class.fun1'"
+    )
     private val skipFunctions: List<String> by config(emptyList())
 
     @Suppress("ReturnCount")
@@ -95,6 +98,4 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val fqName = annotation.fqName?.asString() ?: return false
         return any { it.matches(fqName) }
     }
-
-
 }
