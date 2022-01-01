@@ -589,7 +589,6 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
                 }
-
             }
 
             context("if-statements") {

@@ -105,6 +105,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         ParameterCheckVisitor().visitKtFile(file)
     }
 
+    @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val candidateParams = mutableMapOf<DeclarationDescriptor, KtParameter>()
 
