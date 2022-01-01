@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -109,6 +110,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val candidateParams = mutableMapOf<DeclarationDescriptor, KtParameter>()
+        private val propertyDescriptors = mutableSetOf<DeclarationDescriptor>()
 
         override fun visitKtFile(file: KtFile) {
             super.visitKtFile(file)
@@ -125,6 +127,31 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     )
                 )
             }
+        }
+
+        override fun visitProperty(property: KtProperty) {
+            if (!property.isLocal) {
+                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]
+                    ?.let(propertyDescriptors::add)
+            }
+            super.visitProperty(property)
+        }
+
+        override fun visitCallExpression(expression: KtCallExpression) {
+            val calleeName = expression.calleeExpression
+                .getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.name
+                ?.toString()
+            if (calleeName != REQUIRE_NOT_NULL_NAME && calleeName != CHECK_NOT_NULL_NAME) {
+                expression.valueArguments.forEach { valueArgument ->
+                    valueArgument.getArgumentExpression()
+                        .getResolvedCall(bindingContext)
+                        ?.resultingDescriptor
+                        ?.let(candidateParams::remove)
+                }
+            }
+            super.visitCallExpression(expression)
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
@@ -199,11 +226,25 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
-            if (expression.operationToken == KtTokens.ELVIS) {
-                expression.left
-                    ?.getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-                    ?.let(candidateParams::remove)
+            when (expression.operationToken) {
+                KtTokens.ELVIS -> {
+                    expression.left
+                        ?.getResolvedCall(bindingContext)
+                        ?.resultingDescriptor
+                        ?.let(candidateParams::remove)
+                }
+                KtTokens.EQ -> {
+                    val nonLocalPropAssignment = expression.left
+                        .getResolvedCall(bindingContext)
+                        ?.resultingDescriptor
+                        ?.let(propertyDescriptors::contains)
+                    if (nonLocalPropAssignment == true) {
+                        expression.right
+                            .getResolvedCall(bindingContext)
+                            ?.resultingDescriptor
+                            ?.let(candidateParams::remove)
+                    }
+                }
             }
             super.visitBinaryExpression(expression)
         }
@@ -377,5 +418,10 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 }
             }
         }
+    }
+
+    private companion object {
+        private const val REQUIRE_NOT_NULL_NAME = "requireNotNull"
+        private const val CHECK_NOT_NULL_NAME = "checkNotNull"
     }
 }

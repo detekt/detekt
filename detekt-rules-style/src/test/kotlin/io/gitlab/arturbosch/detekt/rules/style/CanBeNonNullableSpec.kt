@@ -385,6 +385,34 @@ class CanBeNonNullableSpec : Spek({
         }
 
         context("nullable function parameters") {
+            context("that are passed through") {
+                it("does not report when a param is used for a property assignment") {
+                    val code = """
+                        private var a: Int? = null
+                        
+                        fun setProp(newA: Int?) {
+                            println("Logging")
+                            a = newA
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("does not report when a param is passed on to another function") {
+                    val code = """
+                        private fun doFoo(a: Int?) {
+                            if (a != null) println("a not null") else println("a is null")
+                        }
+    
+                        fun foo(a: Int?) {
+                            println("Log output")
+                            doFoo(a)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+            }
+
             context("using a double-bang de-nullifier") {
                 it("does report when a param is de-nullified with a postfix expression") {
                     val code = """
