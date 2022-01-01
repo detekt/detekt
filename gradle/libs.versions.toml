@@ -35,7 +35,7 @@ spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.r
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.12.1"
+mockk = "io.mockk:mockk:1.12.2"
 snakeyaml = "org.yaml:snakeyaml:1.30"
 jcommander = "com.beust:jcommander:1.81"
 
@@ -43,8 +43,8 @@ jcommander = "com.beust:jcommander:1.81"
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.8.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.19.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.39.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.18.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.40.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.19.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
 
