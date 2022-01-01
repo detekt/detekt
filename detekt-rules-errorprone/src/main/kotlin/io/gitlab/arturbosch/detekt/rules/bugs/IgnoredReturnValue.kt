@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -58,6 +59,9 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(String::simplePatternToRegex)
     }
 
+    @Configuration("List of fully-qualified function names that should be skipped by this check. Example: 'package.class.fun1'")
+    private val skipFunctions: List<String> by config(emptyList())
+
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -67,6 +71,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
+
+        if (resultingDescriptor.fqNameSafe.asString() in skipFunctions) return
 
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
@@ -89,4 +95,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val fqName = annotation.fqName?.asString() ?: return false
         return any { it.matches(fqName) }
     }
+
+
 }

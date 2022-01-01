@@ -813,5 +813,28 @@ object IgnoredReturnValueSpec : Spek({
             val findings = rule.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        it("does not report when a function is in skip list") {
+            val code = """
+                package foo
+
+                fun listOfChecked(value: String) = listOf(value)
+
+                fun foo() : Int {
+                    listOfChecked("hello")
+                    return 42
+                }
+            """
+            val rule = IgnoredReturnValue(
+                TestConfig(
+                    mapOf(
+                        "skipFunctions" to listOf("foo.listOfChecked"),
+                        "restrictToAnnotatedMethods" to false
+                    )
+                )
+            )
+            val findings = rule.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 })
