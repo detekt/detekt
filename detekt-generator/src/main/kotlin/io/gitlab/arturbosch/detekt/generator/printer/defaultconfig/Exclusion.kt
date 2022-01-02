@@ -26,7 +26,7 @@ private object TestExclusions : Exclusions() {
         "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
     override val ruleSets = emptySet<String>()
     override val rules = setOf(
-        "NamingRules",
+        "FunctionNaming",
         "WildcardImport",
         "MagicNumber",
         "LateinitUsage",
@@ -34,7 +34,6 @@ private object TestExclusions : Exclusions() {
         "SpreadOperator",
         "TooManyFunctions",
         "ForEachOnRange",
-        "FunctionMaxLength",
         "TooGenericExceptionCaught",
         "InstanceOfCheckForException",
         "ThrowingExceptionsWithoutMessageOrCause",
