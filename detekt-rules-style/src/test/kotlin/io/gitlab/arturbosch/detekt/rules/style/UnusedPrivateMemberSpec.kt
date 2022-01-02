@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.lintWithContext
@@ -1026,6 +1027,32 @@ class UnusedPrivateMemberSpec : Spek({
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report used plus operator without type solving - #4242") {
+            val code = """
+                import java.util.Date
+                class Foo {
+                    val bla: Date = Date(System.currentTimeMillis()) + 300L
+                    companion object {
+                        private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report used invoke operator without type solving - #4435") {
+            val code = """
+                object Test {
+                    private operator fun invoke(i: Int): Int = i
+
+                    fun answer() = Test(1)
+                }
+
+                val answer = Test.answer()
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report used operator methods when used with the equal sign") {
