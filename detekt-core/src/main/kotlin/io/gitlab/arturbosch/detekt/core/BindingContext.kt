@@ -25,8 +25,9 @@ internal fun generateBindingContext(
     }
 
     val messageCollector = DetektMessageCollector(
-        debugPrinter = debugPrinter,
         minSeverity = CompilerMessageSeverity.ERROR,
+        debugPrinter = debugPrinter,
+        warningPrinter = warningPrinter,
     )
 
     val analyzer = AnalyzerWithCompilerReport(
@@ -44,27 +45,31 @@ internal fun generateBindingContext(
         )
     }
 
-    if (messageCollector.messages > 0) {
-        warningPrinter(
-            "The BindingContext was created with ${messageCollector.messages} issues. " +
-                "Run detekt with --debug to see the error messages."
-        )
-    }
+    messageCollector.printIssuesCountIfAny()
 
     return analyzer.analysisResult.bindingContext
 }
 
-private class DetektMessageCollector(
-    private val debugPrinter: (() -> String) -> Unit,
+internal class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
+    private val debugPrinter: (() -> String) -> Unit,
+    private val warningPrinter: (String) -> Unit,
 ) : MessageCollector by MessageCollector.NONE {
-    var messages = 0
-        private set
+    private var messages = 0
 
     override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
         if (severity.ordinal <= minSeverity.ordinal) {
             debugPrinter { DetektMessageRenderer.render(severity, message, location) }
             messages++
+        }
+    }
+
+    fun printIssuesCountIfAny() {
+        if (messages > 0) {
+            warningPrinter(
+                "The BindingContext was created with $messages issues. " +
+                    "Run detekt with --debug to see the error messages."
+            )
         }
     }
 }
