@@ -364,5 +364,31 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
             }
         }
+
+        describe("configuration reportIfNonePresent") {
+            val configuredSubject by memoized {
+                OutdatedDocumentation(TestConfig(mapOf("reportIfNonePresent" to "true")))
+            }
+
+            it("should report on class when no tags are present and option is on") {
+                val noDoc = """
+                /**
+                 * I'm a class without param docs 
+                 */
+                class MyClass(someParam: String)
+                """
+                assertThat(configuredSubject.compileAndLint(noDoc)).hasSize(1)
+            }
+
+            it("should report on function when no tags are present and option is on") {
+                val noDoc = """
+                /**
+                 * I'm a function without param docs 
+                 */
+                fun myFunction(someParam: String)
+                """
+                assertThat(configuredSubject.compileAndLint(noDoc)).hasSize(1)
+            }
+        }
     }
 })

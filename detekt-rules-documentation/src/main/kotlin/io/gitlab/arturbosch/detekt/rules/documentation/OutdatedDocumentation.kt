@@ -25,7 +25,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
  * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
- * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
+ * If KDoc is not present, rule violation will not be reported (you can use the UndocumentedPublicClass and
+ * UndocumentedPublicFunction rules to report missing KDoc). If KDoc is present but no `@param` or `@property` tags are
+ * present, rule violation is only reported if the `reportIfNonePresent` config option is set to `true`.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
  *
@@ -75,6 +77,11 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("if the order of declarations should be preserved")
     private val matchDeclarationsOrder: Boolean by config(true)
+
+    @Configuration(
+        "if violations should be reported if no @property or @params tags are present in the first place"
+    )
+    private val reportIfNonePresent: Boolean by config(false)
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
@@ -157,7 +164,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     ) {
         val doc = element.docComment ?: return
         val docDeclarations = getDocDeclarations(doc)
-        if (docDeclarations.isNotEmpty()) {
+        if (docDeclarations.isNotEmpty() || reportIfNonePresent) {
             val elementDeclarations = elementDeclarationsProvider()
             if (!declarationsMatch(docDeclarations, elementDeclarations)) {
                 reportCodeSmell(element)
