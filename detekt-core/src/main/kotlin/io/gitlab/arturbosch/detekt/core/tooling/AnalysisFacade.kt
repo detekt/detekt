@@ -22,17 +22,22 @@ class AnalysisFacade(
     private val spec: ProcessingSpec
 ) : Detekt {
 
-    override fun run(): AnalysisResult = runAnalysis { DefaultLifecycle(it, inputPathsToKtFiles) }
+    override fun run(): AnalysisResult = runAnalysis {
+        DefaultLifecycle(spec.getDefaultConfiguration(), it, inputPathsToKtFiles)
+    }
 
     override fun run(path: Path): AnalysisResult =
-        runAnalysis { DefaultLifecycle(it, pathToKtFile(path)) }
+        runAnalysis { DefaultLifecycle(spec.getDefaultConfiguration(), it, pathToKtFile(path)) }
 
     override fun run(sourceCode: String, filename: String): AnalysisResult =
-        runAnalysis { DefaultLifecycle(it, contentToKtFile(sourceCode, Paths.get(filename))) }
+        runAnalysis {
+            DefaultLifecycle(spec.getDefaultConfiguration(), it, contentToKtFile(sourceCode, Paths.get(filename)))
+        }
 
     override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
         runAnalysis {
             DefaultLifecycle(
+                spec.getDefaultConfiguration(),
                 it,
                 parsingStrategy = { files.toList() },
                 bindingProvider = { bindingContext }
