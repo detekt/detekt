@@ -79,7 +79,6 @@ class UndocumentedPublicFunctionReturn(config: Config = Config.empty) : Rule(con
     private val throwsOrExceptionReturnTypes: List<String> by config(listOf("kotlin.Nothing"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val ctx = bindingContext
         val doc = function.docComment
         if (bindingContext == BindingContext.EMPTY || doc == null) return
         val returnType = function.createTypeBindingForReturnType(bindingContext)?.type?.fqNameOrNull()?.toString()

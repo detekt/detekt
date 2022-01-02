@@ -90,7 +90,6 @@ class UndocumentedPublicFunctionReturnSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-
             it("does not report on documented function with throws") {
                 val code = """
                     /**
