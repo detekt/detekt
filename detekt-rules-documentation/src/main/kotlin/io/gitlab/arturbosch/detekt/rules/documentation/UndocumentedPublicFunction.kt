@@ -29,10 +29,12 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * receivers (e.g. missing @receiver tag).
  */
 class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
-    @Configuration("If set to true, this rule will also report type and value parameters that are not properly documented (either using a '@param' tag on the function's KDoc or by directly documenting them).")
+    @Configuration("If set to true, this rule will also report type and value parameters that are not " +
+        "properly documented (either using a '@param' tag on the function's KDoc or by directly documenting them).")
     private val reportUndocumentedParameter by config(false)
 
-    @Configuration("If set to true, this rule will also report receivers that are not documented using a '@receiver' tag on the function's KDoc.")
+    @Configuration("If set to true, this rule will also report receivers that are not documented using a " +
+        "'@receiver' tag on the function's KDoc.")
     private val reportUndocumentedReceiver by config(false)
 
     override val issue = Issue(
@@ -78,23 +80,13 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
     private fun KtParameter.isNotDocumented(function: KtNamedFunction): Boolean {
         if (docComment != null) return false
         val paramName = name ?: return true
-        return !function.hasEntryForTag("param", paramName)
+        return function.getEntriesForTagAndSubject("param", paramName).isEmpty()
     }
 
     private fun KtTypeParameter.isNotDocumented(function: KtNamedFunction): Boolean {
         val paramName = name ?: return true
-        return !function.hasEntryForTag("param", paramName)
+        return function.getEntriesForTagAndSubject("param", paramName).isEmpty()
     }
 
-    private fun KtNamedFunction.isReceiverNotDocumented() = !hasEntryForTag("receiver")
-
-    private fun KtFunction.hasEntryForTag(tagName: String, subject: String? = null) =
-        docComment?.getAllSections()?.any {
-            val tag = it.findTagByName(tagName)
-            when {
-                tag == null -> false
-                subject == null -> true
-                else -> tag.getSubjectName() == subject
-            }
-        } ?: false
+    private fun KtNamedFunction.isReceiverNotDocumented() = getEntriesForTagAndSubject("receiver").isEmpty()
 }
