@@ -24,7 +24,7 @@ class TooGenericExceptionSpec : Spek({
 })
 
 const val tooGenericExceptionCode = """
-        fun main() {
+    fun main() {
         try {
             throw Throwable()
         } catch (e: ArrayIndexOutOfBoundsException) {
@@ -41,4 +41,5 @@ const val tooGenericExceptionCode = """
         } catch (e: NullPointerException) {
 
         }
-    }"""
+    }
+"""
