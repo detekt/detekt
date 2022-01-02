@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -26,7 +26,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report a null-check on a mutable property in non-initial clauses in an if-statement") {
@@ -39,7 +39,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report a null-check on a mutable property used in the same if-statement") {
@@ -52,7 +52,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report on a mutable property that is not subject to a double-bang") {
@@ -65,7 +65,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report on a mutable property even if it is checked multiple times") {
@@ -81,7 +81,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should not report when the checked property is not used afterwards") {
@@ -94,7 +94,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should not report a null-check on a shadowed property") {
@@ -108,7 +108,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should not report a null-check on a non-mutable constructor property") {
@@ -121,7 +121,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should report a null-check on a mutable class property") {
@@ -135,7 +135,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should not report a null-check on a val property") {
@@ -149,7 +149,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should report a null-check on a val property with a getter") {
@@ -170,7 +170,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report a null-check conducted within an inner class") {
@@ -185,7 +185,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report an inner-class mutable property") {
@@ -206,7 +206,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should report a null-check on a mutable file property") {
@@ -221,7 +221,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should not report a null-check on a non-mutable file property") {
@@ -236,7 +236,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should not report a null-check when there is no binding context") {
@@ -249,7 +249,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should report a null-check when null is the first element in the if-statement") {
@@ -262,7 +262,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         it("should not report when the if-expression has no explicit null value") {
@@ -276,7 +276,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("should not report a null-check on a function") {
@@ -292,7 +292,7 @@ class NullCheckOnMutablePropertySpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })

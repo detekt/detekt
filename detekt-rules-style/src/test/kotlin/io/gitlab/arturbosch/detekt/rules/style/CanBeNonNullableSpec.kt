@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -25,7 +25,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         context("evaluating private vars") {
@@ -47,7 +47,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
             it("reports when vars utilize non-nullable delegate values") {
@@ -77,7 +77,7 @@ class CanBeNonNullableSpec : Spek({
                         }
                     }
                     """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
             it("reports when file-level vars are never assigned nullable values") {
@@ -89,7 +89,7 @@ class CanBeNonNullableSpec : Spek({
                     fileB = 6
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
             it("does not report when class-level vars are assigned nullable values") {
@@ -121,7 +121,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report vars that utilize nullable delegate values") {
@@ -130,7 +130,7 @@ class CanBeNonNullableSpec : Spek({
                         private var a: Int? by this::aDelegate
                     }
                     """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when file-level vars are assigned nullable values") {
@@ -151,7 +151,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("reports when vars with private setters are never assigned nullable values") {
@@ -164,7 +164,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
             it("does not report when vars with private setters are assigned nullable values") {
@@ -177,7 +177,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when vars use public setters") {
@@ -189,7 +189,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when vars use non-private setters") {
@@ -202,7 +202,7 @@ class CanBeNonNullableSpec : Spek({
                         }
                     }
                     """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when private vars are declared in the constructor") {
@@ -213,7 +213,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -231,7 +231,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
             }
 
             it("reports when vals utilize non-nullable delegate values") {
@@ -242,14 +242,14 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
             it("reports when file-level vals are set to non-nullable values") {
                 val code = """
                 val fileA: Int? = 5
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
             it("does not report when class-level vals are assigned a nullable value") {
@@ -267,7 +267,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when vals utilize nullable delegate values") {
@@ -281,14 +281,14 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when file-level vals are assigned a nullable value") {
                 val code = """
                 val fileA: Int? = null
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when vals are declared non-nullable") {
@@ -297,14 +297,14 @@ class CanBeNonNullableSpec : Spek({
                     val a: Int = 5
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("does not report when vals are declared in the constructor") {
                 val code = """
                 class A(private val a: Int?)
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             it("reports when vals with getters never return nullable values") {
@@ -324,7 +324,7 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
                 """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
             }
 
             it("does not report when vals with getters return potentially-nullable values") {
@@ -347,7 +347,7 @@ class CanBeNonNullableSpec : Spek({
                         }
                     }
                     """
-                Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -358,7 +358,7 @@ class CanBeNonNullableSpec : Spek({
                     open var b: Int? = 5
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report properties whose initial assignment derives from unsafe non-Java code") {
@@ -371,7 +371,7 @@ class CanBeNonNullableSpec : Spek({
                     private var a: String? = e.localizedMessage
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         it("does not report interface properties") {
@@ -381,7 +381,7 @@ class CanBeNonNullableSpec : Spek({
                     var b: Int?
                 }
                 """
-            Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 })
