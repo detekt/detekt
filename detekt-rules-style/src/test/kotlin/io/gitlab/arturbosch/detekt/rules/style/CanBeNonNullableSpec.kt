@@ -416,6 +416,124 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
+            context("single-expression functions") {
+                context("with initializer") {
+                    it("does report when a function's nullable param is the source of its single expression") {
+                        val code = """
+                            fun doFoo(callback: () -> Unit) {
+                                callback.invoke()
+                            }
+                            
+                            fun foo(a: String?) = doFoo {
+                                a?.let { println("a not null") }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when a function ultimately has more than a single expression") {
+                        val code = """
+                            fun doFoo(callback: () -> Unit) {
+                                callback.invoke()
+                            }
+                            
+                            fun foo(a: String?) = doFoo {
+                                a?.let { println("a not null") }
+                                println("OTHER FOO")
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+
+                context("with a non-qualified call") {
+                    it("does report when a function's nullable param is the source of its single expression") {
+                        val code = """
+                            fun doFoo(callback: () -> Unit) {
+                                callback.invoke()
+                            }
+    
+                            fun foo(a: String?) {
+                                doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when a function ultimately has more than a single expression") {
+                        val code = """
+                            fun doFoo(callback: () -> Unit) {
+                                callback.invoke()
+                            }
+    
+                            fun foo(a: String?) {
+                                doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                                println("OTHER FOO")
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+
+                context("with return call") {
+                    it("does report when a function's nullable param is the source of its single expression") {
+                        val code = """
+                            fun doFoo(callback: () -> Unit) {
+                                callback.invoke()
+                            }
+    
+                            fun foo(a: String?) {
+                                return doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+                }
+
+                context("with a dot-qualified call") {
+                    it("does report when a function's nullable param is the source of its single expression") {
+                        val code = """
+                            class A {
+                                fun doFoo(callback: () -> Unit) {
+                                    callback.invoke()
+                                }
+                            }
+    
+                            fun foo(a: String?, aObj: A) {
+                                aObj.doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when a function ultimately has more than a single expression") {
+                        val code = """
+                            class A {
+                                fun doFoo(callback: () -> Unit) {
+                                    callback.invoke()
+                                }
+                            }
+    
+                            fun foo(a: String?, aObj: A) {
+                                aObj.doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                                println("OTHER FOO")
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+            }
+
             context("using a null-safe expression") {
                 it("does report when the safe-qualified expression is the only expression of the function") {
                     val code = """

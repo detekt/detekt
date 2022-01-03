@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -127,15 +128,14 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     nullableParams[descriptor] = NullableParam(param)
                 }
 
-            val singleChildExpression = if (function.initializer != null) {
-                true
-            } else {
-                function.bodyBlockExpression?.let { functionBlock ->
-                    functionBlock.allChildren.filter { it is KtExpression && it.parent == functionBlock }.toList()
-                }?.let { blockChildren ->
-                    blockChildren.size == 1
-                } ?: false
+            val validSingleChildExpression = when (val functionInitializer = function.initializer) {
+                null -> {
+                    function.bodyBlockExpression.isSingleExpression()
+                }
+                is KtCallExpression -> functionInitializer.isSingleExpression()
+                else -> true
             }
+
             // Evaluate the function, then analyze afterwards whether the candidate properties
             // could be made non-nullable.
             super.visitNamedFunction(function)
@@ -148,7 +148,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 // * The containing function only consists of a single non-null check on
                 //   the param, either via an if/when check or with a safe-qualified expression.
                 .filter {
-                    val onlyNonNullCheck = singleChildExpression && it.isNonNullChecked && !it.isNullChecked
+                    val onlyNonNullCheck = validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
                     it.isNonNullForced || onlyNonNullCheck
                 }.forEach { nullableParam ->
                     report(
@@ -228,6 +228,31 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 updateNullableParam(receiverExpression) { it.isNullChecked = true }
             }
             super.visitDotQualifiedExpression(expression)
+        }
+
+        private fun KtCallExpression.isSingleExpression(): Boolean {
+            return lambdaArguments.all { lambdaArgument ->
+                lambdaArgument.getLambdaExpression()
+                    ?.functionLiteral
+                    ?.bodyBlockExpression.isSingleExpression()
+            }
+        }
+
+        private fun KtBlockExpression?.isSingleExpression(): Boolean {
+            val children = this?.allChildren
+                ?.filterIsInstance<KtExpression>()
+                ?.toList()
+                .orEmpty()
+            return if (children.size == 1) {
+                val onlyChild = children.first()
+                // If the only child is a call expression, it will be necessary to enter
+                // into that expression and determine whether it's a lambda expression;
+                // otherwise, the whole expression that includes this block expression is
+                // truly a single expression.
+                if (onlyChild is KtCallExpression) onlyChild.isSingleExpression() else true
+            } else {
+                false
+            }
         }
 
         private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
