@@ -97,11 +97,11 @@ class FunctionNamingSpec : Spek({
             )
         }
 
-        it("allow functions with backtick") {
+        it("doesn't allow functions with backtick") {
             val code = """
                 fun `7his is a function name _`() = Unit
             """
-            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(SourceLocation(1, 5))
         }
     }
 })
