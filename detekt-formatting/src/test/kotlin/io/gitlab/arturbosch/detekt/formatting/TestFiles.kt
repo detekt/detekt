@@ -5,11 +5,12 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.Finding
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths
 
-fun FormattingRule.lint(content: String, fileName: String = "Test.kt"): List<Finding> {
+fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = "Test.kt"): List<Finding> {
     val root = compileContentForTest(content, fileName)
     this.visit(root)
     root.node.visit { node -> this.apply(node) }
