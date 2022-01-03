@@ -418,7 +418,7 @@ class CanBeNonNullableSpec : Spek({
 
             context("single-expression functions") {
                 context("with initializer") {
-                    it("does report when a function's nullable param is the source of its single expression") {
+                    it("does report when a function's nullable param is the indirect source of its single expression") {
                         val code = """
                             fun doFoo(callback: () -> Unit) {
                                 callback.invoke()
@@ -429,6 +429,24 @@ class CanBeNonNullableSpec : Spek({
                             }
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when a function's nullable param is not the source of its single expression") {
+                        val code = """
+                            fun doFoo(a: Int?) {
+                                if (a != null) println("a not null") else println("a is null")
+                            }
+    
+                            fun foo(a: String?) = doFoo(a?.plus(5))
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when a function's nullable param is the direct source of its single expression") {
+                        val code = """
+                            fun foo(a: String?) = a?.length
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
                     it("does not report when a function ultimately has more than a single expression") {
@@ -545,17 +563,26 @@ class CanBeNonNullableSpec : Spek({
                             val foo = a?.foo
                         }
                         
-                        fun fizz(a: A?) {
-                            a?.let { println(it.foo) }
-                        }
-
-                        fun bizz(a: A?) = a?.foo
-
-                        fun buzz(a: A?): String {
-                            return a?.foo
+                        fun fizz(aObj: A?) {
+                            aObj?.let { println(it.foo) }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                }
+
+                it("does not report when a safe-qualified expression is used in the return statement") {
+                    val code = """
+                        class A {
+                            val foo = "BAR"
+                        }
+                        
+                        fun foo(a: A?) = a?.foo
+                        
+                        fun fizz(aObj: A?): String? {
+                            return aObj?.foo
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
                 it("does not report when a null-safe extension function is used in the single expression") {

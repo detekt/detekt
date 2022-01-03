@@ -130,10 +130,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
             val validSingleChildExpression = when (val functionInitializer = function.initializer) {
                 null -> {
-                    function.bodyBlockExpression.isSingleExpression()
+                    function.bodyBlockExpression.isEligibleSingleExpression(candidateDescriptors)
                 }
-                is KtCallExpression -> functionInitializer.isSingleExpression()
-                else -> true
+                is KtCallExpression -> functionInitializer.isEligibleSingleExpression(candidateDescriptors)
+                is KtSafeQualifiedExpression -> functionInitializer.isEligibleSingleExpression(candidateDescriptors)
+                else -> {
+                    ELIGIBLE_SINGLE_EXPRESSION
+                }
             }
 
             // Evaluate the function, then analyze afterwards whether the candidate properties
@@ -240,28 +243,50 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             return receiverExpression
         }
 
-        private fun KtCallExpression.isSingleExpression(): Boolean {
-            return lambdaArguments.all { lambdaArgument ->
-                lambdaArgument.getLambdaExpression()
-                    ?.functionLiteral
-                    ?.bodyBlockExpression.isSingleExpression()
+        private fun KtSafeQualifiedExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
+            return this.getRootExpression()
+                .getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.let(candidates::contains) != true
+        }
+
+        private fun KtCallExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
+            val isFromNullableParam = this.getRootExpression()
+                .getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.let(candidates::contains)
+            return if (isFromNullableParam == true) {
+                NOT_ELIGIBLE_SINGLE_EXPRESSION
+            } else {
+                lambdaArguments.isNotEmpty() && lambdaArguments.all { lambdaArgument ->
+                    lambdaArgument.getLambdaExpression()
+                        ?.functionLiteral
+                        ?.bodyBlockExpression.isEligibleSingleExpression(candidates)
+                }
             }
         }
 
-        private fun KtBlockExpression?.isSingleExpression(): Boolean {
+        private fun KtReturnExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
+            return when (val returnedExpression = returnedExpression) {
+                is KtCallExpression -> returnedExpression.isEligibleSingleExpression(candidates)
+                is KtSafeQualifiedExpression -> returnedExpression.isEligibleSingleExpression(candidates)
+                else -> ELIGIBLE_SINGLE_EXPRESSION
+            }
+        }
+
+        private fun KtBlockExpression?.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
             val children = this?.allChildren
                 ?.filterIsInstance<KtExpression>()
                 ?.toList()
                 .orEmpty()
             return if (children.size == 1) {
-                val onlyChild = children.first()
-                // If the only child is a call expression, it will be necessary to enter
-                // into that expression and determine whether it's a lambda expression;
-                // otherwise, the whole expression that includes this block expression is
-                // truly a single expression.
-                if (onlyChild is KtCallExpression) onlyChild.isSingleExpression() else true
+                when(val child = children.first()) {
+                    is KtCallExpression -> child.isEligibleSingleExpression(candidates)
+                    is KtReturnExpression -> child.isEligibleSingleExpression(candidates)
+                    else -> ELIGIBLE_SINGLE_EXPRESSION
+                }
             } else {
-                false
+                NOT_ELIGIBLE_SINGLE_EXPRESSION
             }
         }
 
@@ -497,5 +522,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     private companion object {
         private const val REQUIRE_NOT_NULL_NAME = "requireNotNull"
         private const val CHECK_NOT_NULL_NAME = "checkNotNull"
+
+        private const val NOT_ELIGIBLE_SINGLE_EXPRESSION = false
+        private const val ELIGIBLE_SINGLE_EXPRESSION = true
     }
 }
