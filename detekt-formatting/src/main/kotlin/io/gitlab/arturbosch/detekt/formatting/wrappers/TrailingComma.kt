@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
  */
 @OptIn(FeatureInAlphaState::class)
-@AutoCorrectable(since = "1.19.0")
+@AutoCorrectable(since = "1.20.0")
 class TrailingComma(config: Config) : FormattingRule(config) {
 
     override val wrapping = TrailingCommaRule()
