@@ -33,7 +33,7 @@ spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spe
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
-assertj = "org.assertj:assertj-core:3.20.2"
+assertj = "org.assertj:assertj-core:3.22.0"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.2"
 snakeyaml = "org.yaml:snakeyaml:1.30"
