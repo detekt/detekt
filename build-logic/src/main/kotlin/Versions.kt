@@ -1,6 +1,6 @@
 object Versions {
 
-    const val DETEKT: String = "1.19.0"
+    const val DETEKT: String = "1.19.0-artem"
     const val SNAPSHOT_NAME: String = "main"
     const val JVM_TARGET: String = "1.8"
 
