@@ -23,5 +23,5 @@ class BaselineFacade {
         BaselineFormat().write(baseline, baselineFile)
     }
 
-    internal fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
+    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
 }
