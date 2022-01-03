@@ -33,18 +33,10 @@ class BaselineFacadeSpec : Spek({
             assertThat(detektion).isEqualTo(initialDetektion)
         }
 
-        it("creates a baseline file without findings") {
+        it("doesn't create a baseline file without findings") {
             BaselineFacade().createOrUpdate(baselineFile, emptyList())
 
-            assertThat(baselineFile).hasContent(
-                """
-                <?xml version="1.0" ?>
-                <SmellBaseline>
-                  <ManuallySuppressedIssues></ManuallySuppressedIssues>
-                  <CurrentIssues></CurrentIssues>
-                </SmellBaseline>
-                """.trimIndent()
-            )
+            assertThat(baselineFile).doesNotExist()
         }
 
         it("creates on top of an existing a baseline file without findings") {

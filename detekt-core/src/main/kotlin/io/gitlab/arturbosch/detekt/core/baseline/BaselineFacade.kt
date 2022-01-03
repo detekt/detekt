@@ -19,14 +19,19 @@ class BaselineFacade {
 
     fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
         val ids = findings.map { it.baselineId }.toSortedSet()
-        val baseline = if (baselineExists(baselineFile)) {
+        val exists = baselineExists(baselineFile)
+        val baseline = if (exists) {
             Baseline.load(baselineFile).copy(currentIssues = ids)
         } else {
             Baseline(emptySet(), ids)
         }
-        baselineFile.parent?.let { Files.createDirectories(it) }
-        BaselineFormat().write(baseline, baselineFile)
+        if (baseline.isNotEmpty() || exists) {
+            baselineFile.parent?.let { Files.createDirectories(it) }
+            BaselineFormat().write(baseline, baselineFile)
+        }
     }
 
     private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
+
+    private fun Baseline.isNotEmpty() = currentIssues.isNotEmpty() || manuallySuppressedIssues.isNotEmpty()
 }

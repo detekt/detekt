@@ -49,19 +49,6 @@ class BaselineResultMappingSpec : Spek({
             assertThat(baselineFile.exists()).isFalse()
         }
 
-        it("should not update an existing baseline file when no findings occurred") {
-            val existing = Baseline.load(existingBaselineFile)
-            val mapping = resultMapping(
-                baselineFile = existingBaselineFile,
-                createBaseline = true,
-            )
-
-            mapping.transformFindings(emptyMap())
-
-            val changed = Baseline.load(existingBaselineFile)
-            assertThat(existing).isEqualTo(changed)
-        }
-
         it("should not update an existing baseline file if option configured as false") {
             val existing = Baseline.load(existingBaselineFile)
             val mapping = resultMapping(
