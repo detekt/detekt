@@ -172,7 +172,7 @@ Integrations:
 - [Codefactor](http://codefactor.io/)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 - [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
-- [MuseDev](https://github.com/marketplace/muse-dev)
+- [Sonatype Lift](https://github.com/marketplace/muse-dev)
 
 Custom rules and reports from 3rd parties:
 

@@ -9,7 +9,8 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 
 class DefaultPropertiesConfigValidator(
-    private val settings: ProcessingSettings
+    private val settings: ProcessingSettings,
+    private val baseline: Config,
 ) : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
@@ -21,6 +22,6 @@ class DefaultPropertiesConfigValidator(
             val allExcludes = "$configExcludes,$DEFAULT_PROPERTY_EXCLUDES,$pluginExcludes"
             return CommaSeparatedPattern(allExcludes).mapToRegex()
         }
-        return validateConfig(config, DefaultConfig.newInstance(), patterns())
+        return validateConfig(config, baseline, patterns())
     }
 }

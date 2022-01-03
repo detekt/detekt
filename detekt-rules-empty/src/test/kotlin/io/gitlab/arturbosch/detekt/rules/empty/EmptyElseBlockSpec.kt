@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -22,7 +22,7 @@ class EmptyElseBlockSpec : Spek({
                     }
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("reports empty else blocks with trailing semicolon") {
@@ -34,7 +34,7 @@ class EmptyElseBlockSpec : Spek({
                     } else ;
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
         it("reports empty else with trailing semicolon on new line") {
             val code = """
@@ -47,7 +47,7 @@ class EmptyElseBlockSpec : Spek({
                     i++
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("reports empty else with trailing semicolon and braces") {
@@ -61,7 +61,7 @@ class EmptyElseBlockSpec : Spek({
                     i++
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report nonempty else with braces") {
@@ -75,7 +75,7 @@ class EmptyElseBlockSpec : Spek({
                     }
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report nonempty else without braces") {
@@ -87,7 +87,7 @@ class EmptyElseBlockSpec : Spek({
                     } else i++
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report nonempty else without braces but semicolon") {
@@ -99,7 +99,7 @@ class EmptyElseBlockSpec : Spek({
                     } else i++;
                 }
             """
-            Assertions.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

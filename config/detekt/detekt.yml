@@ -166,6 +166,10 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenImport:
+    active: true
+    imports:
+      - 'org.assertj.core.api.Assertions'
   ForbiddenMethodCall:
     active: true
     methods:

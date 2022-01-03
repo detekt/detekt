@@ -4,6 +4,7 @@ import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException
@@ -19,13 +20,13 @@ internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
 
     if (useDefaultConfig) {
         declaredConfig = if (declaredConfig == null) {
-            DefaultConfig.newInstance()
+            getDefaultConfiguration()
         } else {
-            CompositeConfig(declaredConfig, DefaultConfig.newInstance())
+            CompositeConfig(declaredConfig, getDefaultConfiguration())
         }
     }
 
-    return declaredConfig ?: DefaultConfig.newInstance()
+    return declaredConfig ?: getDefaultConfiguration()
 }
 
 private fun parseResourceConfig(urls: Collection<URL>): Config =
