@@ -12,8 +12,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOperator
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -32,12 +30,14 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtWhenCondition
 import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -109,32 +109,43 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
-        private val candidateParams = mutableMapOf<DeclarationDescriptor, KtParameter>()
-        private val propertyDescriptors = mutableSetOf<DeclarationDescriptor>()
+        private val nullableParams = mutableMapOf<DeclarationDescriptor, NullableParam>()
 
-        override fun visitKtFile(file: KtFile) {
-            super.visitKtFile(file)
-            // Any candidate params that were not removed during the inspection
-            // of the Kotlin file and were not added to referenceParams were never
-            // treated as nullable params in the code, thus they can be converted
-            // to non-nullable.
-            candidateParams.forEach { (_, param) ->
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(param),
-                        "The nullable parameter '${param.name}' can be made non-nullable."
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            val candidateDescriptors = mutableSetOf<DeclarationDescriptor>()
+            function.valueParameters.asSequence()
+                .filter {
+                    it.typeReference?.typeElement is KtNullableType
+                }.mapNotNull { parameter ->
+                    bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
+                        it to parameter
+                    }
+                }.forEach { (descriptor, param) ->
+                    candidateDescriptors.add(descriptor)
+                    nullableParams[descriptor] = NullableParam(param)
+                }
+
+            // Evaluate the function, then analyze afterwards whether the candidate properties
+            // could be made non-nullable.
+            super.visitNamedFunction(function)
+
+            candidateDescriptors.asSequence()
+                .mapNotNull(nullableParams::remove)
+                // The heuristic for whether a nullable param can be made non-nullable is:
+                // * It has been forced into a non-null type, either by `!!` or by
+                //   `checkNonNull()`/`requireNonNull()`, or
+                // * It has only been checked for whether it is non-null and not for whether
+                //   it could be null.
+                .filter { it.isNonNullForced || (it.isNonNullChecked && !it.isNullChecked) }
+                .forEach { nullableParam ->
+                    report(
+                        CodeSmell(
+                            issue,
+                            Entity.from(nullableParam.param),
+                            "The nullable parameter '${nullableParam.param.name}' can be made non-nullable."
+                        )
                     )
-                )
-            }
-        }
-
-        override fun visitProperty(property: KtProperty) {
-            if (!property.isLocal) {
-                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]
-                    ?.let(propertyDescriptors::add)
-            }
-            super.visitProperty(property)
+                }
         }
 
         override fun visitCallExpression(expression: KtCallExpression) {
@@ -143,32 +154,21 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 ?.resultingDescriptor
                 ?.name
                 ?.toString()
-            if (calleeName != REQUIRE_NOT_NULL_NAME && calleeName != CHECK_NOT_NULL_NAME) {
+            // Check for whether a call to `checkNonNull()` or `requireNonNull()` has
+            // been made.
+            if (calleeName == REQUIRE_NOT_NULL_NAME || calleeName == CHECK_NOT_NULL_NAME) {
                 expression.valueArguments.forEach { valueArgument ->
-                    valueArgument.getArgumentExpression()
-                        .getResolvedCall(bindingContext)
-                        ?.resultingDescriptor
-                        ?.let(candidateParams::remove)
+                    updateNullableParam(valueArgument.getArgumentExpression()) { it.isNonNullForced = true }
                 }
             }
             super.visitCallExpression(expression)
         }
 
-        override fun visitNamedFunction(function: KtNamedFunction) {
-            // Operator and override functions may require a nullable param to correspond
-            // with function type parameters, so those functions would not have the choice
-            // to mark the param as non-nullable.
-            if (!function.isOperator() && !function.isOverride()) {
-                function.valueParameters.asSequence()
-                    .filter {
-                        it.typeReference?.typeElement is KtNullableType
-                    }.mapNotNull { parameter ->
-                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
-                            it to parameter
-                        }
-                    }.forEach { (k, v) -> candidateParams[k] = v }
+        override fun visitPostfixExpression(expression: KtPostfixExpression) {
+            if (expression.operationToken == KtTokens.EXCLEXCL) {
+                updateNullableParam(expression.baseExpression) { it.isNonNullForced = true }
             }
-            super.visitNamedFunction(function)
+            super.visitPostfixExpression(expression)
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
@@ -178,20 +178,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 ?.resultingDescriptor
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (subjectDescriptor != null) {
-                val isNullCheck = whenConditions.any { whenCondition ->
-                    when (whenCondition) {
-                        is KtWhenConditionWithExpression -> whenCondition.expression?.text == "null"
-                        is KtWhenConditionIsPattern -> {
-                            (whenCondition.typeReference.isNullable(bindingContext) || whenCondition.isNegated)
-                        }
-                        // A range check doesn't work with Kotlin's contract system
-                        // for checking whether a value is null, so it's to be ignored.
-                        else -> false
-                    }
-                }
-                if (isNullCheck || expression.elseExpression.isValidElseExpression()) {
-                    candidateParams.remove(subjectDescriptor)
-                }
+                whenConditions.evaluateSubjectWhenExpression(expression, subjectDescriptor)
             } else {
                 whenConditions.forEach { whenCondition ->
                     if (whenCondition is KtWhenConditionWithExpression) {
@@ -202,11 +189,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             super.visitWhenExpression(expression)
         }
 
+        override fun visitIfExpression(expression: KtIfExpression) {
+            expression.condition.evaluateCheckStatement(expression.`else`)
+            super.visitIfExpression(expression)
+        }
+
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
-            expression.receiverExpression
-                .getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.let(candidateParams::remove)
+            updateNullableParam(expression.receiverExpression) { it.isNullChecked = true }
             super.visitSafeQualifiedExpression(expression)
         }
 
@@ -217,41 +206,16 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 ?.type
                 ?.isMarkedNullable
             if (isExtensionForNullable == true) {
-                expression.receiverExpression
-                    .getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-                    ?.let(candidateParams::remove)
+                updateNullableParam(expression.receiverExpression) { it.isNullChecked = true }
             }
             super.visitDotQualifiedExpression(expression)
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
-            when (expression.operationToken) {
-                KtTokens.ELVIS -> {
-                    expression.left
-                        ?.getResolvedCall(bindingContext)
-                        ?.resultingDescriptor
-                        ?.let(candidateParams::remove)
-                }
-                KtTokens.EQ -> {
-                    val nonLocalPropAssignment = expression.left
-                        .getResolvedCall(bindingContext)
-                        ?.resultingDescriptor
-                        ?.let(propertyDescriptors::contains)
-                    if (nonLocalPropAssignment == true) {
-                        expression.right
-                            .getResolvedCall(bindingContext)
-                            ?.resultingDescriptor
-                            ?.let(candidateParams::remove)
-                    }
-                }
+            if (expression.operationToken == KtTokens.ELVIS) {
+                updateNullableParam(expression.left) { it.isNullChecked = true }
             }
             super.visitBinaryExpression(expression)
-        }
-
-        override fun visitIfExpression(expression: KtIfExpression) {
-            expression.condition.evaluateCheckStatement(expression.`else`)
-            super.visitIfExpression(expression)
         }
 
         private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
@@ -264,16 +228,20 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
             this.getNonNullChecks()?.let { nonNullChecks ->
-                if (elseExpression.isValidElseExpression()) {
-                    nonNullChecks.forEach(candidateParams::remove)
+                val nullableParamCallback = if (elseExpression.isValidElseExpression()) {
+                    { nullableParam: NullableParam ->
+                        nullableParam.isNonNullChecked = true
+                        nullableParam.isNullChecked = true
+                    }
+                } else {
+                    { nullableParam -> nullableParam.isNonNullChecked = true }
                 }
+                nonNullChecks.forEach { nullableParams[it]?.let(nullableParamCallback) }
             }
         }
 
-        private fun KtExpression?.isValidElseExpression(): Boolean {
-            return this != null && this !is KtIfExpression && this !is KtWhenExpression
-        }
-
+        // Helper function for if- and when-statements that will recursively check for whether
+        // any function params have been checked for being a non-nullable type.
         private fun KtBinaryExpression.evaluateBinaryExpression(): List<CallableDescriptor> {
             val leftExpression = left
             val rightExpression = right
@@ -289,7 +257,9 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             }
 
             if (isNullCheck()) {
-                getDescriptor(leftExpression, rightExpression)?.let(candidateParams::remove)
+                getDescriptor(leftExpression, rightExpression)
+                    ?.let { nullableParams[it] }
+                    ?.let { it.isNullChecked = true }
             } else if (isNonNullCheck()) {
                 getDescriptor(leftExpression, rightExpression)?.let(nonNullChecks::add)
             }
@@ -303,17 +273,74 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         private fun KtIsExpression.evaluateIsExpression(): List<CallableDescriptor> {
             val descriptor = this.leftHandSide.getResolvedCall(bindingContext)?.resultingDescriptor
                 ?: return emptyList()
-            return if (typeReference.isNullable(bindingContext) || isNegated) {
-                candidateParams.remove(descriptor)
+            return if (isNullableCheck(typeReference, isNegated)) {
+                nullableParams[descriptor]?.let { it.isNullChecked = true }
                 emptyList()
             } else {
                 listOf(descriptor)
             }
         }
 
+        private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
+            expression: KtWhenExpression,
+            subjectDescriptor: CallableDescriptor
+        ) {
+            var isNonNullChecked = false
+            var isNullChecked = false
+            forEach { whenCondition ->
+                when (whenCondition) {
+                    is KtWhenConditionWithExpression -> {
+                        if (whenCondition.expression?.text == "null") {
+                            isNullChecked = true
+                        }
+                    }
+                    is KtWhenConditionIsPattern -> {
+                        if (isNullableCheck(whenCondition.typeReference, whenCondition.isNegated)) {
+                            isNullChecked = true
+                        } else {
+                            isNonNullChecked = true
+                        }
+                    }
+                }
+            }
+            if (expression.elseExpression.isValidElseExpression()) {
+                if (isNullChecked) {
+                    isNonNullChecked = true
+                } else if (isNonNullChecked) {
+                    isNullChecked = true
+                }
+            }
+            nullableParams[subjectDescriptor]?.let {
+                if (isNullChecked) it.isNullChecked = true
+                if (isNonNullChecked) it.isNonNullChecked = true
+            }
+        }
+
+        private fun isNullableCheck(typeReference: KtTypeReference?, isNegated: Boolean): Boolean {
+            val isNullable = typeReference.isNullable(bindingContext)
+            return (isNullable && !isNegated) || (!isNullable && isNegated)
+        }
+
+        private fun KtExpression?.isValidElseExpression(): Boolean {
+            return this != null && this !is KtIfExpression && this !is KtWhenExpression
+        }
+
         private fun KtTypeReference?.isNullable(bindingContext: BindingContext): Boolean {
             return this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
         }
+
+        private fun updateNullableParam(expression: KtExpression?, updateCallback: (NullableParam) -> Unit) {
+            expression?.getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.let { nullableParams[it] }
+                ?.let(updateCallback)
+        }
+    }
+
+    private class NullableParam(val param: KtParameter) {
+        var isNullChecked = false
+        var isNonNullChecked = false
+        var isNonNullForced = false
     }
 
     private inner class PropertyCheckVisitor : DetektVisitor() {
