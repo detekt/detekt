@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -16,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -60,10 +60,14 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     }
 
     @Configuration(
-        "List of fully-qualified function names that should be skipped by this check. " +
-            "Example: 'package.class.fun1'"
+        "List of fully-qualified function call signatures which should be ignored by this rule. " +
+            "Functions can be defined without full signature (i.e. `java.time.LocalDate.now`) which will ignore " +
+            "calls of all functions with this name or with full signature " +
+            "(i.e. `java.time.LocalDate.now(java.time.Clock)`) which would ignore only call " +
+            "with this concrete signature."
     )
-    private val skipFunctions: List<String> by config(emptyList())
+    private val ignoreFunctionCall: List<FunctionMatcher> by config(emptyList<String>())
+    { it.map(FunctionMatcher::fromFunctionSignature) }
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -75,7 +79,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
 
-        if (resultingDescriptor.fqNameSafe.asString() in skipFunctions) return
+        if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
 
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
