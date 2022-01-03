@@ -416,6 +416,41 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
+            context("using a safe-qualified expression") {
+                it("does report when the safe-qualified expression is the only expression of the function") {
+                    val code = """
+                        class A {
+                            fun doFoo() { println("FOO") }
+                        }
+                        
+                        fun foo(a: A?) {
+                            a?.doFoo()
+                        }
+                        
+                        fun fizz(a: A?) {
+                            a?.let { it.doFoo() }
+                        }
+
+                        fun bizz(a: A?) = a?.doFoo()
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+                }
+
+                it("does not report when the safe-qualified expression is not the only expression of the function") {
+                    val code = """
+                        class A {
+                            fun doFoo() { println("FOO") }
+                        }
+                        
+                        fun foo(a: A?) {
+                            a?.doFoo()
+                            val b = 5 + 2
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+            }
+
             it("does report when a precondition is called on the param") {
                 val code = """
                     fun foo(a: Int?, b: Int?) {
@@ -661,23 +696,6 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
                 }
 
-                it("does not report when the parameter is eventually checked on nullity in a function") {
-                    val code = """
-                        fun foo(a: Int?) {
-                            if (a != null) {
-                                println(a + 5)
-                            }
-                            
-                            if (a == null) {
-                                println("a is null")
-                            }
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-
-
                 it("does report when the parameter is only checked on non-nullity with multiple clauses") {
                     val code = """
                         fun foo(a: Int?, other: Int) {
@@ -702,37 +720,13 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("does not report when they are used in an assignment with an Elvis operator") {
+                it("does not report when there are other expressions after the non-null check") {
                     val code = """
                         fun foo(a: Int?) {
                             if (a != null) {
                                 println(a + 5)
                             }
-                            val b = (a ?: 0) + 2
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                it("does not report when they are accessed using a null-safe call") {
-                    val code = """
-                        fun foo(a: Int?) {
-                            if (a != null) {
-                                println(a + 5)
-                            }
-                            val b = a?.plus(2)
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                it("does not report when they are accessed using a null-safe extension function") {
-                    val code = """
-                        fun foo(a: List<String>?) {
-                            if (a != null) {
-                                println(a + 5)
-                            }
-                            val b = a.orEmpty()
+                            val b = 5 + 2
                         }
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

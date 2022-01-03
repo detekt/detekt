@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -41,6 +40,7 @@ import org.jetbrains.kotlin.psi.KtWhenCondition
 import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -125,6 +125,15 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     nullableParams[descriptor] = NullableParam(param)
                 }
 
+            val singleChildExpression = if (function.initializer != null) {
+                true
+            } else {
+                function.bodyBlockExpression?.let { functionBlock ->
+                    functionBlock.allChildren.filter { it is KtExpression && it.parent == functionBlock }.toList()
+                }?.let { blockChildren ->
+                    blockChildren.size == 1
+                } ?: false
+            }
             // Evaluate the function, then analyze afterwards whether the candidate properties
             // could be made non-nullable.
             super.visitNamedFunction(function)
@@ -134,10 +143,12 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 // The heuristic for whether a nullable param can be made non-nullable is:
                 // * It has been forced into a non-null type, either by `!!` or by
                 //   `checkNonNull()`/`requireNonNull()`, or
-                // * It has only been checked for whether it is non-null and not for whether
-                //   it could be null.
-                .filter { it.isNonNullForced || (it.isNonNullChecked && !it.isNullChecked) }
-                .forEach { nullableParam ->
+                // * The containing function only consists of a single non-null check on
+                //   the param, either via an if/when check or with a safe-qualified expression.
+                .filter {
+                    val onlyNonNullCheck = singleChildExpression && it.isNonNullChecked && !it.isNullChecked
+                    it.isNonNullForced || onlyNonNullCheck
+                }.forEach { nullableParam ->
                     report(
                         CodeSmell(
                             issue,
@@ -195,27 +206,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
-            updateNullableParam(expression.receiverExpression) { it.isNullChecked = true }
+            updateNullableParam(expression.receiverExpression) { it.isNonNullChecked = true }
             super.visitSafeQualifiedExpression(expression)
-        }
-
-        override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
-            val isExtensionForNullable = expression.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.extensionReceiverParameter
-                ?.type
-                ?.isMarkedNullable
-            if (isExtensionForNullable == true) {
-                updateNullableParam(expression.receiverExpression) { it.isNullChecked = true }
-            }
-            super.visitDotQualifiedExpression(expression)
-        }
-
-        override fun visitBinaryExpression(expression: KtBinaryExpression) {
-            if (expression.operationToken == KtTokens.ELVIS) {
-                updateNullableParam(expression.left) { it.isNullChecked = true }
-            }
-            super.visitBinaryExpression(expression)
         }
 
         private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
