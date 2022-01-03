@@ -583,6 +583,15 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
+            it("does not report when an elvis operator is used") {
+                val code = """
+                    fun foo(a: Int?): Int {
+                        return a?.plus(5) ?: 5
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
             it("does report when a precondition is called on the param") {
                 val code = """
                     fun foo(a: Int?, b: Int?) {

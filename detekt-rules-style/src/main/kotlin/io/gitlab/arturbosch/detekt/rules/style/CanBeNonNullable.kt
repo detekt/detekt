@@ -219,15 +219,25 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 ?.type
                 ?.isMarkedNullable
             if (isExtensionForNullable == true) {
-                // Look for the variable that was the root of the potential call chain
-                // on this extension function for a nullable type.
-                var receiverExpression: KtExpression = expression.receiverExpression
-                while (receiverExpression is KtQualifiedExpression) {
-                    receiverExpression = receiverExpression.receiverExpression
-                }
-                updateNullableParam(receiverExpression) { it.isNullChecked = true }
+                updateNullableParam(expression.receiverExpression.getRootExpression()) { it.isNullChecked = true }
             }
             super.visitDotQualifiedExpression(expression)
+        }
+
+        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            if (expression.operationToken == KtTokens.ELVIS) {
+                updateNullableParam(expression.left.getRootExpression()) { it.isNullChecked = true }
+            }
+            super.visitBinaryExpression(expression)
+        }
+
+        private fun KtExpression?.getRootExpression(): KtExpression? {
+            // Look for the expression that was the root of a potential call chain.
+            var receiverExpression = this
+            while (receiverExpression is KtQualifiedExpression) {
+                receiverExpression = receiverExpression.receiverExpression
+            }
+            return receiverExpression
         }
 
         private fun KtCallExpression.isSingleExpression(): Boolean {
