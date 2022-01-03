@@ -64,7 +64,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     }
 
     private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
-        return typeReference?.text in exceptionNames
+        return typeReference?.let { it.text in exceptionNames } ?: false
     }
 
     companion object {

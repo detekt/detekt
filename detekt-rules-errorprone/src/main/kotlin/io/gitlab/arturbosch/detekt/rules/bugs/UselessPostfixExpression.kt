@@ -78,15 +78,17 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
             report(postfixExpression)
         }
 
-        getPostfixExpressionChildren(expression.returnedExpression)
-            ?.forEach { report(it) }
+        expression.returnedExpression
+            ?.let(this::getPostfixExpressionChildren)
+            ?.forEach(this::report)
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         val postfixExpression = expression.right?.asPostFixExpression()
         val leftIdentifierText = expression.left?.text
         postfixExpression?.let { checkPostfixExpression(it, leftIdentifierText) }
-        getPostfixExpressionChildren(expression.right)
+        expression.right
+            ?.let(this::getPostfixExpressionChildren)
             ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
@@ -118,7 +120,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getPostfixExpressionChildren(expression: KtExpression?) =
-        expression?.getChildrenOfType<KtPostfixExpression>()
-            ?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
+    private fun getPostfixExpressionChildren(expression: KtExpression) =
+        expression.getChildrenOfType<KtPostfixExpression>()
+            .filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }
