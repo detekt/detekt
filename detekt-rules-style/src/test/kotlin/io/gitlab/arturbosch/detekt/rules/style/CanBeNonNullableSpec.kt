@@ -416,24 +416,38 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("using a safe-qualified expression") {
+            context("using a null-safe expression") {
                 it("does report when the safe-qualified expression is the only expression of the function") {
                     val code = """
                         class A {
-                            fun doFoo() { println("FOO") }
+                            val foo = "BAR"
                         }
                         
                         fun foo(a: A?) {
-                            a?.doFoo()
+                            val foo = a?.foo
                         }
                         
                         fun fizz(a: A?) {
-                            a?.let { it.doFoo() }
+                            a?.let { println(it.foo) }
                         }
 
-                        fun bizz(a: A?) = a?.doFoo()
+                        fun bizz(a: A?) = a?.foo
+
+                        fun buzz(a: A?): String {
+                            return a?.foo
+                        }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+                }
+
+                it("does not report when a null-safe extension function is used in the single expression") {
+                    val code = """
+                        fun foo(rawValue: String?): List<String> =
+                            rawValue?.trim()
+                                ?.split(",")
+                                .orEmpty()
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
                 it("does not report when the safe-qualified expression is not the only expression of the function") {

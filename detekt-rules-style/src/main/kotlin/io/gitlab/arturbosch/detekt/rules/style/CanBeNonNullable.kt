@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -33,6 +34,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -208,6 +210,24 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
             updateNullableParam(expression.receiverExpression) { it.isNonNullChecked = true }
             super.visitSafeQualifiedExpression(expression)
+        }
+
+        override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+            val isExtensionForNullable = expression.getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.extensionReceiverParameter
+                ?.type
+                ?.isMarkedNullable
+            if (isExtensionForNullable == true) {
+                // Look for the variable that was the root of the potential call chain
+                // on this extension function for a nullable type.
+                var receiverExpression: KtExpression = expression.receiverExpression
+                while (receiverExpression is KtQualifiedExpression) {
+                    receiverExpression = receiverExpression.receiverExpression
+                }
+                updateNullableParam(receiverExpression) { it.isNullChecked = true }
+            }
+            super.visitDotQualifiedExpression(expression)
         }
 
         private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
