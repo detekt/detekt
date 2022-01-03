@@ -9,8 +9,13 @@ import java.nio.file.Path
 
 class BaselineFacade {
 
-    fun transformResult(baselineFile: Path, result: Detektion): Detektion =
-        BaselineFilteredResult(result, Baseline.load(baselineFile))
+    fun transformResult(baselineFile: Path, result: Detektion): Detektion {
+        return if (baselineExists(baselineFile)) {
+            BaselineFilteredResult(result, Baseline.load(baselineFile))
+        } else {
+            result
+        }
+    }
 
     fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
         val ids = findings.map { it.baselineId }.toSortedSet()

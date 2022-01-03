@@ -17,10 +17,17 @@ class BaselineFacadeSpec : Spek({
         val dir by memoized { createTempDirectoryForTest("baseline_format") }
         val validBaseline = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
-        it("returns a BaselineFilteredResult") {
+        it("returns a BaselineFilteredResult when the baseline exists") {
             val detektion = BaselineFacade().transformResult(validBaseline, TestDetektion())
 
             assertThat(detektion).isInstanceOf(BaselineFilteredResult::class.java)
+        }
+
+        it("returns the same detektion when the baseline doesn't exist") {
+            val initialDetektion = TestDetektion()
+            val detektion = BaselineFacade().transformResult(dir.resolve("baseline.xml"), initialDetektion)
+
+            assertThat(detektion).isEqualTo(initialDetektion)
         }
 
         it("creates a baseline file") {
