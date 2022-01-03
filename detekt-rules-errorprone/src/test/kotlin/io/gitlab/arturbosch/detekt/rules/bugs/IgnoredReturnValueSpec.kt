@@ -814,7 +814,7 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is in skip list") {
+        it("does not report when a function is in ignoreFunctionCall") {
             val code = """
                 package foo
 
@@ -828,7 +828,7 @@ object IgnoredReturnValueSpec : Spek({
             val rule = IgnoredReturnValue(
                 TestConfig(
                     mapOf(
-                        "skipFunctions" to listOf("foo.listOfChecked"),
+                        "ignoreFunctionCall" to listOf("foo.listOfChecked"),
                         "restrictToAnnotatedMethods" to false
                     )
                 )
