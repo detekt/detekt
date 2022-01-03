@@ -54,7 +54,7 @@ private val result = object : Detektion {
     }
 }
 
-const val code = """
+private const val code = """
     package io.gitlab.arturbosch.detekt.sample
 
     class Foo {}
