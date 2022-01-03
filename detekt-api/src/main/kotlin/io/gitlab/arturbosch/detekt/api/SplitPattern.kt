@@ -28,14 +28,14 @@ open class SplitPattern(
      * Does any part contain given [value]?
      */
     fun contains(value: String?): Boolean {
-        return value?.let { excludes.any { value.contains(it, ignoreCase = true) } } ?: false
+        return if (value != null) excludes.any { value.contains(it, ignoreCase = true) } else false
     }
 
     /**
      * Is there any element which matches the given [value]?
      */
     fun any(value: String?): Boolean {
-        return value?.let { excludes.any { value.equals(it, ignoreCase = true) } } ?: false
+        return if (value != null) excludes.any { value.equals(it, ignoreCase = true) } else false
     }
 
     /**
@@ -52,7 +52,7 @@ open class SplitPattern(
      * Tests if any part starts with the given [value]
      */
     fun startWith(value: String?): Boolean {
-        return value?.let { excludes.any { value.startsWith(it)} } ?: false
+        return if (value != null) excludes.any(value::startsWith) else false
     }
 
     /**
