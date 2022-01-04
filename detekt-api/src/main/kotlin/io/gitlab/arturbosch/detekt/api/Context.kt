@@ -21,7 +21,6 @@ interface Context {
      * An alias set can be given to additionally check if an alias was used when suppressing.
      * Additionally suppression by rule set id is supported.
      */
-    @Suppress("CanBeNonNullable")
     fun report(finding: Finding, aliases: Set<String> = emptySet(), ruleSetId: RuleSetId? = null) {
         // no-op
     }

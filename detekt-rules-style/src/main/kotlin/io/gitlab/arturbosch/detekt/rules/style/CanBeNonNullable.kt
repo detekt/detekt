@@ -73,6 +73,12 @@ import org.jetbrains.kotlin.types.isNullable
  * fun foo(a: Int?) {
  *     val b = a!! + 2
  * }
+ *
+ * fun foo(a: Int?) {
+ *     if (a != null) {
+ *         println(a)
+ *     }
+ * }
  * </noncompliant>
  *
  * <compliant>
@@ -91,6 +97,10 @@ import org.jetbrains.kotlin.types.isNullable
  *
  * fun foo(a: Int) {
  *     val b = a + 2
+ * }
+ *
+ * fun foo(a: Int) {
+ *     println(a)
  * }
  * </compliant>
  */
@@ -127,20 +137,19 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     nullableParams[descriptor] = NullableParam(param)
                 }
 
-            val validSingleChildExpression = when (val functionInitializer = function.initializer) {
-                null -> {
-                    val children = function.bodyBlockExpression
-                        ?.allChildren
-                        ?.filterIsInstance<KtExpression>()
-                        ?.toList()
-                        .orEmpty()
-                    if (children.size == 1) {
-                        children.first().determineSingleExpression(candidateDescriptors)
-                    } else {
-                        INELIGIBLE_SINGLE_EXPRESSION
-                    }
+            val validSingleChildExpression = if (function.initializer == null) {
+                val children = function.bodyBlockExpression
+                    ?.allChildren
+                    ?.filterIsInstance<KtExpression>()
+                    ?.toList()
+                    .orEmpty()
+                if (children.size == 1) {
+                    children.first().determineSingleExpression(candidateDescriptors)
+                } else {
+                    INELIGIBLE_SINGLE_EXPRESSION
                 }
-                else -> functionInitializer.determineSingleExpression(candidateDescriptors)
+            } else {
+                INELIGIBLE_SINGLE_EXPRESSION
             }
 
             // Evaluate the function, then analyze afterwards whether the candidate properties
@@ -261,7 +270,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         private fun KtExpression?.determineSingleExpression(candidateDescriptors: Set<DeclarationDescriptor>): Boolean {
             return when (this) {
-                is KtReturnExpression -> this.returnedExpression.determineSingleExpression(candidateDescriptors)
+                is KtReturnExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 is KtIfExpression -> ELIGIBLE_SINGLE_EXPRESSION
                 is KtDotQualifiedExpression -> {
                     this.getRootExpression()

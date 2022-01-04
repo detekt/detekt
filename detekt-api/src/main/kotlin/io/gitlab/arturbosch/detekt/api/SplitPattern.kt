@@ -27,16 +27,12 @@ open class SplitPattern(
     /**
      * Does any part contain given [value]?
      */
-    fun contains(value: String?): Boolean {
-        return if (value != null) excludes.any { value.contains(it, ignoreCase = true) } else false
-    }
+    fun contains(value: String?): Boolean = excludes.any { value?.contains(it, ignoreCase = true) == true }
 
     /**
      * Is there any element which matches the given [value]?
      */
-    fun any(value: String?): Boolean {
-        return if (value != null) excludes.any { value.equals(it, ignoreCase = true) } else false
-    }
+    fun any(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
 
     /**
      * Tests if none of the parts contain the given [value].
@@ -51,9 +47,7 @@ open class SplitPattern(
     /**
      * Tests if any part starts with the given [value]
      */
-    fun startWith(value: String?): Boolean {
-        return if (value != null) excludes.any(value::startsWith) else false
-    }
+    fun startWith(value: String?): Boolean = excludes.any { value?.startsWith(it) ?: false }
 
     /**
      * Transforms all parts by given [transform] function.

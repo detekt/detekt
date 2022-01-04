@@ -65,5 +65,5 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     private fun isPotentialMethod(function: KtNamedFunction) = methodNames.any { function.name == it }
 
     private fun hasThrowExpression(declaration: KtExpression?) =
-        declaration?.anyDescendantOfType<KtThrowExpression>() ?: false
+        declaration?.anyDescendantOfType<KtThrowExpression>() == true
 }
