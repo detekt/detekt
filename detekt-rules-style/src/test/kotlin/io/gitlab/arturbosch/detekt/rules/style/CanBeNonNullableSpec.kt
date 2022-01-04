@@ -452,9 +452,9 @@ class CanBeNonNullableSpec : Spek({
 
                             val aObj = A()
     
-                            fun foo(a: String?) = doFoo(a?.plus(5))
+                            fun foo(a: Int?) = doFoo(a?.plus(5))
 
-                            fun fizz(b: String?) = aObj.doFoo(b?.plus(5))
+                            fun fizz(b: Int?) = aObj.doFoo(b?.plus(5))
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
@@ -485,7 +485,9 @@ class CanBeNonNullableSpec : Spek({
 
                 context("in a non-return statement") {
                     it("does report when the safe-qualified expression is the only expression of the function") {
-                        val code = """                            
+                        val code = """   
+                            class A(val foo: String)
+
                             fun foo(a: A?) {
                                 a?.let { println(it.foo) }
                             }
@@ -657,14 +659,8 @@ class CanBeNonNullableSpec : Spek({
                                     a is Int -> println(2 + a)
                                 }
                             }
-
-                            fun fizz(b: Int?) {
-                                when {
-                                    b !is Int? -> println(2 + b)
-                                }
-                            }
                         """.trimIndent()
-                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
                     it("does report on non-null type matching with multiple clauses") {
@@ -727,14 +723,8 @@ class CanBeNonNullableSpec : Spek({
                                     is Int -> println(2 + a)
                                 }
                             }
-
-                            fun fizz(b: Int?) {
-                                when(b) {
-                                    !is Int? -> println(2 + b)
-                                }
-                            }
                         """.trimIndent()
-                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
                     it("does not report on non-null type matching with an else statement") {
