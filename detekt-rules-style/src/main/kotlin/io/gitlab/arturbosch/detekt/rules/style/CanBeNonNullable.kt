@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -130,13 +129,18 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
             val validSingleChildExpression = when (val functionInitializer = function.initializer) {
                 null -> {
-                    function.bodyBlockExpression.isEligibleSingleExpression(candidateDescriptors)
+                    val children = function.bodyBlockExpression
+                        ?.allChildren
+                        ?.filterIsInstance<KtExpression>()
+                        ?.toList()
+                        .orEmpty()
+                    if (children.size == 1) {
+                        children.first().determineSingleExpression(candidateDescriptors)
+                    } else {
+                        INELIGIBLE_SINGLE_EXPRESSION
+                    }
                 }
-                is KtCallExpression -> functionInitializer.isEligibleSingleExpression(candidateDescriptors)
-                is KtSafeQualifiedExpression -> functionInitializer.isEligibleSingleExpression(candidateDescriptors)
-                else -> {
-                    ELIGIBLE_SINGLE_EXPRESSION
-                }
+                else -> functionInitializer.determineSingleExpression(candidateDescriptors)
             }
 
             // Evaluate the function, then analyze afterwards whether the candidate properties
@@ -243,50 +247,18 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             return receiverExpression
         }
 
-        private fun KtSafeQualifiedExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
-            return this.getRootExpression()
-                .getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.let(candidates::contains) != true
-        }
-
-        private fun KtCallExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
-            val isFromNullableParam = this.getRootExpression()
-                .getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.let(candidates::contains)
-            return if (isFromNullableParam == true) {
-                NOT_ELIGIBLE_SINGLE_EXPRESSION
-            } else {
-                lambdaArguments.isNotEmpty() && lambdaArguments.all { lambdaArgument ->
-                    lambdaArgument.getLambdaExpression()
-                        ?.functionLiteral
-                        ?.bodyBlockExpression.isEligibleSingleExpression(candidates)
+        private fun KtExpression?.determineSingleExpression(candidateDescriptors: Set<DeclarationDescriptor>): Boolean {
+            return when (this) {
+                is KtReturnExpression -> this.returnedExpression.determineSingleExpression(candidateDescriptors)
+                is KtIfExpression -> ELIGIBLE_SINGLE_EXPRESSION
+                is KtDotQualifiedExpression -> {
+                    this.getRootExpression()
+                        .getResolvedCall(bindingContext)
+                        ?.resultingDescriptor
+                        ?.let(candidateDescriptors::contains) == true
                 }
-            }
-        }
-
-        private fun KtReturnExpression.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
-            return when (val returnedExpression = returnedExpression) {
-                is KtCallExpression -> returnedExpression.isEligibleSingleExpression(candidates)
-                is KtSafeQualifiedExpression -> returnedExpression.isEligibleSingleExpression(candidates)
+                is KtCallExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 else -> ELIGIBLE_SINGLE_EXPRESSION
-            }
-        }
-
-        private fun KtBlockExpression?.isEligibleSingleExpression(candidates: Set<DeclarationDescriptor>): Boolean {
-            val children = this?.allChildren
-                ?.filterIsInstance<KtExpression>()
-                ?.toList()
-                .orEmpty()
-            return if (children.size == 1) {
-                when(val child = children.first()) {
-                    is KtCallExpression -> child.isEligibleSingleExpression(candidates)
-                    is KtReturnExpression -> child.isEligibleSingleExpression(candidates)
-                    else -> ELIGIBLE_SINGLE_EXPRESSION
-                }
-            } else {
-                NOT_ELIGIBLE_SINGLE_EXPRESSION
             }
         }
 
@@ -523,7 +495,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         private const val REQUIRE_NOT_NULL_NAME = "requireNotNull"
         private const val CHECK_NOT_NULL_NAME = "checkNotNull"
 
-        private const val NOT_ELIGIBLE_SINGLE_EXPRESSION = false
+        private const val INELIGIBLE_SINGLE_EXPRESSION = false
         private const val ELIGIBLE_SINGLE_EXPRESSION = true
     }
 }

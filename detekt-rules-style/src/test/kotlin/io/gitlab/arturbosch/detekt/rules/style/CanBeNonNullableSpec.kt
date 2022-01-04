@@ -385,7 +385,7 @@ class CanBeNonNullableSpec : Spek({
         }
 
         context("nullable function parameters") {
-            context("using a double-bang de-nullifier") {
+            context("using a de-nullifier") {
                 it("does report when a param is de-nullified with a postfix expression") {
                     val code = """
                         fun foo(a: Int?) {
@@ -404,6 +404,16 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                 }
 
+                it("does report when a de-nullifier precondition is called on the param") {
+                    val code = """
+                        fun foo(a: Int?, b: Int?) {
+                            val aNonNull = requireNotNull(a)
+                            val c = aNonNull + checkNotNull(b)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                }
+
                 it("does not report a double-bang call the field of a non-null param") {
                     val code = """
                         class A(val a: Int?)
@@ -416,17 +426,15 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("single-expression functions") {
-                context("with initializer") {
-                    it("does report when a function's nullable param is the indirect source of its single expression") {
+            context("using a null-safe expression") {
+                context("in initializer") {
+                    it("does report when the safe-qualified expression is the only expression of the function") {
                         val code = """
-                            fun doFoo(callback: () -> Unit) {
-                                callback.invoke()
+                            class A {
+                                val foo = "BAR"
                             }
                             
-                            fun foo(a: String?) = doFoo {
-                                a?.let { println("a not null") }
-                            }
+                            fun foo(a: A?) = a?.foo
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
@@ -436,20 +444,22 @@ class CanBeNonNullableSpec : Spek({
                             fun doFoo(a: Int?) {
                                 if (a != null) println("a not null") else println("a is null")
                             }
+                            class A {
+                                fun doFoo(a: Int?) {
+                                    if (a != null) println("a not null") else println("a is null")
+                                }
+                            }
+
+                            val aObj = A()
     
                             fun foo(a: String?) = doFoo(a?.plus(5))
+
+                            fun fizz(b: String?) = aObj.doFoo(b?.plus(5))
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report when a function's nullable param is the direct source of its single expression") {
-                        val code = """
-                            fun foo(a: String?) = a?.length
-                        """.trimIndent()
-                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                    }
-
-                    it("does not report when a function ultimately has more than a single expression") {
+                    it("does not report when the safe-qualified expression is within a lambda") {
                         val code = """
                             fun doFoo(callback: () -> Unit) {
                                 callback.invoke()
@@ -457,48 +467,78 @@ class CanBeNonNullableSpec : Spek({
                             
                             fun foo(a: String?) = doFoo {
                                 a?.let { println("a not null") }
-                                println("OTHER FOO")
                             }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when a null-safe extension function is used in the single expression") {
+                        val code = """
+                            fun foo(rawValue: String?): List<String> =
+                                rawValue?.trim()
+                                    ?.split(",")
+                                    .orEmpty()
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
                 }
 
-                context("with a non-qualified call") {
-                    it("does report when a function's nullable param is the source of its single expression") {
-                        val code = """
-                            fun doFoo(callback: () -> Unit) {
-                                callback.invoke()
-                            }
-    
-                            fun foo(a: String?) {
-                                doFoo {
-                                    a?.let { println("a not null") }
-                                }
+                context("in a non-return statement") {
+                    it("does report when the safe-qualified expression is the only expression of the function") {
+                        val code = """                            
+                            fun foo(a: A?) {
+                                a?.let { println(it.foo) }
                             }
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does not report when a function ultimately has more than a single expression") {
+                    it("does not report when the safe-qualified expression is within a lambda") {
                         val code = """
-                            fun doFoo(callback: () -> Unit) {
-                                callback.invoke()
+                            class A {
+                                fun doFoo(callback: () -> Unit) {
+                                    callback.invoke()
+                                }
                             }
     
-                            fun foo(a: String?) {
-                                doFoo {
+                            fun foo(a: String?, aObj: A) {
+                                aObj.doFoo {
                                     a?.let { println("a not null") }
                                 }
-                                println("OTHER FOO")
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when the safe-qualified expression is not the only expression of the function") {
+                        val code = """
+                            class A {
+                                fun doFoo() { println("FOO") }
+                            }
+                            
+                            fun foo(a: A?) {
+                                a?.doFoo()
+                                val b = 5 + 2
                             }
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
                 }
+                context("in a return statement") {
+                    it("does report when the safe-qualified expression is the only expression of the function") {
+                        val code = """
+                            class A {
+                                val foo = "BAR"
+                            }
+                            
+                            fun fizz(aObj: A?): String? {
+                                return aObj?.foo
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
 
-                context("with return call") {
-                    it("does report when a function's nullable param is the source of its single expression") {
+                    it("does not report when the safe-qualified expression is within a lambda") {
                         val code = """
                             fun doFoo(callback: () -> Unit) {
                                 callback.invoke()
@@ -510,123 +550,18 @@ class CanBeNonNullableSpec : Spek({
                                 }
                             }
                         """.trimIndent()
-                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-                    }
-                }
-
-                context("with a dot-qualified call") {
-                    it("does report when a function's nullable param is the source of its single expression") {
-                        val code = """
-                            class A {
-                                fun doFoo(callback: () -> Unit) {
-                                    callback.invoke()
-                                }
-                            }
-    
-                            fun foo(a: String?, aObj: A) {
-                                aObj.doFoo {
-                                    a?.let { println("a not null") }
-                                }
-                            }
-                        """.trimIndent()
-                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report when a function ultimately has more than a single expression") {
+                    it("does not report when an elvis operator is used") {
                         val code = """
-                            class A {
-                                fun doFoo(callback: () -> Unit) {
-                                    callback.invoke()
-                                }
-                            }
-    
-                            fun foo(a: String?, aObj: A) {
-                                aObj.doFoo {
-                                    a?.let { println("a not null") }
-                                }
-                                println("OTHER FOO")
+                            fun foo(a: Int?): Int {
+                                return a?.plus(5) ?: 5
                             }
                         """.trimIndent()
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
                 }
-            }
-
-            context("using a null-safe expression") {
-                it("does report when the safe-qualified expression is the only expression of the function") {
-                    val code = """
-                        class A {
-                            val foo = "BAR"
-                        }
-                        
-                        fun foo(a: A?) {
-                            val foo = a?.foo
-                        }
-                        
-                        fun fizz(aObj: A?) {
-                            aObj?.let { println(it.foo) }
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
-                }
-
-                it("does not report when a safe-qualified expression is used in the return statement") {
-                    val code = """
-                        class A {
-                            val foo = "BAR"
-                        }
-                        
-                        fun foo(a: A?) = a?.foo
-                        
-                        fun fizz(aObj: A?): String? {
-                            return aObj?.foo
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                it("does not report when a null-safe extension function is used in the single expression") {
-                    val code = """
-                        fun foo(rawValue: String?): List<String> =
-                            rawValue?.trim()
-                                ?.split(",")
-                                .orEmpty()
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                it("does not report when the safe-qualified expression is not the only expression of the function") {
-                    val code = """
-                        class A {
-                            fun doFoo() { println("FOO") }
-                        }
-                        
-                        fun foo(a: A?) {
-                            a?.doFoo()
-                            val b = 5 + 2
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-            }
-
-            it("does not report when an elvis operator is used") {
-                val code = """
-                    fun foo(a: Int?): Int {
-                        return a?.plus(5) ?: 5
-                    }
-                """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
-
-            it("does report when a precondition is called on the param") {
-                val code = """
-                    fun foo(a: Int?, b: Int?) {
-                        val aNonNull = requireNotNull(a)
-                        val c = aNonNull + checkNotNull(b)
-                    }
-                """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
             context("when statements") {
