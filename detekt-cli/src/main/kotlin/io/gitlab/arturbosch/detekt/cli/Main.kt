@@ -54,7 +54,7 @@ fun buildRunner(
     val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
-        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
+        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter, errorPrinter)
         arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }

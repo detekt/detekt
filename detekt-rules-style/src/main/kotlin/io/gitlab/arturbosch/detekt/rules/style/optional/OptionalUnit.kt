@@ -55,7 +55,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Return type of 'Unit' is unnecessary and can be safely removed.",
+        "Return type of `Unit` is unnecessary and can be safely removed.",
         Debt.FIVE_MINS
     )
 
@@ -90,7 +90,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(expression),
-                        "A single Unit expression is unnecessary and can safely be removed"
+                        "A single Unit expression is unnecessary and can safely be removed."
                     )
                 )
             }

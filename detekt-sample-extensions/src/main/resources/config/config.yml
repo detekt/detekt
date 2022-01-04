@@ -1,0 +1,5 @@
+sample:
+  TooManyFunctions:
+    active: true
+  TooManyFunctionsTwo:
+    active: true

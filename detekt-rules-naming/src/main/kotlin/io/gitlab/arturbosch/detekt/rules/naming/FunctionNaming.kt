@@ -32,7 +32,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("naming pattern")
-    private val functionPattern: Regex by config("([a-z][a-zA-Z0-9]*)|(`.*`)", String::toRegex)
+    private val functionPattern: Regex by config("[a-z][a-zA-Z0-9]*", String::toRegex)
 
     @Configuration("ignores functions in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)

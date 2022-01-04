@@ -80,7 +80,7 @@ the merging makes most sense in a multi-module project. In this spirit, only Gra
 At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
 run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
-#### Groovy DSL
+### Groovy DSL
 ```groovy
 task reportMerge(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
@@ -104,7 +104,7 @@ subprojects {
 }
 ```
 
-#### Kotlin DSL
+### Kotlin DSL
 
 ```kotlin
 val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 

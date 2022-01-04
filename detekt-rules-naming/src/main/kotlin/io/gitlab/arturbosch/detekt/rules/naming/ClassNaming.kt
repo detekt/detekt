@@ -24,7 +24,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "A class or object's name should fit the naming pattern defined in the projects configuration.",
+        "A class or object name should fit the naming pattern defined in the projects configuration.",
         debt = Debt.FIVE_MINS
     )
 

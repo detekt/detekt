@@ -49,6 +49,6 @@ class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
     }
 
     private companion object {
-        const val MESSAGE = "Equals signs for expression style functions should be on the same line as the signature"
+        const val MESSAGE = "Equals signs for expression style functions should be on the same line as the signature."
     }
 }

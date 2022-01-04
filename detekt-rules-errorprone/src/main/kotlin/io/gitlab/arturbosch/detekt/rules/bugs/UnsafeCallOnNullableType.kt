@@ -39,7 +39,8 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnsafeCallOnNullableType",
         Severity.Defect,
-        "It will throw a NullPointerException at runtime if your nullable value is null.",
+        "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
+            "the nullable value is null.",
         Debt.TWENTY_MINS
     )
 

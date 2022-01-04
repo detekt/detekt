@@ -51,8 +51,8 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "PrintStackTrace",
         Severity.CodeSmell,
-        "Do not print an stack trace. " +
-            "These debug statements should be replaced with a logger or removed.",
+        "Do not print a stack trace. " +
+            "These debug statements should be removed or replaced with a logger.",
         Debt.TWENTY_MINS
     )
 

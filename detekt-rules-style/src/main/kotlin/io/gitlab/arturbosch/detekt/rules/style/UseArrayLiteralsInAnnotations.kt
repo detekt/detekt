@@ -26,7 +26,7 @@ class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Array literals '[...]' should be preferred as they are more readable than 'arrayOf(...)' expressions.",
+        "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
         Debt.FIVE_MINS
     )
 

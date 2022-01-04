@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
+import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
+import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
@@ -19,6 +21,7 @@ class SupportConfigValidationSpec : Spek({
     describe("support config validation") {
 
         val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
+        val spec by memoized { createNullLoggingSpec {} }
 
         it("fails when unknown properties are found") {
             val config = yamlConfigFromContent(
@@ -35,7 +38,7 @@ class SupportConfigValidationSpec : Spek({
             """
             )
             createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it) }
+                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
                     .isInstanceOf(InvalidConfig::class.java)
                     .hasMessageContaining("Run failed with 1 invalid config property.")
                     .hasMessageContaining("my_additional_properties")
@@ -53,7 +56,7 @@ class SupportConfigValidationSpec : Spek({
             """
             )
             createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it) }
+                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
                     .isInstanceOf(InvalidConfig::class.java)
                     .hasMessageContaining("Run failed with 1 invalid config property.")
             }
@@ -82,7 +85,8 @@ class SupportConfigValidationSpec : Spek({
             """
             )
             createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it) }.doesNotThrowAnyException()
+                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                    .doesNotThrowAnyException()
             }
         }
     }

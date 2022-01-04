@@ -48,7 +48,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnnecessaryFilter",
         Severity.Style,
-        "filter() with other collection operations may be simplified.",
+        "`filter()` with other collection operations may be simplified.",
         Debt.FIVE_MINS
     )
 

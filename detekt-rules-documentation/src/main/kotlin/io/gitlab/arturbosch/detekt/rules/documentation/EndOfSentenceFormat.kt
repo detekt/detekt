@@ -22,7 +22,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "The first sentence in a KDoc comment should end with correct punctuation.",
+        "The first sentence in a KDoc comment should end with proper punctuation or with a correct URL.",
         Debt.FIVE_MINS
     )
 

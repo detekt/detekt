@@ -39,7 +39,8 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Unnecessary abstract modifier in interface",
+        "Unnecessary abstract modifier in interface detected. " +
+            "This abstract modifier is unnecessary and thus can be removed.",
         Debt.FIVE_MINS
     )
 
