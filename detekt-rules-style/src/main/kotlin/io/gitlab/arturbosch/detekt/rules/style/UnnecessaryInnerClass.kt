@@ -143,7 +143,8 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    // Replace this "contructor().apply{}" pattern with buildSet() when Kotlin is upgraded to 1.6
+    // Replace this "constructor().apply{}" pattern with buildSet() when the Kotlin
+    // API version is upgraded to 1.6
     private fun buildParentClassChain(klass: KtClass) = HashSet<ClassId>().apply {
         var containingClass = klass.containingClass()
         while (containingClass != null) {
