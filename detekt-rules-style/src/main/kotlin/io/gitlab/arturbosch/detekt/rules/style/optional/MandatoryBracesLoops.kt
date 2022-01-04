@@ -16,9 +16,6 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
-private const val DESCRIPTION = "Multi-line loop was found that does not have braces. " +
-    "These should be added to improve readability."
-
 /**
  * This rule detects multi-line `for` and `while` loops which do not have braces.
  * Adding braces would improve readability and avoid possible errors.
@@ -56,7 +53,13 @@ private const val DESCRIPTION = "Multi-line loop was found that does not have br
  * </compliant>
  */
 class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("MandatoryBracesLoops", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
+    override val issue = Issue(
+        "MandatoryBracesLoops",
+        Severity.Style,
+        "A multi-line loop was found that does not have braces. " +
+            "These should be added to improve readability.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitForExpression(expression: KtForExpression) {
         checkForBraces(expression)
@@ -82,7 +85,7 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
                 ?.any { it.textContains('\n') }
                 ?: false
             if (hasNoBraces) {
-                report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
+                report(CodeSmell(issue, Entity.from(expression.body ?: expression), issue.description))
             }
         }
     }
@@ -95,7 +98,7 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
                 .filterIsInstance<PsiWhiteSpace>()
                 .any { it.textContains('\n') }
             if (hasNoBraces) {
-                report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
+                report(CodeSmell(issue, Entity.from(expression.body ?: expression), issue.description))
             }
         }
     }

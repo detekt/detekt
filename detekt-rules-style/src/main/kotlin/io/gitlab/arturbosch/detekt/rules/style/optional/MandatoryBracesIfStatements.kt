@@ -14,9 +14,6 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
-private const val DESCRIPTION = "Multi-line if statement was found that does not have braces. " +
-    "These should be added to improve readability."
-
 /**
  * This rule detects multi-line `if` statements which do not have braces.
  * Adding braces would improve readability and avoid possible errors.
@@ -33,19 +30,25 @@ private const val DESCRIPTION = "Multi-line if statement was found that does not
  */
 class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("MandatoryBracesIfStatements", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
+    override val issue = Issue(
+        "MandatoryBracesIfStatements",
+        Severity.Style,
+        "Multi-line if statement was found that does not have braces. " +
+            "These braces should be added to improve readability.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
         val thenExpression = expression.then ?: return
         if (thenExpression !is KtBlockExpression && hasNewLineAfter(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(thenExpression), DESCRIPTION))
+            report(CodeSmell(issue, Entity.from(thenExpression), issue.description))
         }
 
         val elseExpression = expression.`else` ?: return
         if (mustBeOnSameLine(elseExpression) && hasNewLineAfter(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(elseExpression), DESCRIPTION))
+            report(CodeSmell(issue, Entity.from(elseExpression), issue.description))
         }
     }
 

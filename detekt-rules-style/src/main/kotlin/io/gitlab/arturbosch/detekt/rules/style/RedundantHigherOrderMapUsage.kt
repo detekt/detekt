@@ -77,7 +77,7 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Checks for Redundant 'map' calls.",
+        "Checks for redundant 'map' calls, which can be removed.",
         Debt.FIVE_MINS
     )
 

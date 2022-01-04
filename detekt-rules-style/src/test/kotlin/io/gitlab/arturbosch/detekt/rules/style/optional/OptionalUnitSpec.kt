@@ -110,7 +110,7 @@ class OptionalUnitSpec : Spek({
 
             it("should report the correct violation message") {
                 findings.forEach {
-                    assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed")
+                    assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed.")
                 }
             }
         }

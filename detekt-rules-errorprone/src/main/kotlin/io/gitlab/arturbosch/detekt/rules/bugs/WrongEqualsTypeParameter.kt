@@ -41,8 +41,8 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "WrongEqualsTypeParameter",
         Severity.Defect,
-        "Wrong parameter type for equals() method found. " +
-            "To correctly override the equals() method use Any?",
+        "Wrong parameter type for `equals()` method found. " +
+            "To correctly override the `equals()` method use `Any?`.",
         Debt.TEN_MINS
     )
 

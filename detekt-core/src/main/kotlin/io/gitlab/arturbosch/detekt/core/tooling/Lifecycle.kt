@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -22,6 +23,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 internal interface Lifecycle {
 
+    val baselineConfig: Config
     val settings: ProcessingSettings
     val parsingStrategy: ParsingStrategy
     val bindingProvider: (files: List<KtFile>) -> BindingContext
@@ -32,7 +34,7 @@ internal interface Lifecycle {
     private fun <R> measure(phase: Phase, block: () -> R): R = settings.getOrCreateMonitor().measure(phase, block)
 
     fun analyze(): Detektion {
-        measure(Phase.ValidateConfig) { checkConfiguration(settings) }
+        measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(settings) }
         val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
         val (processors, ruleSets) = measure(Phase.LoadingExtensions) {
@@ -57,6 +59,7 @@ internal interface Lifecycle {
 }
 
 internal class DefaultLifecycle(
+    override val baselineConfig: Config,
     override val settings: ProcessingSettings,
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =

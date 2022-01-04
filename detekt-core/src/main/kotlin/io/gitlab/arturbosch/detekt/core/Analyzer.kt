@@ -15,12 +15,12 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
-import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.getSuppressors
+import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -171,13 +171,13 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     }
 
     if (rulesSpec.activateAllRules) {
-        val defaultConfig = DefaultConfig.newInstance()
+        val defaultConfig = getDefaultConfiguration()
         declaredConfig = AllRulesConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
 
     if (!rulesSpec.autoCorrect) {
-        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: DefaultConfig.newInstance())
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: getDefaultConfiguration())
     }
 
-    return declaredConfig ?: DefaultConfig.newInstance()
+    return declaredConfig ?: getDefaultConfiguration()
 }

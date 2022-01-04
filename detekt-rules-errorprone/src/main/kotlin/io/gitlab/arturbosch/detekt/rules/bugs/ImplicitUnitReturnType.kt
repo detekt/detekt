@@ -45,12 +45,10 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        """
-            Functions using expression statements have an implicit return type.
-            Changing the type of the expression accidentally, changes the function return type.
-            This may lead to backward incompatibility.
-            Use a block statement to make clear this function will never return a value.
-        """.trimIndent(),
+        "Functions using expression statements have an implicit return type. " +
+            "Changing the type of the expression accidentally, changes the function return type. " +
+            "This may lead to backward incompatibility. " +
+            "Use a block statement to make clear this function will never return a value.",
         Debt.FIVE_MINS
     )
 

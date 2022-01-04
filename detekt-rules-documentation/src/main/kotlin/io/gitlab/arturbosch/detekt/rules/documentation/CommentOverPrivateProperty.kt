@@ -15,8 +15,8 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Private properties should be named in a self-explanatory way and readers of the code should be able to understand
  * why the property exists and what purpose it solves without the comment.
  *
- * Instead of simply removing the comment to solve this issue prefer renaming the property to a more self-explanatory
- * name. If this property is inside a bigger class it could make senes to refactor and split up the class. This can
+ * Instead of simply removing the comment to solve this issue, prefer renaming the property to a more self-explanatory
+ * name. If this property is inside a bigger class, it makes sense to refactor and split up the class. This can
  * increase readability and make the documentation obsolete.
  */
 class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
@@ -24,7 +24,7 @@ class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "CommentOverPrivateProperty",
         Severity.Maintainability,
-        "Private properties should be named such that they explain themselves even without a comment.",
+        "Private properties should be named in a self-explanatory manner without the need for a  comment.",
         Debt.TWENTY_MINS
     )
 

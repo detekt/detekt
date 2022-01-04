@@ -12,8 +12,9 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtNullableType
 
 /**
- * Disallow to cast to nullable types. There are cases where `as String?` is misused as the safe cast (`as? String`),
- * so if you want to prevent those cases, turn on this rule.
+ * Disallow to cast to nullable types.
+ * There are cases where `as String?` is misused as safe cast (`as? String`).
+ * So if you want to prevent those cases, turn on this rule.
  *
  * <noncompliant>
  * fun foo(a: Any?) {
@@ -31,7 +32,7 @@ class CastToNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Disallow to cast to nullable types",
+        "Disallow to cast to nullable types.",
         Debt.FIVE_MINS
     )
 

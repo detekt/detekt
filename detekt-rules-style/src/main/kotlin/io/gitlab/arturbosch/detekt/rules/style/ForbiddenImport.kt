@@ -28,7 +28,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
+        "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api " +
             "and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
     )

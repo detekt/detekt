@@ -38,7 +38,7 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Safe cast instead of if-else-null",
+        "Prefer to use a safe cast instead of if-else-null.",
         Debt.FIVE_MINS
     )
 

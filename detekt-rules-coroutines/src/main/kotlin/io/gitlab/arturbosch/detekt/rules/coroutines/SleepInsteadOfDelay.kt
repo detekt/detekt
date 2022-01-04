@@ -43,7 +43,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Usage of Thread.sleep() in coroutines can potentially halt multiple coroutines at once.",
+        "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.",
         Debt.FIVE_MINS
     )
 

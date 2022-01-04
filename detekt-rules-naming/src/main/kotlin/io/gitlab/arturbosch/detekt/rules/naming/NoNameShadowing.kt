@@ -53,7 +53,7 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Disallows shadowing variable declarations.",
+        "Disallow shadowing variable declarations.",
         Debt.FIVE_MINS
     )
 
