@@ -178,7 +178,9 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             // been made.
             if (calleeName == REQUIRE_NOT_NULL_NAME || calleeName == CHECK_NOT_NULL_NAME) {
                 expression.valueArguments.forEach { valueArgument ->
-                    updateNullableParam(valueArgument.getArgumentExpression()) { it.isNonNullForced = true }
+                    valueArgument.getArgumentExpression()?.let { argumentExpression ->
+                        updateNullableParam(argumentExpression) { it.isNonNullForced = true }
+                    }
                 }
             }
             super.visitCallExpression(expression)
@@ -186,7 +188,9 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         override fun visitPostfixExpression(expression: KtPostfixExpression) {
             if (expression.operationToken == KtTokens.EXCLEXCL) {
-                updateNullableParam(expression.baseExpression) { it.isNonNullForced = true }
+                expression.baseExpression?.let { baseExpression ->
+                    updateNullableParam(baseExpression) { it.isNonNullForced = true }
+                }
             }
             super.visitPostfixExpression(expression)
         }
@@ -226,14 +230,22 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 ?.type
                 ?.isMarkedNullable
             if (isExtensionForNullable == true) {
-                updateNullableParam(expression.receiverExpression.getRootExpression()) { it.isNullChecked = true }
+                expression.receiverExpression
+                    .getRootExpression()
+                    ?.let { rootExpression ->
+                        updateNullableParam(rootExpression) { it.isNullChecked = true }
+                    }
             }
             super.visitDotQualifiedExpression(expression)
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (expression.operationToken == KtTokens.ELVIS) {
-                updateNullableParam(expression.left.getRootExpression()) { it.isNullChecked = true }
+                expression.left
+                    .getRootExpression()
+                    ?.let { rootExpression ->
+                        updateNullableParam(rootExpression) { it.isNullChecked = true }
+                    }
             }
             super.visitBinaryExpression(expression)
         }
@@ -373,8 +385,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             return this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
         }
 
-        private fun updateNullableParam(expression: KtExpression?, updateCallback: (NullableParam) -> Unit) {
-            expression?.getResolvedCall(bindingContext)
+        private fun updateNullableParam(expression: KtExpression, updateCallback: (NullableParam) -> Unit) {
+            expression.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
                 ?.let { nullableParams[it] }
                 ?.let(updateCallback)
