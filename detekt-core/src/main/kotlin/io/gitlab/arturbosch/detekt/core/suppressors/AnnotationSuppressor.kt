@@ -9,6 +9,13 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
+/**
+ * Suppress all the issues that are raised under a code that is annotated with the annotations defined at
+ * `ignoreAnnotated`.
+ *
+ * @config ignoreAnnotated: List<String> The annotations can be defined just by its name or with its fully qualified
+ * name. If you don't run detekt with type solving the fully qualified name does not work.
+ */
 internal fun annotationSuppressorFactory(rule: ConfigAware, bindingContext: BindingContext): Suppressor? {
     val annotations = rule.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
         it.qualifiedNameGlobToRegex()
