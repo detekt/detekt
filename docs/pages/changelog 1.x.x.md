@@ -12,7 +12,7 @@ Please welcome the next upcoming stable release of Detekt: `1.19.0` 🎉
 This release is coming with a lot of new features, new rules, evolution in the API and stability improvements.
 
 Specifically, we've shipped some features that will allow you to better adapt detekt to run on codebases
-that are using JetPack compose with features such as `ignoreAnnotated` and `ignoreFunction`. 
+that are using JetPack compose with features such as [`ignoreAnnotated` and `ignoreFunction`](https://detekt.github.io/detekt/suppressors.html).
 
 As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
 us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
