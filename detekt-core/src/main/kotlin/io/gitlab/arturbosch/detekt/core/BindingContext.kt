@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.common.messages.PlainTextMessageRenderer
-import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
@@ -12,20 +12,27 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
-import java.io.PrintStream
 
 internal fun generateBindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,
     files: List<KtFile>,
+    debugPrinter: (() -> String) -> Unit,
+    warningPrinter: (String) -> Unit,
 ): BindingContext {
     if (classpath.isEmpty()) {
         return BindingContext.EMPTY
     }
 
+    val messageCollector = DetektMessageCollector(
+        minSeverity = CompilerMessageSeverity.ERROR,
+        debugPrinter = debugPrinter,
+        warningPrinter = warningPrinter,
+    )
+
     val analyzer = AnalyzerWithCompilerReport(
-        DetektMessageCollector(minSeverity = CompilerMessageSeverity.ERROR),
-        environment.configuration.languageVersionSettings
+        messageCollector,
+        environment.configuration.languageVersionSettings,
     )
     analyzer.analyzeAndReport(files) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
@@ -37,17 +44,32 @@ internal fun generateBindingContext(
             ::FileBasedDeclarationProviderFactory
         )
     }
+
+    messageCollector.printIssuesCountIfAny()
+
     return analyzer.analysisResult.bindingContext
 }
 
 internal class DetektMessageCollector(
-    errorStream: PrintStream = System.err,
-    verbose: Boolean = false,
-    private val minSeverity: CompilerMessageSeverity = CompilerMessageSeverity.ERROR
-) : PrintingMessageCollector(errorStream, DetektMessageRenderer, verbose) {
+    private val minSeverity: CompilerMessageSeverity,
+    private val debugPrinter: (() -> String) -> Unit,
+    private val warningPrinter: (String) -> Unit,
+) : MessageCollector by MessageCollector.NONE {
+    private var messages = 0
+
     override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
         if (severity.ordinal <= minSeverity.ordinal) {
-            super.report(severity, message, location)
+            debugPrinter { DetektMessageRenderer.render(severity, message, location) }
+            messages++
+        }
+    }
+
+    fun printIssuesCountIfAny() {
+        if (messages > 0) {
+            warningPrinter(
+                "The BindingContext was created with $messages issues. " +
+                    "Run detekt with --debug to see the error messages."
+            )
         }
     }
 }
