@@ -10,23 +10,35 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-
-private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
+import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
 /**
- * Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
- * Val declarations are assign-once (read-only), which makes understanding the current state easier.
+ * Reports var declarations (both local variables and private class properties) that could be val,
+ * as they are not re-assigned. Val declarations are assign-once (read-only), which makes understanding
+ * the current state easier.
  *
  * <noncompliant>
  * fun example() {
@@ -55,30 +67,25 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY || function.isSomehowNested()) {
-            return
-        }
-
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
         val assignmentVisitor = AssignmentVisitor(bindingContext)
-        function.accept(assignmentVisitor)
+        file.accept(assignmentVisitor)
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
             report(CodeSmell(issue, Entity.from(it), "Variable '${it.nameAsSafeName.identifier}' could be val."))
         }
-        super.visitNamedFunction(function)
     }
 
-    private fun KtNamedFunction.isSomehowNested() =
-        getStrictParentOfType<KtNamedFunction>() != null
-
+    @Suppress("TooManyFunctions")
     private class AssignmentVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
 
-        private val declarations = mutableSetOf<KtNamedDeclaration>()
+        private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
+        private val escapeCandidates = mutableMapOf<DeclarationDescriptor, List<KtProperty>>()
 
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> {
-            return declarations.filterNot { it.hasAssignments() }
+            return declarationCandidates.filterNot { it.hasAssignments() }
         }
 
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
@@ -91,25 +98,114 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }
         }
 
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            // The super() call should be first in the function so that any properties
+            // declared in potential object literals can be evaluated.
+            super.visitNamedFunction(function)
+            evaluateReturnExpression(function.initializer)
+        }
+
         override fun visitProperty(property: KtProperty) {
-            if (property.isVar) {
-                declarations.add(property)
-            }
             super.visitProperty(property)
+            if (property.isDeclarationCandidate()) {
+                declarationCandidates.add(property)
+            }
+
+            // Check for whether the initializer contains an object literal.
+            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]?.let {
+                evaluateAssignmentExpression(it, property.initializer)
+            }
         }
 
         override fun visitUnaryExpression(expression: KtUnaryExpression) {
+            super.visitUnaryExpression(expression)
             if (expression.operationToken in unaryAssignmentOperators) {
                 visitAssignment(expression.baseExpression)
             }
-            super.visitUnaryExpression(expression)
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            super.visitBinaryExpression(expression)
             if (expression.operationToken in KtTokens.ALL_ASSIGNMENTS) {
                 visitAssignment(expression.left)
+
+                // Check for whether the assignment contains an object literal.
+                (expression.left as? KtNameReferenceExpression)?.let {
+                    it.getResolvedCall(bindingContext)?.resultingDescriptor
+                }?.let {
+                    evaluateAssignmentExpression(it, expression.right)
+                }
             }
-            super.visitBinaryExpression(expression)
+        }
+
+        override fun visitReturnExpression(expression: KtReturnExpression) {
+            super.visitReturnExpression(expression)
+            evaluateReturnExpression(expression.returnedExpression)
+        }
+
+        private fun evaluateAssignmentExpression(
+            descriptor: DeclarationDescriptor,
+            rightExpression: KtExpression?
+        ) {
+            when (rightExpression) {
+                is KtObjectLiteralExpression -> {
+                    escapeCandidates[descriptor] = rightExpression.collectDescendantsOfType {
+                        it.isEscapeCandidate()
+                    }
+                }
+                is KtIfExpression -> {
+                    evaluateAssignmentExpression(descriptor, rightExpression.then)
+                    evaluateAssignmentExpression(descriptor, rightExpression.`else`)
+                }
+                is KtBlockExpression -> {
+                    rightExpression.lastBlockStatementOrThis()
+                        .takeIf { it != rightExpression }
+                        ?.let { evaluateAssignmentExpression(descriptor, it) }
+                }
+            }
+        }
+
+        private fun evaluateReturnExpression(returnedExpression: KtExpression?) {
+            when (returnedExpression) {
+                is KtObjectLiteralExpression -> {
+                    returnedExpression.collectDescendantsOfType<KtProperty> {
+                        it.isEscapeCandidate()
+                    }.forEach(declarationCandidates::remove)
+                }
+                is KtNameReferenceExpression -> {
+                    returnedExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { descriptor ->
+                        escapeCandidates[descriptor]?.forEach(declarationCandidates::remove)
+                    }
+                }
+                is KtIfExpression -> {
+                    evaluateReturnExpression(returnedExpression.then)
+                    evaluateReturnExpression(returnedExpression.`else`)
+                }
+                is KtBlockExpression -> {
+                    returnedExpression.lastBlockStatementOrThis()
+                        .takeIf { it != returnedExpression }
+                        ?.let { evaluateReturnExpression(it) }
+                }
+            }
+        }
+
+        private fun KtProperty.isDeclarationCandidate(): Boolean {
+            return when {
+                !isVar -> false
+                isLocal || isPrivate() -> true
+                else -> {
+                    // Check for whether property belongs to an anonymous object
+                    // defined in a function.
+                    containingClassOrObject
+                        ?.takeIf { it.isObjectLiteral() }
+                        ?.containingNonLocalDeclaration() != null
+                }
+            }
+        }
+
+        private fun KtProperty.isEscapeCandidate(): Boolean {
+            return !isPrivate() &&
+                (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
         }
 
         private fun visitAssignment(assignedExpression: KtExpression?) {
@@ -121,5 +217,9 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }?.text ?: return
             assignments.getOrPut(name) { mutableSetOf() }.add(assignedExpression)
         }
+    }
+
+    private companion object {
+        private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
     }
 }

@@ -201,7 +201,7 @@ private class UnusedFunctionVisitor(
 
 private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
-    private var unusedParameters: MutableSet<KtParameter> = mutableSetOf()
+    private val unusedParameters: MutableSet<KtParameter> = mutableSetOf()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return unusedParameters.map {
