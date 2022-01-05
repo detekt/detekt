@@ -6,6 +6,10 @@ permalink: changelog.html
 toc: true
 ---
 
+#### UNRELEASED
+
+- Now the rule authors can define the default configuration for their rules. More information [here](LINK_PENDIING!!). [#4315](https://github.com/detekt/detekt/pull/4315)
+
 #### 1.19.0 - 2021-11-29
 
 Please welcome the next upcoming stable release of Detekt: `1.19.0` 🎉
