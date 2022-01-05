@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>AnnotationExcluder | A static code analyzer for Kotlin</title>
+<meta name="keywords" content=" suppressing smells">
+<title>Supressors | A static code analyzer for Kotlin</title>
 <link rel="stylesheet" href="/detekt/css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -148,7 +148,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/detekt/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="AnnotationExcluder">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Supressors">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -434,7 +434,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">AnnotationExcluder</h1>
+   <h1 class="post-title-main">Supressors</h1>
 </div>
 
 
@@ -471,22 +471,46 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/-annotation-excluder.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/detekt/detekt/tree/main/docs/pages//supressors.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
 
     
 
 
     
 
-  <p>//<a href="../../../index.html">detekt-api</a>/<a href="../index.html">io.gitlab.arturbosch.detekt.api</a>/<a href="index.html">AnnotationExcluder</a>/<a href="-annotation-excluder.html">AnnotationExcluder</a></p>
+  <p>The <code class="language-plaintext highlighter-rouge">Suppressor</code>s are a tool that you can use to customize the reports of detekt. They allow you to (surprise) suppress some issues detected by some rules, and they can be applied to any rule.</p>
 
-<h1 id="annotationexcluder">AnnotationExcluder</h1>
+<p>An example is the <strong>annotation</strong> suppressor. It works like this. First, you need to configure the tag <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> with a list of annotations, you want the suppressor to consider. Example:</p>
 
-<p>[jvm]<br />
-fun <a href="-annotation-excluder.html">AnnotationExcluder</a>(root: KtFile, excludes: <a href="../-split-pattern/index.html">SplitPattern</a>)</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">UnusedPrivateMember</span><span class="pi">:</span>
+  <span class="na">active</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">ignoreAnnotated</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s1">'</span><span class="s">Preview'</span>
+</code></pre></div></div>
 
-<p>fun <a href="-annotation-excluder.html">AnnotationExcluder</a>(root: KtFile, excludes: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;)</p>
+<p>Now, if an issue is found under a code that is annotated with <code class="language-plaintext highlighter-rouge">@Preview</code> that issue will be suppressed. This example is really handy if you use <a href="https://detekt.github.io/detekt/compose.html">Jetpack Compose</a>, for example.</p>
 
+<h2 id="available-suppressors">Available <code class="language-plaintext highlighter-rouge">Suppressor</code>s</h2>
+
+<h3 id="annotation-suppressor">Annotation Suppressor</h3>
+
+<p>Suppress all the issues that are raised under a code that is annotated with the annotations defined at <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code>.</p>
+
+<h5 id="config-tag">Config tag</h5>
+
+<p><code class="language-plaintext highlighter-rouge">ignoreAnnotated: List&lt;String&gt;</code>: The annotations can be defined just by its name or with its fully qualified name. If you don’t run detekt with type solving the fully qualified name does not work.</p>
+
+<h3 id="function-suppressor">Function Suppressor</h3>
+
+<p>Suppress any issue raised under a function definition that matches the signatures defined at <code class="language-plaintext highlighter-rouge">ignoreFunction</code>.</p>
+
+<p><em>Note</em>: this Suppressor doesn’t suppress issues found when you call these functions. It just suppresses the ones in the function <strong>definition</strong>.</p>
+
+<h5 id="config-tag-1">Config tag:</h5>
+
+<p><code class="language-plaintext highlighter-rouge">ignoreFunction: List&lt;String&gt;</code>: The signature of the function. You can ignore all the overloads of a function defining just its name like <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code> or you can specify the parameters to only suppress one: <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>.</p>
+
+<p><em>Note:</em> you need to write all the types with fully qualified names e.g. <code class="language-plaintext highlighter-rouge">org.example.foo(kotlin.String)</code>. It is important to add <code class="language-plaintext highlighter-rouge">kotlin.String</code>. Just adding <code class="language-plaintext highlighter-rouge">String</code> will not work.</p>
 
 
     <div class="tags">
