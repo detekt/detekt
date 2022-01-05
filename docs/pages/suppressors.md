@@ -9,7 +9,7 @@ summary:
 The `Suppressor`s are a tool that you can use to customize the reports of detekt. They allow you to (surprise) suppress
 some issues detected by some rules, and they can be applied to any rule.
 
-An example is the annotation suppressor. It works like this. First you need to add the tag `ignoreAnnotated` with a list 
+An example is the **annotation** suppressor. It works like this. First, you need to configure the tag `ignoreAnnotated` with a list of annotations, you want the suppressor to consider. Example:
 of annotations to a rule configuration. Example:
 
 ```yaml
@@ -22,7 +22,7 @@ UnusedPrivateMember:
 Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is
 really handy if you use [Jetpack Compose](https://detekt.github.io/detekt/compose.html), for example.
 
-## Available `Suppresor`s
+## Available `Suppressor`s
 
 ### Annotation Suppressor
 
