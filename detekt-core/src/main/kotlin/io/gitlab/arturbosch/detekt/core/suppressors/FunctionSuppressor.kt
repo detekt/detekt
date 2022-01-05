@@ -14,11 +14,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * the function **definition**.
  *
  * @config ignoreFunction: List<String> The signature of the function. You can ignore all the overloads of a function
- * defining just is name like `java.time.LocalDate.now` or you can specify the parameters to only suppress one:
+ * defining just its name like `java.time.LocalDate.now` or you can specify the parameters to only suppress one:
  * `java.time.LocalDate(java.time.Clock)`.
  *
- * *Note:* you need to write all the types with fully qualified names. For example `org.example.foo(kotlin.String)`. It
- * is important to add the `kotlin.String`. Only with `String` will not work.
+ * *Note:* you need to write all the types with fully qualified names e.g. `org.example.foo(kotlin.String)`. It
+ * is important to add `kotlin.String`. Just adding `String` will not work.
  */
 internal fun functionSuppressorFactory(rule: ConfigAware, bindingContext: BindingContext): Suppressor? {
     val functionMatchers = rule.valueOrDefault("ignoreFunction", emptyList<String>())

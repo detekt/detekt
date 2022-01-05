@@ -20,7 +20,7 @@ UnusedPrivateMember:
 ```
 
 Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is
-really handy is you use Jetpack Compose, for example.
+really handy if you use Jetpack Compose, for example.
 
 ## Available `Suppresor`s
 
@@ -44,7 +44,7 @@ function **definition**.
 ##### Config tag:
 
 `ignoreFunction: List<String>`: The signature of the function. You can ignore all the overloads of a function defining
-just is name like `java.time.LocalDate.now` or you can specify the parameters to only suppress one: 
+just its name like `java.time.LocalDate.now` or you can specify the parameters to only suppress one: 
 `java.time.LocalDate(java.time.Clock)`.
 
 *Note:* you need to write all the types with fully qualified names. For example `org.example.foo(kotlin.String)`. It is
