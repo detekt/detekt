@@ -20,7 +20,7 @@ UnusedPrivateMember:
 ```
 
 Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is
-really handy if you use Jetpack Compose, for example.
+really handy if you use [Jetpack Compose](https://detekt.github.io/detekt/compose.html), for example.
 
 ## Available `Suppresor`s
 
@@ -47,5 +47,5 @@ function **definition**.
 just its name like `java.time.LocalDate.now` or you can specify the parameters to only suppress one: 
 `java.time.LocalDate(java.time.Clock)`.
 
-*Note:* you need to write all the types with fully qualified names. For example `org.example.foo(kotlin.String)`. It is
-important to add the `kotlin.String`. Only with `String` will not work.
+*Note:* you need to write all the types with fully qualified names e.g. `org.example.foo(kotlin.String)`. It is
+important to add `kotlin.String`. Just adding `String` will not work.
