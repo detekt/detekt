@@ -33,10 +33,6 @@ class BaselineResultMapping : ReportingExtension {
         val facade = BaselineFacade()
         val flatten = this.flatMap { it.value }
 
-        if (flatten.isEmpty()) {
-            return this
-        }
-
         if (createBaseline) {
             facade.createOrUpdate(baselinePath, flatten)
         }
