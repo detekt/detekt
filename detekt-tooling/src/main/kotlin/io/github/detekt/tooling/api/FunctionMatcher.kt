@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
 sealed class FunctionMatcher {
 
@@ -33,11 +35,12 @@ sealed class FunctionMatcher {
         private val parameters: List<String>
     ) : FunctionMatcher() {
         override fun match(callableDescriptor: CallableDescriptor): Boolean {
-            if (callableDescriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
+            val descriptor = callableDescriptor.original
+            if (descriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
 
             val encounteredParamTypes =
-                (listOfNotNull(callableDescriptor.extensionReceiverParameter) + callableDescriptor.valueParameters)
-                    .map { it.type.fqNameOrNull()?.asString() }
+                (listOfNotNull(descriptor.extensionReceiverParameter) + descriptor.valueParameters)
+                    .map { it.type.getSignatureParameter() }
 
             return encounteredParamTypes == parameters
         }
@@ -48,7 +51,7 @@ sealed class FunctionMatcher {
 
             val encounteredParameters =
                 (listOfNotNull(function.receiverTypeReference) + function.valueParameters.map { it.typeReference })
-                    .map { bindingContext[BindingContext.TYPE, it]?.fqNameOrNull()?.toString() }
+                    .map { bindingContext[BindingContext.TYPE, it]?.getSignatureParameter() }
 
             return encounteredParameters == parameters
         }
@@ -77,6 +80,14 @@ sealed class FunctionMatcher {
                 throw IllegalStateException("$methodSignature doesn't match a method signature", ex)
             }
         }
+    }
+}
+
+private fun KotlinType.getSignatureParameter(): String? {
+    return if (isTypeParameter()) {
+        toString()
+    } else {
+        fqNameOrNull()?.toString()
     }
 }
 
