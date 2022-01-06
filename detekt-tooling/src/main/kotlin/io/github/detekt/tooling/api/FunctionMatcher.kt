@@ -58,21 +58,77 @@ sealed class FunctionMatcher {
 
     companion object {
         fun fromFunctionSignature(methodSignature: String): FunctionMatcher {
-            val tokens = methodSignature.split("(", ")")
-                .map { it.trim() }
+            @Suppress("TooGenericExceptionCaught", "UnsafeCallOnNullableType")
+            try {
+                val result = functionSignatureRegex.matchEntire(methodSignature)!!
 
-            val methodName = tokens.first().replace("`", "")
-            val params = if (tokens.size > 1) {
-                tokens[1].split(",").map { it.trim() }.filter { it.isNotBlank() }
-            } else {
-                null
-            }
+                val methodName = result.groups[1]!!.value.replace("`", "")
+                val params = result.groups[2]?.value?.splitParams()
+                    ?.map { changeIfLambda(it) ?: it }
 
-            return if (params == null) {
-                NameOnly(methodName)
-            } else {
-                WithParameters(methodName, params)
+                return if (params == null) {
+                    NameOnly(methodName)
+                } else {
+                    WithParameters(methodName, params)
+                }
+            } catch (ex: Exception) {
+                throw IllegalStateException("$methodSignature doesn't match a method signature", ex)
             }
         }
     }
 }
+
+// Extracted from: https://stackoverflow.com/a/16108347/842697
+private fun String.splitParams(): List<String> {
+    val split: MutableList<String> = ArrayList()
+    var nestingLevel = 0
+    val result = StringBuilder()
+    this.forEach { c ->
+        if (c == ',' && nestingLevel == 0) {
+            split.add(result.toString())
+            result.setLength(0)
+        } else {
+            if (c == '(') nestingLevel++
+            if (c == ')') nestingLevel--
+            check(nestingLevel >= 0)
+            result.append(c)
+        }
+    }
+    split.add(result.toString())
+    return split.map { it.trim() }.filter { it.isNotBlank() }
+}
+
+private fun changeIfLambda(param: String): String? {
+    val (paramsRaw, _) = splitLambda(param) ?: return null
+    val params = paramsRaw.splitParams()
+
+    return "kotlin.Function${params.count()}"
+}
+
+private fun splitLambda(param: String): Pair<String, String>? {
+    if (!param.startsWith("(")) return null
+
+    var nestingLevel = 0
+    val paramsRaw = StringBuilder()
+    val returnValue = StringBuilder()
+
+    param.toCharArray()
+        .drop(1)
+        .forEach { c ->
+            if (nestingLevel >= 0) {
+                if (c == '(') nestingLevel++
+                if (c == ')') nestingLevel--
+                if (nestingLevel >= 0) {
+                    paramsRaw.append(c)
+                }
+            } else {
+                returnValue.append(c)
+            }
+        }
+
+    check(returnValue.contains("->"))
+
+    return paramsRaw.toString().trim() to returnValue.toString().substringAfter("->").trim()
+}
+
+private val functionSignatureRegex = """((?:[^()`]|`.*`)*)(?:\((.*)\))?""".toRegex()
