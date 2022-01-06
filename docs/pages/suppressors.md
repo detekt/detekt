@@ -1,8 +1,8 @@
 ---
-title: "Supressors"
+title: "Suppressors"
 keywords: suppressing smells
 sidebar: 
-permalink: supressors.html
+permalink: suppressors.html
 summary:
 ---
 
