@@ -240,7 +240,7 @@
           
           
           
-          <li><a href="/detekt/suppresors.html">Suppressing Issues via Baseline Suppressors</a></li>
+          <li><a href="/detekt/suppressors.html">Suppressing Issues via Suppressors</a></li>
           
           
           
@@ -478,13 +478,19 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1190---2021-11-29">1.19.0 - 2021-11-29</h4>
+  <h4 id="unreleased">UNRELEASED</h4>
+
+<ul>
+  <li>Now the rule authors can define the default configuration for their rules. More information <a href="LINK_PENDIING!!">here</a>. <a href="https://github.com/detekt/detekt/pull/4315">#4315</a></li>
+</ul>
+
+<h4 id="1190---2021-11-29">1.19.0 - 2021-11-29</h4>
 
 <p>Please welcome the next upcoming stable release of Detekt: <code class="language-plaintext highlighter-rouge">1.19.0</code> 🎉
 This release is coming with a lot of new features, new rules, evolution in the API and stability improvements.</p>
 
 <p>Specifically, we’ve shipped some features that will allow you to better adapt detekt to run on codebases
-that are using JetPack compose with features such as <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> and <code class="language-plaintext highlighter-rouge">ignoreFunction</code>.</p>
+that are using JetPack compose with features such as <a href="https://detekt.github.io/detekt/suppressors.html"><code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> and <code class="language-plaintext highlighter-rouge">ignoreFunction</code></a>.</p>
 
 <p>As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
 us release this new version of Detekt. You’re more than welcome to join our community on the <a href="https://kotlinlang.slack.com/archives/C88E12QH4">#detekt</a> channel on KotlinLang’s Slack (you can <a href="https://surveys.jetbrains.com/s3/kotlin-slack-sign-up">get an invite here</a>).</p>
@@ -2804,7 +2810,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Jan 5, 2022 <br />
+ Site last generated: Jan 6, 2022 <br />
                 </div>
             </div>
 </footer>
