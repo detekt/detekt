@@ -386,5 +386,36 @@ class ForbiddenMethodCallSpec : Spek({
                 assertThat(findings).isEmpty()
             }
         }
+
+        context("Should distinguish between runCatching - #4448") {
+            val code = """
+                package org.example
+
+                class A {
+                    fun foo() {
+                        kotlin.runCatching {}
+                        runCatching {}
+                    }
+                }
+            """
+
+            it("forbid the one without receiver") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(() -> R)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings)
+                    .hasSize(1)
+                    .hasSourceLocation(5, 16)
+            }
+
+            it("forbid the one with receiver") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(T, (T) -> R)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings)
+                    .hasSize(1)
+                    .hasSourceLocation(6, 9)
+            }
+        }
     }
 })
