@@ -364,5 +364,67 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
             }
         }
+        describe("configuration allowParamOnConstructorProperties") {
+            val configuredSubject by memoized {
+                OutdatedDocumentation(TestConfig(mapOf("allowParamOnConstructorProperties" to "true")))
+            }
+
+            it("should not report when property is documented as param") {
+                val propertyAsParam = """
+                    /**
+                     * @param someParam Description of param
+                     * @param someProp Description of property
+                     */
+                    class MyClass(someParam: String, val someProp: String)
+                    """
+                assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            }
+
+            it("should not report when property is documented as property") {
+                val propertyAsParam = """
+                    /**
+                     * @param someParam Description of param
+                     * @property someProp Description of property
+                     */
+                    class MyClass(someParam: String, val someProp: String)
+                    """
+                assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            }
+        }
+
+        describe("configuration matchDeclarationsOrder and allowParamOnConstructorProperties") {
+            val configuredSubject by memoized {
+                OutdatedDocumentation(
+                    TestConfig(
+                        mapOf(
+                            "matchDeclarationsOrder" to "false",
+                            "allowParamOnConstructorProperties" to "true"
+                        )
+                    )
+                )
+            }
+
+            it("should not report when property is documented as param") {
+                val propertyAsParam = """
+                    /**
+                     * @param someParam Description of param
+                     * @param someProp Description of property
+                     */
+                    class MyClass(someParam: String, val someProp: String)
+                    """
+                assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            }
+
+            it("should not report when property is documented as property") {
+                val propertyAsParam = """
+                    /**
+                     * @param someParam Description of param
+                     * @property someProp Description of property
+                     */
+                    class MyClass(someParam: String, val someProp: String)
+                    """
+                assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            }
+        }
     }
 })
