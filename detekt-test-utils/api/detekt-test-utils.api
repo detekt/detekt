@@ -46,6 +46,15 @@ public final class io/github/detekt/test/utils/StringPrintStream : java/io/Print
 	public fun toString ()Ljava/lang/String;
 }
 
+public class io/gitlab/arturbosch/detekt/rules/KotlinCoreEnvironmentTest {
+	public field env Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;
+	public fun <init> ()V
+	public final fun disposeWrapper ()V
+	public final fun getEnv ()Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;
+	public final fun setEnv (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;)V
+	public final fun setupWrapper ()V
+}
+
 public final class io/gitlab/arturbosch/detekt/rules/KotlinEnvironmentTestSetupKt {
 	public static final fun setupKotlinEnvironment (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;)V
 	public static synthetic fun setupKotlinEnvironment$default (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;ILjava/lang/Object;)V

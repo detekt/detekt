@@ -4,6 +4,7 @@ jacoco = "0.8.7"
 kotlin = "1.6.10"
 ktlint = "0.43.2"
 spek = "2.0.17"
+junit = "5.8.2"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
@@ -32,6 +33,7 @@ dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "do
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek" }
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
 
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.10.2"
