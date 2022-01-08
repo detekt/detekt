@@ -9,12 +9,19 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.types.isFlexible
 
 /*
@@ -47,6 +54,116 @@ class HasPlatformType(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    /*
+    override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
+        super.visitStringTemplateExpression(expression)
+        if (!expression.hasInterpolation()) return
+        val candidateExpressions = mutableMapOf<CallableDescriptor, KtExpression>()
+        expression.entries
+            .asSequence()
+            .filterIsInstance<KtBlockStringTemplateEntry>()
+            .flatMap {
+                it.expression?.collectDescendantsOfType<KtExpression>().orEmpty()
+            }.forEach { blockExpression ->
+                when (blockExpression) {
+                    is KtCallExpression -> {
+                        val descriptor = blockExpression.getResolvedCall(bindingContext)
+                            ?.resultingDescriptor
+                        if (descriptor != null && descriptor.returnType?.isFlexible() == true) {
+                            candidateExpressions[descriptor] = blockExpression
+                        }
+                    }
+                    is KtDotQualifiedExpression -> {
+                        val descriptor = blockExpression.getResolvedCall(bindingContext)
+                            ?.resultingDescriptor
+                        if (descriptor != null && descriptor.returnType?.isFlexible() == true) {
+                            candidateExpressions[descriptor] = blockExpression
+                        }
+                    }
+                    is KtPostfixExpression -> {
+                        blockExpression.baseExpression
+                            ?.getResolvedCall(bindingContext)
+                            ?.resultingDescriptor
+                            ?.let(candidateExpressions::remove)
+                    }
+                    is KtSafeQualifiedExpression -> {
+                        blockExpression.receiverExpression
+                            .getResolvedCall(bindingContext)
+                            ?.resultingDescriptor
+                            ?.let(candidateExpressions::remove)
+                    }
+                    is KtBinaryExpression -> {
+                        if (blockExpression.operationToken == KtTokens.ELVIS) {
+                            blockExpression.left
+                                ?.getResolvedCall(bindingContext)
+                                ?.resultingDescriptor
+                                ?.let(candidateExpressions::remove)
+                        }
+                    }
+                }
+            }
+
+        candidateExpressions.forEach { (_, candidateExpression) ->
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(candidateExpression),
+                    "$expression has implicit platform type. Type must be declared explicitly."
+                )
+            )
+        }
+    }
+    */
+
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+
+        fun evaluateValueArgument(argument: KtValueArgument) {
+            if (argument.isPlatformTypeCall()) {
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(argument),
+                        "$expression uses implicit platform type in arguments."
+                    )
+                )
+            }
+        }
+
+        val descriptor = expression.getResolvedCall(bindingContext)
+            ?.resultingDescriptor ?: return
+        val valueArguments = expression.valueArguments
+        descriptor.valueParameters
+            .asSequence()
+            .mapIndexedNotNull { index, valueParameterDescriptor ->
+                if (valueParameterDescriptor.returnType?.isMarkedNullable != true) {
+                    index to valueParameterDescriptor.isVararg
+                } else {
+                    null
+                }
+            }.forEach { (index, isVarArg) ->
+                if (isVarArg) {
+                    valueArguments.subList(index, valueArguments.size).forEach(::evaluateValueArgument)
+                } else {
+                    valueArguments.getOrNull(index)?.let(::evaluateValueArgument)
+                }
+            }
+    }
+
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        super.visitDotQualifiedExpression(expression)
+        val receiverExpression = expression.receiverExpression
+        if (receiverExpression.getType(bindingContext)?.isFlexible() == true) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(receiverExpression),
+                    "'${receiverExpression.text}' has implicit platform type. Type must be declared explicitly."
+                )
+            )
+        }
+    }
+
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)
         if (bindingContext == BindingContext.EMPTY) return
@@ -60,6 +177,14 @@ class HasPlatformType(config: Config) : Rule(config) {
                 )
             )
         }
+    }
+
+    private fun KtValueArgument.isPlatformTypeCall(): Boolean {
+        return this.getArgumentExpression()
+            ?.let { it as? KtDotQualifiedExpression ?: it as? KtCallExpression }
+            ?.getResolvedCall(bindingContext)
+            ?.getReturnType()
+            ?.isFlexible() == true
     }
 
     private fun KtCallableDeclaration.hasImplicitPlatformType(): Boolean {
