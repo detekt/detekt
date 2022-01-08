@@ -12,6 +12,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ *
+ * This rules overlaps with [`style>NewLineAtEndOfFile`](https://detekt.github.io/detekt/style.html#newlineatendoffile)
+ * from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
  */
 @OptIn(FeatureInAlphaState::class)
 @ActiveByDefault(since = "1.0.0")
