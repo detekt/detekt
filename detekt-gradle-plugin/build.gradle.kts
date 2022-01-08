@@ -39,12 +39,6 @@ testing {
             }
         }
         register("functionalTest", JvmTestSuite::class) {
-            sources {
-                java {
-                    // Only "test" sources can see "testFixtures" sources by default
-                    srcDirs("src/testFixtures/kotlin")
-                }
-            }
             dependencies {
                 implementation(libs.assertj)
                 implementation(libs.spek.dsl)
@@ -55,6 +49,7 @@ testing {
 }
 
 val pluginCompileOnly: Configuration by configurations.creating
+val functionalTestImplementation: Configuration by configurations.getting
 
 configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 
@@ -62,6 +57,10 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
     implementation(projects.detektUtils)
+
+    // Migrate to `implementation(testFixtures(project))` in test suite configuration when Gradle 7.5 released
+    // (https://github.com/gradle/gradle/pull/19472)
+    functionalTestImplementation(testFixtures(project))
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
