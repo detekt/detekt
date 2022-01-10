@@ -412,7 +412,7 @@ class VarCouldBeValSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when an object escapes and there is no type resolution") {
+            it("does not report when an object initializes a variable directly - without type solving") {
                 val code = """
                     interface I {
                         var optionEnabled: Boolean
