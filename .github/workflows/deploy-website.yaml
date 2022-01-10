@@ -98,7 +98,7 @@ jobs:
       working-directory: docs/
 
     - name: Deploy Github Pages
-      uses: JamesIves/github-pages-deploy-action@4.2.1
+      uses: JamesIves/github-pages-deploy-action@v4.2.2
       with:
         branch: gh-pages
         folder: docs/_site/
