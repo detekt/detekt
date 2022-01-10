@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -193,6 +194,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             return when {
                 !isVar -> false
                 isLocal || isPrivate() -> true
+                isOverride() && bindingContext == BindingContext.EMPTY -> false
                 else -> {
                     // Check for whether property belongs to an anonymous object
                     // defined in a function.
