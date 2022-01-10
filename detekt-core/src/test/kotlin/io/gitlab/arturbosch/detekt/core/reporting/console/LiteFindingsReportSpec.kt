@@ -42,7 +42,7 @@ class LiteFindingsReportSpec : Spek({
         }
 
         it("should not add auto corrected issues to report") {
-            val report = FindingsReport()
+            val report = LiteFindingsReport()
             AutoCorrectableIssueAssert.isReportNull(report)
         }
     }
