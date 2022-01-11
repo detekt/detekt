@@ -37,7 +37,7 @@ assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.2"
 snakeyaml = "org.yaml:snakeyaml:1.30"
-jcommander = "com.beust:jcommander:1.81"
+jcommander = "com.beust:jcommander:1.82"
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.8.0" }
