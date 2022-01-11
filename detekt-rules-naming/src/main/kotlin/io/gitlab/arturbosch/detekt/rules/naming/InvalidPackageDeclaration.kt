@@ -34,24 +34,26 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         if (declaredPath.isNotBlank()) {
             val normalizedFilePath = directive.containingKtFile.absolutePath().parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
-            val expectedPath =
-                if (normalizedRootPackage.isBlank()) {
-                    declaredPath
-                } else {
-                    declaredPath.substringAfter(normalizedRootPackage)
+            val expectedPath = when {
+                normalizedRootPackage.isBlank() -> declaredPath
+                normalizedRootPackage !in declaredPath -> {
+                    directive.reportInvalidPackageDeclaration("The package declaration is missing the root package")
+                    return
                 }
+                else -> declaredPath.substringAfter(normalizedRootPackage)
+            }
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(directive),
-                        "The package declaration does not match the actual file location.",
-                    )
+                directive.reportInvalidPackageDeclaration(
+                    "The package declaration does not match the actual file location."
                 )
             }
         }
+    }
+
+    private fun KtElement.reportInvalidPackageDeclaration(message: String) {
+        report(CodeSmell(issue, Entity.from(this), message))
     }
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")

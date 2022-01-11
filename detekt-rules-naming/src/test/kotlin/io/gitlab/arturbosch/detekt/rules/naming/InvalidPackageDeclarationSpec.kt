@@ -93,6 +93,20 @@ internal class InvalidPackageDeclarationSpec : Spek({
 
                 assertThat(findings).hasSize(1)
             }
+
+            it("should report if root package is missing") {
+                val source = """
+                    package foo.bar
+
+                    class C
+                """
+
+                val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
+                val findings = InvalidPackageDeclaration(config).lint(ktFile)
+
+                assertThat(findings).hasSize(1)
+            }
+
             it("should report if file path matches root package but package declaration differs") {
                 val source = """
                     package io.foo.bar
