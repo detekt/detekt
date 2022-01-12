@@ -34,14 +34,17 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         if (declaredPath.isNotBlank()) {
             val normalizedFilePath = directive.containingKtFile.absolutePath().parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
-            val expectedPath = when {
-                normalizedRootPackage.isBlank() -> declaredPath
-                !declaredPath.startsWith(normalizedRootPackage) -> {
-                    directive.reportInvalidPackageDeclaration("The package declaration is missing the root package")
-                    return
-                }
-                else -> declaredPath.substringAfter(normalizedRootPackage)
+            if (normalizedRootPackage.isNotBlank() && !declaredPath.startsWith(normalizedRootPackage)) {
+                directive.reportInvalidPackageDeclaration("The package declaration is missing the root package")
+                return
             }
+
+            val expectedPath =
+                if (normalizedRootPackage.isBlank()) {
+                    declaredPath
+                } else {
+                    declaredPath.substringAfter(normalizedRootPackage)
+                }
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
