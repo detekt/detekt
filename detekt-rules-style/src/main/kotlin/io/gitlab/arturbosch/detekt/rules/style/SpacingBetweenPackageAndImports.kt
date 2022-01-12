@@ -85,7 +85,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
         }
     }
 
-    private fun checkLinebreakAfterElement(element: PsiElement?, message: String) {
+    private fun checkLinebreakAfterElement(element: PsiElement, message: String) {
         if (element is PsiWhiteSpace || element is KtElement) {
             val count = element.text.count { it == '\n' }
             if (count != 2) {

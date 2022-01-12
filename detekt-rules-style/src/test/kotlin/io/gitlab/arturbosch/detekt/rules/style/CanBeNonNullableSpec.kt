@@ -77,7 +77,7 @@ class CanBeNonNullableSpec : Spek({
                         }
                     }
                     """
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
             it("reports when file-level vars are never assigned nullable values") {
@@ -382,6 +382,384 @@ class CanBeNonNullableSpec : Spek({
                 }
                 """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        context("nullable function parameters") {
+            context("using a de-nullifier") {
+                it("does report when a param is de-nullified with a postfix expression") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            val b = a!! + 2
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                it("does report when a param is de-nullified with a dot-qualified expression") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            val b = a!!.plus(2)
+                        }
+
+                        fun fizz(b: Int?) = b!!.plus(2)
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                }
+
+                it("does report when a de-nullifier precondition is called on the param") {
+                    val code = """
+                        fun foo(a: Int?, b: Int?) {
+                            val aNonNull = requireNotNull(a)
+                            val c = aNonNull + checkNotNull(b)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                }
+
+                it("does not report a double-bang call the field of a non-null param") {
+                    val code = """
+                        class A(val a: Int?)
+
+                        fun foo(a: A) {
+                            val b = a.a!! + 2
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+            }
+
+            context("using a null-safe expression") {
+                context("in initializer") {
+                    it("does not report when the safe-qualified expression is the only expression of the function") {
+                        val code = """
+                            class A {
+                                val foo = "BAR"
+                            }
+                            
+                            fun foo(a: A?) = a?.foo
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+
+                context("in a non-return statement") {
+                    it("does report when the safe-qualified expression is the only expression of the function") {
+                        val code = """   
+                            class A(val foo: String)
+
+                            fun foo(a: A?) {
+                                a?.let { println(it.foo) }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when the safe-qualified expression is within a lambda") {
+                        val code = """
+                            class A {
+                                fun doFoo(callback: () -> Unit) {
+                                    callback.invoke()
+                                }
+                            }
+    
+                            fun foo(a: String?, aObj: A) {
+                                aObj.doFoo {
+                                    a?.let { println("a not null") }
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when the safe-qualified expression is not the only expression of the function") {
+                        val code = """
+                            class A {
+                                fun doFoo() { println("FOO") }
+                            }
+                            
+                            fun foo(a: A?) {
+                                a?.doFoo()
+                                val b = 5 + 2
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+                context("in a return statement") {
+                    it("does not report when the safe-qualified expression is the only expression of the function") {
+                        val code = """
+                            class A {
+                                val foo = "BAR"
+                            }
+                            
+                            fun fizz(aObj: A?): String? {
+                                return aObj?.foo
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+            }
+
+            context("when statements") {
+                context("without a subject") {
+                    it("does not report when the parameter is checked on nullity") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a == null -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when the parameter is checked on nullity in a reversed manner") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    null == a -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report when the parameter is checked on nullity with multiple clauses") {
+                        val code = """
+                            fun foo(a: Int?, other: Int) {
+                                when {
+                                    a == null && other % 2 == 0 -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does report when the parameter is only checked on non-nullity") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a != null -> println(2 + a)
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does report when the parameter is only checked on non-nullity with multiple clauses") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a != null && a % 2 == 0 -> println(2 + a)
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report when the parameter is checked on non-nullity with an else statement") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a != null -> println(2 + a)
+                                    else -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report on nullable type matching") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a !is Int -> println("a is null")
+                                }
+                            }
+
+                            fun fizz(b: Int?) {
+                                when {
+                                    b is Int? -> println("b is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does report on non-null type matching") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a is Int -> println(2 + a)
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does report on non-null type matching with multiple clauses") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a is Int && a % 2 == 0 -> println(2 + a)
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report on non-null type matching with an else statement") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when {
+                                    a is Int -> println(2 + a)
+                                    else -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+
+                context("with a subject") {
+                    it("does not report when the parameter is checked on nullity") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when (a) {
+                                    null -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does not report on nullable type matching") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when (a) {
+                                    !is Int -> println("a is null")
+                                }
+                            }
+
+                            fun fizz(b: Int?) {
+                                when (b) {
+                                    is Int? -> println("b is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+
+                    it("does report on non-null type matching") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when(a) {
+                                    is Int -> println(2 + a)
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    }
+
+                    it("does not report on non-null type matching with an else statement") {
+                        val code = """
+                            fun foo(a: Int?) {
+                                when(a) {
+                                    is Int -> println(2 + a)
+                                    else -> println("a is null")
+                                }
+                            }
+                        """.trimIndent()
+                        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    }
+                }
+            }
+
+            context("if-statements") {
+                it("does not report when the parameter is checked on nullity") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a == null) {
+                                println("'a' is null")
+                            }
+                        }
+
+                        fun fizz(a: Int?) {
+                            if (null == a) {
+                                println("'a' is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("does not report when the if-check is in the else statement") {
+                    val code = """
+                        fun foo(num: Int, a: Int?) {
+                            if (num % 2 == 0) {
+                                println("'num' is even")
+                            } else if (a == null) {
+                                println("'a' is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("does report when the parameter is only checked on non-nullity in a function") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a != null) {
+                                println(a + 5)
+                            }
+                        }
+
+                        fun fizz(a: Int?) {
+                            if (null != a) {
+                                println(a + 5)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                }
+
+                it("does report when the parameter is only checked on non-nullity with multiple clauses") {
+                    val code = """
+                        fun foo(a: Int?, other: Int) {
+                            if (a != null && other % 2 == 0) {
+                                println(a + 5)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                it("does not report when the parameter is checked on non-nullity with an else statement") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a != null) {
+                                println(a + 5)
+                            } else {
+                                println(5)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                it("does not report when there are other expressions after the non-null check") {
+                    val code = """
+                        fun foo(a: Int?) {
+                            if (a != null) {
+                                println(a + 5)
+                            }
+                            val b = 5 + 2
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+            }
         }
     }
 })

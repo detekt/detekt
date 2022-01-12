@@ -78,15 +78,17 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
             report(postfixExpression)
         }
 
-        getPostfixExpressionChildren(expression.returnedExpression)
-            ?.forEach { report(it) }
+        expression.returnedExpression
+            ?.let(this::getPostfixExpressionChildren)
+            ?.forEach(this::report)
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         val postfixExpression = expression.right?.asPostFixExpression()
         val leftIdentifierText = expression.left?.text
-        checkPostfixExpression(postfixExpression, leftIdentifierText)
-        getPostfixExpressionChildren(expression.right)
+        postfixExpression?.let { checkPostfixExpression(it, leftIdentifierText) }
+        expression.right
+            ?.let(this::getPostfixExpressionChildren)
             ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
@@ -94,8 +96,8 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
     ) this else null
 
-    private fun checkPostfixExpression(postfixExpression: KtPostfixExpression?, leftIdentifierText: String?) {
-        if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
+    private fun checkPostfixExpression(postfixExpression: KtPostfixExpression, leftIdentifierText: String?) {
+        if (leftIdentifierText == postfixExpression.firstChild?.text) {
             report(postfixExpression)
         }
     }
@@ -118,7 +120,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getPostfixExpressionChildren(expression: KtExpression?) =
-        expression?.getChildrenOfType<KtPostfixExpression>()
-            ?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
+    private fun getPostfixExpressionChildren(expression: KtExpression) =
+        expression.getChildrenOfType<KtPostfixExpression>()
+            .filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }
