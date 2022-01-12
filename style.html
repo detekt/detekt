@@ -507,6 +507,16 @@ declared as non-nullable instead.</p>
     <span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span>
         <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="mi">5</span>
 <span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span><span class="o">!!</span> <span class="p">+</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <h4 id="compliant-code">Compliant Code:</h4>
@@ -522,6 +532,14 @@ declared as non-nullable instead.</p>
 <span class="kd">class</span> <span class="nc">A</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">Int</span>
         <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="mi">5</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="n">a</span> <span class="p">+</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">println</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -2718,7 +2736,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Jan 11, 2022 <br />
+ Site last generated: Jan 12, 2022 <br />
                 </div>
             </div>
 </footer>
