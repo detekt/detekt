@@ -112,28 +112,32 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }
 
             // Check for whether the initializer contains an object literal.
-            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]?.let {
-                evaluateAssignmentExpression(it, property.initializer)
+            val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]
+            val initializer = property.initializer
+            if (descriptor != null && initializer != null) {
+                evaluateAssignmentExpression(descriptor, initializer)
             }
         }
 
         override fun visitUnaryExpression(expression: KtUnaryExpression) {
             super.visitUnaryExpression(expression)
             if (expression.operationToken in unaryAssignmentOperators) {
-                visitAssignment(expression.baseExpression)
+                expression.baseExpression?.let(::visitAssignment)
             }
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             super.visitBinaryExpression(expression)
             if (expression.operationToken in KtTokens.ALL_ASSIGNMENTS) {
-                visitAssignment(expression.left)
+                expression.left?.let(::visitAssignment)
 
                 // Check for whether the assignment contains an object literal.
-                (expression.left as? KtNameReferenceExpression)?.let {
+                val descriptor = (expression.left as? KtNameReferenceExpression)?.let {
                     it.getResolvedCall(bindingContext)?.resultingDescriptor
-                }?.let {
-                    evaluateAssignmentExpression(it, expression.right)
+                }
+                val expressionRight = expression.right
+                if (descriptor != null && expressionRight != null) {
+                    evaluateAssignmentExpression(descriptor, expressionRight)
                 }
             }
         }
@@ -145,7 +149,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun evaluateAssignmentExpression(
             descriptor: DeclarationDescriptor,
-            rightExpression: KtExpression?
+            rightExpression: KtExpression,
         ) {
             when (rightExpression) {
                 is KtObjectLiteralExpression -> {
@@ -154,8 +158,8 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
                     }
                 }
                 is KtIfExpression -> {
-                    evaluateAssignmentExpression(descriptor, rightExpression.then)
-                    evaluateAssignmentExpression(descriptor, rightExpression.`else`)
+                    rightExpression.then?.let { evaluateAssignmentExpression(descriptor, it) }
+                    rightExpression.`else`?.let { evaluateAssignmentExpression(descriptor, it) }
                 }
                 is KtBlockExpression -> {
                     rightExpression.lastBlockStatementOrThis()
@@ -208,8 +212,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
                 (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
         }
 
-        private fun visitAssignment(assignedExpression: KtExpression?) {
-            if (assignedExpression == null) return
+        private fun visitAssignment(assignedExpression: KtExpression) {
             val name = if (assignedExpression is KtQualifiedExpression) {
                 assignedExpression.selectorExpression
             } else {
