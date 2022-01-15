@@ -7,8 +7,12 @@
   which are enforced by ktlint when running `gradle detekt`.
 - Make sure your IDE uses [ktlint](https://github.com/pinterest/ktlint) formatting rules as well
   as the settings in [.editorconfig](../.editorconfig).
-- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix.
-  For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
+- We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
+  new test classes. If your new rule requires type resolution (i.e. it utilises `BindingContext`) then annotate your
+  test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinCoreEnvironment` as a parameter.
+  See `SpekDiscoverySpec.kt` in the `custom-checks` module for a complete example.
+- We are in the process of migrating existing [Spek](https://github.com/spekframework/spek) tests to JUnit 5. For easier
+  testing of these tests you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
