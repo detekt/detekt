@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.report
 
 import io.gitlab.arturbosch.detekt.getJdkVersion
 import io.gitlab.arturbosch.detekt.manifestContent
+import io.gitlab.arturbosch.detekt.skipIfAndroidEnvironmentRequirementsUnmet
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
@@ -85,7 +86,10 @@ class ReportMergeSpec : Spek({
             }
         }
 
-        it("for android detekt") {
+        it(
+            "for android detekt",
+            skip = skipIfAndroidEnvironmentRequirementsUnmet()
+        ) {
             val builder = DslTestBuilder.groovy()
             val projectLayout = ProjectLayout(0).apply {
                 addSubmodule(
