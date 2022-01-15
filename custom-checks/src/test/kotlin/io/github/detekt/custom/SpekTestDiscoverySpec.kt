@@ -3,12 +3,14 @@ package io.github.detekt.custom
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-class SpekTestDiscoverySpec : KotlinCoreEnvironmentTest() {
+@KotlinCoreEnvironmentTest
+class SpekTestDiscoverySpec(private val env: KotlinCoreEnvironment) {
     val subject = SpekTestDiscovery()
 
     @Nested

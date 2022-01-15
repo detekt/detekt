@@ -6,8 +6,10 @@ package io.gitlab.arturbosch.detekt.rules
 import io.github.detekt.test.utils.KotlinCoreEnvironmentWrapper
 import io.github.detekt.test.utils.createEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.api.extension.ParameterContext
+import org.junit.jupiter.api.extension.ParameterResolver
 import org.spekframework.spek2.dsl.Root
 import org.spekframework.spek2.lifecycle.CachingMode
 import java.nio.file.Path
@@ -24,18 +26,34 @@ fun Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
     val env: KotlinCoreEnvironment by memoized(CachingMode.EACH_GROUP) { wrapper.env }
 }
 
-open class KotlinCoreEnvironmentTest {
-    lateinit var env: KotlinCoreEnvironment
-    private lateinit var wrapper: KotlinCoreEnvironmentWrapper
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+@ExtendWith(KotlinEnvironmentResolver::class)
+annotation class KotlinCoreEnvironmentTest
 
-    @BeforeAll
-    fun setupWrapper() {
-        wrapper = createEnvironment()
-        env = wrapper.env
+internal class KotlinEnvironmentResolver : ParameterResolver {
+    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
+        return parameterContext.parameter.type == KotlinCoreEnvironment::class.java
     }
 
-    @AfterAll
-    fun disposeWrapper() {
-        wrapper.dispose()
+    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
+        val closeableWrapper = extensionContext.wrapper
+            ?: CloseableWrapper(createEnvironment()).also { extensionContext.wrapper = it }
+        return closeableWrapper.wrapper.env
+    }
+
+    private var ExtensionContext.wrapper: CloseableWrapper?
+        get() = getStore(NAMESPACE).get(WRAPPER_KEY, CloseableWrapper::class.java)
+        set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
+
+    companion object {
+        private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
+        private const val WRAPPER_KEY = "wrapper"
+    }
+
+    private class CloseableWrapper(val wrapper: KotlinCoreEnvironmentWrapper) : ExtensionContext.Store.CloseableResource {
+        override fun close() {
+            wrapper.dispose()
+        }
     }
 }
