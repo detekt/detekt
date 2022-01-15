@@ -370,7 +370,7 @@ internal fun isAndroidSdkInstalled() =
 
 internal fun skipIfAndroidEnvironmentRequirementsUnmet() = when {
     !isAndroidSdkInstalled() -> Skip.Yes("No android SDK.")
-    getJdkVersion() < 11 -> Skip.Yes("Android Gradle Plugin requires JDK 11 or newer")
+    getJdkVersion() < 11 -> Skip.Yes("Android Gradle Plugin 7.0+ requires JDK 11 or newer")
     else -> Skip.No
 }
 
