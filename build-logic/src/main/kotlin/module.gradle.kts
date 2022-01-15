@@ -26,6 +26,7 @@ tasks.withType<Test>().configureEach {
     systemProperty("spek2.jvm.cg.scan.concurrency", 1) // use one thread for classpath scanning
     systemProperty("spek2.execution.test.timeout", 0) // disable test timeout
     systemProperty("spek2.discovery.parallel.enabled", 0) // disable parallel test discovery
+    systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
     val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
         (project.property("compile-test-snippets") as String).toBoolean()
     } else {
