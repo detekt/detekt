@@ -32,6 +32,10 @@ fun Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
 annotation class KotlinCoreEnvironmentTest
 
 internal class KotlinEnvironmentResolver : ParameterResolver {
+    private var ExtensionContext.wrapper: CloseableWrapper?
+        get() = getStore(NAMESPACE)[WRAPPER_KEY, CloseableWrapper::class.java]
+        set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
+
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
         return parameterContext.parameter.type == KotlinCoreEnvironment::class.java
     }
@@ -42,16 +46,13 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         return closeableWrapper.wrapper.env
     }
 
-    private var ExtensionContext.wrapper: CloseableWrapper?
-        get() = getStore(NAMESPACE).get(WRAPPER_KEY, CloseableWrapper::class.java)
-        set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
-
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
         private const val WRAPPER_KEY = "wrapper"
     }
 
-    private class CloseableWrapper(val wrapper: KotlinCoreEnvironmentWrapper) : ExtensionContext.Store.CloseableResource {
+    private class CloseableWrapper(val wrapper: KotlinCoreEnvironmentWrapper) :
+        ExtensionContext.Store.CloseableResource {
         override fun close() {
             wrapper.dispose()
         }
