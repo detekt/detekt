@@ -8,28 +8,38 @@ import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object RuleCollectorSpec : Spek({
+class RuleCollectorTest {
 
-    val subject by memoized { RuleCollector() }
+    private lateinit var subject: RuleCollector
 
-    describe("a RuleCollector") {
+    @BeforeEach
+    fun createSubject() {
+        subject = RuleCollector()
+    }
 
-        it("collects no rules when no class is extended") {
+    @Nested
+    inner class `a RuleCollector` {
+
+        @Test
+        fun `collects no rules when no class is extended`() {
             val code = "class SomeRandomClass"
             val items = subject.run(code)
             assertThat(items).isEmpty()
         }
 
-        it("collects no rules when no rule class is extended") {
+        @Test
+        fun `collects no rules when no rule class is extended`() {
             val code = "class SomeRandomClass : SomeOtherClass"
             val items = subject.run(code)
             assertThat(items).isEmpty()
         }
 
-        it("throws when a class extends Rule but has no valid documentation") {
+        @Test
+        fun `throws when a class extends Rule but has no valid documentation`() {
             val rules = listOf("Rule", "FormattingRule", "ThresholdRule", "EmptyRule")
             for (rule in rules) {
                 val code = "class SomeRandomClass : $rule"
@@ -37,7 +47,8 @@ object RuleCollectorSpec : Spek({
             }
         }
 
-        it("collects the rule name") {
+        @Test
+        fun `collects the rule name`() {
             val name = "SomeRandomClass"
             val code = """
                 /**
@@ -49,7 +60,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].name).isEqualTo(name)
         }
 
-        it("collects the rule description") {
+        @Test
+        fun `collects the rule description`() {
             val description = "description"
             val code = """
                 /**
@@ -61,7 +73,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].description).isEqualTo(description)
         }
 
-        it("has a multi paragraph description") {
+        @Test
+        fun `has a multi paragraph description`() {
             val description = "description"
             val code = """
                 /**
@@ -76,7 +89,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].description).contains("more...")
         }
 
-        it("is not active by default") {
+        @Test
+        fun `is not active by default`() {
             val code = """
                 /**
                  * description
@@ -87,7 +101,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].defaultActivationStatus.active).isFalse()
         }
 
-        it("is active by default with valid version") {
+        @Test
+        fun `is active by default with valid version`() {
             val code = """
                 /**
                  * description
@@ -100,7 +115,8 @@ object RuleCollectorSpec : Spek({
             assertThat(defaultActivationStatus.since).isEqualTo("1.12.123")
         }
 
-        it("is active by default with named since") {
+        @Test
+        fun `is active by default with named since`() {
             val code = """
                 /**
                  * description
@@ -113,7 +129,8 @@ object RuleCollectorSpec : Spek({
             assertThat(defaultActivationStatus.since).isEqualTo("1.2.3")
         }
 
-        it("is active by default with invalid version") {
+        @Test
+        fun `is active by default with invalid version`() {
             val code = """
                 /**
                  * description
@@ -124,7 +141,8 @@ object RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
-        it("is auto-correctable") {
+        @Test
+        fun `is auto-correctable`() {
             val code = """
                 /**
                  * description
@@ -137,7 +155,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].autoCorrect).isTrue()
         }
 
-        it("collects the issue property") {
+        @Test
+        fun `collects the issue property`() {
             val code = """
                 /**
                  * description
@@ -153,9 +172,12 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
         }
 
-        context("collects configuration options") {
-            context("using annotation") {
-                it("contains no configuration options by default") {
+        @Nested
+        inner class `collects configuration options` {
+            @Nested
+            inner class `using annotation` {
+                @Test
+                fun `contains no configuration options by default`() {
                     val code = """
                         /**
                          * description
@@ -166,7 +188,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration).isEmpty()
                 }
 
-                it("contains one configuration option with correct formatting") {
+                @Test
+                fun `contains one configuration option with correct formatting`() {
                     val code = """
                         /**
                          * description
@@ -188,7 +211,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
                 }
 
-                it("contains one configuration option of type Int") {
+                @Test
+                fun `contains one configuration option of type Int`() {
                     val code = """
                         /**
                          * description
@@ -203,7 +227,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
                 }
 
-                it("extracts default value when it is a multi line string") {
+                @Test
+                fun `extracts default value when it is a multi line string`() {
                     val code = """
                         /**
                          * description
@@ -217,7 +242,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("'abcd'")
                 }
 
-                it("extracts default value when defined with named parameter") {
+                @Test
+                fun `extracts default value when defined with named parameter`() {
                     val code = """
                         /**
                          * description
@@ -231,7 +257,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
                 }
 
-                it("extracts default value for list of strings") {
+                @Test
+                fun `extracts default value for list of strings`() {
                     val code = """
                         /**
                          * description
@@ -250,7 +277,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
                 }
 
-                it("contains multiple configuration options") {
+                @Test
+                fun `contains multiple configuration options`() {
                     val code = """
                         /**
                          * description
@@ -267,7 +295,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration).hasSize(2)
                 }
 
-                it("has description that is concatenated") {
+                @Test
+                fun `has description that is concatenated`() {
                     val code = """
                         /**
                          * description
@@ -285,7 +314,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
                 }
 
-                it("extracts default value when it is an Int constant") {
+                @Test
+                fun `extracts default value when it is an Int constant`() {
                     val code = """
                         /**
                          * description
@@ -303,7 +333,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
                 }
 
-                it("extracts default value when it is an Int constant as named parameter") {
+                @Test
+                fun `extracts default value when it is an Int constant as named parameter`() {
                     val code = """
                         /**
                          * description
@@ -320,7 +351,9 @@ object RuleCollectorSpec : Spek({
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
                 }
-                it("extracts default value when it is a String constant") {
+
+                @Test
+                fun `extracts default value when it is a String constant`() {
                     val code = """
                         /**
                          * description
@@ -337,7 +370,9 @@ object RuleCollectorSpec : Spek({
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
                 }
-                it("extracts default value for list of strings from constant") {
+
+                @Test
+                fun `extracts default value for list of strings from constant`() {
                     val code = """
                         /**
                          * description
@@ -361,7 +396,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
-                it("extracts emptyList default value") {
+                @Test
+                fun `extracts emptyList default value`() {
                     val code = """
                         /**
                          * description
@@ -379,7 +415,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
                 }
 
-                it("extracts emptyList default value of transformed list") {
+                @Test
+                fun `extracts emptyList default value of transformed list`() {
                     val code = """
                         /**
                          * description
@@ -401,7 +438,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
                 }
 
-                it("is marked as deprecated as well") {
+                @Test
+                fun `is marked as deprecated as well`() {
                     val code = """
                         /**
                          * description
@@ -416,7 +454,8 @@ object RuleCollectorSpec : Spek({
                     assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
                 }
 
-                it("fails if kdoc is used to define configuration") {
+                @Test
+                fun `fails if kdoc is used to define configuration`() {
                     val code = """
                         /**
                          * description
@@ -428,7 +467,8 @@ object RuleCollectorSpec : Spek({
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("fails if not used in combination with delegate") {
+                @Test
+                fun `fails if not used in combination with delegate`() {
                     val code = """
                         /**
                          * description
@@ -441,7 +481,8 @@ object RuleCollectorSpec : Spek({
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("fails if not used in combination with config delegate") {
+                @Test
+                fun `fails if not used in combination with config delegate`() {
                     val code = """
                         /**
                          * description
@@ -454,7 +495,8 @@ object RuleCollectorSpec : Spek({
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                it("fails if config delegate is used without annotation") {
+                @Test
+                fun `fails if config delegate is used without annotation`() {
                     val code = """
                         /**
                          * description
@@ -466,8 +508,10 @@ object RuleCollectorSpec : Spek({
                     assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
                 }
 
-                context("android variants") {
-                    it("extracts values with android variants") {
+                @Nested
+                inner class `android variants` {
+                    @Test
+                    fun `extracts values with android variants`() {
                         val code = """
                             /**
                              * description
@@ -489,7 +533,8 @@ object RuleCollectorSpec : Spek({
                         )
                     }
 
-                    it("extracts values with android variants as named arguments") {
+                    @Test
+                    fun `extracts values with android variants as named arguments`() {
                         val code = """
                             /**
                              * description
@@ -513,8 +558,10 @@ object RuleCollectorSpec : Spek({
                     }
                 }
 
-                context("fallback property") {
-                    it("extracts default value") {
+                @Nested
+                inner class `fallback property` {
+                    @Test
+                    fun `extracts default value`() {
                         val code = """
                         /**
                          * description
@@ -536,7 +583,8 @@ object RuleCollectorSpec : Spek({
                         assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
                     }
 
-                    it("reports an error if the property to fallback on exists but is not a config property") {
+                    @Test
+                    fun `reports an error if the property to fallback on exists but is not a config property`() {
                         val code = """
                         /**
                          * description
@@ -553,7 +601,8 @@ object RuleCollectorSpec : Spek({
                     }
                 }
 
-                context("transformed property") {
+                @Nested
+                inner class `transformed property` {
                     val code = """
                         /**
                          * description
@@ -565,11 +614,15 @@ object RuleCollectorSpec : Spek({
                             private val config2: String by config(false, Boolean::toString)
                         }                        
                     """
-                    it("extracts default value with transformer function") {
+
+                    @Test
+                    fun `extracts default value with transformer function`() {
                         val items = subject.run(code)
                         assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[a-z]+'")
                     }
-                    it("extracts default value with method reference") {
+
+                    @Test
+                    fun `extracts default value with method reference`() {
                         val items = subject.run(code)
                         assertThat(items[0].configuration[1].defaultValue).isEqualTo("'false'")
                     }
@@ -577,8 +630,10 @@ object RuleCollectorSpec : Spek({
             }
         }
 
-        context("collects type resolution information") {
-            it("has no type resolution by default") {
+        @Nested
+        inner class `collects type resolution information` {
+            @Test
+            fun `has no type resolution by default`() {
                 val code = """
                     /**
                      * description
@@ -589,7 +644,8 @@ object RuleCollectorSpec : Spek({
                 assertThat(items[0].requiresTypeResolution).isFalse()
             }
 
-            it("collects the flag that it requires type resolution") {
+            @Test
+            fun `collects the flag that it requires type resolution`() {
                 val code = """
                     /**
                      * description
@@ -601,7 +657,8 @@ object RuleCollectorSpec : Spek({
                 assertThat(items[0].requiresTypeResolution).isTrue()
             }
 
-            it("collects the flag that it requires type resolution from fully qualified annotation") {
+            @Test
+            fun `collects the flag that it requires type resolution from fully qualified annotation`() {
                 val code = """
                     /**
                      * description
@@ -614,7 +671,8 @@ object RuleCollectorSpec : Spek({
             }
         }
 
-        it("contains compliant and noncompliant code examples") {
+        @Test
+        fun `contains compliant and noncompliant code examples`() {
             val code = """
                 /**
                  * description
@@ -634,7 +692,8 @@ object RuleCollectorSpec : Spek({
             assertThat(items[0].compliantCodeExample).isEqualTo("val one = 1")
         }
 
-        it("has wrong noncompliant code example declaration") {
+        @Test
+        fun `has wrong noncompliant code example declaration`() {
             val code = """
                 /**
                  * description
@@ -647,7 +706,8 @@ object RuleCollectorSpec : Spek({
                 .isThrownBy { subject.run(code) }
         }
 
-        it("has wrong compliant code example declaration") {
+        @Test
+        fun `has wrong compliant code example declaration`() {
             val code = """
                 /**
                  * description
@@ -663,7 +723,8 @@ object RuleCollectorSpec : Spek({
                 .isThrownBy { subject.run(code) }
         }
 
-        it("has wrong compliant without noncompliant code example declaration") {
+        @Test
+        fun `has wrong compliant without noncompliant code example declaration`() {
             val code = """
                 /**
                  * description
@@ -678,7 +739,8 @@ object RuleCollectorSpec : Spek({
                 .isThrownBy { subject.run(code) }
         }
 
-        it("has wrong issue style property") {
+        @Test
+        fun `has wrong issue style property`() {
             val code = """
                 /**
                  * description
@@ -695,7 +757,8 @@ object RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidIssueDeclaration::class.java).isThrownBy { subject.run(code) }
         }
 
-        it("has wrong aliases property structure") {
+        @Test
+        fun `has wrong aliases property structure`() {
             val code = """
                 /**
                  * description
@@ -713,7 +776,8 @@ object RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidAliasesDeclaration::class.java).isThrownBy { subject.run(code) }
         }
 
-        it("contains tabs in KDoc") {
+        @Test
+        fun `contains tabs in KDoc`() {
             val description = "\tdescription"
             val code = """
                 /**
@@ -724,4 +788,4 @@ object RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
     }
-})
+}
