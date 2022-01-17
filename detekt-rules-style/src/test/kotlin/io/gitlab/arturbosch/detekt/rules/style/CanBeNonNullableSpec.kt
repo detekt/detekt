@@ -426,6 +426,21 @@ class CanBeNonNullableSpec : Spek({
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
+
+                it("does not report on overridden function parameter") {
+                    val code = """
+                        interface A {
+                            fun foo(a: Int?)
+                        }
+                        
+                        class B : A {
+                            override fun foo(a: Int?) {
+                                val b = a!! + 2 
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
             }
 
             context("using a null-safe expression") {

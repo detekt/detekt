@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -124,6 +125,10 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         private val nullableParams = mutableMapOf<DeclarationDescriptor, NullableParam>()
 
         override fun visitNamedFunction(function: KtNamedFunction) {
+            if (function.isOverride()) {
+                return
+            }
+
             val candidateDescriptors = mutableSetOf<DeclarationDescriptor>()
             function.valueParameters.asSequence()
                 .filter {
