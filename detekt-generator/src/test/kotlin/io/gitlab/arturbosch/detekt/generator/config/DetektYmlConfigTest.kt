@@ -33,9 +33,9 @@ internal class DetektYmlConfigTest {
         "output-reports"
     )
 
-    private val config = Paths.get("../detekt-core/src/main/resources/default-detekt-config.yml")
-        .toAbsolutePath()
-        .let { YamlConfig.load(it) as YamlConfig }
+    private val config: YamlConfig = YamlConfig.load(
+        Paths.get("../detekt-core/src/main/resources/default-detekt-config.yml").toAbsolutePath()
+    ) as YamlConfig
 
     fun ruleSetsNamesToPackageArguments(): Stream<Arguments> =
         ruleSetsNamesToPackage.stream().map { arguments(it.first, it.second) }
