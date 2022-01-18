@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import kotlin.text.Typography.ellipsis
 
 internal fun defaultReportMapping(reportId: String) = when (reportId) {
     TxtOutputReport::class.java.simpleName -> "txt"
@@ -41,16 +42,13 @@ internal fun printFindings(findings: Map<String, List<Finding>>): String {
     }
 }
 
-private fun Finding.detailed() = when (this) {
-    is ThresholdedCodeSmell -> "$id - $metric - [${messageOrDescription()}] at ${location.compact()}"
-    else -> "$id - [${messageOrDescription()}] at ${location.compact()}"
-}
-
 const val BUILD = "build"
 const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
 const val DETEKT_OUTPUT_REPORT_PATHS_KEY = "detekt.output.report.paths.key"
 const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
+
+private const val REPORT_MESSAGE_SIZE_LIMIT = 80
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
@@ -73,4 +71,19 @@ fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Fin
         filteredFindings[ruleSetId] = newFindingsList
     }
     return filteredFindings
+}
+
+private fun Finding.truncatedMessage(): String {
+    val message = messageOrDescription()
+        .replace(Regex("\\s+"), " ")
+        .trim()
+    return when {
+        message.length > REPORT_MESSAGE_SIZE_LIMIT -> "${message.take(REPORT_MESSAGE_SIZE_LIMIT)}($ellipsis)"
+        else -> message
+    }
+}
+
+private fun Finding.detailed(): String = when (this) {
+    is ThresholdedCodeSmell -> "$id - $metric - [${truncatedMessage()}] at ${location.compact()}"
+    else -> "$id - [${truncatedMessage()}] at ${location.compact()}"
 }
