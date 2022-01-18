@@ -24,7 +24,7 @@ open class CodeSmell(
 
     override val id: String = issue.id
 
-    override fun compact(): String = "$id - ${messageWithLocation()}"
+    override fun compact(): String = "$id - ${entity.compact()}"
 
     override fun compactWithSignature(): String = compact() + " - Signature=" + entity.signature
 
@@ -39,8 +39,6 @@ open class CodeSmell(
     }
 
     override fun messageOrDescription(): String = message.ifEmpty { issue.description }
-
-    private fun messageWithLocation() = "[${messageOrDescription()}] at ${location.compact()}"
 }
 
 /**
@@ -100,9 +98,7 @@ open class ThresholdedCodeSmell(
     val threshold: Int
         get() = metric.threshold
 
-    override fun compact(): String = "$id - $metric - ${messageWithLocation()}"
+    override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
     override fun messageOrDescription(): String = message.ifEmpty { issue.description }
-
-    private fun messageWithLocation() = "[${messageOrDescription()}] at ${location.compact()}"
 }
