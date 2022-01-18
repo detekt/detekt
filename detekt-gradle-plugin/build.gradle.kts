@@ -136,6 +136,10 @@ tasks {
     check {
         dependsOn(testing.suites.named("functionalTest"))
     }
+
+    ideaModule {
+        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
+    }
 }
 
 // Skip publishing of test fixture API & runtime variants
