@@ -41,7 +41,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Caught exception is too generic. " +
+        "The caught exception is too generic. " +
             "Prefer catching specific exceptions to the case that is currently handled.",
         Debt.TWENTY_MINS
     )

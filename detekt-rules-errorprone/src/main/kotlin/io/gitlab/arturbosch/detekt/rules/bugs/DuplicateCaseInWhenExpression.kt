@@ -11,9 +11,9 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
- * Flags duplicate case statements in when expressions.
+ * Flags duplicate `case` statements in `when` expressions.
  *
- * If a when expression contains the same case statement multiple times they should be merged. Otherwise, it might be
+ * If a `when` expression contains the same `case` statement multiple times they should be merged. Otherwise, it might be
  * easy to miss one of the cases when reading the code, leading to unwanted side effects.
  *
  * <noncompliant>
@@ -37,7 +37,7 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
     override val issue = Issue(
         "DuplicateCaseInWhenExpression",
         Severity.Warning,
-        "Duplicated case statements in when expression. Both cases should be merged.",
+        "Duplicated `case` statements in a `when` expression detected. Both cases should be merged.",
         Debt.TEN_MINS
     )
 

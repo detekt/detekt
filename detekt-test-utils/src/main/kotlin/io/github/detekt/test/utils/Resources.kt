@@ -10,9 +10,7 @@ internal object Resources
 
 fun resourceUrl(name: String): URL {
     val explicitName = if (name.startsWith("/")) name else "/$name"
-    val resource = Resources::class.java.getResource(explicitName)
-    requireNotNull(resource) { "Make sure the resource '$name' exists!" }
-    return resource
+    return requireNotNull(Resources::class.java.getResource(explicitName)) { "Make sure the resource '$name' exists!" }
 }
 
 fun resource(name: String): URI = resourceUrl(name).toURI()

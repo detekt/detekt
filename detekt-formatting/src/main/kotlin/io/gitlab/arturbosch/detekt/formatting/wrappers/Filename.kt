@@ -7,6 +7,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ *
+ * This rules overlaps with [`naming>MatchingDeclarationName`](https://detekt.github.io/detekt/naming.html#matchingdeclarationname)
+ * from the standard rules, make sure to enable just one.
  */
 @ActiveByDefault(since = "1.0.0")
 class Filename(config: Config) : FormattingRule(config) {

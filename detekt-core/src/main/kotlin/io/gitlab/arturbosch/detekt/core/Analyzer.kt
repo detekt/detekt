@@ -15,12 +15,12 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
-import io.gitlab.arturbosch.detekt.core.config.DefaultConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.getSuppressors
+import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -120,7 +120,7 @@ internal class Analyzer(
         fun executeRules(rules: List<BaseRule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
-                for (finding in filterSuppressedFindings(rule)) {
+                for (finding in filterSuppressedFindings(rule, bindingContext)) {
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
                         "Mapping for '${finding.id}' expected."
                     }
@@ -137,10 +137,10 @@ internal class Analyzer(
     }
 }
 
-private fun filterSuppressedFindings(rule: BaseRule): List<Finding> {
-    val suppressors = getSuppressors(rule)
+private fun filterSuppressedFindings(rule: BaseRule, bindingContext: BindingContext): List<Finding> {
+    val suppressors = getSuppressors(rule, bindingContext)
     return if (suppressors.isNotEmpty()) {
-        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor(finding) } }
+        rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
         rule.findings
     }
@@ -171,13 +171,13 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     }
 
     if (rulesSpec.activateAllRules) {
-        val defaultConfig = DefaultConfig.newInstance()
+        val defaultConfig = getDefaultConfiguration()
         declaredConfig = AllRulesConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
 
     if (!rulesSpec.autoCorrect) {
-        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: DefaultConfig.newInstance())
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: getDefaultConfiguration())
     }
 
-    return declaredConfig ?: DefaultConfig.newInstance()
+    return declaredConfig ?: getDefaultConfiguration()
 }

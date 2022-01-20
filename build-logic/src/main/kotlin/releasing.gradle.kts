@@ -72,10 +72,9 @@ tasks {
 
     register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
         fileToUpdate.set(file("${rootProject.rootDir}/gradle/libs.versions.toml"))
-        linePartToFind.set("detekt-gradle = \"io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+        linePartToFind.set("detekt = { id = \"io.gitlab.arturbosch.detekt\"")
         lineTransformation.set(
-            "detekt-gradle = \"io.gitlab.arturbosch.detekt:" +
-                "detekt-gradle-plugin:${Versions.DETEKT}\""
+            "detekt = { id = \"io.gitlab.arturbosch.detekt\", version = \"${Versions.DETEKT}\" }"
         )
     }
 }

@@ -30,7 +30,7 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfInsteadOfWhen",
         Severity.Style,
-        "Binary expressions are better expressed using an 'if' expression than a 'when' expression.",
+        "Binary expressions are better expressed using an `if` expression than a `when` expression.",
         Debt.FIVE_MINS
     )
 

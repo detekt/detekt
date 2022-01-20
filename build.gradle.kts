@@ -41,6 +41,9 @@ allprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
     }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8"
+    }
 }
 
 val analysisDir = file(projectDir)

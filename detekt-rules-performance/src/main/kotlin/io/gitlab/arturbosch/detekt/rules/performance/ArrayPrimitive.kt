@@ -47,7 +47,7 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "ArrayPrimitive",
         Severity.Performance,
-        "Using Array<Primitive> leads to implicit boxing and a performance hit",
+        "Using `Array<Primitive>` leads to implicit boxing and a performance hit.",
         Debt.FIVE_MINS
     )
 
@@ -65,15 +65,14 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
         super.visitNamedDeclaration(declaration)
         if (declaration is KtCallableDeclaration) {
-            reportArrayPrimitives(declaration.typeReference)
-            reportArrayPrimitives(declaration.receiverTypeReference)
+            declaration.typeReference?.let(this::reportArrayPrimitives)
+            declaration.receiverTypeReference?.let(this::reportArrayPrimitives)
         }
     }
 
-    private fun reportArrayPrimitives(typeReference: KtTypeReference?) {
-        typeReference
-            ?.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
-            ?.forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+    private fun reportArrayPrimitives(typeReference: KtTypeReference) {
+        typeReference.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
+            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun isArrayPrimitive(descriptor: CallableDescriptor): Boolean {

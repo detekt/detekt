@@ -20,7 +20,7 @@ class RuleSetLocatorSpec : Spek({
 
             assertThat(providerClasses).isNotEmpty
             providerClasses
-                .filter { clazz -> providers.firstOrNull { it.javaClass == clazz } == null }
+                .filter { clazz -> providers.none { it.javaClass == clazz } }
                 .forEach { fail("$it rule set is not loaded by the RuleSetLocator") }
         }
 

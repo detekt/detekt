@@ -36,7 +36,7 @@ class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Optional braces in when expression",
+        "Optional braces in when expression detected.",
         Debt.FIVE_MINS
     )
 

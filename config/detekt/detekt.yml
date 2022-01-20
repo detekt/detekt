@@ -103,6 +103,8 @@ formatting:
     active: true
 
 naming:
+  TopLevelPropertyNaming:
+    constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
     active: true
     excludes: ['**/build-logic/**/*.kt', '**/*.kts']
@@ -143,6 +145,8 @@ potential-bugs:
     active: true
 
 style:
+  CanBeNonNullable:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:
@@ -164,6 +168,18 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenImport:
+    active: true
+    imports:
+      - 'org.assertj.core.api.Assertions'
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - 'kotlin.io.print'
+      - 'kotlin.io.println'
+      - 'java.net.URL.openStream'
+      - 'java.lang.Class.getResourceAsStream'
+      - 'java.lang.ClassLoader.getResourceAsStream'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:
@@ -220,6 +236,8 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
+  UseAnyOrNoneInsteadOfFind:
+    active: true
   UseCheckOrError:
     active: true
   UseEmptyCounterpart:
@@ -234,3 +252,6 @@ style:
     active: true
   UseRequireNotNull:
     active: true
+  VarCouldBeVal:
+    active: true
+    ignoreAnnotated: ['Parameter']

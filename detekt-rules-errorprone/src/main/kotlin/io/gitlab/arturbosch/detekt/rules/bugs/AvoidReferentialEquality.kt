@@ -39,7 +39,7 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
     override val issue = Issue(
         "AvoidReferentialEquality",
         Severity.Warning,
-        "Avoid using referential equality checks",
+        "Avoid using referential equality and prefer to use referential equality checks instead.",
         Debt.FIVE_MINS
     )
 

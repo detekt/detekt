@@ -17,6 +17,7 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     val result = CliRunner().run(args)
+    @Suppress("ForbiddenMethodCall")
     when (val error = result.error) {
         is InvalidConfig, is MaxIssuesReached -> println(error.message)
         is UnexpectedError -> {
@@ -53,7 +54,7 @@ fun buildRunner(
     val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
-        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
+        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter, errorPrinter)
         arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }

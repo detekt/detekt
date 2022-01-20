@@ -33,6 +33,7 @@ include("detekt-sample-extensions")
 include("detekt-test")
 include("detekt-test-utils")
 include("detekt-tooling")
+include("detekt-utils")
 
 enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

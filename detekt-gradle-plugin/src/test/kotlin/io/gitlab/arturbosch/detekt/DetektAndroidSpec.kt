@@ -37,7 +37,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :app:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
@@ -89,7 +89,7 @@ object DetektAndroidSpec : Spek({
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
             gradleRunner.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
-            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :app:detekt") {
                 gradleRunner.runTasks(":app:detekt")
@@ -131,7 +131,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
@@ -183,7 +183,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
@@ -230,7 +230,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
@@ -279,7 +279,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
@@ -328,7 +328,7 @@ object DetektAndroidSpec : Spek({
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", MANIFEST_CONTENT)
+            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
 
             it("task :lib:detektMain") {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
@@ -370,12 +370,12 @@ internal fun isAndroidSdkInstalled() =
 
 internal fun skipIfAndroidEnvironmentRequirementsUnmet() = when {
     !isAndroidSdkInstalled() -> Skip.Yes("No android SDK.")
-    getJdkVersion() >= 16 -> Skip.Yes("Android 4.1.3 & 4.2.1 don't run on JDK 16 or higher")
+    getJdkVersion() < 11 -> Skip.Yes("Android Gradle Plugin 7.0+ requires JDK 11 or newer")
     else -> Skip.No
 }
 
-internal val MANIFEST_CONTENT = """
-    <manifest package="io.gitlab.arturbosch.detekt.app"
+internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.app") = """
+    <manifest package="$packageName"
         xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
 

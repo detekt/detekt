@@ -63,6 +63,30 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
+        it("does not report suspend function without body") {
+            val code = """
+                interface SuspendInterface {
+                    suspend fun empty()
+                }
+                """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        it("does not report overridden suspend function") {
+            val code = """
+                interface SuspendInterface {
+                    suspend fun empty()
+                }
+
+                class SuspendClass : SuspendInterface {
+                    override suspend fun empty() {
+                        println("hello world")
+                    }
+                }                                
+                """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
         it("ignores when iterator is suspending") {
             val code = """
                 class SuspendingIterator {

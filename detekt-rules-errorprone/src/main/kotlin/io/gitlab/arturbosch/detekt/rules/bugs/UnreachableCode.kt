@@ -40,7 +40,7 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "UnreachableCode",
         Severity.Warning,
-        "Unreachable code detected. This code should be removed",
+        "Unreachable code detected. This code should be removed.",
         Debt.TEN_MINS
     )
 

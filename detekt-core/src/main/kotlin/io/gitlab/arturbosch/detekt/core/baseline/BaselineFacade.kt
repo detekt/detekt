@@ -9,19 +9,27 @@ import java.nio.file.Path
 
 class BaselineFacade {
 
-    fun transformResult(baselineFile: Path, result: Detektion): Detektion =
-        BaselineFilteredResult(result, Baseline.load(baselineFile))
+    fun transformResult(baselineFile: Path, result: Detektion): Detektion {
+        return if (baselineExists(baselineFile)) {
+            BaselineFilteredResult(result, Baseline.load(baselineFile))
+        } else {
+            result
+        }
+    }
 
     fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
         val ids = findings.map { it.baselineId }.toSortedSet()
-        val baseline = if (baselineExists(baselineFile)) {
-            Baseline.load(baselineFile).copy(currentIssues = ids)
+        val oldBaseline = if (baselineExists(baselineFile)) {
+            Baseline.load(baselineFile)
         } else {
-            Baseline(emptySet(), ids)
+            Baseline(emptySet(), emptySet())
         }
-        baselineFile.parent?.let { Files.createDirectories(it) }
-        BaselineFormat().write(baseline, baselineFile)
+        val baseline = oldBaseline.copy(currentIssues = ids)
+        if (oldBaseline != baseline) {
+            baselineFile.parent?.let { Files.createDirectories(it) }
+            BaselineFormat().write(baseline, baselineFile)
+        }
     }
 
-    internal fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
+    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
 }

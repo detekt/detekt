@@ -18,7 +18,7 @@ class MissingPackageDeclaration(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "Kotlin source files should define a package",
+        "Kotlin source files should define a package.",
         debt = Debt.FIVE_MINS
     )
 

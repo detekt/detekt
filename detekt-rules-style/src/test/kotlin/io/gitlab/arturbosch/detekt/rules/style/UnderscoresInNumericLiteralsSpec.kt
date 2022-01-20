@@ -9,6 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 
 private const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
 private const val ACCEPTABLE_LENGTH = "acceptableLength"
+private const val ALLOW_NON_STANDARD_GROUPING = "allowNonStandardGrouping"
 
 class UnderscoresInNumericLiteralsSpec : Spek({
 
@@ -160,19 +161,26 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    describe("an Int of 10_00_00") {
-        val code = "val myInt = 10_00_00"
+    describe("an Int of 1000_00_00") {
+        val code = "val myInt = 1000_00_00"
 
         it("should be reported by default") {
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
 
-        it("should still be reported even if acceptableLength is 6") {
+        it("should still be reported even if acceptableLength is 99") {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(mapOf(ACCEPTABLE_LENGTH to "6"))
+                TestConfig(mapOf(ACCEPTABLE_LENGTH to "99"))
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
+        }
+
+        it("should not be reported if allowNonStandardGrouping is true") {
+            val findings = UnderscoresInNumericLiterals(
+                TestConfig(mapOf(ALLOW_NON_STANDARD_GROUPING to true))
+            ).compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -357,6 +365,15 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(mapOf(ACCEPTABLE_LENGTH to "7"))
             ).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    describe("a String of 1000000.3141592") {
+        val code = """val myString = "1000000.3141592""""
+
+        it("should not be reported by default") {
+            val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

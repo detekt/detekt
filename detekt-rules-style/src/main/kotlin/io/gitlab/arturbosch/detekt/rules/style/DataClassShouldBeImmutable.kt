@@ -34,8 +34,8 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "DataClassShouldBeImmutable",
         Severity.Style,
-        "Data classes should mainly be immutable and should not have any side effects. " +
-            "(To copy an object altering some of its properties use the copy function)",
+        "Data classes should mainly be immutable and should not have any side effects " +
+            "(To copy an object altering some of its properties use the copy function).",
         Debt.TWENTY_MINS
     )
 

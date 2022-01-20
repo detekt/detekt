@@ -35,6 +35,7 @@ import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
+import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
@@ -48,6 +49,7 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
+import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 import javax.inject.Inject
@@ -142,6 +144,8 @@ open class Detekt @Inject constructor(
 
     @get:Internal
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+    @set:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
     var autoCorrect: Boolean
         @Input
         get() = autoCorrectProp.getOrElse(false)
@@ -224,6 +228,7 @@ open class Detekt @Inject constructor(
 
     @InputFiles
     @SkipWhenEmpty
+    @IgnoreEmptyDirectories
     @PathSensitive(PathSensitivity.RELATIVE)
     override fun getSource(): FileTree = super.getSource()
 

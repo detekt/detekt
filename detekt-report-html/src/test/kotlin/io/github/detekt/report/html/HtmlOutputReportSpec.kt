@@ -38,7 +38,6 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
             assertThat(result).endsWith("</html>\n")
 
-            assertThat(result).contains("<h1>detekt report</h1>")
             assertThat(result).contains("<h2>Metrics</h2>")
             assertThat(result).contains("<h2>Complexity Report</h2>")
             assertThat(result).contains("<h2>Findings</h2>")

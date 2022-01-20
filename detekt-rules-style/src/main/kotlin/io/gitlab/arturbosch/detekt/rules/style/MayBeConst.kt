@@ -41,7 +41,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Reports vals that can be const val instead.",
+        "Usage of `vals` that can be `const val` detected.",
         Debt.FIVE_MINS
     )
 
@@ -57,6 +57,8 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
     private val topLevelConstants = HashSet<String?>()
     private val companionObjectConstants = HashSet<String?>()
+    private val KtProperty.isActual
+        get() = hasModifier(KtTokens.ACTUAL_KEYWORD)
 
     override fun visitKtFile(file: KtFile) {
         topLevelConstants.clear()
@@ -110,6 +112,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
     private fun KtProperty.cannotBeConstant(): Boolean {
         return isLocal ||
             isVar ||
+            isActual ||
             getter != null ||
             isConstant() ||
             isOverride()

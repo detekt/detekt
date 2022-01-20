@@ -1,23 +1,26 @@
 package io.github.detekt.custom
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
-class SpekTestDiscoverySpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class SpekTestDiscoverySpec(private val env: KotlinCoreEnvironment) {
+    val subject = SpekTestDiscovery()
 
-    val subject by memoized { SpekTestDiscovery() }
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class VariableDeclarationsInSpekGroupsShouldOnlyBeSimple {
 
-    describe("variable declarations in spek groups should only be simple") {
+        @Nested
+        inner class TopLevelScope {
 
-        context("top level scope") {
-
-            it("allows strings, paths and files by default") {
+            @Test
+            fun `allows strings, paths and files by default`() {
                 val code = createSpekCode(
                     """
                     val s = "simple"
@@ -29,25 +32,29 @@ class SpekTestDiscoverySpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("detects disallowed types on top level scope") {
+            @Test
+            fun `detects disallowed types on top level scope`() {
                 val code = createSpekCode("val s = Any()")
 
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("allows memoized blocks") {
+            @Test
+            fun `allows memoized blocks`() {
                 val code = createSpekCode("val s by memoized { Any() }")
 
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
-        context("describe and context blocks") {
+        @Nested
+        inner class DescribeAndContextBlocks {
 
-            setOf("describe", "context").forEach { name ->
-                it("allows strings, files and paths by default") {
-                    val code = createSpekCode(
-                        """
+            @ParameterizedTest
+            @ValueSource(strings = ["describe", "context"])
+            fun `allows strings, files and paths by default`(name: String) {
+                val code = createSpekCode(
+                    """
                         $name("group") {
                             val s = "simple"
                             val p = Paths.get("")
@@ -55,28 +62,27 @@ class SpekTestDiscoverySpec : Spek({
                             val m by memoized { Any() }
                         }
                     """
-                    )
+                )
 
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            setOf("describe", "context").forEach { name ->
-                it("disallows non memoized declarations") {
-                    val code = createSpekCode(
-                        """
+            @ParameterizedTest
+            @ValueSource(strings = ["describe", "context"])
+            fun `disallows non memoized declarations`(name: String) {
+                val code = createSpekCode(
+                    """
                         $name("group") {
                             val complex = Any()
                         }
                     """
-                    )
+                )
 
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-                }
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
         }
     }
-})
+}
 
 private fun createSpekCode(content: String) = """
 import org.spekframework.spek2.Spek

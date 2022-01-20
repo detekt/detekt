@@ -3,6 +3,7 @@
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.utils.getSafeResourceAsStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -58,11 +59,11 @@ class YamlConfigSpec : Spek({
     describe("loading empty configurations") {
 
         it("empty yaml file is equivalent to empty config") {
-            YamlConfig.loadResource(javaClass.getResource("/empty.yml"))
+            javaClass.getSafeResourceAsStream("/empty.yml")!!.reader().use(YamlConfig::load)
         }
 
         it("single item in yaml file is valid") {
-            YamlConfig.loadResource(javaClass.getResource("/oneitem.yml"))
+            javaClass.getSafeResourceAsStream("/oneitem.yml")!!.reader().use(YamlConfig::load)
         }
     }
 

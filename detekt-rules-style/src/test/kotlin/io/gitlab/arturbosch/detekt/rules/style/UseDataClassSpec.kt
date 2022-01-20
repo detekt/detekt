@@ -370,5 +370,14 @@ class UseDataClassSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
+
+        it("does not report inner classes") {
+            val code = """
+                class Outer {
+                    inner class Inner(val x: Int)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })

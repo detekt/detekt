@@ -20,6 +20,9 @@ entries:
     - title: Configuration File
       url: /configurations.html
       output: web
+    - title: Configuration for Compose
+      url: /compose.html
+      output: web
     - title: Reporting
       url: /reporting.html
       output: web
@@ -28,6 +31,9 @@ entries:
       output: web
     - title: Suppressing Issues via Baseline File
       url: /baseline.html
+      output: web
+    - title: Suppressing Issues via Suppressors
+      url: /suppressors.html
       output: web
     - title: Extending detekt
       url: /extensions.html

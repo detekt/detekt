@@ -17,6 +17,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
+    val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val projectScript: Project.() -> Unit = {},
 ) {
 
@@ -93,7 +94,9 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     fun writeProjectFile(filename: String, content: String) {
-        File(rootDir, filename).writeText(content)
+        File(rootDir, filename)
+            .also { it.parentFile.mkdirs() }
+            .writeText(content)
     }
 
     fun writeKtFile(srcDir: String, className: String) {
@@ -123,7 +126,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
             add("--stacktrace")
             add("--info")
             add("--build-cache")
-            add("-Dorg.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g")
+            add("-Dorg.gradle.jvmargs=$jvmArgs")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
@@ -153,7 +156,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         runTasksAndCheckResult(DETEKT_TASK) { this.doAssert(it) }
     }
 
-    fun runDetektTask(): BuildResult = runTasks(DETEKT_TASK)
+    fun runDetektTask(vararg args: String): BuildResult = runTasks(DETEKT_TASK, *args)
 
     fun runDetektTaskAndExpectFailure(doAssert: DslGradleRunner.(BuildResult) -> Unit = {}) {
         val result = buildGradleRunner(listOf(DETEKT_TASK)).buildAndFail()

@@ -36,7 +36,7 @@ class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseAnyOrNoneInsteadOfFind",
         Severity.Style,
-        "Use 'any' or 'none' instead of 'find' and null check",
+        "Use `any` or `none` instead of `find` and `null` checks.",
         Debt.FIVE_MINS
     )
 
