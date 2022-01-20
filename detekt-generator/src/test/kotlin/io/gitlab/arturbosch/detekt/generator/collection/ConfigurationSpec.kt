@@ -13,7 +13,7 @@ private val defaultConfiguration = Configuration(
     deprecated = null
 )
 
-class ConfigurationTest {
+class ConfigurationSpec {
 
     @Nested
     inner class `default value to list conversion` {

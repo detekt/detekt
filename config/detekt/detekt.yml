@@ -104,7 +104,7 @@ formatting:
 
 naming:
   ClassNaming:
-    excludes: [ '**/*Test.kt' ]
+    excludes: [ '**/*Spec.kt' ]
   TopLevelPropertyNaming:
     constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:

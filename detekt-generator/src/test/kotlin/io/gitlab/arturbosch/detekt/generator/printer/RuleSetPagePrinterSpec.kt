@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 
-class RuleSetPagePrinterTest {
+class RuleSetPagePrinterSpec {
 
     @Nested
     inner class `Ruleset page printer` {

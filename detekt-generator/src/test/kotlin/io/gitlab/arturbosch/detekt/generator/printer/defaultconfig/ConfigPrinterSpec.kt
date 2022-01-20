@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class ConfigPrinterTest {
+class ConfigPrinterSpec {
 
     @Nested
     inner class `Config printer` {

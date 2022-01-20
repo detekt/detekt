@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.nio.file.Paths
 import java.util.stream.Stream
 
-internal class DetektYmlConfigTest {
+internal class DetektYmlConfigSpec {
 
     private val ruleSetsNamesToPackage: List<Pair<String, String>> = listOf(
         "complexity" to "io.gitlab.arturbosch.detekt.rules.complexity",

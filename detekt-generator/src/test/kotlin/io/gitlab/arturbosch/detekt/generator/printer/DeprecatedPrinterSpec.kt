@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class DeprecatedPrinterTest {
+class DeprecatedPrinterSpec {
 
     @Nested
     inner class `Deprecated page printer` {

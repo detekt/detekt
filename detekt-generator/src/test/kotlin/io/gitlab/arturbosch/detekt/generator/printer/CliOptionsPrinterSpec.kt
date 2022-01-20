@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class CliOptionsPrinterTest {
+class CliOptionsPrinterSpec {
 
     @Nested
     inner class `Cli Options Printer` {

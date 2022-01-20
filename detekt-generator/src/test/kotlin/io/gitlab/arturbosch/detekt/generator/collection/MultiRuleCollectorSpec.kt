@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class MultiRuleCollectorTest {
+class MultiRuleCollectorSpec {
 
     private lateinit var subject: MultiRuleCollector
 
