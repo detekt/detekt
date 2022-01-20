@@ -6,22 +6,28 @@ class MaxLineLength {
         val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
 
         val A_VERY_LONG_MULTI_LINE = """
-            This is anotehr very very very very very very very very, very long multiline String that will break the MaxLineLength"
+            This is another very very very very very very very very, very long multiline String that will break the MaxLineLength"
         """.trimIndent()
     }
 
     val loremIpsumField = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
 
     val longMultiLineField = """
-            This is anotehr very very very very very very very very
+            This is another very very very very very very very very
             very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
             very long multiline String that will break the MaxLineLength
         """.trimIndent()
 
     val longMultiLineFieldWithLineBreaks =
         """
-            This is anotehr very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
+            This is another very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
             very long multiline String with Line Break that will break the MaxLineLength
+        """.trimIndent()
+
+    val longMultiLineFieldWithLeadingQuote =
+        """
+            "This is yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very"
+            "very long multiline String with Line Break that will break the MaxLineLength"
         """.trimIndent()
 
     fun main() {
