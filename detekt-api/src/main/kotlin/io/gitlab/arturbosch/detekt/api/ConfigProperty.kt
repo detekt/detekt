@@ -111,14 +111,8 @@ fun <T : Any, U : Any> configWithAndroidVariants(
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is List<*> -> {
-            if (defaultValue.all { it is String }) {
-                val defaultValueAsListOfStrings = defaultValue as List<String>
-                configAware.valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings) as T
-            } else {
-                error("Only lists of strings are supported. '$propertyName' is invalid. ")
-            }
-        }
+        is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
+        is ExplainedValues -> configAware.getExplainedValuesOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
         is Int -> configAware.valueOrDefault(propertyName, defaultValue)
@@ -127,6 +121,41 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
                 "Use one of String, Boolean, Int or List<String> instead."
         )
     }
+}
+
+private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
+    return if (defaultValue.all { it is String }) {
+        val defaultValueAsListOfStrings = defaultValue as List<String>
+        valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
+    } else {
+        error("Only lists of strings are supported. '$propertyName' is invalid. ")
+    }
+}
+
+private fun ConfigAware.getExplainedValuesOrDefault(
+    propertyName: String,
+    defaultValue: ExplainedValues
+): ExplainedValues {
+    val valuesAsListOrNull: List<*>? = valueOrNull(propertyName)
+    if (valuesAsListOrNull != null) {
+        if (valuesAsListOrNull.all { it is String }) {
+            return ExplainedValuesImpl(valuesAsListOrNull.map { ExplainedValueImpl(it.toString()) })
+        }
+        if (valuesAsListOrNull.all { it is Map<*, *> }) {
+            val explainedValues = valuesAsListOrNull
+                .map { it as Map<*, *> }
+                .map { dict ->
+                    ExplainedValueImpl(
+                        value = dict["value"].toString(),
+                        reason = dict["reason"]?.toString()
+                    )
+                }
+            return ExplainedValuesImpl(explainedValues)
+        } else {
+            error("Only lists of strings are supported. '$propertyName' is invalid. ")
+        }
+    }
+    return defaultValue
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {

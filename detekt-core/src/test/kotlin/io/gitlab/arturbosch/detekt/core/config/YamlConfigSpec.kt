@@ -109,6 +109,32 @@ class YamlConfigSpec : Spek({
             assertThat(config).isNotNull
         }
 
+        describe("explained values") {
+            val config by memoized { YamlConfig.load(resourceAsPath("explained-values.yml")) }
+
+            it("can be parsed") {
+                println(config)
+                assertThat(config).isNotNull
+            }
+
+            it("supports lists") {
+                println(config)
+                val actualAsList: List<*>? = config
+                    .subConfig("style")
+                    .subConfig("AsList")
+                    .valueOrNull("values")
+                assertThat(actualAsList).isNotNull
+            }
+
+            it("supports maps") {
+                val actualAsMap: List<Map<*, *>>? = config
+                    .subConfig("style")
+                    .subConfig("AsMap")
+                    .valueOrNull("values")
+                assertThat(actualAsMap).isNotNull
+            }
+        }
+
         it("throws an exception on an non-existing file") {
             val path = Paths.get("doesNotExist.yml")
             assertThatIllegalArgumentException()

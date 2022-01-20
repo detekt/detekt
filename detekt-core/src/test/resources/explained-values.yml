@@ -1,0 +1,13 @@
+style:
+  AsList:
+    values:
+      - a
+      - b
+      - c
+  AsMap:
+    values:
+      - value: a
+        reason: reason A
+      - value: b
+      - value: c
+        reason: reason C

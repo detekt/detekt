@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.tuple
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.concurrent.atomic.AtomicInteger
@@ -110,6 +111,46 @@ class ConfigPropertySpec : Spek({
                     }
                     it("uses the value provided in config if present") {
                         assertThat(subject.present).isEqualTo(listOf("a", "b", "c"))
+                    }
+                    it("uses the default value if not present") {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
+                    }
+                }
+            }
+            context("ExplainedValues property") {
+                val defaultValue by memoized { explainedValues("aValue" to "aReason") }
+                context("value defined as list") {
+                    val subject by memoized {
+                        object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                            val present: ExplainedValues by config(defaultValue)
+                            val notPresent: ExplainedValues by config(defaultValue)
+                        }
+                    }
+                    it("uses the value provided in config if present") {
+                        assertThat(subject.present)
+                            .extracting(ExplainedValue::value, ExplainedValue::reason)
+                            .containsExactly(tuple("a", null), tuple("b", null), tuple("c", null))
+                    }
+                    it("uses the default value if not present") {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
+                    }
+                }
+                context("value defined as list of maps") {
+                    val subject by memoized {
+                        object : TestConfigAware(
+                            "present" to listOf(
+                                mapOf("value" to "a", "reason" to "reasonA"),
+                                mapOf("value" to "b", "reason" to null)
+                            )
+                        ) {
+                            val present: ExplainedValues by config(defaultValue)
+                            val notPresent: ExplainedValues by config(defaultValue)
+                        }
+                    }
+                    it("uses the value provided in config if present") {
+                        assertThat(subject.present)
+                            .extracting(ExplainedValue::value, ExplainedValue::reason)
+                            .containsExactly(tuple("a", "reasonA"), tuple("b", null))
                     }
                     it("uses the default value if not present") {
                         assertThat(subject.notPresent).isEqualTo(defaultValue)
