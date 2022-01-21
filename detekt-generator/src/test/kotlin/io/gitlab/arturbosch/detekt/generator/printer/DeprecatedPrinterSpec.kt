@@ -2,13 +2,15 @@ package io.gitlab.arturbosch.detekt.generator.printer
 
 import io.gitlab.arturbosch.detekt.generator.util.createRuleSetPage
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class DeprecatedPrinterSpec : Spek({
+class DeprecatedPrinterSpec {
 
-    describe("Deprecated page printer") {
-        it("prints the correct properties") {
+    @Nested
+    inner class `Deprecated page printer` {
+        @Test
+        fun `prints the correct properties`() {
             val markdownString = DeprecatedPrinter.print(listOf(createRuleSetPage()))
             val expectedMarkdownString = """
                 style>WildcardImport>conf2=use conf1 instead
@@ -18,4 +20,4 @@ class DeprecatedPrinterSpec : Spek({
             assertThat(markdownString).isEqualTo(expectedMarkdownString)
         }
     }
-})
+}

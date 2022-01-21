@@ -4,33 +4,44 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class MultiRuleCollectorSpec : Spek({
+class MultiRuleCollectorSpec {
 
-    val subject by memoized { MultiRuleCollector() }
+    private lateinit var subject: MultiRuleCollector
 
-    describe("a MultiRuleCollector") {
+    @BeforeEach
+    fun createSubject() {
+        subject = MultiRuleCollector()
+    }
 
-        it("collects no MultiRule when no class is extended") {
+    @Nested
+    inner class `a MultiRuleCollector` {
+
+        @Test
+        fun `collects no MultiRule when no class is extended`() {
             val code = "class MyRule"
             assertThat(subject.run(code)).isEmpty()
         }
 
-        it("collects no rules when no MultiRule class is extended") {
+        @Test
+        fun `collects no rules when no MultiRule class is extended`() {
             val code = "class MyRule : Other"
             assertThat(subject.run(code)).isEmpty()
         }
 
-        it("throws when no rules are added") {
+        @Test
+        fun `throws when no rules are added`() {
             val code = "class MyRule : MultiRule"
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
                 subject.run(code)
             }
         }
 
-        it("collects all rules in fields and in the rule property") {
+        @Test
+        fun `collects all rules in fields and in the rule property`() {
             val code = """
                 class MyRule : MultiRule {
                     val p1 = Rule3()
@@ -49,4 +60,4 @@ class MultiRuleCollectorSpec : Spek({
             assertThat(items[0].rules).contains("Rule1", "Rule2", "Rule3", "Rule4")
         }
     }
-})
+}
