@@ -2,6 +2,5 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>UnusedPrivateMember:AnnotationSuppressor.kt$private operator fun Iterable&lt;Regex&gt;.contains(a: String?): Boolean</ID>
   </CurrentIssues>
 </SmellBaseline>

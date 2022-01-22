@@ -14,8 +14,7 @@ dependencies {
 
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
     testImplementation(libs.reflections)
 }
 

@@ -103,11 +103,13 @@ formatting:
     active: true
 
 naming:
+  ClassNaming:
+    excludes: [ '**/*Spec.kt' ]
   TopLevelPropertyNaming:
     constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
     active: true
-    excludes: ['**/build-logic/**/*.kt', '**/*.kts']
+    excludes: [ '**/build-logic/**/*.kt', '**/*.kts' ]
   NoNameShadowing:
     active: true
   NonBooleanPropertyPrefixedWithIs:

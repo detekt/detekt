@@ -14,7 +14,6 @@ semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
-kotlin-scriptRuntime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }
 kotlin-scriptUtil = { module = "org.jetbrains.kotlin:kotlin-script-util", version.ref = "kotlin" }
 kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -34,7 +33,6 @@ spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spe
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
@@ -53,4 +51,4 @@ shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
 
 [bundles]
-testImplementation = ["assertj", "spek-dsl", "junit-params"]
+testImplementation = ["assertj", "spek-dsl"]
