@@ -10,7 +10,7 @@ sealed interface DefaultValue {
         fun of(defaultValue: String): DefaultValue = StringDefault(defaultValue)
         fun of(defaultValue: Boolean): DefaultValue = BooleanDefault(defaultValue)
         fun of(defaultValue: Int): DefaultValue = IntegerDefault(defaultValue)
-        fun of(defaultValue: List<String>): DefaultValue = ListDefault(defaultValue)
+        fun of(defaultValue: List<String>): DefaultValue = StringListDefault(defaultValue)
     }
 }
 
@@ -28,7 +28,7 @@ private data class IntegerDefault(private val defaultValue: Int) : DefaultValue 
     override fun getAsPlainString(): String = defaultValue.toString()
 }
 
-private data class ListDefault(private val defaultValue: List<String>) : DefaultValue {
+private data class StringListDefault(private val defaultValue: List<String>) : DefaultValue {
     private val quoted: String = defaultValue.map { "'$it'" }.toString()
 
     override fun isNonEmptyList(): Boolean = defaultValue.isNotEmpty()
