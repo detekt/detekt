@@ -1,21 +1,25 @@
 package io.gitlab.arturbosch.detekt.generator.out
 
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object YamlSpec : Spek({
+class YamlSpec {
 
-    describe("keyValue") {
-        it("renders key and value as provided") {
+    @Nested
+    inner class `keyValue` {
+        @Test
+        fun `renders key and value as provided`() {
             val result = yaml { keyValue() { "key" to "value" } }
             assertThat(result).isEqualTo("key: value")
         }
     }
 
-    describe("list") {
+    @Nested
+    inner class `list` {
 
-        it("renders single element") {
+        @Test
+        fun `renders single element`() {
             val given = listOf("value")
             val result = yaml { list("key", given) }
             val expected = """key:
@@ -24,7 +28,8 @@ object YamlSpec : Spek({
             assertThat(result).isEqualTo(expected)
         }
 
-        it("renders multiple elements") {
+        @Test
+        fun `renders multiple elements`() {
             val given = listOf("value 1", "value 2")
             val result = yaml { list("key", given) }
             val expected = """key:
@@ -34,7 +39,8 @@ object YamlSpec : Spek({
             assertThat(result).isEqualTo(expected)
         }
 
-        it("quotes a value containing special characters") {
+        @Test
+        fun `quotes a value containing special characters`() {
             val given = listOf("val*ue1", "val|ue2", "val\$ue3")
             val result = yaml { list("key", given) }
             val expected = """key:
@@ -45,7 +51,8 @@ object YamlSpec : Spek({
             assertThat(result).isEqualTo(expected)
         }
 
-        it("quotes a blank value") {
+        @Test
+        fun `quotes a blank value`() {
             val given = listOf("   ")
             val result = yaml { list("key", given) }
             val expected = """key:
@@ -54,7 +61,8 @@ object YamlSpec : Spek({
             assertThat(result).isEqualTo(expected)
         }
 
-        it("does not add quotes when value is already enclosed in quotes") {
+        @Test
+        fun `does not add quotes when value is already enclosed in quotes`() {
             val given = listOf("'val*ue1'", "\"val|ue2\"", "\"\"", "''")
             val result = yaml { list("key", given) }
             val expected = """key:
@@ -66,4 +74,4 @@ object YamlSpec : Spek({
             assertThat(result).isEqualTo(expected)
         }
     }
-})
+}
