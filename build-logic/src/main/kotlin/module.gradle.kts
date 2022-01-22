@@ -17,9 +17,9 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-val catalogs = project.extensions.getByType(VersionCatalogsExtension::class)
+val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-jacoco.toolVersion = catalogs.named("libs").findVersion("jacoco").get().requiredVersion
+jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
@@ -96,7 +96,7 @@ tasks.withType<KotlinCompile>().configureEach {
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
+            useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
         }
     }
 }
