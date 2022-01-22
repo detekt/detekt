@@ -6,69 +6,76 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
-internal class MaxIssueCheckSpec : Spek({
+internal class MaxIssueCheckSpec {
 
-    describe("based only on MaxIssuePolicy") {
+    @Nested
+    inner class `based only on MaxIssuePolicy` {
 
-        context("policy of any") {
+        @Nested
+        inner class `policy of any` {
 
-            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.AllowAny) }
+            private val fixture = createFixture(RulesSpec.MaxIssuePolicy.AllowAny)
 
-            listOf(-1, 0, 1, 100).forEach {
-                it("passes on $it issues") {
-                    assertThatCode { fixture.check(it) }.doesNotThrowAnyException()
-                }
+            @ParameterizedTest(name = "passes on {0} issues")
+            @ValueSource(ints = [-1, 0, 1, 100])
+            fun `passes on issues`(value: Int) {
+                assertThatCode { fixture.check(value) }.doesNotThrowAnyException()
             }
         }
 
-        context("policy of none") {
+        @Nested
+        inner class `policy of none` {
 
-            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.NoneAllowed) }
+            private val fixture = createFixture(RulesSpec.MaxIssuePolicy.NoneAllowed)
 
-            it("passes on zero issues") {
+            @Test
+            fun `passes on zero issues`() {
                 assertThatCode { fixture.check(0) }.doesNotThrowAnyException()
             }
 
-            listOf(-1, 1, 100).forEach {
-                it("fails on $it issues") {
-                    assertThatCode { fixture.check(it) }.isInstanceOf(MaxIssuesReached::class.java)
-                }
+            @ParameterizedTest(name = "fails on {0} issues")
+            @ValueSource(ints = [-1, 1, 100])
+            fun `fails on issues`(value: Int) {
+                assertThatCode { fixture.check(value) }.isInstanceOf(MaxIssuesReached::class.java)
             }
         }
 
-        context("policy of specified amount of 2 issues") {
+        @Nested
+        inner class `policy of specified amount of 2 issues` {
 
-            val fixture by memoized { createFixture(RulesSpec.MaxIssuePolicy.AllowAmount(2)) }
+            private val fixture = createFixture(RulesSpec.MaxIssuePolicy.AllowAmount(2))
 
-            listOf(-1, 0, 1, 2).forEach {
-                it("passes on $it issues") {
-                    assertThatCode { fixture.check(it) }.doesNotThrowAnyException()
-                }
+            @ParameterizedTest(name = "passes on {0} issues")
+            @ValueSource(ints = [-1, 0, 1, 2])
+            fun `passes on issues`(value: Int) {
+                assertThatCode { fixture.check(value) }.doesNotThrowAnyException()
             }
 
-            listOf(3, 100).forEach {
-                it("fails on $it issues") {
-                    assertThatCode { fixture.check(it) }.isInstanceOf(MaxIssuesReached::class.java)
-                }
+            @ParameterizedTest(name = "fails on {0} issues")
+            @ValueSource(ints = [3, 100])
+            fun `fails on issues`(value: Int) {
+                assertThatCode { fixture.check(value) }.isInstanceOf(MaxIssuesReached::class.java)
             }
         }
     }
 
-    describe("based on config") {
+    @Nested
+    inner class `based on config` {
 
-        val config by memoized {
-            yamlConfigFromContent(
-                """
+        val config = yamlConfigFromContent(
+            """
                 build:
                     maxIssues: 1
-                """.trimIndent()
-            )
-        }
+            """.trimIndent()
+        )
 
-        it("uses the config for max issues when MaxIssuePolicy == NonSpecified") {
+        @Test
+        fun `uses the config for max issues when MaxIssuePolicy == NonSpecified`() {
             val fixture = MaxIssueCheck(
                 ProcessingSpec { rules { maxIssuePolicy = RulesSpec.MaxIssuePolicy.NonSpecified } }.rulesSpec,
                 config
@@ -77,7 +84,8 @@ internal class MaxIssueCheckSpec : Spek({
             assertThatCode { fixture.check(1) }.doesNotThrowAnyException()
         }
 
-        it("skips the config on any other Policy specied") {
+        @Test
+        fun `skips the config on any other Policy specied`() {
             val fixture = MaxIssueCheck(
                 ProcessingSpec { rules { maxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed } }.rulesSpec,
                 config
@@ -86,7 +94,7 @@ internal class MaxIssueCheckSpec : Spek({
             assertThatCode { fixture.check(1) }.isInstanceOf(MaxIssuesReached::class.java)
         }
     }
-})
+}
 
 private fun createFixture(policy: RulesSpec.MaxIssuePolicy) =
     MaxIssueCheck(ProcessingSpec { rules { maxIssuePolicy = policy } }.rulesSpec, Config.empty)

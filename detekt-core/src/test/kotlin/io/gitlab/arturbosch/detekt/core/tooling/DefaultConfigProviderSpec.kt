@@ -4,17 +4,17 @@ import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-internal class DefaultConfigProviderSpec : Spek({
-    describe("defaultConfigProvider without plugins") {
-        val spec by memoized {
-            createNullLoggingSpec {}
-        }
+internal class DefaultConfigProviderSpec {
+    @Nested
+    inner class `defaultConfigProvider without plugins` {
+        val spec = createNullLoggingSpec {}
 
-        it("gets") {
+        @Test
+        fun `gets`() {
             val config = DefaultConfigProvider().apply { init(spec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -22,7 +22,8 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
-        it("copies") {
+        @Test
+        fun `copies`() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(spec) }.copy(path)
 
@@ -31,16 +32,16 @@ internal class DefaultConfigProviderSpec : Spek({
         }
     }
 
-    describe("defaultConfigProvider with plugins") {
-        val spec by memoized {
-            createNullLoggingSpec {
-                extensions {
-                    fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
-                }
+    @Nested
+    inner class `defaultConfigProvider with plugins` {
+        val spec = createNullLoggingSpec {
+            extensions {
+                fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
         }
 
-        it("gets") {
+        @Test
+        fun `gets`() {
             val config = DefaultConfigProvider().apply { init(spec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -48,7 +49,8 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 
-        it("copies") {
+        @Test
+        fun `copies`() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(spec) }.copy(path)
 
@@ -67,4 +69,4 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(actual).isEqualTo(expected)
         }
     }
-})
+}

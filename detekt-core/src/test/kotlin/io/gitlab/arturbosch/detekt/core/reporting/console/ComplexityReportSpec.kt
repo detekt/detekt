@@ -11,16 +11,19 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class ComplexityReportSpec : Spek({
+internal class ComplexityReportSpec {
 
-    describe("complexity report") {
+    @Nested
+    inner class `complexity report` {
 
-        context("several complexity metrics") {
+        @Nested
+        inner class `several complexity metrics` {
 
-            it("successfully generates a complexity report") {
+            @Test
+            fun `successfully generates a complexity report`() {
                 val report = ComplexityReport()
                 val expectedContent = readResourceContent("/reporting/complexity-report.txt")
                 val detektion = createDetektion()
@@ -28,14 +31,15 @@ internal class ComplexityReportSpec : Spek({
                 assertThat(report.render(detektion)).isEqualTo(expectedContent)
             }
 
-            it("returns null for missing complexity metrics in report") {
+            @Test
+            fun `returns null for missing complexity metrics in report`() {
                 val report = ComplexityReport()
                 val detektion = createDetektion()
                 assertThat(report.render(detektion)).isNull()
             }
         }
     }
-})
+}
 
 private fun createDetektion(): Detektion = DetektResult(mapOf("Key" to listOf(createFinding())))
 

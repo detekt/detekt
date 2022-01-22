@@ -5,41 +5,48 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-class BaselineFacadeSpec : Spek({
+internal class BaselineFacadeSpec {
 
-    describe("a baseline facade") {
+    @Nested
+    inner class `a baseline facade` {
 
-        val baselineFile by memoized { createTempDirectoryForTest("baseline_format").resolve("baseline.xml") }
-        val validBaseline = resourceAsPath("/baseline_feature/valid-baseline.xml")
+        private val baselineFile = createTempDirectoryForTest("baseline_format").resolve("baseline.xml")
+        private val validBaseline = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
-        afterEachTest {
+        @AfterEach
+        fun tearDown() {
             Files.deleteIfExists(baselineFile)
         }
 
-        it("returns a BaselineFilteredResult when the baseline exists") {
+        @Test
+        fun `returns a BaselineFilteredResult when the baseline exists`() {
             val detektion = BaselineFacade().transformResult(validBaseline, TestDetektion())
 
             assertThat(detektion).isInstanceOf(BaselineFilteredResult::class.java)
         }
 
-        it("returns the same detektion when the baseline doesn't exist") {
+        @Test
+        fun `returns the same detektion when the baseline doesn't exist`() {
             val initialDetektion = TestDetektion()
             val detektion = BaselineFacade().transformResult(baselineFile, initialDetektion)
 
             assertThat(detektion).isEqualTo(initialDetektion)
         }
 
-        it("doesn't create a baseline file without findings") {
+        @Test
+        fun `doesn't create a baseline file without findings`() {
             BaselineFacade().createOrUpdate(baselineFile, emptyList())
 
             assertThat(baselineFile).doesNotExist()
         }
 
-        it("creates on top of an existing a baseline file without findings") {
+        @Test
+        fun `creates on top of an existing a baseline file without findings`() {
             Files.copy(validBaseline, baselineFile)
 
             BaselineFacade().createOrUpdate(baselineFile, emptyList())
@@ -58,7 +65,8 @@ class BaselineFacadeSpec : Spek({
             )
         }
 
-        it("creates on top of an existing a baseline file with findings") {
+        @Test
+        fun `creates on top of an existing a baseline file with findings`() {
             Files.copy(validBaseline, baselineFile)
 
             BaselineFacade().createOrUpdate(baselineFile, listOf(createFinding()))
@@ -79,4 +87,4 @@ class BaselineFacadeSpec : Spek({
             )
         }
     }
-})
+}

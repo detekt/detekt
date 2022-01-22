@@ -3,28 +3,32 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ValueOrDefaultCommaSeparatedSpec : Spek({
+internal class ValueOrDefaultCommaSeparatedSpec {
 
-    describe("valueOrDefaultCommaSeparated") {
+    @Nested
+    inner class `valueOrDefaultCommaSeparated` {
 
-        it("returns the default when there is not a config value") {
+        @Test
+        fun `returns the default when there is not a config value`() {
             val config = TestConfig()
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
                 .isEqualTo(listOf("java.utils.*"))
         }
 
-        it("returns the default when there is a config String value") {
+        @Test
+        fun `returns the default when there is a config String value`() {
             val config = TestConfig("imports" to "butterknife.*,java.utils.*,")
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
                 .isEqualTo(listOf("butterknife.*", "java.utils.*"))
         }
 
-        it("returns the config value when there is a config List value") {
+        @Test
+        fun `returns the config value when there is a config List value`() {
             val config = TestConfig("imports" to listOf("butterknife.*"))
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
@@ -32,9 +36,11 @@ class ValueOrDefaultCommaSeparatedSpec : Spek({
         }
     }
 
-    describe("valueOrDefaultCommaSeparated works with CompositeConfig") {
+    @Nested
+    inner class `valueOrDefaultCommaSeparated works with CompositeConfig` {
 
-        it("and empty String") {
+        @Test
+        fun `and empty String`() {
             val config = CompositeConfig(
                 TestConfig(mapOf("imports" to "")),
                 TestConfig(mapOf("imports" to emptyList<String>()))
@@ -43,7 +49,8 @@ class ValueOrDefaultCommaSeparatedSpec : Spek({
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
         }
 
-        it("and empty List") {
+        @Test
+        fun `and empty List`() {
             val config = CompositeConfig(
                 TestConfig(mapOf("imports" to emptyList<String>())),
                 TestConfig(mapOf("imports" to emptyList<String>()))
@@ -52,7 +59,8 @@ class ValueOrDefaultCommaSeparatedSpec : Spek({
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
         }
 
-        it("and String with values") {
+        @Test
+        fun `and String with values`() {
             val config = CompositeConfig(
                 TestConfig(mapOf("imports" to "java.utils.*,butterknife.*")),
                 TestConfig(mapOf("imports" to emptyList<String>()))
@@ -62,7 +70,8 @@ class ValueOrDefaultCommaSeparatedSpec : Spek({
                 .containsExactly("java.utils.*", "butterknife.*")
         }
 
-        it("and List with values") {
+        @Test
+        fun `and List with values`() {
             val config = CompositeConfig(
                 TestConfig(mapOf("imports" to listOf("java.utils.*", "butterknife.*"))),
                 TestConfig(mapOf("imports" to emptyList<String>()))
@@ -72,4 +81,4 @@ class ValueOrDefaultCommaSeparatedSpec : Spek({
                 .containsExactly("java.utils.*", "butterknife.*")
         }
     }
-})
+}

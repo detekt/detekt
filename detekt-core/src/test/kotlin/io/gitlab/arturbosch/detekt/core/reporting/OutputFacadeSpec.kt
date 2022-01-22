@@ -11,12 +11,13 @@ import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
+import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
-internal class OutputFacadeSpec : Spek({
+internal class OutputFacadeSpec {
 
-    test("Running the output facade with multiple reports") {
+    @Test
+    fun `Running the output facade with multiple reports`() {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
         val defaultResult = DetektResult(mapOf("Key" to listOf(createFinding())))
@@ -46,4 +47,4 @@ internal class OutputFacadeSpec : Spek({
             "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath"
         )
     }
-})
+}
