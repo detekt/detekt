@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class IndentationSpec {
+class IndentationSpec {
 
     private lateinit var subject: Indentation
 

@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class ArgumentListWrappingSpec {
+class ArgumentListWrappingSpec {
 
     @Nested
     inner class `ArgumentListWrapping rule` {

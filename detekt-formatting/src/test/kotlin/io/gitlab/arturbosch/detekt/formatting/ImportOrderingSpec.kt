@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * https://github.com/pinterest/ktlint/blob/6bdd345f204e6edcc3dec5e1b139c2d573227dad/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleCustomTest.kt
  * https://github.com/pinterest/ktlint/blob/cdf871b6f015359f9a6f02e15ef1b85a6c442437/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleIdeaTest.kt
  */
-internal class ImportOrderingSpec {
+class ImportOrderingSpec {
 
     @Nested
     inner class `different import ordering layouts` {

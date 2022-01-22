@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class AutoCorrectLevelSpec {
+class AutoCorrectLevelSpec {
 
     @Nested
     inner class `test different autoCorrect levels in configuration` {

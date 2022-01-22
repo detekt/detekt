@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-internal class FormattingRuleSpec {
+class FormattingRuleSpec {
 
     private lateinit var subject: NoLineBreakBeforeAssignment
 

@@ -14,7 +14,7 @@ private const val ALLOW_TRAILING_COMMA_ON_CALL_SITE = "allowTrailingCommaOnCallS
  *
  * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/TrailingCommaRuleTest.kt
  */
-internal class TrailingCommaSpec {
+class TrailingCommaSpec {
 
     @Nested
     inner class `unnecessary comma` {
