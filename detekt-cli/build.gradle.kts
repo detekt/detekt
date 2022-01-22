@@ -19,7 +19,7 @@ dependencies {
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
 
-    testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestUtils)
     testImplementation(libs.bundles.testImplementation)
     testRuntimeOnly(libs.spek.runner)
 

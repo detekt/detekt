@@ -9,5 +9,4 @@ dependencies {
     implementation(projects.detektUtils)
     compileOnly(libs.assertj)
     implementation(projects.detektCore)
-    implementation(projects.detektParser)
 }
