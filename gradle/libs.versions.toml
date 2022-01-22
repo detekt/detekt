@@ -34,7 +34,6 @@ spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spe
 spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
@@ -53,4 +52,4 @@ shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
 
 [bundles]
-testImplementation = ["assertj", "spek-dsl", "junit-params"]
+testImplementation = ["assertj", "spek-dsl"]
