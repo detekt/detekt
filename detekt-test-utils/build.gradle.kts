@@ -8,6 +8,7 @@ dependencies {
     compileOnly(libs.spek.dsl)
     implementation(projects.detektParser)
     implementation(libs.kotlin.scriptUtil)
-    implementation(libs.kotlin.scriptingCompilerEmbeddable)
     implementation(libs.junit.api)
+
+    runtimeOnly(libs.kotlin.scriptingCompilerEmbeddable)
 }
