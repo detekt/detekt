@@ -103,9 +103,13 @@ formatting:
     active: true
 
 naming:
+  ClassNaming:
+    excludes: [ '**/*Spec.kt' ]
+  TopLevelPropertyNaming:
+    constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
     active: true
-    excludes: ['**/build-logic/**/*.kt', '**/*.kts']
+    excludes: [ '**/build-logic/**/*.kt', '**/*.kts' ]
   NoNameShadowing:
     active: true
   NonBooleanPropertyPrefixedWithIs:
@@ -143,6 +147,8 @@ potential-bugs:
     active: true
 
 style:
+  CanBeNonNullable:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:
@@ -164,6 +170,10 @@ style:
       - '@author'
       - '@requiresTypeResolution'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+  ForbiddenImport:
+    active: true
+    imports:
+      - 'org.assertj.core.api.Assertions'
   ForbiddenMethodCall:
     active: true
     methods:
@@ -244,3 +254,6 @@ style:
     active: true
   UseRequireNotNull:
     active: true
+  VarCouldBeVal:
+    active: true
+    ignoreAnnotated: ['Parameter']

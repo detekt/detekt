@@ -43,7 +43,7 @@ class GlobalCoroutineUsage(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "Usage of GlobalScope instance is highly discouraged",
+        "The usage of the `GlobalScope` instance is highly discouraged.",
         Debt.TEN_MINS
     )
 

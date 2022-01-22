@@ -64,7 +64,7 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
     override val issue = Issue(
         id = "SuspendFunWithFlowReturnType",
         severity = Severity.Minor,
-        description = "`suspend` modifier should not be used for functions that return a " +
+        description = "The `suspend` modifier should not be used for functions that return a " +
             "Coroutines Flow type. Flows are cold streams and invoking a function that returns " +
             "one should not produce any side effects.",
         debt = Debt.TEN_MINS

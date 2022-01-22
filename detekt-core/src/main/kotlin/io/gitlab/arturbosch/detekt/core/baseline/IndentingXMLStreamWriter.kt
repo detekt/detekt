@@ -5,9 +5,9 @@ import javax.xml.stream.XMLStreamWriter
 
 @Suppress("TooManyFunctions")
 internal class IndentingXMLStreamWriter(
-    writer: XMLStreamWriter,
+    private val writer: XMLStreamWriter,
     private val indent: String = "  "
-) : DelegatingXMLStreamWriter(writer) {
+) : XMLStreamWriter by writer {
 
     private var currentState = NOTHING
     private val stateStack = Stack<Any>()
@@ -25,7 +25,7 @@ internal class IndentingXMLStreamWriter(
     private fun onEndTag() {
         indentationDepth--
         if (currentState === TAG) {
-            super.writeCharacters("\n")
+            writer.writeCharacters("\n")
             writeIndent()
         }
         currentState = stateStack.pop()
@@ -39,79 +39,79 @@ internal class IndentingXMLStreamWriter(
 
     private fun writeNL() {
         if (indentationDepth > 0) {
-            super.writeCharacters("\n")
+            writer.writeCharacters("\n")
         }
     }
 
     private fun writeIndent() {
         if (indentationDepth > 0) {
-            (0 until indentationDepth).forEach { _ -> super.writeCharacters(indent) }
+            (0 until indentationDepth).forEach { _ -> writer.writeCharacters(indent) }
         }
     }
 
     override fun writeStartDocument() {
-        super.writeStartDocument()
-        super.writeCharacters("\n")
+        writer.writeStartDocument()
+        writer.writeCharacters("\n")
     }
 
     override fun writeStartDocument(version: String) {
-        super.writeStartDocument(version)
-        super.writeCharacters("\n")
+        writer.writeStartDocument(version)
+        writer.writeCharacters("\n")
     }
 
     override fun writeStartDocument(encoding: String, version: String) {
-        super.writeStartDocument(encoding, version)
-        super.writeCharacters("\n")
+        writer.writeStartDocument(encoding, version)
+        writer.writeCharacters("\n")
     }
 
     override fun writeStartElement(localName: String) {
         onStartTag()
-        super.writeStartElement(localName)
+        writer.writeStartElement(localName)
     }
 
     override fun writeStartElement(namespaceURI: String, localName: String) {
         onStartTag()
-        super.writeStartElement(namespaceURI, localName)
+        writer.writeStartElement(namespaceURI, localName)
     }
 
     override fun writeStartElement(prefix: String, localName: String, namespaceURI: String) {
         onStartTag()
-        super.writeStartElement(prefix, localName, namespaceURI)
+        writer.writeStartElement(prefix, localName, namespaceURI)
     }
 
     override fun writeEmptyElement(namespaceURI: String, localName: String) {
         onEmptyTag()
-        super.writeEmptyElement(namespaceURI, localName)
+        writer.writeEmptyElement(namespaceURI, localName)
     }
 
     override fun writeEmptyElement(prefix: String, localName: String, namespaceURI: String) {
         onEmptyTag()
-        super.writeEmptyElement(prefix, localName, namespaceURI)
+        writer.writeEmptyElement(prefix, localName, namespaceURI)
     }
 
     override fun writeEmptyElement(localName: String) {
         onEmptyTag()
-        super.writeEmptyElement(localName)
+        writer.writeEmptyElement(localName)
     }
 
     override fun writeEndElement() {
         onEndTag()
-        super.writeEndElement()
+        writer.writeEndElement()
     }
 
     override fun writeCharacters(text: String) {
         currentState = DATA
-        super.writeCharacters(text)
+        writer.writeCharacters(text)
     }
 
     override fun writeCharacters(text: CharArray, start: Int, len: Int) {
         currentState = DATA
-        super.writeCharacters(text, start, len)
+        writer.writeCharacters(text, start, len)
     }
 
     override fun writeCData(data: String) {
         currentState = DATA
-        super.writeCData(data)
+        writer.writeCData(data)
     }
 
     companion object {

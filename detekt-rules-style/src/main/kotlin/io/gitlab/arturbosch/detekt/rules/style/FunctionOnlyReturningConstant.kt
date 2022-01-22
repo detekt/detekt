@@ -41,8 +41,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "A function that only returns a constant is misleading. " +
-            "Consider declaring a constant instead",
+        "A function that only returns a constant is misleading. Consider declaring a constant instead.",
         Debt.TEN_MINS
     )
 

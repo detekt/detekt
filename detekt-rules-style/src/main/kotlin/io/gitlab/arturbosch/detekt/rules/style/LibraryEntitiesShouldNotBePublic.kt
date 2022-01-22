@@ -32,7 +32,7 @@ class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : R
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Library class should not be public",
+        "Library classes should not be public.",
         Debt.FIVE_MINS
     )
 

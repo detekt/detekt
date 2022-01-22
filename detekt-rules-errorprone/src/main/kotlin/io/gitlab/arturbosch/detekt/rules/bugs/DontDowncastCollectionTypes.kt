@@ -44,7 +44,7 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
     override val issue = Issue(
         "DontDowncastCollectionTypes",
         Severity.Warning,
-        "Down-casting immutable collection types is breaking the collection contract",
+        "Down-casting immutable collection types is breaking the collection contract.",
         Debt.TEN_MINS
     )
 

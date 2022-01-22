@@ -24,7 +24,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Line detected that is longer than the defined maximum line length in the code style.",
+        "Line detected, which is longer than the defined maximum line length in the code style.",
         Debt.FIVE_MINS
     )
 

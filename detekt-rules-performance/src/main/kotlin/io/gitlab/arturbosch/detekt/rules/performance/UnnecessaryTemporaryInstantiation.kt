@@ -30,7 +30,7 @@ class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(co
     override val issue: Issue = Issue(
         "UnnecessaryTemporaryInstantiation",
         Severity.Performance,
-        "Avoid temporary objects when converting primitive types to String.",
+        "Avoid temporary objects when converting primitive types to `String`.",
         Debt.FIVE_MINS
     )
 

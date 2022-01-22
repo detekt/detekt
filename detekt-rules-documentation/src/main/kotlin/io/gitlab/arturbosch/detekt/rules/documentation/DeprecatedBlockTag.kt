@@ -42,8 +42,8 @@ class DeprecatedBlockTag(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "DeprecatedBlockTag",
         Severity.Defect,
-        "Do not use the @deprecated block tag, which is not supported by KDoc. " +
-            "Use the @Deprecated annotation instead.",
+        "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +
+            "Use the `@Deprecated` annotation instead.",
         Debt.FIVE_MINS
     )
 

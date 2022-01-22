@@ -48,7 +48,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "Multiple occurrences of the same string literal within a single file detected.",
+        "Multiple occurrences of the same string literal within a single file detected. " +
+            "Prefer extracting the string literal into a property or constant.",
         Debt.FIVE_MINS
     )
 
@@ -84,8 +85,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
 
     internal inner class StringLiteralVisitor : DetektVisitor() {
 
-        private var literals = HashMap<String, Int>()
-        private var literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
+        private val literals = HashMap<String, Int>()
+        private val literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
         private val pass: Unit = Unit
 
         fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }

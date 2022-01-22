@@ -39,7 +39,7 @@ class UseEmptyCounterpart(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        """Instantiation of an object's "empty" state should use the object's "empty" initializer""",
+        """Instantiation of an object's "empty" state should use the object's "empty" initializer.""",
         Debt.FIVE_MINS
     )
 

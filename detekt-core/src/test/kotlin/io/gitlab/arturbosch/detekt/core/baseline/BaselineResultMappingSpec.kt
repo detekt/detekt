@@ -15,6 +15,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.PrintStream
 import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Path
 
 @OptIn(UnstableApi::class)
@@ -33,6 +34,10 @@ class BaselineResultMappingSpec : Spek({
         }
         val findings by memoized { mapOf("RuleSet" to listOf(finding)) }
 
+        afterEachTest {
+            Files.deleteIfExists(baselineFile)
+        }
+
         it("should not create a new baseline file when no findings occurred") {
             val mapping = resultMapping(
                 baselineFile = baselineFile,
@@ -42,19 +47,6 @@ class BaselineResultMappingSpec : Spek({
             mapping.transformFindings(emptyMap())
 
             assertThat(baselineFile.exists()).isFalse()
-        }
-
-        it("should not update an existing baseline file when no findings occurred") {
-            val existing = Baseline.load(existingBaselineFile)
-            val mapping = resultMapping(
-                baselineFile = existingBaselineFile,
-                createBaseline = true,
-            )
-
-            mapping.transformFindings(emptyMap())
-
-            val changed = Baseline.load(existingBaselineFile)
-            assertThat(existing).isEqualTo(changed)
         }
 
         it("should not update an existing baseline file if option configured as false") {
@@ -106,23 +98,23 @@ class BaselineResultMappingSpec : Spek({
         }
 
         it("should update an existing baseline file if a file is configured") {
-            val existing = Baseline.load(existingBaselineFile)
+            Files.copy(existingBaselineFile, baselineFile)
+            val existing = Baseline.load(baselineFile)
             val mapping = resultMapping(
-
-                baselineFile = existingBaselineFile,
+                baselineFile = baselineFile,
                 createBaseline = true,
             )
 
             mapping.transformFindings(findings)
 
-            val changed = Baseline.load(existingBaselineFile)
+            val changed = Baseline.load(baselineFile)
             assertThat(existing).isNotEqualTo(changed)
         }
     }
 })
 
 @OptIn(UnstableApi::class)
-internal fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
+private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
     BaselineResultMapping().apply {
         init(object : SetupContext {
             override val configUris: Collection<URI> = mockk()

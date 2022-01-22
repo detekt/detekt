@@ -32,6 +32,9 @@ entries:
     - title: Suppressing Issues via Baseline File
       url: /baseline.html
       output: web
+    - title: Suppressing Issues via Suppressors
+      url: /suppressors.html
+      output: web
     - title: Extending detekt
       url: /extensions.html
       output: web

@@ -24,7 +24,7 @@ object Constants {
 
 Some rules like `TooManyFunctions` can be suppressed by using a file level annotation `@file:Suppress("TooManyFunctions")`.
 
-## Formatting rules suppression
+**Formatting rules suppression**
 
 Please note that rules inside the [`formatting`](./formatting.html) ruleset can only be suppressed at **the file level**.
 

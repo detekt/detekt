@@ -40,7 +40,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Violation of the package declaration style.",
+        "Violation of the package declaration style detected.",
         Debt.FIVE_MINS
     )
 
@@ -85,7 +85,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
         }
     }
 
-    private fun checkLinebreakAfterElement(element: PsiElement?, message: String) {
+    private fun checkLinebreakAfterElement(element: PsiElement, message: String) {
         if (element is PsiWhiteSpace || element is KtElement) {
             val count = element.text.count { it == '\n' }
             if (count != 2) {

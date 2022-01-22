@@ -17,7 +17,7 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Checks which lines end with a whitespace.",
+        "Whitespaces at the end of a line are unnecessary and can be removed.",
         Debt.FIVE_MINS
     )
 

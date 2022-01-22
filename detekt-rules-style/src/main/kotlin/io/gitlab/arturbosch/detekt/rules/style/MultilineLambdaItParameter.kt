@@ -69,45 +69,41 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Multiline lambdas should not use `it` as a parameter name",
+        "Multiline lambdas should not use `it` as a parameter name.",
         Debt.FIVE_MINS
     )
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         if (bindingContext == BindingContext.EMPTY) return
-        // If the lambda expression has <= 1 statements, skip check.
-        if (lambdaExpression.bodyExpression?.statements?.size ?: 0 <= 1) return
+        val size = lambdaExpression.bodyExpression?.statements?.size
+        if (size == null || size <= 1) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
-        when {
-            // Explicit `it`
-            IT_LITERAL in parameterNames ->
+        // Explicit `it`
+        if (IT_LITERAL in parameterNames) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(lambdaExpression),
+                    "The parameter name in a multiline lambda should not be an explicit `it`. " +
+                        "Consider giving your parameter a readable and descriptive name."
+                )
+            )
+        } else if (parameterNames.isEmpty()) { // Implicit `it`
+            val implicitParameter = lambdaExpression.implicitParameter(bindingContext)
+            if (implicitParameter != null &&
+                lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext)
+            ) {
                 report(
                     CodeSmell(
                         issue,
                         Entity.from(lambdaExpression),
-                        "The parameter name in a multiline lambda should not be an explicit `it`. " +
+                        "The implicit `it` should not be used in a multiline lambda. " +
                             "Consider giving your parameter a readable and descriptive name."
                     )
                 )
-            // Implicit `it`
-            parameterNames.isEmpty() -> {
-                val implicitParameter = lambdaExpression.implicitParameter(bindingContext)
-                if (implicitParameter != null &&
-                    lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext)
-                ) {
-                    report(
-                        CodeSmell(
-                            issue,
-                            Entity.from(lambdaExpression),
-                            "The implicit `it` should not be used in a multiline lambda. " +
-                                "Consider giving your parameter a readable and descriptive name."
-                        )
-                    )
-                }
             }
-            else -> { }
         }
     }
 }

@@ -56,7 +56,7 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
 
     internal inner class OverloadedMethodVisitor : DetektVisitor() {
 
-        private var methods = HashMap<String, Int>()
+        private val methods = HashMap<String, Int>()
 
         fun reportIfThresholdExceeded(entity: Entity) {
             for ((name, value) in methods.filterValues { it >= threshold }) {

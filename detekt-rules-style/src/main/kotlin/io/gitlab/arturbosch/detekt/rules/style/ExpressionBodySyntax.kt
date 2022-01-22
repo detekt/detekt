@@ -43,8 +43,7 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Functions with exact one statement, the return statement," +
-            " can be rewritten with ExpressionBodySyntax.",
+        "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax.",
         Debt.FIVE_MINS
     )
 

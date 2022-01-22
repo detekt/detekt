@@ -47,7 +47,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "The `apply` usage is unnecessary",
+        "The `apply` usage is unnecessary and can be removed.",
         Debt.FIVE_MINS
     )
 

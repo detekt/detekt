@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
- * This rule will report any class, function or constructor with KDoc that does not match declaration signature.
+ * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
  * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
@@ -66,7 +66,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "KDoc should match actual function or class signature",
+        "KDoc comments should match the actual function or class signature",
         Debt.TEN_MINS
     )
 
@@ -75,6 +75,9 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("if the order of declarations should be preserved")
     private val matchDeclarationsOrder: Boolean by config(true)
+
+    @Configuration("if we allow constructor parameters to be marked as @param instead of @property")
+    private val allowParamOnConstructorProperties: Boolean by config(false)
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
@@ -119,7 +122,15 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
         return valueParameters.mapNotNull {
             it.name?.let { name ->
-                val type = if (it.isPropertyParameter()) DeclarationType.PROPERTY else DeclarationType.PARAM
+                val type = if (it.isPropertyParameter()) {
+                    if (allowParamOnConstructorProperties) {
+                        DeclarationType.ANY
+                    } else {
+                        DeclarationType.PROPERTY
+                    }
+                } else {
+                    DeclarationType.PARAM
+                }
                 Declaration(name, type)
             }
         }
@@ -166,11 +177,21 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
-        return if (matchDeclarationsOrder) {
-            doc == element
-        } else {
-            doc.sortedBy { it.name } == element.sortedBy { it.name }
+        if (doc.size != element.size) {
+            return false
         }
+
+        val zippedElements = if (matchDeclarationsOrder) {
+            doc.zip(element)
+        } else {
+            doc.sortedBy { it.name }.zip(element.sortedBy { it.name })
+        }
+
+        return zippedElements.all { (doc, element) -> declarationMatches(doc, element) }
+    }
+
+    private fun declarationMatches(doc: Declaration, element: Declaration): Boolean {
+        return element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
     }
 
     private fun reportCodeSmell(element: KtNamedDeclaration) {
@@ -193,6 +214,6 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     )
 
     enum class DeclarationType {
-        PARAM, PROPERTY
+        PARAM, PROPERTY, ANY
     }
 }

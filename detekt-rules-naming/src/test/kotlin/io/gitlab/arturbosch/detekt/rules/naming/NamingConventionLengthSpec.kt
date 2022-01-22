@@ -85,10 +85,10 @@ class NamingConventionLengthSpec : Spek({
             assertThat(subject.findings).isEmpty()
         }
 
-        it("should not report a function name that begins with a backtick, capitals, and spaces") {
+        it("should report a function name that begins with a backtick, capitals, and spaces") {
             val code = "fun `Hi bye`() = 3"
             subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            assertThat(subject.findings).hasSize(1)
         }
     }
 })
