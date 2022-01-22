@@ -4,14 +4,16 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ArgumentListWrappingSpec : Spek({
+internal class ArgumentListWrappingSpec {
 
-    describe("ArgumentListWrapping rule") {
+    @Nested
+    inner class `ArgumentListWrapping rule` {
 
-        it("reports wrong argument wrapping") {
+        @Test
+        fun `reports wrong argument wrapping`() {
             val code = """
                 val x = f(
                     1,
@@ -21,7 +23,8 @@ class ArgumentListWrappingSpec : Spek({
             assertThat(ArgumentListWrapping(Config.empty).lint(code)).hasSize(1)
         }
 
-        it("does not report correct argument list wrapping") {
+        @Test
+        fun `does not report correct argument list wrapping`() {
             val code = """
                 val x = f(
                     1,
@@ -32,7 +35,8 @@ class ArgumentListWrappingSpec : Spek({
             assertThat(ArgumentListWrapping(Config.empty).lint(code)).isEmpty()
         }
 
-        it("does not report when overriding an indentation level config of 1") {
+        @Test
+        fun `does not report when overriding an indentation level config of 1`() {
             val code = """
                 val x = f(
                  1,
@@ -44,7 +48,8 @@ class ArgumentListWrappingSpec : Spek({
             assertThat(ArgumentListWrapping(config).lint(code)).isEmpty()
         }
 
-        it("reports when max line length is exceeded") {
+        @Test
+        fun `reports when max line length is exceeded`() {
             val code = """
                 val x = f(1111, 2222, 3333)
             """.trimIndent()
@@ -52,4 +57,4 @@ class ArgumentListWrappingSpec : Spek({
             assertThat(ArgumentListWrapping(config).lint(code)).hasSize(4)
         }
     }
-})
+}

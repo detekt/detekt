@@ -3,31 +3,38 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class MaximumLineLengthSpec : Spek({
+internal class MaximumLineLengthSpec {
 
-    val subject by memoized {
-        val config = TestConfig(MAX_LINE_LENGTH to "30")
-        MaximumLineLength(config)
+    private lateinit var subject: MaximumLineLength
+
+    @BeforeEach
+    fun createSubject() {
+        subject = MaximumLineLength(TestConfig(MAX_LINE_LENGTH to "30"))
     }
 
-    describe("MaximumLineLength rule") {
+    @Nested
+    inner class `MaximumLineLength rule` {
 
-        describe("a single function") {
+        @Nested
+        inner class `a single function` {
 
             val code = """
                 package home.test
                 fun f() { /* 123456789012345678901234567890 */ }
             """.trimIndent()
 
-            it("reports line which exceeds the threshold") {
+            @Test
+            fun `reports line which exceeds the threshold`() {
                 assertThat(subject.lint(code)).hasSize(1)
             }
 
-            it("reports issues with the filename and package as signature") {
+            @Test
+            fun `reports issues with the filename and package as signature`() {
                 val finding = subject.lint(
                     code,
                     Paths.get("home", "test", "Test.kt").toString()
@@ -36,18 +43,21 @@ class MaximumLineLengthSpec : Spek({
                 assertThat(finding.entity.signature).isEqualTo("home.test.Test.kt:2")
             }
 
-            it("does not report line which does not exceed the threshold") {
+            @Test
+            fun `does not report line which does not exceed the threshold`() {
                 val config = TestConfig(MAX_LINE_LENGTH to code.length)
                 assertThat(MaximumLineLength(config).lint(code)).isEmpty()
             }
         }
 
-        it("does not report line which does not exceed the threshold") {
+        @Test
+        fun `does not report line which does not exceed the threshold`() {
             val code = "val a = 1"
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports correct line numbers") {
+        @Test
+        fun `reports correct line numbers`() {
             val findings = subject.lint(longLines)
 
             // Note that KtLint's MaximumLineLength rule, in contrast to detekt's MaxLineLength rule, does not report
@@ -58,7 +68,8 @@ class MaximumLineLengthSpec : Spek({
             assertThat(findings[1].entity.location.source.line).isEqualTo(14)
         }
 
-        it("does not report back ticked line which exceeds the threshold") {
+        @Test
+        fun `does not report back ticked line which exceeds the threshold`() {
             val code = """
                 package home.test
                 fun `this is a test method that has more than 30 characters inside the back ticks`() {
@@ -73,6 +84,6 @@ class MaximumLineLengthSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}
 
 const val MAX_LINE_LENGTH = "maxLineLength"

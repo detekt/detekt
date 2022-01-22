@@ -6,16 +6,19 @@ import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class AutoCorrectLevelSpec : Spek({
+internal class AutoCorrectLevelSpec {
 
-    describe("test different autoCorrect levels in configuration") {
+    @Nested
+    inner class `test different autoCorrect levels in configuration` {
 
-        describe("autoCorrect: true on all levels") {
+        @Nested
+        inner class `autoCorrect_ true on all levels` {
 
-            it("should reformat the test file") {
+            @Test
+            fun `should reformat the test file`() {
                 val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
 
                 val (file, findings) = runRule(config)
@@ -25,9 +28,11 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        describe("autoCorrect: false on ruleSet level") {
+        @Nested
+        inner class `autoCorrect_ false on ruleSet level` {
 
-            it("should not reformat the test file") {
+            @Test
+            fun `should not reformat the test file`() {
                 val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
 
                 val (file, findings) = runRule(config)
@@ -37,9 +42,11 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        describe("autoCorrect: false on rule level") {
+        @Nested
+        inner class `autoCorrect_ false on rule level` {
 
-            it("should not reformat the test file") {
+            @Test
+            fun `should not reformat the test file`() {
                 val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
 
                 val (file, findings) = runRule(config)
@@ -49,9 +56,11 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        describe("autoCorrect: true but rule active false") {
+        @Nested
+        inner class `autoCorrect_ true but rule active false` {
 
-            it("should not reformat the test file") {
+            @Test
+            fun `should not reformat the test file`() {
                 val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
 
                 val (file, findings) = runRule(config)
@@ -61,7 +70,7 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
