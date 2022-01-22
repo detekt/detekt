@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 sealed interface DefaultValue {
     fun isNonEmptyList(): Boolean = false
     fun getAsList(): List<String> = error("default value is not a list")
-    fun getAsPlainString(): String
+    fun getAsPlainString(): String = toString()
     fun getQuotedIfNecessary(): String = getAsPlainString()
 
     companion object {
