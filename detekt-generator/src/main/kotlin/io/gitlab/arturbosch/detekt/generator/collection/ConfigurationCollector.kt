@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.C
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getAndroidDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.toDefaultValueIfLiteral
-import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -58,7 +57,7 @@ class ConfigurationCollector {
 
     private fun KtProperty.getConstantValue(): DefaultValue? {
         if (hasListDeclaration()) {
-            return of(getListDeclaration().valueArguments.map { it.text.withoutQuotes() })
+            return DefaultValue.of(getListDeclaration().valueArguments.map { it.text.withoutQuotes() })
         }
 
         return findDescendantOfType<KtConstantExpression>()?.toDefaultValueIfLiteral()
@@ -131,7 +130,7 @@ class ConfigurationCollector {
                 val listValues = listDeclarationForDefault.valueArguments.map {
                     (constantsByName[it.text]?.getAsPlainString() ?: it.text.withoutQuotes())
                 }
-                return of(listValues)
+                return DefaultValue.of(listValues)
             }
 
             return toDefaultValueIfLiteral()
