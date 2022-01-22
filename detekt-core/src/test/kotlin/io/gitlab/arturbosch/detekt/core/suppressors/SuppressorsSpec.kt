@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class SuppressorsSpec {
+class SuppressorsSpec {
 
     val noIgnorableCodeSmell = CodeSmell(
         issue = ARule().issue,

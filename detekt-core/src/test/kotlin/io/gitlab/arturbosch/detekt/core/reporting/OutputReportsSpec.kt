@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 import java.util.function.Predicate
 
-internal class OutputReportsSpec {
+class OutputReportsSpec {
 
     @Nested
     inner class `reports` {
@@ -120,7 +120,7 @@ internal class OutputReportsSpec {
     }
 }
 
-internal class TestOutputReport : OutputReport() {
+class TestOutputReport : OutputReport() {
     override val ending: String = "yml"
     override fun render(detektion: Detektion): String? {
         throw UnsupportedOperationException("not implemented")

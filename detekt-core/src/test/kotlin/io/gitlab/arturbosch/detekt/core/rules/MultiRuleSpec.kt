@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class MultiRuleSpec {
+class MultiRuleSpec {
 
     @Nested
     inner class `a multi rule` {

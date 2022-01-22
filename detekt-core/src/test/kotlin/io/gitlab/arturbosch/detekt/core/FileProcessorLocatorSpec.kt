@@ -13,7 +13,7 @@ import java.lang.reflect.Modifier
 /**
  * This tests the existence of all metric processors in the META-INF config file in the core package
  */
-internal class FileProcessorLocatorSpec {
+class FileProcessorLocatorSpec {
 
     @Nested
     inner class `file processor locator` {

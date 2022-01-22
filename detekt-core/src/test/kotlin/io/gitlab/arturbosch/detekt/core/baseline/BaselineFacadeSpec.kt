@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-internal class BaselineFacadeSpec {
+class BaselineFacadeSpec {
 
     @Nested
     inner class `a baseline facade` {

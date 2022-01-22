@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-internal class DefaultConfigProviderSpec {
+class DefaultConfigProviderSpec {
     @Nested
     inner class `defaultConfigProvider without plugins` {
         val spec = createNullLoggingSpec {}

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-internal class BaselineFormatSpec {
+class BaselineFormatSpec {
 
     @Nested
     inner class `baseline format` {

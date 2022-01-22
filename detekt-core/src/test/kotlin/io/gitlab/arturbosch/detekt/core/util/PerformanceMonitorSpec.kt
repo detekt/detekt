@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.tooling.DefaultDetektProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class PerformanceMonitorSpec {
+class PerformanceMonitorSpec {
 
     @Test
     fun `all phases have a measurement`() {

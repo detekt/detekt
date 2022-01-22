@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class FunctionSuppressorSpec {
+class FunctionSuppressorSpec {
 
     @Nested
     inner class `FunctionSuppressorFactory` {

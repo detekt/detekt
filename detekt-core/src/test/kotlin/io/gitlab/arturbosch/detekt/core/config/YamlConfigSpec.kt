@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.yaml.snakeyaml.parser.ParserException
 import java.nio.file.Paths
 
-internal class YamlConfigSpec {
+class YamlConfigSpec {
 
     @Nested
     inner class `load yaml config` {

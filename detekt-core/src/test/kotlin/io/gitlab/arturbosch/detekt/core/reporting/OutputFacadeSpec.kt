@@ -14,7 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
-internal class OutputFacadeSpec {
+class OutputFacadeSpec {
 
     @Test
     fun `Running the output facade with multiple reports`() {

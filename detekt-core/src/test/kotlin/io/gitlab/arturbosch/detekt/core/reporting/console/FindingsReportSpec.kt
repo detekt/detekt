@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class FindingsReportSpec {
+class FindingsReportSpec {
 
     private val subject = createFindingsReport()
 

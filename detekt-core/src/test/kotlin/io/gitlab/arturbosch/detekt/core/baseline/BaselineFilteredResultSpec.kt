@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class BaselineFilteredResultSpec {
+class BaselineFilteredResultSpec {
 
     @Nested
     inner class `baseline based result transformation` {

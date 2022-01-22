@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.konan.file.File
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class EnvironmentFacadeSpec {
+class EnvironmentFacadeSpec {
 
     @Nested
     inner class `classpath entries should be separated by platform-specific separator` {

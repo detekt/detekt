@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class LoadingSpec {
+class LoadingSpec {
 
     @Test
     fun `extensions can be excluded via ExtensionSpec`() {

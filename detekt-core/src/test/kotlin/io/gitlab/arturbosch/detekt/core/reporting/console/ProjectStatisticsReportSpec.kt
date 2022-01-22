@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class ProjectStatisticsReportSpec {
+class ProjectStatisticsReportSpec {
 
     private val subject = ProjectStatisticsReport()
 

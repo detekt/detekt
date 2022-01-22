@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
-internal class RuleSetLocatorSpec {
+class RuleSetLocatorSpec {
 
     @Nested
     inner class `locating RuleSetProvider's` {

@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class TopLevelAutoCorrectSpec {
+class TopLevelAutoCorrectSpec {
 
     @Nested
     inner class `autoCorrect_ false on top level` {

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CompletionException
 
-internal class AnalyzerSpec {
+class AnalyzerSpec {
 
     @Nested
     inner class `exceptions during analyze()` {

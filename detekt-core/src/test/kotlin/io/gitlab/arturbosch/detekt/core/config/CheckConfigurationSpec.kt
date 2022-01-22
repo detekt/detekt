@@ -16,7 +16,7 @@ import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class SupportConfigValidationSpec {
+class SupportConfigValidationSpec {
 
     @Nested
     inner class `support config validation` {
@@ -96,14 +96,14 @@ internal class SupportConfigValidationSpec {
     }
 }
 
-internal class SampleRuleProvider : RuleSetProvider {
+class SampleRuleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample-rule-set"
 
     override fun instance(config: Config) = RuleSet(ruleSetId, emptyList())
 }
 
-internal class SampleConfigValidator : ConfigValidator {
+class SampleConfigValidator : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
         val result = mutableListOf<Notification>()

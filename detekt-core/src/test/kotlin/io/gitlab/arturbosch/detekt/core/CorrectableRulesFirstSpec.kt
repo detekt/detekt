@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class CorrectableRulesFirstSpec {
+class CorrectableRulesFirstSpec {
 
     @Nested
     inner class `correctable rules are run first` {

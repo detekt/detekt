@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
  *          detekt-core/src/test/resources/sample-rule-set.jar'
  *  4. Now 'gradle build' should be green again.
  */
-internal class CustomRuleSetProviderSpec {
+class CustomRuleSetProviderSpec {
 
     @Nested
     inner class `custom rule sets should be loadable through jars` {

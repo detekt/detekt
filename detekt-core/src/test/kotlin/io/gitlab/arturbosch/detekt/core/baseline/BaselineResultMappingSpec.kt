@@ -21,7 +21,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 @OptIn(UnstableApi::class)
-internal class BaselineResultMappingSpec {
+class BaselineResultMappingSpec {
 
     @Nested
     inner class `a baseline result mapping` {

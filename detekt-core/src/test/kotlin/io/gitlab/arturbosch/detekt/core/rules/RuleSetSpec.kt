@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class RuleSetSpec {
+class RuleSetSpec {
 
     @Nested
     inner class `rule sets` {

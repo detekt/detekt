@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-internal class KtTreeCompilerSpec {
+class KtTreeCompilerSpec {
 
     @Nested
     inner class `tree compiler functionality` {

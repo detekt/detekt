@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class DetektMessageCollectorSpec {
+class DetektMessageCollectorSpec {
 
-    lateinit var debugPrinter: (() -> String) -> Unit
-    lateinit var warningPrinter: ((String) -> Unit)
-    lateinit var subject: DetektMessageCollector
+    private lateinit var debugPrinter: (() -> String) -> Unit
+    private lateinit var warningPrinter: ((String) -> Unit)
+    private lateinit var subject: DetektMessageCollector
 
     @BeforeEach
     fun setupMocksAndSubject() {

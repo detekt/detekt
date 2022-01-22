@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class CompositeConfigSpec {
+class CompositeConfigSpec {
 
     @Nested
     inner class `both configs should be considered` {
