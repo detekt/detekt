@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ChainWrappingSpec : Spek({
+class ChainWrappingSpec {
 
-    describe("tests integration of formatting") {
+    @Nested
+    inner class `tests integration of formatting` {
 
-        it("should work like KtLint") {
+        @Test
+        fun `should work like KtLint`() {
             val subject = loadFile("configTests/chain-wrapping-before.kt")
             val expected = loadFileContent("configTests/chain-wrapping-after.kt")
 
@@ -20,4 +22,4 @@ class ChainWrappingSpec : Spek({
             assertThat(subject.text).isEqualTo(expected)
         }
     }
-})
+}
