@@ -2,13 +2,15 @@ package io.github.detekt.metrics.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class SLOCVisitorSpec : Spek({
-    describe("SLOC Visitor") {
+class SLOCVisitorSpec {
+    @Nested
+    inner class `SLOC Visitor` {
 
-        it("defaultClass") {
+        @Test
+        fun `defaultClass`() {
             val file = compileContentForTest(default)
             val loc = with(file) {
                 accept(SLOCVisitor())
@@ -17,4 +19,4 @@ class SLOCVisitorSpec : Spek({
             assertThat(loc).isEqualTo(3)
         }
     }
-})
+}

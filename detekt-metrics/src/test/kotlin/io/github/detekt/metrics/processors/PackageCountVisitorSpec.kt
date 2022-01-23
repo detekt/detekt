@@ -3,13 +3,15 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class PackageCountVisitorSpec : Spek({
-    describe("Package Count Visitor") {
+class PackageCountVisitorSpec {
+    @Nested
+    inner class `Package Count Visitor` {
 
-        it("twoClassesInSeparatePackage") {
+        @Test
+        fun `twoClassesInSeparatePackage`() {
             val files = arrayOf(
                 compileContentForTest(default),
                 compileContentForTest(emptyEnum)
@@ -21,7 +23,7 @@ class PackageCountVisitorSpec : Spek({
             assertThat(count).isEqualTo(2)
         }
     }
-})
+}
 
 private fun getData(file: KtFile): String {
     return with(file) {

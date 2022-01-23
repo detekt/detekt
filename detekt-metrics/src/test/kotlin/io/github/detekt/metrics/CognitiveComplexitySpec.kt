@@ -2,14 +2,16 @@ package io.github.detekt.metrics
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CognitiveComplexitySpec : Spek({
+class CognitiveComplexitySpec {
 
-    describe("cognitive complexity") {
+    @Nested
+    inner class `cognitive complexity` {
 
-        it("sums seven for sumOfPrimes example") {
+        @Test
+        fun `sums seven for sumOfPrimes example`() {
             val code = compileContentForTest(
                 """
                 fun sumOfPrimes(max: Int): Int {
@@ -31,7 +33,8 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(7)
         }
 
-        it("sums one for getWords example for a single when expression") {
+        @Test
+        fun `sums one for getWords example for a single when expression`() {
             val code = compileContentForTest(
                 """
                  fun getWords(number: Int): String = when (number) {
@@ -46,9 +49,11 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
         }
 
-        describe("recursion") {
+        @Nested
+        inner class `recursion` {
 
-            it("adds one for recursion inside class") {
+            @Test
+            fun `adds one for recursion inside class`() {
                 val code = compileContentForTest(
                     """
                     class A {
@@ -61,7 +66,8 @@ class CognitiveComplexitySpec : Spek({
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
             }
 
-            it("adds one for top level recursion") {
+            @Test
+            fun `adds one for top level recursion`() {
                 val code = compileContentForTest(
                     """
                     fun factorial(n: Int): Int =
@@ -72,7 +78,8 @@ class CognitiveComplexitySpec : Spek({
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
             }
 
-            it("does not add as it is only the same name") {
+            @Test
+            fun `does not add as it is only the same name`() {
                 val code = compileContentForTest(
                     """
                     object O { fun factorial(i: Int): Int = i - 1 }
@@ -85,7 +92,8 @@ class CognitiveComplexitySpec : Spek({
             }
         }
 
-        it("ignores shorthand operators") {
+        @Test
+        fun `ignores shorthand operators`() {
             val code = compileContentForTest(
                 """
                 fun parse(args: Array<String>): Nothing = TODO()
@@ -98,7 +106,8 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
         }
 
-        it("adds one per catch clause") {
+        @Test
+        fun `adds one per catch clause`() {
             val code = compileContentForTest(
                 """
                 fun main() {
@@ -113,7 +122,8 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
         }
 
-        it("adds extra complexity for nesting") {
+        @Test
+        fun `adds extra complexity for nesting`() {
             val code = compileContentForTest(
                 """
                 fun main() {
@@ -135,7 +145,8 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(9)
         }
 
-        it("adds nesting for lambdas but not complexity") {
+        @Test
+        fun `adds nesting for lambdas but not complexity`() {
             val code = compileContentForTest(
                 """
                 fun main() { run { if (true) {} } }
@@ -145,7 +156,8 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
         }
 
-        it("adds nesting for nested functions but not complexity") {
+        @Test
+        fun `adds nesting for nested functions but not complexity`() {
             val code = compileContentForTest(
                 """
                 fun main() { fun run() { if (true) {} } }
@@ -155,54 +167,61 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
         }
 
-        describe("binary expressions") {
+        @Nested
+        inner class `binary expressions` {
 
-            it("does not increment on just a condition") {
+            @Test
+            fun `does not increment on just a condition`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond: Boolean) = !cond
+                    fun test(cond_ Boolean) = !cond
                 """
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
             }
 
-            describe("increments for every non-like operator") {
+            @Nested
+            inner class `increments for every non-like operator` {
 
-                it("adds one for just a &&") {
+                @Test
+                fun `adds one for just a &&`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) = !cond && !cond
+                        fun test(cond_ Boolean) = !cond && !cond
                     """
                     )
 
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
                 }
 
-                it("adds only one for repeated &&") {
+                @Test
+                fun `adds only one for repeated &&`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) = !cond && !cond && !cond
+                        fun test(cond_ Boolean) = !cond && !cond && !cond
                     """
                     )
 
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
                 }
 
-                it("adds one per logical alternate operator") {
+                @Test
+                fun `adds one per logical alternate operator`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) = !cond && !cond || cond
+                        fun test(cond_ Boolean) = !cond && !cond || cond
                     """
                     )
 
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
                 }
 
-                it("adds one per logical alternate operator with like operators in between") {
+                @Test
+                fun `adds one per logical alternate operator with like operators in between`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) {
+                        fun test(cond_ Boolean) {
                             if (                    // +1
                                 !cond 
                                 && !cond && !cond   // +1
@@ -216,10 +235,11 @@ class CognitiveComplexitySpec : Spek({
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(4)
                 }
 
-                it("adds one for negated but similar operators") {
+                @Test
+                fun `adds one for negated but similar operators`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) {
+                        fun test(cond_ Boolean) {
                             if (                    // +1
                                 !cond 
                                 && !(cond && cond)  // +2
@@ -231,10 +251,11 @@ class CognitiveComplexitySpec : Spek({
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
                 }
 
-                it("adds only one for a negated chain of similar operators") {
+                @Test
+                fun `adds only one for a negated chain of similar operators`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) {
+                        fun test(cond_ Boolean) {
                             if (                    // +1
                                 !cond 
                                 && !(cond && cond && cond)  // +2
@@ -246,10 +267,11 @@ class CognitiveComplexitySpec : Spek({
                     assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
                 }
 
-                it("adds one for every negated similar operator chain") {
+                @Test
+                fun `adds one for every negated similar operator chain`() {
                     val code = compileContentForTest(
                         """
-                        fun test(cond: Boolean) {
+                        fun test(cond_ Boolean) {
                             if (                            // +1
                                 !cond 
                                 && !(cond && cond && cond)  // +2
@@ -264,4 +286,4 @@ class CognitiveComplexitySpec : Spek({
             }
         }
     }
-})
+}
