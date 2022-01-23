@@ -4,14 +4,14 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import kotlinx.html.div
 import kotlinx.html.stream.createHTML
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class HtmlUtilsSpec : Spek({
+class HtmlUtilsSpec {
 
-    describe("HTML snippet code") {
-        val code by memoized {
-            """
+    @Nested
+    inner class `HTML snippet code` {
+        private val code = """
             package cases
             // reports 1 - line with just one space
 
@@ -28,10 +28,10 @@ class HtmlUtilsSpec : Spek({
                 // reports 1
                 }
             }
-            """.trimIndent().splitToSequence('\n')
-        }
+        """.trimIndent().splitToSequence('\n')
 
-        it("all line") {
+        @Test
+        fun `all line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 1), 34)
             }
@@ -53,7 +53,8 @@ class HtmlUtilsSpec : Spek({
             )
         }
 
-        it("part of line") {
+        @Test
+        fun `part of line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 26)
             }
@@ -75,7 +76,8 @@ class HtmlUtilsSpec : Spek({
             )
         }
 
-        it("more than one line") {
+        @Test
+        fun `more than one line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 66)
             }
@@ -97,7 +99,8 @@ class HtmlUtilsSpec : Spek({
             )
         }
 
-        it("first line") {
+        @Test
+        fun `first line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(1, 1), 1)
             }
@@ -105,7 +108,8 @@ class HtmlUtilsSpec : Spek({
             assertThat(snippet).contains((1..4).map { "  $it " })
         }
 
-        it("second line") {
+        @Test
+        fun `second line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(2, 1), 1)
             }
@@ -113,7 +117,8 @@ class HtmlUtilsSpec : Spek({
             assertThat(snippet).contains((1..5).map { "  $it " })
         }
 
-        it("penultimate line") {
+        @Test
+        fun `penultimate line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(15, 1), 1)
             }
@@ -121,7 +126,8 @@ class HtmlUtilsSpec : Spek({
             assertThat(snippet).contains((12..16).map { "  $it " })
         }
 
-        it("last line") {
+        @Test
+        fun `last line`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(16, 1), 1)
             }
@@ -129,7 +135,8 @@ class HtmlUtilsSpec : Spek({
             assertThat(snippet).contains((13..16).map { "  $it " })
         }
 
-        it("when we provide an invalid source location the exception div is shown") {
+        @Test
+        fun `when we provide an invalid source location the exception div is shown`() {
             val snippet = createHTML().div() {
                 snippetCode("ruleName", code.asSequence(), SourceLocation(7, 100), 1)
             }
@@ -137,4 +144,4 @@ class HtmlUtilsSpec : Spek({
             assertThat(snippet).contains("""<div class="exception">""")
         }
     }
-})
+}

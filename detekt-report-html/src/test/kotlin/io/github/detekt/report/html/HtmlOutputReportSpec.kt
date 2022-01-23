@@ -21,18 +21,20 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-class HtmlOutputReportSpec : Spek({
+class HtmlOutputReportSpec {
 
-    describe("HTML output report") {
+    @Nested
+    inner class `HTML output report` {
 
-        val htmlReport by memoized { HtmlOutputReport() }
+        private val htmlReport = HtmlOutputReport()
 
-        it("renders the HTML headers correctly") {
+        @Test
+        fun `renders the HTML headers correctly`() {
             val result = htmlReport.render(TestDetektion())
 
             assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
@@ -43,7 +45,8 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<h2>Findings</h2>")
         }
 
-        it("renders the 'generated with' text correctly") {
+        @Test
+        fun `renders the 'generated with' text correctly`() {
             val version = whichDetekt()
             val header =
                 """generated with <a href="https://detekt.github.io/">detekt version $version</a> on """
@@ -54,13 +57,15 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).doesNotContain("@@@date@@@")
         }
 
-        it("contains the total number of findings") {
+        @Test
+        fun `contains the total number of findings`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("Total: 3")
         }
 
-        it("contains no findings") {
+        @Test
+        fun `contains no findings`() {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     "EmptyRuleset" to emptyList()
@@ -70,7 +75,8 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("Total: 0")
         }
 
-        it("renders the right file locations") {
+        @Test
+        fun `renders the right file locations`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
@@ -78,7 +84,8 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
-        it("renders the right file locations for relative paths") {
+        @Test
+        fun `renders the right file locations for relative paths`() {
             val result = htmlReport.render(createTestDetektionFromRelativePath())
 
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
@@ -86,14 +93,16 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
-        it("renders the right number of issues per rule") {
+        @Test
+        fun `renders the right number of issues per rule`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"rule\">id_a: 2 </span>")
             assertThat(result).contains("<span class=\"rule\">id_b: 1 </span>")
         }
 
-        it("renders the right violation messages for the rules") {
+        @Test
+        fun `renders the right violation messages for the rules`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"message\">Message finding 1</span>")
@@ -101,14 +110,16 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).doesNotContain("<span class=\"message\"></span>")
         }
 
-        it("renders the right violation description for the rules") {
+        @Test
+        fun `renders the right violation description for the rules`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"description\">Description id_a</span>")
             assertThat(result).contains("<span class=\"description\">Description id_b</span>")
         }
 
-        it("renders a metric report correctly") {
+        @Test
+        fun `renders a metric report correctly`() {
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
                     ProjectMetric("M1", 10_000),
@@ -120,7 +131,8 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<li>2 M2</li>")
         }
 
-        it("renders the complexity report correctly") {
+        @Test
+        fun `renders the complexity report correctly`() {
             val detektion = TestDetektion()
             detektion.addData(complexityKey, 10)
             detektion.addData(CognitiveComplexity.KEY, 10)
@@ -134,12 +146,14 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<li>10 logical lines of code (lloc)</li>")
         }
 
-        it("renders a blank complexity report correctly") {
+        @Test
+        fun `renders a blank complexity report correctly`() {
             val result = htmlReport.render(createTestDetektionWithMultipleSmells())
             assertThat(result).contains("<h2>Complexity Report</h2>\n\n<div>\n  <ul></ul>\n</div>")
         }
 
-        it("asserts that the generated HTML is the same as expected") {
+        @Test
+        fun `asserts that the generated HTML is the same as expected`() {
             val expected = resourceAsPath("HtmlOutputFormatTest.html")
             var result = htmlReport.render(createTestDetektionWithMultipleSmells())
             result = generatedRegex.replace(result, replacement)
@@ -150,7 +164,8 @@ class HtmlOutputReportSpec : Spek({
             assertThat(actual).hasSameTextualContentAs(expected)
         }
 
-        it("asserts that the generated HTML is the same even if we change the order of the findings") {
+        @Test
+        fun `asserts that the generated HTML is the same even if we change the order of the findings`() {
             val findings = findings()
             val reversedFindings = findings
                 .reversedArray()
@@ -163,7 +178,7 @@ class HtmlOutputReportSpec : Spek({
             assertThat(firstReport).hasSameTextualContentAs(secondReport)
         }
     }
-})
+}
 
 private fun mockKtElement(): KtElement {
     val ktElementMock = mockk<KtElement>()
