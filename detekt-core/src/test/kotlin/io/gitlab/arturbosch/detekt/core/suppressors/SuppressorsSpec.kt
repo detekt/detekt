@@ -12,63 +12,62 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class SuppressorsSpec : Spek({
+class SuppressorsSpec {
 
-    describe("test getSuppressors") {
-        val noIgnorableCodeSmell by memoized {
-            val root = compileContentForTest(
-                """
-                fun foo() = Unit
-                """.trimIndent()
-            )
-            CodeSmell(ARule().issue, Entity.from(root), "")
-        }
-        val ignorableCodeSmell by memoized {
-            val root = compileContentForTest(
-                """
-                @file:Composable
-                fun foo() = Unit
-                """.trimIndent()
-            )
-            CodeSmell(ARule().issue, Entity.from(root), "")
-        }
+    val noIgnorableCodeSmell = CodeSmell(
+        issue = ARule().issue,
+        entity = Entity.from(compileContentForTest("""fun foo() = Unit""".trimIndent())),
+        message = ""
+    )
 
-        it("A finding that should be suppressed") {
-            val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+    val ignorableCodeSmell = CodeSmell(
+        issue = ARule().issue,
+        entity = Entity.from(compileContentForTest("""@file:Composable fun foo() = Unit""".trimIndent())),
+        message = ""
+    )
+
+    @Test
+    fun `A finding that should be suppressed`() {
+        val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+        val suppress = getSuppressors(rule, BindingContext.EMPTY)
+            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
+
+        assertThat(suppress).isFalse()
+    }
+
+    @Test
+    fun `A finding that should not be suppressed`() {
+        val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+        val suppress = getSuppressors(rule, BindingContext.EMPTY)
+            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
+
+        assertThat(suppress).isTrue()
+    }
+
+    @Nested
+    inner class `MultiRule` {
+        @Test
+        fun `A finding that should be suppressed`() {
+            val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
             val suppress = getSuppressors(rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
             assertThat(suppress).isFalse()
         }
-        it("A finding that should not be suppressed") {
-            val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
+
+        @Test
+        fun `A finding that should not be suppressed`() {
+            val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
             val suppress = getSuppressors(rule, BindingContext.EMPTY)
                 .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
             assertThat(suppress).isTrue()
         }
-
-        context("MultiRule") {
-            it("A finding that should be suppressed") {
-                val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule, BindingContext.EMPTY)
-                    .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
-
-                assertThat(suppress).isFalse()
-            }
-            it("A finding that should not be suppressed") {
-                val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-                val suppress = getSuppressors(rule, BindingContext.EMPTY)
-                    .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
-
-                assertThat(suppress).isTrue()
-            }
-        }
     }
-})
+}
 
 private class AMultiRule(config: Config) : MultiRule() {
     override val rules: List<Rule> = listOf(ARule(config))

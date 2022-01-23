@@ -7,82 +7,98 @@ import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.lifecycle.CachingMode
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal object DetektMessageCollectorSpec : Spek({
-    describe("DetektMessageCollector") {
-        val debugPrinter: (() -> String) -> Unit by memoized(CachingMode.TEST) {
-            mockk {
-                every { this@mockk.invoke(any()) } returns Unit
-            }
+class DetektMessageCollectorSpec {
+
+    private lateinit var debugPrinter: (() -> String) -> Unit
+    private lateinit var warningPrinter: ((String) -> Unit)
+    private lateinit var subject: DetektMessageCollector
+
+    @BeforeEach
+    fun setupMocksAndSubject() {
+        debugPrinter = mockk { every { this@mockk.invoke(any()) } returns Unit }
+        warningPrinter = mockk { every { this@mockk.invoke(any()) } returns Unit }
+        subject = DetektMessageCollector(
+            minSeverity = CompilerMessageSeverity.INFO,
+            debugPrinter = debugPrinter,
+            warningPrinter = warningPrinter,
+        )
+    }
+
+    @Nested
+    inner class `message with min severity` {
+        @BeforeEach
+        fun setUp() {
+            subject.report(CompilerMessageSeverity.INFO, "message", null)
         }
-        val warningPrinter: (String) -> Unit by memoized(CachingMode.TEST) {
-            mockk {
-                every { this@mockk.invoke(any()) } returns Unit
-            }
-        }
-        val subject by memoized(CachingMode.TEST) {
-            DetektMessageCollector(
-                minSeverity = CompilerMessageSeverity.INFO,
-                debugPrinter = debugPrinter,
-                warningPrinter = warningPrinter,
-            )
+
+        @Test
+        fun `prints the message`() {
+            val slot = slot<() -> String>()
+            verify { debugPrinter.invoke(capture(slot)) }
+            assertThat(slot.captured()).isEqualTo("info: message")
         }
 
-        describe("message with min severity") {
-            beforeEachTest { subject.report(CompilerMessageSeverity.INFO, "message", null) }
+        @Test
+        fun `adds up to the message count`() {
+            subject.printIssuesCountIfAny()
 
-            it("prints the message") {
-                val slot = slot<() -> String>()
-                verify { debugPrinter.invoke(capture(slot)) }
-                assertThat(slot.captured()).isEqualTo("info: message")
-            }
-
-            it("adds up to the message count") {
-                subject.printIssuesCountIfAny()
-
-                verify {
-                    warningPrinter(
-                        "The BindingContext was created with 1 issues. " +
-                            "Run detekt with --debug to see the error messages."
-                    )
-                }
-            }
-        }
-        describe("message with higher severity than the min severity") {
-            beforeEachTest { subject.report(CompilerMessageSeverity.WARNING, "message", null) }
-
-            it("prints the message") {
-                val slot = slot<() -> String>()
-                verify { debugPrinter.invoke(capture(slot)) }
-                assertThat(slot.captured()).isEqualTo("warning: message")
-            }
-
-            it("adds up to the message count") {
-                subject.printIssuesCountIfAny()
-
-                verify {
-                    warningPrinter(
-                        "The BindingContext was created with 1 issues. " +
-                            "Run detekt with --debug to see the error messages."
-                    )
-                }
-            }
-        }
-        describe("message with lower severity than the min severity") {
-            beforeEachTest { subject.report(CompilerMessageSeverity.LOGGING, "message", null) }
-
-            it("ignores the message") {
-                verify { debugPrinter wasNot Called }
-            }
-
-            it("doesn't add up to the message count") {
-                subject.printIssuesCountIfAny()
-
-                verify { warningPrinter wasNot Called }
+            verify {
+                warningPrinter(
+                    "The BindingContext was created with 1 issues. " +
+                        "Run detekt with --debug to see the error messages."
+                )
             }
         }
     }
-})
+
+    @Nested
+    inner class `message with higher severity than the min severity` {
+        @BeforeEach
+        fun setUp() {
+            subject.report(CompilerMessageSeverity.WARNING, "message", null)
+        }
+
+        @Test
+        fun `prints the message`() {
+            val slot = slot<() -> String>()
+            verify { debugPrinter.invoke(capture(slot)) }
+            assertThat(slot.captured()).isEqualTo("warning: message")
+        }
+
+        @Test
+        fun `adds up to the message count`() {
+            subject.printIssuesCountIfAny()
+
+            verify {
+                warningPrinter(
+                    "The BindingContext was created with 1 issues. " +
+                        "Run detekt with --debug to see the error messages."
+                )
+            }
+        }
+    }
+
+    @Nested
+    inner class `message with lower severity than the min severity` {
+        @BeforeEach
+        fun setUp() {
+            subject.report(CompilerMessageSeverity.LOGGING, "message", null)
+        }
+
+        @Test
+        fun `ignores the message`() {
+            verify { debugPrinter wasNot Called }
+        }
+
+        @Test
+        fun `doesn't add up to the message count`() {
+            subject.printIssuesCountIfAny()
+
+            verify { warningPrinter wasNot Called }
+        }
+    }
+}

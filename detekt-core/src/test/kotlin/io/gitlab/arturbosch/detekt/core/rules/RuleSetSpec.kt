@@ -6,40 +6,48 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class RuleSetSpec : Spek({
+class RuleSetSpec {
 
-    describe("rule sets") {
+    @Nested
+    inner class `rule sets` {
 
-        context("should rule set be used") {
+        @Nested
+        inner class `should rule set be used` {
 
-            it("is explicitly deactivated") {
+            @Test
+            fun `is explicitly deactivated`() {
                 val config = yamlConfig("configs/deactivated_ruleset.yml")
                 assertThat(config.subConfig("comments").isActive()).isFalse()
             }
 
-            it("is active with an empty config") {
+            @Test
+            fun `is active with an empty config`() {
                 assertThat(Config.empty.isActive()).isTrue()
             }
         }
 
-        context("should rule analyze a file") {
+        @Nested
+        inner class `should rule analyze a file` {
 
-            val file by memoized { compileForTest(resourceAsPath("/cases/Default.kt")) }
+            private val file = compileForTest(resourceAsPath("/cases/Default.kt"))
 
-            it("analyzes file with an empty config") {
+            @Test
+            fun `analyzes file with an empty config`() {
                 val config = Config.empty
                 assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
             }
 
-            it("should not analyze file with *.kt excludes") {
+            @Test
+            fun `should not analyze file with *_kt excludes`() {
                 val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
                 assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
             }
 
-            it("should analyze file as it's path is first excluded but then included") {
+            @Test
+            fun `should analyze file as it's path is first excluded but then included`() {
                 val config = TestConfig(
                     Config.EXCLUDES_KEY to "**/*.kt",
                     Config.INCLUDES_KEY to "**/*.kt"
@@ -48,4 +56,4 @@ class RuleSetSpec : Spek({
             }
         }
     }
-})
+}

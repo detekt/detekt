@@ -11,34 +11,42 @@ import io.gitlab.arturbosch.detekt.core.exists
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 
 @OptIn(UnstableApi::class)
-class BaselineResultMappingSpec : Spek({
+class BaselineResultMappingSpec {
 
-    describe("a baseline result mapping") {
+    @Nested
+    inner class `a baseline result mapping` {
 
-        val dir by memoized { createTempDirectoryForTest("baseline_format") }
-        val baselineFile by memoized { dir.resolve("baseline.xml") }
-        val existingBaselineFile by memoized { resourceAsPath("/baseline_feature/valid-baseline.xml") }
-        val finding by memoized {
-            val issue = mockk<Finding>()
-            every { issue.id }.returns("SomeIssueId")
-            every { issue.signature }.returns("SomeSignature")
-            issue
+        private val dir = createTempDirectoryForTest("baseline_format")
+        private val baselineFile = dir.resolve("baseline.xml")
+        private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
+        private lateinit var findings: Map<String, List<Finding>>
+        private lateinit var finding: Finding
+
+        @BeforeEach
+        fun setupMocks() {
+            finding = mockk()
+            every { finding.id }.returns("SomeIssueId")
+            every { finding.signature }.returns("SomeSignature")
+            findings = mapOf("RuleSet" to listOf(finding))
         }
-        val findings by memoized { mapOf("RuleSet" to listOf(finding)) }
 
-        afterEachTest {
+        @AfterEach
+        fun tearDown() {
             Files.deleteIfExists(baselineFile)
         }
 
-        it("should not create a new baseline file when no findings occurred") {
+        @Test
+        fun `should not create a new baseline file when no findings occurred`() {
             val mapping = resultMapping(
                 baselineFile = baselineFile,
                 createBaseline = true,
@@ -49,7 +57,8 @@ class BaselineResultMappingSpec : Spek({
             assertThat(baselineFile.exists()).isFalse()
         }
 
-        it("should not update an existing baseline file if option configured as false") {
+        @Test
+        fun `should not update an existing baseline file if option configured as false`() {
             val existing = Baseline.load(existingBaselineFile)
             val mapping = resultMapping(
                 baselineFile = existingBaselineFile,
@@ -62,7 +71,8 @@ class BaselineResultMappingSpec : Spek({
             assertThat(existing).isEqualTo(changed)
         }
 
-        it("should not update an existing baseline file if option is not configured") {
+        @Test
+        fun `should not update an existing baseline file if option is not configured`() {
             val existing = Baseline.load(existingBaselineFile)
             val mapping = resultMapping(
                 baselineFile = existingBaselineFile,
@@ -75,7 +85,8 @@ class BaselineResultMappingSpec : Spek({
             assertThat(existing).isEqualTo(changed)
         }
 
-        it("should not create a new baseline file if no file is configured") {
+        @Test
+        fun `should not create a new baseline file if no file is configured`() {
             val mapping = resultMapping(
                 baselineFile = null,
                 createBaseline = false,
@@ -86,7 +97,8 @@ class BaselineResultMappingSpec : Spek({
             assertThat(baselineFile.exists()).isFalse()
         }
 
-        it("should create a new baseline file if a file is configured") {
+        @Test
+        fun `should create a new baseline file if a file is configured`() {
             val mapping = resultMapping(
                 baselineFile = baselineFile,
                 createBaseline = true,
@@ -97,7 +109,8 @@ class BaselineResultMappingSpec : Spek({
             assertThat(baselineFile.exists()).isTrue()
         }
 
-        it("should update an existing baseline file if a file is configured") {
+        @Test
+        fun `should update an existing baseline file if a file is configured`() {
             Files.copy(existingBaselineFile, baselineFile)
             val existing = Baseline.load(baselineFile)
             val mapping = resultMapping(
@@ -111,7 +124,7 @@ class BaselineResultMappingSpec : Spek({
             assertThat(existing).isNotEqualTo(changed)
         }
     }
-})
+}
 
 @OptIn(UnstableApi::class)
 private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =

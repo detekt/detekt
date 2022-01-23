@@ -13,17 +13,19 @@ import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class SupportConfigValidationSpec : Spek({
+class SupportConfigValidationSpec {
 
-    describe("support config validation") {
+    @Nested
+    inner class `support config validation` {
 
-        val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
-        val spec by memoized { createNullLoggingSpec {} }
+        private val testDir = createTempDirectoryForTest("detekt-sample")
+        private val spec = createNullLoggingSpec {}
 
-        it("fails when unknown properties are found") {
+        @Test
+        fun `fails when unknown properties are found`() {
             val config = yamlConfigFromContent(
                 """
                 # Properties of custom rule sets get excluded by default.
@@ -45,7 +47,8 @@ class SupportConfigValidationSpec : Spek({
             }
         }
 
-        it("fails due to custom config validator want active to be booleans") {
+        @Test
+        fun `fails due to custom config validator want active to be booleans`() {
             val config = yamlConfigFromContent(
                 """
                 # Properties of custom rule sets get excluded by default.
@@ -62,7 +65,8 @@ class SupportConfigValidationSpec : Spek({
             }
         }
 
-        it("passes with excluded new properties") {
+        @Test
+        fun `passes with excluded new properties`() {
             val config = yamlConfigFromContent(
                 """
                config:
@@ -90,16 +94,16 @@ class SupportConfigValidationSpec : Spek({
             }
         }
     }
-})
+}
 
-internal class SampleRuleProvider : RuleSetProvider {
+class SampleRuleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample-rule-set"
 
     override fun instance(config: Config) = RuleSet(ruleSetId, emptyList())
 }
 
-internal class SampleConfigValidator : ConfigValidator {
+class SampleConfigValidator : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
         val result = mutableListOf<Notification>()

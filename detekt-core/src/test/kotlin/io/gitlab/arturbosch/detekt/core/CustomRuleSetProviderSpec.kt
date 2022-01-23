@@ -4,8 +4,8 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 /**
  * This test runs a precompiled jar with a custom rule provider.
@@ -18,11 +18,13 @@ import org.spekframework.spek2.style.specification.describe
  *          detekt-core/src/test/resources/sample-rule-set.jar'
  *  4. Now 'gradle build' should be green again.
  */
-class CustomRuleSetProviderSpec : Spek({
+class CustomRuleSetProviderSpec {
 
-    describe("custom rule sets should be loadable through jars") {
+    @Nested
+    inner class `custom rule sets should be loadable through jars` {
 
-        it("should load the sample provider") {
+        @Test
+        fun `should load the sample provider`() {
             val sampleRuleSet = resourceAsPath("sample-rule-set.jar")
             val spec = createNullLoggingSpec {
                 extensions {
@@ -36,4 +38,4 @@ class CustomRuleSetProviderSpec : Spek({
             assertThat(providers).filteredOn { it.ruleSetId == "sample" }.hasSize(1)
         }
     }
-})
+}

@@ -5,17 +5,20 @@ import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-class BaselineFormatSpec : Spek({
+class BaselineFormatSpec {
 
-    describe("baseline format") {
+    @Nested
+    inner class `baseline format` {
 
-        context("read a baseline file") {
+        @Nested
+        inner class `read a baseline file` {
 
-            it("loads the baseline file") {
+            @Test
+            fun `loads the baseline file`() {
                 val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
                 val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
 
@@ -26,20 +29,23 @@ class BaselineFormatSpec : Spek({
                 assertThat(currentIssues).anySatisfy { it.startsWith("FeatureEnvy") }
             }
 
-            it("throws on an invalid baseline file extension") {
+            @Test
+            fun `throws on an invalid baseline file extension`() {
                 val path = resourceAsPath("/baseline_feature/invalid-txt-baseline.txt")
                 assertThatThrownBy { BaselineFormat().read(path) }
                     .isInstanceOf(BaselineFormat.InvalidState::class.java)
             }
 
-            it("throws on an invalid baseline ID declaration") {
+            @Test
+            fun `throws on an invalid baseline ID declaration`() {
                 val path = resourceAsPath("/baseline_feature/missing-temporary-suppressed-baseline.xml")
                 assertThatIllegalStateException()
                     .isThrownBy { BaselineFormat().read(path) }
                     .withMessage("The content of the ID element must not be empty")
             }
 
-            it("supports deprecated baseline values") {
+            @Test
+            fun `supports deprecated baseline values`() {
                 val path = resourceAsPath("/baseline_feature/deprecated-baseline.xml")
                 val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
 
@@ -51,11 +57,13 @@ class BaselineFormatSpec : Spek({
             }
         }
 
-        context("writes a baseline file") {
+        @Nested
+        inner class `writes a baseline file` {
 
-            val savedBaseline by memoized { Baseline(setOf("4", "2", "2"), setOf("1", "2", "3")) }
+            private val savedBaseline = Baseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
 
-            it("has a new line at the end of the written baseline file") {
+            @Test
+            fun `has a new line at the end of the written baseline file`() {
                 val tempFile = createTempFileForTest("baseline1", ".xml")
 
                 val format = BaselineFormat()
@@ -66,7 +74,8 @@ class BaselineFormatSpec : Spek({
                 assertThat(content).endsWith(">\n")
             }
 
-            it("asserts that the saved and loaded baseline files are equal") {
+            @Test
+            fun `asserts that the saved and loaded baseline files are equal`() {
                 val tempFile = createTempFileForTest("baseline-saved", ".xml")
 
                 val format = BaselineFormat()
@@ -77,4 +86,4 @@ class BaselineFormatSpec : Spek({
             }
         }
     }
-})
+}

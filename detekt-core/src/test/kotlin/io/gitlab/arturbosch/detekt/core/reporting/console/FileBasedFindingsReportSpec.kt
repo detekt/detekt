@@ -8,18 +8,21 @@ import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class FileBasedFindingsReportSpec : Spek({
+class FileBasedFindingsReportSpec {
 
-    val subject by memoized { createFileBasedFindingsReport() }
+    private val subject = createFileBasedFindingsReport()
 
-    describe("findings report") {
+    @Nested
+    inner class `findings report` {
 
-        context("reports the debt per file and rule set with the overall debt") {
+        @Nested
+        inner class `reports the debt per file and rule set with the overall debt` {
 
-            it("has the reference content") {
+            @Test
+            fun `has the reference content`() {
                 val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
                 val detektion = object : TestDetektion() {
                     override val findings: Map<String, List<Finding>> = mapOf(
@@ -38,12 +41,14 @@ class FileBasedFindingsReportSpec : Spek({
             }
         }
 
-        it("reports no findings") {
+        @Test
+        fun `reports no findings`() {
             val detektion = TestDetektion()
             assertThat(subject.render(detektion)).isNull()
         }
 
-        it("reports no findings when no rule set contains smells") {
+        @Test
+        fun `reports no findings when no rule set contains smells`() {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     "EmptySmells" to emptyList()
@@ -52,12 +57,13 @@ class FileBasedFindingsReportSpec : Spek({
             assertThat(subject.render(detektion)).isNull()
         }
 
-        it("should not add auto corrected issues to report") {
+        @Test
+        fun `should not add auto corrected issues to report`() {
             val report = FileBasedFindingsReport()
             AutoCorrectableIssueAssert.isReportNull(report)
         }
     }
-})
+}
 
 private fun createFileBasedFindingsReport(): FileBasedFindingsReport {
     val report = FileBasedFindingsReport()
