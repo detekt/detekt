@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.classId
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 /**
  * This rule reports unnecessary inner classes. Nested classes that do not access members from the outer class do
@@ -51,7 +52,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 @RequiresTypeResolution
 class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
 
-    private val candidateClasses = mutableMapOf<KtClass, Set<ClassId>>()
+    private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()
 
     override val issue: Issue = Issue(
@@ -69,14 +70,14 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
     override fun visitClass(klass: KtClass) {
         classChain.add(klass)
         if (klass.isInner()) {
-            candidateClasses[klass] = buildParentClassChain(klass)
+            candidateClassToParentClasses[klass] = findParentClasses(klass)
         }
 
         // Visit the class to determine whether it contains any references
         // to outer class members.
         super.visitClass(klass)
 
-        if (candidateClasses.contains(klass)) {
+        if (klass.isInner() && candidateClassToParentClasses.contains(klass)) {
             report(
                 CodeSmell(
                     issue,
@@ -84,88 +85,79 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
                     "Class '${klass.name}' does not require `inner` keyword."
                 )
             )
-            candidateClasses.remove(klass)
+            candidateClassToParentClasses.remove(klass)
         }
         classChain.pop()
     }
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        checkForOuterUsage { parentClasses ->
-            property.initializer.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOfNotNull(property.initializer))
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        checkForOuterUsage { parentClasses ->
-            function.initializer.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOfNotNull(function.initializer))
     }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        checkForOuterUsage { parentClasses ->
-            expression.belongsToParentClass(parentClasses) ||
-                expression.collectDescendantsOfType<KtReferenceExpression> {
-                    it.belongsToParentClass(parentClasses)
-                }.isNotEmpty()
-        }
+        checkForOuterUsage(expression.collectDescendantsOfType<KtReferenceExpression>() + expression)
     }
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
-        checkForOuterUsage { parentClasses ->
-            parameter.defaultValue.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOfNotNull(parameter.defaultValue))
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
-        checkForOuterUsage { parentClasses ->
-            expression.left.belongsToParentClass(parentClasses) ||
-                expression.right.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOfNotNull(expression.left, expression.right))
     }
 
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
-        checkForOuterUsage { parentClasses ->
-            val condition = expression.condition
-            condition is KtReferenceExpression && condition.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOfNotNull(expression.condition as? KtReferenceExpression))
     }
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
-        checkForOuterUsage { parentClasses ->
-            expression.receiverExpression.belongsToParentClass(parentClasses)
-        }
+        checkForOuterUsage(listOf(expression.receiverExpression))
     }
 
-    // Replace this "constructor().apply{}" pattern with buildSet() when the Kotlin
+    // Replace this "constructor().apply{}" pattern with buildList() when the Kotlin
     // API version is upgraded to 1.6
-    private fun buildParentClassChain(klass: KtClass) = HashSet<ClassId>().apply {
-        var containingClass = klass.containingClass()
+    private fun findParentClasses(ktClass: KtClass): List<KtClass> = ArrayList<KtClass>().apply {
+        var containingClass = ktClass.containingClass()
         while (containingClass != null) {
-            containingClass.getClassId()?.let { add(it) }
+            add(containingClass)
             containingClass = containingClass.containingClass()
         }
     }
 
-    private fun checkForOuterUsage(checkBlock: (Set<ClassId>) -> Boolean) {
-        val containingClass = classChain.peek() ?: return
-        val parentClasses = candidateClasses[containingClass] ?: return
-        if (checkBlock.invoke(parentClasses)) {
-            candidateClasses.remove(containingClass)
+    private fun checkForOuterUsage(expressionsToResolve: List<KtElement>) {
+        val currentClass = classChain.peek() ?: return
+        val parentClasses = candidateClassToParentClasses[currentClass] ?: return
+
+        expressionsToResolve.forEach { ktElement ->
+            val resolvedContainingClassId = findResolvedContainingClassId(ktElement)
+            /*
+             * If class A -> inner class B -> inner class C, and class C has outer usage of A,
+             * then both B and C should stay as inner classes.
+             */
+            val index = parentClasses.indexOfFirst { it.getClassId() == resolvedContainingClassId }
+            if (index >= 0) {
+                candidateClassToParentClasses.remove(currentClass)
+                parentClasses.subList(0, index).forEach { candidateClassToParentClasses.remove(it) }
+            }
         }
     }
 
-    private fun KtElement?.belongsToParentClass(parentClasses: Set<ClassId>): Boolean {
-        return this?.getResolvedCall(bindingContext)
+    private fun findResolvedContainingClassId(ktElement: KtElement): ClassId? {
+        return ktElement.getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.containingDeclaration
-            ?.let { (it as? ClassifierDescriptor)?.classId }
-            ?.let(parentClasses::contains) == true
+            ?.safeAs<ClassifierDescriptor>()
+            ?.classId
     }
 }
