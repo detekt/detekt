@@ -111,8 +111,8 @@ fun <T : Any, U : Any> configWithAndroidVariants(
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
         is ExplainedValues -> configAware.getExplainedValuesOrDefault(propertyName, defaultValue) as T
+        is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
         is Int -> configAware.valueOrDefault(propertyName, defaultValue)
@@ -136,26 +136,23 @@ private fun ConfigAware.getExplainedValuesOrDefault(
     propertyName: String,
     defaultValue: ExplainedValues
 ): ExplainedValues {
-    val valuesAsListOrNull: List<*>? = valueOrNull(propertyName)
-    if (valuesAsListOrNull != null) {
-        if (valuesAsListOrNull.all { it is String }) {
-            return ExplainedValuesImpl(valuesAsListOrNull.map { ExplainedValueImpl(it.toString()) })
-        }
-        if (valuesAsListOrNull.all { it is Map<*, *> }) {
-            val explainedValues = valuesAsListOrNull
+    val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
+    if (valuesAsList.all { it is String }) {
+        return ExplainedValues(values = valuesAsList.map { ExplainedValue(it.toString()) })
+    }
+    if (valuesAsList.all { it is Map<*, *> }) {
+        return ExplainedValues(
+            valuesAsList
                 .map { it as Map<*, *> }
                 .map { dict ->
-                    ExplainedValueImpl(
+                    ExplainedValue(
                         value = dict["value"].toString(),
                         reason = dict["reason"]?.toString()
                     )
                 }
-            return ExplainedValuesImpl(explainedValues)
-        } else {
-            error("Only lists of strings are supported. '$propertyName' is invalid. ")
-        }
+        )
     }
-    return defaultValue
+    error("Only lists of strings are supported. '$propertyName' is invalid. ")
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {

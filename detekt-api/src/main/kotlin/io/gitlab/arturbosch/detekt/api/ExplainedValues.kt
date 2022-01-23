@@ -1,19 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
-interface ExplainedValues : Iterable<ExplainedValue> {
-    val values: List<ExplainedValue>
-    override operator fun iterator(): Iterator<ExplainedValue> = values.iterator()
+fun explainedValues(vararg values: Pair<String, String?>): ExplainedValues {
+    return ExplainedValues(values.map { ExplainedValue(it.first, it.second) })
 }
 
-interface ExplainedValue {
-    val value: String
-    val reason: String?
-}
+data class ExplainedValues(val values: List<ExplainedValue>) : List<ExplainedValue> by values
 
-fun explainedValues(vararg values: Pair<String, String>): ExplainedValues {
-    return ExplainedValuesImpl(values = values.map { ExplainedValueImpl(it.first, it.second) })
-}
-
-internal data class ExplainedValuesImpl(override val values: List<ExplainedValue>) : ExplainedValues
-
-internal data class ExplainedValueImpl(override val value: String, override val reason: String? = null) : ExplainedValue
+data class ExplainedValue(val value: String, val reason: String? = null)
