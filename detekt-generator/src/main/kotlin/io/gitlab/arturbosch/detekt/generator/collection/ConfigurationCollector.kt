@@ -6,6 +6,9 @@ import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.C
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.FALLBACK_DELEGATE_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.checkUsingInvalidFallbackReference
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithFallbackSupport.isFallbackConfigDelegate
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getAndroidDefaultValue
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getDefaultValue
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.toDefaultValueIfLiteral
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -24,7 +27,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotatio
 
 class ConfigurationCollector {
 
-    private val constantsByName = mutableMapOf<String, String>()
+    private val constantsByName = mutableMapOf<String, DefaultValue>()
     private val properties = mutableListOf<KtProperty>()
 
     fun getConfiguration(): List<Configuration> {
@@ -43,25 +46,22 @@ class ConfigurationCollector {
         )
     }
 
-    private fun resolveConstantOrNull(prop: KtProperty): Pair<String, String>? {
+    private fun resolveConstantOrNull(prop: KtProperty): Pair<String, DefaultValue>? {
         if (prop.isVar) return null
 
         val propertyName = checkNotNull(prop.name)
-        val constantOrNull = prop.getConstantValueAsStringOrNull()
+        val constantOrNull = prop.getConstantValue()
 
         return constantOrNull?.let { propertyName to it }
     }
 
-    private fun KtProperty.getConstantValueAsStringOrNull(): String? {
+    private fun KtProperty.getConstantValue(): DefaultValue? {
         if (hasListDeclaration()) {
-            return getListDeclaration()
-                .valueArguments
-                .map { "'${it.text.withoutQuotes()}'" }
-                .toString()
+            return DefaultValue.of(getListDeclaration().valueArguments.map { it.text.withoutQuotes() })
         }
 
-        return findDescendantOfType<KtConstantExpression>()?.text
-            ?: findDescendantOfType<KtStringTemplateExpression>()?.text?.withoutQuotes()
+        return findDescendantOfType<KtConstantExpression>()?.toDefaultValueIfLiteral()
+            ?: findDescendantOfType<KtStringTemplateExpression>()?.toDefaultValueIfLiteral()
     }
 
     private fun KtProperty.parseConfigurationAnnotation(): Configuration? = when {
@@ -84,59 +84,61 @@ class ConfigurationCollector {
         val propertyName: String = checkNotNull(name)
         val deprecationMessage = firstAnnotationParameterOrNull(Deprecated::class)
         val description: String = firstAnnotationParameter(ConfigAnnotation::class)
-        val defaultValueAsString = getDefaultValueAsString()
-        val defaultAndroidValueAsString = getDefaultAndroidValueAsString()
+        val defaultValue = getDefaultValue(constantsByName)
+        val defaultAndroidValue = getAndroidDefaultValue(constantsByName)
 
         return Configuration(
             name = propertyName,
             description = description,
-            defaultValue = defaultValueAsString,
-            defaultAndroidValue = defaultAndroidValueAsString,
+            defaultValue = defaultValue,
+            defaultAndroidValue = defaultAndroidValue,
             deprecated = deprecationMessage,
         )
     }
 
-    private fun KtProperty.getDefaultValueAsString(): String {
-        val defaultValueArgument = getValueArgument(
-            name = DEFAULT_VALUE_ARGUMENT_NAME,
-            actionForPositionalMatch = { arguments ->
-                when {
-                    isFallbackConfigDelegate() -> arguments[1]
-                    isAndroidVariantConfigDelegate() -> arguments[0]
-                    else -> arguments[0]
+    private object DefaultValueSupport {
+        fun KtProperty.getDefaultValue(constantsByName: Map<String, DefaultValue>): DefaultValue {
+            val defaultValueArgument = getValueArgument(
+                name = DEFAULT_VALUE_ARGUMENT_NAME,
+                actionForPositionalMatch = { arguments ->
+                    when {
+                        isFallbackConfigDelegate() -> arguments[1]
+                        isAndroidVariantConfigDelegate() -> arguments[0]
+                        else -> arguments[0]
+                    }
                 }
-            }
-        ) ?: invalidDocumentation { "'$name' is not a delegated property" }
-        return formatDefaultValueExpression(checkNotNull(defaultValueArgument.getArgumentExpression()))
-    }
-
-    private fun KtProperty.getDefaultAndroidValueAsString(): String? {
-        val defaultValueArgument = getValueArgument(
-            name = DEFAULT_ANDROID_VALUE_ARGUMENT_NAME,
-            actionForPositionalMatch = { arguments ->
-                when {
-                    isAndroidVariantConfigDelegate() -> arguments[1]
-                    else -> null
-                }
-            }
-        )
-        val defaultValueExpression = defaultValueArgument?.getArgumentExpression() ?: return null
-        return formatDefaultValueExpression(defaultValueExpression)
-    }
-
-    private fun KtProperty.formatDefaultValueExpression(ktExpression: KtExpression): String {
-        val listDeclarationForDefault = ktExpression.getListDeclarationOrNull()
-        if (listDeclarationForDefault != null) {
-            return listDeclarationForDefault.valueArguments.map {
-                val value = constantsByName[it.text] ?: it.text
-                "'${value.withoutQuotes()}'"
-            }.toString()
+            ) ?: invalidDocumentation { "'$name' is not a delegated property" }
+            return checkNotNull(defaultValueArgument.getArgumentExpression()).toDefaultValue(constantsByName)
         }
 
-        val defaultValueOrConstantName = checkNotNull(ktExpression.text.withoutQuotes())
-        val defaultValue = constantsByName[defaultValueOrConstantName] ?: defaultValueOrConstantName
-        val needsQuotes = declaredTypeOrNull in TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT
-        return if (needsQuotes) "'$defaultValue'" else defaultValue
+        fun KtProperty.getAndroidDefaultValue(constantsByName: Map<String, DefaultValue>): DefaultValue? {
+            val defaultValueArgument = getValueArgument(
+                name = DEFAULT_ANDROID_VALUE_ARGUMENT_NAME,
+                actionForPositionalMatch = { arguments ->
+                    when {
+                        isAndroidVariantConfigDelegate() -> arguments[1]
+                        else -> null
+                    }
+                }
+            )
+            return defaultValueArgument?.getArgumentExpression()?.toDefaultValue(constantsByName)
+        }
+
+        fun KtExpression.toDefaultValue(constantsByName: Map<String, DefaultValue>): DefaultValue {
+            val listDeclarationForDefault = getListDeclarationOrNull()
+            if (listDeclarationForDefault != null) {
+                val listValues = listDeclarationForDefault.valueArguments.map {
+                    (constantsByName[it.text]?.getAsPlainString() ?: it.text.withoutQuotes())
+                }
+                return DefaultValue.of(listValues)
+            }
+
+            return toDefaultValueIfLiteral()
+                ?: constantsByName[text.withoutQuotes()]
+                ?: error("$text is neither a literal nor a constant")
+        }
+
+        fun KtExpression.toDefaultValueIfLiteral(): DefaultValue? = createDefaultValueIfLiteral(text)
     }
 
     private object ConfigWithFallbackSupport {
@@ -185,14 +187,6 @@ class ConfigurationCollector {
         private const val LIST_OF = "listOf"
         private const val EMPTY_LIST = "emptyList"
         private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
-
-        private const val TYPE_STRING = "String"
-        private const val TYPE_REGEX = "Regex"
-        private const val TYPE_SPLIT_PATTERN = "SplitPattern"
-        private val TYPES_THAT_NEED_QUOTATION_FOR_DEFAULT = listOf(TYPE_STRING, TYPE_REGEX, TYPE_SPLIT_PATTERN)
-
-        private val KtProperty.declaredTypeOrNull: String?
-            get() = typeReference?.text
 
         private fun KtElement.getListDeclaration(): KtCallExpression =
             checkNotNull(getListDeclarationOrNull())

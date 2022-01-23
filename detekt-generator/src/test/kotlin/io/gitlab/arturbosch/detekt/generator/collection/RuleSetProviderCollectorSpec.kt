@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -287,7 +289,7 @@ class RuleSetProviderCollectorSpec {
         }
 
         @Nested
-        inner class `a correct RuleSetProvider class with full parameters missing` {
+        inner class `a correct RuleSetProvider class with full parameters and multiple rules` {
             val description = "This is a description"
             val ruleSetId = "test"
             val ruleName = "TestRule"
@@ -365,14 +367,14 @@ class RuleSetProviderCollectorSpec {
                 }
             }
         """
-            val items = subject.run(code)
+            private val items = subject.run(code)
 
             @Test
             fun `extracts boolean configuration option`() {
                 val conf = items[0].configuration[0]
                 assertThat(conf.name).isEqualTo("aBool")
                 assertThat(conf.description).isEqualTo("bool description")
-                assertThat(conf.defaultValue).isEqualTo("true")
+                assertThat(conf.defaultValue).isEqualTo(of(true))
                 assertThat(conf.deprecated).isNull()
             }
 
@@ -381,7 +383,7 @@ class RuleSetProviderCollectorSpec {
                 val conf = items[0].configuration[1]
                 assertThat(conf.name).isEqualTo("anInt")
                 assertThat(conf.description).isEqualTo("int description")
-                assertThat(conf.defaultValue).isEqualTo("99")
+                assertThat(conf.defaultValue).isEqualTo(of(99))
             }
 
             @Test
@@ -389,8 +391,38 @@ class RuleSetProviderCollectorSpec {
                 val conf = items[0].configuration[2]
                 assertThat(conf.name).isEqualTo("aString")
                 assertThat(conf.description).isEqualTo("string description")
-                assertThat(conf.defaultValue).isEqualTo("'a'")
+                assertThat(conf.defaultValue).isEqualTo(of("a"))
                 assertThat(conf.deprecated).isEqualTo("use something else")
+            }
+        }
+
+        @Nested
+        inner class `a RuleSetProvider with unsupported configuration format` {
+            val code = """
+            package foo
+
+            /**
+             * description
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "ruleSetId"
+
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(RruleName(config)))
+                }
+
+                companion object {
+                    @Configuration("a description")
+                    val aConfig by ruleSetConfig(listOf("a"))
+                }
+            }
+        """
+
+            @Test
+            fun `fails`() {
+                assertThatThrownBy { subject.run(code) }
+                    .isInstanceOf(InvalidDocumentationException::class.java)
+                    .hasMessageContaining("""Unsupported default value format 'listOf("a")'""")
             }
         }
     }

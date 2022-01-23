@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 private val defaultConfiguration = Configuration(
     name = "name",
     description = "description",
-    defaultValue = "",
+    defaultValue = of(""),
     defaultAndroidValue = null,
     deprecated = null
 )
@@ -19,7 +20,7 @@ class ConfigurationSpec {
     inner class `default value to list conversion` {
         @Nested
         inner class `empty default value` {
-            val subject = defaultConfiguration.copy(defaultValue = "")
+            private val subject = defaultConfiguration.copy(defaultValue = of(""))
 
             @Test
             fun `identifies default as not a list`() {
@@ -34,7 +35,7 @@ class ConfigurationSpec {
 
         @Nested
         inner class `non list default value` {
-            val subject = defaultConfiguration.copy(defaultValue = "abc")
+            private val subject = defaultConfiguration.copy(defaultValue = of("abc"))
 
             @Test
             fun `identifies default as not a list`() {
@@ -49,7 +50,7 @@ class ConfigurationSpec {
 
         @Nested
         inner class `empty list default value` {
-            val subject = defaultConfiguration.copy(defaultValue = "[ ]")
+            private val subject = defaultConfiguration.copy(defaultValue = of(emptyList()))
 
             @Test
             fun `identifies default as not a non empty list`() {
@@ -64,7 +65,7 @@ class ConfigurationSpec {
 
         @Nested
         inner class `bracket list default value` {
-            val subject = defaultConfiguration.copy(defaultValue = "[ 'a', 'b' ]")
+            private val subject = defaultConfiguration.copy(defaultValue = of(listOf("a", "b")))
 
             @Test
             fun `identifies default as a non empty list`() {
