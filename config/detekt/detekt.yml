@@ -233,6 +233,7 @@ style:
     active: true
   UnnecessaryInnerClass:
     active: true
+    ignoreAnnotated: ['Nested']
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
