@@ -31,7 +31,7 @@ class CyclomaticComplexitySpec {
         }
 
         @Test
-        fun `counts if and && and || expressions`() {
+        fun `counts 'and' and 'or' expressions`() {
             val code = compileContentForTest(
                 """
                     fun test() = if (true || true && false) 1 else 0
