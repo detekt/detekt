@@ -2,13 +2,15 @@ package io.github.detekt.metrics.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class FieldCountVisitorSpec : Spek({
-    describe("something") {
+class FieldCountVisitorSpec {
+    @Nested
+    inner class `something` {
 
-        it("defaultFieldCount") {
+        @Test
+        fun `defaultFieldCount`() {
             val file = compileContentForTest(classWithFields)
             val count = with(file) {
                 accept(PropertyCountVisitor())
@@ -17,4 +19,4 @@ class FieldCountVisitorSpec : Spek({
             assertThat(count).isEqualTo(2)
         }
     }
-})
+}

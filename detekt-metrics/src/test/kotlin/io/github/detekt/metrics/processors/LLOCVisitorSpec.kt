@@ -2,13 +2,15 @@ package io.github.detekt.metrics.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class LLOCVisitorSpec : Spek({
-    describe("LLOC Visitor") {
+class LLOCVisitorSpec {
+    @Nested
+    inner class `LLOC Visitor` {
 
-        it("defaultCaseHasOneClassAndAnnotationLine") {
+        @Test
+        fun `defaultCaseHasOneClassAndAnnotationLine`() {
             val file = compileContentForTest(default)
 
             val lloc = with(file) {
@@ -19,7 +21,8 @@ class LLOCVisitorSpec : Spek({
             assertThat(lloc).isEqualTo(2)
         }
 
-        it("llocOfComplexClass") {
+        @Test
+        fun `llocOfComplexClass`() {
             val file = compileContentForTest(complexClass)
 
             val lloc = with(file) {
@@ -30,4 +33,4 @@ class LLOCVisitorSpec : Spek({
             assertThat(lloc).isEqualTo(85)
         }
     }
-})
+}
