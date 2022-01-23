@@ -87,6 +87,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
+        if (!containsRuleSetProvider) return
+
         if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
@@ -95,7 +97,8 @@ class RuleSetProviderVisitor : DetektVisitor() {
                 )
         }
         if (property.isAnnotatedWith(ConfigAnnotation::class)) {
-            val defaultValue = formatDefaultValue(
+            val defaultValue = toDefaultValue(
+                name,
                 checkNotNull(property.delegate?.expression as? KtCallExpression)
                     .valueArguments
                     .first()
@@ -133,14 +136,11 @@ class RuleSetProviderVisitor : DetektVisitor() {
     }
 
     companion object {
-
-        private const val DOUBLE_QUOTE = '"'
-
-        private fun formatDefaultValue(defaultValueText: String): String =
-            if (defaultValueText.startsWith(DOUBLE_QUOTE) && defaultValueText.endsWith(DOUBLE_QUOTE)) {
-                "'${defaultValueText.removeSurrounding("$DOUBLE_QUOTE")}'"
-            } else {
-                defaultValueText
-            }
+        private fun toDefaultValue(providerName: String, defaultValueText: String): DefaultValue =
+            createDefaultValueIfLiteral(defaultValueText)
+                ?: throw InvalidDocumentationException(
+                    "Unsupported default value format '$defaultValueText' " +
+                        "in $providerName. Please use a Boolean, Int or String literal instead."
+                )
     }
 }

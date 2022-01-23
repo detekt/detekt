@@ -66,7 +66,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         if (configuration.isDefaultValueNonEmptyList()) {
             list(configuration.name, configuration.getDefaultValueAsList())
         } else {
-            keyValue { configuration.name to configuration.defaultValue }
+            keyValue { configuration.name to configuration.defaultValue.getQuotedIfNecessary() }
         }
     }
 

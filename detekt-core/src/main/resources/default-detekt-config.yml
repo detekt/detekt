@@ -752,6 +752,8 @@ style:
     active: false
   UnnecessaryInheritance:
     active: true
+  UnnecessaryInnerClass:
+    active: false
   UnnecessaryLet:
     active: false
   UnnecessaryParentheses:

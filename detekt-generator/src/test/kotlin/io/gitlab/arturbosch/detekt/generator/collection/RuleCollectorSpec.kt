@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
@@ -204,7 +205,7 @@ class RuleCollectorSpec {
                     val expectedConfiguration = Configuration(
                         name = "config",
                         description = "description",
-                        defaultValue = "'[A-Z$]'",
+                        defaultValue = of("[A-Z$]"),
                         defaultAndroidValue = null,
                         deprecated = null
                     )
@@ -219,12 +220,12 @@ class RuleCollectorSpec {
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val config: Int by config(99)
+                            private val config: Int by config(1_999_000)
                         }                        
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration).hasSize(1)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(1_999_000))
                 }
 
                 @Test
@@ -239,7 +240,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'abcd'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("abcd"))
                 }
 
                 @Test
@@ -254,7 +255,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
 
                 @Test
@@ -274,7 +275,8 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("['a', 'b']")
+                    val expected = of(listOf("a", "b"))
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
                 }
 
                 @Test
@@ -311,7 +313,7 @@ class RuleCollectorSpec {
                     """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
                 }
 
                 @Test
@@ -330,7 +332,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
 
                 @Test
@@ -349,7 +351,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("99")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
                 }
 
                 @Test
@@ -368,7 +370,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("'a'")
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
                 }
 
                 @Test
@@ -391,7 +393,7 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    val expected = "['a', 'b']"
+                    val expected = of(listOf("a", "b"))
                     assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
                     assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
@@ -411,8 +413,9 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
-                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                    val expected = of(emptyList())
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
                 @Test
@@ -434,8 +437,9 @@ class RuleCollectorSpec {
                         }                        
                     """
                     val items = subject.run(code)
-                    assertThat(items[0].configuration[0].defaultValue).isEqualTo("[]")
-                    assertThat(items[0].configuration[1].defaultValue).isEqualTo("[]")
+                    val expected = of(emptyList())
+                    assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+                    assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
                 }
 
                 @Test
@@ -526,8 +530,8 @@ class RuleCollectorSpec {
                             Configuration(
                                 name = "maxLineLength",
                                 description = "description",
-                                defaultValue = "120",
-                                defaultAndroidValue = "100",
+                                defaultValue = of(120),
+                                defaultAndroidValue = of(100),
                                 deprecated = null
                             )
                         )
@@ -550,8 +554,8 @@ class RuleCollectorSpec {
                             Configuration(
                                 name = "maxLineLength",
                                 description = "description",
-                                defaultValue = "120",
-                                defaultAndroidValue = "100",
+                                defaultValue = of(120),
+                                defaultAndroidValue = of(100),
                                 deprecated = null
                             )
                         )
@@ -580,7 +584,7 @@ class RuleCollectorSpec {
                         val items = subject.run(code)
                         val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
                         assertThat(fallbackProperties).hasSize(3)
-                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly("99")
+                        assertThat(fallbackProperties.map { it.defaultValue }).containsOnly(of(99))
                     }
 
                     @Test
@@ -618,13 +622,13 @@ class RuleCollectorSpec {
                     @Test
                     fun `extracts default value with transformer function`() {
                         val items = subject.run(code)
-                        assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[a-z]+'")
+                        assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("[a-z]+"))
                     }
 
                     @Test
                     fun `extracts default value with method reference`() {
                         val items = subject.run(code)
-                        assertThat(items[0].configuration[1].defaultValue).isEqualTo("'false'")
+                        assertThat(items[0].configuration[1].defaultValue).isEqualTo(of(false))
                     }
                 }
             }

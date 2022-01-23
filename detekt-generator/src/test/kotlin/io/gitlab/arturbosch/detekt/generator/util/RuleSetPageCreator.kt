@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.generator.util
 
 import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
+import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.Inactive
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
@@ -19,35 +20,35 @@ internal fun createRuleSetPage(): RuleSetPage {
                 Configuration(
                     name = "rulesetconfig1",
                     description = "description rulesetconfig1",
-                    defaultValue = "true",
+                    defaultValue = of(true),
                     defaultAndroidValue = null,
                     deprecated = null
                 ),
                 Configuration(
                     name = "rulesetconfig2",
                     description = "description rulesetconfig2",
-                    defaultValue = "['foo', 'bar']",
+                    defaultValue = of(listOf("foo", "bar")),
                     defaultAndroidValue = null,
                     deprecated = null
                 ),
                 Configuration(
                     name = "deprecatedSimpleConfig",
                     description = "description deprecatedSimpleConfig",
-                    defaultValue = "true",
+                    defaultValue = of(true),
                     defaultAndroidValue = null,
                     deprecated = "is deprecated"
                 ),
                 Configuration(
                     name = "deprecatedListConfig",
                     description = "description deprecatedListConfig",
-                    defaultValue = "['foo', 'bar']",
+                    defaultValue = of(listOf("foo", "bar")),
                     defaultAndroidValue = null,
                     deprecated = "is deprecated"
                 ),
                 Configuration(
                     name = "rulesetconfig3",
                     description = "description rulesetconfig2",
-                    defaultValue = "['first', 'se*cond']",
+                    defaultValue = of(listOf("first", "se*cond")),
                     defaultAndroidValue = null,
                     deprecated = null
                 )
@@ -68,11 +69,11 @@ internal fun createRules(): List<Rule> {
         aliases = "alias1, alias2",
         parent = "",
         configuration = listOf(
-            Configuration("conf1", "a config option", "foo", null, null),
-            Configuration("conf2", "deprecated config", "false", null, "use conf1 instead"),
-            Configuration("conf3", "list config", "['a', 'b']", null, null),
-            Configuration("conf4", "deprecated list config", "['a', 'b']", null, "use conf3 instead"),
-            Configuration("conf5", "rule with android variants", "120", "100", null),
+            Configuration("conf1", "a config option", of("foo"), null, null),
+            Configuration("conf2", "deprecated config", of(false), null, "use conf1 instead"),
+            Configuration("conf3", "list config", of(listOf("a", "b")), null, null),
+            Configuration("conf4", "deprecated list config", of(listOf("a", "b")), null, "use conf3 instead"),
+            Configuration("conf5", "rule with android variants", of(120), of(100), null),
         )
     )
     val rule2 = Rule(
