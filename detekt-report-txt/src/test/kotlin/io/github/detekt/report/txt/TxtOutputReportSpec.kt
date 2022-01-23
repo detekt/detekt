@@ -3,28 +3,32 @@ package io.github.detekt.report.txt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class TxtOutputReportSpec : Spek({
+class TxtOutputReportSpec {
 
-    describe("TXT output report") {
+    @Nested
+    inner class `TXT output report` {
 
-        it("renders none") {
+        @Test
+        fun `renders none`() {
             val report = TxtOutputReport()
             val detektion = TestDetektion()
             val renderedText = ""
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
 
-        it("renders one") {
+        @Test
+        fun `renders one`() {
             val report = TxtOutputReport()
             val detektion = TestDetektion(createFinding())
             val renderedText = "TestSmell - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature\n"
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
 
-        it("renders multiple") {
+        @Test
+        fun `renders multiple`() {
             val report = TxtOutputReport()
             val detektion = TestDetektion(
                 createFinding(ruleName = "TestSmellA"),
@@ -40,4 +44,4 @@ class TxtOutputReportSpec : Spek({
             assertThat(report.render(detektion)).isEqualTo(renderedText)
         }
     }
-})
+}
