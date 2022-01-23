@@ -233,6 +233,7 @@ style:
     active: true
   UnnecessaryInnerClass:
     active: true
+    excludes: ['**/*Spec.kt']
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
