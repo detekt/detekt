@@ -10,8 +10,11 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class AnnotationExcluder(
     root: KtFile,
-    private val excludes: List<String>
+    excludes: List<String>,
 ) {
+    private val excludes = excludes.map {
+        it.removePrefix("*").removeSuffix("*")
+    }
 
     private val resolvedAnnotations = root.importList?.run {
         imports
@@ -22,6 +25,7 @@ class AnnotationExcluder(
             .toMap()
     }.orEmpty()
 
+    @Deprecated("Use AnnotationExcluder(KtFile, List<String>) instead")
     constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
 
     /**
@@ -31,8 +35,8 @@ class AnnotationExcluder(
     fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean = annotations.any(::isExcluded)
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
-        val annotationText = annotation.typeReference?.text
+        val annotationText = annotation.typeReference?.text ?: return false
         val value = resolvedAnnotations[annotationText] ?: annotationText
-        return if (value == null) false else excludes.any { value.contains(it, ignoreCase = true) }
+        return excludes.any { value.contains(it, ignoreCase = true) }
     }
 }
