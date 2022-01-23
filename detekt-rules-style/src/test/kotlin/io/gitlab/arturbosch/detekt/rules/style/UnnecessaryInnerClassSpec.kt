@@ -294,7 +294,7 @@ class UnnecessaryInnerClassSpec : Spek({
                             val fizz = foo
                             inner class C {
                                 fun printFoo() {
-                                    println(foo)
+                                    println(fizz)
                                 }
                             }
                         }
