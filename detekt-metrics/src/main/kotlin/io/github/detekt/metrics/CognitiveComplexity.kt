@@ -46,9 +46,7 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
     data class BinExprHolder(val expr: KtBinaryExpression, val op: IElementType, val isEnclosed: Boolean)
 
     @Suppress("detekt.TooManyFunctions") // visitor pattern
-    inner class FunctionComplexity(
-        private val givenFunction: KtNamedFunction
-    ) : DetektVisitor() {
+    class FunctionComplexity(private val givenFunction: KtNamedFunction) : DetektVisitor() {
         internal var complexity: Int = 0
 
         private var nesting: Int = 0
