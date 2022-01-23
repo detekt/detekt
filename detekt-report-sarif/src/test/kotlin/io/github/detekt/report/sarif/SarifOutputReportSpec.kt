@@ -13,16 +13,18 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
 @OptIn(UnstableApi::class)
-class SarifOutputReportSpec : Spek({
+class SarifOutputReportSpec {
 
-    describe("sarif output report") {
+    @Nested
+    inner class `sarif output report` {
 
-        it("renders multiple issues") {
+        @Test
+        fun `renders multiple issues`() {
             val result = TestDetektion(
                 createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
                 createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
@@ -36,7 +38,8 @@ class SarifOutputReportSpec : Spek({
             assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
         }
 
-        it("renders multiple issues with relative path") {
+        @Test
+        fun `renders multiple issues with relative path`() {
             val basePath = "/Users/tester/detekt/"
             val result = TestDetektion(
                 createFindingForRelativePath(ruleName = "TestSmellA", basePath = basePath),
@@ -68,7 +71,7 @@ class SarifOutputReportSpec : Spek({
             assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
         }
     }
-})
+}
 
 private fun createFinding(ruleName: String, severity: SeverityLevel): Finding {
     return object : CodeSmell(createIssue(ruleName), createEntity("TestFile.kt"), "TestMessage") {
