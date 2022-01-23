@@ -1,14 +1,16 @@
 package io.github.detekt.parser
 
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.io.File
 
-class KotlinEnvironmentUtilsSpec : Spek({
+class KotlinEnvironmentUtilsSpec {
 
-    describe("retrieved kotlin language version") {
-        it("should match") {
+    @Nested
+    inner class `retrieved kotlin language version` {
+        @Test
+        fun `should match`() {
             val expectedVersionString = System.getProperty("kotlinVersion", "")
                 .splitToSequence('.')
                 .take(2)
@@ -25,4 +27,4 @@ class KotlinEnvironmentUtilsSpec : Spek({
             assertThat(languageVersion?.versionString).isEqualTo(expectedVersionString)
         }
     }
-})
+}
