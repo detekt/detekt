@@ -2128,6 +2128,32 @@ removed.</p>
 <span class="kd">class</span> <span class="nc">B</span> <span class="p">:</span> <span class="nc">Object</span><span class="p">()</span>
 </code></pre></div></div>
 
+<h3 id="unnecessaryinnerclass">UnnecessaryInnerClass</h3>
+
+<p>This rule reports unnecessary inner classes. Nested classes that do not access members from the outer class do
+not require the <code class="language-plaintext highlighter-rouge">inner</code> qualifier.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 5min</p>
+
+<h4 id="noncompliant-code-47">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">foo</span> <span class="p">=</span> <span class="s">"BAR"</span>
+
+    <span class="k">inner</span> <span class="kd">class</span> <span class="nc">B</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">fizz</span> <span class="p">=</span> <span class="s">"BUZZ"</span>
+
+        <span class="k">fun</span> <span class="nf">printFizz</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="n">fizz</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="unnecessarylet">UnnecessaryLet</h3>
 
 <p><code class="language-plaintext highlighter-rouge">let</code> expressions are used extensively in our code for null-checking and chaining functions,
@@ -2140,7 +2166,7 @@ to reduce visual complexity.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-47">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-48">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span><span class="p">.</span><span class="nf">let</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span> <span class="c1">// can be replaced with `print(a)`</span>
 <span class="n">a</span><span class="p">.</span><span class="nf">let</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="nf">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">}</span> <span class="c1">// can be replaced with `a.plus(1)`</span>
@@ -2169,7 +2195,7 @@ These unnecessary parentheses can safely be removed.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-48">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-49">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">local</span> <span class="p">=</span> <span class="p">(</span><span class="mi">5</span> <span class="p">+</span> <span class="mi">3</span><span class="p">)</span>
 
@@ -2201,7 +2227,7 @@ some value subtracted by 1. ‘until’ helps to prevent off-by-one errors.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-49">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-50">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="o">..</span> <span class="mi">10</span> <span class="p">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
 <span class="kd">val</span> <span class="py">range</span> <span class="p">=</span> <span class="mi">0</span> <span class="o">..</span> <span class="mi">10</span> <span class="p">-</span> <span class="mi">1</span>
@@ -2266,7 +2292,7 @@ can lead to confusion and potential bugs.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-50">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-51">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">find</span> <span class="p">{</span> <span class="n">it</span> <span class="p">==</span> <span class="mi">4</span> <span class="p">}</span> <span class="p">!=</span> <span class="k">null</span>
 <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">find</span> <span class="p">{</span> <span class="n">it</span> <span class="p">==</span> <span class="mi">4</span> <span class="p">}</span> <span class="p">==</span> <span class="k">null</span>
@@ -2287,7 +2313,7 @@ The latter should be preferred as it is more readable.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-51">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-52">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PositiveCase</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"..."</span><span class="p">))</span>
 </code></pre></div></div>
@@ -2307,7 +2333,7 @@ The latter should be preferred as it is more readable.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-52">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-53">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">check</span><span class="p">(</span><span class="n">x</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
 </code></pre></div></div>
@@ -2326,7 +2352,7 @@ Prefer them instead of manually throwing an IllegalStateException.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-53">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-54">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalStateException</span><span class="p">(</span><span class="s">"value should not be null"</span><span class="p">)</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalStateException</span><span class="p">(</span><span class="s">"value is $value but should be at least 0"</span><span class="p">)</span>
@@ -2374,7 +2400,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
   </li>
 </ul>
 
-<h4 id="noncompliant-code-54">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-55">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">DataClassCandidate</span><span class="p">(</span><span class="kd">val</span> <span class="py">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">i2</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
@@ -2401,7 +2427,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-55">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-56">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">arrayOf</span><span class="p">()</span>
 <span class="nf">listOf</span><span class="p">()</span> <span class="c1">// or listOfNotNull()</span>
@@ -2430,7 +2456,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-56">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-57">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">list</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;,</span> <span class="n">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="nf">isEmpty</span><span class="p">())</span> <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="n">list</span>
@@ -2460,7 +2486,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-57">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-58">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">when</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">null</span> <span class="p">-&gt;</span> <span class="k">true</span>
@@ -2483,7 +2509,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-58">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-59">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;?)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">x</span><span class="p">.</span><span class="nf">isEmpty</span><span class="p">())</span> <span class="k">return</span>
@@ -2511,7 +2537,7 @@ and generate <code class="language-plaintext highlighter-rouge">hashCode</code>,
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-59">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-60">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">test</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;?,</span> <span class="n">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">?)</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">a</span> <span class="p">=</span> <span class="n">x</span> <span class="o">?:</span> <span class="nf">emptyList</span><span class="p">()</span>
@@ -2536,7 +2562,7 @@ IllegalArgumentException.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-60">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-61">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalArgumentException</span><span class="p">(</span><span class="s">"value should not be null"</span><span class="p">)</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="p">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">throw</span> <span class="nc">IllegalArgumentException</span><span class="p">(</span><span class="s">"value is $value but should be at least 0"</span><span class="p">)</span>
@@ -2558,7 +2584,7 @@ IllegalArgumentException.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-61">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-62">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">require</span><span class="p">(</span><span class="n">x</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
 </code></pre></div></div>
@@ -2581,7 +2607,7 @@ the value is null or not.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-62">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-63">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">testList</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">).</span><span class="nf">orEmpty</span><span class="p">()</span>
 <span class="kd">val</span> <span class="py">testList2</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="s">"string"</span><span class="p">).</span><span class="nf">orEmpty</span><span class="p">().</span><span class="nf">map</span> <span class="p">{</span> <span class="n">_</span> <span class="p">}</span>
@@ -2607,7 +2633,7 @@ Furthermore, this rule reports utility classes which are not final.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="noncompliant-code-63">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-64">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">UtilityClassViolation</span> <span class="p">{</span>
 
@@ -2659,7 +2685,7 @@ the current state easier.</p>
 
 <p><strong>Aliases</strong>: CanBeVal</p>
 
-<h4 id="noncompliant-code-64">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-65">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">example</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="py">i</span> <span class="p">=</span> <span class="mi">1</span> <span class="c1">// violation: this variable is never re-assigned</span>
@@ -2699,7 +2725,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
   </li>
 </ul>
 
-<h4 id="noncompliant-code-65">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-66">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">io.gitlab.arturbosch.detekt.*</span>
 
