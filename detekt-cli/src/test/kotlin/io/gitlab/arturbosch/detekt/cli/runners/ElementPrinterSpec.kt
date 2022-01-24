@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ElementPrinterSpec : Spek({
+class ElementPrinterSpec {
 
-    describe("element printer") {
+    @Nested
+    inner class `element printer` {
 
-        it("should print the ast as string") {
+        @Test
+        fun `should print the ast as string`() {
             val case = resourceAsPath("cases/Poko.kt")
             val ktFile = compileForTest(case)
 
@@ -19,7 +21,7 @@ class ElementPrinterSpec : Spek({
             assertThat(dump.trimIndent()).isEqualTo(expected)
         }
     }
-})
+}
 
 private val expected = """0: KtFile
   1: KtPackageDirective
