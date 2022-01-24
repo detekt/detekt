@@ -8,8 +8,7 @@ dependencies {
     api(libs.kotlin.compilerEmbeddable)
     implementation(projects.detektPsiUtils)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }
 
 tasks.withType<Test> {
