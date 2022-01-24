@@ -43,7 +43,7 @@ class SimpleGlobSpec {
         }
 
         @Nested
-        inner class `static pattern` {
+        inner class `Static pattern` {
             private val subject = SimpleGlob.of("abc")
 
             @Test
@@ -60,7 +60,7 @@ class SimpleGlobSpec {
         }
 
         @Nested
-        inner class `* wildcard` {
+        inner class `Asterisk wildcard` {
             @Nested
             inner class `single wildcard` {
                 @Nested
@@ -87,7 +87,7 @@ class SimpleGlobSpec {
                 }
 
                 @Nested
-                inner class `pattern with wildcard at the end` {
+                inner class `Pattern with wildcard at the end` {
                     private val subject = SimpleGlob.of("xyz*")
 
                     @Test
@@ -110,7 +110,7 @@ class SimpleGlobSpec {
                 }
 
                 @Nested
-                inner class `pattern with wildcard at the middle` {
+                inner class `Pattern with wildcard at the middle` {
                     private val subject = SimpleGlob.of("x*yz")
 
                     @Test
@@ -152,7 +152,7 @@ class SimpleGlobSpec {
         }
 
         @Nested
-        inner class `? wildcard` {
+        inner class `Questionmark wildcard` {
             @Nested
             inner class `single wildcard` {
                 @Nested
@@ -234,7 +234,7 @@ class SimpleGlobSpec {
         @Nested
         inner class `characters that have a special meaning in regular expression must be escaped` {
             @Nested
-            inner class `period _` {
+            inner class `Period` {
                 private val subject = SimpleGlob.of("a.b.c")
 
                 @Test
@@ -251,7 +251,7 @@ class SimpleGlobSpec {
             }
 
             @Nested
-            inner class `backslash` {
+            inner class `Backslash` {
                 private val subject = SimpleGlob.of("""ab\d""")
 
                 @Test
@@ -271,7 +271,7 @@ class SimpleGlobSpec {
         @Nested
         inner class `invalid pattern` {
             @Test
-            fun `fails`() {
+            fun `fails during creation`() {
                 assertThatThrownBy { SimpleGlob.of("""a[b""") }
                     .isInstanceOf(IllegalArgumentException::class.java)
             }
