@@ -4,15 +4,17 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.reflections.Reflections
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-class RuleProviderConfigSpec : Spek({
+class RuleProviderConfigSpec {
 
-    describe("RuleProvider config test") {
+    @Nested
+    inner class `RuleProvider config test` {
 
-        it("should test if the config has been passed to all rules") {
+        @Test
+        fun `should test if the config has been passed to all rules`() {
             val config = TestConfig()
             val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
             val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
@@ -31,4 +33,4 @@ class RuleProviderConfigSpec : Spek({
             }
         }
     }
-})
+}
