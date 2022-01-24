@@ -4,12 +4,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 import java.nio.file.Paths
 
 class PathMatchersSpec {
 
-    val expectedMatch = Paths.get("/detekt/api/Issue.kt")
-    val nonMatchingPath = Paths.get("/detekt/cli/Issue.kt")
+    private val expectedMatch: Path = Paths.get("/detekt/api/Issue.kt")
+    private val nonMatchingPath: Path = Paths.get("/detekt/cli/Issue.kt")
 
     @Nested
     inner class `supports globbing` {
