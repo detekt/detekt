@@ -28,14 +28,14 @@ class AnnotationExcluderSpec {
             value = [
                 "Component,@Component,true",
                 "Component,@dagger.Component,true",
-                "Component,@Factory,true", // false positive
-                "Component,@Component.Factory,true", // false positive
-                "Component,@dagger.Component.Factory,true", // false positive
+                "Component,@Factory,false",
+                "Component,@Component.Factory,false",
+                "Component,@dagger.Component.Factory,false",
                 "dagger.Component,@Component,true",
                 "dagger.Component,@dagger.Component,true",
-                "dagger.Component,@Factory,true", // false positive
+                "dagger.Component,@Factory,false",
                 "dagger.Component,@Component.Factory,false",
-                "dagger.Component,@dagger.Component.Factory,true", // false positive
+                "dagger.Component,@dagger.Component.Factory,false",
                 "Component.Factory,@Component,false",
                 "Component.Factory,@dagger.Component,false",
                 "Component.Factory,@Factory,true",
@@ -44,7 +44,7 @@ class AnnotationExcluderSpec {
                 "dagger.Component.Factory,@Component,false",
                 "dagger.Component.Factory,@dagger.Component,false",
                 "dagger.Component.Factory,@Factory,true",
-                "dagger.Component.Factory,@Component.Factory,false", // false negative
+                "dagger.Component.Factory,@Component.Factory,true",
                 "dagger.Component.Factory,@dagger.Component.Factory,true",
                 "Factory,@Component,false",
                 "Factory,@dagger.Component,false",
@@ -54,17 +54,17 @@ class AnnotationExcluderSpec {
                 "dagger.*,@Component,true",
                 "dagger.*,@dagger.Component,true",
                 "dagger.*,@Factory,true",
-                "dagger.*,@Component.Factory,false", // false positive
+                "dagger.*,@Component.Factory,true",
                 "dagger.*,@dagger.Component.Factory,true",
                 "*.Component.Factory,@Component,false",
                 "*.Component.Factory,@dagger.Component,false",
                 "*.Component.Factory,@Factory,true",
-                "*.Component.Factory,@Component.Factory,false", // false positive
+                "*.Component.Factory,@Component.Factory,true",
                 "*.Component.Factory,@dagger.Component.Factory,true",
                 "*.Component.*,@Component,false",
                 "*.Component.*,@dagger.Component,false",
                 "*.Component.*,@Factory,true",
-                "*.Component.*,@Component.Factory,false", // false positive
+                "*.Component.*,@Component.Factory,true",
                 "*.Component.*,@dagger.Component.Factory,true",
                 "foo.Component,@Component,false",
                 "foo.Component,@dagger.Component,false",
