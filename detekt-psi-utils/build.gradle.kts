@@ -6,6 +6,5 @@ plugins {
 dependencies {
     implementation(libs.kotlin.compilerEmbeddable)
 
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }
