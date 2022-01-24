@@ -80,12 +80,12 @@ sealed class FunctionMatcher {
 
 // Extracted from: https://stackoverflow.com/a/16108347/842697
 private fun String.splitParams(): List<String> {
-    val split: MutableList<String> = ArrayList()
+    val split: MutableList<String> = mutableListOf()
     var nestingLevel = 0
     val result = StringBuilder()
     this.forEach { c ->
         if (c == ',' && nestingLevel == 0) {
-            split.add(result.toString())
+            split.add(result.toString().trim())
             result.setLength(0)
         } else {
             if (c == '(') nestingLevel++
@@ -94,8 +94,11 @@ private fun String.splitParams(): List<String> {
             result.append(c)
         }
     }
-    split.add(result.toString())
-    return split.map { it.trim() }.filter { it.isNotBlank() }
+    val lastParam = result.toString().trim()
+    if (lastParam.isNotEmpty()) {
+        split.add(lastParam)
+    }
+    return split
 }
 
 private fun changeIfLambda(param: String): String? {
@@ -112,6 +115,10 @@ private fun splitLambda(param: String): Pair<String, String>? {
     val paramsRaw = StringBuilder()
     val returnValue = StringBuilder()
 
+    /*
+     * We don't count the first `(` so as soon as the nestingLevel reaches the last `)` we know that we read all the
+     * params. Then we handle the rest of the String as the result.
+     */
     param.toCharArray()
         .drop(1)
         .forEach { c ->
@@ -126,7 +133,7 @@ private fun splitLambda(param: String): Pair<String, String>? {
             }
         }
 
-    check(returnValue.contains("->"))
+    check(returnValue.trim().startsWith("->"))
 
     return paramsRaw.toString().trim() to returnValue.toString().substringAfter("->").trim()
 }
