@@ -2,39 +2,45 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class PathMatchersSpec : Spek({
+class PathMatchersSpec {
 
     val expectedMatch = Paths.get("/detekt/api/Issue.kt")
     val nonMatchingPath = Paths.get("/detekt/cli/Issue.kt")
 
-    describe("supports globbing") {
+    @Nested
+    inner class `supports globbing` {
 
         val libraryPattern = "**/detekt/api/**"
-        val matcher by memoized { pathMatcher("glob:$libraryPattern") }
+        private val matcher = pathMatcher("glob:$libraryPattern")
 
-        it("should match") {
+        @Test
+        fun `should match`() {
             assertThat(matcher.matches(expectedMatch)).isTrue()
         }
 
-        it("should not match") {
+        @Test
+        fun `should not match`() {
             assertThat(matcher.matches(nonMatchingPath)).isFalse()
         }
 
-        it("should work with windows like paths") {
+        @Test
+        fun `should work with windows like paths`() {
             assertThat(matcher.matches(Paths.get("C:/detekt/api/Issue.kt"))).isTrue()
         }
     }
 
-    describe("does not support regex") {
+    @Nested
+    inner class `does not support regex` {
 
-        it("should work as a regex path matcher when syntax not specified") {
+        @Test
+        fun `should work as a regex path matcher when syntax not specified`() {
             assertThatThrownBy { pathMatcher("regex:.*/detekt/api/.*") }
                 .isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Only globbing patterns are supported as they are treated os-independently by the PathMatcher api.")
         }
     }
-})
+}
