@@ -4,15 +4,17 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-class ConfigExporterSpec : Spek({
+class ConfigExporterSpec {
 
-    describe("config exporter") {
+    @Nested
+    inner class `config exporter` {
 
-        it("should export the given config") {
+        @Test
+        fun `should export the given config`() {
             val tmpConfig = createTempFileForTest("ConfigPrinterSpec", ".yml")
             val cliArgs = parseArguments(arrayOf("--config", tmpConfig.toString()))
 
@@ -21,4 +23,4 @@ class ConfigExporterSpec : Spek({
             assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
         }
     }
-})
+}

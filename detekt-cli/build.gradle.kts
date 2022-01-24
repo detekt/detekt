@@ -20,8 +20,7 @@ dependencies {
     runtimeOnly(projects.detektRules)
 
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 
     formattingJar(projects.detektFormatting)
 }

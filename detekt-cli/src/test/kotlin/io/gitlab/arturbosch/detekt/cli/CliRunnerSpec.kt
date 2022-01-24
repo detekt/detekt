@@ -2,11 +2,12 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.DetektCli
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
+import org.junit.jupiter.api.Test
 
-class CliRunnerSpec : Spek({
+class CliRunnerSpec {
 
-    test("cli module provides an implementation of DetektCli") {
+    @Test
+    fun `cli module provides an implementation of DetektCli`() {
         assertThat(DetektCli.load()).isInstanceOf(CliRunner::class.java)
     }
-})
+}
