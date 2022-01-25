@@ -13,7 +13,7 @@ class WrongEqualsTypeParameterSpec {
     inner class `WrongEqualsTypeParameter rule` {
 
         @Test
-        fun `does not report Any? as parameter`() {
+        fun `does not report nullable Any as parameter`() {
             val code = """
                 class A {
                     override fun equals(other: Any?): Boolean {

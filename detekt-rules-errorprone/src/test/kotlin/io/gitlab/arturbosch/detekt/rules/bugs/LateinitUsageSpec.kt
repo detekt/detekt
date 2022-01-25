@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -37,14 +38,16 @@ class LateinitUsageSpec {
         }
 
         @Test
-        fun `should only report lateinit properties not matching kotlin_*`() {
+        @DisplayName("should only report lateinit properties not matching kotlin.*")
+        fun `exclude with wildcard`() {
             val findings =
                 LateinitUsage(TestConfig(mapOf(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.*")))).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
-        fun `should only report lateinit properties matching kotlin_`() {
+        @DisplayName("should only report lateinit properties matching kotlin.")
+        fun `exclude with prefix`() {
             val findings =
                 LateinitUsage(TestConfig(mapOf(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.")))).compileAndLint(code)
             assertThat(findings).hasSize(1)

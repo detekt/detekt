@@ -77,7 +77,7 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports String?_toUpperCase() call without explicit locale`() {
+        fun `reports nullable String_toUpperCase call without explicit locale`() {
             val code = """
                 fun x() {
                     val s: String? = "deadbeef"
@@ -87,7 +87,7 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports String?_toLowerCase() call without explicit locale`() {
+        fun `reports nullable String_toLowerCase call without explicit locale`() {
             val code = """
                 fun x() {
                     val s: String? = "deadbeef"

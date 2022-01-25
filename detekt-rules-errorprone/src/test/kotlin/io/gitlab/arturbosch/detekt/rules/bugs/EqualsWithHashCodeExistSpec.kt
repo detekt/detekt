@@ -92,7 +92,7 @@ class EqualsWithHashCodeExistSpec {
             }
 
             @Test
-            fun `does not report when using kotlin_Any?`() {
+            fun `does not report when using nullable Any`() {
                 val code = """
                 class A {
                     override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
