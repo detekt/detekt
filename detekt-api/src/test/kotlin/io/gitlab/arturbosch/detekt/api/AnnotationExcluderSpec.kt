@@ -3,110 +3,128 @@ package io.gitlab.arturbosch.detekt.api
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.createPsiFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.lifecycle.CachingMode
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
-class AnnotationExcluderSpec : Spek({
+class AnnotationExcluderSpec {
 
-    val psiFactory by memoized(CachingMode.SCOPE) { createPsiFactory() }
+    private val psiFactory = createPsiFactory()
 
-    describe("a kt file with some imports") {
-        val file by memoized {
-            compileContentForTest(
-                """
+    @Nested
+    inner class `a kt file with some imports` {
+        private val file = compileContentForTest(
+            """
                 package foo
 
                 import dagger.Component
                 import dagger.Component.Factory
-                """.trimIndent()
+            """.trimIndent()
+        )
+
+        @Nested
+        inner class `All cases` {
+
+            @ParameterizedTest
+            @CsvSource(
+                value = [
+                    "Component,@Component",
+                    "Component,@dagger.Component",
+                    "Component,@Factory", // false positive
+                    "Component,@Component.Factory", // false positive
+                    "Component,@dagger.Component.Factory", // false positive
+                    "dagger.Component,@Component",
+                    "dagger.Component,@dagger.Component",
+                    "dagger.Component,@Factory", // false positive
+                    "dagger.Component,@dagger.Component.Factory", // false positive
+                    "Component.Factory,@Factory",
+                    "Component.Factory,@Component.Factory",
+                    "Component.Factory,@dagger.Component.Factory",
+                    "dagger.Component.Factory,@Factory",
+                    "dagger.Component.Factory,@dagger.Component.Factory",
+                    "Factory,@Factory",
+                    "Factory,@Component.Factory",
+                    "Factory,@dagger.Component.Factory",
+                    "dagger.*,@Component",
+                    "dagger.*,@dagger.Component",
+                    "dagger.*,@Factory",
+                    "dagger.*,@dagger.Component.Factory",
+                    "*.Component.Factory,@Factory",
+                    "*.Component.Factory,@dagger.Component.Factory",
+                    "*.Component.*,@Factory",
+                    "*.Component.*,@dagger.Component.Factory",
+                ]
             )
-        }
+            fun `should exclude`(exclusion: String, annotation: String) {
+                val excluder = AnnotationExcluder(file, listOf(exclusion))
 
-        context("All cases") {
-            data class Case(val excludes: String, val annotation: String)
+                val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+            }
 
-            mapOf(
-                Case("Component", "@Component") to true,
-                Case("Component", "@dagger.Component") to true,
-                Case("Component", "@Factory") to true, // false positive
-                Case("Component", "@Component.Factory") to true, // false positive
-                Case("Component", "@dagger.Component.Factory") to true, // false positive
-                Case("dagger.Component", "@Component") to true,
-                Case("dagger.Component", "@dagger.Component") to true,
-                Case("dagger.Component", "@Factory") to true, // false positive
-                Case("dagger.Component", "@Component.Factory") to false,
-                Case("dagger.Component", "@dagger.Component.Factory") to true, // false positive
-                Case("Component.Factory", "@Component") to false,
-                Case("Component.Factory", "@dagger.Component") to false,
-                Case("Component.Factory", "@Factory") to true,
-                Case("Component.Factory", "@Component.Factory") to true,
-                Case("Component.Factory", "@dagger.Component.Factory") to true,
-                Case("dagger.Component.Factory", "@Component") to false,
-                Case("dagger.Component.Factory", "@dagger.Component") to false,
-                Case("dagger.Component.Factory", "@Factory") to true,
-                Case("dagger.Component.Factory", "@Component.Factory") to false, // false negative
-                Case("dagger.Component.Factory", "@dagger.Component.Factory") to true,
-                Case("Factory", "@Component") to false,
-                Case("Factory", "@dagger.Component") to false,
-                Case("Factory", "@Factory") to true,
-                Case("Factory", "@Component.Factory") to true,
-                Case("Factory", "@dagger.Component.Factory") to true,
-                Case("dagger.*", "@Component") to true,
-                Case("dagger.*", "@dagger.Component") to true,
-                Case("dagger.*", "@Factory") to true,
-                Case("dagger.*", "@Component.Factory") to false, // false positive
-                Case("dagger.*", "@dagger.Component.Factory") to true,
-                Case("*.Component.Factory", "@Component") to false,
-                Case("*.Component.Factory", "@dagger.Component") to false,
-                Case("*.Component.Factory", "@Factory") to true,
-                Case("*.Component.Factory", "@Component.Factory") to false, // false positive
-                Case("*.Component.Factory", "@dagger.Component.Factory") to true,
-                Case("*.Component.*", "@Component") to false,
-                Case("*.Component.*", "@dagger.Component") to false,
-                Case("*.Component.*", "@Factory") to true,
-                Case("*.Component.*", "@Component.Factory") to false, // false positive
-                Case("*.Component.*", "@dagger.Component.Factory") to true,
-                Case("foo.Component", "@Component") to false,
-                Case("foo.Component", "@dagger.Component") to false,
-                Case("foo.Component", "@Factory") to false,
-                Case("foo.Component", "@Component.Factory") to false,
-                Case("foo.Component", "@dagger.Component.Factory") to false,
-            ).forEach { (case, expected) ->
-                val (exclude, annotation) = case
-                it("With exclude $exclude and annotation $annotation") {
-                    val excluder = AnnotationExcluder(file, listOf(exclude))
+            @ParameterizedTest
+            @CsvSource(
+                value = [
+                    "dagger.Component,@Component.Factory",
+                    "Component.Factory,@Component",
+                    "Component.Factory,@dagger.Component",
+                    "dagger.Component.Factory,@Component",
+                    "dagger.Component.Factory,@dagger.Component",
+                    "dagger.Component.Factory,@Component.Factory", // false negative
+                    "Factory,@Component",
+                    "Factory,@dagger.Component",
+                    "dagger.*,@Component.Factory", // false positive
+                    "*.Component.Factory,@Component",
+                    "*.Component.Factory,@dagger.Component",
+                    "*.Component.Factory,@Component.Factory", // false positive
+                    "*.Component.*,@Component",
+                    "*.Component.*,@dagger.Component",
+                    "*.Component.*,@Component.Factory", // false positive
+                    "foo.Component,@Component",
+                    "foo.Component,@dagger.Component",
+                    "foo.Component,@Factory",
+                    "foo.Component,@Component.Factory",
+                    "foo.Component,@dagger.Component.Factory",
+                ]
+            )
+            fun `should not exclude`(exclusion: String, annotation: String) {
+                val excluder = AnnotationExcluder(file, listOf(exclusion))
 
-                    val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
-                    assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(expected)
-                }
+                val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
         }
 
-        context("special cases") {
-            val annotation by memoized { psiFactory.createAnnotationEntry("@Component") }
-            val sinceKotlinAnnotation by memoized { psiFactory.createAnnotationEntry("@SinceKotlin") }
+        @Nested
+        inner class `special cases` {
+            private val annotation = psiFactory.createAnnotationEntry("@Component")
+            private val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
 
-            it("should not exclude when the annotation was not found") {
+            @Test
+            fun `should not exclude when the annotation was not found`() {
                 val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
                 assertThat(excluder.shouldExclude(listOf(annotation))).isFalse()
             }
 
-            it("should not exclude when no annotations should be excluded") {
+            @Test
+            fun `should not exclude when no annotations should be excluded`() {
                 val excluder = AnnotationExcluder(file, emptyList())
                 assertThat(excluder.shouldExclude(listOf(annotation))).isFalse()
             }
 
-            it("should also exclude an annotation that is not imported") {
+            @Test
+            fun `should also exclude an annotation that is not imported`() {
                 val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
                 assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isTrue()
             }
 
-            it("should exclude when the annotation was found with SplitPattern") {
+            @Test
+            fun `should exclude when the annotation was found with SplitPattern`() {
                 @Suppress("DEPRECATION")
                 val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
                 assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isTrue()
             }
         }
     }
-})
+}

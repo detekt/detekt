@@ -5,44 +5,57 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class RuleSetConfigPropertySpec : Spek({
+class RuleSetConfigPropertySpec {
 
-    describe("Rule set config property delegate") {
-        context("boolean property") {
-            it("reads the value in config if present") {
+    @Nested
+    inner class `Rule set config property delegate` {
+        @Nested
+        inner class `boolean property` {
+            @Test
+            fun `reads the value in config if present`() {
                 assertThat(TestRuleSetProvider.android.value(TestConfig("android" to "false")))
                     .isEqualTo(false)
             }
-            it("uses the default value in config if not present") {
+
+            @Test
+            fun `uses the default value in config if not present`() {
                 assertThat(TestRuleSetProvider.android.value(TestConfig()))
                     .isEqualTo(true)
             }
         }
 
-        context("int property") {
-            it("reads the value in config if present") {
+        @Nested
+        inner class `int property` {
+            @Test
+            fun `reads the value in config if present`() {
                 assertThat(TestRuleSetProvider.number.value(TestConfig("number" to "37"))).isEqualTo(37)
             }
-            it("uses the default value in config if not present") {
+
+            @Test
+            fun `uses the default value in config if not present`() {
                 assertThat(TestRuleSetProvider.number.value(TestConfig())).isEqualTo(42)
             }
         }
 
-        context("string property") {
-            it("reads the value in config if present") {
+        @Nested
+        inner class `string property` {
+            @Test
+            fun `reads the value in config if present`() {
                 assertThat(TestRuleSetProvider.fileName.value(TestConfig("fileName" to "main.kt")))
                     .isEqualTo("main.kt")
             }
-            it("uses the default value in config if not present") {
+
+            @Test
+            fun `uses the default value in config if not present`() {
                 assertThat(TestRuleSetProvider.fileName.value(TestConfig()))
                     .isEqualTo("test.kt")
             }
         }
     }
-})
+}
 
 private class TestRuleSetProvider : RuleSetProvider {
     override val ruleSetId: String = "testRuleSetId"

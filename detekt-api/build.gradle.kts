@@ -13,9 +13,7 @@ dependencies {
     implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
-    testImplementation(libs.bundles.testImplementation)
-
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
 
