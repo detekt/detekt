@@ -5,23 +5,27 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
-    val subject by memoized { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
+class EqualsAlwaysReturnsTrueOrFalseSpec {
+    private val subject = EqualsAlwaysReturnsTrueOrFalse(Config.empty)
 
-    describe("Equals Always Returns True Or False rule") {
+    @Nested
+    inner class `Equals Always Returns True Or False rule` {
 
-        it("reports equals() methods") {
+        @Test
+        fun `reports equals() methods`() {
             assertThat(subject.lint(resourceAsPath("EqualsAlwaysReturnsTrueOrFalsePositive.kt"))).hasSize(6)
         }
 
-        it("does not report equals() methods") {
+        @Test
+        fun `does not report equals() methods`() {
             assertThat(subject.lint(resourceAsPath("EqualsAlwaysReturnsTrueOrFalseNegative.kt"))).isEmpty()
         }
 
-        it("detects and doesn't crash when return expression is annotated - #2021") {
+        @Test
+        fun `detects and doesn't crash when return expression is annotated - #2021`() {
             val code = """
                 class C {
                     override fun equals(other: Any?): Boolean {
@@ -33,7 +37,8 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("detects and doesn't crash when the equals method contains no return expression - #2103") {
+        @Test
+        fun `detects and doesn't crash when the equals method contains no return expression - #2103`() {
             val code = """
                 open class SuperClass
                 
@@ -45,4 +50,4 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

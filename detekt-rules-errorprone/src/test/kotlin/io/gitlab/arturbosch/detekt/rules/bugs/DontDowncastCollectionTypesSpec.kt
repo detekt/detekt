@@ -1,24 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class DontDowncastCollectionTypesSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = DontDowncastCollectionTypes(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { DontDowncastCollectionTypes(Config.empty) }
+    @Nested
+    inner class `DontDowncastCollectionTypes rule` {
 
-    describe("DontDowncastCollectionTypes rule") {
-
-        describe("valid cases") {
-            it("detects List type casts") {
+        @Nested
+        inner class `valid cases` {
+            @Test
+            fun `detects List type casts`() {
                 val code = """
                 fun main() {
                     val myList = listOf(1,2,3)
@@ -32,7 +33,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects List type safe casts") {
+            @Test
+            fun `detects List type safe casts`() {
                 val code = """
                 fun main() {
                     val myList : List<Int>? = null
@@ -46,7 +48,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects List type checks") {
+            @Test
+            fun `detects List type checks`() {
                 val code = """
                 fun main() {
                     val myList = listOf(1,2,3)
@@ -62,7 +65,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Set type casts") {
+            @Test
+            fun `detects Set type casts`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -76,7 +80,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Set type safe casts") {
+            @Test
+            fun `detects Set type safe casts`() {
                 val code = """
                 fun main() {
                     val mySet : Set<Int>? = null
@@ -90,7 +95,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Set type checks") {
+            @Test
+            fun `detects Set type checks`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -106,7 +112,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Map type casts") {
+            @Test
+            fun `detects Map type casts`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -120,7 +127,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Map type safe casts") {
+            @Test
+            fun `detects Map type safe casts`() {
                 val code = """
                 fun main() {
                     val myMap : Map<Int, Int>? = null
@@ -134,7 +142,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects Map type checks") {
+            @Test
+            fun `detects Map type checks`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -151,9 +160,11 @@ class DontDowncastCollectionTypesSpec : Spek({
             }
         }
 
-        describe("ignores valid casts") {
+        @Nested
+        inner class `ignores valid casts` {
 
-            it("ignores MutableList casts") {
+            @Test
+            fun `ignores MutableList casts`() {
                 val code = """
                 fun main() {
                     val myList = mutableListOf(1,2,3)
@@ -164,7 +175,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 assertThat(result).isEmpty()
             }
 
-            it("ignores MutableSet casts") {
+            @Test
+            fun `ignores MutableSet casts`() {
                 val code = """
                 fun main() {
                     val mySet = mutableSetOf(1,2,3)
@@ -175,7 +187,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 assertThat(result).isEmpty()
             }
 
-            it("ignores Map type casts") {
+            @Test
+            fun `ignores Map type casts`() {
                 val code = """
                 fun main() {
                     val myMap = mutableMapOf(1 to 2)
@@ -186,7 +199,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 assertThat(result).isEmpty()
             }
 
-            it("ignores Synthetic types") {
+            @Test
+            fun `ignores Synthetic types`() {
                 val code = """
                 import kotlinx.android.synthetic.main.tooltip_progress_bar.view.*
                 fun main() {
@@ -198,9 +212,11 @@ class DontDowncastCollectionTypesSpec : Spek({
             }
         }
 
-        describe("type-aliases") {
+        @Nested
+        inner class `type-aliases` {
 
-            it("detects ArrayList type casts") {
+            @Test
+            fun `detects ArrayList type casts`() {
                 val code = """
                 fun main() {
                     val myList = listOf(1,2,3)
@@ -214,7 +230,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects ArrayList type safe casts") {
+            @Test
+            fun `detects ArrayList type safe casts`() {
                 val code = """
                 fun main() {
                     val myList : List<Int>? = null
@@ -228,7 +245,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects ArrayList type checks") {
+            @Test
+            fun `detects ArrayList type checks`() {
                 val code = """
                 fun main() {
                     val myList = listOf(1,2,3)
@@ -244,7 +262,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashSet type casts") {
+            @Test
+            fun `detects LinkedHashSet type casts`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -258,7 +277,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashSet type safe casts") {
+            @Test
+            fun `detects LinkedHashSet type safe casts`() {
                 val code = """
                 fun main() {
                     val mySet : Set<Int>? = null
@@ -272,7 +292,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashSet type checks") {
+            @Test
+            fun `detects LinkedHashSet type checks`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -288,7 +309,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashSet type casts") {
+            @Test
+            fun `detects HashSet type casts`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -302,7 +324,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashSet type safe casts") {
+            @Test
+            fun `detects HashSet type safe casts`() {
                 val code = """
                 fun main() {
                     val mySet : Set<Int>? = null
@@ -316,7 +339,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashSet type checks") {
+            @Test
+            fun `detects HashSet type checks`() {
                 val code = """
                 fun main() {
                     val mySet = setOf(1,2,3)
@@ -332,7 +356,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashMap type casts") {
+            @Test
+            fun `detects HashMap type casts`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -346,7 +371,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashMap type safe casts") {
+            @Test
+            fun `detects HashMap type safe casts`() {
                 val code = """
                 fun main() {
                     val myMap : Map<Int, Int>? = null
@@ -360,7 +386,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects HashMap type checks") {
+            @Test
+            fun `detects HashMap type checks`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -376,7 +403,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashMap type casts") {
+            @Test
+            fun `detects LinkedHashMap type casts`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -390,7 +418,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashMap type safe casts") {
+            @Test
+            fun `detects LinkedHashMap type safe casts`() {
                 val code = """
                 fun main() {
                     val myMap : Map<Int, Int>? = null
@@ -404,7 +433,8 @@ class DontDowncastCollectionTypesSpec : Spek({
                 )
             }
 
-            it("detects LinkedHashMap type checks") {
+            @Test
+            fun `detects LinkedHashMap type checks`() {
                 val code = """
                 fun main() {
                     val myMap = mapOf(1 to 2)
@@ -421,4 +451,4 @@ class DontDowncastCollectionTypesSpec : Spek({
             }
         }
     }
-})
+}

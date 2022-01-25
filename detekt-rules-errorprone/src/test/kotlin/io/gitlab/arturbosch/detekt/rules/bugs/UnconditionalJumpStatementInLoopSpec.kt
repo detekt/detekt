@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnconditionalJumpStatementInLoopSpec : Spek({
-    val subject by memoized { UnconditionalJumpStatementInLoop() }
+class UnconditionalJumpStatementInLoopSpec {
+    private val subject = UnconditionalJumpStatementInLoop()
 
-    describe("UnconditionalJumpStatementInLoop rule") {
+    @Nested
+    inner class `UnconditionalJumpStatementInLoop rule` {
 
-        it("reports an unconditional return in for loop") {
+        @Test
+        fun `reports an unconditional return in for loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) return
@@ -19,7 +21,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional return in while loop") {
+        @Test
+        fun `reports an unconditional return in while loop`() {
             val code = """
                 fun f() {
                     while (true) { return } 
@@ -28,7 +31,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional return in do-while loop") {
+        @Test
+        fun `reports an unconditional return in do-while loop`() {
             val code = """
                 fun f() {
                     do { return } while(true) 
@@ -37,7 +41,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional continue in for loop") {
+        @Test
+        fun `reports an unconditional continue in for loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) continue
@@ -46,7 +51,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional continue in while loop") {
+        @Test
+        fun `reports an unconditional continue in while loop`() {
             val code = """
                 fun f() {
                     while (true) { continue } 
@@ -55,7 +61,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional continue in do-while loop") {
+        @Test
+        fun `reports an unconditional continue in do-while loop`() {
             val code = """
                 fun f() {
                     do { continue } while(true) 
@@ -64,7 +71,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional break in for loop") {
+        @Test
+        fun `reports an unconditional break in for loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) break
@@ -73,7 +81,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional break in while loop") {
+        @Test
+        fun `reports an unconditional break in while loop`() {
             val code = """
                 fun f() {
                     while (true) { break } 
@@ -82,7 +91,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional break in do-while loop") {
+        @Test
+        fun `reports an unconditional break in do-while loop`() {
             val code = """
                 fun f() {
                     do { break } while(true) 
@@ -91,7 +101,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional return in a nested loop") {
+        @Test
+        fun `reports an unconditional return in a nested loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -104,7 +115,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional continue in a nested loop") {
+        @Test
+        fun `reports an unconditional continue in a nested loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -117,7 +129,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports an unconditional break in a nested loop") {
+        @Test
+        fun `reports an unconditional break in a nested loop`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -130,7 +143,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report a conditional return in an if-else block") {
+        @Test
+        fun `does not report a conditional return in an if-else block`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -144,7 +158,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional continue in an if-else block") {
+        @Test
+        fun `does not report a conditional continue in an if-else block`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -158,7 +173,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional break in an if-else block") {
+        @Test
+        fun `does not report a conditional break in an if-else block`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -172,7 +188,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports an unconditional return after Elvis operator") {
+        @Test
+        fun `reports an unconditional return after Elvis operator`() {
             val code = """
                 fun main() {
                     fun compute(i: Int) = null
@@ -184,7 +201,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report a conditional continue after Elvis operator") {
+        @Test
+        fun `does not report a conditional continue after Elvis operator`() {
             val code = """
                 fun f(): Int {
                     fun compute(i: Int): Int? = null
@@ -197,7 +215,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional break after Elvis operator") {
+        @Test
+        fun `does not report a conditional break after Elvis operator`() {
             val code = """
                 fun f(): Int {
                     fun compute(i: Int): Int? = null
@@ -210,7 +229,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional return after assignment with Elvis operator") {
+        @Test
+        fun `does not report a conditional return after assignment with Elvis operator`() {
             val code = """
                 fun f(): Int {
                     fun compute(i: Int): Int? = null
@@ -224,7 +244,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional continue after assignment with Elvis operator") {
+        @Test
+        fun `does not report a conditional continue after assignment with Elvis operator`() {
             val code = """
                 fun f(): Int {
                     fun compute(i: Int): Int? = null
@@ -238,7 +259,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional break after assignment with Elvis operator") {
+        @Test
+        fun `does not report a conditional break after assignment with Elvis operator`() {
             val code = """
                 fun f(): Int {
                     fun compute(i: Int): Int? = null
@@ -252,7 +274,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional return after expression with Elvis operator") {
+        @Test
+        fun `does not report a conditional return after expression with Elvis operator`() {
             val code = """
                 fun f() {
                     fun compute(i: Int): Int? = null
@@ -264,7 +287,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional continue after expression with Elvis operator") {
+        @Test
+        fun `does not report a conditional continue after expression with Elvis operator`() {
             val code = """
                 fun f() {
                     fun compute(i: Int): Int? = null
@@ -276,7 +300,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional break after expression with Elvis operator") {
+        @Test
+        fun `does not report a conditional break after expression with Elvis operator`() {
             val code = """
                 fun f() {
                     fun compute(i: Int): Int? = null
@@ -288,7 +313,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a conditional jump in a nested block") {
+        @Test
+        fun `does not report a conditional jump in a nested block`() {
             val code = """
                 fun f() {
                     for (i in 1..2) {
@@ -302,7 +328,8 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a return after a conditional jump") {
+        @Test
+        fun `does not report a return after a conditional jump`() {
             val findings = subject.compileAndLint(
                 """
                 fun f(): Int {
@@ -330,4 +357,4 @@ class UnconditionalJumpStatementInLoopSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}
