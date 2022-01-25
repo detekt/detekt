@@ -4,56 +4,64 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class EmptyDefaultConstructorSpec : Spek({
+internal class EmptyDefaultConstructorSpec {
 
-    describe("EmptyDefaultConstructor rule") {
+    @Nested
+    inner class `EmptyDefaultConstructor rule` {
 
-        it("EmptyConstructor") {
+        @Test
+        fun `EmptyConstructor`() {
             val code = """
                 class EmptyConstructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
-        it("EmptyPrimaryConstructor") {
+        @Test
+        fun `EmptyPrimaryConstructor`() {
             val code = """
                 class EmptyPrimaryConstructor constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
-        it("EmptyPublicPrimaryConstructor") {
+        @Test
+        fun `EmptyPublicPrimaryConstructor`() {
             val code = """
                 class EmptyPublicPrimaryConstructor public constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
-        it("PrimaryConstructorWithParameter") {
+        @Test
+        fun `PrimaryConstructorWithParameter`() {
             val code = """
                 class PrimaryConstructorWithParameter constructor(x: Int)
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
 
-        it("PrimaryConstructorWithAnnotation") {
+        @Test
+        fun `PrimaryConstructorWithAnnotation`() {
             val code = """
                 class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
 
-        it("PrivatePrimaryConstructor") {
+        @Test
+        fun `PrivatePrimaryConstructor`() {
             val code = """
                 class PrivatePrimaryConstructor private constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
 
-        it("EmptyConstructorIsCalled") {
+        @Test
+        fun `EmptyConstructorIsCalled`() {
             val code = """
                 class EmptyConstructorIsCalled() {
 
@@ -63,32 +71,36 @@ internal class EmptyDefaultConstructorSpec : Spek({
             assertThat(EmptyDefaultConstructor(Config.empty).compileAndLint(code)).isEmpty()
         }
 
-        it("should not report empty constructors for classes with expect keyword - #1362") {
+        @Test
+        fun `should not report empty constructors for classes with expect keyword - #1362`() {
             val code = """
                 expect class NeedsConstructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
         }
 
-        it("should not report empty constructors for classes with actual - #1362") {
+        @Test
+        fun `should not report empty constructors for classes with actual - #1362`() {
             val code = """
                 actual class NeedsConstructor actual constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
         }
 
-        it("should not report empty constructors for annotation classes with expect keyword - #1362") {
+        @Test
+        fun `should not report empty constructors for annotation classes with expect keyword - #1362`() {
             val code = """
                 expect annotation class NeedsConstructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
         }
 
-        it("should not report empty constructors for annotation classes with actual - #1362") {
+        @Test
+        fun `should not report empty constructors for annotation classes with actual - #1362`() {
             val code = """
                 actual annotation class NeedsConstructor actual constructor()
             """
             assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
         }
     }
-})
+}
