@@ -13,22 +13,24 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThatCode
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
-class DefaultConfigurationProviderSpec : Spek({
+class DefaultConfigurationProviderSpec {
 
-    describe("default configuration") {
+    @Nested
+    inner class `default configuration` {
 
-        it("loads first found instance") {
+        @Test
+        fun `loads first found instance`() {
             assertThatCode {
                 DefaultConfigurationProvider.load(Spec)
                     .copy(createTempFileForTest("test", "test"))
             }.doesNotThrowAnyException()
         }
     }
-})
+}
 
 internal class TestConfigurationProvider : DefaultConfigurationProvider {
     override fun init(spec: ProcessingSpec) {

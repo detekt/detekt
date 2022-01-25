@@ -7,8 +7,7 @@ dependencies {
     api(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }
 
 apiValidation {

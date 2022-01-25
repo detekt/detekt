@@ -4,9 +4,12 @@ import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
 import io.gitlab.arturbosch.detekt.generator.out.PropertiesWriter
 import io.gitlab.arturbosch.detekt.generator.out.YamlWriter
+import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
+import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.printRuleSetPage
+import java.nio.file.Paths
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
 
@@ -20,8 +23,17 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
                 jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
             }
         }
-        yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
-        propertiesWriter.write(arguments.configPath, "deprecation") { DeprecatedPrinter.print(pages) }
+        yamlWriter.write(arguments.configPath, "default-detekt-config") {
+            ConfigPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
+        }
+        propertiesWriter.write(arguments.configPath, "deprecation") {
+            DeprecatedPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
+        }
+        yamlWriter.write(Paths.get("../detekt-formatting/src/main/resources/config"), "config") {
+            yaml {
+                printRuleSetPage(pages.first { it.ruleSet.name == "formatting" })
+            }
+        }
     }
 
     private fun jekyllHeader(ruleSet: String): String {

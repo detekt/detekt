@@ -3,16 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class EmptyIfBlockSpec : Spek({
+class EmptyIfBlockSpec {
 
-    val subject by memoized { EmptyIfBlock(Config.empty) }
+    private val subject = EmptyIfBlock(Config.empty)
 
-    describe("EmptyIfBlock rule") {
+    @Nested
+    inner class `EmptyIfBlock rule` {
 
-        it("reports empty if with trailing semicolon") {
+        @Test
+        fun `reports empty if with trailing semicolon`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -23,7 +25,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports empty if with trailing semicolon on new line") {
+        @Test
+        fun `reports empty if with trailing semicolon on new line`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -35,7 +38,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports empty if with trailing semicolon and braces") {
+        @Test
+        fun `reports empty if with trailing semicolon and braces`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -47,7 +51,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report nonempty if with braces") {
+        @Test
+        fun `does not report nonempty if with braces`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -59,7 +64,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nonempty if without braces") {
+        @Test
+        fun `does not report nonempty if without braces`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -69,7 +75,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nonempty if without braces but semicolon") {
+        @Test
+        fun `does not report nonempty if without braces but semicolon`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -79,7 +86,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report empty if but nonempty else") {
+        @Test
+        fun `does not report empty if but nonempty else`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -90,7 +98,8 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report empty if and else-if but nonempty else") {
+        @Test
+        fun `does not report empty if and else-if but nonempty else`() {
             val code = """
                 fun f() {
                     var i = 0
@@ -102,4 +111,4 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}
