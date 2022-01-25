@@ -50,7 +50,31 @@ class FunctionMatcherSpec : Spek({
                     "io.gitlab.arturbosch.detekt.SomeClass.some , method",
                     listOf("kotlin.String"),
                 ),
-            )
+            ),
+            TestCase(
+                testDescription = "should return method name and param list when it has lambdas",
+                functionSignature = "hello((Bar, Foo) -> Unit, (Bar) -> Bar, Foo, () -> Foo)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function2",
+                        "kotlin.Function1",
+                        "Foo",
+                        "kotlin.Function0",
+                    ),
+                ),
+            ),
+            TestCase(
+                testDescription = "should return method name and param list when it has complex lambdas",
+                functionSignature = "hello((Bar, (Bar) -> Unit) -> (Bar) -> Foo, () -> Unit)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function2",
+                        "kotlin.Function0",
+                    ),
+                ),
+            ),
         ).forEach { testCase ->
             it(testCase.testDescription) {
                 val functionMatcher = FunctionMatcher.fromFunctionSignature(testCase.functionSignature)
@@ -132,6 +156,20 @@ private val matrixCase: Map<FunctionMatcher, Map<String, Boolean>> = run {
             functions[3] to false, // fun compare()
             functions[4] to false, // fun compare(hello: String)
             functions[5] to false, // fun compare(hello: String, world: Int)
+        ),
+        FunctionMatcher.fromFunctionSignature("foo(() -> kotlin.String)") to linkedMapOf(
+            "fun foo(a: () -> String)" to true,
+            "fun foo(a: () -> Unit)" to true,
+            "fun foo(a: (String) -> String)" to false,
+            "fun foo(a: (String) -> Unit)" to false,
+            "fun foo(a: (Int) -> Unit)" to false,
+        ),
+        FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)") to linkedMapOf(
+            "fun foo(a: () -> String)" to false,
+            "fun foo(a: () -> Unit)" to false,
+            "fun foo(a: (String) -> String)" to true,
+            "fun foo(a: (String) -> Unit)" to true,
+            "fun foo(a: (Int) -> Unit)" to true,
         ),
     )
 }

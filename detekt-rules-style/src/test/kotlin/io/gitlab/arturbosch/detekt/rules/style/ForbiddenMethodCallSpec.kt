@@ -302,5 +302,21 @@ class ForbiddenMethodCallSpec : Spek({
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }
+
+        it("should report functions with lambda params") {
+            val code = """
+                package org.example
+
+                fun bar(b: (String) -> String) = Unit
+
+                fun foo() {
+                    bar { "" }
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(METHODS to listOf("org.example.bar((kotlin.String) -> kotlin.String)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 })
