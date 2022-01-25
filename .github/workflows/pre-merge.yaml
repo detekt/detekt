@@ -55,7 +55,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        java-version: 11
+        java-version: 17
         distribution: 'temurin'
     - name: Verify Generated Detekt Config File
       uses: gradle/gradle-build-action@v2
@@ -71,7 +71,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@v2
