@@ -51,8 +51,6 @@ testing {
 
             dependencies {
                 implementation(libs.assertj)
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.runner)
             }
         }
     }
