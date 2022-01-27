@@ -88,6 +88,7 @@ tasks.withType<KotlinCompile>().configureEach {
         apiVersion = "1.4"
         freeCompilerArgs = listOf(
             "-progressive",
+            "-Xsuppress-version-warnings",
             "-Xopt-in=kotlin.RequiresOptIn"
         )
     }
