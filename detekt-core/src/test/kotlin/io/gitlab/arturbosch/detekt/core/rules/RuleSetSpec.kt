@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -41,7 +42,8 @@ class RuleSetSpec {
             }
 
             @Test
-            fun `should not analyze file with *_kt excludes`() {
+            @DisplayName("should not analyze file with **/*.kt excludes")
+            fun ignoreExcludedKt() {
                 val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
                 assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
             }
