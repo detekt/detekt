@@ -84,7 +84,6 @@ configurations.create("coverageDataElements") {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
-        languageVersion = "1.6"
         apiVersion = "1.4"
         freeCompilerArgs = listOf(
             "-progressive",
