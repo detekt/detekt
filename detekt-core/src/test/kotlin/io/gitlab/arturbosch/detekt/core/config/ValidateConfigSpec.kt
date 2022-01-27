@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -178,7 +179,8 @@ class ValidateConfigSpec {
             }
 
             @Test
-            fun `does not report '_*_InnerMap'`() {
+            @DisplayName("does not report .*>InnerMap")
+            fun `does not report innerMap`() {
                 val result = validateConfig(
                     yamlConfig("config_validation/other-nested-property-names.yml"),
                     baseline,
