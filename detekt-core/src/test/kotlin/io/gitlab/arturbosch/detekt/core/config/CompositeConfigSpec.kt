@@ -16,7 +16,7 @@ class CompositeConfigSpec {
         private val compositeConfig = CompositeConfig(second, first)
 
         @Test
-        fun `should have style sub config with active false which is overridden in "second" config regardless of default value`() {
+        fun `should have style sub config with active false which is overridden in second config regardless of default value`() {
             val styleConfig = compositeConfig.subConfig("style").subConfig("WildcardImport")
             assertThat(styleConfig.valueOrDefault("active", true)).isEqualTo(false)
             assertThat(styleConfig.valueOrDefault("active", false)).isEqualTo(false)
