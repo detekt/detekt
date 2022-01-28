@@ -21,10 +21,17 @@ object KotlinScriptEngine {
         borrowEngine().compileWithRetryOnNameClash(code)
     }
 
+    @Suppress("ForbiddenMethodCall")
     private fun PooledScriptEngine.compileWithRetryOnNameClash(code: String) {
         try {
             compile(code)
-        } catch (e: KotlinFrontEndException) {
+        } catch (_: KotlinFrontEndException) {
+            println(
+                "Kotlin compiler exception detected. " +
+                    "This could be caused by a name clash with previously compiled snippets. Will retry to compile" +
+                    "\n$code\n" +
+                    "with a fresh script engine."
+            )
             borrowNewEngine().compileWithRetryOnNameClash(code)
         } catch (e: ScriptException) {
             throw KotlinScriptException(e)

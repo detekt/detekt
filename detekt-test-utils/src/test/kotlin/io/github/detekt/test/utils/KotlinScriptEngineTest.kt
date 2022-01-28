@@ -30,7 +30,7 @@ class KotlinScriptEngineTest {
     @RepeatedTest(10)
     fun `can compile the same script repeatedly`() {
         val code = """
-            package foo.b
+            package foo.c
             
             class A
         """.trimIndent()
@@ -40,7 +40,7 @@ class KotlinScriptEngineTest {
     @RepeatedTest(10)
     fun `fails repeatedly on invalid script`() {
         val invalidCode = """
-            package foo.b
+            package foo.d
 
             val unknownType: UnknownType
         """.trimIndent()
