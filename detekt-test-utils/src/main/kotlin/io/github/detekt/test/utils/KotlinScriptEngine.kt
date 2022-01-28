@@ -1,6 +1,10 @@
 package io.github.detekt.test.utils
 
+import io.github.detekt.test.utils.KotlinScriptEnginePool.borrowEngine
+import io.github.detekt.test.utils.KotlinScriptEnginePool.borrowNewEngine
+import io.github.detekt.test.utils.KotlinScriptEnginePool.returnEngine
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.util.KotlinFrontEndException
 import javax.script.ScriptException
 
 /**
@@ -14,11 +18,18 @@ object KotlinScriptEngine {
      * Afterwards this method throws a [KotlinScriptException].
      */
     fun compile(@Language("kotlin") code: String) {
+        borrowEngine().compileWithRetryOnNameClash(code)
+    }
+
+    private fun PooledScriptEngine.compileWithRetryOnNameClash(code: String) {
         try {
-            KotlinScriptEnginePool.getEngine().compile(code)
+            compile(code)
+        } catch (e: KotlinFrontEndException) {
+            borrowNewEngine().compileWithRetryOnNameClash(code)
         } catch (e: ScriptException) {
-            KotlinScriptEnginePool.recoverEngine()
             throw KotlinScriptException(e)
+        } finally {
+            returnEngine(this)
         }
     }
 }

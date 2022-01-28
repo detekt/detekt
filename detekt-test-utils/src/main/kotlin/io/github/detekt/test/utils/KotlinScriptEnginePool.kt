@@ -3,6 +3,7 @@ package io.github.detekt.test.utils
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory
+import java.util.Collections
 
 /**
  * The object to manage a pool of Kotlin script engines to distribute the load for compiling code.
@@ -10,28 +11,27 @@ import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactor
  */
 internal object KotlinScriptEnginePool {
 
-    private const val NUMBER_OF_ENGINES = 8
+    private val AVAILABLE_ENGINES: MutableList<PooledScriptEngine> =
+        Collections.synchronizedList(mutableListOf())
 
-    private val engines: Array<KotlinJsr223JvmLocalScriptEngine> by lazy {
-        Array(NUMBER_OF_ENGINES) { createEngine() }
-    }
-    private var id = 0
+    fun borrowEngine(): PooledScriptEngine = AVAILABLE_ENGINES.removeFirstOrNull() ?: createEngine()
 
-    fun getEngine(): KotlinJsr223JvmLocalScriptEngine {
-        id++
-        if (id == NUMBER_OF_ENGINES) {
-            id = 0
-        }
-        return engines[id]
+    fun borrowNewEngine(): PooledScriptEngine = createEngine()
+
+    fun returnEngine(engine: PooledScriptEngine) {
+        AVAILABLE_ENGINES.add(engine)
     }
 
-    fun recoverEngine() {
-        engines[id] = createEngine()
-    }
-
-    private fun createEngine(): KotlinJsr223JvmLocalScriptEngine {
+    private fun createEngine(): PooledScriptEngine {
         setIdeaIoUseFallback() // To avoid error on Windows
         val engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine as? KotlinJsr223JvmLocalScriptEngine
-        return requireNotNull(engine) { "Kotlin script engine not supported" }
+            ?: error("Kotlin script engine not supported")
+        return PooledScriptEngine(engine)
+    }
+}
+
+internal class PooledScriptEngine(private val engine: KotlinJsr223JvmLocalScriptEngine) {
+    fun compile(code: String) {
+        engine.compile(code)
     }
 }
