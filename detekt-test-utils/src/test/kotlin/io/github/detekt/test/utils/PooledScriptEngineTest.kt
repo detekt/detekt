@@ -41,7 +41,7 @@ internal class PooledScriptEngineTest {
         """.trimIndent()
 
         val validCode = """
-            package foo.c
+            package pooled.c
             
             class A
         """.trimIndent()
