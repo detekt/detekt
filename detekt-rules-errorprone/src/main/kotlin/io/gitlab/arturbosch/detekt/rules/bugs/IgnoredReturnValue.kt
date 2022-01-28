@@ -60,11 +60,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     }
 
     @Configuration(
-        "List of fully-qualified function call signatures which should be ignored by this rule. " +
-            "Functions can be defined without full signature (i.e. `java.time.LocalDate.now`) which will ignore " +
-            "calls of all functions with this name or with full signature " +
-            "(i.e. `java.time.LocalDate.now(java.time.Clock)`) which would ignore only call " +
-            "with this concrete signature."
+        "List of function signatures which should be ignored by this rule. " +
+            "Specifying fully-qualified function signature with name only (i.e. `java.time.LocalDate.now`) will ignore " +
+            "all function calls matching the name. Specifying fully-qualified function signature with parameters" +
+            "(i.e. `java.time.LocalDate.now(java.time.Clock)`) will ignore only function calls matching the name " +
+            "and parameters exactly."
     )
     private val ignoreFunctionCall: List<FunctionMatcher> by config(emptyList<String>()) {
         it.map(FunctionMatcher::fromFunctionSignature)
