@@ -4,7 +4,7 @@ import org.junit.jupiter.api.RepeatedTest
 
 class KotlinScriptEngineTest {
 
-    @RepeatedTest(10)
+    @RepeatedTest(2)
     fun `can compile a script`() {
         val code = """
             package foo
