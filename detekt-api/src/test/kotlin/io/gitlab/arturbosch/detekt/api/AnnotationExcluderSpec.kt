@@ -23,77 +23,61 @@ class AnnotationExcluderSpec {
             """.trimIndent()
         )
 
-        @Nested
-        inner class `All cases` {
+        @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2}")
+        @CsvSource(
+            value = [
+                "Component,@Component,true",
+                "Component,@dagger.Component,true",
+                "Component,@Factory,true", // false positive
+                "Component,@Component.Factory,true", // false positive
+                "Component,@dagger.Component.Factory,true", // false positive
+                "dagger.Component,@Component,true",
+                "dagger.Component,@dagger.Component,true",
+                "dagger.Component,@Factory,true", // false positive
+                "dagger.Component,@Component.Factory,false",
+                "dagger.Component,@dagger.Component.Factory,true", // false positive
+                "Component.Factory,@Component,false",
+                "Component.Factory,@dagger.Component,false",
+                "Component.Factory,@Factory,true",
+                "Component.Factory,@Component.Factory,true",
+                "Component.Factory,@dagger.Component.Factory,true",
+                "dagger.Component.Factory,@Component,false",
+                "dagger.Component.Factory,@dagger.Component,false",
+                "dagger.Component.Factory,@Factory,true",
+                "dagger.Component.Factory,@Component.Factory,false", // false negative
+                "dagger.Component.Factory,@dagger.Component.Factory,true",
+                "Factory,@Component,false",
+                "Factory,@dagger.Component,false",
+                "Factory,@Factory,true",
+                "Factory,@Component.Factory,true",
+                "Factory,@dagger.Component.Factory,true",
+                "dagger.*,@Component,true",
+                "dagger.*,@dagger.Component,true",
+                "dagger.*,@Factory,true",
+                "dagger.*,@Component.Factory,false", // false positive
+                "dagger.*,@dagger.Component.Factory,true",
+                "*.Component.Factory,@Component,false",
+                "*.Component.Factory,@dagger.Component,false",
+                "*.Component.Factory,@Factory,true",
+                "*.Component.Factory,@Component.Factory,false", // false positive
+                "*.Component.Factory,@dagger.Component.Factory,true",
+                "*.Component.*,@Component,false",
+                "*.Component.*,@dagger.Component,false",
+                "*.Component.*,@Factory,true",
+                "*.Component.*,@Component.Factory,false", // false positive
+                "*.Component.*,@dagger.Component.Factory,true",
+                "foo.Component,@Component,false",
+                "foo.Component,@dagger.Component,false",
+                "foo.Component,@Factory,false",
+                "foo.Component,@Component.Factory,false",
+                "foo.Component,@dagger.Component.Factory,false",
+            ]
+        )
+        fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
+            val excluder = AnnotationExcluder(file, listOf(exclusion))
 
-            @ParameterizedTest
-            @CsvSource(
-                value = [
-                    "Component,@Component",
-                    "Component,@dagger.Component",
-                    "Component,@Factory", // false positive
-                    "Component,@Component.Factory", // false positive
-                    "Component,@dagger.Component.Factory", // false positive
-                    "dagger.Component,@Component",
-                    "dagger.Component,@dagger.Component",
-                    "dagger.Component,@Factory", // false positive
-                    "dagger.Component,@dagger.Component.Factory", // false positive
-                    "Component.Factory,@Factory",
-                    "Component.Factory,@Component.Factory",
-                    "Component.Factory,@dagger.Component.Factory",
-                    "dagger.Component.Factory,@Factory",
-                    "dagger.Component.Factory,@dagger.Component.Factory",
-                    "Factory,@Factory",
-                    "Factory,@Component.Factory",
-                    "Factory,@dagger.Component.Factory",
-                    "dagger.*,@Component",
-                    "dagger.*,@dagger.Component",
-                    "dagger.*,@Factory",
-                    "dagger.*,@dagger.Component.Factory",
-                    "*.Component.Factory,@Factory",
-                    "*.Component.Factory,@dagger.Component.Factory",
-                    "*.Component.*,@Factory",
-                    "*.Component.*,@dagger.Component.Factory",
-                ]
-            )
-            fun `should exclude`(exclusion: String, annotation: String) {
-                val excluder = AnnotationExcluder(file, listOf(exclusion))
-
-                val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
-                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
-            }
-
-            @ParameterizedTest
-            @CsvSource(
-                value = [
-                    "dagger.Component,@Component.Factory",
-                    "Component.Factory,@Component",
-                    "Component.Factory,@dagger.Component",
-                    "dagger.Component.Factory,@Component",
-                    "dagger.Component.Factory,@dagger.Component",
-                    "dagger.Component.Factory,@Component.Factory", // false negative
-                    "Factory,@Component",
-                    "Factory,@dagger.Component",
-                    "dagger.*,@Component.Factory", // false positive
-                    "*.Component.Factory,@Component",
-                    "*.Component.Factory,@dagger.Component",
-                    "*.Component.Factory,@Component.Factory", // false positive
-                    "*.Component.*,@Component",
-                    "*.Component.*,@dagger.Component",
-                    "*.Component.*,@Component.Factory", // false positive
-                    "foo.Component,@Component",
-                    "foo.Component,@dagger.Component",
-                    "foo.Component,@Factory",
-                    "foo.Component,@Component.Factory",
-                    "foo.Component,@dagger.Component.Factory",
-                ]
-            )
-            fun `should not exclude`(exclusion: String, annotation: String) {
-                val excluder = AnnotationExcluder(file, listOf(exclusion))
-
-                val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
-                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
-            }
+            val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
         }
 
         @Nested
