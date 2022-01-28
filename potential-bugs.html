@@ -809,6 +809,11 @@ fun returnsNoValue() {}</p>
 
     <p>Annotations to skip this inspection</p>
   </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ignoreFunctionCall</code> (default: <code class="language-plaintext highlighter-rouge">[]</code>)</p>
+
+    <p>List of function signatures which should be ignored by this rule. Specifying fully-qualified function signature with name only (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) will ignore all function calls matching the name. Specifying fully-qualified function signature with parameters(i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now(java.time.Clock)</code>) will ignore only function calls matching the name and parameters exactly.</p>
+  </li>
 </ul>
 
 <h4 id="noncompliant-code-10">Noncompliant Code:</h4>
@@ -1536,7 +1541,7 @@ See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Jan 27, 2022 <br />
+ Site last generated: Jan 28, 2022 <br />
                 </div>
             </div>
 </footer>
