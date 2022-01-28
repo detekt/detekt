@@ -838,6 +838,11 @@ To do this introduce a query on detekt tasks and define include and exclude patt
     <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
     <span class="n">exclude</span><span class="o">(</span><span class="s2">"**/special/package/internal/**"</span><span class="o">)</span> <span class="c1">// but exclude our legacy internal package</span>
 <span class="o">}</span>
+
+<span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">io</span><span class="o">.</span><span class="na">gitlab</span><span class="o">.</span><span class="na">arturbosch</span><span class="o">.</span><span class="na">detekt</span><span class="o">.</span><span class="na">DetektCreateBaselineTask</span><span class="o">).</span><span class="na">configureEach</span> <span class="o">{</span>
+    <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
+    <span class="n">exclude</span><span class="o">(</span><span class="s2">"**/special/package/internal/**"</span><span class="o">)</span> <span class="c1">// but exclude our legacy internal package</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h4 id="kotlin-dsl-5">Kotlin DSL</h4>
@@ -847,6 +852,11 @@ To do this introduce a query on detekt tasks and define include and exclude patt
 <span class="p">}</span>
 
 <span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">Detekt</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
+    <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
+    <span class="nf">exclude</span><span class="p">(</span><span class="s">"**/special/package/internal/**"</span><span class="p">)</span> <span class="c1">// but exclude our legacy internal package</span>
+<span class="p">}</span>
+
+<span class="n">tasks</span><span class="p">.</span><span class="n">withType</span><span class="p">&lt;</span><span class="n">io</span><span class="p">.</span><span class="n">gitlab</span><span class="p">.</span><span class="n">arturbosch</span><span class="p">.</span><span class="n">detekt</span><span class="p">.</span><span class="nc">DetektCreateBaselineTask</span><span class="p">&gt;().</span><span class="nf">configureEach</span> <span class="p">{</span>
     <span class="c1">// include("**/special/package/**") // only analyze a sub package inside src/main/kotlin</span>
     <span class="nf">exclude</span><span class="p">(</span><span class="s">"**/special/package/internal/**"</span><span class="p">)</span> <span class="c1">// but exclude our legacy internal package</span>
 <span class="p">}</span>
