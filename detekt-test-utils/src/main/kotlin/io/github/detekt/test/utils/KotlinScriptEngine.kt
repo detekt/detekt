@@ -18,11 +18,11 @@ object KotlinScriptEngine {
      * Afterwards this method throws a [KotlinScriptException].
      */
     fun compile(@Language("kotlin") code: String) {
-        borrowEngine().compileWithRetryOnNameClash(code)
+        borrowEngine().compileWithRetryOnFrontendException(code)
     }
 
     @Suppress("ForbiddenMethodCall")
-    private fun PooledScriptEngine.compileWithRetryOnNameClash(code: String) {
+    private fun PooledScriptEngine.compileWithRetryOnFrontendException(code: String) {
         try {
             compile(code)
         } catch (_: KotlinFrontEndException) {
@@ -32,7 +32,7 @@ object KotlinScriptEngine {
                     "\n$code\n" +
                     "with a fresh script engine."
             )
-            borrowNewEngine().compileWithRetryOnNameClash(code)
+            borrowNewEngine().compileWithRetryOnFrontendException(code)
         } catch (e: ScriptException) {
             throw KotlinScriptException(e)
         } finally {
