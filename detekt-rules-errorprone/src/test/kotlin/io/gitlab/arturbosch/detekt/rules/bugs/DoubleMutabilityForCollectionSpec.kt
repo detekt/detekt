@@ -4,9 +4,12 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
+private const val MUTABLE_TYPES = "mutableTypes"
 
 @KotlinCoreEnvironmentTest
 class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) {
@@ -115,6 +118,27 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     val result = subject.compileAndLintWithContext(env, code)
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(2, 5)
+                }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun main() {
+                        var myState = MutableState("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(3, 5)
                 }
             }
 
@@ -333,6 +357,25 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(1, 1)
                 }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    var myState = MutableState("foo")
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(2, 1)
+                }
             }
 
             @Nested
@@ -543,6 +586,27 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     val result = subject.compileAndLintWithContext(env, code)
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(2, 5)
+                }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    class MyClass {
+                        var myState = MutableState("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(3, 5)
                 }
             }
 
