@@ -56,7 +56,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
-        ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
+        ruleModules.plus("${rootProject.rootDir}/detekt-formatting/src/main/kotlin").joinToString(","),
         "--documentation",
         documentationDir,
         "--config",

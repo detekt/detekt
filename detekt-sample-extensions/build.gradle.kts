@@ -9,6 +9,5 @@ dependencies {
     // When creating a sample extension, change this dependency to the detekt-test version you build against
     // e.g. io.gitlab.arturbosch.detekt:detekt-test:1.x.x
     testImplementation(projects.detektTest)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }

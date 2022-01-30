@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -332,7 +333,8 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `With glob doesn't match because * doesn't match _`() {
+            @DisplayName("with glob doesn't match because * doesn't match .")
+            fun withGlobDoesntMatch() {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("*.Composable")),
                     binding,

@@ -19,7 +19,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
 
       - name: Run detekt-cli with argsfile
@@ -44,7 +44,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        java-version: 11
+        java-version: 17
         distribution: 'temurin'
     - name: Run analysis
       uses: gradle/gradle-build-action@v2

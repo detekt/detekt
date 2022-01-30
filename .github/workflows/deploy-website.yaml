@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-detekt-docs:
+    if: github.repository == 'detekt/detekt'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -15,7 +16,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
 
       - name: Build Detekt Documentation

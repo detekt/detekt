@@ -10,5 +10,6 @@ dependencies {
     implementation(libs.kotlin.scriptUtil)
     implementation(libs.junit.api)
 
+    testImplementation(libs.assertj)
     runtimeOnly(libs.kotlin.scriptingCompilerEmbeddable)
 }

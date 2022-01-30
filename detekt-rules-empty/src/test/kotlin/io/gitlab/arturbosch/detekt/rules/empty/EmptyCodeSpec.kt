@@ -9,13 +9,13 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
 private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 
-class EmptyCodeSpec : Spek({
+class EmptyCodeSpec {
 
     val regexTestingCode = """
             fun f() {
@@ -24,13 +24,16 @@ class EmptyCodeSpec : Spek({
                 }
             }"""
 
-    describe("EmptyCatchBlock rule") {
+    @Nested
+    inner class `EmptyCatchBlock rule` {
 
-        it("findsEmptyCatch") {
+        @Test
+        fun `findsEmptyCatch`() {
             test { EmptyCatchBlock(Config.empty) }
         }
 
-        it("findsEmptyNestedCatch") {
+        @Test
+        fun `findsEmptyNestedCatch`() {
             val code = """
             fun f() {
                 try {
@@ -43,7 +46,8 @@ class EmptyCodeSpec : Spek({
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
-        it("doesNotReportIgnoredOrExpectedException") {
+        @Test
+        fun `doesNotReportIgnoredOrExpectedException`() {
             val code = """
             fun f() {
                 try {
@@ -54,7 +58,8 @@ class EmptyCodeSpec : Spek({
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
         }
 
-        it("doesNotReportEmptyCatchWithConfig") {
+        @Test
+        fun `doesNotReportEmptyCatchWithConfig`() {
             val code = """
             fun f() {
                 try {
@@ -65,55 +70,68 @@ class EmptyCodeSpec : Spek({
             assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
         }
 
-        it("findsEmptyFinally") {
+        @Test
+        fun `findsEmptyFinally`() {
             test { EmptyFinallyBlock(Config.empty) }
         }
 
-        it("findsEmptyIf") {
+        @Test
+        fun `findsEmptyIf`() {
             test { EmptyIfBlock(Config.empty) }
         }
 
-        it("findsEmptyElse") {
+        @Test
+        fun `findsEmptyElse`() {
             test { EmptyElseBlock(Config.empty) }
         }
 
-        it("findsEmptyFor") {
+        @Test
+        fun `findsEmptyFor`() {
             test { EmptyForBlock(Config.empty) }
         }
 
-        it("findsEmptyWhile") {
+        @Test
+        fun `findsEmptyWhile`() {
             test { EmptyWhileBlock(Config.empty) }
         }
 
-        it("findsEmptyDoWhile") {
+        @Test
+        fun `findsEmptyDoWhile`() {
             test { EmptyDoWhileBlock(Config.empty) }
         }
 
-        it("findsEmptyFun") {
+        @Test
+        fun `findsEmptyFun`() {
             test { EmptyFunctionBlock(Config.empty) }
         }
 
-        it("findsEmptyClass") {
+        @Test
+        fun `findsEmptyClass`() {
             test { EmptyClassBlock(Config.empty) }
         }
 
-        it("findsEmptyTry") {
+        @Test
+        fun `findsEmptyTry`() {
             test { EmptyTryBlock(Config.empty) }
         }
 
-        it("findsEmptyWhen") {
+        @Test
+        fun `findsEmptyWhen`() {
             test { EmptyWhenBlock(Config.empty) }
         }
 
-        it("findsEmptyInit") {
+        @Test
+        fun `findsEmptyInit`() {
             test { EmptyInitBlock(Config.empty) }
         }
 
-        it("findsOneEmptySecondaryConstructor") {
+        @Test
+        fun `findsOneEmptySecondaryConstructor`() {
             test { EmptySecondaryConstructor(Config.empty) }
         }
 
-        it("doesNotFailWithInvalidRegexWhenDisabled") {
+        @Test
+        fun `doesNotFailWithInvalidRegexWhenDisabled`() {
             val configValues = mapOf(
                 "active" to "false",
                 ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
@@ -122,7 +140,8 @@ class EmptyCodeSpec : Spek({
             assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
         }
 
-        it("doesFailWithInvalidRegex") {
+        @Test
+        fun `doesFailWithInvalidRegex`() {
             val configValues = mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
             val config = TestConfig(configValues)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
@@ -130,7 +149,7 @@ class EmptyCodeSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun test(block: () -> Rule) {
     val rule = block()

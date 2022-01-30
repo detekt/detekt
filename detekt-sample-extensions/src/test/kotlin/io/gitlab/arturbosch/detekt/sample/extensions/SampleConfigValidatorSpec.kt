@@ -2,11 +2,12 @@ package io.gitlab.arturbosch.detekt.sample.extensions
 
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
+import org.junit.jupiter.api.Test
 
-internal class SampleConfigValidatorSpec : Spek({
+class SampleConfigValidatorSpec {
 
-    test("warns if active property is not a boolean") {
+    @Test
+    fun `it warns if active property is not a boolean`() {
         val config = yamlConfigFromContent(
             """
             sample:
@@ -22,4 +23,4 @@ internal class SampleConfigValidatorSpec : Spek({
             .extracting("message")
             .contains("'active' property must be of type boolean.")
     }
-})
+}

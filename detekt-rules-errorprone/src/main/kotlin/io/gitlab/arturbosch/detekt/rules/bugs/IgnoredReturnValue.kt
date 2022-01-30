@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -58,6 +59,17 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(String::simplePatternToRegex)
     }
 
+    @Configuration(
+        "List of function signatures which should be ignored by this rule. " +
+            "Specifying fully-qualified function signature with name only (i.e. `java.time.LocalDate.now`) will " +
+            "ignore all function calls matching the name. Specifying fully-qualified function signature with " +
+            "parameters (i.e. `java.time.LocalDate.now(java.time.Clock)`) will ignore only function calls matching " +
+            "the name and parameters exactly."
+    )
+    private val ignoreFunctionCall: List<FunctionMatcher> by config(emptyList<String>()) {
+        it.map(FunctionMatcher::fromFunctionSignature)
+    }
+
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -67,6 +79,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
+
+        if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
 
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return

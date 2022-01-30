@@ -375,6 +375,11 @@ tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
+
+tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
 ```
 
 #### Kotlin DSL
@@ -385,6 +390,11 @@ detekt {
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }

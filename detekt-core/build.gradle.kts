@@ -16,7 +16,6 @@ dependencies {
     implementation(projects.detektUtils)
 
     testRuntimeOnly(projects.detektRules)
-    testRuntimeOnly(projects.detektFormatting)
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.mockk)
