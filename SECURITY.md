@@ -2,20 +2,11 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Version | Supported                                                                                                          | Fix   |
+|---------|--------------------------------------------------------------------------------------------------------------------|-------|
+| 1.20.0  | Improper Restriction of XML External Entity Reference - [CWE-611](https://cwe.mitre.org/data/definitions/611.html) | #4499 |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Please report vulnerability to security@detekt.dev.
+If you have already reported on vulnerability disclosure platform, please include its link in the email.
