@@ -7,17 +7,32 @@ import java.util.Collections
 
 /**
  * The object to manage a pool of Kotlin script engines to distribute the load for compiling code.
- * The load for compiling code is distributed over a number of engines.
+ * Creating script engines is expensive so they are reused when compiling snippets. The pool is able to grow
+ * dynamically so whenever there is no script engine available, a new one is created. Access to the pooled engines is
+ * thread safe.
  */
 internal object KotlinScriptEnginePool {
 
     private val AVAILABLE_ENGINES: MutableList<PooledScriptEngine> =
         Collections.synchronizedList(mutableListOf())
 
+    /**
+     * Retrieves an engine from the pool. If none is available, a new one is created. The method is thread safe.
+     *
+     * When the caller is done using the engine, it should be returned to the pool by calling [returnEngine].
+     */
     fun borrowEngine(): PooledScriptEngine = AVAILABLE_ENGINES.removeFirstOrNull() ?: createEngine()
 
+    /**
+     * Creates a new engine.
+     *
+     * When the caller is done using the engine, it should be returned to the pool by calling [returnEngine].
+     */
     fun borrowNewEngine(): PooledScriptEngine = createEngine()
 
+    /**
+     * Returns a borrowed engine to the pool. This method is thread safe.
+     */
     fun returnEngine(engine: PooledScriptEngine) {
         AVAILABLE_ENGINES.add(engine)
     }

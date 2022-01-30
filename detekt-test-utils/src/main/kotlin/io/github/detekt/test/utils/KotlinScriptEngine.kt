@@ -14,8 +14,10 @@ object KotlinScriptEngine {
 
     /**
      * Compiles a given code string with the Jsr223 script engine.
-     * If a compilation error occurs the script engine is recovered.
-     * Afterwards this method throws a [KotlinScriptException].
+     * Since the script engines are reused, this might cause name clashes between compilation attempts. In this case
+     * a new script engine is created and the compilation is attempted a second time.
+     *
+     * @throws KotlinScriptException if the given code snippet does not compile
      */
     fun compile(@Language("kotlin") code: String) {
         borrowEngine().compileWithRetryOnFrontendException(code)
@@ -27,14 +29,12 @@ object KotlinScriptEngine {
             compile(code)
         } catch (_: KotlinFrontEndException) {
             println(
-                "Kotlin compiler exception detected. " +
-                    "This could be caused by a name clash with previously compiled snippets. Will retry to compile" +
-                    "\n$code\n" +
-                    "with a fresh script engine."
+                "w: Kotlin compiler exception detected. " +
+                    "This is most likely caused by a name clash with previously compiled snippets"
             )
             borrowNewEngine().compileWithRetryOnFrontendException(code)
         } catch (e: ScriptException) {
-            throw KotlinScriptException(e)
+            throw KotlinScriptException(e, code)
         } finally {
             returnEngine(this)
         }
