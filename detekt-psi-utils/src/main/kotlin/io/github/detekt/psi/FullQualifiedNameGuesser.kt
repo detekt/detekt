@@ -2,6 +2,7 @@ package io.github.detekt.psi
 
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
+import org.jetbrains.kotlin.utils.addIfNotNull
 import kotlin.LazyThreadSafetyMode.NONE
 
 class FullQualifiedNameGuesser internal constructor(
@@ -34,9 +35,7 @@ class FullQualifiedNameGuesser internal constructor(
         } else {
             mutableSetOf<String>()
                 .apply {
-                    if (name in kotlinPackageClasses) {
-                        add("kotlin.$name")
-                    }
+                    addIfNotNull(defaultImportClasses[name])
                     if (packageName != null) {
                         add("$packageName.$name")
                     }
@@ -54,55 +53,3 @@ class FullQualifiedNameGuesser internal constructor(
         }
     }
 }
-
-private val kotlinPackageClasses = arrayOf(
-    "Annotation",
-    "Any",
-    "Array",
-    "ArrayIndexOutOfBoundsException",
-    "Boolean",
-    "BooleanArray",
-    "Byte",
-    "ByteArray",
-    "Char",
-    "CharArray",
-    "CharSequence",
-    "Comparable",
-    "Comparator",
-    "DeepRecursiveFunction",
-    "DeepRecursiveScope",
-    "Deprecated",
-    "DeprecationLevel",
-    "Double",
-    "DoubleArray",
-    "Enum",
-    "Float",
-    "FloatArray",
-    "Function",
-    "Int",
-    "IntArray",
-    "KotlinVersion",
-    "Lazy",
-    "LazyThreadSafetyMode",
-    "Long",
-    "LongArray",
-    "Nothing",
-    "Number",
-    "OutOfMemoryError",
-    "Pair",
-    "Result",
-    "Short",
-    "ShortArray",
-    "String",
-    "Throwable",
-    "Triple",
-    "UByte",
-    "UByteArray",
-    "UInt",
-    "UIntArray",
-    "ULong",
-    "ULongArray",
-    "Unit",
-    "UShort",
-    "UShortArray",
-)
