@@ -186,6 +186,36 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
+
+        @DisplayName("When lambdas foo(() -> kotlin.String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun foo(a: () -> String),          true",
+            "fun foo(a: () -> Unit),            true",
+            "fun foo(a: (String) -> String),    false",
+            "fun foo(a: (String) -> Unit),      false",
+            "fun foo(a: (Int) -> Unit),         false",
+        )
+        fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(() -> kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When lambdas foo((kotlin.String) -> Unit)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun foo(a: () -> String),          false",
+            "fun foo(a: () -> Unit),            false",
+            "fun foo(a: (String) -> String),    true",
+            "fun foo(a: (String) -> Unit),      true",
+            "fun foo(a: (Int) -> Unit),         true",
+        )
+        fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
     }
 }
 
