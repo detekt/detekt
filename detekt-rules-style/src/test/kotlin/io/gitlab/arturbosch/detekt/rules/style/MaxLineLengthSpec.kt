@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import org.assertj.core.api.Assertions.assertThat as doAssert
 
 private const val MAX_LINE_LENGTH = "maxLineLength"
 private const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
@@ -35,7 +36,15 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength()
 
                 rule.visit(fileContent)
-                assertThat(rule.findings).hasSize(6)
+                assertThat(rule.findings).hasSize(7)
+            }
+
+            it("should report meaningful signature for all violations") {
+                val rule = MaxLineLength()
+
+                rule.visit(fileContent)
+                val locations = rule.findings.map { it.signature.substringAfterLast('$') }
+                doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
             }
         }
 
