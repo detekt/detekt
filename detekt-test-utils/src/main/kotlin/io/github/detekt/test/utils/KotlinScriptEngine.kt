@@ -34,7 +34,7 @@ object KotlinScriptEngine {
             )
             borrowNewEngine().compileWithRetryOnFrontendException(code)
         } catch (e: ScriptException) {
-            throw KotlinScriptException(e, code)
+            throw KotlinScriptException(e)
         } finally {
             returnEngine(this)
         }

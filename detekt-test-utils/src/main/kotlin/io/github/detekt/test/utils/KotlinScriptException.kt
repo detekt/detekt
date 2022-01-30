@@ -7,5 +7,4 @@ import javax.script.ScriptException
  * Exception types thrown by the underlying scripting implementations are wrapped in instances of
  * KotlinScriptException.
  */
-class KotlinScriptException(e: ScriptException, code: String) :
-    RuntimeException("Given Kotlin code $code is invalid.", e)
+class KotlinScriptException(e: ScriptException) : RuntimeException("Given Kotlin code is invalid.", e)
