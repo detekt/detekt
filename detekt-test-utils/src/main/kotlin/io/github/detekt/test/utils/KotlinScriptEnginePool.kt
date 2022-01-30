@@ -13,7 +13,7 @@ import java.util.Collections
  */
 internal object KotlinScriptEnginePool {
 
-    private val AVAILABLE_ENGINES: MutableList<PooledScriptEngine> =
+    private val availableEngines: MutableList<PooledScriptEngine> =
         Collections.synchronizedList(mutableListOf())
 
     /**
@@ -21,7 +21,7 @@ internal object KotlinScriptEnginePool {
      *
      * When the caller is done using the engine, it should be returned to the pool by calling [returnEngine].
      */
-    fun borrowEngine(): PooledScriptEngine = AVAILABLE_ENGINES.removeFirstOrNull() ?: createEngine()
+    fun borrowEngine(): PooledScriptEngine = availableEngines.removeFirstOrNull() ?: createEngine()
 
     /**
      * Creates a new engine.
@@ -34,7 +34,7 @@ internal object KotlinScriptEnginePool {
      * Returns a borrowed engine to the pool. This method is thread safe.
      */
     fun returnEngine(engine: PooledScriptEngine) {
-        AVAILABLE_ENGINES.add(engine)
+        availableEngines.add(engine)
     }
 
     private fun createEngine(): PooledScriptEngine {
