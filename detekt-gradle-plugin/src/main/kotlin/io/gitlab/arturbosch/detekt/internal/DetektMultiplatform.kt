@@ -3,6 +3,8 @@ package io.gitlab.arturbosch.detekt.internal
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
+import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
@@ -108,34 +110,7 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.set(layout.file(provider { baselineFile }))
             }
-            reports.xml.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".xml").absolutePath
-                    }
-                )
-            )
-            reports.html.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".html").absolutePath
-                    }
-                )
-            )
-            reports.txt.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".txt").absolutePath
-                    }
-                )
-            )
-            reports.sarif.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".sarif").absolutePath
-                    }
-                )
-            )
+            outputConventions(reports, extension, compilation.name)
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
@@ -166,6 +141,28 @@ internal class DetektMultiplatform(private val project: Project) {
             }
         }
     }
+}
+
+internal fun Project.outputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
+    outputConvention(extension, reports.xml, name, "xml")
+    outputConvention(extension, reports.html, name, "html")
+    outputConvention(extension, reports.txt, name, "txt")
+    outputConvention(extension, reports.sarif, name, "sarif")
+}
+
+private fun Project.outputConvention(
+    extension: DetektExtension,
+    report: DetektReport,
+    name: String,
+    format: String
+) {
+    report.outputLocation.convention(
+        layout.projectDirectory.file(
+            providers.provider {
+                File(extension.reportsDir, "$name.$format").absolutePath
+            }
+        )
+    )
 }
 
 // We currently run type resolution only for Jvm & Android targets as
