@@ -63,7 +63,7 @@ See all issues at: [RC16](https://github.com/detekt/detekt/milestone/45)
   For example `--filters .*/resources/.*` becomes `--excludes **/resources/**`. `includes` also accepts *globing patterns*.
   *Globing patterns* allow us to reuse some common logic of the `java.nio.file` package which for example handle Windows specific paths for us.
   This change also allows to be more fine granular with analyzing files: `--excludes **/generated/** --includes **/generated/this-needs-to-be-checked`.
-  The following [how-to guide](https://detekt.dev/howto-migratetestpattern.html) describes the migration process from the **test-pattern** functionality.
+  The following [how-to guide](howto-migratetestpattern.html) describes the migration process from the **test-pattern** functionality.
 - **Gradle Plugin**: Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
   detekt task which aligns with how other static analysis tools handle filters. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
   For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
@@ -572,7 +572,7 @@ detekt {
 can be applied to the root build file.
 
 A full `detekt` configuration for multi-module gradle project could look like `detekt`'s own build file.
-Attention(!) this must be translated to [groovy](https://detekt.dev/groovydsl.html) if you do not use the [kotlin-dsl](https://detekt.dev/kotlindsl.html).
+Attention(!) this must be translated to [groovy](groovydsl.html) if you do not use the [kotlin-dsl](kotlindsl.html).
 ```gradle
 plugins {
 	id("io.gitlab.arturbosch.detekt") version "[1.0.0.RC9]"
@@ -621,7 +621,7 @@ The `config` property now explicitly tells the user that `detekt` can consume mu
 There is also a breaking change for the `detekt-cli` module which will attack custom gradle task and cli users.
 The `output` and `reports` options are no longer. There is the new `--report` option which can be used multiple times to generate specific reports.
 The report pattern now is `--report [report-id:path-to-store-report]`.
-There are three provided output reports named: `plain`, `xml` and `html`. Custom reports can be added to leveraging the detekt extension mechanism as described on the [website](https://detekt.dev/extensions.html).
+There are three provided output reports named: `plain`, `xml` and `html`. Custom reports can be added to leveraging the detekt extension mechanism as described on the [website](extensions.html).
 
 ##### Changes
 
@@ -1768,5 +1768,5 @@ More issues: https://gitlab.com/arturbosch/detekt/milestones/2
 
 More issues: https://gitlab.com/arturbosch/detekt/milestones/1
 
-[1]: https://detekt.dev/groovydsl.html#defining-custom-detekt-task
-[2]: https://detekt.dev/kotlindsl.html#defining-custom-detekt-task
+[1]: groovydsl.html#defining-custom-detekt-task
+[2]: kotlindsl.html#defining-custom-detekt-task

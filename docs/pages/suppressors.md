@@ -17,7 +17,7 @@ UnusedPrivateMember:
     - 'Preview'
 ```
 
-Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is really handy if you use [Jetpack Compose](https://detekt.dev/compose.html), for example.
+Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is really handy if you use [Jetpack Compose](compose.html), for example.
 
 ## Available `Suppressor`s
 
