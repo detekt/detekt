@@ -150,12 +150,7 @@ internal fun Project.outputConventions(reports: DetektReports, extension: Detekt
     outputConvention(extension, reports.sarif, name, "sarif")
 }
 
-private fun Project.outputConvention(
-    extension: DetektExtension,
-    report: DetektReport,
-    name: String,
-    format: String
-) {
+private fun Project.outputConvention(extension: DetektExtension, report: DetektReport, name: String, format: String) {
     report.outputLocation.convention(
         layout.projectDirectory.file(
             providers.provider {
