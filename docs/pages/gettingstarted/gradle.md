@@ -10,7 +10,7 @@ redirect_from:
 summary:
 ---
 
-Detekt requires **Gradle 6.1** or higher. We, however, recommend using the version of Gradle that is [listed in this table](https://detekt.github.io/detekt/compatibility.html).
+Detekt requires **Gradle 6.1** or higher. We, however, recommend using the version of Gradle that is [listed in this table](https://detekt.dev/compatibility.html).
 
 ## <a name="tasks">Available plugin tasks</a>
 

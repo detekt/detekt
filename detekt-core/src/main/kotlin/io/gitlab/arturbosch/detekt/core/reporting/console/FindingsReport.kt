@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.printFindings
 
 /**
  * Contains all rule violations in a list format grouped by ruleset.
- * See: https://detekt.github.io/detekt/configurations.html#console-reports
+ * See: https://detekt.dev/configurations.html#console-reports
  */
 class FindingsReport : AbstractFindingsReport() {
 

@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 
 /**
  * Contains metrics and statistics concerning the analyzed project sorted by priority.
- * See: https://detekt.github.io/detekt/configurations.html#console-reports
+ * See: https://detekt.dev/configurations.html#console-reports
  */
 class ProjectStatisticsReport : ConsoleReport() {
 

@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
- * This rules overlaps with [`style>MaxLineLength`](https://detekt.github.io/detekt/style.html#maxlinelength)
+ * This rules overlaps with [`style>MaxLineLength`](https://detekt.dev/style.html#maxlinelength)
  * from the standard rules, make sure to enable just one or keep them aligned. The pro of this rule is that it can
  * auto-correct the issue.
  */
