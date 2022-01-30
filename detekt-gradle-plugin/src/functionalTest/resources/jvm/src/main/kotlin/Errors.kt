@@ -8,6 +8,7 @@ class Errors {
     }
 
     fun javaExit() {
+        @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
         System.exit(1)
     }
 }

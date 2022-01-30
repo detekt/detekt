@@ -62,8 +62,7 @@ class HtmlOutputReport : OutputReport() {
 
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val now = OffsetDateTime.now(ZoneOffset.UTC).format(formatter) + " UTC"
-        return now
+        return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
     }
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
