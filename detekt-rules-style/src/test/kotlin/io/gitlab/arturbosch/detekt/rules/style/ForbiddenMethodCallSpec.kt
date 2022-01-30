@@ -318,5 +318,21 @@ class ForbiddenMethodCallSpec : Spek({
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        it("should report extension functions") {
+            val code = """
+                package org.example
+
+                fun String.bar() = Unit
+
+                fun foo() {
+                    "".bar()
+                }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(METHODS to listOf("org.example.bar(kotlin.String)")))
+            ).compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 })

@@ -216,6 +216,36 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
+
+        @DisplayName("When extension functions foo(kotlin.String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun String.foo(),              true",
+            "fun foo(a: String),            true",
+            "fun Int.foo(),                 false",
+            "fun String.foo(a: Int),        false",
+            "'fun foo(a: String, ba: Int)', false",
+        )
+        fun `When foo(kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When extension functions foo(kotlin.String, kotlin.Int)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun String.foo(),              false",
+            "fun foo(a: String),            false",
+            "fun Int.foo(),                 false",
+            "fun String.foo(a: Int),        true",
+            "'fun foo(a: String, ba: Int)', true",
+        )
+        fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String, kotlin.Int)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
     }
 }
 
