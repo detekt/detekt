@@ -49,6 +49,7 @@ internal class PooledScriptEngineTest {
         val engine = KotlinScriptEnginePool.borrowEngine()
 
         assertThatThrownBy { engine.compile(invalidCode) }
+            .isInstanceOf(ScriptException::class.java)
 
         engine.compile(validCode)
     }
