@@ -35,11 +35,6 @@ class LateinitUsageSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should only report lateinit properties matching kotlin.") {
-            val findings = LateinitUsage(TestConfig(mapOf(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.")))).compileAndLint(code)
-            assertThat(findings).hasSize(1)
-        }
-
         it("should only report lateinit properties matching kotlin.SinceKotlin") {
             val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.SinceKotlin")))
             val findings = LateinitUsage(config).compileAndLint(code)
