@@ -1,4 +1,4 @@
-package io.github.detekt.psi
+package io.github.detekt.psi.internal
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat

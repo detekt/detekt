@@ -1,4 +1,4 @@
-package io.github.detekt.psi
+package io.github.detekt.psi.internal
 
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective

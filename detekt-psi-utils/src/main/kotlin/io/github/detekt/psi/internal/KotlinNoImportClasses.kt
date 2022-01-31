@@ -1,6 +1,6 @@
 @file:Suppress("MaxLineLength")
 
-package io.github.detekt.psi
+package io.github.detekt.psi.internal
 
 /*
  The entries of this map was generate with this script:

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.psi.FullQualifiedNameGuesser
+import io.github.detekt.psi.internal.FullQualifiedNameGuesser
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -41,16 +41,18 @@ class AnnotationExcluder(
             fullQualifiedNameGuesser.getFullQualifiedName(annotationText)
         } else {
             listOf(annotationText)
-        }.flatMap { fqName ->
-            fqName
-                .split(".")
-                .dropWhile { it.first().isLowerCase() }
-                .reversed()
-                .scan("") { acc, name ->
-                    if (acc.isEmpty()) name else "$name.$acc"
-                }
-                .drop(1) + fqName
-        }
+        }.flatMap(::expandFqNames)
         return excludes.any { exclude -> possibleNames.any { exclude.matches(it) } }
     }
+}
+
+private fun expandFqNames(fqName: String): List<String> {
+    return fqName
+        .split(".")
+        .dropWhile { it.first().isLowerCase() }
+        .reversed()
+        .scan("") { acc, name ->
+            if (acc.isEmpty()) name else "$name.$acc"
+        }
+        .drop(1) + fqName
 }
