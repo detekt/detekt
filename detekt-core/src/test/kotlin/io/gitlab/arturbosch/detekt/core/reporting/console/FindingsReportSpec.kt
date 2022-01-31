@@ -6,7 +6,9 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -68,6 +70,23 @@ class FindingsReportSpec {
         fun `should not add auto corrected issues to report`() {
             val report = FindingsReport()
             AutoCorrectableIssueAssert.isReportNull(report)
+        }
+
+        @Test
+        fun `truncates long message`() {
+            val expectedContent = readResourceContent("/reporting/long-messages-report.txt")
+            val longMessage = "This is just a long message that should be truncated after a given " +
+                "threshold is reached."
+            val multilineMessage = "A multiline\n\r\tmessage.\t "
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    "Ruleset" to listOf(
+                        createFinding(createIssue("LongRule"), createEntity("File.kt"), longMessage),
+                        createFinding(createIssue("MultilineRule"), createEntity("File.kt"), multilineMessage),
+                    ),
+                )
+            }
+            assertThat(subject.render(detektion)?.decolorized()).isEqualTo(expectedContent)
         }
     }
 }
