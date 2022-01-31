@@ -129,7 +129,7 @@ class RunnerSpec {
 
             @Test
             fun `writes no build related output to output printer`() {
-                assertThat(outPrintStream.toString()).doesNotContain("test - [Poko]")
+                assertThat(outPrintStream.toString()).doesNotContain("test - [A failure]")
             }
 
             @Test
@@ -158,7 +158,7 @@ class RunnerSpec {
 
             @Test
             fun `writes output to output printer`() {
-                assertThat(outPrintStream.toString()).contains("test - [Poko]")
+                assertThat(outPrintStream.toString()).contains("test - [A failure]")
             }
 
             @Test
