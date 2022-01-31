@@ -5,8 +5,6 @@
         <ID>LongMethod:Signature</ID>
     </ManuallySuppressedIssues>
     <CurrentIssues>
-        <ID>
-            FeatureEnvy:Signature
-        </ID>
+        <ID>FeatureEnvy:Signature</ID>
     </CurrentIssues>
 </SmellBaseline>
