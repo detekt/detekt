@@ -12,5 +12,6 @@ Generally updating to the latest stable version will have all security issues ad
 
 ## Reporting a Vulnerability
 
-Please report vulnerability to security@detekt.dev.
-If you have already reported on vulnerability disclosure platform, please include its link in the email.
+Please report vulnerability to security@detekt.dev. 
+We commit to respond within 2 weeks. You may also find us in #detekt channel of [kotlinlang Slack](https://kotlinlang.slack.com/).
+If you have already reported on vulnerability disclosure platform, please include its link in the report.
