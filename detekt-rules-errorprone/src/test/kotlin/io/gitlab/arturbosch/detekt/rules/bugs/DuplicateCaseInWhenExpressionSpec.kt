@@ -3,15 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class DuplicateCaseInWhenExpressionSpec : Spek({
-    val subject by memoized { DuplicateCaseInWhenExpression(Config.empty) }
+class DuplicateCaseInWhenExpressionSpec {
+    private val subject = DuplicateCaseInWhenExpression(Config.empty)
 
-    describe("Duplicate Case In When Expression rule") {
+    @Nested
+    inner class `Duplicate Case In When Expression rule` {
 
-        it("reports duplicated label in when") {
+        @Test
+        fun `reports duplicated label in when`() {
             val code = """
                 fun f() {
                     when (1) {
@@ -27,7 +29,8 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
             assertThat(result.first().message).isEqualTo("When expression has multiple case statements for 1; 1, 2.")
         }
 
-        it("does not report duplicated label in when") {
+        @Test
+        fun `does not report duplicated label in when`() {
             val code = """
                 fun f() {
                     when (1) {
@@ -38,4 +41,4 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

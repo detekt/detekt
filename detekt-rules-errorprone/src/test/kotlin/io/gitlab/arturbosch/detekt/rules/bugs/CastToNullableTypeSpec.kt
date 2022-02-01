@@ -2,14 +2,16 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CastToNullableTypeSpec : Spek({
-    val subject by memoized { CastToNullableType() }
+class CastToNullableTypeSpec {
+    private val subject = CastToNullableType()
 
-    describe("CastToNullableTypeSpec rule") {
-        it("casting to nullable types") {
+    @Nested
+    inner class `CastToNullableTypeSpec rule` {
+        @Test
+        fun `casting to nullable types`() {
             val code = """
                 fun foo(a: Any?) {
                     val x: String? = a as String?
@@ -21,7 +23,8 @@ class CastToNullableTypeSpec : Spek({
             assertThat(findings[0]).hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
         }
 
-        it("safe casting") {
+        @Test
+        fun `safe casting`() {
             val code = """
                 fun foo(a: Any?) {
                     val x: String? = a as? String
@@ -31,7 +34,8 @@ class CastToNullableTypeSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("type checking") {
+        @Test
+        fun `type checking`() {
             val code = """
                 fun foo(a: Any?) {
                     val x = a is String?
@@ -41,4 +45,4 @@ class CastToNullableTypeSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

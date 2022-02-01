@@ -2,14 +2,16 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class MissingPackageDeclarationSpec : Spek({
+internal class MissingPackageDeclarationSpec {
 
-    describe("MissingPackageDeclaration rule") {
+    @Nested
+    inner class `MissingPackageDeclaration rule` {
 
-        it("should pass if package declaration is declared") {
+        @Test
+        fun `should pass if package declaration is declared`() {
             val code = """
                 package foo.bar
 
@@ -20,7 +22,8 @@ internal class MissingPackageDeclarationSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report if package declaration is missing") {
+        @Test
+        fun `should report if package declaration is missing`() {
             val code = "class C"
 
             val findings = MissingPackageDeclaration().compileAndLint(code)
@@ -28,4 +31,4 @@ internal class MissingPackageDeclarationSpec : Spek({
             assertThat(findings).hasSize(1)
         }
     }
-})
+}

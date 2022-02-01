@@ -1,23 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object IgnoredReturnValueSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
 
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `default config with non-annotated return values` {
+        private val subject = IgnoredReturnValue()
 
-    describe("default config with non-annotated return values") {
-        val subject by memoized { IgnoredReturnValue() }
-
-        it("does not report when a function which returns a value is called and the return is ignored") {
+        @Test
+        fun `does not report when a function which returns a value is called and the return is ignored`() {
             val code = """
                 fun foo() {
                     listOf("hello")
@@ -27,7 +27,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called before a valid return") {
+        @Test
+        fun `does not report when a function which returns a value is called before a valid return`() {
             val code = """
                 fun foo() : Int {
                     listOf("hello")
@@ -38,7 +39,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called in chain and the return is ignored") {
+        @Test
+        fun `does not report when a function which returns a value is called in chain and the return is ignored`() {
             val code = """
                 fun foo() {
                     listOf("hello").isEmpty().not()
@@ -48,7 +50,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called before a semicolon") {
+        @Test
+        fun `does not report when a function which returns a value is called before a semicolon`() {
             val code = """
                 fun foo() {
                     listOf("hello");println("foo")
@@ -58,7 +61,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called after a semicolon") {
+        @Test
+        fun `does not report when a function which returns a value is called after a semicolon`() {
             val code = """
                 fun foo() {
                     println("foo");listOf("hello")
@@ -68,7 +72,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called between comments") {
+        @Test
+        fun `does not report when a function which returns a value is called between comments`() {
             val code = """
                 fun foo() {
                     listOf("hello")//foo
@@ -78,7 +83,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when an extension function which returns a value is called and the return is ignored") {
+        @Test
+        fun `does not report when an extension function which returns a value is called and the return is ignored`() {
             val code = """
                 fun Int.isTheAnswer(): Boolean = this == 42
                 fun foo(input: Int) {
@@ -89,7 +95,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when the return value is assigned to a pre-existing variable") {
+        @Test
+        fun `does not report when the return value is assigned to a pre-existing variable`() {
             val code = """
                 package test
                 
@@ -108,7 +115,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which doesn't return a value is called") {
+        @Test
+        fun `does not report when a function which doesn't return a value is called`() {
             val code = """
                 fun noReturnValue() {}
 
@@ -120,7 +128,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used in a test statement") {
+        @Test
+        fun `does not report when a function's return value is used in a test statement`() {
             val code = """
                 fun returnsBoolean() = true
                 
@@ -132,7 +141,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used in a comparison") {
+        @Test
+        fun `does not report when a function's return value is used in a comparison`() {
             val code = """
                 fun returnsInt() = 42
                 
@@ -144,7 +154,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used as parameter for another call") {
+        @Test
+        fun `does not report when a function's return value is used as parameter for another call`() {
             val code = """
                 fun returnsInt() = 42
                 
@@ -156,7 +167,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used with named parameters") {
+        @Test
+        fun `does not report when a function's return value is used with named parameters`() {
             val code = """
                 fun returnsInt() = 42
                 
@@ -169,10 +181,12 @@ object IgnoredReturnValueSpec : Spek({
         }
     }
 
-    describe("default config with annotated return values") {
-        val subject by memoized { IgnoredReturnValue() }
+    @Nested
+    inner class `default config with annotated return values` {
+        private val subject = IgnoredReturnValue()
 
-        it("reports when a function which returns a value is called and the return is ignored") {
+        @Test
+        fun `reports when a function which returns a value is called and the return is ignored`() {
             val code = """
                 package annotation
                 
@@ -196,7 +210,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function which returns a value is called before a valid return") {
+        @Test
+        fun `reports when a function which returns a value is called before a valid return`() {
             val code = """
                 package noreturn
                 
@@ -210,13 +225,14 @@ object IgnoredReturnValueSpec : Spek({
                     return 42
                 }
             """
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasSourceLocation(9, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function which returns a value is called in chain as first statement and the return is ignored") {
+        @Test
+        fun `reports when a function which returns a value is called in chain as first statement and the return is ignored`() {
             val code = """
                 package noreturn
                 
@@ -234,7 +250,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which returns a value is called in the middle of a chain and the return is ignored") {
+        @Test
+        fun `does not report when a function which returns a value is called in the middle of a chain and the return is ignored`() {
             val code = """
                 package noreturn
                 
@@ -257,7 +274,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("reports when a function which returns a value is called in the end of a chain and the return is ignored") {
+        @Test
+        fun `reports when a function which returns a value is called in the end of a chain and the return is ignored`() {
             val code = """
                 package noreturn
                 
@@ -280,7 +298,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function which returns a value is called before a semicolon") {
+        @Test
+        fun `reports when a function which returns a value is called before a semicolon`() {
             val code = """
                 package special
                 
@@ -299,7 +318,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function which returns a value is called after a semicolon") {
+        @Test
+        fun `reports when a function which returns a value is called after a semicolon`() {
             val code = """
                 package special
                 
@@ -319,7 +339,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function which returns a value is called between comments") {
+        @Test
+        fun `reports when a function which returns a value is called between comments`() {
             val code = """
                 package special
                 
@@ -339,7 +360,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when an extension function which returns a value is called and the return is ignored") {
+        @Test
+        fun `reports when an extension function which returns a value is called and the return is ignored`() {
             val code = """
                 package specialize
                 
@@ -358,7 +380,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call isTheAnswer is returning a value that is ignored.")
         }
 
-        it("does not report when the return value is assigned to a pre-existing variable") {
+        @Test
+        fun `does not report when the return value is assigned to a pre-existing variable`() {
             val code = """
                 package specialize
                 
@@ -377,7 +400,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function which doesn't return a value is called") {
+        @Test
+        fun `does not report when a function which doesn't return a value is called`() {
             val code = """
                 package specialize
                 
@@ -395,7 +419,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used in a test statement") {
+        @Test
+        fun `does not report when a function's return value is used in a test statement`() {
             val code = """
                 package comparison
                 
@@ -412,7 +437,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used in a comparison") {
+        @Test
+        fun `does not report when a function's return value is used in a comparison`() {
             val code = """
                 package comparison
                 
@@ -429,7 +455,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used as parameter for another call") {
+        @Test
+        fun `does not report when a function's return value is used as parameter for another call`() {
             val code = """
                 package parameter
                 
@@ -446,7 +473,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function's return value is used with named parameters") {
+        @Test
+        fun `does not report when a function's return value is used with named parameters`() {
             val code = """
                 package parameter
                 
@@ -463,7 +491,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is the last statement in a block and it's used") {
+        @Test
+        fun `does not report when a function is the last statement in a block and it's used`() {
             val code = """
                 package block
                 
@@ -482,7 +511,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("report when a function is not the last statement in a 'if' block and 'if' block is used") {
+        @Test
+        fun `report when a function is not the last statement in a 'if' block and 'if' block is used`() {
             val code = """
                 package block
                 
@@ -502,7 +532,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("does not report when a function is the last statement in a block and it's in a chain") {
+        @Test
+        fun `does not report when a function is the last statement in a block and it's in a chain`() {
             val code = """
                 package block
 
@@ -523,7 +554,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("report when a function is not the last statement in a block and it's in a chain") {
+        @Test
+        fun `report when a function is not the last statement in a block and it's in a chain`() {
             val code = """
                 package block
 
@@ -545,7 +577,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("report when a function is the last statement in a block") {
+        @Test
+        fun `report when a function is the last statement in a block`() {
             val code = """
                 package block
 
@@ -566,7 +599,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("does not report when a function return value is consumed in a chain that returns a Unit") {
+        @Test
+        fun `does not report when a function return value is consumed in a chain that returns a Unit`() {
             val code = """
                 package callchain
                 
@@ -589,7 +623,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("reports when the containing class of a function has `@CheckReturnValue`") {
+        @Test
+        fun `reports when the containing class of a function has _@CheckReturnValue_`() {
             val code = """
                 package foo
 
@@ -604,11 +639,12 @@ object IgnoredReturnValueSpec : Spek({
                     Assertions().listOfChecked("hello")
                 }
             """
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
-        it("reports when the containing object of a function has `@CheckReturnValue`") {
+        @Test
+        fun `reports when the containing object of a function has _@CheckReturnValue_`() {
             val code = """
                 package foo
 
@@ -623,11 +659,12 @@ object IgnoredReturnValueSpec : Spek({
                     Assertions.listOfChecked("hello")
                 }
             """
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
-        it("does not report when the containing class of a function has `@CheckReturnValue` but the function has `@CanIgnoreReturnValue`") {
+        @Test
+        fun `does not report when the containing class of a function has _@CheckReturnValue_ but the function has _@CanIgnoreReturnValue_`() {
             val code = """
                 package foo
 
@@ -644,11 +681,12 @@ object IgnoredReturnValueSpec : Spek({
                     Assertions().listOfChecked("hello")
                 }
             """
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when the containing class of a function has no `@CheckReturnValue` but the parent class has `@CheckReturnValue`") {
+        @Test
+        fun `does not report when the containing class of a function has no _@CheckReturnValue_ but the parent class has _@CheckReturnValue_`() {
             val code = """
                 package foo
                 
@@ -665,19 +703,19 @@ object IgnoredReturnValueSpec : Spek({
                     Parent.Child().listOfChecked("hello")
                 }
             """
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
 
-    describe("custom annotation config") {
-        val subject by memoized {
-            IgnoredReturnValue(
-                TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
-            )
-        }
+    @Nested
+    inner class `custom annotation config` {
+        val subject = IgnoredReturnValue(
+            TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
+        )
 
-        it("reports when a function is annotated with the custom annotation") {
+        @Test
+        fun `reports when a function is annotated with the custom annotation`() {
             val code = """
                 package config
                 annotation class CustomReturn
@@ -696,7 +734,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("does not report when a function is annotated with the not included annotation") {
+        @Test
+        fun `does not report when a function is annotated with the not included annotation`() {
             val code = """
                 package config
                 
@@ -714,7 +753,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is not annotated") {
+        @Test
+        fun `does not report when a function is not annotated`() {
             val code = """
                 package config
 
@@ -730,12 +770,12 @@ object IgnoredReturnValueSpec : Spek({
         }
     }
 
-    describe("restrict to annotated methods config") {
-        val subject by memoized {
-            IgnoredReturnValue(TestConfig(mapOf("restrictToAnnotatedMethods" to false)))
-        }
+    @Nested
+    inner class `restrict to annotated methods config` {
+        val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToAnnotatedMethods" to false)))
 
-        it("reports when a function is annotated with a custom annotation") {
+        @Test
+        fun `reports when a function is annotated with a custom annotation`() {
             val code = """
                 package config
                 
@@ -755,7 +795,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("reports when a function is not annotated") {
+        @Test
+        fun `reports when a function is not annotated`() {
             val code = """
                 fun listOfChecked(value: String) = listOf(value)
                 
@@ -770,7 +811,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
-        it("does not report when a function has `@CanIgnoreReturnValue`") {
+        @Test
+        fun `does not report when a function has _@CanIgnoreReturnValue_`() {
             val code = """
                 package foo
 
@@ -788,7 +830,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function has a custom annotation") {
+        @Test
+        fun `does not report when a function has a custom annotation`() {
             val code = """
                 package foo
 
@@ -814,7 +857,8 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when a function is in ignoreFunctionCall") {
+        @Test
+        fun `does not report when a function is in ignoreFunctionCall`() {
             val code = """
                 package foo
 
@@ -837,4 +881,4 @@ object IgnoredReturnValueSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}
