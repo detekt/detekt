@@ -110,7 +110,7 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.set(layout.file(provider { baselineFile }))
             }
-            outputConventions(reports, extension, compilation.name)
+            setReportOutputConventions(reports, extension, compilation.name)
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
@@ -143,14 +143,19 @@ internal class DetektMultiplatform(private val project: Project) {
     }
 }
 
-internal fun Project.outputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
-    outputConvention(extension, reports.xml, name, "xml")
-    outputConvention(extension, reports.html, name, "html")
-    outputConvention(extension, reports.txt, name, "txt")
-    outputConvention(extension, reports.sarif, name, "sarif")
+internal fun Project.setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
+    setReportOutputConvention(extension, reports.xml, name, "xml")
+    setReportOutputConvention(extension, reports.html, name, "html")
+    setReportOutputConvention(extension, reports.txt, name, "txt")
+    setReportOutputConvention(extension, reports.sarif, name, "sarif")
 }
 
-private fun Project.outputConvention(extension: DetektExtension, report: DetektReport, name: String, format: String) {
+private fun Project.setReportOutputConvention(
+    extension: DetektExtension,
+    report: DetektReport,
+    name: String,
+    format: String
+) {
     report.outputLocation.convention(
         layout.projectDirectory.file(
             providers.provider {

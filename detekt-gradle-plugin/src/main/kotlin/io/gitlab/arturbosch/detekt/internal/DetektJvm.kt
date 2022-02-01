@@ -29,7 +29,7 @@ internal class DetektJvm(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(sourceSet.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-            outputConventions(reports, extension, sourceSet.name)
+            setReportOutputConventions(reports, extension, sourceSet.name)
             description = "EXPERIMENTAL: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }

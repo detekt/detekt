@@ -120,7 +120,7 @@ internal fun Project.registerAndroidDetektTask(
         extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.set(layout.file(project.provider { baselineFile }))
         }
-        outputConventions(reports, extension, variant.name)
+        setReportOutputConventions(reports, extension, variant.name)
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
