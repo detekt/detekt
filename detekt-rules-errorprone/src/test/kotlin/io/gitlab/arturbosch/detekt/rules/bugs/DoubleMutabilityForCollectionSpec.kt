@@ -152,7 +152,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
                     fun main() {
                         var myState = mutableStateOf("foo")
                     }
@@ -173,8 +173,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
                     fun main() {
                         var myState = remember { mutableStateOf("foo") }
                     }
@@ -329,11 +329,11 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
-                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
-                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
-                        this.value = value
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
                     }
                     fun main() {
                         var myState by remember { mutableStateOf("foo") }
@@ -461,7 +461,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
                     var myState = mutableStateOf("foo")
                     """
                     val result = rule.compileAndLintWithContext(env, code)
@@ -480,8 +480,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
                     var myState = remember { mutableStateOf("foo") }
                     """
                     val result = rule.compileAndLintWithContext(env, code)
@@ -612,11 +612,11 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
-                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
-                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
-                        this.value = value
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
                     }
                     var myState by remember { mutableStateOf("foo") }
                     """
@@ -760,7 +760,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
                     class MyClass {
                         var myState = mutableStateOf("foo")
                     }
@@ -781,8 +781,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
                     class MyClass {
                         var myState = remember { mutableStateOf("foo") }
                     }
@@ -937,11 +937,11 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
                     val code = """
                     data class MutableState<T>(var state: T)
-                    fun <T> mutableStateOf(value: T): MutableState<T>
-                    fun <T> remember(calculation: () -> T): T
-                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
-                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
-                        this.value = value
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
                     }
                     class MyClass {
                         var myState by remember { mutableStateOf("foo") }
