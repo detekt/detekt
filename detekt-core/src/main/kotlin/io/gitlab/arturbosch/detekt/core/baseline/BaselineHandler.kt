@@ -33,8 +33,8 @@ internal class BaselineHandler : DefaultHandler() {
             ID -> {
                 check(content.isNotBlank()) { "The content of the ID element must not be empty" }
                 when (current) {
-                    MANUALLY_SUPPRESSED_ISSUES -> manuallySuppressedIssues.add(content.trim())
-                    CURRENT_ISSUES -> currentIssues.add(content.trim())
+                    MANUALLY_SUPPRESSED_ISSUES -> manuallySuppressedIssues.add(content)
+                    CURRENT_ISSUES -> currentIssues.add(content)
                 }
                 content = ""
             }

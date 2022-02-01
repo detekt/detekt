@@ -15,7 +15,7 @@ open class CustomDetektReport @Inject constructor(objects: ObjectFactory) {
     @Deprecated("Use outputLocation.set(value)")
     @get:Internal
     var destination: File?
-        get() = outputLocation.asFile.getOrNull()
+        get() = outputLocation.asFile.orNull
         set(value) {
             outputLocation.set(value)
         }

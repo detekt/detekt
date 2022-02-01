@@ -1,20 +1,26 @@
 package io.github.detekt.tooling.api
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
-class FunctionMatcherSpec : Spek({
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
+@KotlinCoreEnvironmentTest
+class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
 
-    describe("FunctionMatcher.fromFunctionSignature") {
+    @TestFactory
+    @Suppress("LongMethod")
+    fun `FunctionMatcher#fromFunctionSignature`(): List<DynamicTest> =
         listOf(
             TestCase(
                 testDescription = "should return method name and null params list in case of simplifies signature",
@@ -50,90 +56,137 @@ class FunctionMatcherSpec : Spek({
                     "io.gitlab.arturbosch.detekt.SomeClass.some , method",
                     listOf("kotlin.String"),
                 ),
-            )
-        ).forEach { testCase ->
-            it(testCase.testDescription) {
+            ),
+            TestCase(
+                testDescription = "should return method name and param list when it has lambdas",
+                functionSignature = "hello((Bar, Foo) -> Unit, (Bar) -> Bar, Foo, () -> Foo)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function2",
+                        "kotlin.Function1",
+                        "Foo",
+                        "kotlin.Function0",
+                    ),
+                ),
+            ),
+            TestCase(
+                testDescription = "should return method name and param list when it has complex lambdas",
+                functionSignature = "hello((Bar, (Bar) -> Unit) -> (Bar) -> Foo, () -> Unit)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function2",
+                        "kotlin.Function0",
+                    ),
+                ),
+            ),
+        ).map { testCase ->
+            dynamicTest(testCase.testDescription) {
                 val functionMatcher = FunctionMatcher.fromFunctionSignature(testCase.functionSignature)
 
                 assertThat(functionMatcher).isEqualTo(testCase.expectedFunctionMatcher)
             }
         }
-    }
 
-    describe("match KtNamedFunctions") {
-        matrixCase.forEach { (methodSignature, cases) ->
-            context("When $methodSignature") {
-                cases.forEach { (code, result) ->
-                    it("in case $code it returns $result") {
-                        val (function, bindingContext) = buildKtFunction(env, code)
-                        assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
-                    }
-                }
-            }
+    @Nested
+    inner class `match KtNamedFunctions` {
+        @DisplayName("When toString")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            true",
+            "fun toString(hello: String) = Unit,               true",
+            "'fun toString(hello: String, world: Int) = Unit', true",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString()")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            true",
+            "fun toString(hello: String) = Unit,               false",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString()`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString()")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(kotlin.String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               true",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString(kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(kotlin.Int)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               false",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString(kotlin#Int)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.Int)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(kotlin.String, kotlin.Int)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               false",
+            "'fun toString(hello: String, world: Int) = Unit', true",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String, kotlin.Int)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               false",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString(String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
     }
-})
-
-private val matrixCase: Map<FunctionMatcher, Map<String, Boolean>> = run {
-    val functions = arrayOf(
-        "fun toString() = Unit",
-        "fun toString(hello: String) = Unit",
-        "fun toString(hello: String, world: Int) = Unit",
-        "fun compare() = Unit",
-        "fun compare(hello: String) = Unit",
-        "fun compare(hello: String, world: Int) = Unit",
-    )
-
-    linkedMapOf(
-        FunctionMatcher.fromFunctionSignature("toString") to linkedMapOf(
-            functions[0] to true, // fun toString()
-            functions[1] to true, // fun toString(hello: String)
-            functions[2] to true, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-        FunctionMatcher.fromFunctionSignature("toString()") to linkedMapOf(
-            functions[0] to true, // fun toString()
-            functions[1] to false, // fun toString(hello: String)
-            functions[2] to false, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-        FunctionMatcher.fromFunctionSignature("toString(kotlin.String)") to linkedMapOf(
-            functions[0] to false, // fun toString()
-            functions[1] to true, // fun toString(hello: String)
-            functions[2] to false, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-        FunctionMatcher.fromFunctionSignature("toString(kotlin.Int)") to linkedMapOf(
-            functions[0] to false, // fun toString()
-            functions[1] to false, // fun toString(hello: String)
-            functions[2] to false, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-        FunctionMatcher.fromFunctionSignature("toString(kotlin.String, kotlin.Int)") to linkedMapOf(
-            functions[0] to false, // fun toString()
-            functions[1] to false, // fun toString(hello: String)
-            functions[2] to true, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-        FunctionMatcher.fromFunctionSignature("toString(String)") to linkedMapOf(
-            functions[0] to false, // fun toString()
-            functions[1] to false, // fun toString(hello: String)
-            functions[2] to false, // fun toString(hello: String, world: Int)
-            functions[3] to false, // fun compare()
-            functions[4] to false, // fun compare(hello: String)
-            functions[5] to false, // fun compare(hello: String, world: Int)
-        ),
-    )
 }
 
 private class TestCase(

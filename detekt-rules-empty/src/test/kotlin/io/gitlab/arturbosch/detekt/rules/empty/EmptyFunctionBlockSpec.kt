@@ -4,19 +4,21 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
-class EmptyFunctionBlockSpec : Spek({
+class EmptyFunctionBlockSpec {
 
-    val subject by memoized { EmptyFunctionBlock(Config.empty) }
+    private val subject = EmptyFunctionBlock(Config.empty)
 
-    describe("EmptyFunctionBlock rule") {
+    @Nested
+    inner class `EmptyFunctionBlock rule` {
 
-        it("should flag function with protected modifier") {
+        @Test
+        fun `should flag function with protected modifier`() {
             val code = """
                 class A {
                     protected fun stuff() {}
@@ -24,7 +26,8 @@ class EmptyFunctionBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 27)
         }
 
-        it("should not flag function with open modifier") {
+        @Test
+        fun `should not flag function with open modifier`() {
             val code = """
                 open class A {
                     open fun stuff() {}
@@ -32,7 +35,8 @@ class EmptyFunctionBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should not flag a default function in an interface") {
+        @Test
+        fun `should not flag a default function in an interface`() {
             val code = """
                 interface I {
                     fun stuff() {}
@@ -40,7 +44,8 @@ class EmptyFunctionBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should flag the nested empty function") {
+        @Test
+        fun `should flag the nested empty function`() {
             val code = """
                 fun a() {
                     fun b() {}
@@ -48,7 +53,8 @@ class EmptyFunctionBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 13)
         }
 
-        context("some overridden functions") {
+        @Nested
+        inner class `some overridden functions` {
 
             val code = """
                 fun empty() {}
@@ -73,17 +79,20 @@ class EmptyFunctionBlockSpec : Spek({
                     }
                 }"""
 
-            it("should flag empty block in overridden function") {
+            @Test
+            fun `should flag empty block in overridden function`() {
                 assertThat(subject.compileAndLint(code)).hasSize(2)
             }
 
-            it("should not flag overridden functions") {
+            @Test
+            fun `should not flag overridden functions`() {
                 val config = TestConfig(mapOf(IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSourceLocation(1, 13)
             }
         }
 
-        context("some overridden functions") {
+        @Nested
+        inner class `some overridden functions when implementing interfaces` {
             val code = """
                 private interface Listener {
                     fun listenThis()
@@ -101,14 +110,17 @@ class EmptyFunctionBlockSpec : Spek({
                     }
                 }
             """
-            it("should not flag overridden functions with commented body") {
+
+            @Test
+            fun `should not flag overridden functions with commented body`() {
                 assertThat(subject.compileAndLint(code)).hasSourceLocation(12, 31)
             }
 
-            it("should not flag overridden functions with ignoreOverridden") {
+            @Test
+            fun `should not flag overridden functions with ignoreOverridden`() {
                 val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "true"))
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).isEmpty()
             }
         }
     }
-})
+}

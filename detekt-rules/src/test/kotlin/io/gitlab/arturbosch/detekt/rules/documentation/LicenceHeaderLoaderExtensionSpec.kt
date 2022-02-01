@@ -6,17 +6,19 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import org.assertj.core.api.Assertions.assertThatCode
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
 
 @OptIn(UnstableApi::class)
-class LicenceHeaderLoaderExtensionSpec : Spek({
+class LicenceHeaderLoaderExtensionSpec {
 
-    describe("Licence header extension - #2503") {
+    @Nested
+    inner class `Licence header extension - #2503` {
 
-        it("should not crash when using resources") {
+        @Test
+        fun `should not crash when using resources`() {
             assertThatCode {
                 LicenceHeaderLoaderExtension().init(object : SetupContext {
                     override val configUris: Collection<URI> = listOf(resource("extensions/config.yml"))
@@ -29,4 +31,4 @@ class LicenceHeaderLoaderExtensionSpec : Spek({
             }.doesNotThrowAnyException()
         }
     }
-})
+}

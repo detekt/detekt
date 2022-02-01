@@ -6,14 +6,16 @@ import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class KtLintMultiRuleSpec : Spek({
+class KtLintMultiRuleSpec {
 
-    describe("KtLintMultiRule rule") {
+    @Nested
+    inner class `KtLintMultiRule rule` {
 
-        it("sorts rules correctly") {
+        @Test
+        fun `sorts rules correctly`() {
             val ktlintRule = KtLintMultiRule(Config.empty)
             ktlintRule.visitFile(compileContentForTest(""))
             val sortedRules = ktlintRule.getSortedRules()
@@ -29,4 +31,4 @@ class KtLintMultiRuleSpec : Spek({
                 .isLessThan(sortedRules.indexOfFirst { it.wrapping is Last })
         }
     }
-})
+}

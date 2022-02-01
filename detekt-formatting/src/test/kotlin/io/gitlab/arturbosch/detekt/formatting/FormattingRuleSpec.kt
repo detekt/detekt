@@ -4,17 +4,25 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class FormattingRuleSpec : Spek({
+class FormattingRuleSpec {
 
-    val subject by memoized { NoLineBreakBeforeAssignment(Config.empty) }
+    private lateinit var subject: NoLineBreakBeforeAssignment
 
-    describe("formatting rules can be suppressed") {
+    @BeforeEach
+    fun createSubject() {
+        subject = NoLineBreakBeforeAssignment(Config.empty)
+    }
 
-        it("does support suppression only on file level") {
+    @Nested
+    inner class `formatting rules can be suppressed` {
+
+        @Test
+        fun `does support suppression only on file level`() {
             val findings = subject.lint(
                 """
                 @file:Suppress("NoLineBreakBeforeAssignment")
@@ -26,7 +34,8 @@ class FormattingRuleSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not support suppression on node level") {
+        @Test
+        fun `does not support suppression on node level`() {
             val findings = subject.lint(
                 """
                 @Suppress("NoLineBreakBeforeAssignment")
@@ -39,9 +48,11 @@ class FormattingRuleSpec : Spek({
         }
     }
 
-    describe("formatting rules have a signature") {
+    @Nested
+    inner class `formatting rules have a signature` {
 
-        it("has no package name") {
+        @Test
+        fun `has no package name`() {
             val findings = subject.lint(
                 """
                 fun main() 
@@ -52,7 +63,8 @@ class FormattingRuleSpec : Spek({
             assertThat(findings.first().signature).isEqualTo("Test.kt:2")
         }
 
-        it("has a package name") {
+        @Test
+        fun `has a package name`() {
             val findings = subject.lint(
                 """
                 package test.test.test
@@ -65,7 +77,8 @@ class FormattingRuleSpec : Spek({
         }
     }
 
-    test("#3063: formatting issues have an absolute path") {
+    @Test
+    fun `#3063_ formatting issues have an absolute path`() {
         val expectedPath = Paths.get("/root/kotlin/test.kt").toString()
 
         val findings = subject.lint(
@@ -78,4 +91,4 @@ class FormattingRuleSpec : Spek({
 
         assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
     }
-})
+}

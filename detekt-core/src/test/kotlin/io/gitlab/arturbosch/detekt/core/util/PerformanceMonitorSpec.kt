@@ -5,11 +5,12 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultDetektProvider
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
+import org.junit.jupiter.api.Test
 
-class PerformanceMonitorSpec : Spek({
+class PerformanceMonitorSpec {
 
-    test("all phases have a measurement") {
+    @Test
+    fun `all phases have a measurement`() {
         val actual = StringPrintStream()
         val spec = ProcessingSpec {
             project {
@@ -25,4 +26,4 @@ class PerformanceMonitorSpec : Spek({
 
         assertThat(actual.toString()).contains(PerformanceMonitor.Phase.values().map { it.name })
     }
-})
+}

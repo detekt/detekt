@@ -17,7 +17,7 @@ open class DetektReport @Inject constructor(val type: DetektReportType, objects:
 
     @Deprecated("Use outputLocation.set(value)")
     var destination: File?
-        get() = outputLocation.asFile.getOrNull()
+        get() = outputLocation.asFile.orNull
         set(value) {
             outputLocation.set(value)
         }

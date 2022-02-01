@@ -56,9 +56,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
-        classes.map { it.removePrefix("*").removeSuffix("*") }
-    }
+    private val excludeAnnotatedClasses: List<String> by config(emptyList())
 
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)

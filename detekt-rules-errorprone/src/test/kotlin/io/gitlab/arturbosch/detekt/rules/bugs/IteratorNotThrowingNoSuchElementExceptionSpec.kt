@@ -3,22 +3,25 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class IteratorNotThrowingNoSuchElementExceptionSpec : Spek({
-    val subject by memoized { IteratorNotThrowingNoSuchElementException() }
+class IteratorNotThrowingNoSuchElementExceptionSpec {
+    private val subject = IteratorNotThrowingNoSuchElementException()
 
-    describe("IteratorNotThrowingNoSuchElementException rule") {
+    @Nested
+    inner class `IteratorNotThrowingNoSuchElementException rule` {
 
-        it("reports invalid next() implementations") {
+        @Test
+        fun `reports invalid next() implementations`() {
             val path = resourceAsPath("IteratorImplPositive.kt")
             assertThat(subject.lint(path)).hasSize(4)
         }
 
-        it("does not report correct next() implemenations") {
+        @Test
+        fun `does not report correct next() implemenations`() {
             val path = resourceAsPath("IteratorImplNegative.kt")
             assertThat(subject.lint(path)).isEmpty()
         }
     }
-})
+}

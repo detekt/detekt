@@ -3,17 +3,20 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class EqualsWithHashCodeExistSpec : Spek({
-    val subject by memoized { EqualsWithHashCodeExist(Config.empty) }
+class EqualsWithHashCodeExistSpec {
+    private val subject = EqualsWithHashCodeExist(Config.empty)
 
-    describe("Equals With Hash Code Exist rule") {
+    @Nested
+    inner class `Equals With Hash Code Exist rule` {
 
-        context("some classes with equals() and hashCode() functions") {
+        @Nested
+        inner class `some classes with equals() and hashCode() functions` {
 
-            it("reports hashCode() without equals() function") {
+            @Test
+            fun `reports hashCode() without equals() function`() {
                 val code = """
                 class A {
                     override fun hashCode(): Int { return super.hashCode() }
@@ -21,7 +24,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports equals() without hashCode() function") {
+            @Test
+            fun `reports equals() without hashCode() function`() {
                 val code = """
                 class A {
                     override fun equals(other: Any?): Boolean { return super.equals(other) }
@@ -29,7 +33,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a different equals() function signature") {
+            @Test
+            fun `reports a different equals() function signature`() {
                 val code = """
                 class A {
                     fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
@@ -38,7 +43,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a different hashcode() function signature") {
+            @Test
+            fun `reports a different hashcode() function signature`() {
                 val code = """
                 class A {
                     override fun equals(other: Any?): Boolean { return super.equals(other) }
@@ -47,7 +53,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a different overridden equals() function signature") {
+            @Test
+            fun `reports a different overridden equals() function signature`() {
                 val code = """
                 interface I {
                     fun equals(other: Any?, i: Int): Boolean
@@ -60,7 +67,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a different overridden hashCode() function signature") {
+            @Test
+            fun `reports a different overridden hashCode() function signature`() {
                 val code = """
                 interface I {
                     fun hashCode(i: Int): Int
@@ -73,7 +81,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report equals() with hashCode() function") {
+            @Test
+            fun `does not report equals() with hashCode() function`() {
                 val code = """
                 class A {
                     override fun equals(other: Any?): Boolean { return super.equals(other) }
@@ -82,7 +91,8 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report when using kotlin.Any?") {
+            @Test
+            fun `does not report when using nullable Any`() {
                 val code = """
                 class A {
                     override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
@@ -92,9 +102,11 @@ class EqualsWithHashCodeExistSpec : Spek({
             }
         }
 
-        context("a data class") {
+        @Nested
+        inner class `a data class` {
 
-            it("does not report equals() or hashcode() violation on data class") {
+            @Test
+            fun `does not report equals() or hashcode() violation on data class`() {
                 val code = """
                 data class EqualsData(val i: Int) {
                     override fun equals(other: Any?): Boolean {
@@ -105,4 +117,4 @@ class EqualsWithHashCodeExistSpec : Spek({
             }
         }
     }
-})
+}

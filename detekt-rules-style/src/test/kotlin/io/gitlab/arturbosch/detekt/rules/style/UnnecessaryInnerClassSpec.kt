@@ -283,23 +283,44 @@ class UnnecessaryInnerClassSpec : Spek({
             }
         }
 
-        it("does not report a double-nested inner class accessing from an outer-class member") {
-            val code = """
-                class A {
-                    val foo = "BAR"
-                    
-                    inner class B {
-                        val fizz = foo
-                        inner class C {
-                            fun printFoo() {
-                                println(foo)
+        context("does not report a double-nested inner class accessing from an outer-class member") {
+
+            it("when the innermost class refers a inner class and the inner class refers the outermost class") {
+                val code = """
+                    class A {
+                        val foo = "BAR"
+                        
+                        inner class B {
+                            val fizz = foo
+                            inner class C {
+                                fun printFoo() {
+                                    println(fizz)
+                                }
                             }
                         }
                     }
-                }
-            """.trimIndent()
+                """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            it("when the innermost class refers the outermost class") {
+                val code = """
+                    class A {
+                        val foo = "BAR"
+                        
+                        inner class B {
+                            inner class C {
+                                fun printFoo() {
+                                    println(foo)
+                                }
+                            }
+                        }
+                    }
+                """.trimIndent()
+
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
 
         it("does not report anonymous inner classes") {

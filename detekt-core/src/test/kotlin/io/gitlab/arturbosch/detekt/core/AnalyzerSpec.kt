@@ -14,14 +14,16 @@ import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.concurrent.CompletionException
 
-class AnalyzerSpec : Spek({
+class AnalyzerSpec {
 
-    describe("exceptions during analyze()") {
-        it("throw error explicitly when config has wrong value type in config") {
+    @Nested
+    inner class `exceptions during analyze()` {
+        @Test
+        fun `throw error explicitly when config has wrong value type in config`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-wrong.yml"))
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
@@ -31,7 +33,8 @@ class AnalyzerSpec : Spek({
             }.isInstanceOf(IllegalStateException::class.java)
         }
 
-        it("throw error explicitly in parallel when config has wrong value in config") {
+        @Test
+        fun `throw error explicitly in parallel when config has wrong value in config`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
                 inputPath = testFile,
@@ -51,9 +54,11 @@ class AnalyzerSpec : Spek({
         }
     }
 
-    describe("analyze successfully when config has correct value type in config") {
+    @Nested
+    inner class `analyze successfully when config has correct value type in config` {
 
-        it("no findings") {
+        @Test
+        fun `no findings`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
@@ -61,7 +66,8 @@ class AnalyzerSpec : Spek({
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
         }
 
-        it("with findings") {
+        @Test
+        fun `with findings`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
@@ -69,7 +75,8 @@ class AnalyzerSpec : Spek({
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
         }
 
-        it("with findings but ignored") {
+        @Test
+        fun `with findings but ignored`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
                 testFile,
@@ -80,7 +87,7 @@ class AnalyzerSpec : Spek({
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
         }
     }
-})
+}
 
 private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSetProvider {
     override val ruleSetId: String = "style"

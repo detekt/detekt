@@ -3,27 +3,32 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class PathFiltersSpec : Spek({
+class PathFiltersSpec {
 
-    describe("parse different filter settings") {
+    @Nested
+    inner class `parse different filter settings` {
 
-        it("should load single filter") {
+        @Test
+        fun `should load single filter`() {
             val filters = CliArgs { excludes = "**/one/**" }.toSpecFilters()
             assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
             assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
         }
 
-        describe("parsing with different nullability combinations of path filters") {
-            it("returns an empty path filter when includes are empty and excludes are empty") {
+        @Nested
+        inner class `parsing with different nullability combinations of path filters` {
+            @Test
+            fun `returns an empty path filter when includes are empty and excludes are empty`() {
                 val pathFilter = PathFilters.of(emptyList(), emptyList())
                 assertThat(pathFilter).isNull()
             }
 
-            it("parses includes correctly") {
+            @Test
+            fun `parses includes correctly`() {
                 val pathFilter = PathFilters.of(listOf("**/one/**", "**/two/**"), emptyList())
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
@@ -31,7 +36,8 @@ class PathFiltersSpec : Spek({
                 assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
             }
 
-            it("parses excludes correctly") {
+            @Test
+            fun `parses excludes correctly`() {
                 val pathFilter = PathFilters.of(emptyList(), listOf("**/one/**", "**/two/**"))
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isTrue
@@ -39,7 +45,8 @@ class PathFiltersSpec : Spek({
                 assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isFalse
             }
 
-            it("parses both includes and excludes correctly") {
+            @Test
+            fun `parses both includes and excludes correctly`() {
                 val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**"))
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
@@ -48,40 +55,48 @@ class PathFiltersSpec : Spek({
             }
         }
 
-        describe("parsing with different separators") {
+        @Nested
+        inner class `parsing with different separators` {
 
-            it("should load multiple comma-separated filters with no spaces around commas") {
+            @Test
+            fun `should load multiple comma-separated filters with no spaces around commas`() {
                 val filters = CliArgs { excludes = "**/one/**,**/two/**,**/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
-            it("should load multiple semicolon-separated filters with no spaces around semicolons") {
+            @Test
+            fun `should load multiple semicolon-separated filters with no spaces around semicolons`() {
                 val filters = CliArgs { excludes = "**/one/**;**/two/**;**/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
-            it("should load multiple comma-separated filters with spaces around commas") {
+            @Test
+            fun `should load multiple comma-separated filters with spaces around commas`() {
                 val filters = CliArgs { excludes = "**/one/** ,**/two/**, **/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
-            it("should load multiple semicolon-separated filters with spaces around semicolons") {
+            @Test
+            fun `should load multiple semicolon-separated filters with spaces around semicolons`() {
                 val filters = CliArgs { excludes = "**/one/** ;**/two/**; **/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
-            it("should load multiple mixed-separated filters with no spaces around separators") {
+            @Test
+            fun `should load multiple mixed-separated filters with no spaces around separators`() {
                 val filters = CliArgs { excludes = "**/one/**,**/two/**;**/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
 
-            it("should load multiple mixed-separated filters with spaces around separators") {
+            @Test
+            fun `should load multiple mixed-separated filters with spaces around separators`() {
                 val filters = CliArgs { excludes = "**/one/** ,**/two/**; **/three" }.toSpecFilters()
                 assertSameFiltersIndependentOfSpacingAndSeparater(filters)
             }
         }
 
-        it("should ignore empty and blank filters") {
+        @Test
+        fun `should ignore empty and blank filters`() {
             val filters = CliArgs { excludes = " ,,**/three" }.toSpecFilters()
             assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
             assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
@@ -90,7 +105,7 @@ class PathFiltersSpec : Spek({
             assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
         }
     }
-})
+}
 
 private fun CliArgs.toSpecFilters(): PathFilters? {
     val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec

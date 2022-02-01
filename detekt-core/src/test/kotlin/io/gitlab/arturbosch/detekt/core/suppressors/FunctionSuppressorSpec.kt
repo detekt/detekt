@@ -8,13 +8,15 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class FunctionSuppressorSpec : Spek({
+class FunctionSuppressorSpec {
 
-    describe("FunctionSuppressorFactory") {
-        it("Factory returns null if ignoreFunction is not set") {
+    @Nested
+    inner class `FunctionSuppressorFactory` {
+        @Test
+        fun `Factory returns null if ignoreFunction is not set`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware(/* empty */),
                 BindingContext.EMPTY,
@@ -23,7 +25,8 @@ class FunctionSuppressorSpec : Spek({
             assertThat(suppressor).isNull()
         }
 
-        it("Factory returns null if ignoreFunction is set to empty") {
+        @Test
+        fun `Factory returns null if ignoreFunction is set to empty`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware("ignoreFunction" to emptyList<String>()),
                 BindingContext.EMPTY,
@@ -32,7 +35,8 @@ class FunctionSuppressorSpec : Spek({
             assertThat(suppressor).isNull()
         }
 
-        it("Factory returns not null if ignoreFunction is set to a not empty list") {
+        @Test
+        fun `Factory returns not null if ignoreFunction is set to a not empty list`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware("ignoreFunction" to listOf("toString")),
                 BindingContext.EMPTY,
@@ -42,17 +46,19 @@ class FunctionSuppressorSpec : Spek({
         }
     }
 
-    describe("FunctionSuppressor") {
-        it("If KtElement is null it returns false") {
+    @Nested
+    inner class `FunctionSuppressor` {
+        @Test
+        fun `If KtElement is null it returns false`() {
             val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
 
             assertThat(suppressor.shouldSuppress(buildFinding(element = null))).isFalse()
         }
 
-        context("If the function is suppressed") {
-            val root by memoized {
-                compileContentForTest(
-                    """
+        @Nested
+        inner class `If the function is suppressed` {
+            val root = compileContentForTest(
+                """
                     class OneClass {
                         fun toString(parameter: String): String {
                             fun hello(name: String) {
@@ -64,24 +70,26 @@ class FunctionSuppressorSpec : Spek({
                     }
 
                     fun toString() = Unit
-                    """.trimIndent()
-                )
-            }
+                """.trimIndent()
+            )
 
-            it("If reports root it returns false") {
+            @Test
+            fun `If reports root it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
-            it("If reports class it returns false") {
+            @Test
+            fun `If reports class it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
             }
 
-            it("If reports function in class it returns true") {
+            @Test
+            fun `If reports function in class it returns true`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
@@ -89,7 +97,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
-            it("If reports parameter in function in class it returns true") {
+            @Test
+            fun `If reports parameter in function in class it returns true`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktParameter = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
@@ -98,7 +107,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isTrue()
             }
 
-            it("If reports function in function it returns true") {
+            @Test
+            fun `If reports function in function it returns true`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
@@ -109,7 +119,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
-            it("If reports parameter function in function it returns true") {
+            @Test
+            fun `If reports parameter function in function it returns true`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
@@ -121,7 +132,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
-            it("If reports parameter function in function it returns true 2") {
+            @Test
+            fun `If reports parameter function in function it returns true 2`() {
                 val suppressor = buildFunctionSuppressor(listOf("hello"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
@@ -133,7 +145,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
             }
 
-            it("If reports top level function it returns true") {
+            @Test
+            fun `If reports top level function it returns true`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
@@ -141,10 +154,10 @@ class FunctionSuppressorSpec : Spek({
             }
         }
 
-        context("If the function is not suppressed") {
-            val root by memoized {
-                compileContentForTest(
-                    """
+        @Nested
+        inner class `If the function is not suppressed` {
+            val root = compileContentForTest(
+                """
                     class OneClass {
                         fun compare(parameter: String): String {
                             return ""
@@ -152,23 +165,25 @@ class FunctionSuppressorSpec : Spek({
                     }
 
                     fun compare() = Unit
-                    """.trimIndent()
-                )
-            }
+                """.trimIndent()
+            )
 
-            it("If reports root it returns false") {
+            @Test
+            fun `If reports root it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
-            it("If reports class it returns false") {
+            @Test
+            fun `If reports class it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
             }
 
-            it("If reports function in class it returns false") {
+            @Test
+            fun `If reports function in class it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("compare")!!
@@ -176,7 +191,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
             }
 
-            it("If reports parameter in function in class it returns false") {
+            @Test
+            fun `If reports parameter in function in class it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktParameter = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("compare")!!
@@ -185,7 +201,8 @@ class FunctionSuppressorSpec : Spek({
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktParameter))).isFalse()
             }
 
-            it("If reports top level function it returns false") {
+            @Test
+            fun `If reports top level function it returns false`() {
                 val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
@@ -193,7 +210,7 @@ class FunctionSuppressorSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun buildFunctionSuppressor(ignoreFunction: List<String>, bindingContext: BindingContext): Suppressor {
     return functionSuppressorFactory(buildConfigAware("ignoreFunction" to ignoreFunction), bindingContext)!!

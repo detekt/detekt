@@ -11,14 +11,16 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CorrectableRulesFirstSpec : Spek({
+class CorrectableRulesFirstSpec {
 
-    describe("correctable rules are run first") {
+    @Nested
+    inner class `correctable rules are run first` {
 
-        it("runs rule with id 'NonCorrectable' last") {
+        @Test
+        fun `runs rule with id 'NonCorrectable' last`() {
             var actualLastRuleId = ""
 
             class First(config: Config) : Rule(config) {
@@ -51,7 +53,7 @@ class CorrectableRulesFirstSpec : Spek({
             assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
         }
     }
-})
+}
 
 private val justAnIssue = Issue(
     "JustAnIssue",

@@ -10,18 +10,21 @@ import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-class RunnerSpec : Spek({
+class RunnerSpec {
 
     val inputPath = resourceAsPath("cases/Poko.kt")
 
-    describe("executes the runner with different maxIssues configurations") {
+    @Nested
+    inner class `executes the runner with different maxIssues configurations` {
 
-        it("should report one issue when maxIssues=2") {
+        @Test
+        fun `should report one issue when maxIssues=2`() {
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
@@ -36,7 +39,8 @@ class RunnerSpec : Spek({
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
 
-        it("should throw on maxIssues=0") {
+        @Test
+        fun `should throw on maxIssues=0`() {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
@@ -47,7 +51,8 @@ class RunnerSpec : Spek({
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
         }
 
-        it("should never throw on maxIssues=-1") {
+        @Test
+        fun `should never throw on maxIssues=-1`() {
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
@@ -62,9 +67,11 @@ class RunnerSpec : Spek({
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
 
-        context("with additional baseline file") {
+        @Nested
+        inner class `with additional baseline file` {
 
-            it("should not throw on maxIssues=0 due to baseline") {
+            @Test
+            fun `should not throw on maxIssues=0 due to baseline`() {
                 val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
                 executeDetekt(
@@ -83,9 +90,11 @@ class RunnerSpec : Spek({
         }
     }
 
-    describe("executes the runner with create baseline") {
+    @Nested
+    inner class `executes the runner with create baseline` {
 
-        it("should not throw on maxIssues=0") {
+        @Test
+        fun `should not throw on maxIssues=0`() {
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
@@ -100,33 +109,40 @@ class RunnerSpec : Spek({
         }
     }
 
-    describe("customize output and error printers") {
+    @Nested
+    inner class `customize output and error printers` {
 
-        val outPrintStream by memoized { StringPrintStream() }
-        val errPrintStream by memoized { StringPrintStream() }
+        private val outPrintStream = StringPrintStream()
+        private val errPrintStream = StringPrintStream()
 
-        context("execute with default config which allows no issues") {
+        @Nested
+        inner class `execute with default config which allows no issues` {
 
             val path: Path = resourceAsPath("/cases/CleanPoko.kt")
 
-            beforeEachTest {
+            @BeforeEach
+            fun setUp() {
                 val args = parseArguments(arrayOf("--input", path.toString()))
 
                 Runner(args, outPrintStream, errPrintStream).execute()
             }
 
-            it("writes no build related output to output printer") {
-                assertThat(outPrintStream.toString()).doesNotContain("test - [Poko]")
+            @Test
+            fun `writes no build related output to output printer`() {
+                assertThat(outPrintStream.toString()).doesNotContain("test - [A failure]")
             }
 
-            it("does not write anything to error printer") {
+            @Test
+            fun `does not write anything to error printer`() {
                 assertThat(errPrintStream.toString()).isEmpty()
             }
         }
 
-        context("execute with strict config") {
+        @Nested
+        inner class `execute with strict config` {
 
-            beforeEachTest {
+            @BeforeEach
+            fun setUp() {
                 val args = parseArguments(
                     arrayOf(
                         "--input",
@@ -140,21 +156,25 @@ class RunnerSpec : Spek({
                     .isExactlyInstanceOf(MaxIssuesReached::class.java)
             }
 
-            it("writes output to output printer") {
-                assertThat(outPrintStream.toString()).contains("test - [Poko]")
+            @Test
+            fun `writes output to output printer`() {
+                assertThat(outPrintStream.toString()).contains("test - [A failure]")
             }
 
-            it("does not write anything to error printer") {
+            @Test
+            fun `does not write anything to error printer`() {
                 assertThat(errPrintStream.toString()).isEmpty()
             }
         }
     }
 
-    describe("with config validation") {
+    @Nested
+    inner class `with config validation` {
 
         val path: Path = resourceAsPath("/cases/CleanPoko.kt")
 
-        it("should throw on invalid config property when validation=true") {
+        @Test
+        fun `should throw on invalid config property when validation=true`() {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
@@ -166,7 +186,8 @@ class RunnerSpec : Spek({
                 .hasMessageContaining("property")
         }
 
-        it("should throw on invalid config properties when validation=true") {
+        @Test
+        fun `should throw on invalid config properties when validation=true`() {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
@@ -178,7 +199,8 @@ class RunnerSpec : Spek({
                 .hasMessageContaining("properties")
         }
 
-        it("should not throw on invalid config property when validation=false") {
+        @Test
+        fun `should not throw on invalid config property when validation=false`() {
             assertThatCode {
                 executeDetekt(
                     "--input",
@@ -189,7 +211,8 @@ class RunnerSpec : Spek({
             }.doesNotThrowAnyException()
         }
 
-        it("should not throw on deprecation warnings") {
+        @Test
+        fun `should not throw on deprecation warnings`() {
             assertThatCode {
                 executeDetekt(
                     "--input",
@@ -201,9 +224,11 @@ class RunnerSpec : Spek({
         }
     }
 
-    describe("executes the runner for a single rule") {
+    @Nested
+    inner class `executes the runner for a single rule` {
 
-        it("should load and run custom rule") {
+        @Test
+        fun `should load and run custom rule`() {
             val tmp = createTempFileForTest("SingleRuleRunnerSpec", ".txt")
 
             assertThatThrownBy {
@@ -219,32 +244,38 @@ class RunnerSpec : Spek({
             assertThat(Files.readAllLines(tmp)).hasSize(1)
         }
 
-        it("should throw on non existing rule") {
+        @Test
+        fun `should throw on non existing rule`() {
             assertThatThrownBy { executeDetekt("--run-rule", "test:non_existing") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
         }
 
-        it("should throw on non existing rule set") {
+        @Test
+        fun `should throw on non existing rule set`() {
             assertThatThrownBy { executeDetekt("--run-rule", "non_existing:test") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
         }
 
-        it("should throw on non existing run-rule") {
+        @Test
+        fun `should throw on non existing run-rule`() {
             assertThatThrownBy { executeDetekt("--run-rule", "") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
         }
     }
 
-    describe("runner with maxIssuePolicy") {
+    @Nested
+    inner class `runner with maxIssuePolicy` {
 
-        it("does fail via cli flag") {
+        @Test
+        fun `does fail via cli flag`() {
             assertThatThrownBy { executeDetekt("--input", inputPath.toString(), "--max-issues", "0") }
                 .isExactlyInstanceOf(MaxIssuesReached::class.java)
                 .hasMessage("Build failed with 1 weighted issues.")
         }
 
-        it("does fail via cli flag even if config>maxIssues is specified") {
+        @Test
+        fun `does fail via cli flag even if config_maxIssues is specified`() {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
@@ -258,12 +289,14 @@ class RunnerSpec : Spek({
                 .hasMessage("Build failed with 1 weighted issues.")
         }
 
-        it("does not fail when cli flag is negative") {
+        @Test
+        fun `does not fail when cli flag is negative`() {
             executeDetekt("--input", inputPath.toString(), "--max-issues", "-1")
         }
 
-        it("does not fail when cli flag is positive") {
+        @Test
+        fun `does not fail when cli flag is positive`() {
             executeDetekt("--input", inputPath.toString(), "--max-issues", "2")
         }
     }
-})
+}

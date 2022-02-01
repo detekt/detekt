@@ -122,7 +122,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
-        val args = buildList<String> {
+        val args = buildList {
             add("--stacktrace")
             add("--info")
             add("--build-cache")

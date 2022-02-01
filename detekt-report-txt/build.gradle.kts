@@ -5,6 +5,5 @@ plugins {
 dependencies {
     implementation(projects.detektApi)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }

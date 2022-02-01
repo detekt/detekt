@@ -22,14 +22,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class TopLevelAutoCorrectSpec : Spek({
+class TopLevelAutoCorrectSpec {
 
-    describe("autoCorrect: false on top level") {
+    @Nested
+    inner class `autoCorrect_ false on top level` {
 
-        it("should format the test file but not print the modified content to disc") {
+        @Test
+        fun `should format the test file but not print the modified content to disc`() {
             val fileContentBeforeAutoCorrect = readResourceContent("cases/Test.kt")
             val fileUnderTest = resourceAsPath("cases/Test.kt")
             val spec = ProcessingSpec {
@@ -68,7 +70,7 @@ class TopLevelAutoCorrectSpec : Spek({
             assertThat(readResourceContent("cases/Test.kt")).isEqualTo(fileContentBeforeAutoCorrect)
         }
     }
-})
+}
 
 private class DeleteAnnotationsRule : Rule() {
     override val issue = Issue("test-rule", Severity.CodeSmell, "", Debt.FIVE_MINS)

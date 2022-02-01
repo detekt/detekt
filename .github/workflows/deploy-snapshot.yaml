@@ -8,7 +8,7 @@ on:
 jobs:
   gradle:
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    if: github.repository == 'detekt/detekt' && !contains(github.event.head_commit.message, 'ci skip')
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        java-version: 8
+        java-version: 17
         distribution: 'temurin'
 
     - name: Build detekt
@@ -31,4 +31,3 @@ jobs:
         MAVEN_CENTRAL_PW: ${{ secrets.MAVEN_CENTRAL_PW }}
       with:
         arguments: publishAllPublicationsToSonatypeSnapshotRepository -Dsnapshot=true --stacktrace
-      if: ${{ github.repository == 'detekt/detekt'}}

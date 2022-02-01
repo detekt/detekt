@@ -4,12 +4,13 @@ import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.konan.file.File
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class EnvironmentFacadeSpec : Spek({
+class EnvironmentFacadeSpec {
 
-    describe("classpath entries should be separated by platform-specific separator") {
+    @Nested
+    inner class `classpath entries should be separated by platform-specific separator` {
 
         val classpath = when (File.pathSeparator) {
             ":" -> "/path/to/file1:/path/to/file2:/path/to/file3"
@@ -17,13 +18,14 @@ internal class EnvironmentFacadeSpec : Spek({
             else -> ""
         }
 
-        it("supports ${File.pathSeparator}") {
+        @Test
+        fun `supports ${File_pathSeparator}`() {
             testSettings(classpath).use {
                 assertThat(it.classpath).hasSize(3)
             }
         }
     }
-})
+}
 
 private fun testSettings(classpath: String) = createProcessingSettings(
     spec = createNullLoggingSpec {

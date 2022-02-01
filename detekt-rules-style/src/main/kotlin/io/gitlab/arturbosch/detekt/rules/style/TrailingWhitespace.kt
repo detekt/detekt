@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * This rule reports lines that end with a whitespace.
@@ -28,7 +30,7 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
             val trailingWhitespaces = countTrailingWhitespace(line)
             if (trailingWhitespaces > 0) {
                 val file = fileContent.file
-                val ktElement = findFirstKtElementInParents(file, offset, line)
+                val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
                 if (ktElement == null || !ktElement.isPartOfString()) {
                     val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
                         entity.copy(
@@ -49,4 +51,9 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun createMessage(line: Int) = "Line ${line + 1} ends with a whitespace."
+
+    private fun findFirstKtElementInParentsOrNull(file: KtFile, offset: Int, line: String): PsiElement? {
+        return findKtElementInParents(file, offset, line)
+            .firstOrNull()
+    }
 }

@@ -1,20 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object NullableToStringCallSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = NullableToStringCall()
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { NullableToStringCall() }
-
-    describe("NullableToString rule") {
-        it("reports when a nullable toString is explicitly called") {
+    @Nested
+    inner class `NullableToString rule` {
+        @Test
+        fun `reports when a nullable toString is explicitly called`() {
             val code = """
                 fun test(a: Any?) {
                     println(a.toString())
@@ -25,7 +25,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is implicitly called in a string template") {
+        @Test
+        fun `reports when a nullable toString is implicitly called in a string template`() {
             val code = """
                 fun test(a: Any?) {
                     println("${'$'}a")
@@ -36,7 +37,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is implicitly called in curly braces in a string template") {
+        @Test
+        fun `reports when a nullable toString is implicitly called in curly braces in a string template`() {
             val code = """
                 fun test(a: Any?) {
                     println("${'$'}{a}")
@@ -47,7 +49,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is implicitly called in a raw string template") {
+        @Test
+        fun `reports when a nullable toString is implicitly called in a raw string template`() {
             val code = """
                 fun test(a: Any?) {
                     println(${'"'}""${'$'}a""${'"'})
@@ -58,7 +61,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is explicitly called and the expression is qualified/call expression") {
+        @Test
+        fun `reports when a nullable toString is explicitly called and the expression is qualified or call expression`() {
             val code = """
                 data class Foo(val a: Any?) {
                     fun bar(): Int? = null
@@ -78,7 +82,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual[2].message).isEqualTo("This call 'baz().toString()' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is implicitly called and the expression is qualified/call expression") {
+        @Test
+        fun `reports when a nullable toString is implicitly called and the expression is qualified or call expression`() {
             val code = """
                 data class Foo(val a: Any?) {
                     fun bar(): Int? = null
@@ -98,7 +103,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual[2].message).isEqualTo("This call '\${baz()}' may return the string \"null\".")
         }
 
-        it("reports when a nullable toString is implicitly called and the expression is safe qualified expression") {
+        @Test
+        fun `reports when a nullable toString is implicitly called and the expression is safe qualified expression`() {
             val code = """
                 data class Foo(val a: Any)
                 
@@ -111,7 +117,8 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual[0].message).isEqualTo("This call '\${foo?.a}' may return the string \"null\".")
         }
 
-        it("does not report when a nullable toString is not called") {
+        @Test
+        fun `does not report when a nullable toString is not called`() {
             val code = """
                 fun test(a: Any?) {
                     println(a?.toString())
@@ -158,7 +165,8 @@ object NullableToStringCallSpec : Spek({
         }
 
         // https://github.com/detekt/detekt/issues/4059
-        it("ignores platform types") {
+        @Test
+        fun `ignores platform types`() {
             val code = """
                 class Foo(val a: Any) {
                     fun test(foo: Foo?) {
@@ -174,4 +182,4 @@ object NullableToStringCallSpec : Spek({
             assertThat(actual).isEmpty()
         }
     }
-})
+}

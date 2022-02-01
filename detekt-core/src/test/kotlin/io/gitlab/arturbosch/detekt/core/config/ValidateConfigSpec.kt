@@ -8,21 +8,27 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
-internal class ValidateConfigSpec : Spek({
+class ValidateConfigSpec {
 
-    describe("validate configuration file") {
+    @Nested
+    inner class `validate configuration file` {
 
-        val baseline by memoized { yamlConfig("config_validation/baseline.yml") }
+        private val baseline = yamlConfig("config_validation/baseline.yml")
 
-        it("passes for same config test") {
+        @Test
+        fun `passes for same config test`() {
             val result = validateConfig(baseline, baseline)
             assertThat(result).isEmpty()
         }
 
-        it("passes for properties which may appear on rules and rule sets but may be not present in default config") {
+        @Test
+        fun `passes for properties which may appear on rules and rule sets but may be not present in default config`() {
             val result = validateConfig(
                 yamlConfig("config_validation/default-excluded-properties.yml"),
                 baseline
@@ -30,7 +36,8 @@ internal class ValidateConfigSpec : Spek({
             assertThat(result).isEmpty()
         }
 
-        it("reports different rule set name") {
+        @Test
+        fun `reports different rule set name`() {
             val result = validateConfig(
                 yamlConfig("config_validation/other-ruleset-name.yml"),
                 baseline
@@ -38,7 +45,8 @@ internal class ValidateConfigSpec : Spek({
             assertThat(result).contains(propertyDoesNotExists("code-smell"))
         }
 
-        it("reports different nested property names") {
+        @Test
+        fun `reports different nested property names`() {
             val result = validateConfig(
                 yamlConfig("config_validation/other-nested-property-names.yml"),
                 baseline
@@ -52,7 +60,8 @@ internal class ValidateConfigSpec : Spek({
             )
         }
 
-        it("reports different rule set name") {
+        @Test
+        fun `reports nested configuration expected`() {
             val result = validateConfig(
                 yamlConfig("config_validation/no-nested-config.yml"),
                 baseline
@@ -63,7 +72,8 @@ internal class ValidateConfigSpec : Spek({
             )
         }
 
-        it("reports unexpected nested configs") {
+        @Test
+        fun `reports unexpected nested configs`() {
             // note that the baseline config is now the first argument
             val result = validateConfig(baseline, yamlConfig("config_validation/no-value.yml"))
             assertThat(result).contains(
@@ -72,40 +82,47 @@ internal class ValidateConfigSpec : Spek({
             )
         }
 
-        it("returns an error for an invalid config type") {
+        @Test
+        fun `returns an error for an invalid config type`() {
             val invalidConfig = TestConfig()
             assertThatIllegalStateException().isThrownBy {
                 validateConfig(invalidConfig, baseline)
             }.withMessageStartingWith("Unsupported config type for validation")
         }
 
-        it("returns an error for an invalid baseline") {
+        @Test
+        fun `returns an error for an invalid baseline`() {
             val invalidBaseline = TestConfig()
             assertThatIllegalArgumentException().isThrownBy {
                 validateConfig(Config.empty, invalidBaseline)
             }.withMessageStartingWith("Only supported baseline config is the YamlConfig.")
         }
 
-        it("returns an error for an empty baseline") {
+        @Test
+        fun `returns an error for an empty baseline`() {
             val invalidBaseline = Config.empty
             assertThatIllegalArgumentException().isThrownBy {
                 validateConfig(Config.empty, invalidBaseline)
             }.withMessageStartingWith("Cannot validate configuration based on an empty baseline config.")
         }
 
-        describe("validate composite configurations") {
+        @Nested
+        inner class `validate composite configurations` {
 
-            it("passes for same left, right and baseline config") {
+            @Test
+            fun `passes for same left, right and baseline config`() {
                 val result = validateConfig(CompositeConfig(baseline, baseline), baseline)
                 assertThat(result).isEmpty()
             }
 
-            it("passes for empty configs") {
+            @Test
+            fun `passes for empty configs`() {
                 val result = validateConfig(CompositeConfig(Config.empty, Config.empty), baseline)
                 assertThat(result).isEmpty()
             }
 
-            it("finds accumulated errors") {
+            @Test
+            fun `finds accumulated errors`() {
                 val result = validateConfig(
                     CompositeConfig(
                         yamlConfig("config_validation/other-nested-property-names.yml"),
@@ -126,11 +143,13 @@ internal class ValidateConfigSpec : Spek({
             }
         }
 
-        describe("configure additional exclude paths") {
+        @Nested
+        inner class `configure additional exclude paths` {
 
             fun patterns(str: String) = CommaSeparatedPattern(str).mapToRegex()
 
-            it("does not report any complexity properties") {
+            @Test
+            fun `does not report any complexity properties`() {
                 val result = validateConfig(
                     yamlConfig("config_validation/other-nested-property-names.yml"),
                     baseline,
@@ -139,7 +158,8 @@ internal class ValidateConfigSpec : Spek({
                 assertThat(result).isEmpty()
             }
 
-            it("does not report 'complexity>LargeClass>howMany'") {
+            @Test
+            fun `does not report 'complexity_LargeClass_howMany'`() {
                 val result = validateConfig(
                     yamlConfig("config_validation/other-nested-property-names.yml"),
                     baseline,
@@ -158,7 +178,9 @@ internal class ValidateConfigSpec : Spek({
                 )
             }
 
-            it("does not report '.*>InnerMap'") {
+            @Test
+            @DisplayName("does not report .*>InnerMap")
+            fun `does not report innerMap`() {
                 val result = validateConfig(
                     yamlConfig("config_validation/other-nested-property-names.yml"),
                     baseline,
@@ -178,35 +200,32 @@ internal class ValidateConfigSpec : Spek({
             }
         }
 
-        describe("deprecated configuration option") {
+        @Nested
+        inner class `deprecated configuration option` {
 
-            arrayOf(
-                "reports a deprecated property as a warning" to false,
-                "reports a deprecated property as an error" to true,
-            ).forEach { (testName, warningsAsErrors) ->
-
-                it(testName) {
-                    val config = yamlConfigFromContent(
-                        """
+            @ParameterizedTest
+            @ValueSource(booleans = [true, false])
+            fun `reports a deprecated property as a warning`(warningsAsErrors: Boolean) {
+                val config = yamlConfigFromContent(
+                    """
                     config:
                       warningsAsErrors: $warningsAsErrors
                     naming:
                       FunctionParameterNaming:
                         ignoreOverriddenFunctions: ''
-                        """.trimIndent()
-                    )
+                    """.trimIndent()
+                )
 
-                    val result = validateConfig(config, config)
+                val result = validateConfig(config, config)
 
-                    assertThat(result).contains(
-                        propertyIsDeprecated(
-                            "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
-                            "Use `ignoreOverridden` instead",
-                            reportAsError = warningsAsErrors
-                        )
+                assertThat(result).contains(
+                    propertyIsDeprecated(
+                        "naming>FunctionParameterNaming>ignoreOverriddenFunctions",
+                        "Use `ignoreOverridden` instead",
+                        reportAsError = warningsAsErrors
                     )
-                }
+                )
             }
         }
     }
-})
+}

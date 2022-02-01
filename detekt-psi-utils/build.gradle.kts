@@ -6,6 +6,10 @@ plugins {
 dependencies {
     implementation(libs.kotlin.compilerEmbeddable)
 
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
+    testImplementation(projects.detektTest)
+}
+
+apiValidation {
+    ignoredPackages.add("io.github.detekt.psi.internal")
 }

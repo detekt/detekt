@@ -1,22 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class NullCheckOnMutablePropertySpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
+    private val subject = NullCheckOnMutableProperty(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { NullCheckOnMutableProperty(Config.empty) }
-
-    describe("NullCheckOnMutableProperty Rule") {
-        it("should report a null-check on a mutable constructor property") {
+    @Nested
+    inner class `NullCheckOnMutableProperty Rule` {
+        @Test
+        fun `should report a null-check on a mutable constructor property`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -29,7 +29,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report a null-check on a mutable property in non-initial clauses in an if-statement") {
+        @Test
+        fun `should report a null-check on a mutable property in non-initial clauses in an if-statement`() {
             val code = """
                 class A(private var a: Int?, private val b: Int) {
                     fun foo() {
@@ -42,7 +43,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report a null-check on a mutable property used in the same if-statement") {
+        @Test
+        fun `should report a null-check on a mutable property used in the same if-statement`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -55,7 +57,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report on a mutable property that is not subject to a double-bang") {
+        @Test
+        fun `should report on a mutable property that is not subject to a double-bang`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -68,7 +71,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report on a mutable property even if it is checked multiple times") {
+        @Test
+        fun `should report on a mutable property even if it is checked multiple times`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -84,7 +88,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should not report when the checked property is not used afterwards") {
+        @Test
+        fun `should not report when the checked property is not used afterwards`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -97,7 +102,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should not report a null-check on a shadowed property") {
+        @Test
+        fun `should not report a null-check on a shadowed property`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -111,7 +117,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should not report a null-check on a non-mutable constructor property") {
+        @Test
+        fun `should not report a null-check on a non-mutable constructor property`() {
             val code = """
                 class A(private val a: Int?) {
                     fun foo() {
@@ -124,7 +131,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should report a null-check on a mutable class property") {
+        @Test
+        fun `should report a null-check on a mutable class property`() {
             val code = """
                 class A {
                     private var a: Int? = 5
@@ -138,7 +146,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should not report a null-check on a val property") {
+        @Test
+        fun `should not report a null-check on a val property`() {
             val code = """
                 class A {
                     private val a: Int? = 5
@@ -152,7 +161,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should report a null-check on a val property with a getter") {
+        @Test
+        fun `should report a null-check on a val property with a getter`() {
             val code = """
                 import kotlin.random.Random
                 
@@ -173,7 +183,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report a null-check conducted within an inner class") {
+        @Test
+        fun `should report a null-check conducted within an inner class`() {
             val code = """
                 class A(private var a: Int?) {
                     inner class B {
@@ -188,7 +199,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report an inner-class mutable property") {
+        @Test
+        fun `should report an inner-class mutable property`() {
             val code = """
                 class A(private val a: Int?) {
                     inner class B(private var a: Int) {
@@ -209,7 +221,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report a null-check on a mutable file property") {
+        @Test
+        fun `should report a null-check on a mutable file property`() {
             val code = """
                 private var a: Int? = 5
                 
@@ -224,7 +237,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should not report a null-check on a non-mutable file property") {
+        @Test
+        fun `should not report a null-check on a non-mutable file property`() {
             val code = """
                 private val a: Int? = 5
                 
@@ -239,7 +253,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should not report a null-check when there is no binding context") {
+        @Test
+        fun `should not report a null-check when there is no binding context`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -252,7 +267,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should report a null-check when null is the first element in the if-statement") {
+        @Test
+        fun `should report a null-check when null is the first element in the if-statement`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -265,7 +281,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should not report when the if-expression has no explicit null value") {
+        @Test
+        fun `should not report when the if-expression has no explicit null value`() {
             val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -279,7 +296,8 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("should not report a null-check on a function") {
+        @Test
+        fun `should not report a null-check on a function`() {
             val code = """
                 class A {
                     private fun otherFoo(): Int? {
@@ -295,4 +313,4 @@ class NullCheckOnMutablePropertySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

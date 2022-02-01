@@ -8,19 +8,18 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createCorrectableFinding
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class IssueExtensionSpec : Spek({
+class IssueExtensionSpec {
 
-    val issues by memoized {
-        mapOf(
-            "Ruleset1" to listOf(createFinding(), createCorrectableFinding()),
-            "Ruleset2" to listOf(createFinding())
-        )
-    }
+    private val issues = mapOf(
+        "Ruleset1" to listOf(createFinding(), createCorrectableFinding()),
+        "Ruleset2" to listOf(createFinding())
+    )
 
-    test("compute weighted amount of issues") {
+    @Test
+    fun `compute weighted amount of issues`() {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = issues
         }
@@ -29,15 +28,18 @@ class IssueExtensionSpec : Spek({
         assertThat(amount).isEqualTo(3)
     }
 
-    describe("filter auto corrected issues") {
+    @Nested
+    inner class `filter auto corrected issues` {
 
-        it("excludeCorrectable = false (default)") {
+        @Test
+        fun `excludeCorrectable = false (default)`() {
             val detektion = TestDetektion(createFinding(), createCorrectableFinding())
             val findings = detektion.filterAutoCorrectedIssues(Config.empty)
             assertThat(findings).hasSize(1)
         }
 
-        it("excludeCorrectable = true") {
+        @Test
+        fun `excludeCorrectable = true`() {
             val config = TestConfig(mapOf("maxIssues" to "0", "excludeCorrectable" to "true"))
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = issues
@@ -47,4 +49,4 @@ class IssueExtensionSpec : Spek({
             assertThat(findings).hasSize(2)
         }
     }
-})
+}

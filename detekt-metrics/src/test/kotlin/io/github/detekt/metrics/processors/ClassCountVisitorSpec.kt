@@ -3,13 +3,15 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ClassCountVisitorSpec : Spek({
-    describe("something") {
+class ClassCountVisitorSpec {
+    @Nested
+    inner class `something` {
 
-        it("twoClassesInSeparateFile") {
+        @Test
+        fun `twoClassesInSeparateFile`() {
             val files = arrayOf(
                 compileContentForTest(default),
                 compileContentForTest(classWithFields)
@@ -18,13 +20,15 @@ class ClassCountVisitorSpec : Spek({
             assertThat(count).isEqualTo(2)
         }
 
-        it("oneClassWithOneNestedClass") {
+        @Test
+        fun `oneClassWithOneNestedClass`() {
             val file = compileContentForTest(complexClass)
             val count = getClassCount(arrayOf(file))
             assertThat(count).isEqualTo(2)
         }
 
-        it("testEnumAndInterface") {
+        @Test
+        fun `testEnumAndInterface`() {
             val files = arrayOf(
                 compileContentForTest(emptyEnum),
                 compileContentForTest(emptyInterface)
@@ -33,7 +37,7 @@ class ClassCountVisitorSpec : Spek({
             assertThat(count).isEqualTo(2)
         }
     }
-})
+}
 
 private fun getClassCount(files: Array<KtFile>): Int {
     return files.sumOf { getData(it) }

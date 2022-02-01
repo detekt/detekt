@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 /**
  * Some test cases were used directly from KtLint to verify the wrapper rule:
@@ -14,11 +14,13 @@ import org.spekframework.spek2.style.specification.describe
  * https://github.com/pinterest/ktlint/blob/6bdd345f204e6edcc3dec5e1b139c2d573227dad/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleCustomTest.kt
  * https://github.com/pinterest/ktlint/blob/cdf871b6f015359f9a6f02e15ef1b85a6c442437/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleIdeaTest.kt
  */
-class ImportOrderingSpec : Spek({
+class ImportOrderingSpec {
 
-    describe("different import ordering layouts") {
+    @Nested
+    inner class `different import ordering layouts` {
 
-        it("defaults to the idea layout") {
+        @Test
+        fun `defaults to the idea layout`() {
             val findings = ImportOrdering(Config.empty).lint(
                 """
                 import android.app.Activity
@@ -38,7 +40,8 @@ class ImportOrderingSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        describe("can be configured to use the ascii one") {
+        @Nested
+        inner class `can be configured to use the ascii one` {
 
             val negativeCase = """
                 import a.A
@@ -52,35 +55,42 @@ class ImportOrderingSpec : Spek({
                 import a.AB
             """.trimIndent()
 
-            it("passes for alphabetical order") {
+            @Test
+            fun `passes for alphabetical order`() {
                 val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
                     .lint(negativeCase)
 
                 assertThat(findings).isEmpty()
             }
 
-            it("fails for non alphabetical order") {
+            @Test
+            fun `fails for non alphabetical order`() {
                 val findings = ImportOrdering(TestConfig("layout" to ImportOrdering.ASCII_PATTERN))
                     .lint(positiveCase)
 
                 assertThat(findings).hasSize(1)
             }
 
-            describe("defaults to ascii if 'android'' property is set to true") {
+            @Nested
+            inner class `defaults to ascii if 'android'' property is set to true` {
 
-                it("passes for alphabetical order") {
+                @Test
+                fun `passes for alphabetical order`() {
                     assertThat(ImportOrdering(TestConfig("android" to "true")).lint(negativeCase)).isEmpty()
                 }
 
-                it("fails for non alphabetical order") {
+                @Test
+                fun `fails for non alphabetical order`() {
                     assertThat(ImportOrdering(TestConfig("android" to "true")).lint(positiveCase)).hasSize(1)
                 }
             }
         }
 
-        describe("supports custom patterns") {
+        @Nested
+        inner class `supports custom patterns` {
 
-            it("misses a empty line between aliases and other imports") {
+            @Test
+            fun `misses a empty line between aliases and other imports`() {
                 val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint(
                     """
                     import android.app.Activity
@@ -95,7 +105,9 @@ class ImportOrderingSpec : Spek({
 
                 assertThat(findings).hasSize(1)
             }
-            it("passes for empty line between aliases and other imports") {
+
+            @Test
+            fun `passes for empty line between aliases and other imports`() {
                 val findings = ImportOrdering(TestConfig("layout" to "*,|,^*")).lint(
                     """
                     import android.app.Activity
@@ -113,4 +125,4 @@ class ImportOrderingSpec : Spek({
             }
         }
     }
-})
+}

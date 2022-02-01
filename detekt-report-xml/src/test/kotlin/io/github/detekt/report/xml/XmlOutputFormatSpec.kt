@@ -15,43 +15,42 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.nio.file.Paths
 import java.util.Locale
 
 private const val TAB = "\t"
 
-class XmlOutputFormatSpec : Spek({
+class XmlOutputFormatSpec {
 
-    val entity1 by memoized {
-        Entity(
-            "Sample1",
-            "",
-            Location(
-                SourceLocation(11, 1),
-                TextLocation(0, 10),
-                FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample1.kt"))
-            )
+    private val entity1 = Entity(
+        "Sample1",
+        "",
+        Location(
+            SourceLocation(11, 1),
+            TextLocation(0, 10),
+            FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample1.kt"))
         )
-    }
-    val entity2 by memoized {
-        Entity(
-            "Sample2",
-            "",
-            Location(
-                SourceLocation(22, 2),
-                TextLocation(0, 20),
-                FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample2.kt"))
-            )
+    )
+    val entity2 = Entity(
+        "Sample2",
+        "",
+        Location(
+            SourceLocation(22, 2),
+            TextLocation(0, 20),
+            FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample2.kt"))
         )
-    }
+    )
+    private val outputFormat = XmlOutputReport()
 
-    val outputFormat by memoized { XmlOutputReport() }
+    @Nested
+    inner class `XML output format` {
 
-    describe("XML output format") {
-
-        it("renders empty report") {
+        @Test
+        fun `renders empty report`() {
             val result = outputFormat.render(TestDetektion())
 
             assertThat(result).isEqualTo(
@@ -63,7 +62,8 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        it("renders one reported issue in single file") {
+        @Test
+        fun `renders one reported issue in single file`() {
             val smell = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
 
             val result = outputFormat.render(TestDetektion(smell))
@@ -80,7 +80,8 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        it("renders two reported issues in single file") {
+        @Test
+        fun `renders two reported issues in single file`() {
             val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
             val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
 
@@ -99,7 +100,8 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        it("renders one reported issue across multiple files") {
+        @Test
+        fun `renders one reported issue across multiple files`() {
             val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
             val smell2 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity2, message = "")
 
@@ -120,7 +122,8 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        it("renders issues with relative path") {
+        @Test
+        fun `renders issues with relative path`() {
             val findingA = createFindingForRelativePath(
                 ruleName = "id_a",
                 basePath = "/Users/tester/detekt/",
@@ -149,7 +152,8 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        it("renders two reported issues across multiple files") {
+        @Test
+        fun `renders two reported issues across multiple files`() {
             val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
             val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
             val smell3 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity2, message = "")
@@ -181,23 +185,23 @@ class XmlOutputFormatSpec : Spek({
             )
         }
 
-        describe("severity level conversion") {
+        @Nested
+        inner class `severity level conversion` {
 
-            SeverityLevel.values().forEach { severity ->
-
+            @ParameterizedTest
+            @EnumSource(SeverityLevel::class)
+            fun `renders detektion with severity as XML with severity`(severity: SeverityLevel) {
                 val xmlSeverity = severity.name.toLowerCase(Locale.US)
+                val finding = object : CodeSmell(
+                    issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
+                    entity = entity1,
+                    message = "message"
+                ) {
+                    override val severity: SeverityLevel
+                        get() = severity
+                }
 
-                it("renders detektion with severity [$severity] as XML with severity [$xmlSeverity]") {
-                    val finding = object : CodeSmell(
-                        issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
-                        entity = entity1,
-                        message = "message"
-                    ) {
-                        override val severity: SeverityLevel
-                            get() = severity
-                    }
-
-                    val expected = """
+                val expected = """
                     <?xml version="1.0" encoding="UTF-8"?>
                     <checkstyle version="4.3">
                     <file name="src/main/com/sample/Sample1.kt">
@@ -206,11 +210,10 @@ class XmlOutputFormatSpec : Spek({
                     </checkstyle>
                     """
 
-                    val actual = outputFormat.render(TestDetektion(finding))
+                val actual = outputFormat.render(TestDetektion(finding))
 
-                    assertThat(actual).isEqualTo(expected.trimIndent())
-                }
+                assertThat(actual).isEqualTo(expected.trimIndent())
             }
         }
     }
-})
+}
