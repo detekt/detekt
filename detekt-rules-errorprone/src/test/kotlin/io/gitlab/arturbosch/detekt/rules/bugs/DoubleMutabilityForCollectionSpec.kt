@@ -2,11 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
+private const val MUTABLE_TYPES = "mutableTypes"
 
 @KotlinCoreEnvironmentTest
 class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) {
@@ -116,6 +119,70 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(2, 5)
                 }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun main() {
+                        var myState = MutableState("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(3, 5)
+                }
+
+                fun `detects var declaration with MutableState via factory function, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun main() {
+                        var myState = mutableStateOf("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(4, 5)
+                }
+
+                fun `detects var declaration with MutableState via calculation lambda, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    fun main() {
+                        var myState = remember { mutableStateOf("foo") }
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(5, 5)
+                }
             }
 
             @Nested
@@ -246,6 +313,36 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).isEmpty()
                 }
             }
+
+            @Nested
+            inner class `ignores declaration with var and property delegation` {
+
+                @Test
+                fun `does not detect var declaration with property delegate`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
+                    }
+                    fun main() {
+                        var myState by remember { mutableStateOf("foo") }
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).isEmpty()
+                }
+            }
         }
 
         @Nested
@@ -332,6 +429,64 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     val result = subject.compileAndLintWithContext(env, code)
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(1, 1)
+                }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    var myState = MutableState("foo")
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(2, 1)
+                }
+
+                fun `detects var declaration with MutableState via factory function, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    var myState = mutableStateOf("foo")
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(3, 1)
+                }
+
+                fun `detects var declaration with MutableState via calculation lambda, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    var myState = remember { mutableStateOf("foo") }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(4, 1)
                 }
             }
 
@@ -441,6 +596,34 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).isEmpty()
                 }
             }
+
+            @Nested
+            inner class `ignores declaration with var and property delegation` {
+
+                @Test
+                fun `does not detect var declaration with property delegate`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
+                    }
+                    var myState by remember { mutableStateOf("foo") }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).isEmpty()
+                }
+            }
         }
 
         @Nested
@@ -543,6 +726,70 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     val result = subject.compileAndLintWithContext(env, code)
                     assertThat(result).hasSize(1)
                     assertThat(result).hasSourceLocation(2, 5)
+                }
+
+                @Test
+                fun `detects var declaration with MutableState, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    class MyClass {
+                        var myState = MutableState("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(3, 5)
+                }
+
+                fun `detects var declaration with MutableState via factory function, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    class MyClass {
+                        var myState = mutableStateOf("foo")
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(4, 5)
+                }
+
+                fun `detects var declaration with MutableState via calculation lambda, when configured`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    class MyClass {
+                        var myState = remember { mutableStateOf("foo") }
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
+                    assertThat(result).hasSize(1)
+                    assertThat(result).hasSourceLocation(5, 5)
                 }
             }
 
@@ -671,6 +918,36 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     }
                     """
                     val result = subject.compileAndLintWithContext(env, code)
+                    assertThat(result).isEmpty()
+                }
+            }
+
+            @Nested
+            inner class `ignores declaration with var and property delegation` {
+
+                @Test
+                fun `does not detect var declaration with property delegate`() {
+                    val rule = DoubleMutabilityForCollection(
+                        TestConfig(
+                            mapOf(
+                                MUTABLE_TYPES to listOf("MutableState")
+                            )
+                        )
+                    )
+
+                    val code = """
+                    data class MutableState<T>(var state: T)
+                    fun <T> mutableStateOf(value: T): MutableState<T> = MutableState(value)
+                    fun <T> remember(calculation: () -> T): T = calculation()
+                    inline operator fun <T> MutableState<T>.getValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>): T = state
+                    inline operator fun <T> MutableState<T>.setValue(thisObj: Any?, property: kotlin.reflect.KProperty<*>, value: T) {
+                        this.state = value
+                    }
+                    class MyClass {
+                        var myState by remember { mutableStateOf("foo") }
+                    }
+                    """
+                    val result = rule.compileAndLintWithContext(env, code)
                     assertThat(result).isEmpty()
                 }
             }

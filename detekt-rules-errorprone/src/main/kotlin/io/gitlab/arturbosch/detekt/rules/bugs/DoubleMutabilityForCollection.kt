@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
@@ -14,8 +16,13 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * Using `var` when declaring a mutable collection leads to double mutability. Consider instead
- * declaring your variable with `val` or switching your declaration to use an immutable type.
+ * Using `var` when declaring a mutable collection or value holder leads to double mutability.
+ * Consider instead declaring your variable with `val` or switching your declaration to use an
+ * immutable type.
+ *
+ * By default, the rule triggers on standard mutable collections, however it can be configured
+ * to trigger on other types of mutable value types, such as `MutableState` from Jetpack
+ * Compose.
  *
  * <noncompliant>
  * var myList = mutableListOf(1,2,3)
@@ -38,13 +45,20 @@ import org.jetbrains.kotlin.resolve.BindingContext
 @RequiresTypeResolution
 class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config) {
 
+    override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
+
     override val issue: Issue = Issue(
         "DoubleMutabilityForCollection",
         Severity.CodeSmell,
-        "Using var with mutable collections leads to double mutability. " +
-            "Consider using val or immutable collection types.",
+        "Using var with mutable collections or values leads to double mutability. " +
+            "Consider using val or immutable collection or value types.",
         Debt.FIVE_MINS
     )
+
+    @Configuration("Define a list of mutable types to trigger on when defined with `var`.")
+    private val mutableTypes: Set<FqName> by config(defaultMutableTypes) { types ->
+        types.map { FqName(it) }.toSet()
+    }
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
@@ -59,22 +73,22 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
                     issue,
                     Entity.from(property),
                     "Variable ${property.name} is declared as `var` with a mutable type $standardType. " +
-                        "Consider using `val` or an immutable collection type"
+                        "Consider using `val` or an immutable collection or value type"
                 )
             )
         }
     }
 
     companion object {
-        val mutableTypes = setOf(
-            FqName("kotlin.collections.MutableList"),
-            FqName("kotlin.collections.MutableMap"),
-            FqName("kotlin.collections.MutableSet"),
-            FqName("java.util.ArrayList"),
-            FqName("java.util.LinkedHashSet"),
-            FqName("java.util.HashSet"),
-            FqName("java.util.LinkedHashMap"),
-            FqName("java.util.HashMap"),
+        val defaultMutableTypes = listOf(
+            "kotlin.collections.MutableList",
+            "kotlin.collections.MutableMap",
+            "kotlin.collections.MutableSet",
+            "java.util.ArrayList",
+            "java.util.LinkedHashSet",
+            "java.util.HashSet",
+            "java.util.LinkedHashMap",
+            "java.util.HashMap",
         )
     }
 }
