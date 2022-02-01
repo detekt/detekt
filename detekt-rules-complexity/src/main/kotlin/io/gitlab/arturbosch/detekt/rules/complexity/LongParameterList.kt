@@ -64,14 +64,32 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     )
     private val ignoreAnnotatedParameter: List<String> by config(emptyList())
 
-    private lateinit var annotationExcluder: AnnotationExcluder
+    @Configuration(
+        "ignore annotated functions from the check (e.g. `@Something fun foo(...)` would not be checked)"
+    )
+    private val ignoreAnnotatedFunctions: List<String> by config(emptyList())
+
+    @Configuration(
+        "ignore annotated constructors from the check (e.g. `data class MyClass @Something constructor(...)` would not be checked)"
+    )
+    private val ignoreAnnotatedConstructors: List<String> by config(emptyList())
+
+    private lateinit var annotatedParametersExcluder: AnnotationExcluder
+    private lateinit var annotatedFunctionsExcluder: AnnotationExcluder
+    private lateinit var annotatedConstructorsExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
+        annotatedParametersExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
+        annotatedFunctionsExcluder = AnnotationExcluder(file, ignoreAnnotatedFunctions)
+        annotatedConstructorsExcluder = AnnotationExcluder(file, ignoreAnnotatedConstructors)
         super.visitKtFile(file)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        if (annotatedFunctionsExcluder.shouldExclude(function.annotationEntries)) {
+            return
+        }
+
         checkLongParameterList(function, functionThreshold, "function ${function.nameAsSafeName}")
     }
 
@@ -83,8 +101,8 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         validateConstructor(constructor)
     }
 
-    private fun KtAnnotated.isIgnored(): Boolean {
-        return annotationExcluder.shouldExclude(annotationEntries)
+    private fun KtAnnotated.isParameterIgnored(): Boolean {
+        return annotatedParametersExcluder.shouldExclude(annotationEntries)
     }
 
     private fun validateConstructor(constructor: KtConstructor<*>) {
@@ -92,6 +110,10 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         if (owner is KtClass && owner.isDataClassOrIgnored()) {
             return
         }
+        if (annotatedConstructorsExcluder.shouldExclude(constructor.annotationEntries)) {
+            return
+        }
+
         checkLongParameterList(constructor, constructorThreshold, "constructor")
     }
 
@@ -99,6 +121,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
 
     private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
         if (function.isOverride()) return
+
         val parameterList = function.valueParameterList ?: return
         val parameterNumber = parameterList.parameterCount()
 
@@ -120,7 +143,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtParameterList.parameterCount(): Int {
-        val preFilteredParameters = parameters.filter { !it.isIgnored() }
+        val preFilteredParameters = parameters.filter { !it.isParameterIgnored() }
         return if (ignoreDefaultParameters) {
             preFilteredParameters.count { !it.hasDefaultValue() }
         } else {
