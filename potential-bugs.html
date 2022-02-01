@@ -580,14 +580,31 @@ Prefer to use instead the <code class="language-plaintext highlighter-rouge">toM
 
 <h3 id="doublemutabilityforcollection">DoubleMutabilityForCollection</h3>
 
-<p>Using <code class="language-plaintext highlighter-rouge">var</code> when declaring a mutable collection leads to double mutability. Consider instead
-declaring your variable with <code class="language-plaintext highlighter-rouge">val</code> or switching your declaration to use an immutable type.</p>
+<p>Using <code class="language-plaintext highlighter-rouge">var</code> when declaring a mutable collection or value holder leads to double mutability.
+Consider instead declaring your variable with <code class="language-plaintext highlighter-rouge">val</code> or switching your declaration to use an
+immutable type.</p>
+
+<p>By default, the rule triggers on standard mutable collections, however it can be configured
+to trigger on other types of mutable value types, such as <code class="language-plaintext highlighter-rouge">MutableState</code> from Jetpack
+Compose.</p>
 
 <p><strong>Active by default</strong>: No</p>
 
 <p><strong>Requires Type Resolution</strong></p>
 
 <p><strong>Debt</strong>: 5min</p>
+
+<p><strong>Aliases</strong>: DoubleMutability</p>
+
+<h4 id="configuration-options-1">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mutableTypes</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.collections.MutableList', 'kotlin.collections.MutableMap', 'kotlin.collections.MutableSet', 'java.util.ArrayList', 'java.util.LinkedHashSet', 'java.util.HashSet', 'java.util.LinkedHashMap', 'java.util.HashMap']</code>)</p>
+
+    <p>Define a list of mutable types to trigger on when defined with <code class="language-plaintext highlighter-rouge">var</code>.</p>
+  </li>
+</ul>
 
 <h4 id="noncompliant-code-3">Noncompliant Code:</h4>
 
@@ -791,7 +808,7 @@ fun returnsNoValue() {}</p>
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="configuration-options-1">Configuration options:</h4>
+<h4 id="configuration-options-2">Configuration options:</h4>
 
 <ul>
   <li>
@@ -872,7 +889,7 @@ Use a block statement to make clear this function will never return a value.</p>
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="configuration-options-2">Configuration options:</h4>
+<h4 id="configuration-options-3">Configuration options:</h4>
 
 <ul>
   <li>
@@ -992,7 +1009,7 @@ guaranteed. Try using constructor injection or delegation to initialize properti
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="configuration-options-3">Configuration options:</h4>
+<h4 id="configuration-options-4">Configuration options:</h4>
 
 <ul>
   <li>
@@ -1075,7 +1092,7 @@ either handle all cases or use a default <code class="language-plaintext highlig
 
 <p><strong>Debt</strong>: 20min</p>
 
-<h4 id="configuration-options-4">Configuration options:</h4>
+<h4 id="configuration-options-5">Configuration options:</h4>
 
 <ul>
   <li>
