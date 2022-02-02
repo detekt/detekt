@@ -22,10 +22,12 @@ class LongParameterListSpec : Spek({
 
     describe("LongParameterList rule") {
 
-        val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
-            "The current threshold is set to $defaultThreshold."
-        val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
-            "The current threshold is set to $defaultThreshold."
+        val reportMessageForFunction =
+            "The function long(a: Int, b: Int) has too many parameters. " +
+                "The current threshold is set to $defaultThreshold."
+        val reportMessageForConstructor =
+            "The constructor(a: Int, b: Int) has too many parameters. " +
+                "The current threshold is set to $defaultThreshold."
 
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int) {}"
@@ -99,8 +101,8 @@ class LongParameterListSpec : Spek({
             val config by memoized {
                 TestConfig(
                     mapOf(
-                        "ignoreAnnotatedConstructors" to listOf("com.test.Composable"),
-                        "ignoreAnnotatedFunctions" to listOf("com.test.Composable"),
+                        "ignoreAnnotatedConstructors" to listOf("Composable"),
+                        "ignoreAnnotatedFunctions" to listOf("Composable"),
                         "ignoreAnnotatedParameter" to listOf(
                             "Generated",
                             "kotlin.Deprecated",
@@ -151,7 +153,45 @@ class LongParameterListSpec : Spek({
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report long parameter list for constructor is annotated with ignored annotation") {
+            it("reports long parameter for functions annotated with ignored annotations from different packages") {
+                val localRule = LongParameterList(
+                    TestConfig(
+                        mapOf(
+                            "ignoreAnnotatedFunctions" to listOf("com.test.Composable"),
+                            "functionThreshold" to 1
+                        )
+                    )
+                )
+                val code = """
+                    import com.test.specific.Composable
+                    @Target(AnnotationTarget.FUNCTION)
+                    annotation class Composable
+
+                    @Composable fun foo(a: Int) {} 
+                """
+                assertThat(localRule.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports long parameter for constructors annotated with ignored annotations from different packages") {
+                val localRule = LongParameterList(
+                    TestConfig(
+                        mapOf(
+                            "ignoreAnnotatedConstructors" to listOf("com.test.Composable"),
+                            "constructorThreshold" to 1
+                        )
+                    )
+                )
+                val code = """
+                    import com.test.specific.Composable
+                    @Target(AnnotationTarget.FUNCTION)
+                    annotation class Composable
+
+                    class Data @Composable constructor(val a: Int)
+                """
+                assertThat(localRule.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report long parameter list for constructor if it is annotated with ignored annotation") {
                 val code = """
                     import com.test.Composable
                     @Target(AnnotationTarget.CONSTRUCTOR)
