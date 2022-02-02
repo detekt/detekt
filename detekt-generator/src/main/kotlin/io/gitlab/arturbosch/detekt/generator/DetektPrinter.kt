@@ -27,7 +27,9 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
             ConfigPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
         }
         propertiesWriter.write(arguments.configPath, "deprecation") {
-            DeprecatedPrinter.print(pages.filterNot { it.ruleSet.name == "formatting" })
+            // We intentionally not filter for "formatting" as we want to be able to deprecate
+            // properties from that ruleset as well.
+            DeprecatedPrinter.print(pages)
         }
         yamlWriter.write(Paths.get("../detekt-formatting/src/main/resources/config"), "config") {
             yaml {
