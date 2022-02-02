@@ -99,6 +99,8 @@ class LongParameterListSpec : Spek({
             val config by memoized {
                 TestConfig(
                     mapOf(
+                        "ignoreAnnotatedConstructors" to listOf("com.test.Composable"),
+                        "ignoreAnnotatedFunctions" to listOf("com.test.Composable"),
                         "ignoreAnnotatedParameter" to listOf(
                             "Generated",
                             "kotlin.Deprecated",
@@ -137,6 +139,29 @@ class LongParameterListSpec : Spek({
                 val code = "class Data constructor(@kotlin.Suppress(\"\") val a: Int)"
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
+
+            it("does not report long parameter list for functions if function is annotated with ignored annotation") {
+                val code = """
+                    import com.test.Composable
+                    @Target(AnnotationTarget.FUNCTION)
+                    annotation class Composable
+
+                    @Composable fun foo(a: Int) {} 
+                """
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report long parameter list for constructor is annotated with ignored annotation") {
+                val code = """
+                    import com.test.Composable
+                    @Target(AnnotationTarget.CONSTRUCTOR)
+                    annotation class Composable
+
+                    class Data @Composable constructor(val a: Int)
+                """
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
 
             it("does not report long parameter list for functions if enough function parameters are annotated with ignored annotation") {
                 val code = """class Data {

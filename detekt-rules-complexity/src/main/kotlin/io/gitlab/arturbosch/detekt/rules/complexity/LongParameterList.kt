@@ -70,7 +70,8 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private val ignoreAnnotatedFunctions: List<String> by config(emptyList())
 
     @Configuration(
-        "ignore annotated constructors from the check (e.g. `data class MyClass @Something constructor(...)` would not be checked)"
+        "ignore annotated constructors from the check " +
+            "(e.g. `data class MyClass @Something constructor(...)` would not be checked)"
     )
     private val ignoreAnnotatedConstructors: List<String> by config(emptyList())
 
@@ -121,7 +122,6 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
 
     private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
         if (function.isOverride()) return
-
         val parameterList = function.valueParameterList ?: return
         val parameterNumber = parameterList.parameterCount()
 
