@@ -202,7 +202,6 @@ class LongParameterListSpec : Spek({
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
-
             it("does not report long parameter list for functions if enough function parameters are annotated with ignored annotation") {
                 val code = """class Data {
                     fun foo(@kotlin.Suppress("") a: Int) {} }
