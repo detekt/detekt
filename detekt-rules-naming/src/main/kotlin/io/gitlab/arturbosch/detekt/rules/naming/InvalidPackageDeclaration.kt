@@ -25,8 +25,11 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         debt = Debt.FIVE_MINS
     )
 
-    @Configuration("if specified the declaration must start with this root, but it is ignored in the file structure")
+    @Configuration("if specified this part of the package structure is ignored")
     private val rootPackage: String by config("")
+
+    @Configuration("requires the declaration to start with the specified rootPackage")
+    private val requireRootInDeclaration : Boolean by config(false)
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
@@ -34,7 +37,7 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         if (declaredPath.isNotBlank()) {
             val normalizedFilePath = directive.containingKtFile.absolutePath().parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
-            if (normalizedRootPackage.isNotBlank() && !declaredPath.startsWith(normalizedRootPackage)) {
+            if (requireRootInDeclaration && !declaredPath.startsWith(normalizedRootPackage)) {
                 directive.reportInvalidPackageDeclaration("The package declaration is missing the root package")
                 return
             }

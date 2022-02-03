@@ -10,6 +10,7 @@ import java.nio.file.FileSystems
 import java.nio.file.Paths
 
 private const val ROOT_PACKAGE = "rootPackage"
+private const val REQUIRE_ROOT_PACKAGE = "requireRootInDeclaration"
 
 internal class InvalidPackageDeclarationSpec : Spek({
 
@@ -94,19 +95,6 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should report if root package is missing") {
-                val source = """
-                    package foo.bar
-
-                    class C
-                """
-
-                val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
-                val findings = InvalidPackageDeclaration(config).lint(ktFile)
-
-                assertThat(findings).hasSize(1)
-            }
-
             it("should report if file path matches root package but package declaration differs") {
                 val source = """
                     package io.foo.bar
@@ -115,6 +103,37 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 """
 
                 val ktFile = compileContentForTest(source, createPath("src/com/example/File.kt"))
+                val findings = InvalidPackageDeclaration(config).lint(ktFile)
+
+                assertThat(findings).hasSize(1)
+            }
+        }
+
+        describe("with root package required") {
+
+            val config by memoized { TestConfig(mapOf(ROOT_PACKAGE to "com.example", REQUIRE_ROOT_PACKAGE to true)) }
+
+            it("should pass if declaration starts with root package") {
+                val source = """
+                    package com.example.foo.bar
+
+                    class C
+                """
+
+                val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
+                val findings = InvalidPackageDeclaration(config).lint(ktFile)
+
+                assertThat(findings).isEmpty()
+            }
+
+            it("should report if root package is missing") {
+                val source = """
+                    package foo.bar
+
+                    class C
+                """
+
+                val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
                 val findings = InvalidPackageDeclaration(config).lint(ktFile)
 
                 assertThat(findings).hasSize(1)
