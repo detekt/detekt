@@ -9,7 +9,6 @@ import org.gradle.api.internal.HasConvention
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import java.io.File
 
 internal class DetektJvm(private val project: Project) {
     fun registerTasks(extension: DetektExtension) {
@@ -30,36 +29,7 @@ internal class DetektJvm(private val project: Project) {
             extension.baseline?.existingVariantOrBaseFile(sourceSet.name)?.let { baselineFile ->
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
-
-            reports.xml.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, sourceSet.name + ".xml").absolutePath
-                    }
-                )
-            )
-            reports.html.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, sourceSet.name + ".html").absolutePath
-                    }
-                )
-            )
-            reports.txt.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, sourceSet.name + ".txt").absolutePath
-                    }
-                )
-            )
-            reports.sarif.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, sourceSet.name + ".sarif").absolutePath
-                    }
-                )
-            )
-
+            setReportOutputConventions(reports, extension, sourceSet.name)
             description = "EXPERIMENTAL: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }

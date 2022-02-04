@@ -16,7 +16,6 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import java.io.File
 
 internal class DetektAndroid(private val project: Project) {
 
@@ -121,34 +120,7 @@ internal fun Project.registerAndroidDetektTask(
         extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.set(layout.file(project.provider { baselineFile }))
         }
-        reports.xml.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".xml").absolutePath
-                }
-            )
-        )
-        reports.html.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".html").absolutePath
-                }
-            )
-        )
-        reports.txt.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".txt").absolutePath
-                }
-            )
-        )
-        reports.sarif.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".sarif").absolutePath
-                }
-            )
-        )
+        setReportOutputConventions(reports, extension, variant.name)
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
