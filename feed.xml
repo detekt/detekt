@@ -3,10 +3,10 @@
     <channel>
         <title>detekt</title>
         <description>Meet detekt, a static code analysis tool for Kotlin.</description>
-        <link>https://detekt.github.io/</link>
-        <atom:link href="https://detekt.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Tue, 01 Feb 2022 16:53:27 -0600</pubDate>
-        <lastBuildDate>Tue, 01 Feb 2022 16:53:27 -0600</lastBuildDate>
+        <link>https://detekt.dev/</link>
+        <atom:link href="https://detekt.dev/feed.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Thu, 03 Feb 2022 18:57:30 -0600</pubDate>
+        <lastBuildDate>Thu, 03 Feb 2022 18:57:30 -0600</lastBuildDate>
         <generator>Jekyll v3.9.0</generator>
         
         <item>
@@ -44,8 +44,8 @@ val createDetektConfigForDiff by tasks.registering(DetektGenerateConfigTask::cla
 &lt;p&gt;Likewise we can diff the default config of detekt version X with the default config of detekt version X-1. This will tell us which properties are new in version X.&lt;/p&gt;
 </description>
             <pubDate>Sun, 27 Sep 2020 00:00:00 -0500</pubDate>
-            <link>https://detekt.github.io/howto-diff-config.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-diff-config.html</guid>
+            <link>https://detekt.dev/howto-diff-config.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-diff-config.html</guid>
             
             <category>guides</category>
             
@@ -54,7 +54,7 @@ val createDetektConfigForDiff by tasks.registering(DetektGenerateConfigTask::cla
         
         <item>
             <title>Howto: make detekt silent</title>
-            <description>&lt;p&gt;detekt’s reporting mechanism relies on implementations of &lt;a href=&quot;https://detekt.github.io/detekt/pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html&quot;&gt;ConsoleReport&lt;/a&gt;’s.
+            <description>&lt;p&gt;detekt’s reporting mechanism relies on implementations of &lt;a href=&quot;./pages/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html&quot;&gt;ConsoleReport&lt;/a&gt;’s.
 The cli module and therefore the Gradle plugin implement a bunch of this reports.&lt;/p&gt;
 
 &lt;p&gt;A typical detekt report will look like following:&lt;/p&gt;
@@ -106,11 +106,11 @@ This can be achieved by implementing a custom &lt;code class=&quot;language-plai
 
 &lt;p&gt;&lt;img src=&quot;images/howto-silent-run/compact_report.png&quot; alt=&quot;report&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;See the &lt;a href=&quot;https://detekt.github.io/detekt/extensions.html&quot;&gt;extension&lt;/a&gt; documention on how to let detekt know about your custom report.&lt;/p&gt;
+&lt;p&gt;See the &lt;a href=&quot;extensions.html&quot;&gt;extension&lt;/a&gt; documention on how to let detekt know about your custom report.&lt;/p&gt;
 </description>
             <pubDate>Wed, 14 Aug 2019 00:00:00 -0500</pubDate>
-            <link>https://detekt.github.io/howto-silent-reports.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-silent-reports.html</guid>
+            <link>https://detekt.dev/howto-silent-reports.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-silent-reports.html</guid>
             
             <category>guides</category>
             
@@ -196,8 +196,8 @@ We are excited to see how many users will jump on the 1.x.x release train and ho
 &lt;/ul&gt;
 </description>
             <pubDate>Sun, 04 Aug 2019 00:00:00 -0500</pubDate>
-            <link>https://detekt.github.io/calling-it-one-zero.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/calling-it-one-zero.html</guid>
+            <link>https://detekt.dev/calling-it-one-zero.html</link>
+            <guid isPermaLink="true">https://detekt.dev/calling-it-one-zero.html</guid>
             
             <category>news</category>
             
@@ -239,8 +239,8 @@ To configure snapshot usage in your gradle plugin apply the following changes to
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
             <pubDate>Sat, 29 Jun 2019 00:00:00 -0500</pubDate>
-            <link>https://detekt.github.io/howto-snapshots.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-snapshots.html</guid>
+            <link>https://detekt.dev/howto-snapshots.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-snapshots.html</guid>
             
             <category>guides</category>
             
@@ -304,8 +304,8 @@ you will not notice any changes when upgrading to &amp;gt;= RC15.
 All &lt;em&gt;exclude-rules&lt;/em&gt; and &lt;em&gt;exclude-rule-sets&lt;/em&gt; will now make use of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;excludes: &quot;**/test/**,**/*Test.kt,**/*Spec.kt&quot;&lt;/code&gt;.&lt;/p&gt;
 </description>
             <pubDate>Sat, 08 Jun 2019 00:00:00 -0500</pubDate>
-            <link>https://detekt.github.io/howto-migratetestpattern.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-migratetestpattern.html</guid>
+            <link>https://detekt.dev/howto-migratetestpattern.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-migratetestpattern.html</guid>
             
             <category>guides</category>
             
@@ -377,8 +377,8 @@ Using the &lt;em&gt;Kotlin-Dsl&lt;/em&gt; it could look like this:&lt;/p&gt;
 
 </description>
             <pubDate>Sun, 03 Mar 2019 00:00:00 -0600</pubDate>
-            <link>https://detekt.github.io/howto-buildupondefaultconfig.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-buildupondefaultconfig.html</guid>
+            <link>https://detekt.dev/howto-buildupondefaultconfig.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-buildupondefaultconfig.html</guid>
             
             <category>guides</category>
             
@@ -422,8 +422,8 @@ This allows us to simplify our detekt setup without copy-pasting a huge config f
 
 </description>
             <pubDate>Sun, 03 Mar 2019 00:00:00 -0600</pubDate>
-            <link>https://detekt.github.io/howto-buildupondefaultconfig.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/howto-buildupondefaultconfig.html</guid>
+            <link>https://detekt.dev/howto-buildupondefaultconfig.html</link>
+            <guid isPermaLink="true">https://detekt.dev/howto-buildupondefaultconfig.html</guid>
             
             <category>guides</category>
             
@@ -436,8 +436,8 @@ This allows us to simplify our detekt setup without copy-pasting a huge config f
 
 </description>
             <pubDate>Sun, 11 Feb 2018 00:00:00 -0600</pubDate>
-            <link>https://detekt.github.io/website-online.html</link>
-            <guid isPermaLink="true">https://detekt.github.io/website-online.html</guid>
+            <link>https://detekt.dev/website-online.html</link>
+            <guid isPermaLink="true">https://detekt.dev/website-online.html</guid>
             
             <category>news</category>
             
