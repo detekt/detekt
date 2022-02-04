@@ -44,6 +44,6 @@ private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
         id = "detekt.$ruleSetId.$ruleId",
         name = ruleId,
         shortDescription = MultiformatMessageString(text = issue.description),
-        helpURI = "https://detekt.github.io/detekt/$formattedRuleSetId.html#$formattedRuleId"
+        helpURI = "https://detekt.dev/$formattedRuleSetId.html#$formattedRuleId"
     )
 }

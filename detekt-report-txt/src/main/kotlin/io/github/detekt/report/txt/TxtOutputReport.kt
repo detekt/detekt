@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 
 /**
  * Contains rule violations in a plain text report similar to a log file.
- * See: https://detekt.github.io/detekt/configurations.html#output-reports
+ * See: https://detekt.dev/configurations.html#output-reports
  */
 class TxtOutputReport : OutputReport() {
 

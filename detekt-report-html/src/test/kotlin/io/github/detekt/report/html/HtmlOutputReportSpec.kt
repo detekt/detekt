@@ -49,7 +49,7 @@ class HtmlOutputReportSpec {
         fun `renders the 'generated with' text correctly`() {
             val version = whichDetekt()
             val header =
-                """generated with <a href="https://detekt.github.io/">detekt version $version</a> on """
+                """generated with <a href="https://detekt.dev/">detekt version $version</a> on """
 
             val result = htmlReport.render(TestDetektion())
 

@@ -1,7 +1,7 @@
 # __detekt__
 
 [![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
-[![Visit the website at detekt.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.github.io/detekt/)
+[![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
@@ -31,17 +31,17 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Project Website
 
-Visit [the project website](https://detekt.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
+Visit [the project website](https://detekt.dev/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
 #### Quick-Links
 
-- [Changelog and migration guides](https://detekt.github.io/detekt/changelog.html)
-- [Available CLI options](https://detekt.github.io/detekt/cli.html)
-- [Rule set and rule descriptions](https://detekt.github.io/detekt/complexity.html)
-- [Writing custom rules and extending detekt](https://detekt.github.io/detekt/extensions.html)
-- [Suppressing issues in code](https://detekt.github.io/detekt/suppressing-rules.html)
-- [Suppressing issues via baseline file](https://detekt.github.io/detekt/baseline.html)
-- [Configuring detekt](https://detekt.github.io/detekt/configurations.html)
+- [Changelog and migration guides](https://detekt.dev/changelog.html)
+- [Available CLI options](https://detekt.dev/cli.html)
+- [Rule set and rule descriptions](https://detekt.dev/complexity.html)
+- [Writing custom rules and extending detekt](https://detekt.dev/extensions.html)
+- [Suppressing issues in code](https://detekt.dev/suppressing-rules.html)
+- [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
+- [Configuring detekt](https://detekt.dev/configurations.html)
 - Sample Gradle integrations examples:
     - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/build-logic/src/main/kotlin/detekt.gradle.kts)
     - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/main/build.gradle)
@@ -58,7 +58,7 @@ curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt-
 java -jar detekt-cli-[version]-all.jar --help
 ```
 
-You can find [other ways to install detekt here](https://detekt.github.io/detekt/cli.html)
+You can find [other ways to install detekt here](https://detekt.dev/cli.html)
 
 #### with Gradle
 
@@ -108,7 +108,7 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 
 See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
 
-If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
+If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.dev/snapshots.html).
 
 #### Requirements
 
@@ -118,7 +118,7 @@ Gradle 6.1+ is the minimum requirement. However, the recommended versions togeth
 | -------------- | ------ | ------ | --- | ----------------- | --------------- |
 | `1.19.0`       | `7.3.0` | `1.5.31` | `4.2.2`| `1.8`       | `17`            |
 
-The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
+The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
 ### Adding more rule sets
 
@@ -131,7 +131,7 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
 
 ### Contributing
 

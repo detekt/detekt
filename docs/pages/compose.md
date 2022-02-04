@@ -13,7 +13,7 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 
 ### FunctionNaming
 
-See [FunctionNaming](https://detekt.github.io/detekt/naming.html#functionnaming).
+See [FunctionNaming](naming.html#functionnaming).
 
 ``@Composable`` functions that return ``Unit`` are named using ``PascalCase``. Detekt may see this as a violation:
 
@@ -30,7 +30,7 @@ Choose _either_ of the following options:
 
 ### TopLevelPropertyNaming
 
-See [TopLevelPropertyNaming](https://detekt.github.io/detekt/naming.html#toplevelpropertynaming).
+See [TopLevelPropertyNaming](naming.html#toplevelpropertynaming).
 
 Compose guidelines prescribe `CamelCase` for top-level constants.
 
@@ -53,7 +53,7 @@ private val FooPadding = 16.dp
 
 ### LongParameterList
 
-See [LongParameterList](https://detekt.github.io/detekt/complexity.html#longparameterlist).
+See [LongParameterList](complexity.html#longparameterlist).
 
 Composables may boast more than the typical number of function arguments (albeit mostly with default values). For example, see [OutlinedTextField](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/OutlinedTextField.kt;l=133?q=OutlinedTextFieldLayout&ss=androidx%2Fplatform%2Fframeworks%2Fsupport:compose%2F).
 
@@ -64,7 +64,7 @@ Composables may boast more than the typical number of function arguments (albeit
 
 ### MagicNumber
 
-See [MagicNumber](https://detekt.github.io/detekt/style.html#magicnumber).
+See [MagicNumber](style.html#magicnumber).
 
 Class/companion object/top-level properties that declare objects such as ``Color(0xFFEA6D7E)`` may be considered violations if they don't specify the named parameter (i.e. ``Color(color = 0xFFEA6D7E)``).
 
@@ -86,7 +86,7 @@ class Foo {
 
 ### UnusedPrivateMember
 
-See [UnusedPrivateMember](https://detekt.github.io/detekt/style.html#unusedprivatemember).
+See [UnusedPrivateMember](style.html#unusedprivatemember).
 
 Detekt may see composable preview functions, i.e. those marked with ``@Preview``, as unused.
 

@@ -82,7 +82,7 @@ tasks.withType(Detekt).configureEach {
 }
 ```
 
-See [reporting](https://detekt.github.io/detekt/reporting.html) docs for more details on configuring reports.
+See [reporting](reporting.html) docs for more details on configuring reports.
 
 ### Adding more rule sets
 
@@ -95,6 +95,6 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](extensions.html) can be added to detekt.
 
 {% include links.html %}

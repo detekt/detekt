@@ -8,7 +8,7 @@ import java.util.Locale
 
 /**
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
- * See: https://detekt.github.io/detekt/configurations.html#output-reports
+ * See: https://detekt.dev/configurations.html#output-reports
  */
 class XmlOutputReport : OutputReport() {
 

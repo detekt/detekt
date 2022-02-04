@@ -96,7 +96,7 @@ tasks.validatePlugins {
 }
 
 pluginBundle {
-    website = "https://detekt.github.io/detekt"
+    website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")

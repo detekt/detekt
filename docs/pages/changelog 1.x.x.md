@@ -16,7 +16,7 @@ Please welcome the next upcoming stable release of Detekt: `1.19.0` 🎉
 This release is coming with a lot of new features, new rules, evolution in the API and stability improvements.
 
 Specifically, we've shipped some features that will allow you to better adapt detekt to run on codebases
-that are using JetPack compose with features such as [`ignoreAnnotated` and `ignoreFunction`](https://detekt.github.io/detekt/suppressors.html).
+that are using JetPack compose with features such as [`ignoreAnnotated` and `ignoreFunction`](suppressors.html).
 
 As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
 us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
@@ -692,9 +692,9 @@ In addition to many rule improvements, there are also new ones:
 - RedundantHigherOrderMapUsage
 - UseIfEmptyOrIfBlank
 
-We added documentation on how to configure [type resolution](https://detekt.github.io/detekt/type-resolution.html).  
+We added documentation on how to configure [type resolution](type-resolution.html).  
 Only the rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see
-for example https://detekt.github.io/detekt/style.html#forbiddenmethodcall).
+for example style.html#forbiddenmethodcall).
 
 detekt now supports [SARIF](https://sarifweb.azurewebsites.net/) as an output format. In the future you will be able to
 upload this format to GitHub and see detekt issues right in your pull requests.
@@ -2075,7 +2075,7 @@ See all issues at: [1.1.0](https://github.com/detekt/detekt/milestone/19)
 
 ##### Notable changes
 
-- [detekt runs can be completely silent on absence of findings](https://detekt.github.io/detekt/howto-silent-reports.html)
+- [detekt runs can be completely silent on absence of findings](howto-silent-reports.html)
 - All detekt's dependencies are now on MavenCentral. Bogus "*could not find JCommander dependency*" should be gone.
 
 ##### Changelog
