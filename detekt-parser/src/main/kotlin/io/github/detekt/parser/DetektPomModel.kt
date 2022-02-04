@@ -1,6 +1,7 @@
 package io.github.detekt.parser
 
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
+import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions.getRootArea
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
@@ -20,9 +21,9 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
     init {
         val extension = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
         val extensionClass = TreeCopyHandler::class.java.name
-        val extensionArea = project.extensionArea
-        synchronized(extensionArea) {
-            if (extensionArea.hasExtensionPoint(extension)) {
+        @Suppress("DEPRECATION")
+        for (extensionArea in listOf(project.extensionArea, getRootArea())) {
+            if (!extensionArea.hasExtensionPoint(extension)) {
                 extensionArea.registerExtensionPoint(extension, extensionClass, ExtensionPoint.Kind.INTERFACE)
             }
         }
