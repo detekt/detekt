@@ -120,10 +120,15 @@ internal class InvalidPackageDeclarationSpec : Spek({
                     class C
                 """
 
-                val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
-                val findings = InvalidPackageDeclaration(config).lint(ktFile)
+                val ktFileWithRelativePath = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
+                val findingsForRelativePath = InvalidPackageDeclaration(config).lint(ktFileWithRelativePath)
 
-                assertThat(findings).isEmpty()
+                assertThat(findingsForRelativePath).isEmpty()
+
+                val ktFileWithFullPath = compileContentForTest(source, createPath("src/com/example/foo/bar/File.kt"))
+                val findingsForFullPath = InvalidPackageDeclaration(config).lint(ktFileWithFullPath)
+
+                assertThat(findingsForFullPath).isEmpty()
             }
 
             it("should report if root package is missing") {

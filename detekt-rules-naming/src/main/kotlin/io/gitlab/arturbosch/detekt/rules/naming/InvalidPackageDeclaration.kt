@@ -29,7 +29,7 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
     private val rootPackage: String by config("")
 
     @Configuration("requires the declaration to start with the specified rootPackage")
-    private val requireRootInDeclaration : Boolean by config(false)
+    private val requireRootInDeclaration: Boolean by config(false)
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
