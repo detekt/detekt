@@ -112,7 +112,7 @@ internal fun Project.registerAndroidDetektTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<Detekt> =
     registerDetektTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
@@ -132,7 +132,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<DetektCreateBaselineTask> =
     registerCreateBaselineTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
