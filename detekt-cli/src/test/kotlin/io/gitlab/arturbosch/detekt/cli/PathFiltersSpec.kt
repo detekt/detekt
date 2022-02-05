@@ -47,11 +47,12 @@ class PathFiltersSpec {
 
             @Test
             fun `parses both includes and excludes correctly`() {
-                val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**"))
+                val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**", "**/one/three/**"))
                 assertThat(pathFilter).isNotNull
                 assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
                 assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
-                assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
+                assertThat(pathFilter?.isIgnored(Paths.get("/one/three/path"))).isTrue
+                assertThat(pathFilter?.isIgnored(Paths.get("/four/path"))).isTrue
             }
         }
 
