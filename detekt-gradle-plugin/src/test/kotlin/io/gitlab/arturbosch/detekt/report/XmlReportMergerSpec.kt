@@ -1,17 +1,19 @@
 package io.gitlab.arturbosch.detekt.report
 
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.io.File
 
 private const val TAB = "\t"
 
-internal class XmlReportMergerSpec : Spek({
+class XmlReportMergerSpec {
 
-    describe("classpath changes") {
+    @Nested
+    inner class `classpath changes` {
 
-        it("passes for same files") {
+        @Test
+        fun `passes for same files`() {
             val file1 = File.createTempFile("detekt1", "xml").apply {
                 writeText(
                     """
@@ -52,4 +54,4 @@ internal class XmlReportMergerSpec : Spek({
             assertThat(output.readText()).isEqualToIgnoringNewLines(expectedText)
         }
     }
-})
+}
