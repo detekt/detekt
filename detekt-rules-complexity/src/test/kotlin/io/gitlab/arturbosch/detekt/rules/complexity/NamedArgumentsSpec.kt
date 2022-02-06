@@ -1,24 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class NamedArgumentsSpec : Spek({
-    setupKotlinEnvironment()
-
-    val env: KotlinCoreEnvironment by memoized()
+@KotlinCoreEnvironmentTest
+class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
     val defaultThreshold = 2
-    val defaultConfig by memoized { TestConfig(mapOf("threshold" to defaultThreshold)) }
-    val subject by memoized { NamedArguments(defaultConfig) }
+    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val subject = NamedArguments(defaultConfig)
 
-    describe("NameArguments rule") {
+    @Nested
+    inner class `NameArguments rule` {
 
-        it("invocation with more than 2 parameters should throw error") {
+        @Test
+        fun `invocation with more than 2 parameters should throw error`() {
             val code = """
                 fun sum(a: Int, b:Int, c:Int) {
                     println(a + b + c)
@@ -31,7 +31,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("Function invocation with more than 2 parameters should not throw error if named") {
+        @Test
+        fun `Function invocation with more than 2 parameters should not throw error if named`() {
             val code = """
                 fun sum(a: Int, b:Int, c:Int) {
                     println(a + b + c)
@@ -44,7 +45,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("invocation with more than 2 parameters should throw error if even one is not named") {
+        @Test
+        fun `invocation with more than 2 parameters should throw error if even one is not named`() {
             val code = """
                 fun sum(a: Int, b:Int, c:Int) {
                     println(a + b + c)
@@ -57,7 +59,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("invocation with less than 3 parameters should not throw error") {
+        @Test
+        fun `invocation with less than 3 parameters should not throw error`() {
             val code = """
                 fun sum(a: Int, b:Int) {
                     println(a + b)
@@ -70,7 +73,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("invocation with less than 3 named parameters should not throw error") {
+        @Test
+        fun `invocation with less than 3 named parameters should not throw error`() {
             val code = """
                 fun sum(a: Int, b:Int) {
                     println(a + b)
@@ -83,7 +87,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("constructor invocation with more than 3 non-named parameters should throw error") {
+        @Test
+        fun `constructor invocation with more than 3 non-named parameters should throw error`() {
             val code = """
                 class C(val a: Int, val b:Int, val c:Int)
                 
@@ -93,7 +98,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("constructor invocation with more than 3 named parameters should not throw error") {
+        @Test
+        fun `constructor invocation with more than 3 named parameters should not throw error`() {
             val code = """
                 class C(val a: Int, val b:Int, val c:Int)
                 
@@ -103,7 +109,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("constructor invocation with less than 3 non-named parameters should not throw error") {
+        @Test
+        fun `constructor invocation with less than 3 non-named parameters should not throw error`() {
             val code = """
                 class C(val a: Int, val b:Int)
                 
@@ -113,7 +120,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("java method invocation should not be flagged") {
+        @Test
+        fun `java method invocation should not be flagged`() {
             val code = """
                 import java.time.LocalDateTime
                 
@@ -125,7 +133,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("invocation with varargs should not be flagged") {
+        @Test
+        fun `invocation with varargs should not be flagged`() {
             val code = """
                 fun foo(vararg i: Int) {}
                 fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
@@ -138,7 +147,8 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("invocation with spread operator should be flagged") {
+        @Test
+        fun `invocation with spread operator should be flagged`() {
             val code = """
                 fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
                 fun test() {
@@ -149,8 +159,10 @@ class NamedArgumentsSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        context("lambda argument") {
-            it("inner lambda argument") {
+        @Nested
+        inner class `lambda argument` {
+            @Test
+            fun `inner lambda argument`() {
                 val code = """
                 fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
                 
@@ -162,7 +174,8 @@ class NamedArgumentsSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("outer lambda argument") {
+            @Test
+            fun `outer lambda argument`() {
                 val code = """
                 fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
                 
@@ -174,7 +187,8 @@ class NamedArgumentsSpec : Spek({
                 assertThat(findings).hasSize(0)
             }
 
-            it("unnamed argument and outer argument") {
+            @Test
+            fun `unnamed argument and outer argument`() {
                 val code = """
                 fun foo(a: Int, b: Int, c: Int, block: ((Int) -> Int)) {}
                 
@@ -187,4 +201,4 @@ class NamedArgumentsSpec : Spek({
             }
         }
     }
-})
+}

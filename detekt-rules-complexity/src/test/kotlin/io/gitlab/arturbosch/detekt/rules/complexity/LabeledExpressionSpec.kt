@@ -3,16 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class LabeledExpressionSpec : Spek({
+class LabeledExpressionSpec {
 
-    val subject by memoized { LabeledExpression() }
+    private val subject = LabeledExpression()
 
-    describe("LabeledExpression rule") {
+    @Nested
+    inner class `LabeledExpression rule` {
 
-        it("reports break and continue labels") {
+        @Test
+        fun `reports break and continue labels`() {
             val code = """
                 fun f() {
                     loop@ for (i in 1..3) {
@@ -26,7 +28,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
-        it("reports implicit return label") {
+        @Test
+        fun `reports implicit return label`() {
             val code = """
                 fun f(range: IntRange) {
                     range.forEach {
@@ -38,7 +41,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports explicit return label") {
+        @Test
+        fun `reports explicit return label`() {
             val code = """
                 fun f(range: IntRange) {
                     range.forEach label@{
@@ -50,7 +54,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports labels referencing inner and outer class") {
+        @Test
+        fun `reports labels referencing inner and outer class`() {
             val code = """
                 class Outer {
                     inner class Inner {
@@ -68,7 +73,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
-        it("does not report inner class referencing outer class") {
+        @Test
+        fun `does not report inner class referencing outer class`() {
             val code = """
             class Outer {
                 inner class Inner {
@@ -81,7 +87,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report inner class referencing outer class in extension function") {
+        @Test
+        fun `does not report inner class referencing outer class in extension function`() {
             val code = """
             class Outer {
                 inner class Inner {
@@ -95,7 +102,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nested class referencing outer class in extension function") {
+        @Test
+        fun `does not report nested class referencing outer class in extension function`() {
             val code = """
             class Outer {
                 class Nested {
@@ -108,7 +116,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report inner classes referencing outer class in extension function") {
+        @Test
+        fun `does not report inner classes referencing outer class in extension function`() {
             val code = """
             class Outer {
                 inner class Inner {
@@ -128,7 +137,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report excluded label") {
+        @Test
+        fun `does not report excluded label`() {
             val code = """
                 fun f() {
                     loop@ for (i in 1..5) {}
@@ -139,7 +149,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report excluded label config with string") {
+        @Test
+        fun `does not report excluded label config with string`() {
             val code = """
                 fun f() {
                     loop@ for (i in 1..5) {}
@@ -150,7 +161,8 @@ class LabeledExpressionSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report excluded label config with leading and trailing wildcard") {
+        @Test
+        fun `does not report excluded label config with leading and trailing wildcard`() {
             val code = """
                 fun f() {
                     loop@ for (i in 1..5) {}
@@ -161,4 +173,4 @@ class LabeledExpressionSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

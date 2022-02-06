@@ -3,20 +3,23 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class MethodOverloadingSpec : Spek({
+class MethodOverloadingSpec {
     val defaultThreshold = 3
-    val defaultConfig by memoized { TestConfig(mapOf("threshold" to defaultThreshold)) }
+    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
 
-    val subject by memoized { MethodOverloading(defaultConfig) }
+    val subject = MethodOverloading(defaultConfig)
 
-    describe("MethodOverloading rule") {
+    @Nested
+    inner class `MethodOverloading rule` {
 
-        context("several overloaded methods") {
+        @Nested
+        inner class `several overloaded methods` {
 
-            it("reports overloaded methods which exceed the threshold") {
+            @Test
+            fun `reports overloaded methods which exceed the threshold`() {
                 val code = """
                     class Test {
                         fun x() {}
@@ -29,7 +32,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(findings[0].message).isEqualTo("The method 'x' is overloaded 3 times.")
             }
 
-            it("reports overloaded top level methods which exceed the threshold") {
+            @Test
+            fun `reports overloaded top level methods which exceed the threshold`() {
                 val code = """
                     fun x() {}
                     fun x(i: Int) {}
@@ -38,7 +42,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report overloaded methods which do not exceed the threshold") {
+            @Test
+            fun `does not report overloaded methods which do not exceed the threshold`() {
                 subject.compileAndLint(
                     """
                 class Test {
@@ -50,9 +55,11 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        context("several overloaded extensions methods") {
+        @Nested
+        inner class `several overloaded extensions methods` {
 
-            it("does not report extension methods with a different receiver") {
+            @Test
+            fun `does not report extension methods with a different receiver`() {
                 subject.compileAndLint(
                     """
                 fun Boolean.foo() {}
@@ -62,7 +69,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.findings.size).isZero()
             }
 
-            it("reports extension methods with the same receiver") {
+            @Test
+            fun `reports extension methods with the same receiver`() {
                 subject.compileAndLint(
                     """
                 fun Int.foo() {}
@@ -73,9 +81,11 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        context("several nested overloaded methods") {
+        @Nested
+        inner class `several nested overloaded methods` {
 
-            it("reports nested overloaded methods which exceed the threshold") {
+            @Test
+            fun `reports nested overloaded methods which exceed the threshold`() {
                 val code = """
                     class Outer {
                         internal class Inner {
@@ -88,7 +98,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report nested overloaded methods which do not exceed the threshold") {
+            @Test
+            fun `does not report nested overloaded methods which do not exceed the threshold`() {
                 val code = """
                     class Outer {
 
@@ -104,9 +115,11 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        context("several overloaded methods inside objects") {
+        @Nested
+        inner class `several overloaded methods inside objects` {
 
-            it("reports overloaded methods inside an object which exceed the threshold") {
+            @Test
+            fun `reports overloaded methods inside an object which exceed the threshold`() {
                 val code = """
                     object Test {
                         fun f() {}
@@ -117,7 +130,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report overloaded methods inside an object which do not exceed the threshold") {
+            @Test
+            fun `does not report overloaded methods inside an object which do not exceed the threshold`() {
                 val code = """
                     object Test {
                         fun f() {}
@@ -127,7 +141,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports overloaded methods inside a companion object which exceed the threshold") {
+            @Test
+            fun `reports overloaded methods inside a companion object which exceed the threshold`() {
                 val code = """
                     class Test {
                         companion object {
@@ -140,7 +155,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report overloaded methods in a companion object that do not exceed the threshold") {
+            @Test
+            fun `does not report overloaded methods in a companion object that do not exceed the threshold`() {
                 val code = """
                     class Test {
                         companion object {
@@ -152,7 +168,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report overloaded methods in classes/objects that do not exceed the threshold") {
+            @Test
+            fun `does not report overloaded methods in classes or objects that do not exceed the threshold`() {
                 val code = """
                     class Test {
 
@@ -167,7 +184,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports overloaded methods inside an anonymous object expression") {
+            @Test
+            fun `reports overloaded methods inside an anonymous object expression`() {
                 val code = """
                     class A {
                     
@@ -184,9 +202,11 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        context("several overloaded methods inside enum classes") {
+        @Nested
+        inner class `several overloaded methods inside enum classes` {
 
-            it("does not report overridden methods inside enum entries") {
+            @Test
+            fun `does not report overridden methods inside enum entries`() {
                 val code = """
                     enum class Test {
                         E1 {
@@ -205,7 +225,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports overloaded methods in enum entry") {
+            @Test
+            fun `reports overloaded methods in enum entry`() {
                 val code = """
                     enum class Test {
                         E {
@@ -218,7 +239,8 @@ class MethodOverloadingSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports overloaded methods in enum class") {
+            @Test
+            fun `reports overloaded methods in enum class`() {
                 val code = """
                     enum class Test {
                         E;
@@ -232,12 +254,14 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        it("does not report a class without a body") {
+        @Test
+        fun `does not report a class without a body`() {
             val code = "class A"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overloaded local functions") {
+        @Test
+        fun `does not report overloaded local functions`() {
             val code = """
                 fun top() {
                     fun f() {}
@@ -248,4 +272,4 @@ class MethodOverloadingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}
