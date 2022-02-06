@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
     @Nested
-    inner class `AnnotationSuppressorFactory` {
+    inner class AnnotationSuppressorFactory {
         @Test
         fun `Factory returns null if ignoreAnnotated is not set`() {
             val suppressor = annotationSuppressorFactory(buildConfigAware(/* empty */), BindingContext.EMPTY)
@@ -49,7 +49,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `AnnotationSuppressor` {
+    inner class AnnotationSuppressor {
         val suppressor = annotationSuppressorFactory(
             buildConfigAware("ignoreAnnotated" to listOf("Composable")),
             BindingContext.EMPTY,
@@ -65,6 +65,8 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     @file:Composable
+
+                    import androidx.compose.runtime.Composable
 
                     class OneClass {
                         fun function(parameter: String) {
@@ -117,6 +119,8 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         inner class `If annotation is at function level` {
             val root = compileContentForTest(
                 """
+                    import androidx.compose.runtime.Composable
+
                     class OneClass {
                         @Composable
                         fun function(parameter: String) {
@@ -169,6 +173,8 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         inner class `If there is not annotations` {
             val root = compileContentForTest(
                 """
+                    import androidx.compose.runtime.Composable
+
                     class OneClass {
                         fun function(parameter: String) {
                             val a = 0
@@ -221,6 +227,8 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     @file:A
+
+                    import androidx.compose.runtime.Composable
 
                     @B
                     class OneClass {
