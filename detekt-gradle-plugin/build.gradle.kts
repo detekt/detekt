@@ -19,10 +19,8 @@ testing {
         getByName("test", JvmTestSuite::class) {
             dependencies {
                 implementation(libs.assertj)
-                implementation(libs.spek.dsl)
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
-                runtimeOnly(libs.spek.runner)
 
                 // Workaround for gradle/gradle#16774, see
                 // https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
