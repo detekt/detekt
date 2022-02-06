@@ -1,26 +1,16 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.createPsiFactory
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtFunction
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 class AnnotationExcluderSpec {
-
-    private val psiFactory = createPsiFactory()
-
-    private val file = compileContentForTest(
-        """
-            package foo
-
-            import dagger.Component
-            import dagger.Component.Factory
-        """.trimIndent()
-    )
-
     @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2}")
     @CsvSource(
         value = [
@@ -82,40 +72,60 @@ class AnnotationExcluderSpec {
         ]
     )
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
+        val (file, ktAnnotation) = createKtFile(annotation)
         val excluder = AnnotationExcluder(file, listOf(exclusion))
 
-        val ktAnnotation = psiFactory.createAnnotationEntry(annotation)
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
 
     @Nested
     inner class `special cases` {
-        private val annotation = psiFactory.createAnnotationEntry("@Component")
-        private val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
-
         @Test
         fun `should not exclude when the annotation was not found`() {
+            val (file, ktAnnotation) = createKtFile("@Component")
             val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
-            assertThat(excluder.shouldExclude(listOf(annotation))).isFalse()
+
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
 
         @Test
         fun `should not exclude when no annotations should be excluded`() {
+            val (file, ktAnnotation) = createKtFile("@Component")
             val excluder = AnnotationExcluder(file, emptyList())
-            assertThat(excluder.shouldExclude(listOf(annotation))).isFalse()
+
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
 
         @Test
         fun `should also exclude an annotation that is not imported`() {
+            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
             val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
-            assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isTrue()
+
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
 
         @Test
         fun `should exclude when the annotation was found with SplitPattern`() {
-            @Suppress("DEPRECATION")
-            val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
-            assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isTrue()
+            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
+            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, SplitPattern("SinceKotlin"))
+
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
     }
+}
+
+private fun createKtFile(annotation: String): Pair<KtFile, KtAnnotationEntry> {
+    val file = compileContentForTest(
+        """
+            package foo
+
+            import dagger.Component
+            import dagger.Component.Factory
+
+            $annotation
+            fun function() = Unit
+        """.trimIndent()
+    )
+
+    return file to file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()
 }

@@ -25,7 +25,17 @@ class SuppressorsSpec {
 
     val ignorableCodeSmell = CodeSmell(
         issue = ARule().issue,
-        entity = Entity.from(compileContentForTest("""@file:Composable fun foo() = Unit""".trimIndent())),
+        entity = Entity.from(
+            compileContentForTest(
+                """
+                @file:Composable
+
+                import androidx.compose.runtime.Composable
+
+                fun foo() = Unit
+                """.trimIndent()
+            )
+        ),
         message = ""
     )
 
