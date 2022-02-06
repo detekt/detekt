@@ -1,24 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object InjectDispatcherSpec : Spek({
+@KotlinCoreEnvironmentTest
+class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
 
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `InjectDispatcher with default config` {
 
-    describe("InjectDispatcher with default config") {
+        val subject = InjectDispatcher(Config.empty)
 
-        val subject by memoized { InjectDispatcher(Config.empty) }
-
-        it("reports when dispatchers is used inside a function") {
+        @Test
+        fun `reports when dispatchers is used inside a function`() {
             val code = """
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
@@ -33,7 +33,8 @@ object InjectDispatcherSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("does not report when dispatcher is used as a function parameter") {
+        @Test
+        fun `does not report when dispatcher is used as a function parameter`() {
             val code = """
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
@@ -49,7 +50,8 @@ object InjectDispatcherSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when dispatcher is used as a constructor parameter") {
+        @Test
+        fun `does not report when dispatcher is used as a constructor parameter`() {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
@@ -59,7 +61,8 @@ object InjectDispatcherSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when dispatcher is used as a property") {
+        @Test
+        fun `does not report when dispatcher is used as a property`() {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
@@ -69,7 +72,8 @@ object InjectDispatcherSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when dispatcher main is used") {
+        @Test
+        fun `does not report when dispatcher main is used`() {
             val code = """
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
@@ -85,11 +89,13 @@ object InjectDispatcherSpec : Spek({
         }
     }
 
-    describe("InjectDispatcher with config specifying dispatcher names") {
+    @Nested
+    inner class `InjectDispatcher with config specifying dispatcher names` {
 
-        val subject by memoized { InjectDispatcher(TestConfig("dispatcherNames" to listOf("Main", "IO", "Default", "Confined"))) }
+        val subject = InjectDispatcher(TestConfig("dispatcherNames" to listOf("Main", "IO", "Default", "Confined")))
 
-        it("reports when dispatcher main is used") {
+        @Test
+        fun `reports when dispatcher main is used`() {
             val code = """
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
@@ -104,4 +110,4 @@ object InjectDispatcherSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
-})
+}
