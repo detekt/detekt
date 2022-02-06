@@ -14,6 +14,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 @KotlinCoreEnvironmentTest
 class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
@@ -314,10 +316,14 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 """.trimIndent()
             )
 
-            val binding = env.getContextForPaths(listOf(root, *composableFiles))
+            val bindings = listOf(
+                env.getContextForPaths(listOf(root, *composableFiles)),
+                BindingContext.EMPTY,
+            )
 
-            @Test
-            fun `Just name`() {
+            @ParameterizedTest
+            @MethodSource("getBindings")
+            fun `Just name`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("Composable")),
                     binding,
@@ -328,8 +334,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
             }
 
-            @Test
-            fun `Full qualified name name`() {
+            @ParameterizedTest
+            @MethodSource("getBindings")
+            fun `Full qualified name name`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
                     binding,
@@ -340,9 +347,10 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
             }
 
-            @Test
+            @ParameterizedTest
+            @MethodSource("getBindings")
             @DisplayName("with glob doesn't match because * doesn't match .")
-            fun withGlobDoesntMatch() {
+            fun withGlobDoesntMatch(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("*.Composable")),
                     binding,
@@ -353,8 +361,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isFalse()
             }
 
-            @Test
-            fun `With glob2`() {
+            @ParameterizedTest
+            @MethodSource("getBindings")
+            fun `With glob2`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("**.Composable")),
                     binding,
@@ -365,8 +374,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
             }
 
-            @Test
-            fun `With glob3`() {
+            @ParameterizedTest
+            @MethodSource("getBindings")
+            fun `With glob3`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("Compo*")),
                     binding,
@@ -377,8 +387,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
             }
 
-            @Test
-            fun `With glob4`() {
+            @ParameterizedTest
+            @MethodSource("getBindings")
+            fun `With glob4`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("*")),
                     binding,
