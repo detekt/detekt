@@ -2,13 +2,16 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class DeprecatedBlockTagSpec : Spek({
-    val subject by memoized { DeprecatedBlockTag() }
-    describe("DeprecatedBlockTag rule") {
-        it("does not report regular kdoc block") {
+class DeprecatedBlockTagSpec {
+    val subject = DeprecatedBlockTag()
+
+    @Nested
+    inner class `DeprecatedBlockTag rule` {
+        @Test
+        fun `does not report regular kdoc block`() {
             val code = """
                 /**
                  * This is just a regular kdoc block.
@@ -20,7 +23,8 @@ class DeprecatedBlockTagSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
-        describe("reporting deprecation tag on kdoc block") {
+        @Nested
+        inner class `reporting deprecation tag on kdoc block` {
             val code = """
                 /**
                  * I am a KDoc block
@@ -30,11 +34,13 @@ class DeprecatedBlockTagSpec : Spek({
                 fun ohNo() { }
             """
 
-            it("has found something") {
+            @Test
+            fun `has found something`() {
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("correct message") {
+            @Test
+            fun `correct message`() {
                 assertThat(subject.compileAndLint(code)[0]).hasMessage(
                     "@deprecated tag block does not properly report " +
                         "deprecation in Kotlin, use @Deprecated annotation instead"
@@ -42,9 +48,11 @@ class DeprecatedBlockTagSpec : Spek({
             }
         }
 
-        describe("reporting deprecation tag wherever @Deprecated is available") {
+        @Nested
+        inner class `reporting deprecation tag wherever @Deprecated is available` {
 
-            it("report deprecation tag on class") {
+            @Test
+            fun `report deprecation tag on class`() {
                 val code = """
                 /**
                  * Hello there
@@ -56,7 +64,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on property") {
+            @Test
+            fun `report deprecation tag on property`() {
                 val code = """
                 class Thing {
                     /**
@@ -70,7 +79,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on annotation class") {
+            @Test
+            fun `report deprecation tag on annotation class`() {
                 val code = """
                     /**
                      * An annotation you should not use
@@ -82,7 +92,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on constructor") {
+            @Test
+            fun `report deprecation tag on constructor`() {
                 val code = """
                     class Thing {
                         /**
@@ -96,7 +107,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on property setter") {
+            @Test
+            fun `report deprecation tag on property setter`() {
                 val code = """
                     class Thing {
                         var someProperty: Int
@@ -112,7 +124,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on property getter") {
+            @Test
+            fun `report deprecation tag on property getter`() {
                 val code = """
                     class Thing {
                         var someProperty: Int
@@ -128,7 +141,8 @@ class DeprecatedBlockTagSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("report deprecation tag on typealias") {
+            @Test
+            fun `report deprecation tag on typealias`() {
                 val code = """
                     /**
                      * This alias is pointless, do not use it
@@ -141,4 +155,4 @@ class DeprecatedBlockTagSpec : Spek({
             }
         }
     }
-})
+}

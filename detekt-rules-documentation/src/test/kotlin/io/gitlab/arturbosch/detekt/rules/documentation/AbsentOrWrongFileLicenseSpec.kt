@@ -11,18 +11,21 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
 
-internal class AbsentOrWrongFileLicenseSpec : Spek({
+class AbsentOrWrongFileLicenseSpec {
 
-    describe("AbsentOrWrongFileLicense rule") {
+    @Nested
+    inner class `AbsentOrWrongFileLicense rule` {
 
-        context("file with correct license header") {
+        @Nested
+        inner class `file with correct license header` {
 
-            it("reports nothing") {
+            @Test
+            fun `reports nothing`() {
                 val findings = checkLicence(
                     """
                     /* LICENSE */
@@ -34,9 +37,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             }
         }
 
-        context("file with incorrect license header") {
+        @Nested
+        inner class `file with incorrect license header` {
 
-            it("reports missed license header") {
+            @Test
+            fun `reports missed license header`() {
                 val findings = checkLicence(
                     """
                     /* WRONG LICENSE */
@@ -48,9 +53,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             }
         }
 
-        context("file with absent license header") {
+        @Nested
+        inner class `file with absent license header` {
 
-            it("reports missed license header") {
+            @Test
+            fun `reports missed license header`() {
                 val findings = checkLicence(
                     """
                     package cases
@@ -61,9 +68,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             }
         }
 
-        context("file with correct license header using regex matching") {
+        @Nested
+        inner class `file with correct license header using regex matching` {
 
-            it("reports nothing for 2016") {
+            @Test
+            fun `reports nothing for 2016`() {
                 val findings = checkLicence(
                     """
                     //
@@ -80,7 +89,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("reports nothing for 2021") {
+            @Test
+            fun `reports nothing for 2021`() {
                 val findings = checkLicence(
                     """
                     //
@@ -98,9 +108,11 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             }
         }
 
-        context("file with incorrect license header using regex matching") {
+        @Nested
+        inner class `file with incorrect license header using regex matching` {
 
-            it("file with missing license header") {
+            @Test
+            fun `file with missing license header`() {
                 val findings = checkLicence(
                     """
                     package cases
@@ -111,7 +123,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("file with license header not on the first line") {
+            @Test
+            fun `file with license header not on the first line`() {
                 val findings = checkLicence(
                     """
                     package cases
@@ -128,7 +141,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("file with incomplete license header") {
+            @Test
+            fun `file with incomplete license header`() {
                 val findings = checkLicence(
                     """
                     //
@@ -142,7 +156,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("file with too many empty likes in license header") {
+            @Test
+            fun `file with too many empty likes in license header`() {
                 val findings = checkLicence(
                     """
                     //
@@ -160,7 +175,8 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("file with incorrect year in license header") {
+            @Test
+            fun `file with incorrect year in license header`() {
                 val findings = checkLicence(
                     """
                     //
@@ -178,7 +194,7 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
             }
         }
     }
-})
+}
 
 @OptIn(UnstableApi::class)
 private fun checkLicence(content: String, isRegexLicense: Boolean = false): List<Finding> {

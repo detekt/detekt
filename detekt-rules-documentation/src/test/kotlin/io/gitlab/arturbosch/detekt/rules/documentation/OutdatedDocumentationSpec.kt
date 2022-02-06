@@ -3,23 +3,27 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class OutdatedDocumentationSpec : Spek({
-    val subject by memoized { OutdatedDocumentation() }
+class OutdatedDocumentationSpec {
+    val subject = OutdatedDocumentation()
 
-    describe("OutdatedDocumentation rule") {
+    @Nested
+    inner class `OutdatedDocumentation rule` {
 
-        describe("general") {
-            it("should not report when doc is missing") {
+        @Nested
+        inner class `general` {
+            @Test
+            fun `should not report when doc is missing`() {
                 val withoutDoc = """
                 class MyClass(someParam: String, val someProp: String)
                 """
                 assertThat(subject.compileAndLint(withoutDoc)).isEmpty()
             }
 
-            it("should not report when doc does not contain any property or param tags") {
+            @Test
+            fun `should not report when doc does not contain any property or param tags`() {
                 val docWithoutParamAndPropertyTags = """
                 /**
                  * Some class description without referring to tags or properties
@@ -30,8 +34,10 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("class") {
-            it("should not report when doc match class params") {
+        @Nested
+        inner class `class` {
+            @Test
+            fun `should not report when doc match class params`() {
                 val correctParam = """
                 /**
                  * @param someParam Description of param
@@ -41,7 +47,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctParam)).isEmpty()
             }
 
-            it("should report when doc mismatch class param name") {
+            @Test
+            fun `should report when doc mismatch class param name`() {
                 val incorrectParamName = """
                 /**
                  * @param someParam Description of param
@@ -51,7 +58,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
             }
 
-            it("should report when doc mismatch class param list") {
+            @Test
+            fun `should report when doc mismatch class param list`() {
                 val incorrectListOfParams = """
                 /**
                  * @param someParam Description of param
@@ -62,7 +70,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectListOfParams)).hasSize(1)
             }
 
-            it("should report when doc mismatch class param list order") {
+            @Test
+            fun `should report when doc mismatch class param list order`() {
                 val incorrectParamOrder = """
                 /**
                  * @param someParam Description of param
@@ -73,7 +82,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectParamOrder)).hasSize(1)
             }
 
-            it("should not report when doc match class params and props") {
+            @Test
+            fun `should not report when doc match class params and props`() {
                 val correctParamAndProp = """
                 /**
                  * @param someParam Description of param
@@ -84,7 +94,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctParamAndProp)).isEmpty()
             }
 
-            it("should report when doc match class params but mismatch props") {
+            @Test
+            fun `should report when doc match class params but mismatch props`() {
                 val correctParamIncorrectProp = """
                 /**
                  * @param someParam Description of param
@@ -95,7 +106,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctParamIncorrectProp)).hasSize(1)
             }
 
-            it("should report when doc mismatch class params and match props") {
+            @Test
+            fun `should report when doc mismatch class params and match props`() {
                 val incorrectParamCorrectProp = """
                 /**
                  * @param someParam Description of param
@@ -106,7 +118,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectParamCorrectProp)).hasSize(1)
             }
 
-            it("should report when doc for constructor is incorrect") {
+            @Test
+            fun `should report when doc for constructor is incorrect`() {
                 val incorrectConstructorDoc = """
                 class MyClass {
                     /**
@@ -118,7 +131,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectConstructorDoc)).hasSize(1)
             }
 
-            it("should report when property is documented as param") {
+            @Test
+            fun `should report when property is documented as param`() {
                 val propertyAsParam = """
                     /**
                      * @property someParam Description of param
@@ -129,7 +143,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
             }
 
-            it("should report when declarations order is incorrect") {
+            @Test
+            fun `should report when declarations order is incorrect`() {
                 val incorrectDeclarationsOrder = """
                 /**
                  * @property someProp Description of property
@@ -141,9 +156,11 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("class with type params") {
+        @Nested
+        inner class `class with type params` {
 
-            it("should not report when doc match class params") {
+            @Test
+            fun `should not report when doc match class params`() {
                 val correctTypeParam = """
                 /**
                  * @param T Description of type param
@@ -154,7 +171,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
             }
 
-            it("should report when doc misses type param") {
+            @Test
+            fun `should report when doc misses type param`() {
                 val missingTypeParam = """
                 /**
                  * @param someParam Description of param
@@ -164,7 +182,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
             }
 
-            it("should report when doc mismatch type param name") {
+            @Test
+            fun `should report when doc mismatch type param name`() {
                 val incorrectTypeParamName = """
                 /**
                  * @param S Description of type param
@@ -175,7 +194,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
             }
 
-            it("should report when doc mismatch type param list") {
+            @Test
+            fun `should report when doc mismatch type param list`() {
                 val incorrectTypeParamList = """
                 /**
                  * @param T Description of type param
@@ -187,9 +207,11 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("function") {
+        @Nested
+        inner class `function` {
 
-            it("should not report when doc match function params") {
+            @Test
+            fun `should not report when doc match function params`() {
                 val correctDoc = """
                 /**
                  * @param someParam Description of param
@@ -199,7 +221,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctDoc)).isEmpty()
             }
 
-            it("should report when doc mismatch function param name") {
+            @Test
+            fun `should report when doc mismatch function param name`() {
                 val incorrectParamName = """
                 /**
                  * @param someParam Description of param
@@ -210,9 +233,11 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("function with type params") {
+        @Nested
+        inner class `function with type params` {
 
-            it("should not report when doc match function params") {
+            @Test
+            fun `should not report when doc match function params`() {
                 val correctTypeParam = """
                 /**
                  * @param T Description of type param
@@ -223,7 +248,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
             }
 
-            it("should report when doc misses type param") {
+            @Test
+            fun `should report when doc misses type param`() {
                 val missingTypeParam = """
                 /**
                  * @param someParam Description of param
@@ -233,7 +259,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
             }
 
-            it("should report when doc mismatch type param name") {
+            @Test
+            fun `should report when doc mismatch type param name`() {
                 val incorrectTypeParamName = """
                 /**
                  * @param S Description of type param
@@ -244,7 +271,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
             }
 
-            it("should report when doc mismatch type param list") {
+            @Test
+            fun `should report when doc mismatch type param list`() {
                 val incorrectTypeParamList = """
                 /**
                  * @param T Description of type param
@@ -255,7 +283,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
             }
 
-            it("should report when not all type params are first declarations of doc") {
+            @Test
+            fun `should report when not all type params are first declarations of doc`() {
                 val incorrectTypeParamsOrder = """
                     /**
                      * @param T Description of type param
@@ -268,9 +297,11 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("advanced scenarios") {
+        @Nested
+        inner class `advanced scenarios` {
 
-            it("should not report when doc match all signatures") {
+            @Test
+            fun `should not report when doc match all signatures`() {
                 val correctClassWithFunction = """
                 /**
                  * @param someParam Description of param
@@ -285,7 +316,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(subject.compileAndLint(correctClassWithFunction)).isEmpty()
             }
 
-            it("should report for every class and function with incorrect doc") {
+            @Test
+            fun `should report for every class and function with incorrect doc`() {
                 val incorrectClassWithTwoIncorrectFunctions = """
                 /**
                  * @param someParam Description of param
@@ -309,12 +341,13 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("configuration matchTypeParameters") {
-            val configuredSubject by memoized {
+        @Nested
+        inner class `configuration matchTypeParameters` {
+            val configuredSubject =
                 OutdatedDocumentation(TestConfig(mapOf("matchTypeParameters" to "false")))
-            }
 
-            it("should not report when class type parameters mismatch and configuration is off") {
+            @Test
+            fun `should not report when class type parameters mismatch and configuration is off`() {
                 val incorrectClassTypeParams = """
                 /**
                  * @param someParam Description of param
@@ -324,7 +357,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(incorrectClassTypeParams)).isEmpty()
             }
 
-            it("should not report when function type parameters mismatch and configuration is off") {
+            @Test
+            fun `should not report when function type parameters mismatch and configuration is off`() {
                 val incorrectFunctionTypeParams = """
                 /**
                  * @param someParam Description of param
@@ -335,12 +369,13 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("configuration matchDeclarationsOrder") {
-            val configuredSubject by memoized {
+        @Nested
+        inner class `configuration matchDeclarationsOrder` {
+            val configuredSubject =
                 OutdatedDocumentation(TestConfig(mapOf("matchDeclarationsOrder" to "false")))
-            }
 
-            it("should not report when declarations order mismatch and configuration is off") {
+            @Test
+            fun `should not report when declarations order mismatch and configuration is off`() {
                 val incorrectDeclarationsOrder = """
                 /**
                  * @param someParam Description of param
@@ -351,7 +386,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
             }
 
-            it("should not report when declarations with types order mismatch and configuration is off") {
+            @Test
+            fun `should not report when declarations with types order mismatch and configuration is off`() {
                 val incorrectDeclarationsOrderWithType = """
                 /**
                  * @param S Description of type param
@@ -364,12 +400,14 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
             }
         }
-        describe("configuration allowParamOnConstructorProperties") {
-            val configuredSubject by memoized {
-                OutdatedDocumentation(TestConfig(mapOf("allowParamOnConstructorProperties" to "true")))
-            }
 
-            it("should not report when property is documented as param") {
+        @Nested
+        inner class `configuration allowParamOnConstructorProperties` {
+            val configuredSubject =
+                OutdatedDocumentation(TestConfig(mapOf("allowParamOnConstructorProperties" to "true")))
+
+            @Test
+            fun `should not report when property is documented as param`() {
                 val propertyAsParam = """
                     /**
                      * @param someParam Description of param
@@ -380,7 +418,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
 
-            it("should not report when property is documented as property") {
+            @Test
+            fun `should not report when property is documented as property`() {
                 val propertyAsParam = """
                     /**
                      * @param someParam Description of param
@@ -392,8 +431,9 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
 
-        describe("configuration matchDeclarationsOrder and allowParamOnConstructorProperties") {
-            val configuredSubject by memoized {
+        @Nested
+        inner class `configuration matchDeclarationsOrder and allowParamOnConstructorProperties` {
+            val configuredSubject =
                 OutdatedDocumentation(
                     TestConfig(
                         mapOf(
@@ -402,9 +442,9 @@ class OutdatedDocumentationSpec : Spek({
                         )
                     )
                 )
-            }
 
-            it("should not report when property is documented as param") {
+            @Test
+            fun `should not report when property is documented as param`() {
                 val propertyAsParam = """
                     /**
                      * @param someParam Description of param
@@ -415,7 +455,8 @@ class OutdatedDocumentationSpec : Spek({
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
 
-            it("should not report when property is documented as property") {
+            @Test
+            fun `should not report when property is documented as property`() {
                 val propertyAsParam = """
                     /**
                      * @param someParam Description of param
@@ -427,4 +468,4 @@ class OutdatedDocumentationSpec : Spek({
             }
         }
     }
-})
+}

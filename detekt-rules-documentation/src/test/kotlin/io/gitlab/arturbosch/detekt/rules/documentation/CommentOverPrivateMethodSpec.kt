@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CommentOverPrivateMethodSpec : Spek({
-    val subject by memoized { CommentOverPrivateFunction() }
+class CommentOverPrivateMethodSpec {
+    val subject = CommentOverPrivateFunction()
 
-    describe("CommentOverPrivateFunction rule") {
+    @Nested
+    inner class `CommentOverPrivateFunction rule` {
 
-        it("reports private method with a comment") {
+        @Test
+        fun `reports private method with a comment`() {
             val code = """
                 class Test {
                     /**
@@ -21,7 +23,8 @@ class CommentOverPrivateMethodSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report public method with a comment") {
+        @Test
+        fun `does not report public method with a comment`() {
             val code = """
                 /**
                  * asdf
@@ -30,7 +33,8 @@ class CommentOverPrivateMethodSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public method in a class with a comment") {
+        @Test
+        fun `does not report public method in a class with a comment`() {
             val code = """
                 class Test {
                     /**
@@ -41,4 +45,4 @@ class CommentOverPrivateMethodSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

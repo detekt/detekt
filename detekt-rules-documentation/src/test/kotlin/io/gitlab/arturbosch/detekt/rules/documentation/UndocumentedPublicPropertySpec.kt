@@ -2,20 +2,23 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UndocumentedPublicPropertySpec : Spek({
-    val subject by memoized { UndocumentedPublicProperty() }
+class UndocumentedPublicPropertySpec {
+    val subject = UndocumentedPublicProperty()
 
-    describe("UndocumentedPublicProperty rule") {
+    @Nested
+    inner class `UndocumentedPublicProperty rule` {
 
-        it("reports undocumented public property") {
+        @Test
+        fun `reports undocumented public property`() {
             val code = "val a = 1"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public property in objects") {
+        @Test
+        fun `reports undocumented public property in objects`() {
             val code = """
                 object Test {
                     val a = 1
@@ -24,7 +27,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public property in nested objects") {
+        @Test
+        fun `reports undocumented public property in nested objects`() {
             val code = """
                 class Test {
                     object NestedTest {
@@ -35,7 +39,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public properties in companion object") {
+        @Test
+        fun `reports undocumented public properties in companion object`() {
             val code = """
                 class Test {
                     companion object {
@@ -47,7 +52,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports undocumented public property in an interface") {
+        @Test
+        fun `reports undocumented public property in an interface`() {
             val code = """
                 interface Test {
                     val a: Int
@@ -56,17 +62,20 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public properties in a primary constructor") {
+        @Test
+        fun `reports undocumented public properties in a primary constructor`() {
             val code = "class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public property in a primary constructor") {
+        @Test
+        fun `reports undocumented public property in a primary constructor`() {
             val code = "/* comment */ class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report documented public property") {
+        @Test
+        fun `does not report documented public property`() {
             val code = """
                 /**
                  * Comment
@@ -76,7 +85,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report documented public property in class") {
+        @Test
+        fun `does not report documented public property in class`() {
             val code = """
                 class Test {
                     /**
@@ -88,7 +98,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented, public and overridden property in class") {
+        @Test
+        fun `does not report undocumented, public and overridden property in class`() {
             val code = """
                 interface I {
                     /**
@@ -104,7 +115,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented internal and private property") {
+        @Test
+        fun `does not report undocumented internal and private property`() {
             val code = """
                 class Test {
                     internal val a = 1
@@ -114,7 +126,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report local variables") {
+        @Test
+        fun `does not report local variables`() {
             val code = """
                 fun commented(x: Int) {
                     var a = x
@@ -123,7 +136,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public properties in internal class") {
+        @Test
+        fun `does not report public properties in internal class`() {
             val code = """
                 internal class NoComments {
                     public val a = 1
@@ -133,7 +147,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public properties in private class") {
+        @Test
+        fun `does not report public properties in private class`() {
             val code = """
                 private class NoComments {
                     public val a = 1
@@ -143,7 +158,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report properties in a secondary constructor") {
+        @Test
+        fun `does not report properties in a secondary constructor`() {
             val code = """
                 class Test() {
                     constructor(a: Int) : this()
@@ -152,7 +168,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented non-public properties in a primary constructor") {
+        @Test
+        fun `does not report undocumented non-public properties in a primary constructor`() {
             val code = """
                 class Test1(internal val a: Int)
                 class Test2(b: Int)
@@ -160,12 +177,14 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented public properties in a primary constructor for an internal class") {
+        @Test
+        fun `does not report undocumented public properties in a primary constructor for an internal class`() {
             val code = "internal class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report documented public properties in a primary constructor") {
+        @Test
+        fun `does not report documented public properties in a primary constructor`() {
             val code = """
                 /**
                 * @property a int1
@@ -187,7 +206,8 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented public properties in private object") {
+        @Test
+        fun `does not report undocumented public properties in private object`() {
             val code = """
                 private object Test {
                     val a = 1
@@ -196,9 +216,11 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        describe("public properties in nested classes") {
+        @Nested
+        inner class `public properties in nested classes` {
 
-            it("reports undocumented public properties in nested classes") {
+            @Test
+            fun `reports undocumented public properties in nested classes`() {
                 val code = """
                 class Outer { 
                     class Inner {
@@ -213,7 +235,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(2)
             }
 
-            it("reports undocumented public properties in inner classes") {
+            @Test
+            fun `reports undocumented public properties in inner classes`() {
                 val code = """
                 class Outer {
                     inner class Inner {
@@ -224,7 +247,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("reports undocumented public properties in classes nested in objects") {
+            @Test
+            fun `reports undocumented public properties in classes nested in objects`() {
                 val code = """
                 object Outer {
                     class Inner {
@@ -235,7 +259,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report undocumented and non-public properties in nested classes") {
+            @Test
+            fun `does not report undocumented and non-public properties in nested classes`() {
                 val code = """
                 internal class Outer {
                     class Inner {
@@ -246,7 +271,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report undocumented and non-public properties in inner classes") {
+            @Test
+            fun `does not report undocumented and non-public properties in inner classes`() {
                 val code = """
                 internal class Outer {
                     inner class Inner {
@@ -258,9 +284,11 @@ class UndocumentedPublicPropertySpec : Spek({
             }
         }
 
-        describe("public properties in primary constructors inside nested classes") {
+        @Nested
+        inner class `public properties in primary constructors inside nested classes` {
 
-            it("reports undocumented public properties in nested classes") {
+            @Test
+            fun `reports undocumented public properties in nested classes`() {
                 val code = """
                 class Outer(val a: Int) {
                     class Inner(val b: Int) {
@@ -271,7 +299,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(3)
             }
 
-            it("reports undocumented public properties in inner classes") {
+            @Test
+            fun `reports undocumented public properties in inner classes`() {
                 val code = """
                 class Outer(val a: Int) {
                     inner class Inner(val b: Int)
@@ -280,7 +309,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(2)
             }
 
-            it("reports undocumented public properties in classes nested in objects") {
+            @Test
+            fun `reports undocumented public properties in classes nested in objects`() {
                 val code = """
                 object Outer {
                     class Inner(val a: Int)
@@ -289,7 +319,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not report undocumented and non-public properties in nested classes") {
+            @Test
+            fun `does not report undocumented and non-public properties in nested classes`() {
                 val code = """
                 internal class Outer(val a: Int) {
                     class Inner(val b: Int)
@@ -298,7 +329,8 @@ class UndocumentedPublicPropertySpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report undocumented and non-public properties in inner classes") {
+            @Test
+            fun `does not report undocumented and non-public properties in inner classes`() {
                 val code = """
                 internal class Outer(val a: Int) {
                     inner class Inner(val b: Int)
@@ -308,4 +340,4 @@ class UndocumentedPublicPropertySpec : Spek({
             }
         }
     }
-})
+}
