@@ -56,12 +56,18 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedFunction: List<String> by config(emptyList())
+    private val excludeAnnotatedFunction: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
+    }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visit(root: KtFile) {
-        annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedFunction)
+        annotationExcluder = AnnotationExcluder(
+            root,
+            @Suppress("DEPRECATION") excludeAnnotatedFunction,
+            bindingContext,
+        )
         super.visit(root)
     }
 

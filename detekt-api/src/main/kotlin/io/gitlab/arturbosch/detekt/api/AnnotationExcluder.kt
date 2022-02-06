@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.github.detekt.psi.internal.FullQualifiedNameGuesser
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Primary use case for an AnnotationExcluder is to decide if a KtElement should be
@@ -11,16 +12,31 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class AnnotationExcluder(
     root: KtFile,
-    excludes: List<String>,
+    private val excludes: List<Regex>,
+    private val context: BindingContext,
 ) {
-    private val excludes: List<Regex> = excludes.map {
-        it.replace(".", "\\.").replace("*", ".*").toRegex()
-    }
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
 
-    @Deprecated("Use AnnotationExcluder(KtFile, List<String>) instead")
-    constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
+    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
+    constructor(root: KtFile, excludes: SplitPattern) : this(
+        root,
+        excludes.mapAll { it }
+            .map { it.replace(".", "\\.").replace("*", ".*").toRegex() },
+        BindingContext.EMPTY,
+    )
+
+    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
+    constructor(
+        root: KtFile,
+        excludes: List<String>,
+    ) : this(
+        root,
+        excludes.map {
+            it.replace(".", "\\.").replace("*", ".*").toRegex()
+        },
+        BindingContext.EMPTY,
+    )
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern

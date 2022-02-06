@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,23 +21,23 @@ class AnnotationExcluderSpec {
             "Component,@Component.Factory,false",
             "Component,@dagger.Component.Factory,false",
 
-            "dagger.Component,@Component,true",
-            "dagger.Component,@dagger.Component,true",
-            "dagger.Component,@Factory,false",
-            "dagger.Component,@Component.Factory,false",
-            "dagger.Component,@dagger.Component.Factory,false",
+            "dagger\\.Component,@Component,true",
+            "dagger\\.Component,@dagger.Component,true",
+            "dagger\\.Component,@Factory,false",
+            "dagger\\.Component,@Component.Factory,false",
+            "dagger\\.Component,@dagger.Component.Factory,false",
 
-            "Component.Factory,@Component,false",
-            "Component.Factory,@dagger.Component,false",
-            "Component.Factory,@Factory,true",
-            "Component.Factory,@Component.Factory,true",
-            "Component.Factory,@dagger.Component.Factory,true",
+            "Component\\.Factory,@Component,false",
+            "Component\\.Factory,@dagger.Component,false",
+            "Component\\.Factory,@Factory,true",
+            "Component\\.Factory,@Component.Factory,true",
+            "Component\\.Factory,@dagger.Component.Factory,true",
 
-            "dagger.Component.Factory,@Component,false",
-            "dagger.Component.Factory,@dagger.Component,false",
-            "dagger.Component.Factory,@Factory,true",
-            "dagger.Component.Factory,@Component.Factory,true",
-            "dagger.Component.Factory,@dagger.Component.Factory,true",
+            "dagger\\.Component\\.Factory,@Component,false",
+            "dagger\\.Component\\.Factory,@dagger.Component,false",
+            "dagger\\.Component\\.Factory,@Factory,true",
+            "dagger\\.Component\\.Factory,@Component.Factory,true",
+            "dagger\\.Component\\.Factory,@dagger.Component.Factory,true",
 
             "Factory,@Component,false",
             "Factory,@dagger.Component,false",
@@ -44,36 +45,28 @@ class AnnotationExcluderSpec {
             "Factory,@Component.Factory,true",
             "Factory,@dagger.Component.Factory,true",
 
-            "dagger.*,@Component,true",
-            "dagger.*,@dagger.Component,true",
-            "dagger.*,@Factory,true",
-            "dagger.*,@Component.Factory,true",
-            "dagger.*,@dagger.Component.Factory,true",
+            "dagger\\..*,@Component,true",
+            "dagger\\..*,@dagger.Component,true",
+            "dagger\\..*,@Factory,true",
+            "dagger\\..*,@Component.Factory,true",
+            "dagger\\..*,@dagger.Component.Factory,true",
 
-            "*.Component.Factory,@Component,false",
-            "*.Component.Factory,@dagger.Component,false",
-            "*.Component.Factory,@Factory,true",
-            "*.Component.Factory,@Component.Factory,true",
-            "*.Component.Factory,@dagger.Component.Factory,true",
+            ".*\\.Component.Factory,@Component,false",
+            ".*\\.Component.Factory,@dagger.Component,false",
+            ".*\\.Component.Factory,@Factory,true",
+            ".*\\.Component.Factory,@Component.Factory,true",
+            ".*\\.Component.Factory,@dagger.Component.Factory,true",
 
-            "*.Component.*,@Component,false",
-            "*Component*,@Component,true",
-            "*Component,@Component,true",
-            "*.Component.*,@dagger.Component,false",
-            "*.Component.*,@Factory,true",
-            "*.Component.*,@Component.Factory,true",
-            "*.Component.*,@dagger.Component.Factory,true",
-
-            "foo.Component,@Component,false",
-            "foo.Component,@dagger.Component,false",
-            "foo.Component,@Factory,false",
-            "foo.Component,@Component.Factory,false",
-            "foo.Component,@dagger.Component.Factory,false",
+            "foo\\.Component,@Component,false",
+            "foo\\.Component,@dagger.Component,false",
+            "foo\\.Component,@Factory,false",
+            "foo\\.Component,@Component.Factory,false",
+            "foo\\.Component,@dagger.Component.Factory,false",
         ]
     )
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)
-        val excluder = AnnotationExcluder(file, listOf(exclusion))
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), BindingContext.EMPTY)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -83,7 +76,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should not exclude when the annotation was not found`() {
             val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -91,7 +84,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should not exclude when no annotations should be excluded`() {
             val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, emptyList())
+            val excluder = AnnotationExcluder(file, emptyList(), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -99,7 +92,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should also exclude an annotation that is not imported`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin"))
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -108,6 +101,14 @@ class AnnotationExcluderSpec {
         fun `should exclude when the annotation was found with SplitPattern`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
             val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, SplitPattern("SinceKotlin"))
+
+            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+        }
+
+        @Test
+        fun `should exclude when the annotation was found with List of Strings`() {
+            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
+            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, listOf("SinceKo*"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
