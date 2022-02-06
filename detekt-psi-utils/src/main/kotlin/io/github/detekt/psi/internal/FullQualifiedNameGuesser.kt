@@ -39,13 +39,16 @@ class FullQualifiedNameGuesser internal constructor(
                     if (packageName != null) {
                         add("$packageName.$name")
                     }
+                    if (name.first().isLowerCase()) {
+                        add(name)
+                    }
                 }
         }
     }
 
     private fun findName(name: String): String? {
         val searchName = name.substringBefore('.')
-        val resolvedName = resolvedNames[searchName]
+        val resolvedName = resolvedNames[searchName] ?: return null
         return if (name == searchName) {
             resolvedName
         } else {
