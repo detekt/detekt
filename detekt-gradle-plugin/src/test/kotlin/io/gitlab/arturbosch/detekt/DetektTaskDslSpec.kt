@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
@@ -18,9 +17,8 @@ internal object DetektTaskDslSpec : Spek({
         lateinit var gradleRunner: DslGradleRunner
         lateinit var result: BuildResult
         val defaultDetektVersion = loadDetektVersion(DetektTaskDslSpec::class.java.classLoader)
+        val builder = kotlin().dryRun()
 
-        listOf(groovy().dryRun(), kotlin().dryRun()).forEach { builder ->
-            context("using ${builder.gradleBuildName}") {
                 describe("without detekt config") {
 
                     beforeGroup {
@@ -542,100 +540,8 @@ internal object DetektTaskDslSpec : Spek({
                         assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:$customVersion")
                     }
                 }
-            }
-        }
 
         describe("and creating a custom task") {
-            context("using the groovy dsl") {
-                val builder = groovy().dryRun()
-                beforeGroup {
-                    val config = """
-                        |task myDetekt(type: io.gitlab.arturbosch.detekt.Detekt) {
-                        |    description = "Runs a custom detekt build."
-                        |
-                        |    setSource("${"$"}projectDir")
-                        |    config.setFrom(files("config.yml"))
-                        |    includes = ["**/*.kt", "**/*.kts"]
-                        |    excludes = ["build/"]
-                        |    debug = true
-                        |    parallel = true
-                        |    disableDefaultRuleSets = true
-                        |    buildUponDefaultConfig = true
-                        |    allRules = false
-                        |    ignoreFailures = false
-                        |    autoCorrect = false
-                        |    reports {
-                        |        xml {
-                        |            enabled = true
-                        |            destination = file("build/reports/mydetekt.xml")
-                        |        }
-                        |        html.destination = file("build/reports/mydetekt.html")
-                        |        txt.destination = file("build/reports/mydetekt.txt")
-                        |        sarif {
-                        |            enabled = true
-                        |            destination = file("build/reports/mydetekt.sarif")
-                        |        }
-                        |    }
-                        |    basePath = projectDir
-                        |}
-                        """
-
-                    gradleRunner = builder
-                        .withDetektConfig(config)
-                        .build()
-                        .apply { writeProjectFile("config.yml", "") }
-
-                    result = gradleRunner.runTasks("myDetekt")
-                }
-
-                it("completes successfully") {
-                    assertThat(result.task(":myDetekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                }
-
-                it("enables xml report to specified location") {
-                    val xmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
-                    assertThat(result.output).contains("--report xml:$xmlReportFile")
-                }
-
-                it("enables html report to specified location") {
-                    val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
-                    assertThat(result.output).contains("--report html:$htmlReportFile")
-                }
-
-                it("enables text report to specified location") {
-                    val textReportFile = gradleRunner.projectFile("build/reports/mydetekt.txt")
-                    assertThat(result.output).contains("--report txt:$textReportFile")
-                }
-
-                it("enables sarif report to specified location") {
-                    val sarifReportFile = gradleRunner.projectFile("build/reports/mydetekt.sarif")
-                    assertThat(result.output).contains("--report sarif:$sarifReportFile")
-                }
-
-                it("sets base path") {
-                    assertThat(result.output).contains("--base-path")
-                }
-
-                it("sets absolute filename of both config file to detekt cli") {
-                    val config = gradleRunner.projectFile("config.yml")
-
-                    val expectedConfigParam = "--config $config"
-                    assertThat(result.output).contains(expectedConfigParam)
-                }
-
-                it("enables debug mode") {
-                    assertThat(result.output).contains("--debug")
-                }
-
-                it("enables parallel processing") {
-                    assertThat(result.output).contains("--parallel")
-                }
-
-                it("disables the default ruleset") {
-                    assertThat(result.output).contains("--disable-default-rulesets")
-                }
-            }
-
             context("using the kotlin dsl") {
                 val builder = kotlin().dryRun()
                 beforeGroup {
