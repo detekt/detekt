@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -85,6 +86,69 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
             val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, listOf("SinceKo*"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+        }
+    }
+
+    @Nested
+    inner class `difference between type solving and no type solving` {
+
+        @Nested
+        inner class `Don't mix annotations with the same name` {
+
+            @Test
+            fun `incorrect without type solving`() {
+                val (file, ktAnnotation) = createKtFile("@Deprecated")
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), BindingContext.EMPTY)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+            }
+
+            @Test
+            fun `correct without type solving`() {
+                val (file, ktAnnotation) = createKtFile("@Deprecated")
+                val binding = env.getContextForPaths(listOf(file, annotationsKtFile))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), binding)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
+            }
+        }
+
+        @Nested
+        inner class `Know where ends a package` {
+            val helloWorldAnnotationsKtFile = compileContentForTest(
+                """
+                    package com.Hello
+
+                    annotation class World
+                """.trimIndent()
+            )
+            val file = compileContentForTest(
+                """
+                    package foo
+
+                    import com.Hello.World
+
+                    @World
+                    fun function() = Unit
+                """.trimIndent()
+            )
+            val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+
+            @Test
+            fun `incorrect without type solving`() {
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), BindingContext.EMPTY)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+            }
+
+            @Test
+            @Disabled("This should be doable but it's not imlemented yet")
+            fun `correct with type solving`() {
+                val binding = env.getContextForPaths(listOf(file, helloWorldAnnotationsKtFile))
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), binding)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
+            }
         }
     }
 }
