@@ -1,7 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
@@ -9,64 +12,35 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.CsvFileSource
 
-class AnnotationExcluderSpec {
-    @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2}")
-    @CsvSource(
-        value = [
-            "Component,@Component,true",
-            "Component,@dagger.Component,true",
-            "Component,@Factory,false",
-            "Component,@Component.Factory,false",
-            "Component,@dagger.Component.Factory,false",
+@KotlinCoreEnvironmentTest
+class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
+    private val annotationsKtFile = compileContentForTest(
+        """
+            package dagger
 
-            "dagger\\.Component,@Component,true",
-            "dagger\\.Component,@dagger.Component,true",
-            "dagger\\.Component,@Factory,false",
-            "dagger\\.Component,@Component.Factory,false",
-            "dagger\\.Component,@dagger.Component.Factory,false",
-
-            "Component\\.Factory,@Component,false",
-            "Component\\.Factory,@dagger.Component,false",
-            "Component\\.Factory,@Factory,true",
-            "Component\\.Factory,@Component.Factory,true",
-            "Component\\.Factory,@dagger.Component.Factory,true",
-
-            "dagger\\.Component\\.Factory,@Component,false",
-            "dagger\\.Component\\.Factory,@dagger.Component,false",
-            "dagger\\.Component\\.Factory,@Factory,true",
-            "dagger\\.Component\\.Factory,@Component.Factory,true",
-            "dagger\\.Component\\.Factory,@dagger.Component.Factory,true",
-
-            "Factory,@Component,false",
-            "Factory,@dagger.Component,false",
-            "Factory,@Factory,true",
-            "Factory,@Component.Factory,true",
-            "Factory,@dagger.Component.Factory,true",
-
-            "dagger\\..*,@Component,true",
-            "dagger\\..*,@dagger.Component,true",
-            "dagger\\..*,@Factory,true",
-            "dagger\\..*,@Component.Factory,true",
-            "dagger\\..*,@dagger.Component.Factory,true",
-
-            ".*\\.Component.Factory,@Component,false",
-            ".*\\.Component.Factory,@dagger.Component,false",
-            ".*\\.Component.Factory,@Factory,true",
-            ".*\\.Component.Factory,@Component.Factory,true",
-            ".*\\.Component.Factory,@dagger.Component.Factory,true",
-
-            "foo\\.Component,@Component,false",
-            "foo\\.Component,@dagger.Component,false",
-            "foo\\.Component,@Factory,false",
-            "foo\\.Component,@Component.Factory,false",
-            "foo\\.Component,@dagger.Component.Factory,false",
-        ]
+            annotation class Component {
+                annotation class Factory
+            }
+        """.trimIndent()
     )
+
+    @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without type solving")
+    @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)
         val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), BindingContext.EMPTY)
+
+        assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
+    }
+
+    @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2} with type solving")
+    @CsvFileSource(resources = ["/annotation_excluder.csv"])
+    fun `all cases - Type Solving`(exclusion: String, annotation: String, shouldExclude: Boolean) {
+        val (file, ktAnnotation) = createKtFile(annotation)
+        val binding = env.getContextForPaths(listOf(file, annotationsKtFile))
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), binding)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
