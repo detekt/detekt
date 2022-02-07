@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CommentOverPrivatePropertiesSpec : Spek({
-    val subject by memoized { CommentOverPrivateProperty() }
+class CommentOverPrivatePropertiesSpec {
+    val subject = CommentOverPrivateProperty()
 
-    describe("CommentOverPrivateProperty rule") {
+    @Nested
+    inner class `CommentOverPrivateProperty rule` {
 
-        it("reports private property with a comment") {
+        @Test
+        fun `reports private property with a comment`() {
             val code = """
                 /**
                  * asdf
@@ -19,7 +21,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report public property with a comment") {
+        @Test
+        fun `does not report public property with a comment`() {
             val code = """
                 /**
                  * asdf
@@ -28,7 +31,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports private property in class with a comment") {
+        @Test
+        fun `reports private property in class with a comment`() {
             val code = """
                     class Test {
                     /**
@@ -39,7 +43,8 @@ class CommentOverPrivatePropertiesSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report public property with a comment") {
+        @Test
+        fun `does not report public property in class with a comment`() {
             val code = """
                 class Test {
                     /**
@@ -50,4 +55,4 @@ class CommentOverPrivatePropertiesSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}
