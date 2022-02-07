@@ -4,16 +4,18 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class LongMethodSpec : Spek({
+class LongMethodSpec {
 
-    val subject by memoized { LongMethod(TestConfig(mapOf("threshold" to 5))) }
+    val subject = LongMethod(TestConfig(mapOf("threshold" to 5)))
 
-    describe("nested functions can be long") {
+    @Nested
+    inner class `nested functions can be long` {
 
-        it("should find two long methods") {
+        @Test
+        fun `should find two long methods`() {
             val code = """
                 fun longMethod() { // 5 lines
                     println()
@@ -33,7 +35,8 @@ class LongMethodSpec : Spek({
             assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
         }
 
-        it("should not find too long methods") {
+        @Test
+        fun `should not find too long methods`() {
             val code = """
                 fun methodOk() { // 3 lines
                     println()
@@ -47,7 +50,8 @@ class LongMethodSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should not find too long method with params on newlines") {
+        @Test
+        fun `should not find too long method with params on newlines`() {
             val code = """
                 fun methodWithParams(
                     param1: String
@@ -60,7 +64,8 @@ class LongMethodSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should find too long method with params on newlines") {
+        @Test
+        fun `should find too long method with params on newlines`() {
             val code = """
                 fun longMethodWithParams(
                     param1: String
@@ -77,7 +82,8 @@ class LongMethodSpec : Spek({
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
 
-        it("should find long method with method call with params on separate lines") {
+        @Test
+        fun `should find long method with method call with params on separate lines`() {
             val code = """
                 fun longMethod( 
                     x1: Int,
@@ -100,7 +106,8 @@ class LongMethodSpec : Spek({
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(8)
         }
 
-        it("should find two long methods with params on separate lines") {
+        @Test
+        fun `should find two long methods with params on separate lines`() {
             val code = """
                 fun longMethod(
                     param1: String
@@ -125,7 +132,8 @@ class LongMethodSpec : Spek({
             assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
         }
 
-        it("should find nested long methods with params on separate lines") {
+        @Test
+        fun `should find nested long methods with params on separate lines`() {
             val code = """
                 fun longMethod(
                     param1: String
@@ -150,4 +158,4 @@ class LongMethodSpec : Spek({
             assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
         }
     }
-})
+}

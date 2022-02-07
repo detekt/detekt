@@ -6,35 +6,30 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
 private fun subject(threshold: Int) = LargeClass(TestConfig(mapOf("threshold" to threshold)))
 
-class LargeClassSpec : Spek({
+class LargeClassSpec {
 
-    describe("nested classes are also considered") {
-
-        it("should detect only the nested large class which exceeds threshold 70") {
-            val findings = subject(threshold = 70).lint(resourceAsPath("NestedClasses.kt"))
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocations(SourceLocation(12, 15))
-        }
+    @Test
+    fun `should detect only the nested large class which exceeds threshold 70`() {
+        val findings = subject(threshold = 70).lint(resourceAsPath("NestedClasses.kt"))
+        assertThat(findings).hasSize(1)
+        assertThat(findings).hasSourceLocations(SourceLocation(12, 15))
     }
 
-    describe("files without classes should not be considered") {
+    @Test
+    fun `should not report anything in files without classes`() {
+        val code = """
+            val i = 0 
 
-        it("should not report anything in files without classes") {
-            val code = """
-                val i = 0 
-
-                fun f() {
-                    println()
-                    println()
-                }
-            """
-            val rule = subject(threshold = 2)
-            assertThat(rule.compileAndLint(code)).isEmpty()
-        }
+            fun f() {
+                println()
+                println()
+            }
+        """
+        val rule = subject(threshold = 2)
+        assertThat(rule.compileAndLint(code)).isEmpty()
     }
-})
+}

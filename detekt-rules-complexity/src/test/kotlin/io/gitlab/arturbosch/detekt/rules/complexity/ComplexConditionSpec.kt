@@ -2,12 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ComplexConditionSpec : Spek({
+class ComplexConditionSpec {
 
-    describe("ComplexCondition rule") {
+    @Nested
+    inner class `ComplexCondition rule` {
 
         val code = """
             val a = if (5 > 4 && 4 < 6 || (3 < 5 || 2 < 5)) { 42 } else { 24 }
@@ -18,8 +19,9 @@ class ComplexConditionSpec : Spek({
             }
         """
 
-        it("reports some complex conditions") {
+        @Test
+        fun `reports some complex conditions`() {
             assertThat(ComplexCondition().compileAndLint(code)).hasSize(3)
         }
     }
-})
+}
