@@ -543,7 +543,6 @@ internal object DetektTaskDslSpec : Spek({
 
         describe("and creating a custom task") {
             context("using the kotlin dsl") {
-                val builder = kotlin().dryRun()
                 beforeGroup {
                     val config = """
                         |task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
