@@ -28,12 +28,20 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
     @Configuration("if specified this part of the package structure is ignored")
     private val rootPackage: String by config("")
 
+    @Configuration("requires the declaration to start with the specified rootPackage")
+    private val requireRootInDeclaration: Boolean by config(false)
+
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
         val declaredPath = directive.packageNames.map(KtElement::getText).toNormalizedForm()
         if (declaredPath.isNotBlank()) {
             val normalizedFilePath = directive.containingKtFile.absolutePath().parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
+            if (requireRootInDeclaration && !declaredPath.startsWith(normalizedRootPackage)) {
+                directive.reportInvalidPackageDeclaration("The package declaration is missing the root package")
+                return
+            }
+
             val expectedPath =
                 if (normalizedRootPackage.isBlank()) {
                     declaredPath
@@ -43,15 +51,15 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(directive),
-                        "The package declaration does not match the actual file location.",
-                    )
+                directive.reportInvalidPackageDeclaration(
+                    "The package declaration does not match the actual file location."
                 )
             }
         }
+    }
+
+    private fun KtElement.reportInvalidPackageDeclaration(message: String) {
+        report(CodeSmell(issue, Entity.from(this), message))
     }
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")
