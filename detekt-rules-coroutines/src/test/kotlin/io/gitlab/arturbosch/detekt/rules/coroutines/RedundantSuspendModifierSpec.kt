@@ -1,22 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object RedundantSuspendModifierSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { RedundantSuspendModifier(Config.empty) }
+    val subject = RedundantSuspendModifier(Config.empty)
 
-    describe("RedundantSuspendModifier") {
+    @Nested
+    inner class `RedundantSuspendModifier` {
 
-        it("reports when public function returns expression of platform type") {
+        @Test
+        fun `reports when public function returns expression of platform type`() {
             val code = """
                 import kotlin.coroutines.Continuation
                 import kotlin.coroutines.resume
@@ -35,7 +36,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("does not report when private") {
+        @Test
+        fun `does not report when private`() {
             val code = """
                 import kotlin.coroutines.Continuation
                 import kotlin.coroutines.resume
@@ -52,7 +54,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when public function returns expression of platform type") {
+        @Test
+        fun `does not report when public function returns expression of platform type`() {
             val code = """
                 class RedundantClass {
                     open suspend fun redundantSuspend() {
@@ -63,7 +66,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report suspend function without body") {
+        @Test
+        fun `does not report suspend function without body`() {
             val code = """
                 interface SuspendInterface {
                     suspend fun empty()
@@ -72,7 +76,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report overridden suspend function") {
+        @Test
+        fun `does not report overridden suspend function`() {
             val code = """
                 interface SuspendInterface {
                     suspend fun empty()
@@ -87,7 +92,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("ignores when iterator is suspending") {
+        @Test
+        fun `ignores when iterator is suspending`() {
             val code = """
                 class SuspendingIterator {
                     suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
@@ -102,7 +108,8 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("ignores when suspending function used in property delegate") {
+        @Test
+        fun `ignores when suspending function used in property delegate`() {
             val code = """
                 class SuspendingIterator {
                     suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
@@ -122,4 +129,4 @@ object RedundantSuspendModifierSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}
