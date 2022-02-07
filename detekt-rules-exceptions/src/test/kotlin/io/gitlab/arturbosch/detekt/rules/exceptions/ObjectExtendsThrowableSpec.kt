@@ -1,21 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ObjectExtendsThrowableSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
 
-    val subject by memoized { ObjectExtendsThrowable() }
-    val env: KotlinCoreEnvironment by memoized()
+    val subject = ObjectExtendsThrowable()
 
-    describe("ObjectExtendsThrowable rule") {
+    @Nested
+    inner class `ObjectExtendsThrowable rule` {
 
-        it("reports top-level objects that extend Throwable") {
+        @Test
+        fun `reports top-level objects that extend Throwable`() {
             val code = """
             object BanException : Throwable()
             object AuthException : RuntimeException()
@@ -25,7 +26,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
         }
 
-        it("reports object subtype of sealed class that extends Throwable") {
+        @Test
+        fun `reports object subtype of sealed class that extends Throwable`() {
             val code = """
             sealed class DomainException : RuntimeException() {
                 data class Exception1(val prop1: String, val prop2: Boolean) : DomainException()
@@ -36,7 +38,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports object that extends custom exception") {
+        @Test
+        fun `reports object that extends custom exception`() {
             val code = """
             object ObjectCustomException : CustomException("singleton custom exception")
 
@@ -45,7 +48,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("reports companion objects that extend Throwable") {
+        @Test
+        fun `reports companion objects that extend Throwable`() {
             val code = """
             class Test1 {
                 companion object : Throwable() {
@@ -74,7 +78,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
         }
 
-        it("does not report objects that do not extend Throwable") {
+        @Test
+        fun `does not report objects that do not extend Throwable`() {
             val code = """
             object BanException
             object AuthException : CustomException(message = "Authentication failed!")
@@ -90,7 +95,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report companion objects that do not extend Throwable") {
+        @Test
+        fun `does not report companion objects that do not extend Throwable`() {
             val code = """
             class Test1 {
                 companion object {
@@ -107,7 +113,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report non-objects that do extend Throwable") {
+        @Test
+        fun `does not report non-objects that do extend Throwable`() {
             val code = """
             class BanException : Throwable()
             data class AuthException(val code: Int) : RuntimeException()
@@ -126,7 +133,8 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report an anonymous object that extends Throwable") {
+        @Test
+        fun `does not report an anonymous object that extends Throwable`() {
             val code = """
             val exception = object : AbstractCustomException() {}
 
@@ -135,4 +143,4 @@ class ObjectExtendsThrowableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

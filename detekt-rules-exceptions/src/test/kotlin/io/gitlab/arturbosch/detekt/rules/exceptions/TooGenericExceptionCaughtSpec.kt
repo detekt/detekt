@@ -5,18 +5,20 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
 private const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
 private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 
-class TooGenericExceptionCaughtSpec : Spek({
+class TooGenericExceptionCaughtSpec {
 
-    describe("a file with many caught exceptions") {
+    @Nested
+    inner class `a file with many caught exceptions` {
 
-        it("should find one of each kind of defaults") {
+        @Test
+        fun `should find one of each kind of defaults`() {
             val rule = TooGenericExceptionCaught(Config.empty)
 
             val findings = rule.compileAndLint(tooGenericExceptionCode)
@@ -25,7 +27,8 @@ class TooGenericExceptionCaughtSpec : Spek({
         }
     }
 
-    describe("a file with a caught exception which is ignored") {
+    @Nested
+    inner class `a file with a caught exception which is ignored` {
 
         val code = """
             class MyTooGenericException : RuntimeException()
@@ -39,7 +42,8 @@ class TooGenericExceptionCaughtSpec : Spek({
             }
         """
 
-        it("should not report an ignored catch blocks because of its exception name") {
+        @Test
+        fun `should not report an ignored catch blocks because of its exception name`() {
             val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
             val rule = TooGenericExceptionCaught(config)
 
@@ -48,7 +52,8 @@ class TooGenericExceptionCaughtSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should not report an ignored catch blocks because of its exception type") {
+        @Test
+        fun `should not report an ignored catch blocks because of its exception type`() {
             val config = TestConfig(mapOf(CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]"))
             val rule = TooGenericExceptionCaught(config)
 
@@ -57,7 +62,8 @@ class TooGenericExceptionCaughtSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should not fail when disabled with invalid regex on allowed exception names") {
+        @Test
+        fun `should not fail when disabled with invalid regex on allowed exception names`() {
             val configRules = mapOf(
                 "active" to "false",
                 ALLOWED_EXCEPTION_NAME_REGEX to "*MyException"
@@ -69,7 +75,8 @@ class TooGenericExceptionCaughtSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should fail with invalid regex on allowed exception names") {
+        @Test
+        fun `should fail with invalid regex on allowed exception names`() {
             val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo"))
             val rule = TooGenericExceptionCaught(config)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
@@ -77,4 +84,4 @@ class TooGenericExceptionCaughtSpec : Spek({
             }
         }
     }
-})
+}
