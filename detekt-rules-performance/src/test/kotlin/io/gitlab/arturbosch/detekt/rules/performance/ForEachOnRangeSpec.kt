@@ -2,16 +2,18 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ForEachOnRangeSpec : Spek({
+class ForEachOnRangeSpec {
 
-    val subject by memoized { ForEachOnRange() }
+    val subject = ForEachOnRange()
 
-    describe("ForEachOnRange rule") {
+    @Nested
+    inner class `ForEachOnRange rule` {
 
-        context("using a forEach on a range") {
+        @Nested
+        inner class `using a forEach on a range` {
             val code = """
             fun test() {
                 (1..10).forEach {
@@ -29,26 +31,30 @@ class ForEachOnRangeSpec : Spek({
             }
         """
 
-            it("should report the forEach usage") {
+            @Test
+            fun `should report the forEach usage`() {
                 val findings = subject.compileAndLint(code)
                 assertThat(findings).hasSize(4)
             }
         }
 
-        context("using any other method on a range") {
+        @Nested
+        inner class `using any other method on a range` {
             val code = """
             fun test() {
                 (1..10).isEmpty()
             }
         """
 
-            it("should not report any issues") {
+            @Test
+            fun `should not report any issues`() {
                 val findings = subject.compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
 
-        context("using a forEach on a list") {
+        @Nested
+        inner class `using a forEach on a list` {
             val code = """
             fun test() {
                 listOf(1, 2, 3).forEach {
@@ -57,10 +63,11 @@ class ForEachOnRangeSpec : Spek({
             }
         """
 
-            it("should not report any issues") {
+            @Test
+            fun `should not report any issues`() {
                 val findings = subject.compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
     }
-})
+}
