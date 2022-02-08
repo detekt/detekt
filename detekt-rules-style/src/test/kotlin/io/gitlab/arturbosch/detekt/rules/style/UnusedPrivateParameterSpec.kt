@@ -1,19 +1,21 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnusedPrivateParameterSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnusedPrivateMember()
 
-    val subject by memoized { UnusedPrivateMember() }
-
-    describe("function parameters") {
-        it("reports single parameters if they are unused") {
+    @Nested
+    inner class `function parameters` {
+        @Test
+        fun `reports single parameters if they are unused in public function`() {
             val code = """
             fun function(unusedParameter: Int): Int {
                 return 5
@@ -23,7 +25,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("does not report single parameters if they used in return statement") {
+        @Test
+        fun `does not report single parameters if they used in return statement in public function`() {
             val code = """
             fun function(used: Int): Int {
                 return used
@@ -33,7 +36,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report single parameters if they used in function") {
+        @Test
+        fun `does not report single parameters if they used in public function`() {
             val code = """
             fun function(used: Int) {
                 println(used)
@@ -43,7 +47,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports parameters that are unused in return statement") {
+        @Test
+        fun `reports parameters that are unused in return statement in public function`() {
             val code = """
             fun function(unusedParameter: Int, usedParameter: Int): Int {
                 return usedParameter
@@ -53,7 +58,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports parameters that are unused in function") {
+        @Test
+        fun `reports parameters that are unused in public function`() {
             val code = """
             fun function(unusedParameter: Int, usedParameter: Int) {
                 println(usedParameter)
@@ -63,7 +69,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports single parameters if they are unused") {
+        @Test
+        fun `reports single parameters if they are unused in private function`() {
             val code = """
             class Test {
                 val value = usedMethod(1)
@@ -77,7 +84,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports two parameters if they are unused and called the same in different methods") {
+        @Test
+        fun `reports two parameters if they are unused and called the same in different methods`() {
             val code = """
             class Test {
                 val value = usedMethod(1)
@@ -96,7 +104,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(2)
         }
 
-        it("does not report single parameters if they used in return statement") {
+        @Test
+        fun `does not report single parameters if they used in return statement in private function`() {
             val code = """
             class Test {
                 val value = usedMethod(1)
@@ -110,7 +119,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report single parameters if they used in function") {
+        @Test
+        fun `does not report single parameters if they used in private function`() {
             val code = """
             class Test {
                 val value = usedMethod(1)
@@ -124,7 +134,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports parameters that are unused in return statement") {
+        @Test
+        fun `reports parameters that are unused in return statement in private function`() {
             val code = """
             class Test {
                 val value = usedMethod(1, 2)
@@ -138,7 +149,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports parameters that are unused in function") {
+        @Test
+        fun `reports parameters that are unused in private function`() {
             val code = """
             class Test {
                 val value = usedMethod(1, 2)
@@ -153,15 +165,18 @@ class UnusedPrivateParameterSpec : Spek({
         }
     }
 
-    describe("parameters in primary constructors") {
-        it("reports unused parameter") {
+    @Nested
+    inner class `parameters in primary constructors` {
+        @Test
+        fun `reports unused parameter`() {
             val code = """
                 class Test(unused: Any)
             """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("does not report used parameter for calling super") {
+        @Test
+        fun `does not report used parameter for calling super`() {
             val code = """
                 class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
@@ -169,7 +184,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report used parameter in init block") {
+        @Test
+        fun `does not report used parameter in init block`() {
             val code = """
                 class Test(used: Any) {
                     init {
@@ -180,7 +196,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report used parameter to initialize property") {
+        @Test
+        fun `does not report used parameter to initialize property`() {
             val code = """
                 class Test(used: Any) {
                     val usedString = used.toString()
@@ -190,8 +207,10 @@ class UnusedPrivateParameterSpec : Spek({
         }
     }
 
-    describe("secondary parameters") {
-        it("report unused parameters in secondary constructors") {
+    @Nested
+    inner class `secondary parameters` {
+        @Test
+        fun `report unused parameters in secondary constructors`() {
             val code = """
                 private class ClassWithSecondaryConstructor {
                     constructor(used: Any, unused: Any) {
@@ -206,8 +225,10 @@ class UnusedPrivateParameterSpec : Spek({
         }
     }
 
-    describe("suppress unused parameter warning annotations") {
-        it("does not report annotated parameters") {
+    @Nested
+    inner class `suppress unused parameter warning annotations` {
+        @Test
+        fun `does not report annotated parameters`() {
             val code = """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
             """
@@ -215,7 +236,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports parameters without annotation") {
+        @Test
+        fun `reports parameters without annotation`() {
             val code = """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
             """
@@ -226,7 +248,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
         }
 
-        it("does not report parameters in annotated function") {
+        @Test
+        fun `does not report parameters in annotated function`() {
             val code = """
                 @Suppress("UNUSED_PARAMETER")
                 fun foo(unused: String, otherUnused: String){}
@@ -235,7 +258,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report parameters in annotated class") {
+        @Test
+        fun `does not report parameters in annotated class`() {
             val code = """
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
@@ -247,7 +271,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report parameters in annotated object") {
+        @Test
+        fun `does not report parameters in annotated object`() {
             val code = """
                 @Suppress("UNUSED_PARAMETER")
                 object Test {
@@ -258,7 +283,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report parameters in class with annotated outer class") {
+        @Test
+        fun `does not report parameters in class with annotated outer class`() {
             val code = """
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
@@ -273,7 +299,8 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report parameters in annotated file") {
+        @Test
+        fun `does not report parameters in annotated file`() {
             val code = """
                 @file:Suppress("UNUSED_PARAMETER")
 
@@ -289,4 +316,4 @@ class UnusedPrivateParameterSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
     }
-})
+}

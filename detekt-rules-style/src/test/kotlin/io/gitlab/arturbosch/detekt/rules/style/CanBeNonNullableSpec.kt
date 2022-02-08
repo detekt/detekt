@@ -1,22 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CanBeNonNullableSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
+    val subject = CanBeNonNullable(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { CanBeNonNullable(Config.empty) }
-
-    describe("CanBeNonNullable Rule") {
-        it("does not report when there is no context") {
+    @Nested
+    inner class `CanBeNonNullable Rule` {
+        @Test
+        fun `does not report when there is no context`() {
             val code = """
                 class A {
                     private var a: Int? = 5
@@ -28,8 +28,10 @@ class CanBeNonNullableSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        context("evaluating private vars") {
-            it("reports when class-level vars are never assigned nullable values") {
+        @Nested
+        inner class `evaluating private properties` {
+            @Test
+            fun `reports when class-level vars are never assigned nullable values`() {
                 val code = """
                 class A(bVal: Int) {
                     private var a: Int? = 5
@@ -50,7 +52,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
-            it("reports when vars utilize non-nullable delegate values") {
+            @Test
+            fun `reports when vars utilize non-nullable delegate values`() {
                 val code = """
                     import kotlin.reflect.KProperty
                     
@@ -80,7 +83,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
-            it("reports when file-level vars are never assigned nullable values") {
+            @Test
+            fun `reports when file-level vars are never assigned nullable values`() {
                 val code = """
                 private var fileA: Int? = 5
                 private var fileB: Int? = 5
@@ -92,7 +96,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
-            it("does not report when class-level vars are assigned nullable values") {
+            @Test
+            fun `does not report when class-level vars are assigned nullable values`() {
                 val code = """
                 import kotlin.random.Random
 
@@ -124,7 +129,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report vars that utilize nullable delegate values") {
+            @Test
+            fun `does not report vars that utilize nullable delegate values`() {
                 val code = """
                     class A(private var aDelegate: Int?) {
                         private var a: Int? by this::aDelegate
@@ -133,7 +139,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when file-level vars are assigned nullable values") {
+            @Test
+            fun `does not report when file-level vars are assigned nullable values`() {
                 val code = """
                 import kotlin.random.Random
 
@@ -154,7 +161,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("reports when vars with private setters are never assigned nullable values") {
+            @Test
+            fun `reports when vars with private setters are never assigned nullable values`() {
                 val code = """
                 class A {
                     var a: Int? = 5
@@ -167,7 +175,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("does not report when vars with private setters are assigned nullable values") {
+            @Test
+            fun `does not report when vars with private setters are assigned nullable values`() {
                 val code = """
                 class A {
                     var a: Int? = 5
@@ -180,7 +189,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when vars use public setters") {
+            @Test
+            fun `does not report when vars use public setters`() {
                 val code = """
                 class A {
                     var a: Int? = 5
@@ -192,7 +202,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when vars use non-private setters") {
+            @Test
+            fun `does not report when vars use non-private setters`() {
                 val code = """
                     class A {
                         var a: Int? = 5
@@ -205,7 +216,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when private vars are declared in the constructor") {
+            @Test
+            fun `does not report when private vars are declared in the constructor`() {
                 val code = """
                 class A(private var a: Int?) {
                     fun foo() {
@@ -217,8 +229,10 @@ class CanBeNonNullableSpec : Spek({
             }
         }
 
-        context("evaluating private vars") {
-            it("reports when class-level vals are set to non-nullable values") {
+        @Nested
+        inner class `evaluating public properties` {
+            @Test
+            fun `reports when class-level vals are set to non-nullable values`() {
                 val code = """
                 class A(cVal: Int) {
                     val a: Int? = 5
@@ -234,7 +248,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
             }
 
-            it("reports when vals utilize non-nullable delegate values") {
+            @Test
+            fun `reports when vals utilize non-nullable delegate values`() {
                 val code = """
                 class A {
                     val a: Int? by lazy {
@@ -245,14 +260,16 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("reports when file-level vals are set to non-nullable values") {
+            @Test
+            fun `reports when file-level vals are set to non-nullable values`() {
                 val code = """
                 val fileA: Int? = 5
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("does not report when class-level vals are assigned a nullable value") {
+            @Test
+            fun `does not report when class-level vals are assigned a nullable value`() {
                 val code = """
                 import kotlin.random.Random
 
@@ -270,7 +287,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when vals utilize nullable delegate values") {
+            @Test
+            fun `does not report when vals utilize nullable delegate values`() {
                 val code = """
                 import kotlin.random.Random
 
@@ -284,14 +302,16 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when file-level vals are assigned a nullable value") {
+            @Test
+            fun `does not report when file-level vals are assigned a nullable value`() {
                 val code = """
                 val fileA: Int? = null
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when vals are declared non-nullable") {
+            @Test
+            fun `does not report when vals are declared non-nullable`() {
                 val code = """
                 class A {
                     val a: Int = 5
@@ -300,14 +320,16 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report when vals are declared in the constructor") {
+            @Test
+            fun `does not report when vals are declared in the constructor`() {
                 val code = """
                 class A(private val a: Int?)
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("reports when vals with getters never return nullable values") {
+            @Test
+            fun `reports when vals with getters never return nullable values`() {
                 val code = """
                 class A {
                     val a: Int?
@@ -327,7 +349,8 @@ class CanBeNonNullableSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
             }
 
-            it("does not report when vals with getters return potentially-nullable values") {
+            @Test
+            fun `does not report when vals with getters return potentially-nullable values`() {
                 val code = """
                     import kotlin.random.Random
                     
@@ -351,7 +374,8 @@ class CanBeNonNullableSpec : Spek({
             }
         }
 
-        it("does not report open properties") {
+        @Test
+        fun `does not report open properties`() {
             val code = """
                 abstract class A {
                     open val a: Int? = 5
@@ -361,7 +385,8 @@ class CanBeNonNullableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report properties whose initial assignment derives from unsafe non-Java code") {
+        @Test
+        fun `does not report properties whose initial assignment derives from unsafe non-Java code`() {
             val code = """
                 class A(msg: String?) {
                     private val e = Exception(msg)
@@ -374,7 +399,8 @@ class CanBeNonNullableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report interface properties") {
+        @Test
+        fun `does not report interface properties`() {
             val code = """
                 interface A {
                     val a: Int?
@@ -384,9 +410,12 @@ class CanBeNonNullableSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        context("nullable function parameters") {
-            context("using a de-nullifier") {
-                it("does report when a param is de-nullified with a postfix expression") {
+        @Nested
+        inner class `nullable function parameters` {
+            @Nested
+            inner class `using a de-nullifier` {
+                @Test
+                fun `does report when a param is de-nullified with a postfix expression`() {
                     val code = """
                         fun foo(a: Int?) {
                             val b = a!! + 2
@@ -395,7 +424,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                 }
 
-                it("does report when a param is de-nullified with a dot-qualified expression") {
+                @Test
+                fun `does report when a param is de-nullified with a dot-qualified expression`() {
                     val code = """
                         fun foo(a: Int?) {
                             val b = a!!.plus(2)
@@ -406,7 +436,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
                 }
 
-                it("does report when a de-nullifier precondition is called on the param") {
+                @Test
+                fun `does report when a de-nullifier precondition is called on the param`() {
                     val code = """
                         fun foo(a: Int?, b: Int?) {
                             val aNonNull = requireNotNull(a)
@@ -416,7 +447,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
                 }
 
-                it("does not report a double-bang call the field of a non-null param") {
+                @Test
+                fun `does not report a double-bang call the field of a non-null param`() {
                     val code = """
                         class A(val a: Int?)
 
@@ -427,7 +459,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("does not report on overridden function parameter") {
+                @Test
+                fun `does not report on overridden function parameter`() {
                     val code = """
                         interface A {
                             fun foo(a: Int?)
@@ -443,9 +476,12 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("using a null-safe expression") {
-                context("in initializer") {
-                    it("does not report when the safe-qualified expression is the only expression of the function") {
+            @Nested
+            inner class `using a null-safe expression` {
+                @Nested
+                inner class `in initializer` {
+                    @Test
+                    fun `does not report when the safe-qualified expression is the only expression of the function`() {
                         val code = """
                             class A {
                                 val foo = "BAR"
@@ -457,8 +493,10 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
 
-                context("in a non-return statement") {
-                    it("does report when the safe-qualified expression is the only expression of the function") {
+                @Nested
+                inner class `in a non-return statement` {
+                    @Test
+                    fun `does report when the safe-qualified expression is the only expression of the function`() {
                         val code = """   
                             class A(val foo: String)
 
@@ -469,7 +507,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does not report when the safe-qualified expression is within a lambda") {
+                    @Test
+                    fun `does not report when the safe-qualified expression is within a lambda`() {
                         val code = """
                             class A {
                                 fun doFoo(callback: () -> Unit) {
@@ -486,7 +525,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report when the safe-qualified expression is not the only expression of the function") {
+                    @Test
+                    fun `does not report when the safe-qualified expression is not the only expression of the function`() {
                         val code = """
                             class A {
                                 fun doFoo() { println("FOO") }
@@ -500,8 +540,11 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
                 }
-                context("in a return statement") {
-                    it("does not report when the safe-qualified expression is the only expression of the function") {
+
+                @Nested
+                inner class `in a return statement` {
+                    @Test
+                    fun `does not report when the safe-qualified expression is the only expression of the function`() {
                         val code = """
                             class A {
                                 val foo = "BAR"
@@ -516,9 +559,12 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("when statements") {
-                context("without a subject") {
-                    it("does not report when the parameter is checked on nullity") {
+            @Nested
+            inner class `when statements` {
+                @Nested
+                inner class `without a subject` {
+                    @Test
+                    fun `does not report when the parameter is checked on nullity`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -529,7 +575,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report when the parameter is checked on nullity in a reversed manner") {
+                    @Test
+                    fun `does not report when the parameter is checked on nullity in a reversed manner`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -540,7 +587,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report when the parameter is checked on nullity with multiple clauses") {
+                    @Test
+                    fun `does not report when the parameter is checked on nullity with multiple clauses`() {
                         val code = """
                             fun foo(a: Int?, other: Int) {
                                 when {
@@ -551,7 +599,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does report when the parameter is only checked on non-nullity") {
+                    @Test
+                    fun `does report when the parameter is only checked on non-nullity`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -562,7 +611,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does report when the parameter is only checked on non-nullity with multiple clauses") {
+                    @Test
+                    fun `does report when the parameter is only checked on non-nullity with multiple clauses`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -573,7 +623,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does not report when the parameter is checked on non-nullity with an else statement") {
+                    @Test
+                    fun `does not report when the parameter is checked on non-nullity with an else statement`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -585,7 +636,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report on nullable type matching") {
+                    @Test
+                    fun `does not report on nullable type matching`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -602,7 +654,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does report on non-null type matching") {
+                    @Test
+                    fun `does report on non-null type matching`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -613,7 +666,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does report on non-null type matching with multiple clauses") {
+                    @Test
+                    fun `does report on non-null type matching with multiple clauses`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -624,7 +678,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does not report on non-null type matching with an else statement") {
+                    @Test
+                    fun `does not report on non-null type matching with an else statement`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when {
@@ -637,8 +692,10 @@ class CanBeNonNullableSpec : Spek({
                     }
                 }
 
-                context("with a subject") {
-                    it("does not report when the parameter is checked on nullity") {
+                @Nested
+                inner class `with a subject` {
+                    @Test
+                    fun `does not report when the parameter is checked on nullity`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when (a) {
@@ -649,7 +706,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does not report on nullable type matching") {
+                    @Test
+                    fun `does not report on nullable type matching`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when (a) {
@@ -666,7 +724,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                     }
 
-                    it("does report on non-null type matching") {
+                    @Test
+                    fun `does report on non-null type matching`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when(a) {
@@ -677,7 +736,8 @@ class CanBeNonNullableSpec : Spek({
                         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                     }
 
-                    it("does not report on non-null type matching with an else statement") {
+                    @Test
+                    fun `does not report on non-null type matching with an else statement`() {
                         val code = """
                             fun foo(a: Int?) {
                                 when(a) {
@@ -691,8 +751,10 @@ class CanBeNonNullableSpec : Spek({
                 }
             }
 
-            context("if-statements") {
-                it("does not report when the parameter is checked on nullity") {
+            @Nested
+            inner class `if-statements` {
+                @Test
+                fun `does not report when the parameter is checked on nullity`() {
                     val code = """
                         fun foo(a: Int?) {
                             if (a == null) {
@@ -709,7 +771,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("does not report when the if-check is in the else statement") {
+                @Test
+                fun `does not report when the if-check is in the else statement`() {
                     val code = """
                         fun foo(num: Int, a: Int?) {
                             if (num % 2 == 0) {
@@ -722,7 +785,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("does report when the parameter is only checked on non-nullity in a function") {
+                @Test
+                fun `does report when the parameter is only checked on non-nullity in a function`() {
                     val code = """
                         fun foo(a: Int?) {
                             if (a != null) {
@@ -739,7 +803,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
                 }
 
-                it("does report when the parameter is only checked on non-nullity with multiple clauses") {
+                @Test
+                fun `does report when the parameter is only checked on non-nullity with multiple clauses`() {
                     val code = """
                         fun foo(a: Int?, other: Int) {
                             if (a != null && other % 2 == 0) {
@@ -750,7 +815,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
                 }
 
-                it("does not report when the parameter is checked on non-nullity with an else statement") {
+                @Test
+                fun `does not report when the parameter is checked on non-nullity with an else statement`() {
                     val code = """
                         fun foo(a: Int?) {
                             if (a != null) {
@@ -763,7 +829,8 @@ class CanBeNonNullableSpec : Spek({
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("does not report when there are other expressions after the non-null check") {
+                @Test
+                fun `does not report when there are other expressions after the non-null check`() {
                     val code = """
                         fun foo(a: Int?) {
                             if (a != null) {
@@ -777,4 +844,4 @@ class CanBeNonNullableSpec : Spek({
             }
         }
     }
-})
+}

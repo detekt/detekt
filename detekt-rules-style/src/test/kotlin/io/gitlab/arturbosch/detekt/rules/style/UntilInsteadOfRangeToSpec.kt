@@ -3,15 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UntilInsteadOfRangeToSpec : Spek({
-    val subject by memoized { UntilInsteadOfRangeTo(Config.empty) }
+class UntilInsteadOfRangeToSpec {
+    val subject = UntilInsteadOfRangeTo(Config.empty)
 
-    describe("UntilInsteadOfRangeTo rule") {
+    @Nested
+    inner class `UntilInsteadOfRangeTo rule` {
 
-        it("reports for '..'") {
+        @Test
+        @DisplayName("reports for '..'")
+        fun reportsForDoubleDotsInForIterator() {
             val code = """
                 fun f() {
                     for (i in 0 .. 10 - 1) {}
@@ -22,7 +26,8 @@ class UntilInsteadOfRangeToSpec : Spek({
             assertThat(findings[0]).hasMessage("'..' call can be replaced with 'until'")
         }
 
-        it("does not report if rangeTo not used") {
+        @Test
+        fun `does not report if rangeTo not used`() {
             val code = """
                 fun f() {
                     for (i in 0 until 10 - 1) {}
@@ -32,7 +37,8 @@ class UntilInsteadOfRangeToSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report if upper value isn't a binary expression") {
+        @Test
+        fun `does not report if upper value isn't a binary expression`() {
             val code = """
                 fun f() {
                     for (i in 0 .. 10) {}
@@ -41,7 +47,8 @@ class UntilInsteadOfRangeToSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report if not minus one") {
+        @Test
+        fun `does not report if not minus one`() {
             val code = """
                 fun f() {
                     for (i in 0 .. 10 + 1) {}
@@ -51,21 +58,25 @@ class UntilInsteadOfRangeToSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports for '..'") {
+        @Test
+        @DisplayName("reports for '..'")
+        fun reportsForDoubleDots() {
             val code = "val r = 0 .. 10 - 1"
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("does not report binary expressions without a range operator") {
+        @Test
+        fun `does not report binary expressions without a range operator`() {
             val code = "val sum = 1 + 2"
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports for 'rangeTo'") {
+        @Test
+        fun `reports for 'rangeTo'`() {
             val code = "val r = 0.rangeTo(10 - 1)"
             val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage("'rangeTo' call can be replaced with 'until'")
         }
     }
-})
+}

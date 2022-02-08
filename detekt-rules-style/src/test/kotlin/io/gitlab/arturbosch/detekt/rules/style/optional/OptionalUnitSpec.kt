@@ -2,23 +2,24 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class OptionalUnitSpec : Spek({
+@KotlinCoreEnvironmentTest
+class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
-    setupKotlinEnvironment()
+    val subject = OptionalUnit(Config.empty)
 
-    val subject by memoized { OptionalUnit(Config.empty) }
-    val env: KotlinCoreEnvironment by memoized()
-
-    describe("OptionalUnit rule") {
-        it("should report when a function has an explicit Unit return type with context") {
+    @Nested
+    inner class `OptionalUnit rule` {
+        @Test
+        fun `should report when a function has an explicit Unit return type with context`() {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
@@ -26,7 +27,8 @@ class OptionalUnitSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should not report when a function has a non-unit body expression") {
+        @Test
+        fun `should not report when a function has a non-unit body expression`() {
             val code = """
                 fun foo() = String
             """.trimIndent()
@@ -34,7 +36,8 @@ class OptionalUnitSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        context("several functions which return Unit") {
+        @Nested
+        inner class `several functions which return Unit` {
 
             val code = """
                 fun returnsUnit1(): Unit {
@@ -48,15 +51,18 @@ class OptionalUnitSpec : Spek({
             """
             lateinit var findings: List<Finding>
 
-            beforeEachTest {
+            @BeforeEach
+            fun beforeEachTest() {
                 findings = subject.compileAndLint(code)
             }
 
-            it("should report functions returning Unit") {
+            @Test
+            fun `should report functions returning Unit`() {
                 assertThat(findings).hasSize(3)
             }
 
-            it("should report the correct violation message") {
+            @Test
+            fun `should report the correct violation message`() {
                 findings.forEach {
                     assertThat(it.message).endsWith(
                         " defines a return type of Unit. This is unnecessary and can safely be removed."
@@ -65,9 +71,11 @@ class OptionalUnitSpec : Spek({
             }
         }
 
-        context("an overridden function which returns Unit") {
+        @Nested
+        inner class `an overridden function which returns Unit` {
 
-            it("should not report Unit return type in overridden function") {
+            @Test
+            fun `should not report Unit return type in overridden function`() {
                 val code = """
                     interface I {
                         fun returnsUnit()
@@ -81,7 +89,8 @@ class OptionalUnitSpec : Spek({
             }
         }
 
-        context("several lone Unit statements") {
+        @Nested
+        inner class `several lone Unit statements` {
 
             val code = """
                 fun returnsNothing() {
@@ -100,24 +109,29 @@ class OptionalUnitSpec : Spek({
             """
             lateinit var findings: List<Finding>
 
-            beforeEachTest {
+            @BeforeEach
+            fun beforeEachTest() {
                 findings = subject.compileAndLint(code)
             }
 
-            it("should report lone Unit statement") {
+            @Test
+            fun `should report lone Unit statement`() {
                 assertThat(findings).hasSize(4)
             }
 
-            it("should report the correct violation message") {
+            @Test
+            fun `should report the correct violation message`() {
                 findings.forEach {
                     assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed.")
                 }
             }
         }
 
-        context("several Unit references") {
+        @Nested
+        inner class `several Unit references` {
 
-            it("should not report Unit reference") {
+            @Test
+            fun `should not report Unit reference`() {
                 val findings = subject.compileAndLint(
                     """
                     fun returnsNothing(u: Unit, us: () -> String) {
@@ -133,8 +147,10 @@ class OptionalUnitSpec : Spek({
             }
         }
 
-        context("a default interface implementation") {
-            it("should report Unit as part of default interface implementations") {
+        @Nested
+        inner class `a default interface implementation` {
+            @Test
+            fun `should report Unit as part of default interface implementations`() {
                 val code = """
                     interface Foo {
                         fun method(i: Int) = Unit
@@ -145,8 +161,10 @@ class OptionalUnitSpec : Spek({
             }
         }
 
-        context("last statement in block - #2452") {
-            it("unused as an expression") {
+        @Nested
+        inner class `last statement in block - #2452` {
+            @Test
+            fun `unused as an expression`() {
                 val code = """
                     fun test(i: Int, b: Boolean) {
                         when (i) {
@@ -164,7 +182,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("used as an expression and the previous expression is not a Unit type") {
+            @Test
+            fun `used as an expression and the previous expression is not a Unit type`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -184,7 +203,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("used as an expression and the previous expression cannot be used as a value") {
+            @Test
+            fun `used as an expression and the previous expression cannot be used as a value`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -210,7 +230,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("used as an expression and the previous expression cannot be used as a value 2") {
+            @Test
+            fun `used as an expression and the previous expression cannot be used as a value 2`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -234,7 +255,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("used as an expression and the previous expression can be used as a value") {
+            @Test
+            fun `used as an expression and the previous expression can be used as a value`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -262,7 +284,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("used as an expression and the previous expression can be used as a value 2") {
+            @Test
+            fun `used as an expression and the previous expression can be used as a value 2`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -287,7 +310,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("used as an expression and the previous expression can be used as a value 3") {
+            @Test
+            fun `used as an expression and the previous expression can be used as a value 3`() {
                 val code = """
                     fun <T> T.foo() {
                         println(this)
@@ -312,7 +336,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("another object is used as the last expression") {
+            @Test
+            fun `another object is used as the last expression`() {
                 val code = """
                     fun foo() {
                         String
@@ -323,8 +348,10 @@ class OptionalUnitSpec : Spek({
             }
         }
 
-        context("function initializers") {
-            it("should not report when function initializer is Nothing") {
+        @Nested
+        inner class `function initializers` {
+            @Test
+            fun `should not report when function initializer is Nothing`() {
                 val code = """
                     fun test(): Unit = throw UnsupportedOperationException()
                 """
@@ -332,7 +359,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not report when the function initializer requires a type") {
+            @Test
+            fun `should not report when the function initializer requires a type`() {
                 val code = """
                     fun <T> foo(block: (List<T>) -> Unit): T {
                         val list = listOf<T>()
@@ -346,7 +374,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should report on function initializers when there is no context") {
+            @Test
+            fun `should report on function initializers when there is no context`() {
                 val code = """
                     fun test(): Unit = throw UnsupportedOperationException()
                 """
@@ -354,7 +383,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should report when the function initializer takes in the type Nothing") {
+            @Test
+            fun `should report when the function initializer takes in the type Nothing`() {
                 val code = """
                     fun <T> foo(block: (List<T>) -> Unit): T {
                         val list = listOf<T>()
@@ -368,7 +398,8 @@ class OptionalUnitSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should report when the function initializer does not provide a different type") {
+            @Test
+            fun `should report when the function initializer does not provide a different type`() {
                 val code = """
                     fun foo() {}
                     
@@ -379,4 +410,4 @@ class OptionalUnitSpec : Spek({
             }
         }
     }
-})
+}

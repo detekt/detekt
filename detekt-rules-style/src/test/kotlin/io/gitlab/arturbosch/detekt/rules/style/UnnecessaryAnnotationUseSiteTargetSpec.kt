@@ -2,14 +2,18 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
+class UnnecessaryAnnotationUseSiteTargetSpec {
 
-    describe("UnnecessaryAnnotationUseSiteTarget rule") {
+    @Nested
+    inner class `UnnecessaryAnnotationUseSiteTarget rule` {
 
-        it("Unnecessary @param: in a property constructor") {
+        @Test
+        @DisplayName("Unnecessary @param: in a property constructor")
+        fun unnecessaryParamInPropertyConstructor() {
             val code = """
                 class C(@param:Asdf private val foo: String)
 
@@ -18,7 +22,9 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
         }
 
-        it("Unnecessary @param: in a constructor") {
+        @Test
+        @DisplayName("Unnecessary @param: in a constructor")
+        fun unnecessaryParamInConstructor() {
             val code = """
                 class C(@param:Asdf foo: String)
 
@@ -27,7 +33,9 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
         }
 
-        it("Necessary @get:") {
+        @Test
+        @DisplayName("Necessary @get:")
+        fun unnecessaryGet() {
             val code = """
                 class C(@get:Asdf private val foo: String)
 
@@ -36,7 +44,9 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
         }
 
-        it("Necessary @property:") {
+        @Test
+        @DisplayName("Necessary @property:")
+        fun necessaryProperty() {
             val code = """
                 class C(@property:Asdf private val foo: String)
 
@@ -45,7 +55,9 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
         }
 
-        it("Unnecessary @property:") {
+        @Test
+        @DisplayName("Unnecessary @property:")
+        fun unnecessaryProperty() {
             val code = """
                 class C {
                     @property:Asdf private val foo: String = "bar"
@@ -56,7 +68,9 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
         }
 
-        it("Unnecessary @property: at a top level property") {
+        @Test
+        @DisplayName("Unnecessary @property: at a top level property")
+        fun unnecessaryPropertyAtTopLevel() {
             val code = """
                 @property:Asdf private val foo: String = "bar"
 
@@ -65,4 +79,4 @@ class UnnecessaryAnnotationUseSiteTargetSpec : Spek({
             assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
         }
     }
-})
+}

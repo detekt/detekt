@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class SafeCastSpec : Spek({
-    val subject by memoized { SafeCast() }
+class SafeCastSpec {
+    val subject = SafeCast()
 
-    describe("SafeCast rule") {
+    @Nested
+    inner class `SafeCast rule` {
 
-        it("reports negated expression") {
+        @Test
+        fun `reports negated expression`() {
             val code = """
                 fun test(element: Int) {
                     val cast = if (element !is Number) {
@@ -23,7 +25,8 @@ class SafeCastSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports expression") {
+        @Test
+        fun `reports expression`() {
             val code = """
                 fun test(element: Int) {
                     val cast = if (element is Number) {
@@ -36,7 +39,8 @@ class SafeCastSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report wrong condition") {
+        @Test
+        fun `does not report wrong condition`() {
             val code = """
                 fun test(element: Int) {
                     val other = 3
@@ -50,7 +54,8 @@ class SafeCastSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report wrong else clause") {
+        @Test
+        fun `does not report wrong else clause`() {
             val code = """
                 fun test(element: Int) {
                     val cast = if (element is Number) {
@@ -63,4 +68,4 @@ class SafeCastSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

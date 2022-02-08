@@ -1,21 +1,21 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnnecessaryInnerClassSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnnecessaryInnerClass(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UnnecessaryInnerClass(Config.empty) }
-
-    describe("UnnecessaryInnerClass Rule") {
-        it("reports when an inner class does not access members of its outer class") {
+    @Nested
+    inner class `UnnecessaryInnerClass Rule` {
+        @Test
+        fun `reports when an inner class does not access members of its outer class`() {
             val code = """
                 val fileFoo = "FILE_FOO"
                 
@@ -40,8 +40,10 @@ class UnnecessaryInnerClassSpec : Spek({
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
-        context("does not report an inner class accessing outer-class members") {
-            it("as a default argument for a constructor") {
+        @Nested
+        inner class `does not report an inner class accessing outer-class members` {
+            @Test
+            fun `as a default argument for a constructor`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -53,7 +55,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("as a property initializer") {
+            @Test
+            fun `as a property initializer`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -67,8 +70,10 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            context("in a variable assignment") {
-                it("where the outer-class variable is on the left") {
+            @Nested
+            inner class `in a variable assignment` {
+                @Test
+                fun `where the outer-class variable is on the left`() {
                     val code = """
                         class A {
                             var foo = "BAR"
@@ -85,7 +90,8 @@ class UnnecessaryInnerClassSpec : Spek({
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
-                it("where the outer-class variable is on the right") {
+                @Test
+                fun `where the outer-class variable is on the right`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -102,7 +108,8 @@ class UnnecessaryInnerClassSpec : Spek({
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
-                it("where the outer-class variable is in a compound statement") {
+                @Test
+                fun `where the outer-class variable is in a compound statement`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -120,8 +127,10 @@ class UnnecessaryInnerClassSpec : Spek({
                 }
             }
 
-            context("in an if-statement") {
-                it("where the outer-class variable is the only expression") {
+            @Nested
+            inner class `in an if-statement` {
+                @Test
+                fun `where the outer-class variable is the only expression`() {
                     val code = """
                         class A(val foo: Boolean) {
                             
@@ -138,7 +147,8 @@ class UnnecessaryInnerClassSpec : Spek({
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
-                it("where the outer-class variable is on the left") {
+                @Test
+                fun `where the outer-class variable is on the left`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -156,7 +166,8 @@ class UnnecessaryInnerClassSpec : Spek({
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
-                it("where the outer-class variable is on the right") {
+                @Test
+                fun `where the outer-class variable is on the right`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -174,7 +185,8 @@ class UnnecessaryInnerClassSpec : Spek({
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
-                it("where the outer-class variable is in a compound statement") {
+                @Test
+                fun `where the outer-class variable is in a compound statement`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -194,7 +206,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 }
             }
 
-            it("as a function initializer") {
+            @Test
+            fun `as a function initializer`() {
                 val code = """
                     class A {
                         fun printFoo() {
@@ -210,7 +223,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("as a function call") {
+            @Test
+            fun `as a function call`() {
                 val code = """
                     class A {
                         fun printFoo() {
@@ -228,7 +242,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("as a function argument") {
+            @Test
+            fun `as a function argument`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -244,7 +259,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("as a default value in a function signature") {
+            @Test
+            fun `as a default value in a function signature`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -260,7 +276,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("to call a function of the member") {
+            @Test
+            fun `to call a function of the member`() {
                 val code = """
                     class FooClass {
                         fun printFoo() {
@@ -283,9 +300,11 @@ class UnnecessaryInnerClassSpec : Spek({
             }
         }
 
-        context("does not report a double-nested inner class accessing from an outer-class member") {
+        @Nested
+        inner class `does not report a double-nested inner class accessing from an outer-class member` {
 
-            it("when the innermost class refers a inner class and the inner class refers the outermost class") {
+            @Test
+            fun `when the innermost class refers a inner class and the inner class refers the outermost class`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -304,7 +323,8 @@ class UnnecessaryInnerClassSpec : Spek({
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
-            it("when the innermost class refers the outermost class") {
+            @Test
+            fun `when the innermost class refers the outermost class`() {
                 val code = """
                     class A {
                         val foo = "BAR"
@@ -323,7 +343,8 @@ class UnnecessaryInnerClassSpec : Spek({
             }
         }
 
-        it("does not report anonymous inner classes") {
+        @Test
+        fun `does not report anonymous inner classes`() {
             val code = """
                 interface FooInterface {
                     fun doFoo()
@@ -347,4 +368,4 @@ class UnnecessaryInnerClassSpec : Spek({
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

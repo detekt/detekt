@@ -1,22 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnusedImportsSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnusedImports(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UnusedImports(Config.empty) }
+    @Nested
+    inner class `UnusedImports rule` {
 
-    describe("UnusedImports rule") {
-
-        it("does not report infix operators") {
+        @Test
+        fun `does not report infix operators`() {
             val main = """
                 import tasks.success
 
@@ -36,7 +36,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("does not report imports in documentation") {
+        @Test
+        fun `does not report imports in documentation`() {
             val main = """
                 import tasks.success
                 import tasks.failure
@@ -66,7 +67,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("should ignore import for link") {
+        @Test
+        fun `should ignore import for link`() {
             val main = """
                 import tasks.success
                 import tasks.failure
@@ -97,7 +99,8 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("reports imports from the current package") {
+        @Test
+        fun `reports imports from the current package`() {
             val main = """
                 package test
                 import test.SomeClass
@@ -116,7 +119,8 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("does not report KDoc references with method calls") {
+        @Test
+        fun `does not report KDoc references with method calls`() {
             val main = """
                 package com.example
 
@@ -141,7 +145,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("reports imports with different cases") {
+        @Test
+        fun `reports imports with different cases`() {
             val main = """
                 import p.a
                 import p.B6 // positive
@@ -183,8 +188,10 @@ class UnusedImportsSpec : Spek({
             val escaped = """
                 package escaped
 
-                fun `when`() {}
-                fun `foo`() {}
+                @Test
+fun `when`() {}
+                @Test
+fun `foo`() {}
             """
             val lint = subject.lintWithContext(env, main, p, p2, escaped)
             with(lint) {
@@ -195,7 +202,8 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("does not report imports in same package when inner") {
+        @Test
+        fun `does not report imports in same package when inner`() {
             val main = """
                 package test
                 
@@ -218,7 +226,8 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("does not report KDoc @see annotation linking to class") {
+        @Test
+        fun `does not report KDoc @see annotation linking to class`() {
             val main = """
                 import tasks.success
 
@@ -236,7 +245,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("does not report KDoc @see annotation linking to class with description") {
+        @Test
+        fun `does not report KDoc @see annotation linking to class with description`() {
             val main = """
                 import tasks.success
 
@@ -254,7 +264,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("reports KDoc @see annotation that does not link to class") {
+        @Test
+        fun `reports KDoc @see annotation that does not link to class`() {
             val main = """
                 import tasks.success
 
@@ -272,7 +283,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
         }
 
-        it("reports KDoc @see annotation that links after description") {
+        @Test
+        fun `reports KDoc @see annotation that links after description`() {
             val main = """
                 import tasks.success
 
@@ -290,7 +302,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
         }
 
-        it("does not report imports in KDoc") {
+        @Test
+        fun `does not report imports in KDoc`() {
             val main = """
                 import tasks.success   // here
                 import tasks.undefined // and here
@@ -313,7 +326,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("should not report import alias as unused when the alias is used") {
+        @Test
+        fun `should not report import alias as unused when the alias is used`() {
             val main = """
                 import test.forEach as foreach
                 fun foo() = listOf().iterator().foreach {}
@@ -325,7 +339,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("should not report used alias even when import is from same package") {
+        @Test
+        fun `should not report used alias even when import is from same package`() {
             val main = """
                 package com.example
 
@@ -347,7 +362,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
         }
 
-        it("should not report import of provideDelegate operator overload - #1608") {
+        @Test
+        fun `should not report import of provideDelegate operator overload - #1608`() {
             val main = """
                 import org.gradle.kotlin.dsl.Foo
                 import org.gradle.kotlin.dsl.provideDelegate // this line specifically should not be reported
@@ -371,7 +387,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("should not report import of componentN operator") {
+        @Test
+        fun `should not report import of componentN operator`() {
             val main = """
                 import com.example.MyClass.component1
                 import com.example.MyClass.component2
@@ -389,7 +406,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
         }
 
-        it("should report import of identifiers with component in the name") {
+        @Test
+        fun `should report import of identifiers with component in the name`() {
             val main = """
                 import com.example.TestComponent
                 import com.example.component1.Unused
@@ -421,7 +439,8 @@ class UnusedImportsSpec : Spek({
             }
         }
 
-        it("reports when same name identifiers are imported and used") {
+        @Test
+        fun `reports when same name identifiers are imported and used`() {
             val mainFile = """
                 import foo.test
                 import bar.test
@@ -442,7 +461,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings[0].entity.signature).endsWith("import bar.test")
         }
 
-        it("does not report when used as a type") {
+        @Test
+        fun `does not report when used as a type`() {
             val code = """
                 import java.util.HashMap
                 
@@ -453,7 +473,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when used in a class literal expression") {
+        @Test
+        fun `does not report when used in a class literal expression`() {
             val code = """
                 import java.util.HashMap
                 import kotlin.reflect.KClass
@@ -467,7 +488,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when used as a constructor call") {
+        @Test
+        fun `does not report when used as a constructor call`() {
             val mainFile = """
                 import x.y.z.Foo
                 
@@ -482,7 +504,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report when used as a annotation") {
+        @Test
+        fun `does not report when used as a annotation`() {
             val mainFile = """
                 import x.y.z.Ann
 
@@ -498,7 +521,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report companion object") {
+        @Test
+        fun `does not report companion object`() {
             val mainFile = """
                 import x.y.z.Foo
                 
@@ -515,7 +539,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report companion object that calls function") {
+        @Test
+        fun `does not report companion object that calls function`() {
             val mainFile = """
                 import x.y.z.Foo
                 
@@ -534,7 +559,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report companion object that references variable") {
+        @Test
+        fun `does not report companion object that references variable`() {
             val mainFile = """
                 import x.y.z.Foo
                 
@@ -553,7 +579,8 @@ class UnusedImportsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report static import") {
+        @Test
+        fun `does not report static import`() {
             val mainFile = """
                 import x.y.z.FetchType
                 
@@ -569,7 +596,8 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
         }
 
-        it("does not report annotations used as attributes - #3246") {
+        @Test
+        fun `does not report annotations used as attributes - #3246`() {
             val mainFile = """
                 import x.y.z.AnnotationA
                 import x.y.z.AnnotationB
@@ -588,4 +616,4 @@ class UnusedImportsSpec : Spek({
             assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
         }
     }
-})
+}

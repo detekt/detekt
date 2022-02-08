@@ -1,26 +1,27 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnnecessaryApplySpec : Spek({
+@KotlinCoreEnvironmentTest
+class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
-    setupKotlinEnvironment()
+    val subject = UnnecessaryApply(Config.empty)
 
-    val subject by memoized { UnnecessaryApply(Config.empty) }
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `UnnecessaryApply rule` {
 
-    describe("UnnecessaryApply rule") {
+        @Nested
+        inner class `unnecessary apply expressions that can be changed to ordinary method call` {
 
-        context("unnecessary apply expressions that can be changed to ordinary method call") {
-
-            it("reports an apply on non-nullable type") {
+            @Test
+            fun `reports an apply on non-nullable type`() {
                 val findings = subject.compileAndLintWithContext(
                     env,
                     """
@@ -36,7 +37,8 @@ class UnnecessaryApplySpec : Spek({
                 assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
             }
 
-            it("reports an apply on nullable type") {
+            @Test
+            fun `reports an apply on nullable type`() {
                 val findings = subject.compileAndLintWithContext(
                     env,
                     """
@@ -54,7 +56,8 @@ class UnnecessaryApplySpec : Spek({
                 assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
             }
 
-            it("reports a false negative apply on nullable type - #1485") {
+            @Test
+            fun `reports a false negative apply on nullable type - #1485`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -72,7 +75,8 @@ class UnnecessaryApplySpec : Spek({
                 ).hasSize(1)
             }
 
-            it("does not report an apply with lambda block") {
+            @Test
+            fun `does not report an apply with lambda block`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -88,7 +92,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("does not report single statement in apply used as function argument") {
+            @Test
+            fun `does not report single statement in apply used as function argument`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -106,7 +111,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("does not report single assignment statement in apply used as function argument - #1517") {
+            @Test
+            fun `does not report single assignment statement in apply used as function argument - #1517`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -132,7 +138,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("does not report if result of apply is used - #2938") {
+            @Test
+            fun `does not report if result of apply is used - #2938`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -145,7 +152,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("does not report applies with lambda body containing more than one statement") {
+            @Test
+            fun `does not report applies with lambda body containing more than one statement`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -172,7 +180,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("reports when lambda has a dot qualified expression") {
+            @Test
+            fun `reports when lambda has a dot qualified expression`() {
                 val findings = subject.compileAndLintWithContext(
                     env,
                     """
@@ -192,7 +201,8 @@ class UnnecessaryApplySpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("reports when lambda has a dot qualified expression which has 'this' receiver") {
+            @Test
+            fun `reports when lambda has a dot qualified expression which has 'this' receiver`() {
                 val findings = subject.compileAndLintWithContext(
                     env,
                     """
@@ -212,7 +222,8 @@ class UnnecessaryApplySpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("reports when lambda has a 'this' expression") {
+            @Test
+            fun `reports when lambda has a 'this' expression`() {
                 val findings = subject.compileAndLintWithContext(
                     env,
                     """
@@ -227,9 +238,11 @@ class UnnecessaryApplySpec : Spek({
             }
         }
 
-        context("reported false positives - #1305") {
+        @Nested
+        inner class `reported false positives - #1305` {
 
-            it("is used within an assignment expr itself") {
+            @Test
+            fun `is used within an assignment expr itself`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -244,7 +257,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("is used as return type of extension function") {
+            @Test
+            fun `is used as return type of extension function`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -257,7 +271,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not flag apply when assigning property on this") {
+            @Test
+            fun `should not flag apply when assigning property on this`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -272,7 +287,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report apply when using it after returning something") {
+            @Test
+            fun `should not report apply when using it after returning something`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -285,7 +301,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report apply usage inside safe chained expressions") {
+            @Test
+            fun `should not report apply usage inside safe chained expressions`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -302,9 +319,11 @@ class UnnecessaryApplySpec : Spek({
             }
         }
 
-        context("false positive in single nesting expressions - #1473") {
+        @Nested
+        inner class `false positive in single nesting expressions - #1473` {
 
-            it("should not report the if expression") {
+            @Test
+            fun `should not report the if expression`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -325,7 +344,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("should report reference expressions") {
+            @Test
+            fun `should report reference expressions`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -349,9 +369,11 @@ class UnnecessaryApplySpec : Spek({
             }
         }
 
-        context("false positive when it's used as an expression - #2435") {
+        @Nested
+        inner class `false positive when it's used as an expression - #2435` {
 
-            it("do not report when it's used as an assignment") {
+            @Test
+            fun `do not report when it's used as an assignment`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -372,7 +394,8 @@ class UnnecessaryApplySpec : Spek({
                 ).isEmpty()
             }
 
-            it("do not report when it's used as the last statement of a block inside lambda") {
+            @Test
+            fun `do not report when it's used as the last statement of a block inside lambda`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -397,9 +420,11 @@ class UnnecessaryApplySpec : Spek({
             }
         }
 
-        context("false positive when lambda has multiple member references - #3561") {
+        @Nested
+        inner class `false positive when lambda has multiple member references - #3561` {
 
-            it("do not report when lambda has multiple member references") {
+            @Test
+            fun `do not report when lambda has multiple member references`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -424,4 +449,4 @@ class UnnecessaryApplySpec : Spek({
             }
         }
     }
-})
+}

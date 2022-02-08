@@ -1,22 +1,21 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnnecessaryLetSpec : Spek({
+@KotlinCoreEnvironmentTest
+class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnnecessaryLet(Config.empty)
 
-    setupKotlinEnvironment()
-
-    val subject by memoized { UnnecessaryLet(Config.empty) }
-    val env: KotlinCoreEnvironment by memoized()
-
-    describe("UnnecessaryLet rule") {
-        it("reports unnecessary lets that can be changed to ordinary method call 1") {
+    @Nested
+    inner class `UnnecessaryLet rule` {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 1`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -31,7 +30,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 2") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 2`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -46,7 +46,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 3") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 3`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -61,7 +62,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 4") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 4`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -75,7 +77,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 5") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 5`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -90,7 +93,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 6") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 6`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -105,7 +109,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports unnecessary lets that can be replaced with an if") {
+        @Test
+        fun `reports unnecessary lets that can be replaced with an if`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -120,7 +125,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
         }
 
-        it("reports unnecessary lets that can be changed to ordinary method call 7") {
+        @Test
+        fun `reports unnecessary lets that can be changed to ordinary method call 7`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -135,7 +141,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("reports use of let without the safe call operator when we use an argument") {
+        @Test
+        fun `reports use of let without the safe call operator when we use an argument`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -150,7 +157,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
         }
 
-        it("does not report lets used for function calls 1") {
+        @Test
+        fun `does not report lets used for function calls 1`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -164,7 +172,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report lets used for function calls 2") {
+        @Test
+        fun `does not report lets used for function calls 2`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -177,7 +186,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report \"can be replaced by if\" because you will need an else too") {
+        @Test
+        fun `does not report 'can be replaced by if' because you will need an else too`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -191,7 +201,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report a let where returned value is used - #2987") {
+        @Test
+        fun `does not report a let where returned value is used - #2987`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -204,7 +215,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report use of let with the safe call operator when we use an argument") {
+        @Test
+        fun `does not report use of let with the safe call operator when we use an argument`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -218,7 +230,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).hasSize(0)
         }
 
-        it("does not report lets with lambda body containing more than one statement") {
+        @Test
+        fun `does not report lets with lambda body containing more than one statement`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -254,7 +267,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report lets where it is used multiple times") {
+        @Test
+        fun `does not report lets where it is used multiple times`() {
             val findings = subject.compileAndLintWithContext(
                 env,
                 """
@@ -271,8 +285,10 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        context("destructuring declarations") {
-            it("does not report `let` when parameters are used more than once") {
+        @Nested
+        inner class `destructuring declarations` {
+            @Test
+            fun `does not report 'let' when parameters are used more than once`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -284,7 +300,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("does not report `let` with a safe call when a parameter is used more than once") {
+            @Test
+            fun `does not report 'let' with a safe call when a parameter is used more than once`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -296,7 +313,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("does not report `let` when parameters with types are used more than once") {
+            @Test
+            fun `does not report 'let' when parameters with types are used more than once`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -308,7 +326,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("reports `let` when parameters are used only once") {
+            @Test
+            fun `reports 'let' when parameters are used only once`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -321,7 +340,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports `let` with a safe call when parameters are used only once") {
+            @Test
+            fun `reports 'let' with a safe call when parameters are used only once`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -334,7 +354,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports `let` when parameters are not used") {
+            @Test
+            fun `reports 'let' when parameters are not used`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -347,7 +368,8 @@ class UnnecessaryLetSpec : Spek({
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
             }
 
-            it("reports `let` with a safe call when parameters are not used") {
+            @Test
+            fun `reports 'let' with a safe call when parameters are not used`() {
                 val content = """
                 data class Foo(val a: Int, val b: Int)
                 
@@ -361,7 +383,8 @@ class UnnecessaryLetSpec : Spek({
             }
         }
 
-        it("reports when implicit parameter isn't used") {
+        @Test
+        fun `reports when implicit parameter isn't used`() {
             val content = """
                 fun test(value: Int?) {
                     value?.let {
@@ -374,7 +397,8 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
         }
 
-        it("does not report when an implicit parameter is used in an inner lambda") {
+        @Test
+        fun `does not report when an implicit parameter is used in an inner lambda`() {
             val content = """
                 fun callMe(callback: () -> Unit) {
                     callback()
@@ -392,7 +416,7 @@ class UnnecessaryLetSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
 private const val MESSAGE_USE_IF = "let expression can be replaced with a simple if"

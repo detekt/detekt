@@ -1,23 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
+@KotlinCoreEnvironmentTest
+class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `library code must have explicit return types` {
 
-    describe("library code must have explicit return types") {
-
-        it("should not report without explicit filters set") {
+        @Test
+        fun `should not report without explicit filters set`() {
             val subject = LibraryCodeMustSpecifyReturnType(TestConfig(Config.EXCLUDES_KEY to "**"))
             assertThat(
                 subject.compileAndLintWithContext(
@@ -34,13 +34,12 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             ).isEmpty()
         }
 
-        val subject by memoized {
-            LibraryCodeMustSpecifyReturnType()
-        }
+        @Nested
+        inner class `positive cases` {
+            val subject = LibraryCodeMustSpecifyReturnType()
 
-        describe("positive cases") {
-
-            it("should report a top level function") {
+            @Test
+            fun `should report a top level function`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -51,7 +50,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("should report a top level property") {
+            @Test
+            fun `should report a top level property`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -62,7 +62,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("should report a public class with public members") {
+            @Test
+            fun `should report a public class with public members`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -76,7 +77,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).hasSize(2)
             }
 
-            it("should report a public class with protected members") {
+            @Test
+            fun `should report a public class with protected members`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -91,9 +93,12 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             }
         }
 
-        describe("negative cases with public scope") {
+        @Nested
+        inner class `negative cases with public scope` {
+            val subject = LibraryCodeMustSpecifyReturnType()
 
-            it("should not report a top level function") {
+            @Test
+            fun `should not report a top level function`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -104,7 +109,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a non expression function") {
+            @Test
+            fun `should not report a non expression function`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -115,7 +121,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a top level property") {
+            @Test
+            fun `should not report a top level property`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -126,7 +133,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a public class with public members") {
+            @Test
+            fun `should not report a public class with public members`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -140,9 +148,13 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
         }
-        describe("negative cases with no public scope") {
 
-            it("should not report a private top level function") {
+        @Nested
+        inner class `negative cases with no public scope` {
+            val subject = LibraryCodeMustSpecifyReturnType()
+
+            @Test
+            fun `should not report a private top level function`() {
                 assertThat(
                     subject.lintWithContext(
                         env,
@@ -154,7 +166,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a internal top level property") {
+            @Test
+            fun `should not report a internal top level property`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -165,7 +178,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report members and local variables") {
+            @Test
+            fun `should not report members and local variables`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -182,7 +196,8 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report effectively private properties and functions") {
+            @Test
+            fun `should not report effectively private properties and functions`() {
                 assertThat(
                     subject.compileAndLintWithContext(
                         env,
@@ -197,4 +212,4 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             }
         }
     }
-})
+}

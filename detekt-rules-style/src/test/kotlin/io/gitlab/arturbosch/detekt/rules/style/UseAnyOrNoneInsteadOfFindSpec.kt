@@ -1,84 +1,110 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseAnyOrNoneInsteadOfFindSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UseAnyOrNoneInsteadOfFindSpec(val env: KotlinCoreEnvironment) {
+    val subject = UseAnyOrNoneInsteadOfFind()
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UseAnyOrNoneInsteadOfFind() }
-
-    describe("UseAnyOrNoneInsteadOfFind rule") {
-        it("Reports collections.find != null") {
+    @Nested
+    inner class `UseAnyOrNoneInsteadOfFind rule` {
+        @Test
+        @DisplayName("Reports collections.find != null")
+        fun reportCollectionsFindNotEqualToNull() {
             val code = "val x = listOf(1, 2, 3).find { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual[0].message).isEqualTo("Use 'any' instead of 'find'")
         }
-        it("Reports sequences.find != null") {
+
+        @Test
+        @DisplayName("Reports sequences.find != null")
+        fun reportSequencesFindNotEqualToNull() {
             val code = "val x = sequenceOf(1, 2, 3).find { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
-        it("Reports text.find != null") {
+
+        @Test
+        @DisplayName("Reports text.find != null")
+        fun reportTextFindNotEqualToNull() {
             val code = "val x = \"123\".find { it == '4' } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
-        it("Reports collections.firstOrNull != null") {
+        @Test
+        @DisplayName("Reports collections.firstOrNull != null")
+        fun reportCollectionsFirstOrNullNotEqualToNull() {
             val code = "val x = arrayOf(1, 2, 3).firstOrNull { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual[0].message).isEqualTo("Use 'any' instead of 'firstOrNull'")
         }
-        it("Reports sequences.firstOrNull != null") {
+
+        @Test
+        @DisplayName("Reports sequences.firstOrNull != null")
+        fun reportSequencesFirstOrNullNotEqualToNull() {
             val code = "val x = sequenceOf(1, 2, 3).firstOrNull { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
-        it("Reports text.firstOrNull != null") {
+
+        @Test
+        @DisplayName("Reports text.firstOrNull != null")
+        fun reportTextFirstOrNullNotEqualToNull() {
             val code = "val x = \"123\".firstOrNull { it == '4' } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
-        it("Reports collections.find == null") {
+        @Test
+        @DisplayName("Reports collections.find == null")
+        fun reportCollectionsFindEqualToNull() {
             val code = "val x = setOf(1, 2, 3).find { it == 4 } == null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual[0].message).isEqualTo("Use 'none' instead of 'find'")
         }
 
-        it("Reports null != collections.find") {
+        @Test
+        @DisplayName("Reports null != collections.find")
+        fun reportNullNotEqualToCollectionsFind() {
             val code = "val x = null != listOf(1, 2, 3).find { it == 4 }"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual[0].message).isEqualTo("Use 'any' instead of 'find'")
         }
 
-        it("Reports collections.find != null in extension") {
+        @Test
+        @DisplayName("Reports collections.find != null in extension")
+        fun reportCollectionsFindNotEqualToNullInExtension() {
             val code = "fun List<Int>.test(): Boolean = find { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
-        it("Reports collections.lastOrNull != null") {
+        @Test
+        @DisplayName("Reports collections.lastOrNull != null")
+        fun reportCollectionsLastOrNullNotEqualToNull() {
             val code = "val x = listOf(1, 2, 3).lastOrNull { it == 4 } != null"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual[0].message).isEqualTo("Use 'any' instead of 'lastOrNull'")
         }
 
-        it("Does not report collections.find") {
+        @Test
+        @DisplayName("Does not report collections.find")
+        fun noReportCollectionsFind() {
             val code = "val x = listOf(1, 2, 3).find { it == 4 }"
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
     }
-})
+}
