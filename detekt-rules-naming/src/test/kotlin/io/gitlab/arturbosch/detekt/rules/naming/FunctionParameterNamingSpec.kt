@@ -3,17 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
-object FunctionParameterNamingSpec : Spek({
+class FunctionParameterNamingSpec {
 
-    describe("parameters in a function of a class") {
+    @Nested
+    inner class `parameters in a function of a class` {
 
-        it("should detect no violations") {
+        @Test
+        fun `should detect no violations`() {
             val code = """
                 class C {
                     fun someStuff(param: String) {}
@@ -22,7 +24,8 @@ object FunctionParameterNamingSpec : Spek({
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should not detect violations in overridden function by default") {
+        @Test
+        fun `should not detect violations in overridden function by default`() {
             val code = """
                 class C : I {
                     override fun someStuff(`object`: String) {}
@@ -32,7 +35,8 @@ object FunctionParameterNamingSpec : Spek({
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should detect violations in overridden function if ignoreOverridden is false") {
+        @Test
+        fun `should detect violations in overridden function if ignoreOverridden is false`() {
             val code = """
                 class C : I {
                     override fun someStuff(`object`: String) {}
@@ -43,7 +47,8 @@ object FunctionParameterNamingSpec : Spek({
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
-        it("should find some violations") {
+        @Test
+        fun `should find some violations`() {
             val code = """
                 class C {
                     fun someStuff(PARAM: String) {}
@@ -53,11 +58,13 @@ object FunctionParameterNamingSpec : Spek({
         }
     }
 
-    describe("parameters in a function of an excluded class") {
+    @Nested
+    inner class `parameters in a function of an excluded class` {
 
-        val config by memoized { TestConfig(mapOf(EXCLUDE_CLASS_PATTERN to "Excluded")) }
+        val config = TestConfig(mapOf(EXCLUDE_CLASS_PATTERN to "Excluded"))
 
-        it("should not detect function parameter") {
+        @Test
+        fun `should not detect function parameter`() {
             val code = """
                 class Excluded {
                     fun f(PARAM: Int) {}
@@ -66,9 +73,10 @@ object FunctionParameterNamingSpec : Spek({
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
         }
 
-        it("should not detect constructor parameter") {
+        @Test
+        fun `should not detect constructor parameter`() {
             val code = "class Excluded(val PARAM: Int) {}"
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
         }
     }
-})
+}

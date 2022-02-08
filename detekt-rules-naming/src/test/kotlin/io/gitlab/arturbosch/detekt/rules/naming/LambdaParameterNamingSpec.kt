@@ -2,13 +2,15 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object LambdaParameterNamingSpec : Spek({
+class LambdaParameterNamingSpec {
 
-    describe("lambda parameters") {
-        it("Reports no supported parameter names") {
+    @Nested
+    inner class `lambda parameters` {
+        @Test
+        fun `Reports no supported parameter names`() {
             val code = """
                 val a: (String) -> Unit = { HELLO_THERE -> Unit }
             """
@@ -17,7 +19,8 @@ object LambdaParameterNamingSpec : Spek({
                 .hasTextLocations("HELLO_THERE")
         }
 
-        it("Reports no supported parameter names when there are multiple") {
+        @Test
+        fun `Reports no supported parameter names when there are multiple`() {
             val code = """
                 val a: (String, Int) -> Unit = { HI, HELLO_THERE -> Unit }
             """
@@ -26,7 +29,8 @@ object LambdaParameterNamingSpec : Spek({
                 .hasTextLocations("HI", "HELLO_THERE")
         }
 
-        it("Doesn't report a valid parameter") {
+        @Test
+        fun `Doesn't report a valid parameter`() {
             val code = """
                 val a: (String) -> Unit = { helloThere -> Unit }
             """
@@ -34,7 +38,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report a valid parameter when define type") {
+        @Test
+        fun `Doesn't report a valid parameter when define type`() {
             val code = """
                 val a = { helloThere: String -> Unit }
             """
@@ -42,7 +47,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report _") {
+        @Test
+        fun `Doesn't report _`() {
             val code = """
                 val a: (String) -> Unit = { _ -> Unit }
             """
@@ -50,7 +56,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report by using implicit name") {
+        @Test
+        fun `Doesn't report by using implicit name`() {
             val code = """
                 val a: (String) -> Unit = { Unit }
             """
@@ -58,7 +65,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report if there aren't parameters") {
+        @Test
+        fun `Doesn't report if there aren't parameters`() {
             val code = """
                 val a: () -> Unit = { Unit }
             """
@@ -66,7 +74,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Reports no supported destructuring parameter names") {
+        @Test
+        fun `Reports no supported destructuring parameter names`() {
             val code = """
                 data class Bar(val a: String)
                 val a: (Bar) -> Unit = { (HELLO_THERE) -> Unit }
@@ -76,7 +85,8 @@ object LambdaParameterNamingSpec : Spek({
                 .hasTextLocations("HELLO_THERE")
         }
 
-        it("Reports no supported destructuring parameter names when there are multiple") {
+        @Test
+        fun `Reports no supported destructuring parameter names when there are multiple`() {
             val code = """
                 data class Bar(val a: String, val b: String)
                 val a: (Bar) -> Unit = { (HI, HELLO_THERE) -> Unit }
@@ -86,7 +96,8 @@ object LambdaParameterNamingSpec : Spek({
                 .hasTextLocations("HI", "HELLO_THERE")
         }
 
-        it("Doesn't report valid destructuring parameters") {
+        @Test
+        fun `Doesn't report valid destructuring parameters`() {
             val code = """
                 data class Bar(val a: String, val b: String)
                 val a: (Bar) -> Unit = { (a, b) -> Unit }
@@ -95,7 +106,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report valid destructuring parameters when define type") {
+        @Test
+        fun `Doesn't report valid destructuring parameters when define type`() {
             val code = """
                 data class Bar(val a: String, val b: String)
                 val a: (Bar) -> Unit = { (a: String, b) -> Unit }
@@ -104,7 +116,8 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
 
-        it("Doesn't report valid destructuring parameters using _") {
+        @Test
+        fun `Doesn't report valid destructuring parameters using _`() {
             val code = """
                 data class Bar(val a: String, val b: String)
                 val a: (Bar) -> Unit = { (_, b) -> Unit }
@@ -113,4 +126,4 @@ object LambdaParameterNamingSpec : Spek({
                 .isEmpty()
         }
     }
-})
+}

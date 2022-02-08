@@ -4,14 +4,16 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class FunctionNamingSpec : Spek({
+class FunctionNamingSpec {
 
-    describe("FunctionNaming rule") {
+    @Nested
+    inner class `FunctionNaming rule` {
 
-        it("allows FunctionName as alias for suppressing") {
+        @Test
+        fun `allows FunctionName as alias for suppressing`() {
             val code = """
             @Suppress("FunctionName")
             fun MY_FUN() {}
@@ -19,7 +21,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("allows anonymous functions") {
+        @Test
+        fun `allows anonymous functions`() {
             val code = """
             val f: (Int) -> Int = fun(i: Int): Int {
                 return i + i
@@ -28,7 +31,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("ignores functions in classes matching excludeClassPattern") {
+        @Test
+        fun `ignores functions in classes matching excludeClassPattern`() {
             val code = """
             class WhateverTest {
                 fun SHOULD_NOT_BE_FLAGGED() {}
@@ -38,7 +42,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
-        it("flags functions inside functions") {
+        @Test
+        fun `flags functions inside functions`() {
             val code = """
             class C : I {
                 override fun shouldNotBeFlagged() {
@@ -50,7 +55,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
-        it("ignores overridden functions by default") {
+        @Test
+        fun `ignores overridden functions by default`() {
             val code = """
             class C : I {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
@@ -60,7 +66,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when the function name is identical to the type of the result") {
+        @Test
+        fun `does not report when the function name is identical to the type of the result`() {
             val code = """
             interface Foo
             private class FooImpl : Foo
@@ -71,7 +78,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
-        it("flags functions with bad names inside overridden functions by default") {
+        @Test
+        fun `flags functions with bad names inside overridden functions by default`() {
             val code = """
             class C : I {
                 override fun SHOULD_BE_FLAGGED() {
@@ -83,7 +91,8 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
-        it("doesn't ignore overridden functions if ignoreOverridden is false") {
+        @Test
+        fun `doesn't ignore overridden functions if ignoreOverridden is false`() {
             val code = """
             class C : I {
                 override fun SHOULD_BE_FLAGGED() {}
@@ -97,11 +106,12 @@ class FunctionNamingSpec : Spek({
             )
         }
 
-        it("doesn't allow functions with backtick") {
+        @Test
+        fun `doesn't allow functions with backtick`() {
             val code = """
                 fun `7his is a function name _`() = Unit
             """
             assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(SourceLocation(1, 5))
         }
     }
-})
+}

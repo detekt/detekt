@@ -2,14 +2,16 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ClassNamingSpec : Spek({
+class ClassNamingSpec {
 
-    describe("different naming conventions inside classes") {
+    @Nested
+    inner class `different naming conventions inside classes` {
 
-        it("should detect no violations class with numbers") {
+        @Test
+        fun `should detect no violations class with numbers`() {
             val code = """
                 class MyClassWithNumbers5
             """
@@ -17,7 +19,8 @@ class ClassNamingSpec : Spek({
             assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should detect no violations") {
+        @Test
+        fun `should detect no violations`() {
             val code = """
                 class NamingConventions {
                 }
@@ -26,7 +29,8 @@ class ClassNamingSpec : Spek({
             assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should detect no violations with class using backticks") {
+        @Test
+        fun `should detect no violations with class using backticks`() {
             val code = """
                 class `NamingConventions`
             """
@@ -34,7 +38,8 @@ class ClassNamingSpec : Spek({
             assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should detect because it have a _") {
+        @Test
+        fun `should detect because it have a _`() {
             val code = """
                 class _NamingConventions
             """
@@ -44,7 +49,8 @@ class ClassNamingSpec : Spek({
                 .hasTextLocations(6 to 24)
         }
 
-        it("should detect because it have starts with lowercase") {
+        @Test
+        fun `should detect because it have starts with lowercase`() {
             val code = """
                 class namingConventions {}
             """
@@ -54,7 +60,8 @@ class ClassNamingSpec : Spek({
                 .hasTextLocations(6 to 23)
         }
 
-        it("should ignore the issue by alias suppression") {
+        @Test
+        fun `should ignore the issue by alias suppression`() {
             val code = """
                 @Suppress("ClassName")
                 class namingConventions {}
@@ -62,4 +69,4 @@ class ClassNamingSpec : Spek({
             assertThat(ClassNaming().compileAndLint(code)).isEmpty()
         }
     }
-})
+}

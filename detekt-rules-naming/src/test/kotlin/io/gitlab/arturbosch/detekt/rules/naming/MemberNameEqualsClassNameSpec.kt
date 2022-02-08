@@ -1,36 +1,37 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
-class MemberNameEqualsClassNameSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
+    val subject = MemberNameEqualsClassName(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { MemberNameEqualsClassName(Config.empty) }
+    @Nested
+    inner class `MemberNameEqualsClassName rule` {
 
-    describe("MemberNameEqualsClassName rule") {
-
-        val noIgnoreOverridden by memoized {
+        val noIgnoreOverridden =
             TestConfig(
                 mapOf(
                     IGNORE_OVERRIDDEN to "false"
                 )
             )
-        }
 
-        context("some classes with methods which don't have the same name") {
+        @Nested
+        inner class `some classes with methods which don't have the same name` {
 
-            it("does not report a nested function with the same name as the class") {
+            @Test
+            fun `does not report a nested function with the same name as the class`() {
                 val code = """
                     class MethodNameNotEqualsClassName {
                         fun nestedFunction() {
@@ -41,7 +42,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report a function with same name in nested class") {
+            @Test
+            fun `does not report a function with same name in nested class`() {
                 val code = """
                     class MethodNameNotEqualsClassName {
                         class NestedNameEqualsTopClassName {
@@ -52,7 +54,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report a function with the same name as a companion object") {
+            @Test
+            fun `does not report a function with the same name as a companion object`() {
                 val code = """
                     class StaticMethodNameEqualsObjectName {
                         companion object A {
@@ -64,9 +67,11 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
         }
 
-        context("some classes with members which have the same name") {
+        @Nested
+        inner class `some classes with members which have the same name` {
 
-            it("reports a method which is named after the class") {
+            @Test
+            fun `reports a method which is named after the class`() {
                 val code = """
                     class MethodNameEqualsClassName {
                         fun methodNameEqualsClassName() {}
@@ -75,7 +80,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a method which is named after the object") {
+            @Test
+            fun `reports a method which is named after the object`() {
                 val code = """
                     object MethodNameEqualsObjectName {
                         fun MethodNameEqualsObjectName() {}
@@ -84,7 +90,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a property which is named after the class") {
+            @Test
+            fun `reports a property which is named after the class`() {
                 val code = """
                     class PropertyNameEqualsClassName {
                         val propertyNameEqualsClassName = 0
@@ -93,7 +100,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a property which is named after the object") {
+            @Test
+            fun `reports a property which is named after the object`() {
                 val code = """
                     object PropertyNameEqualsObjectName {
                         val propertyNameEqualsObjectName = 0
@@ -102,7 +110,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a companion object function which is named after the class") {
+            @Test
+            fun `reports a companion object function which is named after the class`() {
                 val code = """
                     class StaticMethodNameEqualsClassName {
                         companion object {
@@ -113,7 +122,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a method which is named after the class even when it's inside another one") {
+            @Test
+            fun `reports a method which is named after the class even when it's inside another one`() {
                 val code = """
                     class MethodNameContainer {
                         class MethodNameEqualsNestedClassName {
@@ -124,7 +134,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("doesn't report overridden methods which are named after the class") {
+            @Test
+            fun `doesn't report overridden methods which are named after the class`() {
                 val code = """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override fun AbstractMethodNameEqualsClassName() {}
@@ -136,7 +147,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
             }
 
-            it("doesn't report an methods which are named after the interface") {
+            @Test
+            fun `doesn't report an methods which are named after the interface`() {
                 val code = """
                     interface MethodNameEqualsInterfaceName {
                         fun MethodNameEqualsInterfaceName() {}
@@ -145,7 +157,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
             }
 
-            it("reports overridden methods which are named after the class if they are not ignored") {
+            @Test
+            fun `reports overridden methods which are named after the class if they are not ignored`() {
                 val code = """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override fun AbstractMethodNameEqualsClassName() {}
@@ -157,7 +170,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
             }
 
-            it("doesn't report overridden properties which are named after the class") {
+            @Test
+            fun `doesn't report overridden properties which are named after the class`() {
                 val code = """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override val AbstractMethodNameEqualsClassName = ""
@@ -169,7 +183,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
             }
 
-            it("reports overridden properties which are named after the class if they are not ignored") {
+            @Test
+            fun `reports overridden properties which are named after the class if they are not ignored`() {
                 val code = """
                     class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
                         override val AbstractMethodNameEqualsClassName = ""
@@ -182,9 +197,11 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
         }
 
-        context("some companion object functions named after the class (factory functions)") {
+        @Nested
+        inner class `some companion object functions named after the class (factory functions)` {
 
-            it("reports a function which has no return type") {
+            @Test
+            fun `reports a function which has no return type`() {
                 val code = """
                     class WrongFactoryClass1 {
 
@@ -196,7 +213,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a function which has the wrong return type") {
+            @Test
+            fun `reports a function which has the wrong return type`() {
                 val code = """
                     class WrongFactoryClass2 {
 
@@ -210,7 +228,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports a body-less function which has the wrong return type") {
+            @Test
+            fun `reports a body-less function which has the wrong return type`() {
                 val code = """
                     class WrongFactoryClass3 {
                     
@@ -222,7 +241,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("doesn't report a factory function") {
+            @Test
+            fun `doesn't report a factory function`() {
                 val code = """
                     open class A {
                         companion object {
@@ -239,7 +259,8 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("doesn't report a generic factory function") {
+            @Test
+            fun `doesn't report a generic factory function`() {
                 val code = """
                     data class GenericClass<T>(val wrapped: T) {
                         companion object {
@@ -255,7 +276,9 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            context("doesn't report a body-less factory function") {
+            @Nested
+            @DisplayName("doesn't report a body-less factory function")
+            inner class IgnoreBodylessFactoryFunction {
                 val code = """
                     open class A {
                       companion object {
@@ -268,14 +291,16 @@ class MemberNameEqualsClassNameSpec : Spek({
                     class C: A()
                 """
 
-                it("with type solving") {
+                @Test
+                fun `with type solving`() {
                     assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
                 }
 
-                it("without type solving") {
+                @Test
+                fun `without type solving`() {
                     assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
                 }
             }
         }
     }
-})
+}

@@ -3,20 +3,22 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val CONSTANT_PATTERN = "constantPattern"
 private const val PROPERTY_PATTERN = "propertyPattern"
 private const val PRIVATE_PROPERTY_PATTERN = "privatePropertyPattern"
 
-class ObjectPropertyNamingSpec : Spek({
+class ObjectPropertyNamingSpec {
 
-    describe("constants in object declarations") {
+    @Nested
+    inner class `constants in object declarations` {
 
-        val subject by memoized { ObjectPropertyNaming() }
+        val subject = ObjectPropertyNaming()
 
-        it("should not detect public constants complying to the naming rules") {
+        @Test
+        fun `should not detect public constants complying to the naming rules`() {
             val code = """
                 object O {
                     ${PublicConst.negative}
@@ -25,7 +27,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect public constants not complying to the naming rules") {
+        @Test
+        fun `should detect public constants not complying to the naming rules`() {
             val code = """
                 object O {
                     ${PublicConst.positive}
@@ -34,7 +37,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should not detect private constants complying to the naming rules") {
+        @Test
+        fun `should not detect private constants complying to the naming rules`() {
             val code = """
                 object O {
                     ${PrivateConst.negative}
@@ -43,7 +47,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect private constants not complying to the naming rules") {
+        @Test
+        fun `should detect private constants not complying to the naming rules`() {
             val code = """
                 object O {
                     ${PrivateConst.positive}
@@ -52,7 +57,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should report constants not complying to the naming rules at the right position") {
+        @Test
+        fun `should report constants not complying to the naming rules at the right position`() {
             val code = """
                 object O {
                     ${PublicConst.positive}
@@ -62,11 +68,13 @@ class ObjectPropertyNamingSpec : Spek({
         }
     }
 
-    describe("constants in companion object") {
+    @Nested
+    inner class `constants in companion object` {
 
-        val subject by memoized { ObjectPropertyNaming() }
+        val subject = ObjectPropertyNaming()
 
-        it("should not detect public constants complying to the naming rules") {
+        @Test
+        fun `should not detect public constants complying to the naming rules`() {
             val code = """
                 class C {
                     companion object {
@@ -77,7 +85,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect public constants not complying to the naming rules") {
+        @Test
+        fun `should detect public constants not complying to the naming rules`() {
             val code = """
                 class C {
                     companion object {
@@ -88,7 +97,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should not detect private constants complying to the naming rules") {
+        @Test
+        fun `should not detect private constants complying to the naming rules`() {
             val code = """
                 class C {
                     companion object {
@@ -99,7 +109,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect private constants not complying to the naming rules") {
+        @Test
+        fun `should detect private constants not complying to the naming rules`() {
             val code = """
                 class C {
                     companion object {
@@ -110,7 +121,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should report constants not complying to the naming rules at the right position") {
+        @Test
+        fun `should report constants not complying to the naming rules at the right position`() {
             val code = """
                 class C {
                     companion object {
@@ -122,11 +134,13 @@ class ObjectPropertyNamingSpec : Spek({
         }
     }
 
-    describe("variables in objects") {
+    @Nested
+    inner class `variables in objects` {
 
-        val subject by memoized { ObjectPropertyNaming() }
+        val subject = ObjectPropertyNaming()
 
-        it("should not detect public variables complying to the naming rules") {
+        @Test
+        fun `should not detect public variables complying to the naming rules`() {
             val code = """
                 object O {
                     ${PublicVal.negative}
@@ -135,7 +149,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect public variables not complying to the naming rules") {
+        @Test
+        fun `should detect public variables not complying to the naming rules`() {
             val code = """
                 object O {
                     ${PublicVal.positive}
@@ -144,7 +159,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should not detect private variables complying to the naming rules") {
+        @Test
+        fun `should not detect private variables complying to the naming rules`() {
             val code = """
                 object O {
                     ${PrivateVal.negative}
@@ -153,7 +169,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should detect private variables not complying to the naming rules") {
+        @Test
+        fun `should detect private variables not complying to the naming rules`() {
             val code = """
                 object O {
                     private val __NAME = "Artur"
@@ -163,19 +180,20 @@ class ObjectPropertyNamingSpec : Spek({
         }
     }
 
-    describe("variables and constants in objects with custom config") {
+    @Nested
+    inner class `variables and constants in objects with custom config` {
 
-        val config by memoized {
+        val config =
             TestConfig(
                 mapOf(
                     CONSTANT_PATTERN to "_[A-Za-z]*",
                     PRIVATE_PROPERTY_PATTERN to ".*"
                 )
             )
-        }
-        val subject by memoized { ObjectPropertyNaming(config) }
+        val subject = ObjectPropertyNaming(config)
 
-        it("should not detect constants in object with underscores") {
+        @Test
+        fun `should not detect constants in object with underscores`() {
             val code = """
                 object O {
                     const val _NAME = "Artur"
@@ -185,7 +203,8 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should not detect private properties in object") {
+        @Test
+        fun `should not detect private properties in object`() {
             val code = """
                 object O {
                     private val __NAME = "Artur"
@@ -196,8 +215,10 @@ class ObjectPropertyNamingSpec : Spek({
         }
     }
 
-    describe("local properties") {
-        it("should not detect local properties") {
+    @Nested
+    inner class `local properties` {
+        @Test
+        fun `should not detect local properties`() {
             val config = TestConfig(
                 mapOf(
                     PROPERTY_PATTERN to "valid"
@@ -216,7 +237,7 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
