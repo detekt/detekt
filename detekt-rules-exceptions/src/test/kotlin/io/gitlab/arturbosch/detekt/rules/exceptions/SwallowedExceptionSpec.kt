@@ -146,7 +146,7 @@ class SwallowedExceptionSpec {
         }
 
         @Nested
-        inner class `listOf(IllegalArgumentException)` {
+        inner class `when given listOf(IllegalArgumentException)` {
             val ignoredExceptionValue = listOf("IllegalArgumentException")
 
             @Nested
@@ -184,7 +184,7 @@ class SwallowedExceptionSpec {
         }
 
         @Nested
-        inner class IllegalArgumentException {
+        inner class `when given IllegalArgumentException` {
             val ignoredExceptionValue = "IllegalArgumentException"
 
             @Nested
