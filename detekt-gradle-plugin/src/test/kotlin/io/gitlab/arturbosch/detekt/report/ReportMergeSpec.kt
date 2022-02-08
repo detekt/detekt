@@ -196,15 +196,3 @@ class ReportMergeSpec {
         }
     }
 }
-
-internal fun getJdkVersion(): Int {
-    val version = System.getProperty("java.version")
-    val majorVersion = if (version.startsWith("1.")) {
-        version.substring(2, 3)
-    } else if (!version.contains('.') && version.contains('-')) {
-        version.substringBefore('-') // early access Java.net versions
-    } else {
-        version.substringBefore('.')
-    }
-    return Integer.parseInt(majorVersion)
-}
