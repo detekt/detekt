@@ -2,17 +2,20 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class PrintStackTraceSpec : Spek({
-    val subject by memoized { PrintStackTrace() }
+class PrintStackTraceSpec {
+    val subject = PrintStackTrace()
 
-    describe("PrintStackTrace") {
+    @Nested
+    inner class `print stack trace rule` {
 
-        context("catch clauses with printStacktrace methods") {
+        @Nested
+        inner class `catch clauses with printStacktrace methods` {
 
-            it("prints a stacktrace") {
+            @Test
+            fun `prints a stacktrace`() {
                 val code = """
                 fun x() {
                     try {
@@ -23,7 +26,8 @@ class PrintStackTraceSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does not print a stacktrace") {
+            @Test
+            fun `does not print a stacktrace`() {
                 val code = """
                 fun x() {
                     try {
@@ -39,9 +43,11 @@ class PrintStackTraceSpec : Spek({
             }
         }
 
-        context("a stacktrace printed by a thread") {
+        @Nested
+        inner class `a stacktrace printed by a thread` {
 
-            it("prints one") {
+            @Test
+            fun `prints one`() {
                 val code = """
                 fun x() {
                     Thread.dumpStack()
@@ -53,4 +59,4 @@ class PrintStackTraceSpec : Spek({
             }
         }
     }
-})
+}

@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class RethrowCaughtExceptionSpec : Spek({
-    val subject by memoized { RethrowCaughtException() }
+class RethrowCaughtExceptionSpec {
+    val subject = RethrowCaughtException()
 
-    describe("RethrowCaughtException rule") {
+    @Nested
+    inner class `RethrowCaughtException rule` {
 
-        it("reports when the same exception is rethrown") {
+        @Test
+        fun `reports when the same exception is rethrown`() {
             val code = """
                 fun f() {
                     try {
@@ -22,7 +24,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report when the other exception is rethrown with same name") {
+        @Test
+        fun `does not report when the other exception is rethrown with same name`() {
             val code = """
                 class A {
                     private lateinit var e: Exception
@@ -37,7 +40,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports when the same exception succeeded by dead code is rethrown") {
+        @Test
+        fun `reports when the same exception succeeded by dead code is rethrown`() {
             val code = """
                 fun f() {
                     try {
@@ -50,7 +54,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports when the same nested exception is rethrown") {
+        @Test
+        fun `reports when the same nested exception is rethrown`() {
             val code = """
                 fun f() {
                     try {
@@ -65,7 +70,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report a wrapped exception") {
+        @Test
+        fun `does not report a wrapped exception`() {
             val code = """
                 fun f() {
                     try {
@@ -77,7 +83,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report wrapped exceptions") {
+        @Test
+        fun `does not report wrapped exceptions`() {
             val code = """
                 fun f() {
                     try {
@@ -91,7 +98,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report logged exceptions") {
+        @Test
+        fun `does not report logged exceptions`() {
             val code = """
                 fun f() {
                     try {
@@ -106,7 +114,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when taking specific actions before throwing the exception") {
+        @Test
+        fun `does not report when taking specific actions before throwing the exception`() {
             val code = """
                 fun f() {
                     try {
@@ -124,7 +133,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when exception rethrown only in first catch") {
+        @Test
+        fun `does not report when exception rethrown only in first catch`() {
             val code = """
                 fun f() {
                     try {
@@ -138,7 +148,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when some work is done in last catch") {
+        @Test
+        fun `does not report when some work is done in last catch`() {
             val code = """
                 fun f() {
                     try {
@@ -153,7 +164,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when there is no catch clauses") {
+        @Test
+        fun `does not report when there is no catch clauses`() {
             val code = """
                 fun f() {
                     try {
@@ -164,7 +176,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports when exception rethrown in last catch") {
+        @Test
+        fun `reports when exception rethrown in last catch`() {
             val code = """
                 fun f() {
                     try {
@@ -178,7 +191,8 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports 2 violations for each catch") {
+        @Test
+        fun `reports 2 violations for each catch`() {
             val code = """
                 fun f() {
                     try {
@@ -197,4 +211,4 @@ class RethrowCaughtExceptionSpec : Spek({
             assertThat(result[1].startPosition.line == 7).isTrue
         }
     }
-})
+}

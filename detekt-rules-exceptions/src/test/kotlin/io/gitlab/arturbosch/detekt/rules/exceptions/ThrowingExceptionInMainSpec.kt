@@ -3,15 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ThrowingExceptionInMainSpec : Spek({
-    val subject by memoized { ThrowingExceptionInMain() }
+class ThrowingExceptionInMainSpec {
+    val subject = ThrowingExceptionInMain()
 
-    describe("ThrowingExceptionInMain rule") {
+    @Nested
+    inner class `ThrowingExceptionInMain rule` {
 
-        it("reports a runnable main function which throws an exception") {
+        @Test
+        fun `reports a runnable main function which throws an exception`() {
             val code = """
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
                 fun main(vararg args: String) { throw IllegalArgumentException() }
@@ -20,7 +22,8 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
-        it("reports runnable main functions with @JvmStatic annotation which throw an exception") {
+        @Test
+        fun `reports runnable main functions with @JvmStatic annotation which throw an exception`() {
             val code = """
                 class A {
                     companion object {
@@ -44,7 +47,8 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
-        it("does not report top level main functions with a wrong signature") {
+        @Test
+        fun `does not report top level main functions with a wrong signature`() {
             val code = """
                 private fun main(args: Array<String>) { throw IllegalArgumentException() }
                 private fun main() { throw IllegalArgumentException() }
@@ -54,7 +58,8 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report top level main functions which throw no exception") {
+        @Test
+        fun `does not report top level main functions which throw no exception`() {
             val code = """
                 fun main(args: Array<String>) { }
                 fun main() { }
@@ -63,7 +68,8 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report top level main functions with expression body which throw no exception") {
+        @Test
+        fun `does not report top level main functions with expression body which throw no exception`() {
             val code = """
                 fun main(args: Array<String>) = ""
                 fun main() = Unit
@@ -71,7 +77,8 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report main functions with no @JvmStatic annotation inside a class") {
+        @Test
+        fun `does not report main functions with no @JvmStatic annotation inside a class`() {
             val code = """
             class A {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
@@ -84,4 +91,4 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

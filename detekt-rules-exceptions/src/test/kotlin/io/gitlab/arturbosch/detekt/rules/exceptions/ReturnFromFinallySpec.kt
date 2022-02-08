@@ -1,22 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ReturnFromFinallySpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
-    val subject by memoized { ReturnFromFinally() }
-    val env: KotlinCoreEnvironment by memoized()
+    val subject = ReturnFromFinally()
 
-    describe("ReturnFromFinally rule") {
+    @Nested
+    inner class `ReturnFromFinally rule` {
 
-        context("a finally block with a return statement") {
+        @Nested
+        inner class `a finally block with a return statement` {
             val code = """
                 fun x() {
                     try {
@@ -26,13 +27,15 @@ class ReturnFromFinallySpec : Spek({
                 }
             """
 
-            it("should report") {
+            @Test
+            fun `should report`() {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
 
-        context("a finally block with no return statement") {
+        @Nested
+        inner class `a finally block with no return statement` {
             val code = """
                 fun x() {
                     try {
@@ -41,13 +44,15 @@ class ReturnFromFinallySpec : Spek({
                 }
             """
 
-            it("should not report") {
+            @Test
+            fun `should not report`() {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
 
-        context("a finally block with a nested return statement") {
+        @Nested
+        inner class `a finally block with a nested return statement` {
             val code = """
                 fun x() {
                     try {
@@ -59,13 +64,15 @@ class ReturnFromFinallySpec : Spek({
                 }
             """
 
-            it("should report") {
+            @Test
+            fun `should report`() {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
 
-        context("a finally block with a return in an inner function") {
+        @Nested
+        inner class `a finally block with a return in an inner function` {
             val code = """
                 fun x() {
                     try {
@@ -78,13 +85,15 @@ class ReturnFromFinallySpec : Spek({
                 }
             """
 
-            it("should not report") {
+            @Test
+            fun `should not report`() {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
 
-        context("a finally block with a return as labelled expression") {
+        @Nested
+        inner class `a finally block with a return as labelled expression` {
             val code = """
                 fun x() {
                     label@{ 
@@ -95,20 +104,25 @@ class ReturnFromFinallySpec : Spek({
                     }
                 }
             """
-            it("should report when ignoreLabeled is false") {
+
+            @Test
+            fun `should report when ignoreLabeled is false`() {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
-            it("should not report when ignoreLabeled is true") {
+            @Test
+            fun `should not report when ignoreLabeled is true`() {
                 val config = TestConfig(mapOf("ignoreLabeled" to "true"))
                 val findings = ReturnFromFinally(config).compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
 
-        context("a finally block as expression for property") {
-            it("should report") {
+        @Nested
+        inner class `a finally block as expression for property` {
+            @Test
+            fun `should report`() {
                 val code = """
                     val expression = try {
                         "try"
@@ -125,8 +139,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("a finally block as expression for method") {
-            it("should report") {
+        @Nested
+        inner class `a finally block as expression for method` {
+            @Test
+            fun `should report`() {
                 val code = """
                     fun expression() = try {
                         "try"
@@ -143,8 +159,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when a finally block called method that return value") {
-            it("should report") {
+        @Nested
+        inner class `when a finally block called method that return value` {
+            @Test
+            fun `should report`() {
                 val code = """
                     fun expression() = try {
                         "try"
@@ -163,8 +181,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when finally block absents in expression for property") {
-            it("shouldn't report") {
+        @Nested
+        inner class `when finally block absents in expression for property` {
+            @Test
+            fun `shouldn't report`() {
                 val code = """
                     val expression = try {
                         "try"
@@ -179,9 +199,11 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when finally block absents in expression for method") {
+        @Nested
+        inner class `when finally block absents in expression for method` {
 
-            it("shouldn't report") {
+            @Test
+            fun `shouldn't report`() {
                 val code = """
                     fun expression() = try {
                         "try"
@@ -196,8 +218,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when try catch finally block is independent") {
-            it("shouldn't report") {
+        @Nested
+        inner class `when try catch finally block is independent` {
+            @Test
+            fun `shouldn't report`() {
                 val code = """
                    fun expression() {
                        try {
@@ -216,8 +240,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when finally block doesn't contain return value") {
-            it("shouldn't report") {
+        @Nested
+        inner class `when finally block doesn't contain return value` {
+            @Test
+            fun `shouldn't report`() {
                 val code = """
                     val expression = try {
                         "try"
@@ -234,8 +260,10 @@ class ReturnFromFinallySpec : Spek({
             }
         }
 
-        context("when return value in finally block is property") {
-            it("should report") {
+        @Nested
+        inner class `when return value in finally block is property` {
+            @Test
+            fun `should report`() {
                 val code = """
                     val property: String = "property"
                     val expression = try {
@@ -254,4 +282,4 @@ class ReturnFromFinallySpec : Spek({
             }
         }
     }
-})
+}

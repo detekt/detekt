@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class TooGenericExceptionSpec : Spek({
+class TooGenericExceptionSpec {
 
-    describe("TooGenericException rule") {
+    @Nested
+    inner class `TooGenericException rule` {
 
-        it("should not report any as all catch exception rules are deactivated") {
+        @Test
+        fun `should not report any as all catch exception rules are deactivated`() {
             val config = yamlConfig("deactivated-exceptions.yml")
             val ruleSet = ExceptionsProvider().instance(config)
             val file = compileContentForTest(tooGenericExceptionCode)
@@ -21,7 +23,7 @@ class TooGenericExceptionSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}
 
 const val tooGenericExceptionCode = """
     fun main() {

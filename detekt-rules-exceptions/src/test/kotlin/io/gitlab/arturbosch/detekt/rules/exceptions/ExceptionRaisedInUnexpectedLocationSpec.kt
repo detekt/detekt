@@ -5,25 +5,29 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ExceptionRaisedInUnexpectedLocationSpec : Spek({
-    val subject by memoized { ExceptionRaisedInUnexpectedLocation() }
+class ExceptionRaisedInUnexpectedLocationSpec {
+    val subject = ExceptionRaisedInUnexpectedLocation()
 
-    describe("ExceptionRaisedInUnexpectedLocation rule") {
+    @Nested
+    inner class `ExceptionRaisedInUnexpectedLocation rule` {
 
-        it("reports methods raising an unexpected exception") {
+        @Test
+        fun `reports methods raising an unexpected exception`() {
             val path = resourceAsPath("ExceptionRaisedInMethodsPositive.kt")
             assertThat(subject.lint(path)).hasSize(5)
         }
 
-        it("does not report methods raising no exception") {
+        @Test
+        fun `does not report methods raising no exception`() {
             val path = resourceAsPath("ExceptionRaisedInMethodsNegative.kt")
             assertThat(subject.lint(path)).isEmpty()
         }
 
-        it("reports the configured method") {
+        @Test
+        fun `reports the configured method`() {
             val config = TestConfig(mapOf("methodNames" to listOf("toDo", "todo2")))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
                 """
@@ -34,7 +38,8 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("reports the configured method with String") {
+        @Test
+        fun `reports the configured method with String`() {
             val config = TestConfig(mapOf("methodNames" to "toDo,todo2"))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
                 """
@@ -45,4 +50,4 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
             assertThat(findings).hasSize(1)
         }
     }
-})
+}
