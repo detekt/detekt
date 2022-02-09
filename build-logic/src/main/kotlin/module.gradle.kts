@@ -21,6 +21,10 @@ val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().na
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
+tasks.withType<PublishToMavenRepository>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13468")
+}
+
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     systemProperty("spek2.jvm.cg.scan.concurrency", 1) // use one thread for classpath scanning

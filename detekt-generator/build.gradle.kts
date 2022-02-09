@@ -67,6 +67,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 }
 
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
+    notCompatibleWithConfigurationCache("cannot serialize object of type java.io.ByteArrayOutputStream")
     dependsOn(generateDocumentation)
     description = "Verifies that the default-detekt-config.yml is up-to-date"
     val configDiff = ByteArrayOutputStream()

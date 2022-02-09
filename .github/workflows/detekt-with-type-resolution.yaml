@@ -25,7 +25,7 @@ jobs:
       - name: Run detekt-cli with argsfile
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: --configuration-cache :detekt-cli:runWithArgsFile
+          arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v1
@@ -49,4 +49,4 @@ jobs:
     - name: Run analysis
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: --configuration-cache detektMain detektTest
+        arguments: detektMain detektTest

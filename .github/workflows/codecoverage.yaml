@@ -25,7 +25,7 @@ jobs:
       - name: Generate Coverage Report
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: --configuration-cache jacocoMergedReport
+          arguments: jacocoMergedReport
 
       - name: Publish Coverage
         if: success()
