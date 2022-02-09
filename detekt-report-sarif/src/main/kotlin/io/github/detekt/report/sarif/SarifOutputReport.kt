@@ -53,7 +53,7 @@ class SarifOutputReport : OutputReport() {
                             downloadURI = "https://github.com/detekt/detekt/releases/download/v$version/detekt",
                             fullName = "detekt",
                             guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
-                            informationURI = "https://detekt.github.io/detekt",
+                            informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
                             rules = toReportingDescriptors(config),

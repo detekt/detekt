@@ -2,15 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class EndOfSentenceFormatSpec : Spek({
-    val subject by memoized { EndOfSentenceFormat() }
+class EndOfSentenceFormatSpec {
+    val subject = EndOfSentenceFormat()
 
-    describe("KDocStyle rule") {
+    @Nested
+    inner class `KDocStyle rule` {
 
-        it("reports invalid KDoc endings on classes") {
+        @Test
+        fun `reports invalid KDoc endings on classes`() {
             val code = """
             /** Some doc */
             class Test {
@@ -19,7 +21,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings on function with expression body") {
+        @Test
+        fun `reports invalid KDoc endings on function with expression body`() {
             val code = """
                 /** Some doc */
                 fun f(x: Int, y: Int, z: Int) = 
@@ -28,7 +31,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings on properties") {
+        @Test
+        fun `reports invalid KDoc endings on properties`() {
             val code = """
             class Test {
                 /** Some doc */
@@ -38,7 +42,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings on top-level functions") {
+        @Test
+        fun `reports invalid KDoc endings on top-level functions`() {
             val code = """
             /** Some doc */
             fun test() = 3
@@ -46,7 +51,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings on functions") {
+        @Test
+        fun `reports invalid KDoc endings on functions`() {
             val code = """
             class Test {
                 /** Some doc */
@@ -56,7 +62,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings") {
+        @Test
+        fun `reports invalid KDoc endings`() {
             val code = """
             class Test {
                 /** Some doc-- */
@@ -66,7 +73,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports invalid KDoc endings in block") {
+        @Test
+        fun `reports invalid KDoc endings in block`() {
             val code = """
             /**
              * Something off abc@@
@@ -77,7 +85,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not validate first sentence KDoc endings in a multi sentence comment") {
+        @Test
+        fun `does not validate first sentence KDoc endings in a multi sentence comment`() {
             val code = """
             /**
              * This sentence is correct.
@@ -90,7 +99,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc which doesn't contain any real sentence") {
+        @Test
+        fun `does not report KDoc which doesn't contain any real sentence`() {
             val code = """
             /**
              */
@@ -100,7 +110,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc which doesn't contain any real sentence but many tags") {
+        @Test
+        fun `does not report KDoc which doesn't contain any real sentence but many tags`() {
             val code = """
             /**
              * @configuration this - just an example (default: `150`)
@@ -113,7 +124,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc which doesn't contain any real sentence but html tags") {
+        @Test
+        fun `does not report KDoc which doesn't contain any real sentence but html tags`() {
             val code = """
             /**
              *
@@ -132,7 +144,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc ending with periods") {
+        @Test
+        fun `does not report KDoc ending with periods`() {
             val code = """
             /**
              * Something correct.
@@ -143,7 +156,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc ending with questionmarks") {
+        @Test
+        fun `does not report KDoc ending with questionmarks`() {
             val code = """
             /**
              * Something correct?
@@ -154,7 +168,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc ending with exclamation marks") {
+        @Test
+        fun `does not report KDoc ending with exclamation marks`() {
             val code = """
             /**
              * Something correct!
@@ -165,7 +180,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report KDoc ending with colon") {
+        @Test
+        fun `does not report KDoc ending with colon`() {
             val code = """
             /**
              * Something correct:
@@ -176,7 +192,8 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report URLs in comments") {
+        @Test
+        fun `does not report URLs in comments`() {
             val code = """
             /** http://www.google.com */
             class Test1 {
@@ -190,4 +207,4 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

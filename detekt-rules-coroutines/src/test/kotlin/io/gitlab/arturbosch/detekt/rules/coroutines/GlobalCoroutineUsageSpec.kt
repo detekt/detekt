@@ -3,15 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object GlobalCoroutineUsageSpec : Spek({
-    val subject by memoized { GlobalCoroutineUsage(Config.empty) }
+class GlobalCoroutineUsageSpec {
+    val subject = GlobalCoroutineUsage(Config.empty)
 
-    describe("GlobalCoroutineUsage rule") {
+    @Nested
+    inner class `GlobalCoroutineUsage rule` {
 
-        it("should report GlobalScope.launch") {
+        @Test
+        @DisplayName("should report GlobalScope.launch")
+        fun reportGlobalScopeLaunch() {
             val code = """
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.GlobalScope
@@ -24,7 +28,9 @@ object GlobalCoroutineUsageSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should report GlobalScope.async") {
+        @Test
+        @DisplayName("should report GlobalScope.async")
+        fun reportGlobalScopeAsync() {
             val code = """
                 import kotlinx.coroutines.async
                 import kotlinx.coroutines.delay
@@ -37,7 +43,8 @@ object GlobalCoroutineUsageSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("should not report bar(GlobalScope)") {
+        @Test
+        fun `should not report bar(GlobalScope)`() {
             val code = """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.GlobalScope
@@ -51,7 +58,8 @@ object GlobalCoroutineUsageSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should not report `val scope = GlobalScope`") {
+        @Test
+        fun `should not report 'val scope = GlobalScope'`() {
             val code = """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.GlobalScope
@@ -66,4 +74,4 @@ object GlobalCoroutineUsageSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

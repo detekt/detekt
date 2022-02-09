@@ -2,22 +2,25 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UndocumentedPublicFunctionSpec : Spek({
-    val subject by memoized { UndocumentedPublicFunction() }
+class UndocumentedPublicFunctionSpec {
+    val subject = UndocumentedPublicFunction()
 
-    describe("UndocumentedPublicFunction rule") {
+    @Nested
+    inner class `UndocumentedPublicFunction rule` {
 
-        it("reports undocumented public functions") {
+        @Test
+        fun `reports undocumented public functions`() {
             val code = """
                 fun noComment1() {}
             """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public function in object") {
+        @Test
+        fun `reports undocumented public function in object`() {
             val code = """
                 object Test {
                     fun noComment1() {}
@@ -26,7 +29,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public function in nested object") {
+        @Test
+        fun `reports undocumented public function in nested object`() {
             val code = """
                 class Test {
                     object Test2 {
@@ -37,7 +41,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports undocumented public functions in companion object") {
+        @Test
+        fun `reports undocumented public functions in companion object`() {
             val code = """
                 class Test {
                     companion object {
@@ -49,7 +54,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports undocumented public function in an interface") {
+        @Test
+        fun `reports undocumented public function in an interface`() {
             val code = """
                 interface Test {
                     fun noComment1()
@@ -58,7 +64,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report documented public function") {
+        @Test
+        fun `does not report documented public function`() {
             val code = """
                 /**
                  * Comment
@@ -68,7 +75,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report documented public function in class") {
+        @Test
+        fun `does not report documented public function in class`() {
             val code = """
 				class Test {
 					/**
@@ -80,7 +88,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented internal and private function") {
+        @Test
+        fun `does not report undocumented internal and private function`() {
             val code = """
                 class Test {
                     internal fun no1(){}
@@ -90,7 +99,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report undocumented nested function") {
+        @Test
+        fun `does not report undocumented nested function`() {
             val code = """
                 /**
                  * Comment
@@ -102,7 +112,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public functions in internal class") {
+        @Test
+        fun `does not report public functions in internal class`() {
             val code = """
     			internal class NoComments {
 					fun nope1() {}
@@ -112,7 +123,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public functions in private class") {
+        @Test
+        fun `does not report public functions in private class`() {
             val code = """
     			private class NoComments {
 					fun nope1() {}
@@ -122,7 +134,8 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report public functions in private object") {
+        @Test
+        fun `does not report public functions in private object`() {
             val code = """
                 private object Test {
                     fun noComment1() {}
@@ -131,8 +144,10 @@ class UndocumentedPublicFunctionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        context("nested class") {
-            it("does not report public functions in internal interface") {
+        @Nested
+        inner class `nested class` {
+            @Test
+            fun `does not report public functions in internal interface`() {
                 val code = """
                     internal interface Foo {
                         interface Bar {
@@ -144,7 +159,8 @@ class UndocumentedPublicFunctionSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report public functions in private class") {
+            @Test
+            fun `does not report public functions in private class`() {
                 val code = """
                     class Foo {
                         private class Bar {
@@ -158,7 +174,8 @@ class UndocumentedPublicFunctionSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report public functions in private object") {
+            @Test
+            fun `does not report public functions in private object`() {
                 val code = """
                     private object Foo {
                         class Bar {
@@ -171,4 +188,4 @@ class UndocumentedPublicFunctionSpec : Spek({
             }
         }
     }
-})
+}

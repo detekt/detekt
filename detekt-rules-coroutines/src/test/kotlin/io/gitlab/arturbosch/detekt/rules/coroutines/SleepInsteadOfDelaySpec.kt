@@ -1,22 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 @Suppress("BlockingMethodInNonBlockingContext", "RedundantSuspendModifier")
-object SleepInsteadOfDelaySpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { SleepInsteadOfDelay(Config.empty) }
+    val subject = SleepInsteadOfDelay(Config.empty)
 
-    describe("SleepInsteadOfDelay rule") {
-        it("should report no issue for delay() in suspend functions") {
+    @Nested
+    inner class `SleepInsteadOfDelay rule` {
+        @Test
+        fun `should report no issue for delay() in suspend functions`() {
             val code = """
                 import kotlinx.coroutines.delay
 
@@ -27,7 +29,9 @@ object SleepInsteadOfDelaySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
         }
 
-        it("should report Thread.sleep() in suspend functions") {
+        @Test
+        @DisplayName("should report Thread.sleep() in suspend functions")
+        fun reportThreadSleepInSuspendFunctions() {
             val code = """
                 suspend fun foo() {
                     Thread.sleep(1000L)
@@ -36,7 +40,9 @@ object SleepInsteadOfDelaySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report Thread.sleep() in CoroutineScope.launch()") {
+        @Test
+        @DisplayName("should report Thread.sleep() in CoroutineScope.launch()")
+        fun reportThreadSleepInCoroutineScopeLaunch() {
             val code = """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.Dispatchers
@@ -51,7 +57,9 @@ object SleepInsteadOfDelaySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
-        it("should report Thread.sleep() in CoroutineScope.async()") {
+        @Test
+        @DisplayName("should report Thread.sleep() in CoroutineScope.async()")
+        fun reportThreadSleepInCoroutineScopeAsync() {
             @Suppress("DeferredResultUnused")
             val code = """
                 import kotlinx.coroutines.CoroutineScope
@@ -67,4 +75,4 @@ object SleepInsteadOfDelaySpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
-})
+}

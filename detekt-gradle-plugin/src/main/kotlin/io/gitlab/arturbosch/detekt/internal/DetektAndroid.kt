@@ -16,7 +16,6 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import java.io.File
 
 internal class DetektAndroid(private val project: Project) {
 
@@ -113,7 +112,7 @@ internal fun Project.registerAndroidDetektTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<Detekt> =
     registerDetektTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
@@ -121,34 +120,7 @@ internal fun Project.registerAndroidDetektTask(
         extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.set(layout.file(project.provider { baselineFile }))
         }
-        reports.xml.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".xml").absolutePath
-                }
-            )
-        )
-        reports.html.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".html").absolutePath
-                }
-            )
-        )
-        reports.txt.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".txt").absolutePath
-                }
-            )
-        )
-        reports.sarif.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".sarif").absolutePath
-                }
-            )
-        )
+        setReportOutputConventions(reports, extension, variant.name)
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
@@ -160,7 +132,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<DetektCreateBaselineTask> =
     registerCreateBaselineTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)

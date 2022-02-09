@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.formatting.CONTINUATION_INDENT_SIZE_KEY
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -26,11 +25,12 @@ class Indentation(config: Config) : FormattingRule(config) {
     private val indentSize by config(4)
 
     @Configuration("continuation indentation size")
+    @Deprecated("`continuationIndentSize` is ignored by KtLint and will have no effect")
+    @Suppress("UnusedPrivateMember")
     private val continuationIndentSize by config(4)
 
     override fun overrideEditorConfig() = mapOf(
         INDENT_SIZE_KEY to indentSize,
-        CONTINUATION_INDENT_SIZE_KEY to continuationIndentSize
     )
 
     /**

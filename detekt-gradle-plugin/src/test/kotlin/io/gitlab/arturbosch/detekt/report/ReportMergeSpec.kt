@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.report
 
-import io.gitlab.arturbosch.detekt.getJdkVersion
 import io.gitlab.arturbosch.detekt.manifestContent
 import io.gitlab.arturbosch.detekt.skipIfAndroidEnvironmentRequirementsUnmet
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
@@ -159,12 +158,7 @@ class ReportMergeSpec : Spek({
                 |    }
                 |}""".trimMargin()
 
-            val jvmArgs = if (getJdkVersion() < 9) {
-                "-Xmx2g -XX:MaxMetaspaceSize=1g"
-            } else {
-                // Manifest merger uses a reflective GSON API https://issuetracker.google.com/issues/193919814
-                "-Xmx2g -XX:MaxMetaspaceSize=1g --add-opens=java.base/java.io=ALL-UNNAMED"
-            }
+            val jvmArgs = "-Xmx2g -XX:MaxMetaspaceSize=1g"
 
             val gradleRunner = DslGradleRunner(
                 projectLayout = projectLayout,

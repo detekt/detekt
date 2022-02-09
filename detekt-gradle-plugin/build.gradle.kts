@@ -37,6 +37,14 @@ testing {
                     )
                 )
             }
+            targets {
+                all {
+                    testTask.configure {
+                        inputs.property("androidSdkRoot", System.getenv("ANDROID_SDK_ROOT")).optional(true)
+                        inputs.property("androidHome", System.getenv("ANDROID_HOME")).optional(true)
+                    }
+                }
+            }
         }
         register("functionalTest", JvmTestSuite::class) {
             useJUnitJupiter(libs.versions.junit.get())
@@ -96,7 +104,7 @@ tasks.validatePlugins {
 }
 
 pluginBundle {
-    website = "https://detekt.github.io/detekt"
+    website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
@@ -127,6 +135,10 @@ tasks {
 
     check {
         dependsOn(testing.suites.named("functionalTest"))
+    }
+
+    ideaModule {
+        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
     }
 }
 

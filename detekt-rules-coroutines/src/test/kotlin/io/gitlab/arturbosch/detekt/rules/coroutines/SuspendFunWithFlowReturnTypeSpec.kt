@@ -1,22 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object SuspendFunWithFlowReturnTypeSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { SuspendFunWithFlowReturnType(Config.empty) }
+    val subject = SuspendFunWithFlowReturnType(Config.empty)
 
-    describe("SuspendFunWithFlowReturn") {
+    @Nested
+    inner class `SuspendFunWithFlowReturn` {
 
-        it("reports when top-level suspend function has explicit Flow return type") {
+        @Test
+        fun `reports when top-level suspend function has explicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.Flow
                 import kotlinx.coroutines.flow.flowOf
@@ -42,7 +43,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when top-level suspend function has explicit Flow return type and star import used") {
+        @Test
+        fun `reports when top-level suspend function has explicit Flow return type and star import used`() {
             val code = """
                 import kotlinx.coroutines.flow.*
                 import kotlinx.coroutines.yield
@@ -65,7 +67,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when top-level suspend function has explicit FQN Flow return type") {
+        @Test
+        fun `reports when top-level suspend function has explicit FQN Flow return type`() {
             val code = """
                 import kotlinx.coroutines.yield
 
@@ -87,7 +90,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when top-level suspend function has implicit Flow return type") {
+        @Test
+        fun `reports when top-level suspend function has implicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.flowOf
                 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,7 +102,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
-        it("reports when interface suspend function has explicit Flow return type") {
+        @Test
+        fun `reports when interface suspend function has explicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.Flow
                 import kotlinx.coroutines.flow.MutableStateFlow
@@ -113,7 +118,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when class suspend function has explicit Flow return type") {
+        @Test
+        fun `reports when class suspend function has explicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.Flow
                 import kotlinx.coroutines.flow.flowOf
@@ -141,7 +147,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when class suspend function has implicit Flow return type") {
+        @Test
+        fun `reports when class suspend function has implicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.flowOf
                 import kotlinx.coroutines.flow.MutableStateFlow
@@ -154,7 +161,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
-        it("reports when suspend extension function has explicit Flow return type") {
+        @Test
+        fun `reports when suspend extension function has explicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.asFlow
                 import kotlinx.coroutines.flow.Flow
@@ -180,7 +188,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
-        it("reports when suspend extension function has implicit Flow return type") {
+        @Test
+        fun `reports when suspend extension function has implicit Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.asFlow
                 import kotlinx.coroutines.flow.MutableStateFlow
@@ -191,7 +200,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
-        it("does not report when suspend lambda has Flow return type") {
+        @Test
+        fun `does not report when suspend lambda has Flow return type`() {
             val code = """
                 import kotlinx.coroutines.flow.Flow
                 import kotlinx.coroutines.flow.MutableStateFlow
@@ -211,7 +221,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when suspend functions have non-Flow return types") {
+        @Test
+        fun `does not report when suspend functions have non-Flow return types`() {
             val code = """
                 import kotlinx.coroutines.delay
 
@@ -247,7 +258,8 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report when non-suspend functions have Flow return types") {
+        @Test
+        fun `does not report when non-suspend functions have Flow return types`() {
             val code = """
                 import kotlinx.coroutines.flow.flowOf
                 import kotlinx.coroutines.flow.Flow
@@ -269,4 +281,4 @@ object SuspendFunWithFlowReturnTypeSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

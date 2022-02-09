@@ -3,15 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-class SwallowedExceptionSpec : Spek({
-    val subject by memoized { SwallowedException() }
+class SwallowedExceptionSpec {
+    val subject = SwallowedException()
 
-    describe("SwallowedException rule") {
+    @Nested
+    inner class `SwallowedException rule` {
 
-        it("reports a swallowed exception") {
+        @Test
+        fun `reports a swallowed exception`() {
             val code = """
                 fun f() {
                     try {
@@ -23,7 +27,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports swallowed exceptions only using exception strings") {
+        @Test
+        fun `reports swallowed exceptions only using exception strings`() {
             val code = """
                 fun f() {
                     try {
@@ -37,7 +42,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports swallowed exceptions only using exception strings via variables") {
+        @Test
+        fun `reports swallowed exceptions only using exception strings via variables`() {
             val code = """
                 fun f() {
                     try {
@@ -53,7 +59,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports swallowed exceptions only using exception strings via variables in 'if' block") {
+        @Test
+        fun `reports swallowed exceptions only using exception strings via variables in 'if' block`() {
             val code = """
                 fun f() {
                     try {
@@ -73,7 +80,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports swallowed exceptions when it has multiple throw expressions") {
+        @Test
+        fun `reports swallowed exceptions when it has multiple throw expressions`() {
             val code = """
                 fun f(condition: Boolean) {
                     try {
@@ -89,7 +97,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports swallowed exceptions when it has multiple throw expressions 2") {
+        @Test
+        fun `reports swallowed exceptions when it has multiple throw expressions 2`() {
             val code = """
                 fun f(condition: Boolean) {
                     try {
@@ -105,7 +114,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports nested swallowed exceptions") {
+        @Test
+        fun `reports nested swallowed exceptions`() {
             val code = """
                 fun f(condition: Boolean) {
                     try {
@@ -122,7 +132,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports a swallowed exception that is not logged") {
+        @Test
+        fun `reports a swallowed exception that is not logged`() {
             val code = """
                 fun f() {
                     try {
@@ -134,15 +145,20 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        listOf(listOf("IllegalArgumentException"), "IllegalArgumentException").forEach { ignoredExceptionValue ->
-            context("ignores given exception types config") {
+        @Nested
+        inner class `when given listOf(IllegalArgumentException)` {
+            val ignoredExceptionValue = listOf("IllegalArgumentException")
 
-                val config by memoized {
+            @Nested
+            inner class `ignores given exception types config` {
+
+                val config =
                     TestConfig("ignoredExceptionTypes" to ignoredExceptionValue)
-                }
-                val rule by memoized { SwallowedException(config) }
 
-                it("ignores given exception type in configuration") {
+                val rule = SwallowedException(config)
+
+                @Test
+                fun `ignores given exception type in configuration`() {
                     val code = """
                     fun f() {
                         try {
@@ -153,7 +169,8 @@ class SwallowedExceptionSpec : Spek({
                     assertThat(rule.compileAndLint(code)).isEmpty()
                 }
 
-                it("reports exception type that is missing in the configuration") {
+                @Test
+                fun `reports exception type that is missing in the configuration`() {
                     val code = """
                     fun f() {
                         try {
@@ -166,12 +183,52 @@ class SwallowedExceptionSpec : Spek({
             }
         }
 
-        context("ignores given exception name config") {
+        @Nested
+        inner class `when given IllegalArgumentException` {
+            val ignoredExceptionValue = "IllegalArgumentException"
 
-            val config by memoized { TestConfig(mapOf("allowedExceptionNameRegex" to "myIgnore")) }
-            val rule by memoized { SwallowedException(config) }
+            @Nested
+            inner class `ignores given exception types config` {
 
-            it("ignores given exception name") {
+                val config =
+                    TestConfig("ignoredExceptionTypes" to ignoredExceptionValue)
+
+                val rule = SwallowedException(config)
+
+                @Test
+                fun `ignores given exception type in configuration`() {
+                    val code = """
+                    fun f() {
+                        try {
+                        } catch (e: IllegalArgumentException) {
+                        }
+                    }
+                """
+                    assertThat(rule.compileAndLint(code)).isEmpty()
+                }
+
+                @Test
+                fun `reports exception type that is missing in the configuration`() {
+                    val code = """
+                    fun f() {
+                        try {
+                        } catch (e: Exception) {
+                        }
+                    }
+                """
+                    assertThat(rule.compileAndLint(code)).hasSize(1)
+                }
+            }
+        }
+
+        @Nested
+        inner class `ignores given exception name config` {
+
+            val config = TestConfig(mapOf("allowedExceptionNameRegex" to "myIgnore"))
+            val rule = SwallowedException(config)
+
+            @Test
+            fun `ignores given exception name`() {
                 val code = """
                     fun f() {
                         try {
@@ -182,7 +239,8 @@ class SwallowedExceptionSpec : Spek({
                 assertThat(rule.compileAndLint(code)).isEmpty()
             }
 
-            it("reports exception name") {
+            @Test
+            fun `reports exception name`() {
                 val code = """
                     fun f() {
                         try {
@@ -194,7 +252,8 @@ class SwallowedExceptionSpec : Spek({
             }
         }
 
-        it("does not report wrapped exceptions") {
+        @Test
+        fun `does not report wrapped exceptions`() {
             val code = """
                 fun f() {
                     try {
@@ -208,7 +267,8 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report used exception variables") {
+        @Test
+        fun `does not report used exception variables`() {
             val code = """
                 fun f() {
                     try {
@@ -222,9 +282,10 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        SwallowedException.EXCEPTIONS_IGNORED_BY_DEFAULT.forEach { exceptionName ->
-            it("ignores $exceptionName in the catch clause by default") {
-                val code = """
+        @ParameterizedTest(name = "ignores {0} in the catch clause by default")
+        @MethodSource("io.gitlab.arturbosch.detekt.rules.exceptions.SwallowedException#getEXCEPTIONS_IGNORED_BY_DEFAULT")
+        fun `ignores $exceptionName in the catch clause by default`(exceptionName: String) {
+            val code = """
                 import java.net.MalformedURLException
                 import java.text.ParseException
 
@@ -235,17 +296,19 @@ class SwallowedExceptionSpec : Spek({
                     }
                 }
             """
-                assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @ParameterizedTest(name = "ignores {0} in the catch body by default")
+        @MethodSource("io.gitlab.arturbosch.detekt.rules.exceptions.SwallowedException#getEXCEPTIONS_IGNORED_BY_DEFAULT")
+        fun `ignores $exceptionName in the catch body by default`(exceptionName: String) {
+            val exceptionInstantiation = if (exceptionName == "ParseException") {
+                "$exceptionName(\"\", 0)"
+            } else {
+                "$exceptionName(\"\")"
             }
 
-            it("ignores $exceptionName in the catch body by default") {
-                val exceptionInstantiation = if (exceptionName == "ParseException") {
-                    "$exceptionName(\"\", 0)"
-                } else {
-                    "$exceptionName(\"\")"
-                }
-
-                val code = """
+            val code = """
                 import java.net.MalformedURLException
                 import java.text.ParseException
 
@@ -256,8 +319,7 @@ class SwallowedExceptionSpec : Spek({
                     }
                 }
             """
-                assertThat(subject.compileAndLint(code)).isEmpty()
-            }
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

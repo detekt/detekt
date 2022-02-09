@@ -35,7 +35,6 @@ include("detekt-test-utils")
 include("detekt-tooling")
 include("detekt-utils")
 
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 // build scan plugin can only be applied in settings file

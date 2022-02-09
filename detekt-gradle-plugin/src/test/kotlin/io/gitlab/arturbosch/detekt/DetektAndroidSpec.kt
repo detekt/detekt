@@ -25,7 +25,16 @@ object DetektAndroidSpec : Spek({
                         $ANDROID_BLOCK
                         $DETEKT_REPORTS_BLOCK
                     """.trimIndent(),
-                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                    srcDirs = listOf(
+                        "src/main/java",
+                        "src/debug/java",
+                        "src/test/java",
+                        "src/androidTest/java",
+                        "src/main/kotlin",
+                        "src/debug/kotlin",
+                        "src/test/kotlin",
+                        "src/androidTest/kotlin",
+                    ),
                     baselineFiles = listOf(
                         "detekt-baseline.xml",
                         "detekt-baseline-release.xml",
@@ -43,6 +52,10 @@ object DetektAndroidSpec : Spek({
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]java""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]java""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]kotlin""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]kotlin""")
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -60,6 +73,10 @@ object DetektAndroidSpec : Spek({
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """)
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]java""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]java""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]kotlin""")
+                    assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin""")
                     assertThat(buildResult.output).contains("--report xml:")
                     assertThat(buildResult.output).contains("--report sarif:")
                     assertThat(buildResult.output).doesNotContain("--report txt:")

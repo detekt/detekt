@@ -38,7 +38,7 @@ publishing {
         pom {
             description.set("Static code analysis for Kotlin")
             name.set("detekt")
-            url.set("https://detekt.github.io/detekt")
+            url.set("https://detekt.dev")
             licenses {
                 license {
                     name.set("The Apache Software License, Version 2.0")

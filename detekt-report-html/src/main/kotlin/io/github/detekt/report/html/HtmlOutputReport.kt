@@ -39,7 +39,7 @@ private const val PLACEHOLDER_DATE = "@@@date@@@"
 
 /**
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
- * See: https://detekt.github.io/detekt/configurations.html#output-reports
+ * See: https://detekt.dev/configurations.html#output-reports
  */
 class HtmlOutputReport : OutputReport() {
 

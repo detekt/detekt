@@ -85,7 +85,7 @@ types of descriptions:
    subclass implementing the considered rule. Documentation strings associated
    with built-in rules are automatically pulled from the detekt codebase and
    used to generate the rule set overview available on the
-   [detekt website](https://detekt.github.io/detekt).
+   [detekt website](https://detekt.dev).
 2. **Issue description**: The issue description gives a summary of the code
    smells that the respective rule is supposed to detect. From an implementation
    point of view, it is the string that `Rule` subclasses pass to the

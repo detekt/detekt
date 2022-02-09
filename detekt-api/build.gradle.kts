@@ -33,6 +33,10 @@ tasks.withType<DokkaTask>().configureEach {
     outputDirectory.set(rootDir.resolve("docs/pages/kdoc"))
 }
 
+tasks.dokkaJekyll {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
+}
+
 apiValidation {
     ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }

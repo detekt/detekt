@@ -21,7 +21,7 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
-android-gradle = "com.android.tools.build:gradle:7.1.0"
+android-gradle = "com.android.tools.build:gradle:7.1.1"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
@@ -45,7 +45,7 @@ jcommander = "com.beust:jcommander:1.82"
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.8.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.19.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.41.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.20.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }

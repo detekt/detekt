@@ -316,6 +316,7 @@ naming:
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
+    requireRootInDeclaration: false
   LambdaParameterNaming:
     active: false
     parameterPattern: '[a-z][A-Za-z0-9]*|_'
@@ -382,6 +383,15 @@ potential-bugs:
     active: false
   DoubleMutabilityForCollection:
     active: false
+    mutableTypes:
+      - 'kotlin.collections.MutableList'
+      - 'kotlin.collections.MutableMap'
+      - 'kotlin.collections.MutableSet'
+      - 'java.util.ArrayList'
+      - 'java.util.LinkedHashSet'
+      - 'java.util.HashSet'
+      - 'java.util.LinkedHashMap'
+      - 'java.util.HashMap'
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
