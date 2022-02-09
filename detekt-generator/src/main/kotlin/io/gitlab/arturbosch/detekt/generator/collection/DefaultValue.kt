@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.api.ExplainedValues
+
 sealed interface DefaultValue {
     fun isNonEmptyList(): Boolean = false
     fun getAsList(): List<String> = error("default value is not a list")
@@ -11,6 +13,7 @@ sealed interface DefaultValue {
         fun of(defaultValue: Boolean): DefaultValue = BooleanDefault(defaultValue)
         fun of(defaultValue: Int): DefaultValue = IntegerDefault(defaultValue)
         fun of(defaultValue: List<String>): DefaultValue = StringListDefault(defaultValue)
+        fun of(defaultValue: ExplainedValues): DefaultValue = ExplainedValuesDefault(defaultValue)
     }
 }
 
@@ -36,3 +39,5 @@ private data class StringListDefault(private val defaultValue: List<String>) : D
     override fun getAsPlainString(): String = defaultValue.toString()
     override fun getQuotedIfNecessary(): String = quoted
 }
+
+private data class ExplainedValuesDefault(private val defaultValue: ExplainedValues) : DefaultValue
