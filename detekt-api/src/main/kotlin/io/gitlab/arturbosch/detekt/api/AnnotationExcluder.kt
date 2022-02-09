@@ -50,7 +50,7 @@ class AnnotationExcluder(
     }
 
     private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
-        val fqName = annotation.fqNameOrNull(context)
+        val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
         return if (fqName == null) {
             fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
                 .map { it.getPackage() to it }
@@ -69,7 +69,11 @@ class AnnotationExcluder(
 }
 
 private fun FqName.getPackage(): String {
-    // This is a shortcut. We should make this properly
+    /* This is a shortcut. Right now we are using the same heuristic that we use when we don't have type solving
+     * information. With the type solving information we should know exactly which part is package and which part is
+     * class name. But right now I don't know how to extract that information. There is a disabled test that should be
+     * enabled once this is solved.
+     */
     return this.toString().getPackage()
 }
 
