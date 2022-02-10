@@ -4,13 +4,13 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
-class NamingConventionCustomPatternSpec : Spek({
+class NamingConventionCustomPatternSpec {
 
-    val configCustomRules by memoized {
+    val configCustomRules =
         object : TestConfig() {
             override fun subConfig(key: String): TestConfig = this
 
@@ -27,9 +27,8 @@ class NamingConventionCustomPatternSpec : Spek({
                     else -> default
                 }
         }
-    }
 
-    val testConfig by memoized {
+    val testConfig =
         object : TestConfig() {
             override fun subConfig(key: String): TestConfig =
                 when (key) {
@@ -45,7 +44,6 @@ class NamingConventionCustomPatternSpec : Spek({
 
             override fun <T : Any> valueOrDefault(key: String, default: T): T = default
         }
-    }
 
     val excludeClassPatternVariableRegexCode = """
             class Bar {
@@ -65,9 +63,11 @@ class NamingConventionCustomPatternSpec : Spek({
                 fun MYFun() {}
             }"""
 
-    describe("NamingRules rule") {
+    @Nested
+    inner class `NamingRules rule` {
 
-        it("should use custom name for method and class") {
+        @Test
+        fun `should use custom name for method and class`() {
             val rule = NamingRules(testConfig)
             assertThat(
                 rule.compileAndLint(
@@ -86,7 +86,8 @@ class NamingConventionCustomPatternSpec : Spek({
             ).isEmpty()
         }
 
-        it("should use custom name for constant") {
+        @Test
+        fun `should use custom name for constant`() {
             val rule = NamingRules(testConfig)
             assertThat(
                 rule.compileAndLint(
@@ -101,7 +102,8 @@ class NamingConventionCustomPatternSpec : Spek({
             ).isEmpty()
         }
 
-        it("should use custom name for enum") {
+        @Test
+        fun `should use custom name for enum`() {
             val rule = NamingRules(testConfig)
             assertThat(
                 rule.compileAndLint(
@@ -116,12 +118,14 @@ class NamingConventionCustomPatternSpec : Spek({
             ).isEmpty()
         }
 
-        it("should use custom name for package") {
+        @Test
+        fun `should use custom name for package`() {
             val rule = NamingRules(testConfig)
             assertThat(rule.compileAndLint("package package_1")).isEmpty()
         }
 
-        it("shouldExcludeClassesFromVariableNaming") {
+        @Test
+        fun shouldExcludeClassesFromVariableNaming() {
             val code = """
             class Bar {
                 val MYVar = 3
@@ -134,7 +138,8 @@ class NamingConventionCustomPatternSpec : Spek({
             assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
         }
 
-        it("shouldNotFailWithInvalidRegexWhenDisabledVariableNaming") {
+        @Test
+        fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
             val configValues = mapOf(
                 "active" to "false",
                 VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
@@ -143,14 +148,16 @@ class NamingConventionCustomPatternSpec : Spek({
             assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
         }
 
-        it("shouldFailWithInvalidRegexVariableNaming") {
+        @Test
+        fun shouldFailWithInvalidRegexVariableNaming() {
             val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
             }
         }
 
-        it("shouldExcludeClassesFromFunctionNaming") {
+        @Test
+        fun shouldExcludeClassesFromFunctionNaming() {
             val code = """
             class Bar {
                 fun MYFun() {}
@@ -163,7 +170,8 @@ class NamingConventionCustomPatternSpec : Spek({
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
-        it("shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming") {
+        @Test
+        fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
             val configRules = mapOf(
                 "active" to "false",
                 FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
@@ -172,11 +180,12 @@ class NamingConventionCustomPatternSpec : Spek({
             assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
         }
 
-        it("shouldFailWithInvalidRegexFunctionNaming") {
+        @Test
+        fun shouldFailWithInvalidRegexFunctionNaming() {
             val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
         }
     }
-})
+}

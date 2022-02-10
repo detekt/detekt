@@ -4,19 +4,21 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.FileSystems
 import java.nio.file.Paths
 
 private const val ROOT_PACKAGE = "rootPackage"
 private const val REQUIRE_ROOT_PACKAGE = "requireRootInDeclaration"
 
-internal class InvalidPackageDeclarationSpec : Spek({
+class InvalidPackageDeclarationSpec {
 
-    describe("InvalidPackageDeclaration rule") {
+    @Nested
+    inner class `InvalidPackageDeclaration rule` {
 
-        it("should pass if package declaration is correct") {
+        @Test
+        fun `should pass if package declaration is correct`() {
             val source = """
                 package foo.bar
 
@@ -29,7 +31,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report if package declaration does not match source location") {
+        @Test
+        fun `should report if package declaration does not match source location`() {
             val source = "package foo\n\nclass C"
 
             val ktFile = compileContentForTest(source, createPath("project/src/bar/File.kt"))
@@ -39,11 +42,13 @@ internal class InvalidPackageDeclarationSpec : Spek({
             assertThat(findings).hasTextLocations(0 to 11)
         }
 
-        describe("with root package specified") {
+        @Nested
+        inner class `with root package specified` {
 
-            val config by memoized { TestConfig(mapOf(ROOT_PACKAGE to "com.example")) }
+            val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example"))
 
-            it("should pass if file is located within the root package") {
+            @Test
+            fun `should pass if file is located within the root package`() {
                 val source = """
                     package com.example
 
@@ -56,7 +61,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass if file is located relative to root package") {
+            @Test
+            fun `should pass if file is located relative to root package`() {
                 val source = """
                     package com.example.foo.bar
 
@@ -69,7 +75,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass if file is located in directory corresponding to package declaration") {
+            @Test
+            fun `should pass if file is located in directory corresponding to package declaration`() {
                 val source = """
                     package com.example.foo.bar
 
@@ -82,7 +89,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should report if package declaration does not match") {
+            @Test
+            fun `should report if package declaration does not match`() {
                 val source = """
                     package com.example.foo.baz
 
@@ -95,7 +103,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should report if file path matches root package but package declaration differs") {
+            @Test
+            fun `should report if file path matches root package but package declaration differs`() {
                 val source = """
                     package io.foo.bar
 
@@ -109,11 +118,13 @@ internal class InvalidPackageDeclarationSpec : Spek({
             }
         }
 
-        describe("with root package required") {
+        @Nested
+        inner class `with root package required` {
 
-            val config by memoized { TestConfig(mapOf(ROOT_PACKAGE to "com.example", REQUIRE_ROOT_PACKAGE to true)) }
+            val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example", REQUIRE_ROOT_PACKAGE to true))
 
-            it("should pass if declaration starts with root package") {
+            @Test
+            fun `should pass if declaration starts with root package`() {
                 val source = """
                     package com.example.foo.bar
 
@@ -131,7 +142,8 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 assertThat(findingsForFullPath).isEmpty()
             }
 
-            it("should report if root package is missing") {
+            @Test
+            fun `should report if root package is missing`() {
                 val source = """
                     package foo.bar
 
@@ -145,7 +157,7 @@ internal class InvalidPackageDeclarationSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun createPath(universalPath: String): String {
     val pathSegments = universalPath.split('/')

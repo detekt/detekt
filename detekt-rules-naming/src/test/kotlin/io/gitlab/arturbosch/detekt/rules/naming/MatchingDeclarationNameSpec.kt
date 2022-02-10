@@ -4,22 +4,26 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class MatchingDeclarationNameSpec : Spek({
+class MatchingDeclarationNameSpec {
 
-    describe("MatchingDeclarationName rule") {
+    @Nested
+    inner class `MatchingDeclarationName rule` {
 
-        context("compliant test cases") {
+        @Nested
+        inner class `compliant test cases` {
 
-            it("should pass for object declaration") {
+            @Test
+            fun `should pass for object declaration`() {
                 val ktFile = compileContentForTest("object O", filename = "O.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for suppress") {
+            @Test
+            fun `should pass for suppress`() {
                 val ktFile = compileContentForTest(
                     """@file:Suppress("MatchingDeclarationName") object O""",
                     filename = "Objects.kt"
@@ -28,19 +32,22 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for class declaration") {
+            @Test
+            fun `should pass for class declaration`() {
                 val ktFile = compileContentForTest("class C", filename = "C.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for interface declaration") {
+            @Test
+            fun `should pass for interface declaration`() {
                 val ktFile = compileContentForTest("interface I", filename = "I.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for enum declaration") {
+            @Test
+            fun `should pass for enum declaration`() {
                 val ktFile = compileContentForTest(
                     """
                     enum class E {
@@ -53,7 +60,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for multiple declaration") {
+            @Test
+            fun `should pass for multiple declaration`() {
                 val ktFile = compileContentForTest(
                     """
                     class C
@@ -66,7 +74,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for class declaration with utility functions") {
+            @Test
+            fun `should pass for class declaration with utility functions`() {
                 val ktFile = compileContentForTest(
                     """
                     class C
@@ -79,7 +88,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for class declaration not as first declaration with utility functions") {
+            @Test
+            fun `should pass for class declaration not as first declaration with utility functions`() {
                 val ktFile = compileContentForTest(
                     """
                     fun a() = 5
@@ -92,7 +102,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for private class declaration") {
+            @Test
+            fun `should pass for private class declaration`() {
                 val ktFile = compileContentForTest(
                     """
                 private class C
@@ -104,7 +115,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should pass for a class with a typealias") {
+            @Test
+            fun `should pass for a class with a typealias`() {
                 val code = """
                 typealias Foo = FooImpl
 
@@ -115,15 +127,18 @@ internal class MatchingDeclarationNameSpec : Spek({
             }
         }
 
-        context("non-compliant test cases") {
+        @Nested
+        inner class `non-compliant test cases` {
 
-            it("should not pass for object declaration") {
+            @Test
+            fun `should not pass for object declaration`() {
                 val ktFile = compileContentForTest("object O", filename = "Objects.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for object declaration even with suppress on the object") {
+            @Test
+            fun `should not pass for object declaration even with suppress on the object`() {
                 val ktFile = compileContentForTest(
                     """@Suppress("MatchingDeclarationName") object O""",
                     filename = "Objects.kt"
@@ -132,13 +147,15 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for class declaration") {
+            @Test
+            fun `should not pass for class declaration`() {
                 val ktFile = compileContentForTest("class C", filename = "Classes.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for class declaration as first declaration with utility functions") {
+            @Test
+            fun `should not pass for class declaration as first declaration with utility functions`() {
                 val ktFile = compileContentForTest(
                     """
                     class C
@@ -151,13 +168,15 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for interface declaration") {
+            @Test
+            fun `should not pass for interface declaration`() {
                 val ktFile = compileContentForTest("interface I", filename = "Not_I.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for enum declaration") {
+            @Test
+            fun `should not pass for enum declaration`() {
                 val ktFile = compileContentForTest(
                     """
                     enum class NOT_E {
@@ -170,7 +189,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for a typealias with a different name") {
+            @Test
+            fun `should not pass for a typealias with a different name`() {
                 val code = """
                     class FooImpl {}
                     typealias Bar = FooImpl
@@ -180,12 +200,8 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it(
-                """
-                should not pass for class declaration not as first declaration with utility functions
-                when mustBeFirst is false.
-                """.trimIndent()
-            ) {
+            @Test
+            fun `should not pass for class declaration not as first declaration with utility functions when mustBeFirst is false`() {
                 val ktFile = compileContentForTest(
                     """
                     fun a() = 5
@@ -201,4 +217,4 @@ internal class MatchingDeclarationNameSpec : Spek({
             }
         }
     }
-})
+}

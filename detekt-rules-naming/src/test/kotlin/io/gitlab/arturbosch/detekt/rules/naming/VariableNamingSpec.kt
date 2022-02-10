@@ -4,14 +4,16 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class VariableNamingSpec : Spek({
+class VariableNamingSpec {
 
-    describe("properties in classes") {
+    @Nested
+    inner class `properties in classes` {
 
-        it("should detect all positive cases") {
+        @Test
+        fun `should detect all positive cases`() {
             val code = """
                 class C {
                     private val _FIELD = 5
@@ -27,7 +29,8 @@ class VariableNamingSpec : Spek({
                 )
         }
 
-        it("checks all negative cases") {
+        @Test
+        fun `checks all negative cases`() {
             val code = """
                 class C {
                     private val _field = 5
@@ -38,7 +41,8 @@ class VariableNamingSpec : Spek({
             assertThat(VariableNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should not flag overridden member properties by default") {
+        @Test
+        fun `should not flag overridden member properties by default`() {
             val code = """
                 class C : I {
                     override val SHOULD_NOT_BE_FLAGGED = "banana"
@@ -53,7 +57,8 @@ class VariableNamingSpec : Spek({
             assertThat(VariableNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("doesn't ignore overridden member properties if ignoreOverridden is false") {
+        @Test
+        fun `doesn't ignore overridden member properties if ignoreOverridden is false`() {
             val code = """
                 class C : I {
                     override val SHOULD_BE_FLAGGED = "banana"
@@ -73,6 +78,6 @@ class VariableNamingSpec : Spek({
                 )
         }
     }
-})
+}
 
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
