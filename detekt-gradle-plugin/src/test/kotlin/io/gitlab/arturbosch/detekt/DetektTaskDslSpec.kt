@@ -7,50 +7,64 @@ import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
-internal object DetektTaskDslSpec : Spek({
+class DetektTaskDslSpec {
 
-    describe("When applying the detekt gradle plugin") {
+    @Nested
+    inner class `When applying the detekt gradle plugin` {
 
         lateinit var gradleRunner: DslGradleRunner
         lateinit var result: BuildResult
         val defaultDetektVersion = loadDetektVersion(DetektTaskDslSpec::class.java.classLoader)
         val builder = kotlin().dryRun()
 
-        describe("without detekt config") {
+        @Nested
+        inner class `without detekt config` {
 
-            beforeGroup {
+            @BeforeAll
+            fun beforeGroup() {
                 gradleRunner = builder.build()
                 result = gradleRunner.runDetektTask()
             }
 
-            it("completes successfully") {
+            @Test
+            fun `completes successfully`() {
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            it("enables xml report to default location") {
+            @Test
+            fun `enables xml report to default location`() {
                 val xmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.xml")
                 assertThat(result.output).contains("--report xml:$xmlReportFile")
             }
 
-            it("enables html report to default location") {
+            @Test
+            fun `enables html report to default location`() {
                 val htmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.html")
                 assertThat(result.output).contains("--report html:$htmlReportFile")
             }
 
-            it("enables text report to default location") {
+            @Test
+            fun `enables text report to default location`() {
                 val textReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.txt")
                 assertThat(result.output).contains("--report txt:$textReportFile")
             }
 
-            it("enables sarif report to default location") {
+            @Test
+            fun `enables sarif report to default location`() {
                 val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
                 assertThat(result.output).contains("--report sarif:$sarifReportFile")
             }
 
-            it("set as input all the kotlin files in src/main/java and src/main/kotlin") {
+            @Test
+            @DisplayName("set as input all the kotlin files in src/main/java and src/main/kotlin")
+            fun setInputFiles() {
                 val file1 = gradleRunner.projectFile("src/main/java/My0Root0Class.kt")
                 val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
                 val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
@@ -59,9 +73,11 @@ internal object DetektTaskDslSpec : Spek({
             }
         }
 
-        describe("without multiple detekt configs") {
+        @Nested
+        inner class `without multiple detekt configs` {
 
-            beforeGroup {
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
@@ -73,7 +89,8 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("passes absolute filename of both config files to detekt cli") {
+            @Test
+            fun `passes absolute filename of both config files to detekt cli`() {
                 val firstConfig = gradleRunner.projectFile("firstConfig.yml")
                 val secondConfig = gradleRunner.projectFile("secondConfig.yml")
 
@@ -82,11 +99,12 @@ internal object DetektTaskDslSpec : Spek({
             }
         }
 
-        describe("with custom baseline file") {
+        @Nested
+        inner class `with custom baseline file` {
             val baselineFilename = "custom-baseline.xml"
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |   baseline = file("$baselineFilename")
@@ -100,18 +118,20 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("sets baseline parameter with absolute filename") {
+            @Test
+            fun `sets baseline parameter with absolute filename`() {
                 val baselineFile = gradleRunner.projectFile(baselineFilename)
                 val expectedBaselineArgument = "--baseline $baselineFile"
                 assertThat(result.output).contains(expectedBaselineArgument)
             }
         }
 
-        describe("with custom baseline file that doesn't exist") {
+        @Nested
+        inner class `with custom baseline file that doesn't exist` {
             val baselineFilename = "detekt-baseline-no-exist.xml"
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |   baseline = file("$baselineFilename")
@@ -124,17 +144,20 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("doesn't set the baseline parameter") {
+            @Test
+            fun `doesn't set the baseline parameter`() {
                 assertThat(result.output).doesNotContain("--baseline")
             }
         }
 
-        describe("[deprecated] with custom input directories using input") {
+        @Nested
+        @DisplayName("[deprecated] with custom input directories using input")
+        inner class CustomInputDirectoriesUsingInput {
             val customSrc1 = "gensrc/kotlin"
             val customSrc2 = "src/main/kotlin"
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
@@ -149,24 +172,27 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("sets input parameter to absolute filenames of all source files") {
+            @Test
+            fun `sets input parameter to absolute filenames of all source files`() {
                 val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
                 val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
                 val expectedInputParam = "--input $file1,$file2"
                 assertThat(result.output).contains(expectedInputParam)
             }
 
-            it("ignores input directories that do not exist") {
+            @Test
+            fun `ignores input directories that do not exist`() {
                 assertThat(result.output).doesNotContain("folder_that_does_not_exist")
             }
         }
 
-        describe("with custom input directories") {
+        @Nested
+        inner class `with custom input directories` {
             val customSrc1 = "gensrc/kotlin"
             val customSrc2 = "src/main/kotlin"
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
@@ -181,22 +207,25 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("sets input parameter to absolute filenames of all source files") {
+            @Test
+            fun `sets input parameter to absolute filenames of all source files`() {
                 val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
                 val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
                 val expectedInputParam = "--input $file1,$file2"
                 assertThat(result.output).contains(expectedInputParam)
             }
 
-            it("ignores input directories that do not exist") {
+            @Test
+            fun `ignores input directories that do not exist`() {
                 assertThat(result.output).doesNotContain("folder_that_does_not_exist")
             }
         }
 
-        describe("with custom reports dir") {
+        @Nested
+        inner class `with custom reports dir` {
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
@@ -209,31 +238,36 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("configures xml report to custom directory") {
+            @Test
+            fun `configures xml report to custom directory`() {
                 val xmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.xml")
                 assertThat(result.output).contains("--report xml:$xmlReportFile")
             }
 
-            it("configures html report to custom directory") {
+            @Test
+            fun `configures html report to custom directory`() {
                 val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
                 assertThat(result.output).contains("--report html:$htmlReportFile")
             }
 
-            it("configures text report to custom directory") {
+            @Test
+            fun `configures text report to custom directory`() {
                 val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
                 assertThat(result.output).contains("--report txt:$textReportFile")
             }
 
-            it("configures sarif report to custom directory") {
+            @Test
+            fun `configures sarif report to custom directory`() {
                 val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.sarif")
                 assertThat(result.output).contains("--report sarif:$sarifReportFile")
             }
         }
 
-        describe("with custom reports dir and custom report filename") {
+        @Nested
+        inner class `with custom reports dir and custom report filename` {
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
@@ -252,26 +286,30 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("configures xml report to specific absolute filename") {
+            @Test
+            fun `configures xml report to specific absolute filename`() {
                 val xmlReportFile = gradleRunner.projectFile("build/xml-reports/custom-detekt.xml")
                 assertThat(result.output).contains("--report xml:$xmlReportFile")
             }
 
-            it("configures html report to default name in custom directory") {
+            @Test
+            fun `configures html report to default name in custom directory`() {
                 val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
                 assertThat(result.output).contains("--report html:$htmlReportFile")
             }
 
-            it("configures text report to default name in custom directory") {
+            @Test
+            fun `configures text report to default name in custom directory`() {
                 val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
                 assertThat(result.output).contains("--report txt:$textReportFile")
             }
         }
 
-        describe("with disabled reports") {
+        @Nested
+        inner class `with disabled reports` {
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |tasks.detekt {
                         |    reports {
@@ -295,15 +333,18 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("no report param is set") {
+            @Test
+            fun `no report param is set`() {
                 assertThat(result.output).doesNotContain("--report")
             }
         }
 
-        describe("with custom report types") {
-            describe("configured correctly") {
-                beforeGroup {
-
+        @Nested
+        inner class `with custom report types` {
+            @Nested
+            inner class `configured correctly` {
+                @BeforeAll
+                fun beforeGroup() {
                     val config = """
                                 |tasks.detekt {
                                 |    reports {
@@ -323,20 +364,23 @@ internal object DetektTaskDslSpec : Spek({
                     result = gradleRunner.runDetektTask()
                 }
 
-                it("configures custom xml report to absolute filename") {
+                @Test
+                fun `configures custom xml report to absolute filename`() {
                     val xmlReportFile = gradleRunner.projectFile("build/reports/custom.xml")
                     assertThat(result.output).contains("--report customXml:$xmlReportFile")
                 }
 
-                it("configures custom json report to absolute filename") {
+                @Test
+                fun `configures custom json report to absolute filename`() {
                     val xmlReportFile = gradleRunner.projectFile("build/reports/custom.json")
                     assertThat(result.output).contains("--report customJson:$xmlReportFile")
                 }
             }
 
-            describe("report id is missing") {
-                beforeGroup {
-
+            @Nested
+            inner class `report id is missing` {
+                @BeforeAll
+                fun beforeGroup() {
                     val config = """
                                 |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                 |    reports {
@@ -350,14 +394,16 @@ internal object DetektTaskDslSpec : Spek({
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
 
-                it("fails the build") {
+                @Test
+                fun `fails the build`() {
                     gradleRunner.runDetektTaskAndExpectFailure()
                 }
             }
 
-            describe("report filename is missing") {
-                beforeGroup {
-
+            @Nested
+            inner class `report filename is missing` {
+                @BeforeAll
+                fun beforeGroup() {
                     val config = """
                                 |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                 |    reports {
@@ -371,14 +417,16 @@ internal object DetektTaskDslSpec : Spek({
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
 
-                it("fails the build") {
+                @Test
+                fun `fails the build`() {
                     gradleRunner.runDetektTaskAndExpectFailure()
                 }
             }
 
-            describe("report filename is a directory") {
-                beforeGroup {
-
+            @Nested
+            inner class `report filename is a directory` {
+                @BeforeAll
+                fun beforeGroup() {
                     val aDirectory = "\${rootDir}/src"
 
                     val config = """
@@ -395,17 +443,18 @@ internal object DetektTaskDslSpec : Spek({
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
 
-                it("fails the build") {
+                @Test
+                fun `fails the build`() {
                     gradleRunner.runDetektTaskAndExpectFailure()
                 }
             }
 
-            describe("using the report id of a well known type") {
-                DetektReportType.values().forEach { wellKnownType ->
-                    context(wellKnownType.name) {
-                        beforeGroup {
-
-                            val config = """
+            @Nested
+            inner class `using the report id of a well known type` {
+                @ParameterizedTest
+                @EnumSource(DetektReportType::class)
+                fun `fails the build`(wellKnownType: DetektReportType) {
+                    val config = """
                                         |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
                                         |    reports {
                                         |        custom {
@@ -416,20 +465,17 @@ internal object DetektTaskDslSpec : Spek({
                                         |}
                                         """
 
-                            gradleRunner = builder.withDetektConfig(config).build()
-                        }
-                    }
-                    it("fails the build") {
-                        gradleRunner.runDetektTaskAndExpectFailure()
-                    }
+                    gradleRunner = builder.withDetektConfig(config).build()
+                    gradleRunner.runDetektTaskAndExpectFailure()
                 }
             }
         }
 
-        describe("with flags") {
+        @Nested
+        inner class `with flags` {
 
-            beforeGroup {
-
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                         |detekt {
                         |    debug = true
@@ -449,53 +495,66 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runDetektTask()
             }
 
-            it("enables debug mode") {
+            @Test
+            fun `enables debug mode`() {
                 assertThat(result.output).contains("--debug")
             }
 
-            it("enables parallel processing") {
+            @Test
+            fun `enables parallel processing`() {
                 assertThat(result.output).contains("--parallel")
             }
 
-            it("disables default ruleset") {
+            @Test
+            fun `disables default ruleset`() {
                 assertThat(result.output).contains("--disable-default-rulesets")
             }
 
-            it("ignores failures") {
+            @Test
+            fun `ignores failures`() {
                 assertThat(result.output).contains("Ignore failures: true")
             }
 
-            it("enables all rules") {
+            @Test
+            fun `enables all rules`() {
                 assertThat(result.output).contains("--all-rules")
             }
 
-            it("enables fail fast") {
+            @Test
+            fun `enables fail fast`() {
                 assertThat(result.output).contains("--fail-fast")
             }
 
-            it("enables auto correcting") {
+            @Test
+            fun `enables auto correcting`() {
                 assertThat(result.output).contains("--auto-correct")
             }
 
-            it("enables using default config as baseline") {
+            @Test
+            fun `enables using default config as baseline`() {
                 assertThat(result.output).contains("--build-upon-default-config")
             }
         }
 
-        describe("with cmdline args") {
+        @Nested
+        inner class `with cmdline args` {
 
-            beforeGroup {
+            @BeforeAll
+            fun beforeGroup() {
                 gradleRunner = builder.build()
                 result = gradleRunner.runDetektTask("--auto-correct")
             }
 
-            it("enables auto correcting") {
+            @Test
+            fun `enables auto correcting`() {
                 assertThat(result.output).containsPattern("""Arguments:[^\r\n]*--auto-correct""")
             }
         }
 
-        describe("with an additional plugin") {
-            beforeGroup {
+        @Nested
+        inner class `with an additional plugin` {
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                             |dependencies {
                             |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
@@ -508,18 +567,23 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runTasks("dependencies", "--configuration", "detektPlugins")
             }
 
-            it("successfully checks dependencies") {
+            @Test
+            fun `successfully checks dependencies`() {
                 assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            it("adds the formatting lib to the project dependencies") {
+            @Test
+            fun `adds the formatting lib to the project dependencies`() {
                 assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
             }
         }
 
-        describe("with a custom tool version") {
+        @Nested
+        inner class `with a custom tool version` {
             val customVersion = "1.0.0.RC8"
-            beforeGroup {
+
+            @BeforeAll
+            fun beforeGroup() {
                 val config = """
                             |detekt {
                             |    toolVersion = "$customVersion"
@@ -532,18 +596,23 @@ internal object DetektTaskDslSpec : Spek({
                 result = gradleRunner.runTasks("dependencies", "--offline", "--configuration", "detekt")
             }
 
-            it("successfully checks dependencies") {
+            @Test
+            fun `successfully checks dependencies`() {
                 assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            it("adds the custom detekt version to the dependencies") {
+            @Test
+            fun `adds the custom detekt version to the dependencies`() {
                 assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:$customVersion")
             }
         }
 
-        describe("and creating a custom task") {
-            context("using the kotlin dsl") {
-                beforeGroup {
+        @Nested
+        inner class `and creating a custom task` {
+            @Nested
+            inner class `using the kotlin dsl` {
+                @BeforeAll
+                fun beforeGroup() {
                     val config = """
                         |task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
                         |    description = "Runs a custom detekt build."
@@ -584,53 +653,63 @@ internal object DetektTaskDslSpec : Spek({
                     result = gradleRunner.runTasks("myDetekt")
                 }
 
-                it("completes successfully") {
+                @Test
+                fun `completes successfully`() {
                     assertThat(result.task(":myDetekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
-                it("enables xml report to specified location") {
+                @Test
+                fun `enables xml report to specified location`() {
                     val xmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
                     assertThat(result.output).contains("--report xml:$xmlReportFile")
                 }
 
-                it("enables html report to specified location") {
+                @Test
+                fun `enables html report to specified location`() {
                     val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
                     assertThat(result.output).contains("--report html:$htmlReportFile")
                 }
 
-                it("enables text report to specified location") {
+                @Test
+                fun `enables text report to specified location`() {
                     val textReportFile = gradleRunner.projectFile("build/reports/mydetekt.txt")
                     assertThat(result.output).contains("--report txt:$textReportFile")
                 }
 
-                it("enables sarif report to specified location") {
+                @Test
+                fun `enables sarif report to specified location`() {
                     val sarifReportFile = gradleRunner.projectFile("build/reports/mydetekt.sarif")
                     assertThat(result.output).contains("--report sarif:$sarifReportFile")
                 }
 
-                it("sets base path") {
+                @Test
+                fun `sets base path`() {
                     assertThat(result.output).contains("--base-path")
                 }
 
-                it("sets absolute filename of both config file to detekt cli") {
+                @Test
+                fun `sets absolute filename of both config file to detekt cli`() {
                     val config = gradleRunner.projectFile("config.yml")
 
                     val expectedConfigParam = "--config $config"
                     assertThat(result.output).contains(expectedConfigParam)
                 }
 
-                it("enables debug mode") {
+                @Test
+                fun `enables debug mode`() {
                     assertThat(result.output).contains("--debug")
                 }
 
-                it("enables parallel processing") {
+                @Test
+                fun `enables parallel processing`() {
                     assertThat(result.output).contains("--parallel")
                 }
 
-                it("disables the default ruleset") {
+                @Test
+                fun `disables the default ruleset`() {
                     assertThat(result.output).contains("--disable-default-rulesets")
                 }
             }
         }
     }
-})
+}

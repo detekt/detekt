@@ -4,16 +4,21 @@ import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.dsl.Skip
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledForJreRange
+import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.api.condition.EnabledOnOs
+import org.junit.jupiter.api.condition.JRE.JAVA_11
+import org.junit.jupiter.api.condition.OS.MAC
 import java.util.concurrent.TimeUnit
 
-class DetektMultiplatformSpec : Spek({
+class DetektMultiplatformSpec {
 
-    describe("multiplatform projects - Common target") {
+    @Nested
+    inner class `multiplatform projects - Common target` {
 
-        val gradleRunner by memoized {
+        val gradleRunner =
             setupProject {
                 addSubmodule(
                     "shared",
@@ -30,13 +35,14 @@ class DetektMultiplatformSpec : Spek({
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
                 )
             }
-        }
 
-        it("configures baseline task") {
+        @Test
+        fun `configures baseline task`() {
             gradleRunner.runTasks(":shared:detektBaselineMetadataMain")
         }
 
-        it("configures detekt task without type resolution") {
+        @Test
+        fun `configures detekt task without type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektMetadataMain") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
                 assertDetektWithoutClasspath(it)
@@ -44,9 +50,10 @@ class DetektMultiplatformSpec : Spek({
         }
     }
 
-    describe("multiplatform projects - detekt plain only if user opts out") {
+    @Nested
+    inner class `multiplatform projects - detekt plain only if user opts out` {
 
-        val gradleRunner by memoized {
+        val gradleRunner =
             setupMultiplatformProject {
                 addSubmodule(
                     "shared",
@@ -62,23 +69,25 @@ class DetektMultiplatformSpec : Spek({
                     srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
                 )
             }
-        }
 
-        it("does not configure baseline task") {
+        @Test
+        fun `does not configure baseline task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektBaselineMetadataMain") { result ->
                 assertThat(result.output).contains("Task 'detektBaselineMetadataMain' not found in project")
             }
         }
 
-        it("does not configure detekt task") {
+        @Test
+        fun `does not configure detekt task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektMetadataMain") { result ->
                 assertThat(result.output).contains("Task 'detektMetadataMain' not found in project")
             }
         }
     }
 
-    describe("multiplatform projects - JVM target") {
-        val gradleRunner by memoized {
+    @Nested
+    inner class `multiplatform projects - JVM target` {
+        val gradleRunner =
             setupProject {
                 addSubmodule(
                     "shared",
@@ -101,23 +110,25 @@ class DetektMultiplatformSpec : Spek({
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
                 )
             }
-        }
 
-        it("configures baseline task") {
+        @Test
+        fun `configures baseline task`() {
             gradleRunner.runTasks(":shared:detektBaselineJvmBackendMain")
             gradleRunner.runTasks(":shared:detektBaselineJvmBackendTest")
             gradleRunner.runTasks(":shared:detektBaselineJvmEmbeddedMain")
             gradleRunner.runTasks(":shared:detektBaselineJvmEmbeddedTest")
         }
 
-        it("configures detekt task with type resolution backend") {
+        @Test
+        fun `configures detekt task with type resolution backend`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektJvmBackendMain") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
                 assertDetektWithClasspath(it)
             }
         }
 
-        it("configures detekt task with type resolution embedded") {
+        @Test
+        fun `configures detekt task with type resolution embedded`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektJvmEmbeddedMain") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
                 assertDetektWithClasspath(it)
@@ -125,11 +136,11 @@ class DetektMultiplatformSpec : Spek({
         }
     }
 
-    describe(
-        "multiplatform projects - Android target",
-        skip = skipIfAndroidEnvironmentRequirementsUnmet()
-    ) {
-        val gradleRunner by memoized {
+    @Nested
+    @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
+    inner class `multiplatform projects - Android target` {
+        val gradleRunner =
             setupAndroidProject {
                 addSubmodule(
                     "shared",
@@ -171,20 +182,22 @@ class DetektMultiplatformSpec : Spek({
                     )
                 )
             }
-        }
 
-        it("configures baseline task") {
+        @Test
+        fun `configures baseline task`() {
             gradleRunner.runTasks(":shared:detektBaselineAndroidDebug")
             gradleRunner.runTasks(":shared:detektBaselineAndroidRelease")
         }
 
-        it("configures test tasks") {
+        @Test
+        fun `configures test tasks`() {
             gradleRunner.runTasks(":shared:detektAndroidDebugAndroidTest")
             gradleRunner.runTasks(":shared:detektAndroidDebugUnitTest")
             gradleRunner.runTasks(":shared:detektAndroidReleaseUnitTest")
         }
 
-        it("configures detekt task with type resolution") {
+        @Test
+        fun `configures detekt task with type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektAndroidDebug") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
                 assertDetektWithClasspath(it)
@@ -196,8 +209,9 @@ class DetektMultiplatformSpec : Spek({
         }
     }
 
-    describe("multiplatform projects - JS target") {
-        val gradleRunner by memoized {
+    @Nested
+    inner class `multiplatform projects - JS target` {
+        val gradleRunner =
             setupProject {
                 addSubmodule(
                     "shared",
@@ -221,14 +235,15 @@ class DetektMultiplatformSpec : Spek({
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
             }
-        }
 
-        it("configures baseline task") {
+        @Test
+        fun `configures baseline task`() {
             gradleRunner.runTasks(":shared:detektBaselineJsMain")
             gradleRunner.runTasks(":shared:detektBaselineJsTest")
         }
 
-        it("configures detekt task without type resolution") {
+        @Test
+        fun `configures detekt task without type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektJsMain") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
                 assertDetektWithoutClasspath(it)
@@ -240,11 +255,11 @@ class DetektMultiplatformSpec : Spek({
         }
     }
 
-    describe(
-        "multiplatform projects - iOS target",
-        skip = if (isMacOs() && isXCodeInstalled()) Skip.No else Skip.Yes("XCode is not installed.")
-    ) {
-        val gradleRunner by memoized {
+    @Nested
+    @EnabledOnOs(MAC)
+    @EnabledIf("io.gitlab.arturbosch.detekt.DetektMultiplatformSpecKt#isXCodeInstalled", disabledReason = "XCode is not installed.")
+    inner class `multiplatform projects - iOS target` {
+        val gradleRunner =
             setupProject {
                 addSubmodule(
                     "shared",
@@ -269,16 +284,17 @@ class DetektMultiplatformSpec : Spek({
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
             }
-        }
 
-        it("configures baseline task") {
+        @Test
+        fun `configures baseline task`() {
             gradleRunner.runTasks(":shared:detektBaselineIosArm64Main")
             gradleRunner.runTasks(":shared:detektBaselineIosArm64Test")
             gradleRunner.runTasks(":shared:detektBaselineIosX64Main")
             gradleRunner.runTasks(":shared:detektBaselineIosX64Test")
         }
 
-        it("configures detekt task without type resolution") {
+        @Test
+        fun `configures detekt task without type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektIosArm64Main") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
                 assertDetektWithoutClasspath(it)
@@ -297,7 +313,7 @@ class DetektMultiplatformSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     return DslGradleRunner(
@@ -357,9 +373,7 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
-private fun isMacOs() = System.getProperty("os.name").contains("mac", ignoreCase = true)
-
-private fun isXCodeInstalled(): Boolean {
+fun isXCodeInstalled(): Boolean {
     return try {
         val process = ProcessBuilder()
             .command("xcode-select", "--print-path")

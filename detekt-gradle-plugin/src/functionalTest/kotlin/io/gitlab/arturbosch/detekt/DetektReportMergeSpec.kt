@@ -4,15 +4,19 @@ import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 
-internal class DetektReportMergeSpec : Spek({
+class DetektReportMergeSpec {
 
-    describe("Sarif merge is configured correctly for multi module project") {
+    @Nested
+    inner class `Sarif merge is configured correctly for multi module project` {
 
-        val groovy by memoized { DslTestBuilder.groovy() }
-        val groovyBuildFileContent by memoized {
+        val groovy = DslTestBuilder.groovy()
+        val groovyBuildFileContent =
             """
             |${groovy.gradlePlugins}
             |
@@ -41,9 +45,8 @@ internal class DetektReportMergeSpec : Spek({
             |  }
             |}
             |""".trimMargin()
-        }
-        val kotlin by memoized { DslTestBuilder.kotlin() }
-        val kotlinBuildFileContent by memoized {
+        val kotlin = DslTestBuilder.kotlin()
+        val kotlinBuildFileContent =
             """
             |${kotlin.gradlePlugins}
             |
@@ -72,45 +75,47 @@ internal class DetektReportMergeSpec : Spek({
             |  }
             |}
             |""".trimMargin()
-        }
 
-        it("using Groovy and Kotlin") {
-            listOf(
-                groovy to groovyBuildFileContent,
-                kotlin to kotlinBuildFileContent
-            ).forEach { (builder, mainBuildFileContent) ->
-                val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
-                    addSubmodule(
-                        name = "child1",
-                        numberOfSourceFilesPerSourceDir = 2,
-                        numberOfCodeSmells = 2
-                    )
-                    addSubmodule(
-                        name = "child2",
-                        numberOfSourceFilesPerSourceDir = 4,
-                        numberOfCodeSmells = 4
-                    )
-                }
+        fun scenarios(): List<Arguments> = listOf(
+            arguments(groovy, groovyBuildFileContent),
+            arguments(kotlin, kotlinBuildFileContent)
+        )
 
-                val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
-                gradleRunner.setupProject()
-                gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { _ ->
-                    assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
-                    assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
-                    assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
-                        .contains("\"ruleId\": \"detekt.style.MagicNumber\"")
-                    projectLayout.submodules.forEach {
-                        assertThat(projectFile("${it.name}/build/reports/detekt/detekt.sarif")).exists()
-                    }
+        @ParameterizedTest(name = "Using {0}")
+        @MethodSource("scenarios")
+        fun sarifMerge(builder: DslTestBuilder, mainBuildFileContent: String) {
+            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "child1",
+                    numberOfSourceFilesPerSourceDir = 2,
+                    numberOfCodeSmells = 2
+                )
+                addSubmodule(
+                    name = "child2",
+                    numberOfSourceFilesPerSourceDir = 4,
+                    numberOfCodeSmells = 4
+                )
+            }
+
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            gradleRunner.setupProject()
+            gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { _ ->
+                assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
+                assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
+                assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
+                    .contains("\"ruleId\": \"detekt.style.MagicNumber\"")
+                projectLayout.submodules.forEach {
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.sarif")).exists()
                 }
             }
         }
     }
 
-    describe("XML merge is configured correctly for multi module project") {
+    @Nested
+    inner class `XML merge is configured correctly for multi module project` {
 
-        val groovy by memoized { DslTestBuilder.groovy() }
-        val groovyBuildFileContent by memoized {
+        val groovy = DslTestBuilder.groovy()
+        val groovyBuildFileContent =
             """
             |${groovy.gradlePlugins}
             |
@@ -139,9 +144,8 @@ internal class DetektReportMergeSpec : Spek({
             |  }
             |}
             |""".trimMargin()
-        }
-        val kotlin by memoized { DslTestBuilder.kotlin() }
-        val kotlinBuildFileContent by memoized {
+        val kotlin = DslTestBuilder.kotlin()
+        val kotlinBuildFileContent =
             """
             |${kotlin.gradlePlugins}
             |
@@ -170,38 +174,39 @@ internal class DetektReportMergeSpec : Spek({
             |  }
             |}
             |""".trimMargin()
-        }
 
-        it("using Groovy and Kotlin") {
-            listOf(
-                groovy to groovyBuildFileContent,
-                kotlin to kotlinBuildFileContent
-            ).forEach { (builder, mainBuildFileContent) ->
-                val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
-                    addSubmodule(
-                        name = "child1",
-                        numberOfSourceFilesPerSourceDir = 2,
-                        numberOfCodeSmells = 2
-                    )
-                    addSubmodule(
-                        name = "child2",
-                        numberOfSourceFilesPerSourceDir = 4,
-                        numberOfCodeSmells = 4
-                    )
-                }
+        fun scenarios(): List<Arguments> = listOf(
+            arguments(groovy, groovyBuildFileContent),
+            arguments(kotlin, kotlinBuildFileContent)
+        )
 
-                val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
-                gradleRunner.setupProject()
-                gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { _ ->
-                    assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
-                    assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
-                    assertThat(projectFile("build/reports/detekt/merge.xml").readText())
-                        .contains("<error column=\"30\" line=\"4\"")
-                    projectLayout.submodules.forEach {
-                        assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
-                    }
+        @ParameterizedTest(name = "Using {0}")
+        @MethodSource("scenarios")
+        fun sarifMerge(builder: DslTestBuilder, mainBuildFileContent: String) {
+            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "child1",
+                    numberOfSourceFilesPerSourceDir = 2,
+                    numberOfCodeSmells = 2
+                )
+                addSubmodule(
+                    name = "child2",
+                    numberOfSourceFilesPerSourceDir = 4,
+                    numberOfCodeSmells = 4
+                )
+            }
+
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            gradleRunner.setupProject()
+            gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { _ ->
+                assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
+                assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
+                assertThat(projectFile("build/reports/detekt/merge.xml").readText())
+                    .contains("<error column=\"30\" line=\"4\"")
+                projectLayout.submodules.forEach {
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
                 }
             }
         }
     }
-})
+}

@@ -3,16 +3,21 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.dsl.Skip
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledForJreRange
+import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.api.condition.JRE
 
-object DetektAndroidSpec : Spek({
-    describe(
-        "When applying detekt in an Android project",
-        skip = skipIfAndroidEnvironmentRequirementsUnmet()
-    ) {
-        describe("configures android tasks for android application") {
+class DetektAndroidSpec {
+    @Nested
+    @EnabledForJreRange(min = JRE.JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
+    inner class `When applying detekt in an Android project` {
+
+        @Nested
+        inner class `configures android tasks for android application` {
             val projectLayout = ProjectLayout(
                 numberOfSourceFilesInRootPerSourceDir = 0,
             ).apply {
@@ -45,10 +50,13 @@ object DetektAndroidSpec : Spek({
                     )
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :app:detektMain") {
+            @Test
+            @DisplayName("task :app:detektMain")
+            fun appDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
@@ -68,7 +76,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :app:detektTest") {
+            @Test
+            @DisplayName("task :app:detektTest")
+            fun appDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """)
@@ -90,7 +100,8 @@ object DetektAndroidSpec : Spek({
             }
         }
 
-        describe("does not configures android tasks if user opts out") {
+        @Nested
+        inner class `does not configures android tasks if user opts out` {
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
                     name = "app",
@@ -104,28 +115,36 @@ object DetektAndroidSpec : Spek({
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
-            gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
+                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :app:detekt") {
+            @Test
+            @DisplayName("task :app:detekt")
+            fun appDetekt() {
                 gradleRunner.runTasks(":app:detekt")
             }
 
-            it("task :app:detektMain") {
+            @Test
+            @DisplayName("task :app:detektMain")
+            fun appDetektMain() {
                 gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
                     assertThat(result.output).contains("Task 'detektMain' not found in project")
                 }
             }
 
-            it("task :app:detektTest") {
+            @Test
+            @DisplayName("task :app:detektTest")
+            fun appDetektTest() {
                 gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
                     assertThat(result.output).contains("Task 'detektTest' not found in project")
                 }
             }
         }
 
-        describe("configures android tasks for android library") {
+        @Nested
+        inner class `configures android tasks for android library` {
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
                     name = "lib",
@@ -147,10 +166,13 @@ object DetektAndroidSpec : Spek({
                     )
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :lib:detektMain") {
+            @Test
+            @DisplayName("task :lib:detektMain")
+            fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
@@ -166,7 +188,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :lib:detektTest") {
+            @Test
+            @DisplayName("task :lib:detektTest")
+            fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """)
                     assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """)
@@ -184,7 +208,8 @@ object DetektAndroidSpec : Spek({
             }
         }
 
-        describe("configures android tasks for different build variants") {
+        @Nested
+        inner class `configures android tasks for different build variants` {
 
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
@@ -199,10 +224,13 @@ object DetektAndroidSpec : Spek({
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :lib:detektMain") {
+            @Test
+            @DisplayName("task :lib:detektMain")
+            fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -214,7 +242,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :lib:detektTest") {
+            @Test
+            @DisplayName("task :lib:detektTest")
+            fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -229,7 +259,8 @@ object DetektAndroidSpec : Spek({
             }
         }
 
-        describe("configures android tasks for different build variants excluding ignored build types") {
+        @Nested
+        inner class `configures android tasks for different build variants excluding ignored build types` {
 
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
@@ -246,10 +277,13 @@ object DetektAndroidSpec : Spek({
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :lib:detektMain") {
+            @Test
+            @DisplayName("task :lib:detektMain")
+            fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -262,7 +296,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :lib:detektTest") {
+            @Test
+            @DisplayName("task :lib:detektTest")
+            fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -278,7 +314,8 @@ object DetektAndroidSpec : Spek({
             }
         }
 
-        describe("configures android tasks for different build variants excluding ignored variants") {
+        @Nested
+        inner class `configures android tasks for different build variants excluding ignored variants` {
 
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
@@ -295,10 +332,13 @@ object DetektAndroidSpec : Spek({
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :lib:detektMain") {
+            @Test
+            @DisplayName("task :lib:detektMain")
+            fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -311,7 +351,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :lib:detektTest") {
+            @Test
+            @DisplayName("task :lib:detektTest")
+            fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -327,7 +369,8 @@ object DetektAndroidSpec : Spek({
             }
         }
 
-        describe("configures android tasks for different build variants excluding ignored flavors") {
+        @Nested
+        inner class `configures android tasks for different build variants excluding ignored flavors` {
 
             val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
                 addSubmodule(
@@ -344,10 +387,13 @@ object DetektAndroidSpec : Spek({
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
                 )
             }
-            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout)
-            gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            }
 
-            it("task :lib:detektMain") {
+            @Test
+            @DisplayName("task :lib:detektMain")
+            fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -360,7 +406,9 @@ object DetektAndroidSpec : Spek({
                 }
             }
 
-            it("task :lib:detektTest") {
+            @Test
+            @DisplayName("task :lib:detektTest")
+            fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                     assertThat(buildResult.tasks.map { it.path }).containsAll(
                         listOf(
@@ -376,7 +424,7 @@ object DetektAndroidSpec : Spek({
             }
         }
     }
-})
+}
 
 /**
  * ANDROID_SDK_ROOT is preferred over ANDROID_HOME, but the check here is more lenient.
@@ -384,12 +432,6 @@ object DetektAndroidSpec : Spek({
  */
 internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
-
-internal fun skipIfAndroidEnvironmentRequirementsUnmet() = when {
-    !isAndroidSdkInstalled() -> Skip.Yes("No android SDK.")
-    getJdkVersion() < 11 -> Skip.Yes("Android Gradle Plugin 7.0+ requires JDK 11 or newer")
-    else -> Skip.No
-}
 
 internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.app") = """
     <manifest package="$packageName"

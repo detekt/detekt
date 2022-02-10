@@ -1,34 +1,31 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-internal class DetektTaskMultiModuleSpec : Spek({
+class DetektTaskMultiModuleSpec {
 
-    describe("The Detekt Gradle plugin used in a multi module project") {
+    @Nested
+    inner class `The Detekt Gradle plugin used in a multi module project` {
 
-        listOf(groovy(), kotlin()).forEach { builder ->
+        @ParameterizedTest(
+            name = "Using {0}, it is applied with defaults to all subprojects individually without " +
+                "sources in root project using the subprojects block"
+        )
+        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+        fun applyToSubprojectsWithoutSources(builder: DslTestBuilder) {
+            val projectLayout = ProjectLayout(0).apply {
+                addSubmodule("child1", 2)
+                addSubmodule("child2", 4)
+            }
 
-            describe("using ${builder.gradleBuildName}") {
-
-                it(
-                    """
-                    |is applied with defaults to all subprojects individually
-                    |without sources in root project using the subprojects block
-                """.trimMargin()
-                ) {
-                    val projectLayout = ProjectLayout(0).apply {
-                        addSubmodule("child1", 2)
-                        addSubmodule("child2", 4)
-                    }
-
-                    val mainBuildFileContent: String = """
+            val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
                         |
                         |allprojects {
@@ -39,38 +36,38 @@ internal class DetektTaskMultiModuleSpec : Spek({
                         |}
                         |""".trimMargin()
 
-                    val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
-                    gradleRunner.setupProject()
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        }
-
-                        assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
-                        assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
-                        assertThat(projectFile("build/reports/detekt/detekt.txt")).doesNotExist()
-                        projectLayout.submodules.forEach {
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
-                        }
-                    }
+            gradleRunner.setupProject()
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
-                it(
-                    """
-                    |is applied with defaults to main project
-                    |and subprojects individually using the allprojects block
-                """.trimMargin()
-                ) {
-                    val projectLayout = ProjectLayout(1).apply {
-                        addSubmodule("child1", 2)
-                        addSubmodule("child2", 4)
-                    }
+                assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
+                assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
+                assertThat(projectFile("build/reports/detekt/detekt.txt")).doesNotExist()
+                projectLayout.submodules.forEach {
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
+                }
+            }
+        }
 
-                    val mainBuildFileContent: String = """
+        @ParameterizedTest(
+            name = "Using {0}, it is applied with defaults to main project and subprojects " +
+                "individually using the allprojects block"
+        )
+        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+        fun applyWithAllprojectsBlock(builder: DslTestBuilder) {
+            val projectLayout = ProjectLayout(1).apply {
+                addSubmodule("child1", 2)
+                addSubmodule("child2", 4)
+            }
+
+            val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
                         |
                         |allprojects {
@@ -79,33 +76,35 @@ internal class DetektTaskMultiModuleSpec : Spek({
                         |}
                         |""".trimMargin()
 
-                    val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
-                    gradleRunner.setupProject()
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        }
-
-                        assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
-                        assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
-                        assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
-                        projectLayout.submodules.forEach {
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
-                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
-                        }
-                    }
+            gradleRunner.setupProject()
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
-                it("uses custom configs when configured in allprojects block") {
-                    val projectLayout = ProjectLayout(1).apply {
-                        addSubmodule("child1", 2)
-                        addSubmodule("child2", 4)
-                    }
+                assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
+                assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+                assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
+                projectLayout.submodules.forEach {
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                    assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
+                }
+            }
+        }
 
-                    val mainBuildFileContent: String = """
+        @ParameterizedTest(name = "Using {0}, it uses custom configs when configured in allprojects block")
+        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+        fun usesCustomConfigsWhenConfiguredInAllprojectsBlock(builder: DslTestBuilder) {
+            val projectLayout = ProjectLayout(1).apply {
+                addSubmodule("child1", 2)
+                addSubmodule("child2", 4)
+            }
+
+            val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
                         |
                         |allprojects {
@@ -118,38 +117,43 @@ internal class DetektTaskMultiModuleSpec : Spek({
                         |}
                         |""".trimMargin()
 
-                    val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
-                    gradleRunner.setupProject()
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        }
-
-                        assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
-                        assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
-                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
-                        projectLayout.submodules.forEach {
-                            assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
-                            assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
-                            assertThat(projectFile("${it.name}/build/detekt-reports/detekt.txt")).exists()
-                        }
-                    }
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            gradleRunner.setupProject()
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
-                it("allows changing defaults in allprojects block that can be overwritten in subprojects") {
-                    val child2DetektConfig = """
+                assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
+                assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
+                projectLayout.submodules.forEach {
+                    assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
+                    assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
+                    assertThat(projectFile("${it.name}/build/detekt-reports/detekt.txt")).exists()
+                }
+            }
+        }
+
+        @ParameterizedTest(
+            name = "Using {0}, it allows changing defaults in allprojects block that can be " +
+                "overwritten in subprojects"
+        )
+        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+        fun allowsChangingDefaultsInAllProjectsThatAreOverwrittenInSubprojects(builder: DslTestBuilder) {
+            val child2DetektConfig = """
                         |detekt {
                         |   reportsDir = file("build/custom")
                         |}
                         |""".trimMargin()
 
-                    val projectLayout = ProjectLayout(1).apply {
-                        addSubmodule("child1", 2)
-                        addSubmodule("child2", 4, buildFileContent = child2DetektConfig)
-                    }
+            val projectLayout = ProjectLayout(1).apply {
+                addSubmodule("child1", 2)
+                addSubmodule("child2", 4, buildFileContent = child2DetektConfig)
+            }
 
-                    val mainBuildFileContent: String = """
+            val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
                         |
                         |allprojects {
@@ -162,34 +166,36 @@ internal class DetektTaskMultiModuleSpec : Spek({
                         |}
                         |""".trimMargin()
 
-                    val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+            val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
-                    gradleRunner.setupProject()
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        }
-
-                        assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
-                        assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
-                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
-                        assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
-                        assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
-                        assertThat(projectFile("child1/build/detekt-reports/detekt.txt")).exists()
-                        assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
-                        assertThat(projectFile("child2/build/custom/detekt.html")).exists()
-                        assertThat(projectFile("child2/build/custom/detekt.txt")).exists()
-                    }
+            gradleRunner.setupProject()
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                 }
 
-                it("can be applied to all files in entire project resulting in 1 report") {
-                    val projectLayout = ProjectLayout(1).apply {
-                        addSubmodule("child1", 2)
-                        addSubmodule("child2", 4)
-                    }
+                assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
+                assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
+                assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
+                assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
+                assertThat(projectFile("child1/build/detekt-reports/detekt.txt")).exists()
+                assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
+                assertThat(projectFile("child2/build/custom/detekt.html")).exists()
+                assertThat(projectFile("child2/build/custom/detekt.txt")).exists()
+            }
+        }
 
-                    val detektConfig: String = """
+        @ParameterizedTest(name = "Using {0}, it can be applied to all files in entire project resulting in 1 report")
+        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+        fun applyToAllFilesInProjectResultingInSingleReport(builder: DslTestBuilder) {
+            val projectLayout = ProjectLayout(1).apply {
+                addSubmodule("child1", 2)
+                addSubmodule("child2", 4)
+            }
+
+            val detektConfig: String = """
                         |detekt {
                         |    source = files(
                         |       "${"$"}projectDir/src",
@@ -198,28 +204,26 @@ internal class DetektTaskMultiModuleSpec : Spek({
                         |    )
                         |}
                         """.trimMargin()
-                    val gradleRunner = builder
-                        .withProjectLayout(projectLayout)
-                        .withDetektConfig(detektConfig)
-                        .build()
+            val gradleRunner = builder
+                .withProjectLayout(projectLayout)
+                .withDetektConfig(detektConfig)
+                .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(result.task(":${submodule.name}:detekt")).isNull()
-                        }
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")).isNull()
+                }
 
-                        assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
-                        assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
-                        assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
-                        projectLayout.submodules.forEach { submodule ->
-                            assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
-                            assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
-                            assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.txt")).doesNotExist()
-                        }
-                    }
+                assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
+                assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+                assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
+                    assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
+                    assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.txt")).doesNotExist()
                 }
             }
         }
     }
-})
+}
