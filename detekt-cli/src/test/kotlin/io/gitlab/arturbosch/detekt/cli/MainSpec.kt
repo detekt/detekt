@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.stream.Stream
 import kotlin.reflect.KClass
 
 class MainSpec {
@@ -23,13 +23,13 @@ class MainSpec {
     @Nested
     inner class `Build runner` {
 
-        fun runnerConfigs(): Stream<Arguments> {
-            return Stream.of(
-                Arguments.of(arrayOf("--generate-config"), ConfigExporter::class),
-                Arguments.of(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),
-                Arguments.of(arrayOf("--print-ast"), AstPrinter::class),
-                Arguments.of(arrayOf("--version"), VersionPrinter::class),
-                Arguments.of(emptyArray<String>(), Runner::class),
+        fun runnerConfigs(): List<Arguments> {
+            return listOf(
+                arguments(arrayOf("--generate-config"), ConfigExporter::class),
+                arguments(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),
+                arguments(arrayOf("--print-ast"), AstPrinter::class),
+                arguments(arrayOf("--version"), VersionPrinter::class),
+                arguments(emptyArray<String>(), Runner::class),
             )
         }
 
