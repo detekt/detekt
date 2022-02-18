@@ -66,7 +66,7 @@ internal class DefaultCliInvoker(
         }
     }
 
-    private fun isBuildFailure(msg: String) = "Build failed with" in msg && "issues" in msg
+    private fun isBuildFailure(msg: String) = "Analysis failed with" in msg && "issues" in msg
 }
 
 private class DryRunInvoker(private val logger: Logger) : DetektInvoker {
