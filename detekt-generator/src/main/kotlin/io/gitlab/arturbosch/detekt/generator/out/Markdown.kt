@@ -4,6 +4,7 @@ package io.gitlab.arturbosch.detekt.generator.out
 
 sealed class Markdown(open var content: String = "") {
     fun append(value: String) {
+        if (value.isEmpty()) return
         content = if (content.isEmpty()) {
             value
         } else {

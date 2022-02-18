@@ -8,21 +8,8 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.nio.file.Paths
-import java.util.stream.Stream
 
 class DetektYmlConfigSpec {
-
-    private val ruleSetsNamesToPackage: List<Pair<String, String>> = listOf(
-        "complexity" to "io.gitlab.arturbosch.detekt.rules.complexity",
-        "coroutines" to "io.gitlab.arturbosch.detekt.rules.coroutines",
-        "comments" to "io.gitlab.arturbosch.detekt.rules.documentation",
-        "empty-blocks" to "io.gitlab.arturbosch.detekt.rules.empty",
-        "exceptions" to "io.gitlab.arturbosch.detekt.rules.exceptions",
-        "naming" to "io.gitlab.arturbosch.detekt.rules.naming",
-        "performance" to "io.gitlab.arturbosch.detekt.rules.performance",
-        "potential-bugs" to "io.gitlab.arturbosch.detekt.rules.bugs",
-        "style" to "io.gitlab.arturbosch.detekt.rules.style",
-    )
 
     private val generalConfigKeys = listOf(
         "build",
@@ -36,11 +23,20 @@ class DetektYmlConfigSpec {
         Paths.get("../detekt-core/src/main/resources/default-detekt-config.yml").toAbsolutePath()
     ) as YamlConfig
 
-    fun ruleSetsNamesToPackageArguments(): Stream<Arguments> =
-        ruleSetsNamesToPackage.stream().map { arguments(it.first, it.second) }
+    private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(
+        arguments("complexity", "io.gitlab.arturbosch.detekt.rules.complexity"),
+        arguments("coroutines", "io.gitlab.arturbosch.detekt.rules.coroutines"),
+        arguments("comments", "io.gitlab.arturbosch.detekt.rules.documentation"),
+        arguments("empty-blocks", "io.gitlab.arturbosch.detekt.rules.empty"),
+        arguments("exceptions", "io.gitlab.arturbosch.detekt.rules.exceptions"),
+        arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),
+        arguments("performance", "io.gitlab.arturbosch.detekt.rules.performance"),
+        arguments("potential-bugs", "io.gitlab.arturbosch.detekt.rules.bugs"),
+        arguments("style", "io.gitlab.arturbosch.detekt.rules.style"),
+    )
 
     @ParameterizedTest
-    @MethodSource("ruleSetsNamesToPackageArguments")
+    @MethodSource("ruleSetsNamesToPackage")
     fun `section is valid`(name: String, packageName: String) {
         ConfigAssert(config, name, packageName).assert()
     }
@@ -54,7 +50,7 @@ class DetektYmlConfigSpec {
 
     @Test
     fun `is completely checked`() {
-        val checkedRuleSetNames = ruleSetsNamesToPackage.map { it.first }
+        val checkedRuleSetNames = ruleSetsNamesToPackage().map { it.get()[0] as String }
 
         val topLevelConfigKeys = config.properties.keys
 

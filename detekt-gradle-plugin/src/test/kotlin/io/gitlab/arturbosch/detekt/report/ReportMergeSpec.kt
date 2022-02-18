@@ -1,20 +1,25 @@
 package io.gitlab.arturbosch.detekt.report
 
 import io.gitlab.arturbosch.detekt.manifestContent
-import io.gitlab.arturbosch.detekt.skipIfAndroidEnvironmentRequirementsUnmet
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledForJreRange
+import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.api.condition.JRE.JAVA_11
 
-class ReportMergeSpec : Spek({
+class ReportMergeSpec {
 
-    describe("Merging reports in a multi module projects") {
+    @Nested
+    inner class `Merging reports in a multi module projects` {
 
-        it("for jvm detekt") {
+        @Suppress("LongMethod")
+        @Test
+        fun `for jvm detekt`() {
             val builder = DslTestBuilder.groovy()
             val projectLayout = ProjectLayout(0).apply {
                 addSubmodule(
@@ -85,10 +90,11 @@ class ReportMergeSpec : Spek({
             }
         }
 
-        it(
-            "for android detekt",
-            skip = skipIfAndroidEnvironmentRequirementsUnmet()
-        ) {
+        @Suppress("LongMethod")
+        @Test
+        @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+        @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
+        fun `for android detekt`() {
             val builder = DslTestBuilder.groovy()
             val projectLayout = ProjectLayout(0).apply {
                 addSubmodule(
@@ -189,4 +195,4 @@ class ReportMergeSpec : Spek({
             }
         }
     }
-})
+}

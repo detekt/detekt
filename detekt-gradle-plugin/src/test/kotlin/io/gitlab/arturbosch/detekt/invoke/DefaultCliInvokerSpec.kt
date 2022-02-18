@@ -4,12 +4,13 @@ import io.gitlab.arturbosch.detekt.gradle.TestFileCollection
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import org.assertj.core.api.Assertions.assertThatCode
 import org.gradle.api.GradleException
-import org.spekframework.spek2.Spek
+import org.junit.jupiter.api.Test
 import java.net.URLClassLoader
 
-internal class DefaultCliInvokerSpec : Spek({
+class DefaultCliInvokerSpec {
 
-    test("catches ClassCastException and fails build") {
+    @Test
+    fun `catches ClassCastException and fails build`() {
         val stubbedCache = ClassLoaderCache { URLClassLoader(emptyArray()) }
 
         assertThatCode {
@@ -18,4 +19,4 @@ internal class DefaultCliInvokerSpec : Spek({
         }.isInstanceOf(GradleException::class.java)
             .hasMessageContaining("testing reflection wrapper...")
     }
-})
+}

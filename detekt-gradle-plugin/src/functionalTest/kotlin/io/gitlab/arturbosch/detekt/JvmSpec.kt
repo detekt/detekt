@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt
 
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 import java.io.File
 
-object JvmSpec : Spek({
-    describe("Type resolution on JVM") {
+class JvmSpec {
+    @Test
+    fun `Type resolution on JVM`() {
         val projectDir = checkNotNull(javaClass.classLoader.getResource("jvm")?.file)
         val result = GradleRunner.create()
             .withProjectDir(File(projectDir))
@@ -19,4 +19,4 @@ object JvmSpec : Spek({
         assertThat(result.output).contains("ExitOutsideMain - [kotlinExit]")
         assertThat(result.output).contains("ExitOutsideMain - [javaExit]")
     }
-})
+}

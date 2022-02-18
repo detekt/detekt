@@ -3,16 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val FORBIDDEN_NAME = "forbiddenName"
 
-class ForbiddenClassNameSpec : Spek({
+class ForbiddenClassNameSpec {
 
-    describe("ForbiddenClassName rule") {
+    @Nested
+    inner class `ForbiddenClassName rule` {
 
-        it("should report classes with forbidden names") {
+        @Test
+        fun `should report classes with forbidden names`() {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
@@ -24,7 +26,8 @@ class ForbiddenClassNameSpec : Spek({
                 .hasSize(2)
         }
 
-        it("should report a class that starts with a forbidden name") {
+        @Test
+        fun `should report a class that starts with a forbidden name`() {
             val code = "class TestProvider {}"
             assertThat(
                 ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("test"))))
@@ -33,7 +36,8 @@ class ForbiddenClassNameSpec : Spek({
                 .hasSize(1)
         }
 
-        it("should report classes with forbidden names using config string") {
+        @Test
+        fun `should report classes with forbidden names using config string`() {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
@@ -45,7 +49,8 @@ class ForbiddenClassNameSpec : Spek({
                 .hasSize(2)
         }
 
-        it("should report classes with forbidden names using config string using wildcards") {
+        @Test
+        fun `should report classes with forbidden names using config string using wildcards`() {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
@@ -56,7 +61,9 @@ class ForbiddenClassNameSpec : Spek({
             )
                 .hasSize(2)
         }
-        it("should report all forbidden names in message") {
+
+        @Test
+        fun `should report all forbidden names in message`() {
             val code = """
                 class TestManager {}"""
             val actual = ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Test, Manager, Provider")))
@@ -65,4 +72,4 @@ class ForbiddenClassNameSpec : Spek({
                 .isEqualTo("Class name TestManager is forbidden as it contains: Test, Manager")
         }
     }
-})
+}

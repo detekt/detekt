@@ -2,33 +2,34 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
-object ConfigurationCacheSpec : Spek({
-    describe("Detekt task") {
-        listOf(
-            "regular invocation" to arrayOf("detekt"),
-            "dry-run invocation" to arrayOf("detekt", "-Pdetekt-dry-run=true"),
-        ).forEach { (context, arguments) ->
-            context("given $context") {
-                it("can be loaded from the configuration cache") {
-                    val gradleRunner = DslTestBuilder.kotlin().build()
+class ConfigurationCacheSpec {
+    @ParameterizedTest(name = "Given {0}, can be loaded from the configuration cache")
+    @CsvSource(
+        "regular invocation, 'detekt'",
+        "dry-run invocation, 'detekt,-Pdetekt-dry-run=true'",
+    )
+    @Suppress("UnusedPrivateMember") // `unused` is used in the parameterized test name
+    fun detektConfigCache(unused: String, arguments: String) {
+        val gradleRunner = DslTestBuilder.kotlin().build()
 
-                    // First run primes the cache
-                    gradleRunner.runTasks("--configuration-cache", *arguments)
+        // First run primes the cache
+        gradleRunner.runTasks("--configuration-cache", *arguments.split(',').toTypedArray())
 
-                    // Second run reuses the cache
-                    val result = gradleRunner.runTasks("--configuration-cache", *arguments)
+        // Second run reuses the cache
+        val result = gradleRunner.runTasks("--configuration-cache", *arguments.split(',').toTypedArray())
 
-                    assertThat(result.output).contains("Reusing configuration cache.")
-                }
-            }
-        }
+        assertThat(result.output).contains("Reusing configuration cache.")
     }
 
-    describe("Create baseline task") {
-        it("can be loaded from the configuration cache") {
+    @Nested
+    inner class `Create baseline task` {
+        @Test
+        fun `can be loaded from the configuration cache`() {
             val detektConfig = """
                         |detekt {
                         |   baseline = file("build/baseline.xml")
@@ -49,8 +50,10 @@ object ConfigurationCacheSpec : Spek({
         }
     }
 
-    describe("Generate config task") {
-        it("can be loaded from the configuration cache") {
+    @Nested
+    inner class `Generate config task` {
+        @Test
+        fun `can be loaded from the configuration cache`() {
             val gradleRunner = DslTestBuilder.kotlin()
                 .dryRun()
                 .build()
@@ -64,4 +67,4 @@ object ConfigurationCacheSpec : Spek({
             assertThat(result.output).contains("Reusing configuration cache.")
         }
     }
-})
+}

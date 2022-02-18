@@ -4,14 +4,15 @@ import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 /**
  * Tests that run the Detekt Gradle Plugins tasks multiple times to check for correct
  * UP-TO-DATE states and correct build caching.
  */
-internal class PluginTaskBehaviorSpec : Spek({
+class PluginTaskBehaviorSpec {
 
     val configFileName = "config.yml"
     val baselineFileName = "baseline.xml"
@@ -23,10 +24,12 @@ internal class PluginTaskBehaviorSpec : Spek({
                     |}
                 """
 
-    describe("The Detekt Gradle Plugin :detekt Task") {
+    @Nested
+    inner class `The Detekt Gradle Plugin 'detekt' Task` {
         lateinit var gradleRunner: DslGradleRunner
 
-        beforeEachTest {
+        @BeforeEach
+        fun setupGradleRunner() {
             gradleRunner = kotlin()
                 .withDetektConfig(detektConfig)
                 .withBaseline(baselineFileName)
@@ -34,7 +37,8 @@ internal class PluginTaskBehaviorSpec : Spek({
                 .build()
         }
 
-        it("should be UP-TO-DATE the 2nd run without changes") {
+        @Test
+        fun `should be UP-TO-DATE the 2nd run without changes`() {
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
@@ -42,7 +46,9 @@ internal class PluginTaskBehaviorSpec : Spek({
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
             }
         }
-        it("should pick up build artifacts from the build cache on a 2nd run after deleting the build/ dir") {
+
+        @Test
+        fun `should pick up build artifacts from the build cache on a 2nd run after deleting the build dir`() {
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
@@ -54,7 +60,9 @@ internal class PluginTaskBehaviorSpec : Spek({
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
             }
         }
-        it("should pick up build artifacts from the build cache on a 2nd run after running :clean") {
+
+        @Test
+        fun `should pick up build artifacts from the build cache on a 2nd run after running 'clean'`() {
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
@@ -63,7 +71,9 @@ internal class PluginTaskBehaviorSpec : Spek({
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
             }
         }
-        it("should run again after changing config") {
+
+        @Test
+        fun `should run again after changing config`() {
             val configFileWithCommentsDisabled = """
                             |comments:
                             |  active: false
@@ -80,7 +90,9 @@ internal class PluginTaskBehaviorSpec : Spek({
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
         }
-        it("should run again after changing baseline") {
+
+        @Test
+        fun `should run again after changing baseline`() {
             val changedBaselineContent = """
                             |<some>
                             |    <more/>
@@ -99,8 +111,9 @@ internal class PluginTaskBehaviorSpec : Spek({
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
         }
-        it("should run again after changing inputs") {
 
+        @Test
+        fun `should run again after changing inputs`() {
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
@@ -113,4 +126,4 @@ internal class PluginTaskBehaviorSpec : Spek({
             }
         }
     }
-})
+}

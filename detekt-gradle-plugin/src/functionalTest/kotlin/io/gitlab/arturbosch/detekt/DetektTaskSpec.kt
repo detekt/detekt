@@ -1,58 +1,52 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.groovy
-import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-internal class DetektTaskSpec : Spek({
+class DetektTaskSpec {
 
-    describe("When applying the detekt gradle plugin") {
-        listOf(groovy(), kotlin()).forEach { builder ->
-            context(builder.gradleBuildName) {
-                describe("using the ignoreFailures toggle") {
-                    val projectLayoutWithTooManyIssues = ProjectLayout(
-                        numberOfSourceFilesInRootPerSourceDir = 15,
-                        numberOfCodeSmellsInRootPerSourceDir = 15
-                    )
+    private val projectLayoutWithTooManyIssues = ProjectLayout(
+        numberOfSourceFilesInRootPerSourceDir = 15,
+        numberOfCodeSmellsInRootPerSourceDir = 15
+    )
 
-                    it("build succeeds with more issues than threshold if enabled") {
+    @ParameterizedTest(name = "Using {0}, build succeeds with more issues than threshold if ignoreFailures = true")
+    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+    fun ignoreFailures(builder: DslTestBuilder) {
+        val config = """
+            |detekt {
+            |   ignoreFailures = true
+            |}
+            """
 
-                        val config = """
-                            |detekt {
-                            |   ignoreFailures = true
-                            |}
-                            """
+        val gradleRunner = builder
+            .withProjectLayout(projectLayoutWithTooManyIssues)
+            .withDetektConfig(config)
+            .build()
 
-                        val gradleRunner = builder
-                            .withProjectLayout(projectLayoutWithTooManyIssues)
-                            .withDetektConfig(config)
-                            .build()
-
-                        gradleRunner.runDetektTaskAndCheckResult { result ->
-                            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        }
-                    }
-                    it("build fails with more issues than threshold successfully if disabled") {
-
-                        val config = """
-                            |detekt {
-                            |   ignoreFailures = false
-                            |}
-                            """
-
-                        val gradleRunner = builder
-                            .withProjectLayout(projectLayoutWithTooManyIssues)
-                            .withDetektConfig(config)
-                            .build()
-
-                        gradleRunner.runDetektTaskAndExpectFailure()
-                    }
-                }
-            }
+        gradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         }
     }
-})
+
+    @ParameterizedTest(name = "Using {0}, build fails with more issues than threshold successfully if ignoreFailures = false")
+    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
+    fun doNotIgnoreFailures(builder: DslTestBuilder) {
+        val config = """
+            |detekt {
+            |   ignoreFailures = false
+            |}
+            """
+
+        val gradleRunner = builder
+            .withProjectLayout(projectLayoutWithTooManyIssues)
+            .withDetektConfig(config)
+            .build()
+
+        gradleRunner.runDetektTaskAndExpectFailure()
+    }
+}

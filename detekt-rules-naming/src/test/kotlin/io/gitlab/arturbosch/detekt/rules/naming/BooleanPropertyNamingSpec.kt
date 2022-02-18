@@ -1,59 +1,65 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class BooleanPropertyNamingSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
+    val subject = BooleanPropertyNaming()
 
-    val subject by memoized { BooleanPropertyNaming() }
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `BooleanPropertyNaming rule` {
 
-    describe("BooleanPropertyNaming rule") {
-
-        context("argument declarations") {
-            it("should warn about Kotlin Boolean") {
+        @Nested
+        inner class `argument declarations` {
+            @Test
+            fun `should warn about Kotlin Boolean`() {
                 val code = """data class Test (var default: Boolean)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Kotlin Boolean nullable") {
+            @Test
+            fun `should warn about Kotlin Boolean nullable`() {
                 val code = """data class Test (var default: Boolean?)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Kotlin Boolean initialized") {
+            @Test
+            fun `should warn about Kotlin Boolean initialized`() {
                 val code = """data class Test (var default: Boolean = false)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Java Boolean") {
+            @Test
+            fun `should warn about Java Boolean`() {
                 val code = """data class Test (var default: java.lang.Boolean)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
 
-            it("should not detect primitive types") {
+            @Test
+            fun `should not detect primitive types`() {
                 val code = """data class Test (var count: Int)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect names that match an allowed pattern") {
+            @Test
+            fun `should not detect names that match an allowed pattern`() {
                 val code = """data class Test (var isEnabled: Boolean, var hasDefault: Boolean)"""
                 val findings = subject.compileAndLintWithContext(env, code)
 
@@ -61,8 +67,10 @@ class BooleanPropertyNamingSpec : Spek({
             }
         }
 
-        context("property declarations") {
-            it("should warn about Kotlin Boolean") {
+        @Nested
+        inner class `property declarations` {
+            @Test
+            fun `should warn about Kotlin Boolean`() {
                 val code = """
                     class Test {
                         var default: Boolean = true
@@ -73,7 +81,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Kotlin Boolean nullable") {
+            @Test
+            fun `should warn about Kotlin Boolean nullable`() {
                 val code = """
                     class Test {
                         var default: Boolean? = null
@@ -84,7 +93,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Kotlin Boolean initialized") {
+            @Test
+            fun `should warn about Kotlin Boolean initialized`() {
                 val code = """
                     class Test {
                         var default: Boolean = false
@@ -95,7 +105,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about inferred boolean type") {
+            @Test
+            fun `should warn about inferred boolean type`() {
                 val code = """
                     class Test {
                         var default = true
@@ -106,7 +117,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should warn about Java Boolean") {
+            @Test
+            fun `should warn about Java Boolean`() {
                 val code = """
                     class Test {
                         var default: java.lang.Boolean = java.lang.Boolean(true)
@@ -117,7 +129,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("should not detect primitive types") {
+            @Test
+            fun `should not detect primitive types`() {
                 val code = """
                     class Test {
                         var count: Int = 0
@@ -128,7 +141,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect names that match an allowed pattern") {
+            @Test
+            fun `should not detect names that match an allowed pattern`() {
                 val code = """
                     class Test {
                         var isEnabled: Boolean = true
@@ -140,7 +154,8 @@ class BooleanPropertyNamingSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
-            it("should not detect names that match an allowed pattern from config") {
+            @Test
+            fun `should not detect names that match an allowed pattern from config`() {
                 val code = """
                     class Test {
                         var needReload: Boolean = true
@@ -153,6 +168,6 @@ class BooleanPropertyNamingSpec : Spek({
             }
         }
     }
-})
+}
 
 private const val ALLOWED_PATTERN = "allowedPattern"

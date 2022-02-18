@@ -7,12 +7,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object DetektJvmSpec : Spek({
-    describe("When applying detekt in a JVM project") {
-        context("disabled TXT report") {
+class DetektJvmSpec {
+    @Nested
+    inner class `When applying detekt in a JVM project` {
+
+        @Nested
+        inner class `disabled TXT report` {
 
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
@@ -31,10 +34,10 @@ object DetektJvmSpec : Spek({
                         }
                     }
                 },
-            )
-            gradleRunner.setupProject()
+            ).also(DslGradleRunner::setupProject)
 
-            it("configures detekt type resolution task main") {
+            @Test
+            fun `configures detekt type resolution task main`() {
                 val project = gradleRunner.buildProject()
 
                 val detektTask = project.tasks.getByPath("detektMain") as Detekt
@@ -47,7 +50,7 @@ object DetektJvmSpec : Spek({
                 assertThat(argumentString).contains("--classpath")
             }
 
-            it("configures detekt type resolution task test") {
+            fun `configures detekt type resolution task test`() {
                 val project = gradleRunner.buildProject()
 
                 val detektTask = project.tasks.getByPath("detektTest") as Detekt
@@ -61,7 +64,8 @@ object DetektJvmSpec : Spek({
             }
         }
 
-        context("report location set on extension & task") {
+        @Nested
+        inner class `report location set on extension & task` {
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
                 buildFileName = "build.gradle",
@@ -89,17 +93,20 @@ object DetektJvmSpec : Spek({
                     }
                 """.trimIndent(),
                 dryRun = false
-            )
-            gradleRunner.setupProject()
+            ).also {
+                it.setupProject()
+            }
 
-            it("logs a warning") {
+            @Test
+            fun `logs a warning`() {
                 gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
                     assertThat(buildResult.output).contains("TXT report location set on detekt {} extension will be ignored for detektMain task.")
                 }
             }
         }
 
-        context("report location set on task only") {
+        @Nested
+        inner class `report location set on task only` {
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
                 buildFileName = "build.gradle",
@@ -121,14 +128,15 @@ object DetektJvmSpec : Spek({
                     }
                 """.trimIndent(),
                 dryRun = false
-            )
-            gradleRunner.setupProject()
+            ).also {
+                it.setupProject()
+            }
 
-            it("logs a warning") {
+            fun `logs a warning`() {
                 gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
                     assertThat(buildResult.output).doesNotContain("report location set on detekt {} extension will be ignored")
                 }
             }
         }
     }
-})
+}

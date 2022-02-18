@@ -71,6 +71,9 @@ abstract class DslTestBuilder {
     companion object {
         fun kotlin(): DslTestBuilder = KotlinBuilder()
         fun groovy(): DslTestBuilder = GroovyBuilder()
+
+        @JvmStatic
+        fun builders(): Set<DslTestBuilder> = setOf(GroovyBuilder(), KotlinBuilder())
     }
 }
 
@@ -96,6 +99,8 @@ private class GroovyBuilder : DslTestBuilder() {
     override val gradleSubprojectsApplyPlugins = """
         |apply plugin: "io.gitlab.arturbosch.detekt"
         |"""
+
+    override fun toString() = "build.gradle"
 }
 
 private class KotlinBuilder : DslTestBuilder() {
@@ -121,4 +126,6 @@ private class KotlinBuilder : DslTestBuilder() {
     override val gradleSubprojectsApplyPlugins = """
         |plugins.apply("io.gitlab.arturbosch.detekt")
         |"""
+
+    override fun toString() = "build.gradle.kts"
 }

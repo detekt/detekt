@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ConstructorParameterNamingSpec : Spek({
+class ConstructorParameterNamingSpec {
 
-    describe("parameters in a constructor of a class") {
+    @Nested
+    inner class `parameters in a constructor of a class` {
 
-        it("should detect no violations") {
+        @Test
+        fun `should detect no violations`() {
             val code = """
                 class C(val param: String, private val privateParam: String)
 
@@ -22,7 +24,8 @@ class ConstructorParameterNamingSpec : Spek({
             assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should find some violations") {
+        @Test
+        fun `should find some violations`() {
             val code = """
                 class C(val PARAM: String, private val PRIVATE_PARAM: String)
 
@@ -34,14 +37,16 @@ class ConstructorParameterNamingSpec : Spek({
             assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
         }
 
-        it("should find a violation in the correct text location") {
+        @Test
+        fun `should find a violation in the correct text location`() {
             val code = """
                 class C(val PARAM: String)
             """
             assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
         }
 
-        it("should not complain about override") {
+        @Test
+        fun `should not complain about override by default`() {
             val code = """
                 class C(override val PARAM: String) : I
 
@@ -50,7 +55,8 @@ class ConstructorParameterNamingSpec : Spek({
             assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should not complain about override") {
+        @Test
+        fun `should not complain about override when ignore overridden = false`() {
             val code = """
                 class C(override val PARAM: String) : I
 
@@ -60,6 +66,6 @@ class ConstructorParameterNamingSpec : Spek({
             assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
         }
     }
-})
+}
 
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
