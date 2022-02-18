@@ -47,9 +47,5 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    if (configuration.isDefaultValueNonEmptyList()) {
-        list(configuration.name, configuration.getDefaultValueAsList())
-    } else {
-        keyValue { configuration.name to configuration.defaultValue.getQuotedIfNecessary() }
-    }
+    configuration.defaultValue.printAsYaml(configuration.name, this)
 }

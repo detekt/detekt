@@ -132,27 +132,37 @@ class YamlConfigSpec {
 
             @Test
             fun `can be parsed`() {
-                println(config)
                 assertThat(config).isNotNull
             }
 
             @Test
             fun `supports lists`() {
-                println(config)
                 val actualAsList: List<*>? = config
                     .subConfig("style")
                     .subConfig("AsList")
                     .valueOrNull("values")
-                assertThat(actualAsList).isNotNull
+                assertThat(actualAsList).hasSize(3)
             }
 
             @Test
-            fun `supports maps`() {
+            fun `supports dictionaries`() {
                 val actualAsMap: List<Map<*, *>>? = config
                     .subConfig("style")
-                    .subConfig("AsMap")
+                    .subConfig("AsListOfMaps")
                     .valueOrNull("values")
-                assertThat(actualAsMap).isNotNull
+                assertThat(actualAsMap)
+                    .hasSize(3)
+            }
+
+            @Test
+            fun `supports empty dictionaries`() {
+                val actualAsMap: List<Map<*, *>>? = config
+                    .subConfig("style")
+                    .subConfig("EmptyListOfMaps")
+                    .valueOrNull("values")
+                assertThat(actualAsMap)
+                    .isNotNull
+                    .isEmpty()
             }
         }
 

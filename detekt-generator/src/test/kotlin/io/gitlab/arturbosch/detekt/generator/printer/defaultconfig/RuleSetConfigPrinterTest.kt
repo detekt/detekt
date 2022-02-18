@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.explainedValues
 import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue
@@ -197,6 +198,31 @@ internal class RuleSetConfigPrinterTest {
                     |  - 'a'
                     |  - 'b'
                     |  - 'c'
+                """.trimMargin()
+                assertThat(actual).isEqualTo(expected)
+            }
+
+            @Test
+            fun `empty ExplainedValues default value uses empty list syntax`() {
+                val given = configurationTemplate.copy(defaultValue = DefaultValue.of(explainedValues()))
+                val actual = yaml { printConfiguration(given) }
+                assertThat(actual).isEqualTo("name: []")
+            }
+
+            @Test
+            fun `ExplainedValues default value block syntax`() {
+                val given = configurationTemplate.copy(defaultValue = DefaultValue.of(explainedValues(
+                    "a" to "reason a",
+                    "b" to null,
+                    "c" to "reason c",
+                )))
+                val actual = yaml { printConfiguration(given) }
+                val expected = """name:
+                    |  - reason: reason a
+                    |    value: a
+                    |  - value: b
+                    |  - reason: reason c
+                    |    value: c
                 """.trimMargin()
                 assertThat(actual).isEqualTo(expected)
             }
