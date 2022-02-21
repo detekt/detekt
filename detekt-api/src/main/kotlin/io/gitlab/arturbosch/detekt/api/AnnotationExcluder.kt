@@ -51,20 +51,21 @@ class AnnotationExcluder(
 
     private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
         val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
-        return if (fqName == null) {
+        val possibleNames = if (fqName == null) {
             fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
                 .map { it.getPackage() to it }
         } else {
             listOf(fqName.getPackage() to fqName.toString())
         }
-            .flatMap { (pack, fqName) ->
-                fqName.substringAfter("$pack.", "")
+            .flatMap { (packaage, fqName) ->
+                fqName.substringAfter("$packaage.", "")
                     .split(".")
                     .reversed()
                     .scan("") { acc, name -> if (acc.isEmpty()) name else "$name.$acc" }
                     .drop(1) + fqName
             }
-            .any { name -> name in excludes }
+
+        return possibleNames.any { name -> name in excludes }
     }
 }
 
