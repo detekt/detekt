@@ -17,19 +17,12 @@ allprojects {
     detekt {
         source = objects.fileCollection().from(
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
-            "src/test/java",
+            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
-            "src/test/kotlin"
+            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")
-
-        reports {
-            xml.enabled = true
-            html.enabled = true
-            txt.enabled = true
-            sarif.enabled = true
-        }
     }
 
     dependencies {
@@ -40,6 +33,12 @@ allprojects {
 
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+            txt.required.set(true)
+            sarif.required.set(true)
+        }
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
@@ -70,9 +69,9 @@ val detektFormat by tasks.registering(Detekt::class) {
     exclude(buildFiles)
     baseline.set(baselineFile)
     reports {
-        xml.enabled = false
-        html.enabled = false
-        txt.enabled = false
+        xml.required.set(false)
+        html.required.set(false)
+        txt.required.set(false)
     }
 }
 
@@ -88,9 +87,9 @@ val detektAll by tasks.registering(Detekt::class) {
     exclude(buildFiles)
     baseline.set(baselineFile)
     reports {
-        xml.enabled = false
-        html.enabled = false
-        txt.enabled = false
+        xml.required.set(false)
+        html.required.set(false)
+        txt.required.set(false)
     }
 }
 
