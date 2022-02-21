@@ -150,6 +150,51 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
         }
+
+        @Nested
+        inner class `Know how to work with star imports` {
+            val helloWorldAnnotationsKtFile = compileContentForTest(
+                """
+                    package com.hello
+
+                    annotation class World
+                """.trimIndent()
+            )
+            val file = compileContentForTest(
+                """
+                    package foo
+
+                    import com.hello.*
+
+                    @World
+                    fun function() = Unit
+                """.trimIndent()
+            )
+            val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+
+            @Test
+            fun `incorrect without type solving`() {
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), BindingContext.EMPTY)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
+
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), BindingContext.EMPTY)
+
+                assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
+            }
+
+            @Test
+            fun `correct with type solving`() {
+                val binding = env.getContextForPaths(listOf(file, helloWorldAnnotationsKtFile))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), binding)
+
+                assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
+
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), binding)
+
+                assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
+            }
+        }
     }
 }
 
