@@ -63,7 +63,7 @@ class FullQualifiedNameGuesserSpec {
         }
 
         @Test
-        fun `when don't use the import`() {
+        fun `when not using the import`() {
             assertThat(sut.getFullQualifiedName("kotlin.jvm.JvmField"))
                 .containsExactlyInAnyOrder("kotlin.jvm.JvmField", "foo.kotlin.jvm.JvmField")
         }
