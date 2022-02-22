@@ -15,7 +15,7 @@ class JvmSpec {
             .withArguments("detektMain")
             .buildAndFail()
 
-        assertThat(result.output).contains("Analysis failed with 2 weighted issues.")
+        assertThat(result.output).contains("failed with 2 weighted issues.")
         assertThat(result.output).contains("ExitOutsideMain - [kotlinExit]")
         assertThat(result.output).contains("ExitOutsideMain - [javaExit]")
     }

@@ -59,14 +59,15 @@ internal class DefaultCliInvoker(
             runner::class.java.getMethod("execute").invoke(runner)
         } catch (reflectionWrapper: InvocationTargetException) {
             val message = reflectionWrapper.targetException.message
-            if (message != null && isBuildFailure(message) && ignoreFailures) {
+            if (message != null && isAnalysisFailure(message) && ignoreFailures) {
                 return
             }
             throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
         }
     }
 
-    private fun isBuildFailure(msg: String) = "Analysis failed with" in msg && "issues" in msg
+    private fun isAnalysisFailure(msg: String) =
+        "^(Analysis|Build) failed with \\d+ weighted issues.$".toRegex().matches(msg)
 }
 
 private class DryRunInvoker(private val logger: Logger) : DetektInvoker {
