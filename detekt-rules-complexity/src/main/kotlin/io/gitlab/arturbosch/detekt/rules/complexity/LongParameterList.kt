@@ -62,12 +62,14 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     @Configuration(
         "ignore the annotated parameters for the count (e.g. `fun foo(@Value bar: Int)` would not be counted"
     )
-    private val ignoreAnnotatedParameter: List<String> by config(emptyList())
+    private val ignoreAnnotatedParameter: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
+    }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter, bindingContext)
         super.visitKtFile(file)
     }
 

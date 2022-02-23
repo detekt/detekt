@@ -1,6 +1,7 @@
 public final class io/gitlab/arturbosch/detekt/api/AnnotationExcluder {
 	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/SplitPattern;)V
 	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
 

@@ -56,14 +56,20 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList())
+    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
+    }
 
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedClasses)
+        val annotationExcluder = AnnotationExcluder(
+            root,
+            @Suppress("DEPRECATION") excludeAnnotatedClasses,
+            bindingContext,
+        )
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 

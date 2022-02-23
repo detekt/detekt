@@ -1,8 +1,12 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.psi.internal.FullQualifiedNameGuesser
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Primary use case for an AnnotationExcluder is to decide if a KtElement should be
@@ -11,48 +15,87 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class AnnotationExcluder(
     root: KtFile,
-    excludes: List<String>,
+    private val excludes: List<Regex>,
+    private val context: BindingContext,
 ) {
-    private val excludes: List<Regex> = excludes.map {
-        it.replace(".", "\\.").replace("*", ".*").toRegex()
-    }
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
 
-    @Deprecated("Use AnnotationExcluder(KtFile, List<String>) instead")
-    constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
+    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
+    constructor(root: KtFile, excludes: SplitPattern) : this(
+        root,
+        excludes.mapAll { it }
+            .map { it.replace(".", "\\.").replace("*", ".*").toRegex() },
+        BindingContext.EMPTY,
+    )
+
+    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
+    constructor(
+        root: KtFile,
+        excludes: List<String>,
+    ) : this(
+        root,
+        excludes.map {
+            it.replace(".", "\\.").replace("*", ".*").toRegex()
+        },
+        BindingContext.EMPTY,
+    )
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
-    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean = annotations.any(::isExcluded)
+    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean {
+        return annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it, context) } ?: false }
+    }
 
-    private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
-        val annotationText = annotation.typeReference?.text?.ifEmpty { null } ?: return false
-        /*
-         We can't know if the annotationText is a full-qualified name or not. We can have these cases:
-         @Component
-         @Component.Factory
-         @dagger.Component.Factory
-         For that reason we use a heuristic here: If the first character is lower case we assume it's a package name
-         */
-        val possibleNames = if (!annotationText.first().isLowerCase()) {
-            fullQualifiedNameGuesser.getFullQualifiedName(annotationText)
+    private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
+        val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
+        val possibleNames = if (fqName == null) {
+            fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
+                .map { it.getPackage() to it }
         } else {
-            listOf(annotationText)
-        }.flatMap(::expandFqNames)
-        return excludes.any { exclude -> possibleNames.any { exclude.matches(it) } }
+            listOf(fqName.getPackage() to fqName.toString())
+        }
+            .flatMap { (packaage, fqName) ->
+                fqName.substringAfter("$packaage.", "")
+                    .split(".")
+                    .reversed()
+                    .scan("") { acc, name -> if (acc.isEmpty()) name else "$name.$acc" }
+                    .drop(1) + fqName
+            }
+
+        return possibleNames.any { name -> name in excludes }
     }
 }
 
-private fun expandFqNames(fqName: String): List<String> {
-    return fqName
-        .split(".")
-        .dropWhile { it.first().isLowerCase() }
-        .reversed()
-        .scan("") { acc, name ->
-            if (acc.isEmpty()) name else "$name.$acc"
-        }
-        .drop(1) + fqName
+private fun FqName.getPackage(): String {
+    /* This is a shortcut. Right now we are using the same heuristic that we use when we don't have type solving
+     * information. With the type solving information we should know exactly which part is package and which part is
+     * class name. But right now I don't know how to extract that information. There is a disabled test that should be
+     * enabled once this is solved.
+     */
+    return this.toString().getPackage()
+}
+
+private fun String.getPackage(): String {
+    /* We can't know if the annotationText is a full-qualified name or not. We can have these cases:
+     * @Component
+     * @Component.Factory
+     * @dagger.Component.Factory
+     * For that reason we use a heuristic here: If the first character is lower case we assume it's a package name
+     */
+    return this
+        .splitToSequence(".")
+        .takeWhile { it.first().isLowerCase() }
+        .joinToString(".")
+}
+
+private fun KtTypeReference.fqNameOrNull(bindingContext: BindingContext): FqName? {
+    return bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
+}
+
+private operator fun Iterable<Regex>.contains(a: String?): Boolean {
+    if (a == null) return false
+    return any { it.matches(a) }
 }

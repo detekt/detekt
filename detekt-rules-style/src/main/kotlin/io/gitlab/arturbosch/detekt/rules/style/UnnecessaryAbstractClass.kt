@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
+import org.jetbrains.kotlin.builtins.StandardNames.FqNames.list
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
@@ -60,12 +61,18 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList())
+    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
+    }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, @Suppress("DEPRECATION") excludeAnnotatedClasses)
+        annotationExcluder = AnnotationExcluder(
+            file,
+            @Suppress("DEPRECATION") excludeAnnotatedClasses,
+            bindingContext,
+        )
         super.visitKtFile(file)
     }
 
