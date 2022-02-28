@@ -28,6 +28,7 @@ toc: true
 - We now enable the naming ruleset by default also on tests. Previously they were excluded - [#4438](https://github.com/detekt/detekt/pull/4438)
 - This version of Detekt is built with Gradle `v7.4`, AGP `7.1.1` and Kotlin `1.6.10` (see [#4530](https://github.com/detekt/detekt/pull/4530) [#4573](https://github.com/detekt/detekt/pull/4573) [#4133](https://github.com/detekt/detekt/pull/4133) [#4277](https://github.com/detekt/detekt/pull/4277))
 - This version of Detekt is wrapping KtLint version `0.43.2` (see [#4227](https://github.com/detekt/detekt/pull/4227))
+- For contributors: we migrated most of our tests **from Spek to JUnit** due to better support and tooling.
 
 ##### Changelog
 
