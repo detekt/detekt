@@ -10,6 +10,7 @@ toc: true
 
 ##### Notable Changes
 
+- Thanks to our sponsors ❤️, we were able to buy a domain and move our website to [https://detekt.dev/](https://detekt.dev/).
 - With this Detekt versions, rule authors **can define the default configuration** for their custom rules. This default configuration will be merged together with the user configuration and can be overridden by the user if they wish. More on this here [#4315](https://github.com/detekt/detekt/pull/4315). The `formatting` ruleset provided by Detekt is updated to use this new mechanism - [#4352](https://github.com/detekt/detekt/pull/4352)
 - We've added **4 new rules**:
   - UnnecessaryInnerClass - [#4394](https://github.com/detekt/detekt/pull/4394)
