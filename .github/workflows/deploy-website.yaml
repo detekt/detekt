@@ -57,19 +57,19 @@ jobs:
         restore-keys: cache-gems-
 
     - name: Unzipping Generated Rules documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-generated-docs
         path: docs/pages/documentation/
 
     - name: Unzipping KDoc documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-kdoc
         path: docs/pages/kdoc/
 
     - name: Unzipping generated CLI options documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-cli-options-docs
         path: docs/pages/gettingstarted/
