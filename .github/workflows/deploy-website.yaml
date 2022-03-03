@@ -25,19 +25,19 @@ jobs:
           arguments: :detekt-generator:generateDocumentation
 
       - name: Upload Generated Rules documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-generated-docs
           path: docs/pages/documentation/
 
       - name: Upload KDoc documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-kdoc
           path: docs/pages/kdoc/
 
       - name: Upload generated CLI options documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-cli-options-docs
           path: docs/pages/gettingstarted/cli-options.md
