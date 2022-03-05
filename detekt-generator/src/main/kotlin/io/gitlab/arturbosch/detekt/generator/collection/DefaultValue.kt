@@ -8,12 +8,9 @@ import io.gitlab.arturbosch.detekt.generator.out.listOfMaps
 
 sealed interface DefaultValue {
 
+    fun getPlainValue(): String
     fun printAsYaml(name: String, yaml: YamlNode)
-
-    fun isNonEmptyList(): Boolean = false
-    fun getAsList(): List<String> = error("default value is not a list")
-    fun getAsPlainString(): String = toString()
-    fun getQuotedIfNecessary(): String = getAsPlainString()
+    fun printAsMarkdownCode(): String
 
     companion object {
         fun of(defaultValue: String): DefaultValue = StringDefault(defaultValue)
@@ -30,22 +27,27 @@ private data class StringDefault(private val defaultValue: String) : DefaultValu
         yaml.keyValue { name to quoted }
     }
 
-    override fun getAsPlainString(): String = defaultValue
-    override fun getQuotedIfNecessary(): String = quoted
+    override fun printAsMarkdownCode(): String = quoted
+
+    override fun getPlainValue(): String = defaultValue
 }
 
 private data class BooleanDefault(private val defaultValue: Boolean) : DefaultValue {
-    override fun getAsPlainString(): String = defaultValue.toString()
+    override fun getPlainValue(): String = defaultValue.toString()
     override fun printAsYaml(name: String, yaml: YamlNode) {
         yaml.keyValue { name to defaultValue.toString() }
     }
+
+    override fun printAsMarkdownCode(): String = defaultValue.toString()
 }
 
 private data class IntegerDefault(private val defaultValue: Int) : DefaultValue {
-    override fun getAsPlainString(): String = defaultValue.toString()
+    override fun getPlainValue(): String = defaultValue.toString()
     override fun printAsYaml(name: String, yaml: YamlNode) {
         yaml.keyValue { name to defaultValue.toString() }
     }
+
+    override fun printAsMarkdownCode(): String = defaultValue.toString()
 }
 
 private data class StringListDefault(private val defaultValue: List<String>) : DefaultValue {
@@ -54,15 +56,24 @@ private data class StringListDefault(private val defaultValue: List<String>) : D
         yaml.list(name, defaultValue)
     }
 
-    override fun isNonEmptyList(): Boolean = defaultValue.isNotEmpty()
-    override fun getAsList(): List<String> = defaultValue.ifEmpty { error("default value is an empty list") }
-    override fun getAsPlainString(): String = defaultValue.toString()
-    override fun getQuotedIfNecessary(): String = quoted
+    override fun printAsMarkdownCode(): String = quoted
+    override fun getPlainValue(): String {
+        error("there is no plain string representation for list defaults")
+    }
 }
 
 private data class ExplainedValuesDefault(private val defaultValue: ExplainedValues) : DefaultValue {
+    override fun getPlainValue(): String {
+        error("there is no plain string representation for explained value defaults")
+    }
+
     override fun printAsYaml(name: String, yaml: YamlNode) {
-        val asMap: List<Map<String, String?>> = defaultValue.values.map { mapOf("value" to it.value, "reason" to it.reason) }
+        val asMap: List<Map<String, String?>> =
+            defaultValue.values.map { mapOf("value" to it.value, "reason" to it.reason) }
         yaml.listOfMaps(name, asMap)
+    }
+
+    override fun printAsMarkdownCode(): String {
+        return defaultValue.values.map { "'${it.value}'" }.toString()
     }
 }

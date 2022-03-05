@@ -220,7 +220,7 @@ class ConfigurationCollector {
 
         fun KtElement.getListDefaultOrNull(constantsByName: Map<String, DefaultValue>): DefaultValue? {
             return getListDeclarationOrNull()?.valueArguments?.map {
-                (constantsByName[it.text]?.getAsPlainString() ?: it.text.withoutQuotes())
+                (constantsByName[it.text]?.getPlainValue() ?: it.text.withoutQuotes())
             }?.let { DefaultValue.of(it) }
         }
 

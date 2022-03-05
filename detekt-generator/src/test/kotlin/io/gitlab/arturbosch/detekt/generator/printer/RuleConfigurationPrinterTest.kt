@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
+import io.gitlab.arturbosch.detekt.api.explainedValues
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue
 import org.assertj.core.api.Assertions.assertThat
@@ -48,6 +49,28 @@ internal class RuleConfigurationPrinterTest {
         @Test
         fun `string list default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(listOf("a", "b", "c")))
+            val actual = RuleConfigurationPrinter.print(listOf(config))
+            assertThat(actual).contains("""* ``configName`` (default: ``['a', 'b', 'c']``)""")
+        }
+
+        @Test
+        fun `empty string list default`() {
+            val config = configTemplate.copy(defaultValue = DefaultValue.of(emptyList()))
+            val actual = RuleConfigurationPrinter.print(listOf(config))
+            assertThat(actual).contains("""* ``configName`` (default: ``[]``)""")
+        }
+
+        @Test
+        fun `explained values default`() {
+            val config = configTemplate.copy(
+                defaultValue = DefaultValue.of(
+                    explainedValues(
+                        "a" to "reason for a",
+                        "b" to "reason for b",
+                        "c" to null
+                    )
+                )
+            )
             val actual = RuleConfigurationPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``['a', 'b', 'c']``)""")
         }
