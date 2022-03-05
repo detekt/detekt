@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -25,19 +25,19 @@ jobs:
           arguments: :detekt-generator:generateDocumentation
 
       - name: Upload Generated Rules documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-generated-docs
           path: docs/pages/documentation/
 
       - name: Upload KDoc documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-kdoc
           path: docs/pages/kdoc/
 
       - name: Upload generated CLI options documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: detekt-cli-options-docs
           path: docs/pages/gettingstarted/cli-options.md
@@ -48,7 +48,7 @@ jobs:
     container: jekyll/builder
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: actions/cache@v2
       with:
@@ -57,19 +57,19 @@ jobs:
         restore-keys: cache-gems-
 
     - name: Unzipping Generated Rules documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-generated-docs
         path: docs/pages/documentation/
 
     - name: Unzipping KDoc documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-kdoc
         path: docs/pages/kdoc/
 
     - name: Unzipping generated CLI options documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: detekt-cli-options-docs
         path: docs/pages/gettingstarted/

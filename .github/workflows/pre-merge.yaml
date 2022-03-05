@@ -22,9 +22,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.jdk }}
         distribution: 'temurin'
@@ -32,7 +32,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build -x detekt
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: heap-dump
         path: '**.hprof'
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: 17
         distribution: 'temurin'
@@ -67,9 +67,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'temurin'

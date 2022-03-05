@@ -28,6 +28,17 @@ class FullQualifiedNameGuesser internal constructor(
             .toMap()
     }
 
+    @Suppress("ClassOrdering")
+    private val starImports: List<String> by lazy(NONE) {
+        imports
+            .asSequence()
+            .filter { it.isAllUnder }
+            .mapNotNull { import ->
+                import.importedFqName?.toString()
+            }
+            .toList()
+    }
+
     fun getFullQualifiedName(name: String): Set<String> {
         val resolvedName = findName(name)
         return if (resolvedName != null) {
@@ -39,13 +50,19 @@ class FullQualifiedNameGuesser internal constructor(
                     if (packageName != null) {
                         add("$packageName.$name")
                     }
+                    if (name.first().isLowerCase()) {
+                        add(name)
+                    }
+                    starImports.forEach {
+                        add("$it.$name")
+                    }
                 }
         }
     }
 
     private fun findName(name: String): String? {
         val searchName = name.substringBefore('.')
-        val resolvedName = resolvedNames[searchName]
+        val resolvedName = resolvedNames[searchName] ?: return null
         return if (name == searchName) {
             resolvedName
         } else {

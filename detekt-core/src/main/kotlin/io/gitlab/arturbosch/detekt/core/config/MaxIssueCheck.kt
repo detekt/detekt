@@ -33,7 +33,7 @@ internal class MaxIssueCheck(
 
     fun check(numberOfIssues: Int) {
         if (!meetsPolicy(numberOfIssues)) {
-            throw MaxIssuesReached("Build failed with $numberOfIssues weighted issues.")
+            throw MaxIssuesReached("Analysis failed with $numberOfIssues weighted issues.")
         }
     }
 }

@@ -43,11 +43,9 @@ Visit [the project website](https://detekt.dev/) for installation guides, releas
 - [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
 - [Configuring detekt](https://detekt.dev/configurations.html)
 - Sample Gradle integrations examples:
-    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/build-logic/src/main/kotlin/detekt.gradle.kts)
-    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/main/build.gradle)
+    - [multi project (Kotlin DSL)](https://github.com/detekt/detekt/blob/main/build.gradle.kts)
+    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
     - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/main/pom.xml)
-    - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
-    - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
 
 ### Quick Start ...
 

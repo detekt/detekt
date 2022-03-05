@@ -11,7 +11,7 @@ class GenerateConfigTaskSpec {
     @ParameterizedTest(name = "Using {0}, can be executed without any configuration")
     @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
     fun emptyConfig(builder: DslTestBuilder) {
-        val gradleRunner = builder.build()
+        val gradleRunner = builder.withConfigFile("config/detekt/detekt.yml").build()
 
         gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
             assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -28,7 +28,8 @@ class GenerateConfigTaskSpec {
                     |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
                     |}
                 """
-        ).build()
+        ).withConfigFile("config/detekt/detekt.yml").build()
+        gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
 
         gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
             assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

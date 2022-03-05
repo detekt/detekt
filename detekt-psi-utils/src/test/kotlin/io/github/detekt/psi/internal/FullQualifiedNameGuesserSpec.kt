@@ -16,6 +16,7 @@ class FullQualifiedNameGuesserSpec {
 
                 import kotlin.jvm.JvmField
                 import kotlin.jvm.JvmStatic as Static
+                import java.io.*
                 """.trimIndent()
             )
         )
@@ -35,19 +36,19 @@ class FullQualifiedNameGuesserSpec {
         @Test
         fun `import with alias but using real name`() {
             assertThat(sut.getFullQualifiedName("JvmStatic"))
-                .containsExactlyInAnyOrder("foo.JvmStatic")
+                .containsExactlyInAnyOrder("foo.JvmStatic", "java.io.JvmStatic")
         }
 
         @Test
         fun `no import but maybe kotlin`() {
             assertThat(sut.getFullQualifiedName("Result"))
-                .containsExactlyInAnyOrder("foo.Result", "kotlin.Result")
+                .containsExactlyInAnyOrder("foo.Result", "kotlin.Result", "java.io.Result")
         }
 
         @Test
         fun `no import but not kotlin`() {
             assertThat(sut.getFullQualifiedName("Asdf"))
-                .containsExactlyInAnyOrder("foo.Asdf")
+                .containsExactlyInAnyOrder("foo.Asdf", "java.io.Asdf")
         }
 
         @Test
@@ -60,6 +61,16 @@ class FullQualifiedNameGuesserSpec {
         fun `alias-import with subclass`() {
             assertThat(sut.getFullQualifiedName("Static.Factory"))
                 .containsExactlyInAnyOrder("kotlin.jvm.JvmStatic.Factory")
+        }
+
+        @Test
+        fun `when not using the import`() {
+            assertThat(sut.getFullQualifiedName("kotlin.jvm.JvmField"))
+                .containsExactlyInAnyOrder(
+                    "kotlin.jvm.JvmField",
+                    "foo.kotlin.jvm.JvmField",
+                    "java.io.kotlin.jvm.JvmField",
+                )
         }
     }
 
