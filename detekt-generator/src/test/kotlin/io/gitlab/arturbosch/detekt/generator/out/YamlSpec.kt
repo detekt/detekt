@@ -107,7 +107,7 @@ class YamlSpec {
             val given = listOf(mapOf("name" to "value"))
             val result = yaml { listOfMaps("key", given) }
             val expected = """key:
-                |  - name: value
+                |  - name: 'value'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }
@@ -123,9 +123,9 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """key:
-                |  - name1: value 1
-                |    name2: value 2
-                |    name3: value 3
+                |  - name1: 'value 1'
+                |    name2: 'value 2'
+                |    name3: 'value 3'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }
@@ -148,11 +148,11 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """key:
-                |  - name1: value 1
-                |    name2: value 2
-                |  - name3: value 3
-                |  - name4: value 4
-                |    name5: value 5
+                |  - name1: 'value 1'
+                |    name2: 'value 2'
+                |  - name3: 'value 3'
+                |  - name4: 'value 4'
+                |    name5: 'value 5'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }
@@ -169,10 +169,10 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """key:
-                |  - a: value
-                |    b: value
-                |    x: value
-                |    z: value
+                |  - a: 'value'
+                |    b: 'value'
+                |    x: 'value'
+                |    z: 'value'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }
@@ -188,8 +188,26 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """key:
-                |  - a: value
-                |    c: value
+                |  - a: 'value'
+                |    c: 'value'
+            """.trimMargin()
+            assertThat(result).isEqualTo(expected)
+        }
+
+        @Test
+        fun `quotes values if necessary`() {
+            val given = listOf(
+                mapOf(
+                    "name1" to "'already quoted'",
+                    "name2" to "\"also quoted\"",
+                    "name3" to "should be quoted"
+                )
+            )
+            val result = yaml { listOfMaps("key", given) }
+            val expected = """key:
+                |  - name1: 'already quoted'
+                |    name2: "also quoted"
+                |    name3: 'should be quoted'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
         }

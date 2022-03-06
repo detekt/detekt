@@ -60,7 +60,7 @@ fun YamlNode.list(name: String, list: List<String>) {
     } else {
         append("$name:")
         list.forEach {
-            append("${SINGLE_INDENT}${LIST_PREFIX}${it.quotedForList()}")
+            append("${SINGLE_INDENT}${LIST_PREFIX}${it.ensureQuoted()}")
         }
     }
 }
@@ -86,13 +86,13 @@ private fun YamlNode.map(map: Map<String, String?>) {
             } else {
                 SINGLE_INDENT
             }
-            keyValue { "$prefix$key" to value.orEmpty() }
+            keyValue { "$prefix$key" to value!!.ensureQuoted() }
         }
 }
 
 inline fun YamlNode.yaml(yaml: () -> String): Unit = append(yaml())
 
-private fun String.quotedForList(): String {
+private fun String.ensureQuoted(): String {
     return when {
         isBlank() -> quoted()
         startsWith(SINGLE_QUOTE) && endsWith(SINGLE_QUOTE) ||
