@@ -138,7 +138,7 @@ private fun ConfigAware.getExplainedValuesOrDefault(
 ): ExplainedValues {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
     if (valuesAsList.all { it is String }) {
-        return ExplainedValues(values = valuesAsList.map { ExplainedValue(it.toString()) })
+        return ExplainedValues(values = valuesAsList.map { ExplainedValue(it as String) })
     }
     if (valuesAsList.all { it is Map<*, *> }) {
         return ExplainedValues(
