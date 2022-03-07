@@ -200,6 +200,49 @@ class ConfigPropertySpec {
                         assertThat(subject.notPresent).isEqualTo(defaultValue)
                     }
                 }
+
+                @Nested
+                inner class `value defined as list of maps with invalid data` {
+
+                    @Test
+                    fun `value missing`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("reason" to "reason")
+                                )
+                            ) {
+                                val present: ExplainedValues by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `value with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to 42, "reason" to "reason")
+                                )
+                            ) {
+                                val present: ExplainedValues by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `reason with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to "a", "reason" to 42)
+                                )
+                            ) {
+                                val present: ExplainedValues by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+                }
             }
         }
 

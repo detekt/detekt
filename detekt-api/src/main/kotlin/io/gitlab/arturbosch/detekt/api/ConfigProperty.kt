@@ -145,10 +145,16 @@ private fun ConfigAware.getExplainedValuesOrDefault(
             valuesAsList
                 .map { it as Map<*, *> }
                 .map { dict ->
-                    ExplainedValue(
-                        value = dict["value"].toString(),
-                        reason = dict["reason"]?.toString()
-                    )
+                    try {
+                        ExplainedValue(
+                            value = dict["value"] as String,
+                            reason = dict["reason"] as String?
+                        )
+                    } catch (e: ClassCastException) {
+                        throw Config.InvalidConfigurationError(e)
+                    } catch (e: NullPointerException) {
+                        throw Config.InvalidConfigurationError(e)
+                    }
                 }
         )
     }
