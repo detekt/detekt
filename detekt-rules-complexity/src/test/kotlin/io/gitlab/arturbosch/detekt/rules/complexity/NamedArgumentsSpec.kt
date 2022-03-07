@@ -200,5 +200,53 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 assertThat(findings).hasSize(1)
             }
         }
+
+        @Nested
+        inner class IgnoreArgumentsMatchingNames {
+            @Nested
+            inner class `ignoreArgumentsMatchingNames is true` {
+                val subject =
+                    NamedArguments(TestConfig(mapOf("threshold" to 2, "ignoreArgumentsMatchingNames" to true)))
+
+                @Test
+                fun `all arguments are the same as the parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, b, c)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(0)
+                }
+
+                @Test
+                fun `some arguments are not the same as the parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, c, b)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+            }
+
+            @Nested
+            inner class `ignoreArgumentsMatchingNames is false` {
+                @Test
+                fun `all arguments are the same as parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, b, c)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+            }
+        }
     }
 }
