@@ -152,7 +152,7 @@ private fun ConfigAware.getExplainedValuesOrDefault(
                 }
         )
     }
-    error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid. ")
+    error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid.")
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {
