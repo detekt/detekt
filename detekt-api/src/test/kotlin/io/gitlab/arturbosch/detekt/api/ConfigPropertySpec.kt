@@ -176,7 +176,8 @@ class ConfigPropertySpec {
                     private val subject = object : TestConfigAware(
                         "present" to listOf(
                             mapOf("value" to "a", "reason" to "reasonA"),
-                            mapOf("value" to "b", "reason" to null)
+                            mapOf("value" to "b", "reason" to null),
+                            mapOf("value" to "c"),
                         )
                     ) {
                         val present: ExplainedValues by config(defaultValue)
@@ -187,7 +188,11 @@ class ConfigPropertySpec {
                     fun `uses the value provided in config if present`() {
                         assertThat(subject.present)
                             .extracting(ExplainedValue::value, ExplainedValue::reason)
-                            .containsExactly(tuple("a", "reasonA"), tuple("b", null))
+                            .containsExactly(
+                                tuple("a", "reasonA"),
+                                tuple("b", null),
+                                tuple("c", null)
+                            )
                     }
 
                     @Test
