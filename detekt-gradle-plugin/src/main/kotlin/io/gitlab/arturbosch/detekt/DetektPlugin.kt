@@ -80,7 +80,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion ?: loadDetektVersion(DetektPlugin::class.java.classLoader)
+                val version = extension.toolVersion
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
@@ -119,8 +119,3 @@ class DetektPlugin : Plugin<Project> {
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
-
-internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
-    load(classLoader.getResource("versions.properties")!!.openSafeStream())
-    getProperty("detektVersion")
-}
