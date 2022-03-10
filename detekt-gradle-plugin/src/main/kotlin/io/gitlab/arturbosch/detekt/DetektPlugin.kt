@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
@@ -10,7 +9,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
-import java.util.Properties
 
 class DetektPlugin : Plugin<Project> {
 
