@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
