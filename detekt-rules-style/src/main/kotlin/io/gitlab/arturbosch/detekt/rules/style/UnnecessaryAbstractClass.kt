@@ -16,9 +16,9 @@ import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -103,7 +103,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtClass.members() = body?.children?.filterIsInstance<KtNamedDeclaration>().orEmpty()
+    private fun KtClass.members() = body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
+        primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 

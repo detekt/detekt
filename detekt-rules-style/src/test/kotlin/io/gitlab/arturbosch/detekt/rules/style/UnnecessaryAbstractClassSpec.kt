@@ -246,6 +246,16 @@ class UnnecessaryAbstractClassSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            it("does not report abstract classes with properties in the primary constructor") {
+                val code = """
+                    interface I {
+                        fun test(): Int
+                    }
+                    abstract class Test(val x: Int) : I
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
     }
 })
