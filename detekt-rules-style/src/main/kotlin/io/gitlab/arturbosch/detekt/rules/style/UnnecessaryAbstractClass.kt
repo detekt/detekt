@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -15,7 +14,6 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
-import org.jetbrains.kotlin.builtins.StandardNames.FqNames.list
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
@@ -77,53 +75,46 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClass(klass: KtClass) {
-        if (!klass.isInterface() && klass.isAbstract()) {
-            val namedMembers = klass.body?.children.orEmpty().filterIsInstance<KtNamedDeclaration>()
-            if (namedMembers.isNotEmpty()) {
-                NamedClassMembers(klass, namedMembers).detectAbstractAndConcreteType()
-            } else if (!klass.hasConstructorParameter()) {
-                report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
-            } else {
-                report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-            }
-        }
+        klass.check()
         super.visitClass(klass)
     }
 
-    private fun report(finding: Finding, klass: KtClass) {
-        if (!annotationExcluder.shouldExclude(klass.annotationEntries)) {
-            report(finding)
+    private fun KtClass.check() {
+        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        val members = members()
+        when {
+            members.isNotEmpty() -> {
+                val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+                if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
+                    report(CodeSmell(issue, Entity.from(this), noAbstractMember))
+                    return
+                }
+                if (abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter()) {
+                    return
+                }
+                if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
+                    report(CodeSmell(issue, Entity.from(this), noConcreteMember))
+                }
+            }
+            !hasConstructorParameter() ->
+                report(CodeSmell(issue, Entity.from(this), noConcreteMember))
+            else ->
+                report(CodeSmell(issue, Entity.from(this), noAbstractMember))
         }
     }
 
+    private fun KtClass.members() = body?.children?.filterIsInstance<KtNamedDeclaration>().orEmpty()
+
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private inner class NamedClassMembers(val klass: KtClass, val members: List<KtNamedDeclaration>) {
-
-        fun detectAbstractAndConcreteType() {
-            val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
-
-            if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-                report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-                return
-            }
-
-            if (abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter()) return
-
-            if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
-                report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
-            }
-        }
-
-        private fun hasInheritedMember(isAbstract: Boolean): Boolean {
-            return when {
-                klass.superTypeListEntries.isEmpty() -> false
-                bindingContext == BindingContext.EMPTY -> true
-                else -> {
-                    val descriptor = bindingContext[BindingContext.CLASS, klass]
-                    descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                        (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
-                    }
+    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean {
+        return when {
+            superTypeListEntries.isEmpty() -> false
+            bindingContext == BindingContext.EMPTY -> true
+            else -> {
+                val descriptor = bindingContext[BindingContext.CLASS, this]
+                descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
+                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
                 }
             }
         }
