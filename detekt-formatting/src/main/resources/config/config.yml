@@ -136,3 +136,6 @@ formatting:
     autoCorrect: true
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
+  UnnecessaryParenthesesBeforeTrailingLambda:
+    active: false
+    autoCorrect: true

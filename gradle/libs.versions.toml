@@ -2,7 +2,7 @@
 dokka = "1.6.10"
 jacoco = "0.8.7"
 kotlin = "1.6.10"
-ktlint = "0.43.2"
+ktlint = "0.44.0"
 spek = "2.0.18"
 junit = "5.8.2"
 

@@ -48,6 +48,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
+import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
@@ -105,6 +106,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
         TrailingComma(config),
+        UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
 
     override fun visit(root: KtFile) {
