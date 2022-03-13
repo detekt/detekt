@@ -22,7 +22,7 @@ class KtLintMultiRuleSpec {
                 .isLessThan(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
             assertThat(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
                 .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible})
+                .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
             assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
                 .isGreaterThan(-1)
                 .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible && !it.runOnRootNodeOnly })

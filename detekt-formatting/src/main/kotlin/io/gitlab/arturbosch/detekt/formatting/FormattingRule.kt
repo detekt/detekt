@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
-import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
@@ -110,5 +110,5 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         TextLocation(node.startOffset, node.psi.endOffset)
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-        wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode
+        runOnRootNodeOnly && node !is FileASTNode
 }

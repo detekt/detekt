@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.ast.isRoot
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -111,11 +110,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         val sortedRules = getSortedRules()
         sortedRules.forEach { it.visit(root) }
         root.node.visitTokens { node ->
-            sortedRules.forEach { rule ->
-                if (!rule.runOnRootNodeOnly || rule.runOnRootNodeOnly && node.isRoot()) {
-                    rule.apply(node)
-                }
-            }
+            sortedRules.forEach { it.apply(node) }
         }
     }
 
