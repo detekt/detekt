@@ -23,8 +23,15 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
         val extensionClass = TreeCopyHandler::class.java.name
         @Suppress("DEPRECATION")
         for (extensionArea in listOf(project.extensionArea, getRootArea())) {
-            if (!extensionArea.hasExtensionPoint(extension)) {
-                extensionArea.registerExtensionPoint(extension, extensionClass, ExtensionPoint.Kind.INTERFACE)
+            // Addresses https://github.com/detekt/detekt/issues/4609
+            synchronized(extensionArea) {
+                if (!extensionArea.hasExtensionPoint(extension)) {
+                    extensionArea.registerExtensionPoint(
+                        extension,
+                        extensionClass,
+                        ExtensionPoint.Kind.INTERFACE
+                    )
+                }
             }
         }
     }
