@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.ast.isRoot
 import com.pinterest.ktlint.core.ast.visit
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
@@ -13,7 +14,11 @@ import java.nio.file.Paths
 fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = "Test.kt"): List<Finding> {
     val root = compileContentForTest(content, fileName)
     this.visit(root)
-    root.node.visit { node -> this.apply(node) }
+    root.node.visit { node ->
+        if(!runOnRootNodeOnly || runOnRootNodeOnly && node.isRoot()) {
+            this.apply(node)
+        }
+    }
     return this.findings
 }
 

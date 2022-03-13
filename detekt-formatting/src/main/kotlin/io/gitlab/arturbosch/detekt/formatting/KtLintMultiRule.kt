@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.Rule.Modifier.Last
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
+import com.pinterest.ktlint.core.ast.isRoot
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -113,7 +111,11 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         val sortedRules = getSortedRules()
         sortedRules.forEach { it.visit(root) }
         root.node.visitTokens { node ->
-            sortedRules.forEach { it.apply(node) }
+            sortedRules.forEach { rule ->
+                if (!rule.runOnRootNodeOnly || rule.runOnRootNodeOnly && node.isRoot()) {
+                    rule.apply(node)
+                }
+            }
         }
     }
 
@@ -123,11 +125,10 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         val runLastOnRoot = mutableListOf<FormattingRule>()
         val runLast = mutableListOf<FormattingRule>()
         for (rule in activeRules.filterIsInstance<FormattingRule>()) {
-            when (rule.wrapping) {
-                is Last -> runLast.add(rule)
-                // RestrictToRootLast implements RestrictToRoot, so we have to perform this check first
-                is RestrictToRootLast -> runLastOnRoot.add(rule)
-                is RestrictToRoot -> runFirstOnRoot.add(rule)
+            when {
+                rule.runOnRootNodeOnly && rule.runAsLateAsPossible -> runLastOnRoot.add(rule)
+                rule.runOnRootNodeOnly -> runFirstOnRoot.add(rule)
+                rule.runAsLateAsPossible -> runLast.add(rule)
                 else -> other.add(rule)
             }
         }

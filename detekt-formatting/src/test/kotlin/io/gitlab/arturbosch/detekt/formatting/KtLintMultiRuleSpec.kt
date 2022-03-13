@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.Rule.Modifier.Last
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThat
@@ -20,15 +17,15 @@ class KtLintMultiRuleSpec {
             ktlintRule.visitFile(compileContentForTest(""))
             val sortedRules = ktlintRule.getSortedRules()
             assertThat(sortedRules).isNotEmpty
-            assertThat(sortedRules.indexOfFirst { it.wrapping is RestrictToRoot })
+            assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly })
                 .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping !is RestrictToRoot })
-            assertThat(sortedRules.indexOfFirst { it.wrapping !is RestrictToRoot })
+                .isLessThan(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
+            assertThat(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
                 .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping is RestrictToRootLast })
-            assertThat(sortedRules.indexOfFirst { it.wrapping is RestrictToRootLast })
+                .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible})
+            assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
                 .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping is Last })
+                .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible && !it.runOnRootNodeOnly })
         }
     }
 }

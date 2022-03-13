@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
+import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
@@ -36,6 +38,12 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      */
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
+
+    val runOnRootNodeOnly
+        get() = RunOnRootNodeOnly in wrapping.visitorModifiers
+
+    val runAsLateAsPossible
+        get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()

@@ -21,14 +21,10 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     override val wrapping = ParameterListWrappingRule()
     override val issue = issueFor("Detects mis-aligned parameter lists")
 
-    @Configuration("indentation size")
-    private val indentSize by config(4)
-
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
 
     override fun overrideEditorConfig() = mapOf(
-        INDENT_SIZE_KEY to indentSize,
         MAX_LINE_LENGTH_KEY to maxLineLength
     )
 }
