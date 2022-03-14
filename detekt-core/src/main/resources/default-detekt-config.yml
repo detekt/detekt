@@ -395,6 +395,8 @@ potential-bugs:
       - 'java.util.HashMap'
   DuplicateCaseInWhenExpression:
     active: true
+  ElseCaseInEnumOrSealedWhen:
+    active: false
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:

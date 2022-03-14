@@ -136,6 +136,8 @@ potential-bugs:
     active: true
   DoubleMutabilityForCollection:
     active: false
+  ElseCaseInEnumOrSealedWhen:
+    active: true
   ExitOutsideMain:
     active: false
   HasPlatformType:
