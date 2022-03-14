@@ -75,7 +75,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var default: Boolean = true
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -87,7 +87,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var default: Boolean? = null
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -99,7 +99,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var default: Boolean = false
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -111,7 +111,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var default = true
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -123,7 +123,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var default: java.lang.Boolean = java.lang.Boolean(true)
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
@@ -135,7 +135,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var count: Int = 0
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -148,7 +148,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                         var isEnabled: Boolean = true
                         var hasDefault: Boolean = true
                     }
-                    """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).isEmpty()
@@ -160,7 +160,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     class Test {
                         var needReload: Boolean = true
                     }
-                    """
+                """
 
                 val config = TestConfig(mapOf(ALLOWED_PATTERN to "^(is|has|are|need)"))
                 assertThat(BooleanPropertyNaming(config).compileAndLint(code))

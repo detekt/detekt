@@ -340,7 +340,7 @@ class UseDataClassSpec : Spek({
 
                 @SinceKotlin("1.0.0")
                 class AnnotatedClass(val i: Int) {}
-                """
+            """
             val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
@@ -353,7 +353,7 @@ class UseDataClassSpec : Spek({
                             prop, old, new -> println("")
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

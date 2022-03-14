@@ -49,7 +49,8 @@ class NamingConventionLengthSpec {
                 val code = """
                     class C {
                         val prop: (Int) -> Unit = { _ -> Unit }
-                }"""
+                }
+                """
                 assertThat(variableMinLength.compileAndLint(code)).isEmpty()
             }
         }

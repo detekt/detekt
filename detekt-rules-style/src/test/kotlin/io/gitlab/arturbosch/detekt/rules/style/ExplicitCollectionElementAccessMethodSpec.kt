@@ -23,7 +23,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mapOf<String, String>() 
                         val value = map.get("key") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -32,7 +33,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mapOf<String, String>() 
                         val value = map?.get("key") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -41,7 +43,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mutableMapOf<String, String>() 
                         map.set("key", "value") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -50,7 +53,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -59,7 +63,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mutableMapOf<String, String>() 
                         val oldValue = map.put("key", "val") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -68,7 +73,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f(): Boolean {
                         val map = mutableMapOf<String, String>()
                         return map.put("key", "val") == null
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -77,7 +83,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = hashMapOf<String, String>() 
                         val value = map.get("key") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -86,7 +93,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = hashMapOf<String, String>() 
                         map.put("key", "value") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -95,7 +103,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mapOf<String, String>()
                         val value = map["key"] 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -104,7 +113,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mutableMapOf<String, String>()
                         map["key"] = "value" 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -113,7 +123,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = mapOf<String, String>()
                         val value = listOf("1", "2").associateBy { it }.get("1")
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -122,7 +133,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = linkedMapOf<String, String>()
                         val value = map.get("key") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -143,7 +155,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = listOf<String>() 
                         val value = list.get(0) 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -152,7 +165,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = mutableListOf<String>()
                         val value = list.get(0) 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -161,7 +175,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = listOf<String>() 
                         val value = list[0] 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -170,7 +185,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = arrayListOf<String>() 
                         val value = list.get(0) 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -192,7 +208,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = map.get("key") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -201,7 +218,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         map.set("key", "val") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -210,7 +228,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         map.put("key", "val") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -219,7 +238,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = map["key"] 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -228,7 +248,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         map["key"] = "value" 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -237,7 +258,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val map = java.util.HashMap<String, String>() 
                         val value = listOf("1", "2").associateBy { it }.get("1") 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
@@ -250,7 +272,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val custom = Custom()
                         val value = custom.get(0)
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -260,7 +283,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val custom = Custom()
                         val value = custom.get(0)
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -270,7 +294,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val custom = Custom()
                         custom.set("key", "value")
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -280,7 +305,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val custom = Custom()
                         custom.set("key", "value")
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -292,7 +318,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = java.util.ArrayList<String>() 
                         val value = list.get(0) 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -301,7 +328,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     fun f() {
                         val list = java.util.ArrayList<String>() 
                         val value = list[0] 
-                    }"""
+                    }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

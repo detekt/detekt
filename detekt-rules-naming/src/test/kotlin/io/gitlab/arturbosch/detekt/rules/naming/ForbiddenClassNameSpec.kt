@@ -18,7 +18,8 @@ class ForbiddenClassNameSpec {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
-                class TestHolder"""
+                class TestHolder
+            """
             assertThat(
                 ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("Manager", "Provider"))))
                     .compileAndLint(code)
@@ -41,7 +42,8 @@ class ForbiddenClassNameSpec {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
-                class TestHolder"""
+                class TestHolder
+            """
             assertThat(
                 ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Manager, Provider")))
                     .compileAndLint(code)
@@ -54,7 +56,8 @@ class ForbiddenClassNameSpec {
             val code = """
                 class TestManager {} // violation
                 class TestProvider {} // violation
-                class TestHolder"""
+                class TestHolder
+            """
             assertThat(
                 ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "*Manager*, *Provider*")))
                     .compileAndLint(code)
@@ -65,7 +68,8 @@ class ForbiddenClassNameSpec {
         @Test
         fun `should report all forbidden names in message`() {
             val code = """
-                class TestManager {}"""
+                class TestManager {}
+            """
             val actual = ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Test, Manager, Provider")))
                 .compileAndLint(code)
             assertThat(actual.first().message)

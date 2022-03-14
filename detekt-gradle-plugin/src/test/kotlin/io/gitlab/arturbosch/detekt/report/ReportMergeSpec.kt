@@ -68,7 +68,8 @@ class ReportMergeSpec {
                 |            reportMerge.configure { mergeTask -> mergeTask.input.from(detektTask.xmlReportFile) }
                 |        }
                 |    }
-                |}""".trimMargin()
+                |}
+            """.trimMargin()
 
             val gradleRunner = DslGradleRunner(
                 projectLayout = projectLayout,
@@ -162,7 +163,8 @@ class ReportMergeSpec {
                 |            reportMerge.configure { mergeTask -> mergeTask.input.from(detektTask.xmlReportFile) }
                 |        }
                 |    }
-                |}""".trimMargin()
+                |}
+            """.trimMargin()
 
             val jvmArgs = "-Xmx2g -XX:MaxMetaspaceSize=1g"
 

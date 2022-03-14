@@ -53,7 +53,7 @@ class MatchingDeclarationNameSpec {
                     enum class E {
                         ONE, TWO, THREE
                     }
-                """,
+                    """,
                     filename = "E.kt"
                 )
                 val findings = MatchingDeclarationName().lint(ktFile)
@@ -67,7 +67,7 @@ class MatchingDeclarationNameSpec {
                     class C
                     object O
                     fun a() = 5
-                """,
+                    """,
                     filename = "MultiDeclarations.kt"
                 )
                 val findings = MatchingDeclarationName().lint(ktFile)
@@ -81,7 +81,7 @@ class MatchingDeclarationNameSpec {
                     class C
                     fun a() = 5
                     fun C.b() = 5
-                """,
+                    """,
                     filename = "C.kt"
                 )
                 val findings = MatchingDeclarationName().lint(ktFile)
@@ -95,7 +95,7 @@ class MatchingDeclarationNameSpec {
                     fun a() = 5
                     fun C.b() = 5
                     class C
-                """,
+                    """,
                     filename = "Classes.kt"
                 )
                 val findings = MatchingDeclarationName().lint(ktFile)
@@ -108,7 +108,7 @@ class MatchingDeclarationNameSpec {
                     """
                 private class C
                 fun a() = 5
-            """,
+                    """,
                     filename = "b.kt"
                 )
                 val findings = MatchingDeclarationName().lint(ktFile)
@@ -120,7 +120,8 @@ class MatchingDeclarationNameSpec {
                 val code = """
                 typealias Foo = FooImpl
 
-                class FooImpl {}"""
+                class FooImpl {}
+                """
                 val ktFile = compileContentForTest(code, filename = "Foo.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
@@ -207,7 +208,7 @@ class MatchingDeclarationNameSpec {
                     fun a() = 5
                     fun C.b() = 5
                     class C
-                """,
+                    """,
                     filename = "Classes.kt"
                 )
                 val findings = MatchingDeclarationName(

@@ -580,7 +580,7 @@ class RuleCollectorSpec {
                             @Configuration("description")
                             private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
                         }                        
-                    """
+                        """
                         val items = subject.run(code)
                         val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
                         assertThat(fallbackProperties).hasSize(3)
@@ -598,7 +598,7 @@ class RuleCollectorSpec {
                             @Configuration("description")
                             private val config: Int by configWithFallback(::prop, 99)
                         }                        
-                    """
+                        """
                         assertThatThrownBy { subject.run(code) }
                             .isInstanceOf(InvalidDocumentationException::class.java)
                             .hasMessageContaining("delegate")

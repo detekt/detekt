@@ -96,7 +96,7 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
                 import kotlin.collections.Set
 
                 class A { }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -106,7 +106,7 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
 
                 import kotlin.collections.List
                 import kotlin.collections.Set
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

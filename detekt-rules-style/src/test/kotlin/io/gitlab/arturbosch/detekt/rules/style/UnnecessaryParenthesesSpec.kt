@@ -32,7 +32,8 @@ class UnnecessaryParenthesesSpec : Spek({
                     if ((a equals b)) {
                         println("Test")
                     }
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -45,7 +46,7 @@ class UnnecessaryParenthesesSpec : Spek({
                 fun test() {
                     function({ input -> println(input) })
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -58,7 +59,7 @@ class UnnecessaryParenthesesSpec : Spek({
                 fun test() {
                     function(1, { input -> println(input) })
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -66,7 +67,8 @@ class UnnecessaryParenthesesSpec : Spek({
             val code = """
                 fun f() {
                     instance.copy(value = { false })
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -76,7 +78,8 @@ class UnnecessaryParenthesesSpec : Spek({
                     if (a equals b) {
                         println("Test")
                     }
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -88,7 +91,7 @@ class UnnecessaryParenthesesSpec : Spek({
                         }
                     }
                 })
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -100,7 +103,7 @@ class UnnecessaryParenthesesSpec : Spek({
                         }
                     }
                 })
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 

@@ -27,7 +27,8 @@ class EnumNamingSpec {
             val code = """
                 enum class WorkFlow {
                     default
-                }"""
+                }
+            """
             assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
 
@@ -36,7 +37,8 @@ class EnumNamingSpec {
             val code = """
                 enum class WorkFlow {
                     _Default
-                }"""
+                }
+            """
             assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
         }
 
@@ -45,7 +47,8 @@ class EnumNamingSpec {
             val code = """
                 enum class WorkFlow {
                     @Suppress("EnumNaming") _Default
-                }"""
+                }
+            """
             assertThat(EnumNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -54,7 +57,8 @@ class EnumNamingSpec {
             val code = """
                 enum class WorkFlow {
                     _Default,
-                }"""
+                }
+            """
             val findings = EnumNaming().compileAndLint(code)
             assertThat(findings).hasTextLocations(26 to 34)
         }

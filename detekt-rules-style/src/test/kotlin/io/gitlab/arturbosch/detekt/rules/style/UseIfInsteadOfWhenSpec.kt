@@ -20,7 +20,7 @@ object UseIfInsteadOfWhenSpec : Spek({
                         else -> return false
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -32,7 +32,7 @@ object UseIfInsteadOfWhenSpec : Spek({
                         else -> return false
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -46,7 +46,7 @@ object UseIfInsteadOfWhenSpec : Spek({
                         else -> return false
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -60,7 +60,7 @@ object UseIfInsteadOfWhenSpec : Spek({
                     }
                     return false
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

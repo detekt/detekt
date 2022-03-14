@@ -22,7 +22,8 @@ class PrintStackTraceSpec {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                }"""
+                }
+                """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
@@ -54,7 +55,8 @@ class PrintStackTraceSpec {
 
                     fun dumpStack() {}
                     dumpStack()
-                }"""
+                }
+                """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }

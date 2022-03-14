@@ -351,7 +351,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     }
                     return 0
                 }
-            """
+                """
             )
 
             assertThat(findings).isEmpty()

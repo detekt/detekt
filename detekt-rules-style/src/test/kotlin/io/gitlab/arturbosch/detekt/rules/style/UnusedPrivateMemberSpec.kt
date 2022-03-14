@@ -32,7 +32,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(used)
                     }
                 }
-                """
+    """
 
     describe("interface functions") {
 
@@ -138,7 +138,7 @@ class UnusedPrivateMemberSpec : Spek({
                         fun notify(error: String)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -231,7 +231,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println("This is not using a property")
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -244,7 +244,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println("This is not using a property")
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -257,7 +257,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(used)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -271,7 +271,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(used)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -318,7 +318,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(used)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -332,7 +332,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(text)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -368,7 +368,7 @@ class UnusedPrivateMemberSpec : Spek({
                         private fun doubleColonObjectReferenced() {}
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -406,7 +406,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(used)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
@@ -464,7 +464,7 @@ class UnusedPrivateMemberSpec : Spek({
                         }
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -476,7 +476,7 @@ class UnusedPrivateMemberSpec : Spek({
                         }
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -490,7 +490,7 @@ class UnusedPrivateMemberSpec : Spek({
                         }
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -503,7 +503,7 @@ class UnusedPrivateMemberSpec : Spek({
                         }
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).hasSize(2)
         }
 
@@ -518,7 +518,7 @@ class UnusedPrivateMemberSpec : Spek({
                         }
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -535,7 +535,7 @@ class UnusedPrivateMemberSpec : Spek({
                         println(text)
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -548,7 +548,7 @@ class UnusedPrivateMemberSpec : Spek({
                         val test = unused
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -677,7 +677,8 @@ class UnusedPrivateMemberSpec : Spek({
             val code = """
                 class Test {
                     private val ignored = ""
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -685,7 +686,8 @@ class UnusedPrivateMemberSpec : Spek({
             val code = """
                 class Test {
                     private fun ignored(ignored: Int) {}
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -698,7 +700,8 @@ class UnusedPrivateMemberSpec : Spek({
                     class Inner {
                         private val unused = 1
                     }
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -709,7 +712,8 @@ class UnusedPrivateMemberSpec : Spek({
                         private val used = 1
                         fun someFunction() = used
                     }
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -718,14 +722,14 @@ class UnusedPrivateMemberSpec : Spek({
         it("reports unused private property") {
             val code = """
                 class Test(private val unused: Any)
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report public property") {
             val code = """
                 class Test(val unused: Any)
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -734,7 +738,7 @@ class UnusedPrivateMemberSpec : Spek({
                 class Test(private val used: Any) {
                     init { used.toString() }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -745,7 +749,7 @@ class UnusedPrivateMemberSpec : Spek({
                         used.toString()
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }

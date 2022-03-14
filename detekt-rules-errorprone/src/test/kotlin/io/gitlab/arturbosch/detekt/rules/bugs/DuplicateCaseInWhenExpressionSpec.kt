@@ -23,7 +23,8 @@ class DuplicateCaseInWhenExpressionSpec {
                         1, 2 -> kotlin.io.println()
                         else -> println()
                     }
-                }"""
+                }
+            """
             val result = subject.compileAndLint(code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo("When expression has multiple case statements for 1; 1, 2.")
@@ -37,7 +38,8 @@ class DuplicateCaseInWhenExpressionSpec {
                         1 -> println()
                         else -> println()
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

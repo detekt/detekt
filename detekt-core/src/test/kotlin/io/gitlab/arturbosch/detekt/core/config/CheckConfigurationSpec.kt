@@ -37,7 +37,7 @@ class SupportConfigValidationSpec {
                 my_additional_properties:
                   magic_number: 7
                   magic_string: 'Hello World'
-            """
+                """
             )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -56,7 +56,7 @@ class SupportConfigValidationSpec {
                   TooManyFunctions:
                     # This property is tested via the SampleConfigValidator
                     active: 1 # should be true
-            """
+                """
             )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -86,7 +86,7 @@ class SupportConfigValidationSpec {
                my_additional_properties:
                  magic_number: 7
                  magic_string: 'Hello World'
-            """
+                """
             )
             createProcessingSettings(testDir, config).use {
                 assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }

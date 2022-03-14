@@ -526,7 +526,8 @@ class ObjectLiteralToLambdaSpec : Spek({
             it(
                 """Anonymous objects are always newly created,
                 |but lambdas are singletons,
-                |so they have the same reference.""".trimMargin()
+                |so they have the same reference.
+                """.trimMargin()
             ) {
                 val code = """
                 fun interface Sam {

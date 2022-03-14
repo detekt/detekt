@@ -23,7 +23,8 @@ class UseRequireSpec : Spek({
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException()
                     doSomething()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
@@ -32,7 +33,8 @@ class UseRequireSpec : Spek({
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException("More details")
                     doSomething()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
@@ -41,7 +43,8 @@ class UseRequireSpec : Spek({
                 fun x(a: Int) {
                     if (a < 0) throw java.lang.IllegalArgumentException()
                     doSomething()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
@@ -50,7 +53,8 @@ class UseRequireSpec : Spek({
                 fun x(a: Int) {
                     if (a < 0) throw kotlin.IllegalArgumentException()
                     doSomething()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
@@ -59,7 +63,8 @@ class UseRequireSpec : Spek({
                 fun x(a: Int) {
                     if (a < 0) throw SomeBusinessException()
                     doSomething()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -68,14 +73,16 @@ class UseRequireSpec : Spek({
                 private fun x(a: Int): Nothing {
                     doSomething()
                     throw IllegalArgumentException("message", cause)
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report an issue if the exception thrown as the only action in a block") {
             val code = """
                 fun unsafeRunSync(): A =
-                    foo.fold({ throw IllegalArgumentException("message") }, ::identity)"""
+                    foo.fold({ throw IllegalArgumentException("message") }, ::identity)
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -165,7 +172,7 @@ class UseRequireSpec : Spek({
                         is LinkedList<*> -> 2
                         else -> throw IllegalArgumentException("Not supported List type")
                     }
-                    """
+                """
                 assertThat(subject.lint(code)).isEmpty()
             }
 
@@ -179,7 +186,8 @@ class UseRequireSpec : Spek({
                             }
                         }
                         throw IllegalArgumentException("Test was too big")
-                    }"""
+                    }
+                """
                 assertThat(subject.lint(code)).isEmpty()
             }
 
@@ -189,7 +197,8 @@ class UseRequireSpec : Spek({
                         val subclass = list as? LinkedList
                             ?: throw IllegalArgumentException("List is not a LinkedList")
                         return subclass
-                    }"""
+                    }
+                """
                 assertThat(subject.lint(code)).isEmpty()
             }
         }

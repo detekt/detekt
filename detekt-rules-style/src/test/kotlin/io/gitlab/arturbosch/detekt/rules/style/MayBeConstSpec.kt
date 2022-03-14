@@ -237,7 +237,7 @@ class MayBeConstSpec : Spek({
                 class Test {
                     @JvmField val a = 3
                 }
-            """
+                """
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
@@ -247,7 +247,7 @@ class MayBeConstSpec : Spek({
                 annotation class A
 
                 @A val a = 55
-            """
+                """
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
@@ -261,7 +261,7 @@ class MayBeConstSpec : Spek({
                 object Derived : Base {
                     override val property = 1
                 }
-            """
+                """
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
@@ -301,7 +301,7 @@ class MayBeConstSpec : Spek({
                             val prop = ""
                         }
                     }
-                """
+                    """
                 )
 
                 assertThat(subject.findings).isEmpty()

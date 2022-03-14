@@ -34,7 +34,7 @@ class ConfigurationCacheSpec {
                         |detekt {
                         |   baseline = file("build/baseline.xml")
                         |}
-                        """
+            """
             val gradleRunner = DslTestBuilder.kotlin()
                 .dryRun()
                 .withDetektConfig(detektConfig)

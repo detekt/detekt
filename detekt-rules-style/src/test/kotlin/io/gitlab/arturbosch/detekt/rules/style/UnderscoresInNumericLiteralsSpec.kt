@@ -262,7 +262,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
                     companion object {
                         private const val serialVersionUID = -43857148126114372L
                     }
-                }"""
+                }
+            """
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -275,7 +276,8 @@ class UnderscoresInNumericLiteralsSpec : Spek({
                     companion object {
                         private const val serialVersionUID = 43857148126114372L
                     }
-                }"""
+                }
+            """
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }

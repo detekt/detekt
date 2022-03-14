@@ -54,7 +54,8 @@ class ThrowingExceptionInMainSpec {
                 private fun main() { throw IllegalArgumentException() }
                 fun mai() { throw IllegalArgumentException() }
                 fun main(args: String) { throw IllegalArgumentException() }
-                fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }"""
+                fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -64,7 +65,8 @@ class ThrowingExceptionInMainSpec {
                 fun main(args: Array<String>) { }
                 fun main() { }
                 fun mai() { }
-                fun main(args: String) { }"""
+                fun main(args: String) { }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

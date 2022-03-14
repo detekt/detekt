@@ -29,7 +29,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                     fun b() = 2
                     val c = 2
                 }
-            """
+                    """
                 )
             ).isEmpty()
         }
@@ -46,7 +46,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     fun foo() = 5
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -57,7 +57,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     val foo = 5
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -71,7 +71,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         val foo = 5
                         fun bar() = 5
                     }
-                """
+                        """
                     )
                 ).hasSize(2)
             }
@@ -85,7 +85,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         protected val foo = 5
                         protected fun bar() = 5
                     }
-                """
+                        """
                     )
                 ).hasSize(2)
             }
@@ -99,7 +99,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     fun foo(): Int = 5
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -110,7 +110,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     fun foo() {}
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -121,7 +121,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     val foo: Int = 5
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -135,7 +135,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         val foo: Int = 5
                         fun bar(): Int = 5
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -149,7 +149,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         """
                     internal fun bar() = 5
                     private fun foo() = 5
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -160,7 +160,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         env,
                         """
                     internal val foo = 5
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -177,7 +177,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                             val a = 5
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -191,7 +191,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         fun baz() = 5
                         val qux = 5
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }

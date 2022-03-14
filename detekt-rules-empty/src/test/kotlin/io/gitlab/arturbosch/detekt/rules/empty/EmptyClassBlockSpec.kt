@@ -67,7 +67,7 @@ class EmptyClassBlockSpec {
                 fun f() {
                      object : Open() {}
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

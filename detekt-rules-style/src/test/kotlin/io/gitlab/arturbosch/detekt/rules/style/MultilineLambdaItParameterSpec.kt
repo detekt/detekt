@@ -22,7 +22,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         listOf(it)
                         println(it)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -34,7 +35,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         listOf(it)
                         println(it)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -46,7 +48,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         listOf(param)
                         println(param)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -61,7 +64,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         val it = 3
                         println(it)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -74,7 +78,8 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { 
                         listOf(it)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -85,7 +90,8 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { it ->
                         listOf(it)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -95,7 +101,8 @@ class MultilineLambdaItParameterSpec : Spek({
                     val digits = 1234.let { param ->
                         listOf(param)
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -106,7 +113,8 @@ class MultilineLambdaItParameterSpec : Spek({
                 val code = """
                 fun f() {
                     val digits = 1234.let { listOf(it) }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -115,7 +123,8 @@ class MultilineLambdaItParameterSpec : Spek({
                 val code = """
                 fun f() {
                     val digits = 1234.let { listOf(it) }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -124,7 +133,8 @@ class MultilineLambdaItParameterSpec : Spek({
                 val code = """
                 fun f() {
                     val digits = 1234.let { it -> listOf(it) }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -133,7 +143,8 @@ class MultilineLambdaItParameterSpec : Spek({
                 val code = """
                 fun f() {
                     val digits = 1234.let { param -> listOf(param) }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -147,7 +158,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         println(it)
                         it + index 
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -159,7 +171,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         println(item)
                         item.toString() + that 
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -173,7 +186,8 @@ class MultilineLambdaItParameterSpec : Spek({
                         append("a")
                         append("b")
                     }
-                }"""
+                }
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }

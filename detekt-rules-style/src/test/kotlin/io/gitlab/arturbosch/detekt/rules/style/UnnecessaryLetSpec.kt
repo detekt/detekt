@@ -24,7 +24,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int = 1
                     a.let { it.plus(1) }
                     a.let { that -> that.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -38,7 +39,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a?.let { it.plus(1) }
                     a?.let { that -> that.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -52,7 +54,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a?.let { it?.plus(1) }
                     a?.let { that -> that?.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -65,7 +68,8 @@ class UnnecessaryLetSpec : Spek({
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> that.plus(1) }?.let { it.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -79,7 +83,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int = 1
                     a.let { 1.plus(1) }
                     a.let { that -> 1.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -93,7 +98,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int = 1
                     val x = a.let { 1.plus(1) }
                     val y = a.let { that -> 1.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -107,7 +113,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a?.let { 1.plus(1) }
                     a?.let { that -> 1.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
@@ -121,7 +128,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a.let { print(it) }
                     a.let { that -> print(that) }
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(2)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -135,7 +143,8 @@ class UnnecessaryLetSpec : Spek({
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
                     a.let(f)
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -149,7 +158,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     a?.let { print(it) }
                     a?.let { that -> 1.plus(that) }
-                }"""
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -161,7 +171,8 @@ class UnnecessaryLetSpec : Spek({
                 fun f() {
                     val a: Int? = null
                     a?.let { that -> 1.plus(that) }?.let { print(it) }
-                }"""
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -174,7 +185,8 @@ class UnnecessaryLetSpec : Spek({
                     val a: Int? = null
                     val x = a?.let { 1.plus(1) }
                     val y = a?.let { that -> 1.plus(1) }
-                }"""
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -200,7 +212,8 @@ class UnnecessaryLetSpec : Spek({
                     val f: (Int?) -> Boolean = { true }
                     val a: Int? = null
                     a?.let(f)
-                }"""
+                }
+                """
             )
             assertThat(findings).hasSize(0)
         }
@@ -235,7 +248,8 @@ class UnnecessaryLetSpec : Spek({
                         it.plus(1)
                         it.plus(2)
                     }
-                }"""
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -251,7 +265,8 @@ class UnnecessaryLetSpec : Spek({
                     b.let { it.plus(it) }
                     a?.let { foo -> foo.plus(foo) }
                     b.let { foo -> foo.plus(foo) }
-                }"""
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -264,7 +279,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo) {
                     foo.let { (a, b) -> a + b }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
@@ -276,7 +291,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo) {
                     foo.let { (a, _) -> a + a }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
@@ -288,7 +303,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo) {
                     foo.let { (a: Int, b: Int) -> a + b }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).isEmpty()
             }
@@ -300,7 +315,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo) {
                     foo.let { (a, _) -> a }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -313,7 +328,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo?) {
                     foo?.let { (_, b) -> b.plus(1) }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -326,7 +341,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo) {
                     foo.let { (_, _) -> 0 }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -339,7 +354,7 @@ class UnnecessaryLetSpec : Spek({
                 fun test(foo: Foo?) {
                     foo?.let { (_, _) -> 0 }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, content)
                 assertThat(findings).hasSize(1)
                 assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }

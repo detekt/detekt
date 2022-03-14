@@ -19,7 +19,7 @@ class DeprecatedBlockTagSpec {
                  * Nothing to see here...
                  */
                 val v = 2
-                """
+            """
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 

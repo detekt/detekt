@@ -49,7 +49,8 @@ class MethodOverloadingSpec {
                 class Test {
                     fun x() { }
                     fun x(i: Int) { }
-                }"""
+                }
+                    """
                 )
                 assertThat(subject.findings.size).isZero()
             }
@@ -64,7 +65,8 @@ class MethodOverloadingSpec {
                     """
                 fun Boolean.foo() {}
                 fun Int.foo() {}
-                fun Long.foo() {}"""
+                fun Long.foo() {}
+                    """
                 )
                 assertThat(subject.findings.size).isZero()
             }
@@ -75,7 +77,8 @@ class MethodOverloadingSpec {
                     """
                 fun Int.foo() {}
                 fun Int.foo(i: Int) {}
-                fun Int.foo(i: String) {}"""
+                fun Int.foo(i: String) {}
+                    """
                 )
                 assertThat(subject.findings.size).isEqualTo(1)
             }

@@ -32,7 +32,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                         println("hello world")
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -50,7 +50,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                 suspend fun doesSuspend() {
                     suspendCoroutine()
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -62,7 +62,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                         println("hello world")
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -72,7 +72,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                 interface SuspendInterface {
                     suspend fun empty()
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -88,7 +88,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                         println("hello world")
                     }
                 }                                
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -104,7 +104,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                         println(x)
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -125,7 +125,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                         "Hello"
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

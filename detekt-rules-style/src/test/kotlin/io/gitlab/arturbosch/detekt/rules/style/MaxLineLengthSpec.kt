@@ -70,7 +70,7 @@ class MaxLineLengthSpec : Spek({
 
             class Test {
             }
-        """
+            """
 
             val file by memoized { compileContentForTest(code) }
             val lines by memoized { file.text.splitToSequence("\n") }
@@ -179,7 +179,7 @@ class MaxLineLengthSpec : Spek({
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
             }
-        """.trim()
+            """.trim()
 
             val file by memoized { compileContentForTest(code) }
             val lines by memoized { file.text.splitToSequence("\n") }
