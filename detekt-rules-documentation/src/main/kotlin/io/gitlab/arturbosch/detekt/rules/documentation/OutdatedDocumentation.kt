@@ -153,12 +153,14 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
-        val knownTag = docTag.knownTag
+        val knownTag = docTag.knownTag ?: return emptyList()
         val subjectName = docTag.getSubjectName() ?: return emptyList()
         return when (knownTag) {
             KDocKnownTag.PARAM -> listOf(Declaration(subjectName, DeclarationType.PARAM))
             KDocKnownTag.PROPERTY -> listOf(Declaration(subjectName, DeclarationType.PROPERTY))
-            else -> emptyList()
+            KDocKnownTag.AUTHOR, KDocKnownTag.THROWS, KDocKnownTag.EXCEPTION, KDocKnownTag.RECEIVER,
+            KDocKnownTag.RETURN, KDocKnownTag.SEE, KDocKnownTag.SINCE, KDocKnownTag.CONSTRUCTOR, KDocKnownTag.SAMPLE,
+            KDocKnownTag.SUPPRESS -> emptyList()
         }
     }
 
