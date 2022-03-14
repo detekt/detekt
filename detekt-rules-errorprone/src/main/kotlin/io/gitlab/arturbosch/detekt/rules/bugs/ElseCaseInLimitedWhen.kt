@@ -12,9 +12,14 @@ import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 
 /**
- * Turn on this rule to flag `when` expressions with an `enum` or `sealed` class subject that contain an `else` case.
+ * This rule reports `when` expressions that contain an `else` case even though they have a limited set of cases.
+ *
+ * This occurs when the subject of the `when` expression is either an enum class, sealed class or of type boolean.
+ * Using `else` cases for these expressions can lead to unwanted behavior when adding new enum types, sealed subtype
+ * or changing the nullability of a boolean, since this will be covered by the `else` case.
  *
  * <noncompliant>
  * enum class Color {
@@ -23,12 +28,10 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *     BLUE
  * }
  *
- * fun whenOnEnumFail(c: Color) {
- *     when(c) {
- *         Color.BLUE -> {}
- *         Color.GREEN -> {}
- *         else -> {}
- *     }
+ * when(c) {
+ *     Color.RED -> {}
+ *     Color.GREEN -> {}
+ *     else -> {}
  * }
  * </noncompliant>
  *
@@ -39,22 +42,20 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *     BLUE
  * }
  *
- * fun whenOnEnumCompliant(c: Color) {
- *     when(c) {
- *         Color.BLUE -> {}
- *         Color.GREEN -> {}
- *         Color.RED -> {}
- *     }
+ * when(c) {
+ *     Color.RED -> {}
+ *     Color.GREEN -> {}
+ *     Color.BLUE -> {}
  * }
  * </compliant>
  */
 @RequiresTypeResolution
-class ElseCaseInEnumOrSealedWhen(config: Config = Config.empty) : Rule(config) {
+class ElseCaseInLimitedWhen(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "ElseCaseInEnumOrSealedWhen",
+        "ElseCaseInLimitedWhen",
         Severity.Warning,
-        "Check for `else` case in enum or sealed `when` expression",
+        "A `when` expression that has a limited set of cases should not contain an `else` case.",
         Debt.FIVE_MINS
     )
 
@@ -62,20 +63,25 @@ class ElseCaseInEnumOrSealedWhen(config: Config = Config.empty) : Rule(config) {
         super.visitWhenExpression(whenExpression)
 
         if (bindingContext == BindingContext.EMPTY) return
-        checkForElseCaseInEnumOrSealedWhenExpression(whenExpression)
+        checkForElseCaseInLimitedWhenExpression(whenExpression)
     }
 
-    private fun checkForElseCaseInEnumOrSealedWhenExpression(whenExpression: KtWhenExpression) {
+    private fun checkForElseCaseInLimitedWhenExpression(whenExpression: KtWhenExpression) {
         val subjectExpression = whenExpression.subjectExpression ?: return
         if (whenExpression.elseExpression == null) return
 
         val subjectType = subjectExpression.getType(bindingContext)
         val isEnumSubject = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType) != null
         val isSealedSubject = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType) != null
+        val isBoolean = subjectType?.isBooleanOrNullableBoolean() == true
 
-        if (isEnumSubject || isSealedSubject) {
-            val subjectTypeName = if (isEnumSubject) "enum class" else "sealed class"
-            val message = "When expression with $subjectTypeName subject contains `else` case."
+        if (isEnumSubject || isSealedSubject || isBoolean) {
+            val subjectTypeName = when {
+                isEnumSubject -> "enum class"
+                isSealedSubject -> "sealed class"
+                else -> "boolean"
+            }
+            val message = "When expression with $subjectTypeName subject should not contain an `else` case."
             report(CodeSmell(issue, Entity.from(whenExpression), message))
         }
     }

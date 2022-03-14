@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = ElseCaseInEnumOrSealedWhen()
+class ElseCaseInLimitedWhenSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = ElseCaseInLimitedWhen()
 
     @Nested
-    inner class `ElseCaseInEnumOrSealedWhen rule` {
+    inner class `ElseCaseInLimitedWhen rule` {
         @Nested
-        inner class `enum` {
+        inner class Enum {
             @Test
-            fun `reports when enum or sealed _when_ expression used as statement contains _else_ case`() {
+            fun `reports when enum _when_ expression used as statement contains _else_ case`() {
                 val code = """
                 enum class Color {
                     RED,
@@ -37,7 +37,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `reports when enum or sealed _when_ expression contains _else_ case`() {
+            fun `reports when enum _when_ expression contains _else_ case`() {
                 val code = """
                 enum class Color {
                     RED,
@@ -58,7 +58,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `does not report when enum or sealed _when_ expression does not contain _else_ case`() {
+            fun `does not report when enum _when_ expression does not contain _else_ case`() {
                 val code = """
                 enum class Color {
                     RED,
@@ -67,12 +67,6 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
                 }
 
                 fun whenOnEnumPassA(c: Color) {
-                    when (c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
-                    }
-
                     when (c) {
                         Color.BLUE -> {}
                         Color.GREEN -> {}
@@ -98,9 +92,9 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `sealed classes` {
+        inner class `Sealed class` {
             @Test
-            fun `reports when enum or sealed _when_ expression used as statement contains _else_ case`() {
+            fun `reports when sealed _when_ expression used as statement contains _else_ case`() {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -108,7 +102,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
                         object VariantC : Variant()
                     }
 
-                    fun whenOnEnumFail(v: Variant) {
+                    fun whenOnSealedFail(v: Variant) {
                         when (v) {
                             is Variant.VariantA -> {}
                             is Variant.VariantB -> {}
@@ -120,7 +114,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `reports when enum or sealed _when_ expression contains _else_ case`() {
+            fun `reports when sealed _when_ expression contains _else_ case`() {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -128,7 +122,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
                         object VariantC : Variant()
                     }
 
-                    fun whenOnEnumFail(v: Variant) {
+                    fun whenOnSealedFail(v: Variant) {
                         val x = when (v) {
                             is Variant.VariantA -> "a"
                             is Variant.VariantB -> "b"
@@ -140,7 +134,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `does not report when enum or sealed _when_ expression does not contain _else_ case`() {
+            fun `does not report when sealed _when_ expression does not contain _else_ case`() {
                 val code = """
                     sealed class Variant {
                         object VariantA : Variant()
@@ -148,7 +142,7 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
                         object VariantC : Variant()
                     }
 
-                    fun whenOnEnumPass(v: Variant) {
+                    fun whenOnSealedPass(v: Variant) {
                         when (v) {
                             is Variant.VariantA -> {}
                             is Variant.VariantB -> {}
@@ -160,7 +154,77 @@ class ElseCaseInEnumOrSealedWhenSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `standard when` {
+        inner class Boolean {
+            @Test
+            fun `reports when boolean _when_ expression used as statement contains _else_ case`() {
+                val code = """
+                fun whenOnBooleanFail(b: Boolean) {
+                    when (b) {
+                        true -> {}
+                        else -> {}
+                    }
+                }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+            }
+
+            @Test
+            fun `reports when nullable boolean _when_ expression contains _else_ case`() {
+                val code = """
+                fun whenOnNullableBooleanFail(b: Boolean?) {
+                    val x = when (b) {
+                        true -> 1
+                        false -> 2
+                        else -> 100
+                    }
+                }
+                """
+                val actual = subject.compileAndLintWithContext(env, code)
+                assertThat(actual).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when boolean _when_ expression does not contain _else_ case`() {
+                val code = """
+                fun whenOnBooleanPassA(b: Boolean) {
+                    when (b) {
+                        true -> {}
+                        false -> {}
+                    }
+
+                    val x = when (b) {
+                        true -> 1
+                        false -> 2
+                    }
+                }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when nullable boolean _when_ expression does not contain _else_ case`() {
+                val code = """
+                fun whenOnNullableBooleanPassA(b: Boolean?) {
+                    when (b) {
+                        true -> {}
+                        false -> {}
+                        null -> {}
+                    }
+
+                    val x = when (b) {
+                        true -> 1
+                        false -> 2
+                        null -> 100
+                    }
+                }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+        }
+
+        @Nested
+        inner class `Standard when` {
             @Test
             fun `does not report when _else_ case is used for non enum or sealed _when_ expression`() {
                 val code = """
