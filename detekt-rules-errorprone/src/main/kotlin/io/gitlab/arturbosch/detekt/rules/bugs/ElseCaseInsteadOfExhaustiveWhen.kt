@@ -15,11 +15,11 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 
 /**
- * This rule reports `when` expressions that contain an `else` case even though they have a limited set of cases.
+ * This rule reports `when` expressions that contain an `else` case even though they have an exhaustive set of cases.
  *
  * This occurs when the subject of the `when` expression is either an enum class, sealed class or of type boolean.
- * Using `else` cases for these expressions can lead to unwanted behavior when adding new enum types, sealed subtype
- * or changing the nullability of a boolean, since this will be covered by the `else` case.
+ * Using `else` cases for these expressions can lead to unintended behavior when adding new enum types, sealed subtypes
+ * or changing the nullability of a boolean, since this will be implicitly handled by the `else` case.
  *
  * <noncompliant>
  * enum class Color {
@@ -55,7 +55,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
     override val issue: Issue = Issue(
         "ElseCaseInsteadOfExhaustiveWhen",
         Severity.Warning,
-        "A `when` expression that has a limited set of cases should not contain an `else` case.",
+        "A `when` expression that has an exhaustive set of cases should not contain an `else` case.",
         Debt.FIVE_MINS
     )
 
