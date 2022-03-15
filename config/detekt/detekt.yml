@@ -136,7 +136,7 @@ potential-bugs:
     active: true
   DoubleMutabilityForCollection:
     active: false
-  ElseCaseInLimitedWhen:
+  ElseCaseInsteadOfExhaustiveWhen:
     active: true
   ExitOutsideMain:
     active: false

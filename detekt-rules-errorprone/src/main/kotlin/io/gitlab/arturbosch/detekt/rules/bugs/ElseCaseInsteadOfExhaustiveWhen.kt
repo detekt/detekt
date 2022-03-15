@@ -50,10 +50,10 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class ElseCaseInLimitedWhen(config: Config = Config.empty) : Rule(config) {
+class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-        "ElseCaseInLimitedWhen",
+        "ElseCaseInsteadOfExhaustiveWhen",
         Severity.Warning,
         "A `when` expression that has a limited set of cases should not contain an `else` case.",
         Debt.FIVE_MINS
@@ -63,10 +63,10 @@ class ElseCaseInLimitedWhen(config: Config = Config.empty) : Rule(config) {
         super.visitWhenExpression(whenExpression)
 
         if (bindingContext == BindingContext.EMPTY) return
-        checkForElseCaseInLimitedWhenExpression(whenExpression)
+        checkForElseCaseInsteadOfExhaustiveWhenExpression(whenExpression)
     }
 
-    private fun checkForElseCaseInLimitedWhenExpression(whenExpression: KtWhenExpression) {
+    private fun checkForElseCaseInsteadOfExhaustiveWhenExpression(whenExpression: KtWhenExpression) {
         val subjectExpression = whenExpression.subjectExpression ?: return
         if (whenExpression.elseExpression == null) return
 

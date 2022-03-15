@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ElseCaseInLimitedWhenSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = ElseCaseInLimitedWhen()
+class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = ElseCaseInsteadOfExhaustiveWhen()
 
     @Nested
-    inner class `ElseCaseInLimitedWhen rule` {
+    inner class `ElseCaseInsteadOfExhaustiveWhen rule` {
         @Nested
         inner class Enum {
             @Test
