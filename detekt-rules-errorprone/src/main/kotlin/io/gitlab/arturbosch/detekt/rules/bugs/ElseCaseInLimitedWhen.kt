@@ -73,9 +73,9 @@ class ElseCaseInLimitedWhen(config: Config = Config.empty) : Rule(config) {
         val subjectType = subjectExpression.getType(bindingContext)
         val isEnumSubject = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType) != null
         val isSealedSubject = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType) != null
-        val isBoolean = subjectType?.isBooleanOrNullableBoolean() == true
+        val isBooleanSubject = subjectType?.isBooleanOrNullableBoolean() == true
 
-        if (isEnumSubject || isSealedSubject || isBoolean) {
+        if (isEnumSubject || isSealedSubject || isBooleanSubject) {
             val subjectTypeName = when {
                 isEnumSubject -> "enum class"
                 isSealedSubject -> "sealed class"
