@@ -24,7 +24,6 @@ tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 val depsToPackage = setOf(
     "org.ec4j.core",
     "com.pinterest.ktlint",
-    "com.pinterest.ktlint",
     "io.github.microutils",
     "org.slf4j",
 )
