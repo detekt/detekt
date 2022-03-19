@@ -31,7 +31,8 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     private val indentSize by config(4)
 
     @OptIn(FeatureInAlphaState::class)
-    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> = mapOf(
-        DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
-    )
+    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+        mapOf(
+            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
+        )
 }

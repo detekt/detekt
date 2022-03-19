@@ -78,7 +78,6 @@ class NoWildcardImportsSpec {
             ).hasSize(1)
         }
 
-
         @Test
         fun `Given that the property is set to some packages inclusive subpackages then wildcard imports for those directories are not detected`() {
             val code =

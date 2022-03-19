@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
 import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
-
 /**
  * Some test cases were used directly from KtLint to verify the [KdocWrapping] rule:
  *

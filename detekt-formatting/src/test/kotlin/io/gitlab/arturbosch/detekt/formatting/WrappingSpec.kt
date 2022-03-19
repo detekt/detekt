@@ -16,7 +16,7 @@ class WrappingSpec {
     }
 
     @Test
-    fun `Given a wrong wrapping in the class definition` () {
+    fun `Given a wrong wrapping in the class definition`() {
         val code =
             """
             class A() : B, 
