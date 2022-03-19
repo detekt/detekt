@@ -917,7 +917,6 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.</p>
 <h4 id="noncompliant-code-12">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="nn">foo</span>
-
 <span class="k">import</span> <span class="nn">kotlin.jvm.JvmField</span>
 <span class="k">import</span> <span class="nn">kotlin.SinceKotlin</span>
 </code></pre></div></div>
@@ -1733,9 +1732,8 @@ operator.</p>
 
 <h3 id="redundantvisibilitymodifierrule">RedundantVisibilityModifierRule</h3>
 
-<p>This rule checks for redundant visibility modifiers.</p>
-
-<p>One exemption is the
+<p>This rule checks for redundant visibility modifiers.
+One exemption is the
 <a href="https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors">explicit API mode</a>
 In this mode, the visibility modifier should be defined explicitly even if it is public.
 Hence, the rule ignores the visibility modifiers in explicit API mode.</p>
@@ -2762,7 +2760,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 18, 2022 <br />
+ Site last generated: Mar 19, 2022 <br />
                 </div>
             </div>
 </footer>

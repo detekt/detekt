@@ -736,14 +736,16 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">indentSize</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
-
-    <p>indentation size</p>
-  </li>
-  <li>
     <p><code class="language-plaintext highlighter-rouge">maxLineLength</code> (default: <code class="language-plaintext highlighter-rouge">120</code>) (android default: <code class="language-plaintext highlighter-rouge">100</code>)</p>
 
     <p>maximum line length</p>
+  </li>
+  <li>
+    <p><del><code class="language-plaintext highlighter-rouge">indentSize</code></del> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
+
+    <p><strong>Deprecated</strong>: <code class="language-plaintext highlighter-rouge">indentSize</code> is ignored by KtLint and will have no effect</p>
+
+    <p>indentation size</p>
   </li>
 </ul>
 
@@ -852,6 +854,12 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
   </li>
 </ul>
 
+<h3 id="unnecessaryparenthesesbeforetrailinglambda">UnnecessaryParenthesesBeforeTrailingLambda</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
 
     <div class="tags">
         
@@ -868,7 +876,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 18, 2022 <br />
+ Site last generated: Mar 19, 2022 <br />
                 </div>
             </div>
 </footer>
