@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
+import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
+import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -8,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -28,7 +30,8 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     @Suppress("UnusedPrivateMember")
     private val indentSize by config(4)
 
-    override fun overrideEditorConfig() = mapOf(
-        MAX_LINE_LENGTH_KEY to maxLineLength
+    @OptIn(FeatureInAlphaState::class)
+    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> = mapOf(
+        DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
     )
 }
