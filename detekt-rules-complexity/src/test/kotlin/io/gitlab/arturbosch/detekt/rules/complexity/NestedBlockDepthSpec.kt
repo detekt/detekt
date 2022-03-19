@@ -37,7 +37,8 @@ class NestedBlockDepthSpec {
                             }
                         }
                     }
-                }"""
+                }
+            """
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
@@ -54,7 +55,8 @@ class NestedBlockDepthSpec {
                             }
                         }
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -69,7 +71,8 @@ class NestedBlockDepthSpec {
                             }
                         }
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -86,7 +89,8 @@ class NestedBlockDepthSpec {
                             }
                         }
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }

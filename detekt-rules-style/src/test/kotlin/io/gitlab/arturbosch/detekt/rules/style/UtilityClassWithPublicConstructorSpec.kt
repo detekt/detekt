@@ -54,7 +54,7 @@ class UtilityClassWithPublicConstructorSpec : Spek({
                         const val FEMALE = "female"
                     }
                 }
-            """
+                """
                 assertThat(subject.lint(code)).isEmpty()
             }
         }

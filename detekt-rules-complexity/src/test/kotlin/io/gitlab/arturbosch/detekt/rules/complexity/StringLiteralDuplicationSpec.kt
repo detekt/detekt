@@ -30,7 +30,8 @@ class StringLiteralDuplicationSpec {
                     fun f(s: String = "lorem") {
                         s1.equals("lorem")
                     }
-                }"""
+                }
+                """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
@@ -130,7 +131,8 @@ class StringLiteralDuplicationSpec {
                     fun f(s: String = "lorem") {
                         s1.equals("lorem")
                     }
-                }"""
+                }
+                """
                 val finding = subject.compileAndLint(code)[0]
                 val locations = finding.references.map { it.location } + finding.entity.location
                 assertThat(locations).hasSize(3)

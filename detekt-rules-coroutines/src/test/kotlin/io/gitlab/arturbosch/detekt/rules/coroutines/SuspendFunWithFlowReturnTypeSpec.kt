@@ -39,7 +39,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     yield()
                     return MutableStateFlow(value = 1L)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -63,7 +63,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     yield()
                     return MutableStateFlow(value = 1L)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -86,7 +86,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     yield()
                     return kotlinx.coroutines.flow.MutableStateFlow(value = 1L)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -98,7 +98,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
                 suspend fun flowValues() = flowOf(1L, 2L, 3L)
                 suspend fun mutableStateFlowValues() = MutableStateFlow(value = 1L)
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -114,7 +114,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     suspend fun stateFlowValues(): StateFlow<Long>
                     suspend fun mutableStateFlowValues(): MutableStateFlow<Long>
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -143,7 +143,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                         return MutableStateFlow(value = 1L)
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -157,7 +157,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     suspend fun flowValues() = flowOf(1L, 2L, 3L)
                     suspend fun mutableStateFlowValues() = MutableStateFlow(value = 1L)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -184,7 +184,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     yield()
                     return MutableStateFlow(value = this)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -196,7 +196,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
                 suspend fun Long.flowValues() = (0..this).asFlow()
                 suspend fun Long.mutableStateFlowValues() = MutableStateFlow(value = this)
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -217,7 +217,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 fun doSomething3(block: suspend () -> MutableStateFlow<Long>) {
                     TODO()
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -254,7 +254,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 class ValueRepository3 {
                     suspend fun getValue() = 5L.apply { delay(1_000L) }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -277,7 +277,7 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 fun mutableStateFlowValues(): MutableStateFlow<Long> {
                     return MutableStateFlow(value = 1L)
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

@@ -16,7 +16,7 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 fun test(str: String?) {
                     println(str!!.length)
                 }
-                """
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -26,7 +26,7 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 import java.util.UUID
 
                 val version = UUID.randomUUID()!!
-                """
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -36,7 +36,7 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 fun test(str: String?) {
                     println(str?.length)
                 }
-                """
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -46,7 +46,7 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 fun test(str: String?) {
                     println(str?.length ?: 0)
                 }
-                """
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

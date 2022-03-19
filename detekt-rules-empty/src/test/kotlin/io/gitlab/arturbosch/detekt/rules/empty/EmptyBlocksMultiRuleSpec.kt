@@ -61,7 +61,7 @@ class EmptyBlocksMultiRuleSpec {
                         }
                     }
                 }
-            """
+                """
             )
             assertThat(findings).hasSize(2)
         }

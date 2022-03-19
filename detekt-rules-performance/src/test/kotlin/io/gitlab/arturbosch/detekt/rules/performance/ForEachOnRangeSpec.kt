@@ -29,7 +29,7 @@ class ForEachOnRangeSpec {
                     println(it)
                 }
             }
-        """
+            """
 
             @Test
             fun `should report the forEach usage`() {
@@ -44,7 +44,7 @@ class ForEachOnRangeSpec {
             fun test() {
                 (1..10).isEmpty()
             }
-        """
+            """
 
             @Test
             fun `should not report any issues`() {
@@ -61,7 +61,7 @@ class ForEachOnRangeSpec {
                     println(it)
                 }
             }
-        """
+            """
 
             @Test
             fun `should not report any issues`() {

@@ -22,7 +22,8 @@ class EmptyFunctionBlockSpec {
             val code = """
                 class A {
                     protected fun stuff() {}
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 27)
         }
 
@@ -31,7 +32,8 @@ class EmptyFunctionBlockSpec {
             val code = """
                 open class A {
                     open fun stuff() {}
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -40,7 +42,8 @@ class EmptyFunctionBlockSpec {
             val code = """
                 interface I {
                     fun stuff() {}
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -49,7 +52,8 @@ class EmptyFunctionBlockSpec {
             val code = """
                 fun a() {
                     fun b() {}
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 13)
         }
 
@@ -77,7 +81,8 @@ class EmptyFunctionBlockSpec {
                     override fun stuff() {
                         // this is necessary...
                     }
-                }"""
+                }
+            """
 
             @Test
             fun `should flag empty block in overridden function`() {

@@ -34,7 +34,8 @@ class DetektTaskMultiModuleSpec {
                         |subprojects {
                         |   ${builder.gradleSubprojectsApplyPlugins}
                         |}
-                        |""".trimMargin()
+                        |
+            """.trimMargin()
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
@@ -74,7 +75,8 @@ class DetektTaskMultiModuleSpec {
                         |   ${builder.gradleRepositories}
                         |   ${builder.gradleSubprojectsApplyPlugins}
                         |}
-                        |""".trimMargin()
+                        |
+            """.trimMargin()
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
@@ -115,7 +117,8 @@ class DetektTaskMultiModuleSpec {
                         |       reportsDir = file("build/detekt-reports")
                         |   }
                         |}
-                        |""".trimMargin()
+                        |
+            """.trimMargin()
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
             gradleRunner.setupProject()
@@ -146,7 +149,8 @@ class DetektTaskMultiModuleSpec {
                         |detekt {
                         |   reportsDir = file("build/custom")
                         |}
-                        |""".trimMargin()
+                        |
+            """.trimMargin()
 
             val projectLayout = ProjectLayout(1).apply {
                 addSubmodule("child1", 2)
@@ -164,7 +168,8 @@ class DetektTaskMultiModuleSpec {
                         |       reportsDir = file("build/detekt-reports")
                         |   }
                         |}
-                        |""".trimMargin()
+                        |
+            """.trimMargin()
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
 
@@ -203,7 +208,7 @@ class DetektTaskMultiModuleSpec {
                         |       "${"$"}projectDir/child2/src"
                         |    )
                         |}
-                        """.trimMargin()
+            """.trimMargin()
             val gradleRunner = builder
                 .withProjectLayout(projectLayout)
                 .withDetektConfig(detektConfig)

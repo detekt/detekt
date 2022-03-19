@@ -15,7 +15,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private interface Foo
                 class Bar
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -73,7 +73,7 @@ class UnusedPrivateClassSpec : Spek({
                 fun something() {
                     val foo: Foo = Foo()
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -86,7 +86,7 @@ class UnusedPrivateClassSpec : Spek({
                 private object Bar {
                   fun bar(foo: Foo) = Unit
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -97,7 +97,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private val a: Foo? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -108,7 +108,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private lateinit var a: Foo
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -119,7 +119,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private lateinit var foos: List<Foo>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -130,7 +130,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private val elements = listOf(42).filterIsInstance<Set<Item>>()
                 private class Item
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -141,7 +141,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private val elements = listOf(42).filterIsInstance<Something<Int>>()
                 private abstract class Something<E>: Collection<E>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -156,7 +156,7 @@ class UnusedPrivateClassSpec : Spek({
                 fun <T> bar(): T {
                     throw Exception()
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -167,7 +167,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private lateinit var foos: List<List<Foo>>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -178,7 +178,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo<T>
                 private lateinit var foos: Foo<String>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -189,7 +189,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo<T>
                 private var foos: Foo<String>? = Foo()
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -200,7 +200,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private val a = Foo()
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -211,7 +211,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo(val a: String)
                 private val a = Foo("test")
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -224,7 +224,7 @@ class UnusedPrivateClassSpec : Spek({
                 private object Bar {
                   fun foo(): Foo? = null
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -235,7 +235,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private val lambda: ((Foo) -> Unit)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -246,7 +246,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private val lambda: (() -> Foo)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -257,7 +257,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
                 private class Foo
                 private val lambda: (() -> List<Foo>)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -275,7 +275,7 @@ class UnusedPrivateClassSpec : Spek({
                         override fun bar() = Unit
                     }
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -309,7 +309,7 @@ class UnusedPrivateClassSpec : Spek({
                         B("B"),
                         C("C")
                     }
-                """
+            """
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
@@ -332,7 +332,7 @@ class UnusedPrivateClassSpec : Spek({
                         fun getSomeObject(): ((String) -> Any) = ::InternalClass
                         private class InternalClass(val param: String)
                     }
-                """
+            """
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 

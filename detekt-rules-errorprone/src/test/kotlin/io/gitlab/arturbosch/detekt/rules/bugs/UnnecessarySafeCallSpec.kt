@@ -21,7 +21,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a = 1
                     val b = a?.toString()
-                }"""
+                }
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 61)
@@ -33,7 +34,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a = 1
                     val b = a?.plus(42)
-                }"""
+                }
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 59)
@@ -45,7 +47,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a = 1
                     val b = a?.plus(42)?.minus(24)
-                }"""
+                }
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(48 to 59, 48 to 70)
@@ -61,7 +64,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a : Int? = 1
                     val b = a?.plus(42)
-                }"""
+                }
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -78,7 +82,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a = outside()
                     val b = a?.plus(42)
-                }"""
+                }
+            """
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -91,7 +96,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a : Int? = outside()
                     val b = a?.plus(42)
-                }"""
+                }
+            """
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -104,7 +110,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 fun test(s: String) {
                     val a : Int = outside()
                     val b = a?.plus(42)
-                }"""
+                }
+            """
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(103 to 114)

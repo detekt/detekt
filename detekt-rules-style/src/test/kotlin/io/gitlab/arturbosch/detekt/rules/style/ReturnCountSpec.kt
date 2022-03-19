@@ -48,7 +48,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flagged for if condition guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -70,7 +70,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flagged for if condition guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -102,7 +102,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -121,7 +121,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flagged for ELVIS operator guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -140,7 +140,7 @@ class ReturnCountSpec : Spek({
                 if (x < 4) return 0
                 return 6
             }
-        """
+            """
 
             it("should get flagged for an if condition guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -159,7 +159,7 @@ class ReturnCountSpec : Spek({
                 val y = x ?: return 0
                 return 6
             }
-        """
+            """
 
             it("should get flagged for an ELVIS guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
@@ -212,7 +212,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should get flagged by default") {
                 val findings = ReturnCount().compileAndLint(code)
@@ -239,7 +239,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flagged by default") {
                 val findings = ReturnCount().compileAndLint(code)
@@ -267,7 +267,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flagged") {
                 val findings = ReturnCount(
@@ -310,7 +310,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should flag none of the ignored functions") {
                 val findings = ReturnCount(
@@ -343,7 +343,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flag when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
@@ -378,7 +378,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should not get flag when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
@@ -415,7 +415,7 @@ class ReturnCountSpec : Spek({
                 }
                 return 6
             }
-        """
+            """
 
             it("should get flagged when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
@@ -433,7 +433,7 @@ class ReturnCountSpec : Spek({
                     return@flatMap Flowable.just(it[0])
                 }
             }
-        """
+            """
 
             it("should not count labeled returns from lambda by default") {
                 val findings = ReturnCount().lint(code)

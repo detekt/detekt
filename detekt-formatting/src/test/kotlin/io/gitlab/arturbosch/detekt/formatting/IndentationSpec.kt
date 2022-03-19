@@ -54,5 +54,26 @@ class IndentationSpec {
             val code = "fun main() {\n    println()\n}"
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        @Nested
+        inner class `parameter list indent size equals 1` {
+
+            val code = """
+                fun f(
+                 a: Int
+                ) {}
+            """.trimIndent()
+
+            @Test
+            fun `reports wrong indent size`() {
+                assertThat(subject.lint(code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when using an indentation level config of 1`() {
+                val config = TestConfig("indentSize" to "1")
+                assertThat(Indentation(config).lint(code)).isEmpty()
+            }
+        }
     }
 }

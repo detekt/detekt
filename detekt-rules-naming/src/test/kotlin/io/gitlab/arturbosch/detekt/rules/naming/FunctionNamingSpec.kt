@@ -17,7 +17,7 @@ class FunctionNamingSpec {
             val code = """
             @Suppress("FunctionName")
             fun MY_FUN() {}
-        """
+            """
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -27,7 +27,7 @@ class FunctionNamingSpec {
             val f: (Int) -> Int = fun(i: Int): Int {
                 return i + i
             }
-        """
+            """
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -37,7 +37,7 @@ class FunctionNamingSpec {
             class WhateverTest {
                 fun SHOULD_NOT_BE_FLAGGED() {}
             }
-        """
+            """
             val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$"))
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
@@ -51,7 +51,7 @@ class FunctionNamingSpec {
                 }
             }
             interface I { fun shouldNotBeFlagged() }
-        """
+            """
             assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
@@ -62,7 +62,7 @@ class FunctionNamingSpec {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
-        """
+            """
             assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -73,7 +73,7 @@ class FunctionNamingSpec {
             private class FooImpl : Foo
 
             fun Foo(): Foo = FooImpl()
-        """
+            """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
@@ -87,7 +87,7 @@ class FunctionNamingSpec {
                 }
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
-        """
+            """
             assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
         }
 
@@ -98,7 +98,7 @@ class FunctionNamingSpec {
                 override fun SHOULD_BE_FLAGGED() {}
             }
             interface I { fun SHOULD_BE_FLAGGED() }
-        """
+            """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(
                 SourceLocation(2, 18),

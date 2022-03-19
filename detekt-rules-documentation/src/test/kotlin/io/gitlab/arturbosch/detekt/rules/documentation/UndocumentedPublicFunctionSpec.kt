@@ -78,13 +78,13 @@ class UndocumentedPublicFunctionSpec {
         @Test
         fun `does not report documented public function in class`() {
             val code = """
-				class Test {
-					/**
-					*
-					*/
-					fun commented() {}
-				}
-			"""
+            class Test {
+            	/**
+            	*
+            	*/
+            	fun commented() {}
+            }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -115,22 +115,22 @@ class UndocumentedPublicFunctionSpec {
         @Test
         fun `does not report public functions in internal class`() {
             val code = """
-    			internal class NoComments {
-					fun nope1() {}
-					public fun nope2() {}
-				}
-			"""
+                internal class NoComments {
+                    fun nope1() {}
+                    public fun nope2() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
         fun `does not report public functions in private class`() {
             val code = """
-    			private class NoComments {
-					fun nope1() {}
-					public fun nope2() {}
-				}
-			"""
+                private class NoComments {
+                    fun nope1() {}
+                    public fun nope2() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

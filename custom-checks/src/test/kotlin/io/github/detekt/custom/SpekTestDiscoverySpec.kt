@@ -26,7 +26,7 @@ class SpekTestDiscoverySpec(private val env: KotlinCoreEnvironment) {
                     val s = "simple"
                     val p = Paths.get("")
                     val f = File("")
-                """
+                    """
                 )
 
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

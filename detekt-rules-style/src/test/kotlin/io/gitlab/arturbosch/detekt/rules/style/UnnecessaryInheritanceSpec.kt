@@ -15,7 +15,8 @@ class UnnecessaryInheritanceSpec : Spek({
             val findings = subject.lint(
                 """
                 class A : Any()
-                class B : Object()"""
+                class B : Object()
+                """
             )
             assertThat(findings).hasSize(2)
         }

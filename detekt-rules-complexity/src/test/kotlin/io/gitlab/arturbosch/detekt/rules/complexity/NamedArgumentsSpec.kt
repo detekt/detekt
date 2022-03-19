@@ -26,7 +26,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, 2, 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -40,7 +40,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(a = 1, b = 2, c = 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -54,7 +54,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, b = 2, c = 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -68,7 +68,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, 2)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -82,7 +82,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(a = 1, b = 2)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -169,7 +169,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, c = 3, { it })
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -182,7 +182,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, c = 3) { it }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(0)
             }
@@ -195,7 +195,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, 3) { it }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }

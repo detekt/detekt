@@ -157,7 +157,7 @@ class UnusedPrivateParameterSpec : Spek({
         it("reports unused parameter") {
             val code = """
                 class Test(unused: Any)
-                """
+            """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -165,7 +165,7 @@ class UnusedPrivateParameterSpec : Spek({
             val code = """
                 class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -176,7 +176,7 @@ class UnusedPrivateParameterSpec : Spek({
                         used.toString()
                     }
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -185,7 +185,7 @@ class UnusedPrivateParameterSpec : Spek({
                 class Test(used: Any) {
                     val usedString = used.toString()
                 }
-                """
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }

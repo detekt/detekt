@@ -208,7 +208,7 @@ class XmlOutputFormatSpec {
                     $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                     </file>
                     </checkstyle>
-                    """
+                """
 
                 val actual = outputFormat.render(TestDetektion(finding))
 

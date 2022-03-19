@@ -87,7 +87,6 @@ formatting:
   ParameterListWrapping:
     active: true
     autoCorrect: true
-    indentSize: 4
     maxLineLength: 120
   SpacingAroundAngleBrackets:
     active: false
@@ -136,3 +135,6 @@ formatting:
     autoCorrect: true
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
+  UnnecessaryParenthesesBeforeTrailingLambda:
+    active: false
+    autoCorrect: true

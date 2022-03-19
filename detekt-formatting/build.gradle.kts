@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
+    implementation(libs.ktlint.microutilsKotlinLoggingJvm)
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
@@ -22,7 +23,9 @@ tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 
 val depsToPackage = setOf(
     "org.ec4j.core",
-    "com.pinterest.ktlint"
+    "com.pinterest.ktlint",
+    "io.github.microutils",
+    "org.slf4j",
 )
 
 tasks.jar {

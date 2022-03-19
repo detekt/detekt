@@ -27,7 +27,7 @@ class GenerateConfigTaskSpec {
                     |detekt {
                     |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
                     |}
-                """
+            """
         ).withConfigFile("config/detekt/detekt.yml").build()
         gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
 

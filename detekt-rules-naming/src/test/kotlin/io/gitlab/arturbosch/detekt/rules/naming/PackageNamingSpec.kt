@@ -17,7 +17,7 @@ class PackageNamingSpec {
                     """
                     @file:Suppress("PackageDirectoryMismatch")
                     package FOO.BAR
-                """
+                    """
                 )
             ).isEmpty()
         }

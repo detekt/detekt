@@ -15,7 +15,8 @@ class EqualsNullCallSpec : Spek({
             val code = """
                 fun x(a: String) {
                     a.equals(null)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code).size).isEqualTo(1)
         }
 
@@ -23,7 +24,8 @@ class EqualsNullCallSpec : Spek({
             val code = """
                 fun x(a: String, b: String) {
                     a.equals(b.equals(null))
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code).size).isEqualTo(1)
         }
 
@@ -31,7 +33,8 @@ class EqualsNullCallSpec : Spek({
             val code = """
                 fun x(a: String, b: String) {
                     a.equals(b)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code).size).isEqualTo(0)
         }
     }

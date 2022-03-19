@@ -18,7 +18,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 if (true)
                     println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -32,7 +32,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 	if (true) 50
                         .toString()
                 }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -46,7 +46,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                         .toString() else 50
                         .toString()
                 }
-            """
+                """
             )
 
             assertThat(findings).hasSize(2)
@@ -61,7 +61,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 else
                     println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(2)
@@ -79,7 +79,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 else
                     println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(3)
@@ -95,7 +95,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 } else
                     println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -112,7 +112,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                     println()
                 }
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -126,7 +126,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 if (true) println()
                 else println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -140,7 +140,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
                 if (true) println() else
                     println()
             }
-            """
+                """
             )
 
             assertThat(findings).hasSize(1)

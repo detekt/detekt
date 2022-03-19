@@ -17,7 +17,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map["key"]!!
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -27,7 +28,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map.get("key")!!
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -37,7 +39,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<String, String>()
                     map["key"]
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -47,7 +50,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getValue("key")
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -57,7 +61,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrDefault("key", "")
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -67,7 +72,8 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrElse("key", { "" })
-                }"""
+                }
+        """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

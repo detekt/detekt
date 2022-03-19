@@ -139,7 +139,7 @@ class OutdatedDocumentationSpec {
                      * @param someProp Description of property
                      */
                     class MyClass(someParam: String, val someProp: String)
-                    """
+                """
                 assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
             }
 
@@ -292,7 +292,7 @@ class OutdatedDocumentationSpec {
                      * @param S Description of type param
                      */
                     fun <T, S> myFun(someParam: String) {}
-                    """
+                """
                 assertThat(subject.compileAndLint(incorrectTypeParamsOrder)).hasSize(1)
             }
         }
@@ -414,7 +414,7 @@ class OutdatedDocumentationSpec {
                      * @param someProp Description of property
                      */
                     class MyClass(someParam: String, val someProp: String)
-                    """
+                """
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
 
@@ -426,7 +426,7 @@ class OutdatedDocumentationSpec {
                      * @property someProp Description of property
                      */
                     class MyClass(someParam: String, val someProp: String)
-                    """
+                """
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
         }
@@ -451,7 +451,7 @@ class OutdatedDocumentationSpec {
                      * @param someProp Description of property
                      */
                     class MyClass(someParam: String, val someProp: String)
-                    """
+                """
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
 
@@ -463,7 +463,7 @@ class OutdatedDocumentationSpec {
                      * @property someProp Description of property
                      */
                     class MyClass(someParam: String, val someProp: String)
-                    """
+                """
                 assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
             }
         }

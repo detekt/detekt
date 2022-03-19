@@ -17,7 +17,7 @@ class UseArrayLiteralsInAnnotationsSpec : Spek({
             annotation class Test(val values: Array<String>)
             @Test(arrayOf("value"))
             fun test() = Unit
-        """
+                """
             )
 
             assertThat(findings).hasSize(1)
@@ -29,7 +29,7 @@ class UseArrayLiteralsInAnnotationsSpec : Spek({
             annotation class Test(val values: Array<String>)
             @Test(["value"])
             fun test() = Unit
-        """
+                """
             )
 
             assertThat(findings).isEmpty()

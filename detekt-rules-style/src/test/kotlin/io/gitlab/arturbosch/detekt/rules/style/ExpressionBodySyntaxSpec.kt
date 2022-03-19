@@ -23,7 +23,7 @@ class ExpressionBodySyntaxSpec : Spek({
                     fun stuff(): Int {
                         return 5
                     }
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -35,7 +35,7 @@ class ExpressionBodySyntaxSpec : Spek({
                     fun stuff(): String {
                         return StringBuilder().append(0).toString()
                     }
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -50,7 +50,7 @@ class ExpressionBodySyntaxSpec : Spek({
                     fun stuff(): Int {
                         return try { return 5 } catch (e: Exception) { return 3 }
                     }
-                """
+                        """
                     )
                 ).hasSize(2)
             }
@@ -63,7 +63,7 @@ class ExpressionBodySyntaxSpec : Spek({
                         if (true) return true
                         return false
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -77,7 +77,7 @@ class ExpressionBodySyntaxSpec : Spek({
                     }
 
                     fun callee(a: String): String = ""
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -90,7 +90,8 @@ class ExpressionBodySyntaxSpec : Spek({
                     return StringBuilder()
                         .append(1)
                         .toString()
-                }"""
+                }
+            """
 
             it("does not report with the default configuration") {
                 assertThat(subject.compileAndLint(code)).isEmpty()
@@ -110,7 +111,8 @@ class ExpressionBodySyntaxSpec : Spek({
                         0 -> 0
                         else -> 1
                     }
-                }"""
+                }
+            """
 
             it("does not report with the default configuration") {
                 assertThat(subject.compileAndLint(code)).isEmpty()

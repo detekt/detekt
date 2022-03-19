@@ -23,7 +23,8 @@ class UseCheckOrErrorSpec : Spek({
                 fun x() {
                     doSomething()
                     if (a < 0) throw IllegalStateException()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(3, 16)
         }
 
@@ -32,7 +33,8 @@ class UseCheckOrErrorSpec : Spek({
                 fun x() {
                     doSomething()
                     if (a < 0) throw IllegalStateException("More details")
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(3, 16)
         }
 
@@ -42,7 +44,8 @@ class UseCheckOrErrorSpec : Spek({
                     when (a) {
                         1 -> doSomething()
                         else -> throw IllegalStateException()
-                    }"""
+                    }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(4, 17)
         }
 
@@ -51,7 +54,8 @@ class UseCheckOrErrorSpec : Spek({
                 fun x() {
                     doSomething()
                     if (a < 0) throw java.lang.IllegalStateException()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(3, 16)
         }
 
@@ -60,7 +64,8 @@ class UseCheckOrErrorSpec : Spek({
                 fun x() {
                     doSomething()
                     if (a < 0) throw kotlin.IllegalStateException()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).hasSourceLocation(3, 16)
         }
 
@@ -69,7 +74,8 @@ class UseCheckOrErrorSpec : Spek({
                 fun x() {
                     doSomething()
                     if (a < 0) throw SomeBusinessException()
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -79,7 +85,8 @@ class UseCheckOrErrorSpec : Spek({
                     if  (cause != null) {
                         throw IllegalStateException("message", cause)
                     }
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -87,7 +94,8 @@ class UseCheckOrErrorSpec : Spek({
             val code = """
                 fun unsafeRunSync(): A =
                     unsafeRunTimed(Duration.INFINITE)
-                        .fold({ throw IllegalStateException("message") }, ::identity)"""
+                        .fold({ throw IllegalStateException("message") }, ::identity)
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 

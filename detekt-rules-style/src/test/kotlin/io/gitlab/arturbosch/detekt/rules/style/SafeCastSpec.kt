@@ -18,7 +18,8 @@ class SafeCastSpec : Spek({
                     } else {
                         element
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -30,7 +31,8 @@ class SafeCastSpec : Spek({
                     } else {
                         null
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -43,7 +45,8 @@ class SafeCastSpec : Spek({
                     } else {
                         null
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -55,7 +58,8 @@ class SafeCastSpec : Spek({
                     } else {
                         String()
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

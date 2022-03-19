@@ -127,7 +127,7 @@ class OptionalUnitSpec : Spek({
                         Unit.equals(null)
                         val i: (Int) -> Unit = { _ -> }
                     }
-                """
+                    """
                 )
                 assertThat(findings).isEmpty()
             }

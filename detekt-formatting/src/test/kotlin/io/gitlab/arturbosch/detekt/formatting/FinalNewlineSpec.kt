@@ -26,7 +26,7 @@ class FinalNewlineSpec {
                 """
                     fun main() = Unit
 
-            """
+                """
             )
 
             assertThat(findings).isEmpty()
@@ -39,7 +39,7 @@ class FinalNewlineSpec {
                     """
                 fun main() = Unit
 
-            """
+                    """
                 )
 
             assertThat(findings).hasSize(1)

@@ -320,7 +320,7 @@ class UseIsNullOrEmptySpec : Spek({
                 fun test(x: Sequence<Int>?) {
                     if (x == null || x.count() == 0) return
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }

@@ -22,7 +22,8 @@ class EmptyCodeSpec {
                 try {
                 } catch (foo: Exception) {
                 }
-            }"""
+            }
+    """
 
     @Nested
     inner class `EmptyCatchBlock rule` {
@@ -42,7 +43,8 @@ class EmptyCodeSpec {
                     } catch (e: Exception) {
                     }
                 }
-            }"""
+            }
+            """
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
@@ -54,7 +56,8 @@ class EmptyCodeSpec {
                 } catch (ignore: IllegalArgumentException) {
                 } catch (expected: Exception) {
                 }
-            }"""
+            }
+            """
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
         }
 
@@ -65,7 +68,8 @@ class EmptyCodeSpec {
                 try {
                 } catch (foo: Exception) {
                 }
-            }"""
+            }
+            """
             val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
             assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
         }
