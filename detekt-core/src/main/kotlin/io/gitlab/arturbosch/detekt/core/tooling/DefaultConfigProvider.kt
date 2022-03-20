@@ -34,7 +34,7 @@ private fun configInputStream(spec: ProcessingSpec): InputStream {
     requireNotNull(spec.javaClass.getSafeResourceAsStream("/default-detekt-config.yml"))
         .use { it.copyTo(outputStream) }
 
-    ExtensionFacade(spec.extensionsSpec).pluginLoader
+    ExtensionFacade(spec.extensionsSpec.plugins).pluginLoader
         .getResourcesAsStream("config/config.yml")
         .forEach { inputStream ->
             outputStream.bufferedWriter().append('\n').flush()
