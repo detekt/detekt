@@ -10,17 +10,13 @@ import java.nio.file.Files
 
 class ConfigExporterSpec {
 
-    @Nested
-    inner class `config exporter` {
+    @Test
+    fun `should export the given config`() {
+        val tmpConfig = createTempFileForTest("ConfigPrinterSpec", ".yml")
+        val cliArgs = parseArguments(arrayOf("--config", tmpConfig.toString()))
 
-        @Test
-        fun `should export the given config`() {
-            val tmpConfig = createTempFileForTest("ConfigPrinterSpec", ".yml")
-            val cliArgs = parseArguments(arrayOf("--config", tmpConfig.toString()))
+        ConfigExporter(cliArgs, NullPrintStream(), NullPrintStream()).execute()
 
-            ConfigExporter(cliArgs, NullPrintStream(), NullPrintStream()).execute()
-
-            assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
-        }
+        assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
     }
 }
