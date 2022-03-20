@@ -14,7 +14,7 @@ class ConfigExporter(
     override fun execute() {
         val configPath = Paths.get(arguments.config ?: "detekt.yml")
         val spec = arguments.createSpec(outputPrinter, errorPrinter)
-        DefaultConfigurationProvider.load(spec).copy(configPath)
+        DefaultConfigurationProvider.load(spec.extensionsSpec).copy(configPath)
         outputPrinter.appendLine("Successfully copied default config to ${configPath.toAbsolutePath()}")
     }
 }
