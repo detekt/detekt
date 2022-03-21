@@ -125,6 +125,7 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
 
 private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
     return if (defaultValue.all { it is String }) {
+        @Suppress("UNCHECKED_CAST")
         val defaultValueAsListOfStrings = defaultValue as List<String>
         valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
     } else {
