@@ -86,7 +86,7 @@ private fun YamlNode.map(map: Map<String, String?>) {
             } else {
                 SINGLE_INDENT
             }
-            keyValue { "$prefix$key" to value!!.ensureQuoted() }
+            keyValue { "$prefix$key" to (value?.ensureQuoted() ?: error("value cannot be null")) }
         }
 }
 

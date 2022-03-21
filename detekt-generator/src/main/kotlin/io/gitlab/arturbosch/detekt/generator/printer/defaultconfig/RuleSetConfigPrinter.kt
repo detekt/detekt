@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
-import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
 
 internal fun YamlNode.printRuleSetPage(ruleSetPage: RuleSetPage) {

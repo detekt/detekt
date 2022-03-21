@@ -152,7 +152,7 @@ private fun ConfigAware.getValuesWithReasonOrDefault(
                         )
                     } catch (e: ClassCastException) {
                         throw Config.InvalidConfigurationError(e)
-                    } catch (e: NullPointerException) {
+                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
                         throw Config.InvalidConfigurationError(e)
                     }
                 }

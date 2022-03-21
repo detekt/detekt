@@ -206,8 +206,10 @@ class ConfigurationCollector {
             val keyToValue = arg.children.first() as? KtBinaryExpression
             return keyToValue?.let {
                 ValueWithReason(
-                    value = it.left!!.text.withoutQuotes(),
-                    reason = it.right!!.text.withoutQuotes()
+                    value = it.left?.text?.withoutQuotes()
+                        ?: error("left side of value with reason argument is null"),
+                    reason = it.right?.text?.withoutQuotes()
+                        ?: error("right side of value with reason argument is null")
                 )
             } ?: error("invalid value argument '${arg.text}'")
         }

@@ -88,7 +88,7 @@ class YamlSpec {
 
         @Test
         fun `renders an empty list of maps`() {
-            val given = listOf<Map<String, String>>()
+            val given = emptyList<Map<String, String>>()
             val result = yaml { listOfMaps("key", given) }
             val expected = "key: []"
             assertThat(result).isEqualTo(expected)
