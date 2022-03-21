@@ -24,7 +24,7 @@ class CanBeNonNullableSpec : Spek({
                         a = 6
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -76,7 +76,7 @@ class CanBeNonNullableSpec : Spek({
                             }
                         }
                     }
-                    """
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
             }
 
@@ -129,7 +129,7 @@ class CanBeNonNullableSpec : Spek({
                     class A(private var aDelegate: Int?) {
                         private var a: Int? by this::aDelegate
                     }
-                    """
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -201,7 +201,7 @@ class CanBeNonNullableSpec : Spek({
                             a = 6
                         }
                     }
-                    """
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -346,7 +346,7 @@ class CanBeNonNullableSpec : Spek({
                             return if (randInt % 2 == 0) randInt else null
                         }
                     }
-                    """
+                """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -357,7 +357,7 @@ class CanBeNonNullableSpec : Spek({
                     open val a: Int? = 5
                     open var b: Int? = 5
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -370,7 +370,7 @@ class CanBeNonNullableSpec : Spek({
                     // as non-null in Kotlin code.
                     private var a: String? = e.localizedMessage
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -380,7 +380,7 @@ class CanBeNonNullableSpec : Spek({
                     val a: Int?
                     var b: Int?
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 

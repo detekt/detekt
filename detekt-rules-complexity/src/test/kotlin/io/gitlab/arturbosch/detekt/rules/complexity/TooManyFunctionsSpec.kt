@@ -134,7 +134,7 @@ class TooManyFunctionsSpec {
                     fun f() {
                     }
                 }
-                """
+            """
 
             @Test
             fun `finds all deprecated functions per default`() {
@@ -163,7 +163,7 @@ class TooManyFunctionsSpec {
                 class A {
                     private fun f() {}
                 }
-                """
+            """
 
             @Test
             fun `finds the private function per default`() {
@@ -236,7 +236,7 @@ class TooManyFunctionsSpec {
                         override fun func1() = Unit
                         override fun func2() = Unit
                     }
-                """
+            """
 
             @Test
             fun `should not report class with overridden functions, if ignoreOverridden is enabled`() {

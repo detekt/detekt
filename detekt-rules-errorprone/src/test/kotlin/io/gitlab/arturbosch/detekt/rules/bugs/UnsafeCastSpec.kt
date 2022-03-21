@@ -19,7 +19,8 @@ class UnsafeCastSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(s: String) {
                     println(s as Int)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -28,7 +29,8 @@ class UnsafeCastSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(s: String) {
                     println((s as? Int) ?: 0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -37,7 +39,8 @@ class UnsafeCastSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(s: Any) {
                     println(s as Int)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -46,7 +49,8 @@ class UnsafeCastSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(s: Any) {
                     println((s as? Int) ?: 0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

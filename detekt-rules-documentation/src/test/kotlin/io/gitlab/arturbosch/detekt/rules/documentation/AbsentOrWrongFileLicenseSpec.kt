@@ -30,7 +30,7 @@ class AbsentOrWrongFileLicenseSpec {
                     """
                     /* LICENSE */
                     package cases
-                """
+                    """
                 )
 
                 assertThat(findings).isEmpty()
@@ -46,7 +46,7 @@ class AbsentOrWrongFileLicenseSpec {
                     """
                     /* WRONG LICENSE */
                     package cases
-                """
+                    """
                 )
 
                 assertThat(findings).hasSize(1)
@@ -61,7 +61,7 @@ class AbsentOrWrongFileLicenseSpec {
                 val findings = checkLicence(
                     """
                     package cases
-                """
+                    """
                 )
 
                 assertThat(findings).hasSize(1)

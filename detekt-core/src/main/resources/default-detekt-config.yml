@@ -129,6 +129,7 @@ complexity:
   NamedArguments:
     active: false
     threshold: 3
+    ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
     threshold: 4

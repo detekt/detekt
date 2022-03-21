@@ -40,7 +40,7 @@ In order for your PR to get accepted, it is important that you add
 suitable **annotations** and provide all required types of **descriptions**.
 The following two subsections describe how to
 properly annotate a rule and how to compose the different types
-of descriptoins, respectively.
+of descriptions, respectively.
 
 ### Rule annotations
 

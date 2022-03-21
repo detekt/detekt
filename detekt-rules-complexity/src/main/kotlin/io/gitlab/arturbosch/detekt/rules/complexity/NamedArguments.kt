@@ -44,6 +44,9 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     @Configuration("number of parameters that triggers this inspection")
     private val threshold: Int by config(defaultValue = 3)
 
+    @Configuration("ignores when argument values are the same as the parameter names")
+    private val ignoreArgumentsMatchingNames: Boolean by config(defaultValue = false)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments
@@ -56,12 +59,21 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
-        val unnamedArguments = valueArguments.filterNot { it.isNamed() || it is KtLambdaArgument }
-        if (unnamedArguments.isEmpty()) return false
         val resolvedCall = getResolvedCall(bindingContext) ?: return false
         if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
-        return unnamedArguments.all {
-            resolvedCall.getParameterForArgument(it)?.varargElementType == null || it.getSpreadElement() != null
+
+        val unnamedArguments = valueArguments.mapNotNull { argument ->
+            if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
+            val parameter = resolvedCall.getParameterForArgument(argument) ?: return@mapNotNull null
+            if (ignoreArgumentsMatchingNames &&
+                parameter.name.asString() == argument.getArgumentExpression()?.text
+            ) return@mapNotNull null
+            argument to parameter
+        }
+        if (unnamedArguments.isEmpty()) return false
+
+        return unnamedArguments.all { (argument, parameter) ->
+            argument.getSpreadElement() != null || parameter.varargElementType == null
         }
     }
 }

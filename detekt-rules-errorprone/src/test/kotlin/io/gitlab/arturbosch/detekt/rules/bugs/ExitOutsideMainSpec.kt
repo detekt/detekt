@@ -20,7 +20,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 import kotlin.system.exitProcess
                 fun f() {
                     exitProcess(0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -29,7 +30,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun f() {
                     System.exit(0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -39,7 +41,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 import kotlin.system.exitProcess
                 fun main() {
                     exitProcess(0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -48,7 +51,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun main() {
                     System.exit(0)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -60,7 +64,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                     fun exit() {
                         exitProcess(0)
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -71,7 +76,8 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                     fun exit() {
                         System.exit(0)
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }

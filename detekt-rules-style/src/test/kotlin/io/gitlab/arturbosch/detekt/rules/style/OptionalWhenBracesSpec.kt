@@ -25,7 +25,8 @@ class OptionalWhenBracesSpec : Spek({
                             println()
                         }
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -36,7 +37,8 @@ class OptionalWhenBracesSpec : Spek({
                         1 -> { print(1) }
                         else -> println()
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 

@@ -17,7 +17,7 @@ class CreateBaselineTaskDslSpec {
             |detekt {
             |   baseline = file("$baselineFilename")
             |}
-            """
+        """
         val gradleRunner = builder
             .withProjectLayout(
                 ProjectLayout(
@@ -41,7 +41,7 @@ class CreateBaselineTaskDslSpec {
         val detektConfig = """
             |detekt {
             |}
-            """
+        """
         val gradleRunner = builder
             .withProjectLayout(
                 ProjectLayout(
@@ -65,7 +65,7 @@ class CreateBaselineTaskDslSpec {
             |detekt {
             |   baseline = null
             |}
-            """
+        """
         val gradleRunner = builder
             .withProjectLayout(
                 ProjectLayout(

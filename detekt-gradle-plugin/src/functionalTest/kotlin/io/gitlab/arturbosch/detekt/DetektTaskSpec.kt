@@ -21,7 +21,7 @@ class DetektTaskSpec {
             |detekt {
             |   ignoreFailures = true
             |}
-            """
+        """
 
         val gradleRunner = builder
             .withProjectLayout(projectLayoutWithTooManyIssues)
@@ -40,7 +40,7 @@ class DetektTaskSpec {
             |detekt {
             |   ignoreFailures = false
             |}
-            """
+        """
 
         val gradleRunner = builder
             .withProjectLayout(projectLayoutWithTooManyIssues)

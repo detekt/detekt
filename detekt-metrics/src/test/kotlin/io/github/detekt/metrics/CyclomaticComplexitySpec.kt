@@ -77,7 +77,7 @@ class CyclomaticComplexitySpec {
                     fun test(i: Int) {
                         (1..10).forEach { println(it) }
                     }
-                """
+            """
         )
 
         @Test
@@ -129,7 +129,7 @@ class CyclomaticComplexitySpec {
                         else -> println("Meh")
                     }
                 }
-            """
+                """
             ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
@@ -152,7 +152,7 @@ class CyclomaticComplexitySpec {
                         else -> println("Meh")
                     }
                 }
-            """
+                """
             ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
@@ -177,7 +177,7 @@ class CyclomaticComplexitySpec {
                         else -> println("Meh")
                     }
                 }
-            """
+                """
             ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
@@ -203,7 +203,7 @@ class CyclomaticComplexitySpec {
                         else -> println("Meh")
                     }
                 }
-            """
+                """
             ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {
@@ -231,7 +231,7 @@ class CyclomaticComplexitySpec {
                         else -> println("Meh")
                     }
                 }
-            """
+                """
             ).getFunctionByName("test")
 
             val actual = CyclomaticComplexity.calculate(function) {

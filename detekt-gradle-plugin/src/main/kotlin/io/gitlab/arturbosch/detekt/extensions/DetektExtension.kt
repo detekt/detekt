@@ -1,13 +1,19 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import io.github.detekt.utils.openSafeStream
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
+import java.util.Properties
 import javax.inject.Inject
 
 open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQualityExtension() {
+
+    init {
+        toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
+    }
 
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
@@ -100,4 +106,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_ALL_RULES_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
     }
+}
+
+internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
+    load(classLoader.getResource("versions.properties")!!.openSafeStream())
+    getProperty("detektVersion")
 }

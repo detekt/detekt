@@ -34,7 +34,8 @@ class OptionalAbstractKeywordSpec : Spek({
                     abstract interface B {
                         abstract fun x()
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -49,7 +50,8 @@ class OptionalAbstractKeywordSpec : Spek({
                     abstract class A {
                         abstract fun dependency()
                     }
-                }"""
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

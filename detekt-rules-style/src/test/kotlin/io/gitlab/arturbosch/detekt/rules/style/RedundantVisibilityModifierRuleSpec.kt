@@ -171,7 +171,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
                     """
                     public class A() {
                         fun f()
-                    }"""
+                    }
+                    """
                 )
             }
             val rule by memoized { RedundantVisibilityModifierRule() }

@@ -286,7 +286,7 @@ class MagicNumberSpec : Spek({
                     3 -> return 3
                 }
             }
-        """
+            """
 
             it("should be reported") {
                 val findings = MagicNumber().lint(code)
@@ -306,7 +306,7 @@ class MagicNumberSpec : Spek({
             fun test(x: Int) {
                 val i = 5
             }
-        """
+            """
 
             it("should be reported") {
                 val findings = MagicNumber().lint(code)
@@ -319,7 +319,7 @@ class MagicNumberSpec : Spek({
             fun test() : Boolean {
                 return true;
             }
-        """
+            """
 
             it("should not be reported") {
                 val findings = MagicNumber().lint(code)
@@ -397,7 +397,7 @@ class MagicNumberSpec : Spek({
             }
 
             data class Color(val color: Int)
-        """
+            """
 
             it("should report all without ignore flags") {
                 val config = TestConfig(
@@ -451,7 +451,7 @@ class MagicNumberSpec : Spek({
                     const val anotherBoringConstant = 93872
                 }
             }
-        """
+            """
 
             it("should not report any issues by default") {
                 val findings = MagicNumber().lint(code)
@@ -559,7 +559,7 @@ class MagicNumberSpec : Spek({
                 )
 
                 var model = Model(someVal = $numberString)
-            """
+                """
 
                 it("should not ignore int") {
                     val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
@@ -594,7 +594,7 @@ class MagicNumberSpec : Spek({
                     abstract class A(n: Int)
 
                     object B : A(n = 5)
-                """
+                    """
                     assertThat(MagicNumber().compileAndLint(code)).isEmpty()
                 }
 
@@ -614,7 +614,7 @@ class MagicNumberSpec : Spek({
                 )
 
                 var model = Model($numberString)
-            """
+                """
 
                 it("should detect the argument by default") {
                     assertThat(MagicNumber().lint(code("53"))).hasSize(1)
@@ -626,7 +626,7 @@ class MagicNumberSpec : Spek({
                 fun tested(someVal: Int, other: String = "default")
 
                 vaö t = tested(someVal = $number)
-            """
+                """
                 it("should ignore int by default") {
                     assertThat(MagicNumber().lint(code(53))).isEmpty()
                 }
@@ -649,7 +649,7 @@ class MagicNumberSpec : Spek({
                     SMALL(1),
                     EXTRA_LARGE(5)
                 }
-            """
+                """
                 it("should be reported by default") {
                     assertThat(MagicNumber().lint(code)).hasSize(1)
                 }
@@ -664,7 +664,7 @@ class MagicNumberSpec : Spek({
                     SMALL(id = 1),
                     EXTRA_LARGE(id = 5)
                 }
-            """
+                """
                 it("should be reported") {
                     val rule = MagicNumber(TestConfig(mapOf(IGNORE_NAMED_ARGUMENT to "false")))
                     assertThat(rule.lint(code)).hasSize(1)
@@ -688,14 +688,16 @@ class MagicNumberSpec : Spek({
             it("does not report functions that always returns a constant value") {
                 val code = """
                 fun x() = 9
-                fun y(): Int { return 9 }"""
+                fun y(): Int { return 9 }
+                """
                 assertThat(MagicNumber().compileAndLint(code)).isEmpty()
             }
 
             it("reports functions that does not return a constant value") {
                 val code = """
                 fun x() = 9 + 1
-                fun y(): Int { return 9 + 1 }"""
+                fun y(): Int { return 9 + 1 }
+                """
                 assertThat(MagicNumber().compileAndLint(code)).hasSize(2)
             }
         }
@@ -724,7 +726,8 @@ class MagicNumberSpec : Spek({
                 val code = """
                 class SomeClassWithDefault {
                     constructor(val defaultValue: Int = 10) { }
-                }"""
+                }
+                """
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
 
@@ -732,7 +735,8 @@ class MagicNumberSpec : Spek({
                 val code = """
                 class SomeClassWithDefault {
                     constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
-                }"""
+                }
+                """
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
         }

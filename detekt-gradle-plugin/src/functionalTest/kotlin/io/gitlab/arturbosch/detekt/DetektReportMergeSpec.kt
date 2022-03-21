@@ -44,7 +44,8 @@ class DetektReportMergeSpec {
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |
+            """.trimMargin()
         val kotlin = DslTestBuilder.kotlin()
         val kotlinBuildFileContent =
             """
@@ -74,7 +75,8 @@ class DetektReportMergeSpec {
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |
+            """.trimMargin()
 
         fun scenarios(): List<Arguments> = listOf(
             arguments(groovy, groovyBuildFileContent),
@@ -143,7 +145,8 @@ class DetektReportMergeSpec {
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |
+            """.trimMargin()
         val kotlin = DslTestBuilder.kotlin()
         val kotlinBuildFileContent =
             """
@@ -173,7 +176,8 @@ class DetektReportMergeSpec {
             |    }
             |  }
             |}
-            |""".trimMargin()
+            |
+            """.trimMargin()
 
         fun scenarios(): List<Arguments> = listOf(
             arguments(groovy, groovyBuildFileContent),

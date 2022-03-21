@@ -20,7 +20,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 fun x() {
                     String.format("%d", 1)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -30,7 +31,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 import java.util.Locale
                 fun x() {
                     String.format(Locale.US, "%d", 1)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -40,7 +42,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s = "deadbeef"
                     s.toUpperCase()
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -51,7 +54,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s = "deadbeef"
                     s.toUpperCase(Locale.US)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -61,7 +65,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s = "deadbeef"
                     s.toLowerCase()
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -72,7 +77,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s = "deadbeef"
                     s.toLowerCase(Locale.US)
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -82,7 +88,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s: String? = "deadbeef"
                     s?.toUpperCase()
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -92,7 +99,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
                 fun x() {
                     val s: String? = "deadbeef"
                     s?.toLowerCase()
-                }"""
+                }
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }

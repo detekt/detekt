@@ -248,7 +248,8 @@ abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst
                     ${visibility()}${const()}val MyNAME = "Artur"
                     ${visibility()}${const()}val name = "Artur"
                     ${visibility()}${const()}val nAme = "Artur"
-                    ${visibility()}${const()}val serialVersionUID = 42L"""
+                    ${visibility()}${const()}val serialVersionUID = 42L
+    """
     val positive = """${visibility()}${const()}val _nAme = "Artur""""
 
     private fun visibility() = if (isPrivate) "private " else ""

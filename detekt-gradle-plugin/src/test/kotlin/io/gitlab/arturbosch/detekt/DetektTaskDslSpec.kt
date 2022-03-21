@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
@@ -82,7 +83,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
                         |}
-                        """
+                """
 
                 gradleRunner = builder.withDetektConfig(config).build()
 
@@ -109,7 +110,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |   baseline = file("$baselineFilename")
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -136,7 +137,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |   baseline = file("$baselineFilename")
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -162,7 +163,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
                         |}
-                        """
+                """
 
                 val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
                 gradleRunner = builder
@@ -197,7 +198,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
                         |}
-                        """
+                """
 
                 val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
                 gradleRunner = builder
@@ -230,7 +231,7 @@ class DetektTaskDslSpec {
                         |detekt {
                         |    reportsDir = file("build/detekt-reports")
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -278,7 +279,7 @@ class DetektTaskDslSpec {
                         |        xml.destination = file("build/xml-reports/custom-detekt.xml")
                         |    }
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -325,7 +326,7 @@ class DetektTaskDslSpec {
                         |        }
                         |    }
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -358,7 +359,7 @@ class DetektTaskDslSpec {
                                 |       }
                                 |    }
                                 |}
-                                """
+                    """
 
                     gradleRunner = builder.withDetektConfig(config).build()
                     result = gradleRunner.runDetektTask()
@@ -389,7 +390,7 @@ class DetektTaskDslSpec {
                                 |       }
                                 |    }
                                 |}
-                                """
+                    """
 
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
@@ -412,7 +413,7 @@ class DetektTaskDslSpec {
                                 |       }
                                 |    }
                                 |}
-                                """
+                    """
 
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
@@ -438,7 +439,7 @@ class DetektTaskDslSpec {
                                 |       }
                                 |    }
                                 |}
-                                """
+                    """
 
                     gradleRunner = builder.withDetektConfig(config).build()
                 }
@@ -463,7 +464,7 @@ class DetektTaskDslSpec {
                                         |        }
                                         |    }
                                         |}
-                                        """
+                    """
 
                     gradleRunner = builder.withDetektConfig(config).build()
                     gradleRunner.runDetektTaskAndExpectFailure()
@@ -487,7 +488,7 @@ class DetektTaskDslSpec {
                         |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
                         |}
-                        """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -559,7 +560,7 @@ class DetektTaskDslSpec {
                             |dependencies {
                             |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
                             |}
-                            """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -588,7 +589,7 @@ class DetektTaskDslSpec {
                             |detekt {
                             |    toolVersion = "$customVersion"
                             |}
-                            """
+                """
 
                 gradleRunner = builder
                     .withDetektConfig(config)
@@ -643,7 +644,7 @@ class DetektTaskDslSpec {
                         |    }
                         |    basePath = projectDir.toString()
                         |}
-                        """
+                    """
 
                     gradleRunner = builder
                         .withDetektConfig(config)

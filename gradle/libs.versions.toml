@@ -2,8 +2,9 @@
 dokka = "1.6.10"
 jacoco = "0.8.7"
 kotlin = "1.6.10"
-ktlint = "0.43.2"
-spek = "2.0.17"
+ktlint = "0.44.0"
+microutilsKotlinLoggingJvm = "2.1.21"
+spek = "2.0.18"
 junit = "5.8.2"
 
 [libraries]
@@ -26,6 +27,7 @@ android-gradle = "com.android.tools.build:gradle:7.1.2"
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
+ktlint-microutilsKotlinLoggingJvm = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "microutilsKotlinLoggingJvm" }
 
 dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "dokka"}
 

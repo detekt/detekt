@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * <noncompliant>
  * package foo
-
  * import kotlin.jvm.JvmField
  * import kotlin.SinceKotlin
  * </noncompliant>

@@ -29,7 +29,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.IO) { }
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -46,7 +46,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(dispatcher) { }
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -57,7 +57,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.Dispatchers
 
                 class MyRepository(dispatcher: CoroutineDispatcher = Dispatchers.IO)
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -68,7 +68,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.Dispatchers
 
                 class MyRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO)
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -84,7 +84,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.Main) { }
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -106,7 +106,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.Main) { }
                     }
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }

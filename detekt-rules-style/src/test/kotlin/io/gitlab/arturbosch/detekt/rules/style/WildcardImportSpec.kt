@@ -93,7 +93,7 @@ class WildcardImportSpec : Spek({
 
             class Test {
             }
-        """
+            """
 
             it("should not report any issues") {
                 val findings = WildcardImport().compileAndLint(code)

@@ -17,7 +17,7 @@ class EqualsOnSignatureLineSpec : Spek({
                     """
                     fun foo()
                         = 1
-                """
+                    """
                 )
                 assertThat(findings).hasSize(1)
             }
@@ -29,7 +29,7 @@ class EqualsOnSignatureLineSpec : Spek({
 
                 fun bar() =
                     2
-                """
+                    """
                 )
                 assertThat(findings).isEmpty()
             }
@@ -51,7 +51,7 @@ class EqualsOnSignatureLineSpec : Spek({
                     foo: String
                 ): Int
                     = 3
-                """
+                    """
                 )
                 assertThat(findings).hasSize(3)
             }
@@ -87,7 +87,7 @@ class EqualsOnSignatureLineSpec : Spek({
                 :
                 Int =
                     6
-                """
+                    """
                 )
                 assertThat(findings).isEmpty()
             }
@@ -110,7 +110,7 @@ class EqualsOnSignatureLineSpec : Spek({
                 ): Int
                     where V : Number
                     = 3
-                """
+                    """
                 )
                 assertThat(findings).hasSize(3)
             }
@@ -125,7 +125,7 @@ class EqualsOnSignatureLineSpec : Spek({
                     where V : Number =
                     2
 
-                """
+                    """
                 )
                 assertThat(findings).isEmpty()
             }
@@ -146,7 +146,7 @@ class EqualsOnSignatureLineSpec : Spek({
             Unit
             {
             }
-            """
+                """
             )
             assertThat(findings).isEmpty()
         }

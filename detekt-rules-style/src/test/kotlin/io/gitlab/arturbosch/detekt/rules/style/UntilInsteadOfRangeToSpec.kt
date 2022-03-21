@@ -15,7 +15,8 @@ class UntilInsteadOfRangeToSpec : Spek({
             val code = """
                 fun f() {
                     for (i in 0 .. 10 - 1) {}
-                }"""
+                }
+            """
             val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage("'..' call can be replaced with 'until'")
@@ -26,7 +27,8 @@ class UntilInsteadOfRangeToSpec : Spek({
                 fun f() {
                     for (i in 0 until 10 - 1) {}
                     for (i in 10 downTo 2 - 1) {}
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -34,7 +36,8 @@ class UntilInsteadOfRangeToSpec : Spek({
             val code = """
                 fun f() {
                     for (i in 0 .. 10) {}
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -43,7 +46,8 @@ class UntilInsteadOfRangeToSpec : Spek({
                 fun f() {
                     for (i in 0 .. 10 + 1) {}
                     for (i in 0 .. 10 - 2) {}
-                }"""
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 

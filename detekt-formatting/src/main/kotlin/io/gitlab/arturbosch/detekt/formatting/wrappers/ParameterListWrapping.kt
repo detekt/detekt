@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
 import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 
 /**
@@ -21,14 +20,15 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     override val wrapping = ParameterListWrappingRule()
     override val issue = issueFor("Detects mis-aligned parameter lists")
 
-    @Configuration("indentation size")
-    private val indentSize by config(4)
-
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
 
+    @Configuration("indentation size")
+    @Deprecated("`indentSize` is ignored by KtLint and will have no effect")
+    @Suppress("UnusedPrivateMember")
+    private val indentSize by config(4)
+
     override fun overrideEditorConfig() = mapOf(
-        INDENT_SIZE_KEY to indentSize,
         MAX_LINE_LENGTH_KEY to maxLineLength
     )
 }

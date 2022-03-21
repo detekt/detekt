@@ -16,7 +16,8 @@ class ExplicitItLambdaParameterSpec : Spek({
                     """
                 fun f() {
                     val digits = 1234.let { it -> listOf(it) }
-                }"""
+                }
+                    """
                 )
                 assertThat(findings).hasSize(1)
             }
@@ -25,7 +26,8 @@ class ExplicitItLambdaParameterSpec : Spek({
                     """
                 fun f() {
                     val lambda = { it: Int -> it.toString() }
-                }"""
+                }
+                    """
                 )
                 assertThat(findings).hasSize(1)
             }
@@ -38,7 +40,8 @@ class ExplicitItLambdaParameterSpec : Spek({
                     val lambda = { i: Int -> i.toString() }
                     val digits = 1234.let { lambda(it) }.toList()
                     val flat = listOf(listOf(1), listOf(2)).flatMap { it }
-                }"""
+                }
+                    """
                 )
                 assertThat(findings).isEmpty()
             }
@@ -50,7 +53,8 @@ class ExplicitItLambdaParameterSpec : Spek({
                     """
                 fun f() {
                     val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
-                }"""
+                }
+                    """
                 )
                 assertThat(findings).hasSize(1)
             }
@@ -59,7 +63,8 @@ class ExplicitItLambdaParameterSpec : Spek({
                     """
                 fun f() {
                     val lambda = { it: Int, that: String -> it.toString() + that }
-                }"""
+                }
+                    """
                 )
                 assertThat(findings).hasSize(1)
             }

@@ -165,7 +165,7 @@ class SwallowedExceptionSpec {
                         } catch (e: IllegalArgumentException) {
                         }
                     }
-                """
+                    """
                     assertThat(rule.compileAndLint(code)).isEmpty()
                 }
 
@@ -177,7 +177,7 @@ class SwallowedExceptionSpec {
                         } catch (e: Exception) {
                         }
                     }
-                """
+                    """
                     assertThat(rule.compileAndLint(code)).hasSize(1)
                 }
             }
@@ -203,7 +203,7 @@ class SwallowedExceptionSpec {
                         } catch (e: IllegalArgumentException) {
                         }
                     }
-                """
+                    """
                     assertThat(rule.compileAndLint(code)).isEmpty()
                 }
 
@@ -215,7 +215,7 @@ class SwallowedExceptionSpec {
                         } catch (e: Exception) {
                         }
                     }
-                """
+                    """
                     assertThat(rule.compileAndLint(code)).hasSize(1)
                 }
             }

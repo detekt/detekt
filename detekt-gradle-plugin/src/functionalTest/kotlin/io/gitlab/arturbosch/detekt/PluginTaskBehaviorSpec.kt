@@ -22,7 +22,7 @@ class PluginTaskBehaviorSpec {
                     |    config = files("$configFileName")
                     |    baseline = file("$baselineFileName")
                     |}
-                """
+    """
 
     @Nested
     inner class `The Detekt Gradle Plugin 'detekt' Task` {
@@ -77,7 +77,7 @@ class PluginTaskBehaviorSpec {
             val configFileWithCommentsDisabled = """
                             |comments:
                             |  active: false
-                        """.trimMargin()
+            """.trimMargin()
 
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -98,7 +98,7 @@ class PluginTaskBehaviorSpec {
                             |    <more/>
                             |    <xml/>
                             |</some>
-                        """.trimMargin()
+            """.trimMargin()
 
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

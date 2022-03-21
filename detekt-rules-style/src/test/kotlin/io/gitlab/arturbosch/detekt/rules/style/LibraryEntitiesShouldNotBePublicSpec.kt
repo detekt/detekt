@@ -16,7 +16,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 subject.compileAndLint(
                     """
                     class A 
-            """
+                    """
                 )
             ).isEmpty()
         }
@@ -31,7 +31,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                     subject.compileAndLint(
                         """
                     class A
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -45,7 +45,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                             return 1
                         }
                     }
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -55,7 +55,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                     subject.compileAndLint(
                         """
                     typealias A = List<String>
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -66,7 +66,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                         """
                     typealias A = List<String>
                     fun foo() = Unit
-                """
+                        """
                     )
                 ).hasSize(2)
             }
@@ -76,7 +76,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                     subject.compileAndLint(
                         """
                     fun foo() = Unit
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -92,7 +92,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                             return 1
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -102,7 +102,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                     subject.compileAndLint(
                         """
                     internal class A
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -112,7 +112,7 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                     subject.compileAndLint(
                         """
                     internal typealias A = List<String>
-                """
+                        """
                     )
                 ).isEmpty()
             }

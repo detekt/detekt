@@ -21,7 +21,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     fun apiCall() = System.getProperty("propertyName")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -31,7 +31,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     private fun apiCall() = System.getProperty("propertyName")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -41,7 +41,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     fun apiCall(): String = System.getProperty("propertyName")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -51,7 +51,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     val name = System.getProperty("name")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -61,7 +61,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     private val name = System.getProperty("name")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -71,7 +71,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
                 class Person {
                     val name: String = System.getProperty("name")
                 }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

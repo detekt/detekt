@@ -30,7 +30,7 @@ class UnnecessaryApplySpec : Spek({
                             plus(1)
                         }
                     }
-                """
+                    """
                 )
                 assertThat(findings).hasSize(1)
                 assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
@@ -48,7 +48,7 @@ class UnnecessaryApplySpec : Spek({
                             plus(1)
                         }
                     }
-                """
+                    """
                 )
                 assertThat(findings).hasSize(1)
                 assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
@@ -67,7 +67,7 @@ class UnnecessaryApplySpec : Spek({
                             b()
                         }
                     }
-                """
+                        """
                     )
                 ).hasSize(1)
             }
@@ -83,7 +83,7 @@ class UnnecessaryApplySpec : Spek({
                             plus(1)
                         })
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -101,7 +101,7 @@ class UnnecessaryApplySpec : Spek({
                             toString()
                         })
                     }
-               """
+                        """
                     )
                 ).isEmpty()
             }
@@ -127,7 +127,7 @@ class UnnecessaryApplySpec : Spek({
                             }
                         )
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -140,7 +140,7 @@ class UnnecessaryApplySpec : Spek({
                         val a = listOf(mutableListOf(""))
                                     .map { it.apply { add("") } }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -167,7 +167,7 @@ class UnnecessaryApplySpec : Spek({
                             plus(2)
                         })
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -239,7 +239,7 @@ class UnnecessaryApplySpec : Spek({
                     }
                     
                     val a = C().apply { f() }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -252,7 +252,7 @@ class UnnecessaryApplySpec : Spek({
                     class C(var prop: Int)
                     
                     fun Int.f() = C(5).apply { prop = 10 }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -267,7 +267,7 @@ class UnnecessaryApplySpec : Spek({
                             C(1).apply { prop = 3 }
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -280,7 +280,7 @@ class UnnecessaryApplySpec : Spek({
                     class C(var prop: Int)
                     
                     fun f() = (C(5)).apply { prop = 10 }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -296,7 +296,7 @@ class UnnecessaryApplySpec : Spek({
                             ?.apply { if (true) 4 }
                             ?: listOf(0)
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -320,7 +320,7 @@ class UnnecessaryApplySpec : Spek({
                             }
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -343,7 +343,7 @@ class UnnecessaryApplySpec : Spek({
                             this.prop
                         }
                     }
-                """
+                        """
                     )
                 ).hasSize(2)
             }
@@ -367,7 +367,7 @@ class UnnecessaryApplySpec : Spek({
                             C()
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }
@@ -391,7 +391,7 @@ class UnnecessaryApplySpec : Spek({
                             C().apply { f() }
                         }
                     }
-                """
+                        """
                     )
                 ).isEmpty()
             }

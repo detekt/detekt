@@ -60,7 +60,8 @@ class ModifierOrderSpec : Spek({
                     }
                     abstract class Test : A() {
                         override open fun test() {}
-                    }"""
+                    }
+                """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
@@ -71,7 +72,8 @@ class ModifierOrderSpec : Spek({
                     }
                     abstract class Test : A() {
                         override fun test() {}
-                    }"""
+                    }
+                """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }

@@ -1,6 +1,9 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.EditorConfig.Companion.fromMap
 import com.pinterest.ktlint.core.KtLint
+import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
+import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
@@ -36,6 +39,12 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      */
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
+
+    val runOnRootNodeOnly
+        get() = RunOnRootNodeOnly in wrapping.visitorModifiers
+
+    val runAsLateAsPossible
+        get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
@@ -77,6 +86,13 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         if (ruleShouldOnlyRunOnFileNode(node)) {
             return
         }
+
+        // KtLint 0.44.0 is assuming that KtLint.EDITOR_CONFIG_USER_DATA_KEY is available on all the nodes.
+        // If not, it crashes with a NPE. Here we're patching their behavior.
+        if (node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY) == null) {
+            node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, fromMap(emptyMap()))
+        }
+
         wrapping.visit(node, autoCorrect) { offset, message, _ ->
             val (line, column) = positionByOffset(offset)
             val location = Location(
@@ -102,5 +118,5 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         TextLocation(node.startOffset, node.psi.endOffset)
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-        wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode
+        runOnRootNodeOnly && node !is FileASTNode
 }

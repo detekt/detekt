@@ -91,7 +91,8 @@ private fun createReportUrl(ruleName: String, throwable: Throwable): String {
             |$stackTrace
             |```
             |- How to reproduce it: <WRITE HERE HOW TO REPRODUCE THIS ISSUE. A CODE SNIPPET IS THE BEST WAY.>
-            |""".trimMargin()
+            |
+    """.trimMargin()
     val body = URLEncoder.encode(bodyMessage, "UTF8")
 
     return "https://github.com/detekt/detekt/issues/new?body=$body&title=$title"

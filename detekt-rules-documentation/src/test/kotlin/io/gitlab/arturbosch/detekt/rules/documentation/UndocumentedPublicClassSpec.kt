@@ -18,39 +18,43 @@ class UndocumentedPublicClassSpec {
             /** Some doc */
             class TestInner {
                 inner class Inner
-            }"""
+            }
+    """
 
     val innerObject = """
             /** Some doc */
             class TestInner {
                 object Inner
-            }"""
+            }
+    """
 
     val innerInterface = """
             /** Some doc */
             class TestInner {
                 interface Something
-            }"""
+            }
+    """
 
     val nested = """
             /** Some doc */
             class TestNested {
                 class Nested
-            }"""
+            }
+    """
 
     val nestedPublic = """
             /** Some doc */
             class TestNested {
                 public class Nested
             }
-            """
+    """
 
     val nestedPrivate = """
             /** Some doc */
             class TestNested {
                 private class Nested
             }
-            """
+    """
 
     val privateClass = "private class TestNested {}"
     val internalClass = "internal class TestNested {}"
@@ -140,7 +144,7 @@ class UndocumentedPublicClassSpec {
                 class Nested
                 inner class Inner
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -150,7 +154,7 @@ class UndocumentedPublicClassSpec {
             internal class Outer {
                 interface Inner
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -160,7 +164,7 @@ class UndocumentedPublicClassSpec {
             internal class Outer {
                 object Inner
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -180,7 +184,7 @@ class UndocumentedPublicClassSpec {
                 fun main(args: Array<String>) {
                 }
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -193,7 +197,7 @@ class UndocumentedPublicClassSpec {
                     override fun next() = 1
                 }
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -203,7 +207,7 @@ class UndocumentedPublicClassSpec {
             enum class Enum {
                 CONSTANT
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -214,7 +218,7 @@ class UndocumentedPublicClassSpec {
             enum class Enum {
                 CONSTANT
             }
-        """
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

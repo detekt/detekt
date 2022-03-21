@@ -26,7 +26,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, 2, 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -40,7 +40,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(a = 1, b = 2, c = 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -54,7 +54,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, b = 2, c = 3)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -68,7 +68,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(1, 2)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -82,7 +82,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {
                     sum(a = 1, b = 2)
                 }
-                """
+            """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -169,7 +169,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, c = 3, { it })
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -182,7 +182,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, c = 3) { it }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(0)
             }
@@ -195,9 +195,85 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     foo(a = 1, b = 2, 3) { it }
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
+            }
+        }
+
+        @Nested
+        inner class IgnoreArgumentsMatchingNames {
+            @Nested
+            inner class `ignoreArgumentsMatchingNames is true` {
+                val subject =
+                    NamedArguments(TestConfig(mapOf("threshold" to 2, "ignoreArgumentsMatchingNames" to true)))
+
+                @Test
+                fun `all arguments are the same as the parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, b, c)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(0)
+                }
+
+                @Test
+                fun `some arguments are not the same as the parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, c, b)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+
+                @Test
+                fun `all arguments are the same as the parameter names and have a this receiver`() {
+                    val code = """
+                        class Baz {
+                            private var b: Int = 42
+                            fun foo(a: Int, b: Int, c: Int) {}
+                            fun bar(a: Int, c: Int) {
+                                foo(a, this.b, c)
+                            }
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+
+                @Test
+                fun `all arguments are the same as the parameter names and have a it receiver`() {
+                    val code = """
+                        data class Baz(val b: Int)
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, c: Int, baz: Baz?) {
+                            baz?.let { foo(a, it.b, c) }
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
+            }
+
+            @Nested
+            inner class `ignoreArgumentsMatchingNames is false` {
+                @Test
+                fun `all arguments are the same as parameter names`() {
+                    val code = """
+                        fun foo(a: Int, b: Int, c: Int) {}
+                        fun bar(a: Int, b: Int, c: Int) {
+                            foo(a, b, c)
+                        }
+                    """
+                    val findings = subject.compileAndLintWithContext(env, code)
+                    assertThat(findings).hasSize(1)
+                }
             }
         }
     }

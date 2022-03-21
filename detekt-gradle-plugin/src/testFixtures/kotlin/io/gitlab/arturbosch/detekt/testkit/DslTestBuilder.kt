@@ -54,7 +54,7 @@ abstract class DslTestBuilder {
         val mainBuildFileContent = """
             |$gradleBuildConfig
             |$detektConfig
-            """.trimMargin()
+        """.trimMargin()
         val runner = DslGradleRunner(
             projectLayout = projectLayout,
             buildFileName = gradleBuildName,
@@ -84,7 +84,8 @@ private class GroovyBuilder : DslTestBuilder() {
         |  id 'java-library'
         |  id "io.gitlab.arturbosch.detekt"
         |}
-        |"""
+        |
+    """
 
     override val gradleBuildConfig: String = """
         |$gradlePlugins
@@ -94,11 +95,12 @@ private class GroovyBuilder : DslTestBuilder() {
         |dependencies {
         |   implementation "org.jetbrains.kotlin:kotlin-stdlib"
         |}
-        """.trimMargin()
+    """.trimMargin()
 
     override val gradleSubprojectsApplyPlugins = """
         |apply plugin: "io.gitlab.arturbosch.detekt"
-        |"""
+        |
+    """
 
     override fun toString() = "build.gradle"
 }
@@ -111,7 +113,8 @@ private class KotlinBuilder : DslTestBuilder() {
         |   `java-library`
         |   id("io.gitlab.arturbosch.detekt")
         |}
-        |"""
+        |
+    """
 
     override val gradleBuildConfig: String = """
         |$gradlePlugins
@@ -121,11 +124,12 @@ private class KotlinBuilder : DslTestBuilder() {
         |dependencies {
         |   implementation(kotlin("stdlib"))
         |}
-        """.trimMargin()
+    """.trimMargin()
 
     override val gradleSubprojectsApplyPlugins = """
         |plugins.apply("io.gitlab.arturbosch.detekt")
-        |"""
+        |
+    """
 
     override fun toString() = "build.gradle.kts"
 }
