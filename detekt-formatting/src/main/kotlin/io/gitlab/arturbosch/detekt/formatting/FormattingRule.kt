@@ -58,10 +58,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
 
-        overrideEditorConfig()?.let { overrides ->
-            val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
-            root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, oldEditorConfig.copy(overrides))
-        }
         val editorConfigProperties = overrideEditorConfigProperties()
 
         if (!editorConfigProperties.isNullOrEmpty()) {
@@ -78,12 +74,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         }
         root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
     }
-
-    @Deprecated(
-        message = "Marked for removal in Ktlint 0.46.",
-        replaceWith = ReplaceWith("overrideEditorConfigProperties()")
-    )
-    open fun overrideEditorConfig(): Map<String, Any>? = null
 
     open fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String>? = null
 
