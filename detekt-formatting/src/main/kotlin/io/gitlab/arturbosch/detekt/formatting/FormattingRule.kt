@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.EditorConfig.Companion.fromMap
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
@@ -84,8 +83,14 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
         // KtLint 0.44.0 is assuming that KtLint.EDITOR_CONFIG_USER_DATA_KEY is available on all the nodes.
         // If not, it crashes with a NPE. Here we're patching their behavior.
+        // This block is deprecated and will be removed in KtLint 0.46. But we have to suppress the
+        // deprecation warning because the ci runs with -Werror.
+        @Suppress("DEPRECATION")
         if (node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY) == null) {
-            node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, fromMap(emptyMap()))
+            node.putUserData(
+                KtLint.EDITOR_CONFIG_USER_DATA_KEY,
+                com.pinterest.ktlint.core.EditorConfig.Companion.fromMap(emptyMap())
+            )
         }
 
         wrapping.visit(node, autoCorrect) { offset, message, _ ->
