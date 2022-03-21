@@ -127,8 +127,8 @@ class YamlConfigSpec {
         }
 
         @Nested
-        inner class `explained values` {
-            private val config = YamlConfig.load(resourceAsPath("explained-values.yml"))
+        inner class `Values with reason` {
+            private val config = YamlConfig.load(resourceAsPath("values-with-reason.yml"))
 
             @Test
             fun `can be parsed`() {

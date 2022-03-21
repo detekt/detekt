@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.explainedValues
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
@@ -230,49 +230,49 @@ class RuleCollectorSpec {
                 }
 
                 @Nested
-                inner class ExplainedValues {
+                inner class ValuesWithReasonSpec {
                     private val code = """
                         /**
                          * description
                          */
                         class SomeRandomClass() : Rule {
                             @Configuration("description")
-                            private val singleWithPositionalParam: ExplainedValues by config(explainedValues("value" to "reason"))
+                            private val singleWithPositionalParam: ValuesWithReason by config(valuesWithReason("value" to "reason"))
                             @Configuration("description")
-                            private val singleWithNamedParam by config(defaultValue = explainedValues("value" to "reason"))
+                            private val singleWithNamedParam by config(defaultValue = valuesWithReason("value" to "reason"))
                             @Configuration("description")
                             private val singleWithConstant by config(DEFAULT_VALUE)
                             @Configuration("description")
-                            private val noValues by config(explainedValues())
+                            private val noValues by config(valuesWithReason())
                             @Configuration("description")
-                            private val multipleValues by config(explainedValues("a" to "A and A", "b" to "B and B"))
+                            private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
                             @Configuration("description")
-                            private val multipleLines by config(explainedValues(
+                            private val multipleLines by config(valuesWithReason(
                                                                         "a" to "A " +
                                                                             "and A", 
                                                                         "b" to ""${"\""}B and B""${"\""}))
                             
                             companion object {
-                                private val DEFAULT_VALUE = explainedValues("value" to "reason")
+                                private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
                             }
                         }                        
                     """
                     private val rule = subject.run(code)[0]
 
                     @Test
-                    fun `parse options of type ExplainedValues`() {
+                    fun `parse options of type ValuesWithReason`() {
                         assertThat(rule.configuration).hasSize(6)
                     }
 
                     @Test
                     fun `no values`() {
                         val config = rule.configuration.first { it.name == "noValues" }
-                        assertThat(config.defaultValue).isEqualTo(of(explainedValues()))
+                        assertThat(config.defaultValue).isEqualTo(of(valuesWithReason()))
                     }
 
                     @Test
                     fun `single value`() {
-                        val expected = of(explainedValues("value" to "reason"))
+                        val expected = of(valuesWithReason("value" to "reason"))
                         val singleValueConfigs = rule.configuration.filter { it.name.startsWith("single") }
                         assertThat(singleValueConfigs)
                             .hasSize(3)
@@ -284,7 +284,7 @@ class RuleCollectorSpec {
                     fun `multiple values`() {
                         val configs = rule.configuration.filter { it.name.startsWith("multiple") }
                         val expected = of(
-                            explainedValues(
+                            valuesWithReason(
                                 "a" to "A and A",
                                 "b" to "B and B"
                             )
@@ -593,7 +593,7 @@ class RuleCollectorSpec {
                                 @Configuration("description")
                                 private val maxLineLength: Int by configWithAndroidVariants(120, 100)
                             }                        
-                        """
+                    """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0]).isEqualTo(
                         Configuration(
@@ -617,7 +617,7 @@ class RuleCollectorSpec {
                                 private val maxLineLength: Int by
                                     configWithAndroidVariants(defaultValue = 120, defaultAndroidValue = 100)
                             }                        
-                        """
+                    """
                     val items = subject.run(code)
                     assertThat(items[0].configuration[0]).isEqualTo(
                         Configuration(
@@ -686,7 +686,7 @@ class RuleCollectorSpec {
                             @Configuration("description")
                             private val config2: String by config(false, Boolean::toString)
                         }                        
-                    """
+                """
 
                 @Test
                 fun `extracts default value with transformer function`() {

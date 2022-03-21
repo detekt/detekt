@@ -148,20 +148,20 @@ class ConfigPropertySpec {
             }
 
             @Nested
-            inner class `ExplainedValues property` {
-                private val defaultValue = explainedValues("aValue" to "aReason")
+            inner class `ValuesWithReason property` {
+                private val defaultValue = valuesWithReason("aValue" to "aReason")
 
                 @Nested
                 inner class `value defined as list` {
                     private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
-                        val present: ExplainedValues by config(defaultValue)
-                        val notPresent: ExplainedValues by config(defaultValue)
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
                     }
 
                     @Test
                     fun `uses the value provided in config if present`() {
                         assertThat(subject.present)
-                            .extracting(ExplainedValue::value, ExplainedValue::reason)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
                             .containsExactly(tuple("a", null), tuple("b", null), tuple("c", null))
                     }
 
@@ -180,14 +180,14 @@ class ConfigPropertySpec {
                             mapOf("value" to "c"),
                         )
                     ) {
-                        val present: ExplainedValues by config(defaultValue)
-                        val notPresent: ExplainedValues by config(defaultValue)
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
                     }
 
                     @Test
                     fun `uses the value provided in config if present`() {
                         assertThat(subject.present)
-                            .extracting(ExplainedValue::value, ExplainedValue::reason)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
                             .containsExactly(
                                 tuple("a", "reasonA"),
                                 tuple("b", null),
@@ -212,7 +212,7 @@ class ConfigPropertySpec {
                                     mapOf("reason" to "reason")
                                 )
                             ) {
-                                val present: ExplainedValues by config(defaultValue)
+                                val present: ValuesWithReason by config(defaultValue)
                             }.present
                         }.isInstanceOf(Config.InvalidConfigurationError::class.java)
                     }
@@ -225,7 +225,7 @@ class ConfigPropertySpec {
                                     mapOf("value" to 42, "reason" to "reason")
                                 )
                             ) {
-                                val present: ExplainedValues by config(defaultValue)
+                                val present: ValuesWithReason by config(defaultValue)
                             }.present
                         }.isInstanceOf(Config.InvalidConfigurationError::class.java)
                     }
@@ -238,7 +238,7 @@ class ConfigPropertySpec {
                                     mapOf("value" to "a", "reason" to 42)
                                 )
                             ) {
-                                val present: ExplainedValues by config(defaultValue)
+                                val present: ValuesWithReason by config(defaultValue)
                             }.present
                         }.isInstanceOf(Config.InvalidConfigurationError::class.java)
                     }

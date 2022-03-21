@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.ExplainedValue
-import io.gitlab.arturbosch.detekt.api.ExplainedValues
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
+import io.gitlab.arturbosch.detekt.api.ValuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.ANDROID_VARIANTS_DELEGATE_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.DEFAULT_ANDROID_VALUE_ARGUMENT_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.isAndroidVariantConfigDelegate
@@ -11,10 +11,10 @@ import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.C
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getAndroidDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.toDefaultValueIfLiteral
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ExplainedValuesSupport.getExplainedValuesDefaultOrNull
-import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ExplainedValuesSupport.hasExplainedValueDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.StringListSupport.getListDefaultOrNull
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.StringListSupport.hasListDeclaration
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ValuesWithReasonSupport.getValuesWithReasonDefaultOrNull
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ValuesWithReasonSupport.hasValuesWithReasonDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -63,9 +63,9 @@ class ConfigurationCollector {
     }
 
     private fun KtProperty.getConstantValue(): DefaultValue? {
-        if (hasExplainedValueDeclaration()) {
-            return getExplainedValuesDefaultOrNull()
-                ?: invalidDocumentation { "Invalid declaration of explained values default for property '$text'" }
+        if (hasValuesWithReasonDeclaration()) {
+            return getValuesWithReasonDefaultOrNull()
+                ?: invalidDocumentation { "Invalid declaration of values with reasons default for property '$text'" }
         }
         if (hasListDeclaration()) {
             return getListDefaultOrNull(emptyMap())
@@ -137,7 +137,7 @@ class ConfigurationCollector {
         }
 
         fun KtExpression.toDefaultValue(constantsByName: Map<String, DefaultValue>): DefaultValue {
-            return getExplainedValuesDefaultOrNull()
+            return getValuesWithReasonDefaultOrNull()
                 ?: getListDefaultOrNull(constantsByName)
                 ?: toDefaultValueIfLiteral()
                 ?: constantsByName[text.withoutQuotes()]
@@ -182,30 +182,30 @@ class ConfigurationCollector {
             delegate?.expression?.referenceExpression()?.text == ANDROID_VARIANTS_DELEGATE_NAME
     }
 
-    private object ExplainedValuesSupport {
-        private const val EXPLAINED_VALUE_FACTORY_METHOD = "explainedValues"
+    private object ValuesWithReasonSupport {
+        private const val VALUES_WITH_REASON_FACTORY_METHOD = "valuesWithReason"
 
-        fun KtElement.getExplainedValuesDefaultOrNull(): DefaultValue? {
-            return getExplainedValueDeclarationOrNull()
+        fun KtElement.getValuesWithReasonDefaultOrNull(): DefaultValue? {
+            return getValuesWithReasonDeclarationOrNull()
                 ?.valueArguments
-                ?.map(::toExplainedValue)
-                ?.let { DefaultValue.of(ExplainedValues(it)) }
+                ?.map(::toValueWithReason)
+                ?.let { DefaultValue.of(ValuesWithReason(it)) }
         }
 
-        fun KtElement.getExplainedValueDeclarationOrNull(): KtCallExpression? =
-            findDescendantOfType { it.isExplainedValueDeclaration() }
+        fun KtElement.getValuesWithReasonDeclarationOrNull(): KtCallExpression? =
+            findDescendantOfType { it.isValuesWithReasonDeclaration() }
 
-        fun KtCallExpression.isExplainedValueDeclaration(): Boolean {
-            return referenceExpression()?.text == EXPLAINED_VALUE_FACTORY_METHOD
+        fun KtCallExpression.isValuesWithReasonDeclaration(): Boolean {
+            return referenceExpression()?.text == VALUES_WITH_REASON_FACTORY_METHOD
         }
 
-        fun KtProperty.hasExplainedValueDeclaration(): Boolean =
-            anyDescendantOfType<KtCallExpression> { it.isExplainedValueDeclaration() }
+        fun KtProperty.hasValuesWithReasonDeclaration(): Boolean =
+            anyDescendantOfType<KtCallExpression> { it.isValuesWithReasonDeclaration() }
 
-        private fun toExplainedValue(arg: KtValueArgument): ExplainedValue {
+        private fun toValueWithReason(arg: KtValueArgument): ValueWithReason {
             val keyToValue = arg.children.first() as? KtBinaryExpression
             return keyToValue?.let {
-                ExplainedValue(
+                ValueWithReason(
                     value = it.left!!.text.withoutQuotes(),
                     reason = it.right!!.text.withoutQuotes()
                 )

@@ -111,7 +111,7 @@ fun <T : Any, U : Any> configWithAndroidVariants(
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is ExplainedValues -> configAware.getExplainedValuesOrDefault(propertyName, defaultValue) as T
+        is ValuesWithReason -> configAware.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
         is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
@@ -132,21 +132,21 @@ private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: Lis
     }
 }
 
-private fun ConfigAware.getExplainedValuesOrDefault(
+private fun ConfigAware.getValuesWithReasonOrDefault(
     propertyName: String,
-    defaultValue: ExplainedValues
-): ExplainedValues {
+    defaultValue: ValuesWithReason
+): ValuesWithReason {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
     if (valuesAsList.all { it is String }) {
-        return ExplainedValues(values = valuesAsList.map { ExplainedValue(it as String) })
+        return ValuesWithReason(values = valuesAsList.map { ValueWithReason(it as String) })
     }
     if (valuesAsList.all { it is Map<*, *> }) {
-        return ExplainedValues(
+        return ValuesWithReason(
             valuesAsList
                 .map { it as Map<*, *> }
                 .map { dict ->
                     try {
-                        ExplainedValue(
+                        ValueWithReason(
                             value = dict["value"] as String,
                             reason = dict["reason"] as String?
                         )

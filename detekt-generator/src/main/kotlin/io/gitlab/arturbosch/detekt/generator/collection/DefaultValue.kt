@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.ExplainedValues
+import io.gitlab.arturbosch.detekt.api.ValuesWithReason
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
 import io.gitlab.arturbosch.detekt.generator.out.list
@@ -17,7 +17,7 @@ sealed interface DefaultValue {
         fun of(defaultValue: Boolean): DefaultValue = BooleanDefault(defaultValue)
         fun of(defaultValue: Int): DefaultValue = IntegerDefault(defaultValue)
         fun of(defaultValue: List<String>): DefaultValue = StringListDefault(defaultValue)
-        fun of(defaultValue: ExplainedValues): DefaultValue = ExplainedValuesDefault(defaultValue)
+        fun of(defaultValue: ValuesWithReason): DefaultValue = ValuesWithReasonDefault(defaultValue)
     }
 }
 
@@ -62,9 +62,9 @@ private data class StringListDefault(private val defaultValue: List<String>) : D
     }
 }
 
-private data class ExplainedValuesDefault(private val defaultValue: ExplainedValues) : DefaultValue {
+private data class ValuesWithReasonDefault(private val defaultValue: ValuesWithReason) : DefaultValue {
     override fun getPlainValue(): String {
-        error("there is no plain string representation for explained value defaults")
+        error("there is no plain string representation for values with reason defaults")
     }
 
     override fun printAsYaml(name: String, yaml: YamlNode) {

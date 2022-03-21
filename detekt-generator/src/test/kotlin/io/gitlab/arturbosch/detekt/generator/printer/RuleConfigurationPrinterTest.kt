@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
-import io.gitlab.arturbosch.detekt.api.explainedValues
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue
 import org.assertj.core.api.Assertions.assertThat
@@ -61,10 +61,10 @@ internal class RuleConfigurationPrinterTest {
         }
 
         @Test
-        fun `explained values default`() {
+        fun `values with reason default`() {
             val config = configTemplate.copy(
                 defaultValue = DefaultValue.of(
-                    explainedValues(
+                    valuesWithReason(
                         "a" to "reason for a",
                         "b" to "reason for b",
                         "c" to null
