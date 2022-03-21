@@ -50,7 +50,7 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v3
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: docs/vendor/bundle
         key: cache-gems-${{ hashFiles('**/Gemfile.lock') }}
