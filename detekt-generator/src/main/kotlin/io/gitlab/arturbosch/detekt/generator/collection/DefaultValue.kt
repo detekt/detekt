@@ -69,11 +69,11 @@ private data class ValuesWithReasonDefault(private val defaultValue: ValuesWithR
 
     override fun printAsYaml(name: String, yaml: YamlNode) {
         val asMap: List<Map<String, String?>> =
-            defaultValue.values.map { mapOf("value" to it.value, "reason" to it.reason) }
+            defaultValue.map { mapOf("value" to it.value, "reason" to it.reason) }
         yaml.listOfMaps(name, asMap)
     }
 
     override fun printAsMarkdownCode(): String {
-        return defaultValue.values.map { "'${it.value}'" }.toString()
+        return defaultValue.map { "'${it.value}'" }.toString()
     }
 }

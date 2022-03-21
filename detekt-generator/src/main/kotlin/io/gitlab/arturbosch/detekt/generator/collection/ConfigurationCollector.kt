@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
-import io.gitlab.arturbosch.detekt.api.ValuesWithReason
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.ANDROID_VARIANTS_DELEGATE_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.DEFAULT_ANDROID_VALUE_ARGUMENT_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.isAndroidVariantConfigDelegate
@@ -189,7 +189,7 @@ class ConfigurationCollector {
             return getValuesWithReasonDeclarationOrNull()
                 ?.valueArguments
                 ?.map(::toValueWithReason)
-                ?.let { DefaultValue.of(ValuesWithReason(it)) }
+                ?.let { DefaultValue.of(valuesWithReason(it)) }
         }
 
         fun KtElement.getValuesWithReasonDeclarationOrNull(): KtCallExpression? =
