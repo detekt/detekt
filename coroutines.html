@@ -611,6 +611,46 @@ and cause unpredictable behavior.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
+<h3 id="suspendfunwithcoroutinescopereceiver">SuspendFunWithCoroutineScopeReceiver</h3>
+
+<p>Suspend functions that use <code class="language-plaintext highlighter-rouge">CoroutineScope</code> as receiver should not be marked as <code class="language-plaintext highlighter-rouge">suspend</code>.
+A <code class="language-plaintext highlighter-rouge">CoroutineScope</code> provides structured concurrency via its <code class="language-plaintext highlighter-rouge">coroutineContext</code>. A <code class="language-plaintext highlighter-rouge">suspend</code>
+function also has its own <code class="language-plaintext highlighter-rouge">coroutineContext</code>, which is now ambiguous and mixed with the
+receiver`s.</p>
+
+<p>See https://kotlinlang.org/docs/coroutines-basics.html#scope-builder-and-concurrency</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<p><strong>Requires Type Resolution</strong></p>
+
+<p><strong>Debt</strong>: 10min</p>
+
+<h4 id="noncompliant-code-4">Noncompliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nc">CoroutineScope</span><span class="p">.</span><span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">launch</span> <span class="p">{</span>
+      <span class="nf">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compliant-code-4">Compliant Code:</h4>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nc">CoroutineScope</span><span class="p">.</span><span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">launch</span> <span class="p">{</span>
+      <span class="nf">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Alternative</span>
+<span class="k">suspend</span> <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">=</span> <span class="nf">coroutineScope</span> <span class="p">{</span>
+    <span class="nf">launch</span> <span class="p">{</span>
+      <span class="nf">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <h3 id="suspendfunwithflowreturntype">SuspendFunWithFlowReturnType</h3>
 
 <p>Functions that return <code class="language-plaintext highlighter-rouge">Flow</code> from <code class="language-plaintext highlighter-rouge">kotlinx.coroutines.flow</code> should not be marked as <code class="language-plaintext highlighter-rouge">suspend</code>.
@@ -626,7 +666,7 @@ returned <code class="language-plaintext highlighter-rouge">Flow</code>, should 
 
 <p><strong>Debt</strong>: 10min</p>
 
-<h4 id="noncompliant-code-4">Noncompliant Code:</h4>
+<h4 id="noncompliant-code-5">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">suspend</span> <span class="k">fun</span> <span class="nf">observeSignals</span><span class="p">():</span> <span class="nc">Flow</span><span class="p">&lt;</span><span class="nc">Unit</span><span class="p">&gt;</span> <span class="p">{</span>
     <span class="kd">val</span> <span class="py">pollingInterval</span> <span class="p">=</span> <span class="nf">getPollingInterval</span><span class="p">()</span> <span class="c1">// Done outside of the flow builder block.</span>
@@ -644,7 +684,7 @@ returned <code class="language-plaintext highlighter-rouge">Flow</code>, should 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="compliant-code-4">Compliant Code:</h4>
+<h4 id="compliant-code-5">Compliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">observeSignals</span><span class="p">():</span> <span class="nc">Flow</span><span class="p">&lt;</span><span class="nc">Unit</span><span class="p">&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nf">flow</span> <span class="p">{</span>
