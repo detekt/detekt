@@ -152,6 +152,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
             .fold(emptyList()) { acc, declarations -> acc + declarations }
     }
 
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
         val knownTag = docTag.knownTag
         val subjectName = docTag.getSubjectName() ?: return emptyList()
