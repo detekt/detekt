@@ -168,6 +168,8 @@ coroutines:
     active: false
   SleepInsteadOfDelay:
     active: false
+  SuspendFunWithCoroutineScopeReceiver:
+    active: false
   SuspendFunWithFlowReturnType:
     active: false
 
