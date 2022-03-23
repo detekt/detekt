@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 
 /**
@@ -72,7 +73,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
 
         val subjectType = subjectExpression.getType(bindingContext)
         val isEnumSubject = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType) != null
-        val isSealedSubject = WhenChecker.getClassDescriptorOfTypeIfSealed(subjectType) != null
+        val isSealedSubject = isNonExpectedSealedClass(subjectType)
         val isBooleanSubject = subjectType?.isBooleanOrNullableBoolean() == true
 
         if (isEnumSubject || isSealedSubject || isBooleanSubject) {
@@ -84,5 +85,15 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
             val message = "When expression with $subjectTypeName subject should not contain an `else` case."
             report(CodeSmell(issue, Entity.from(whenExpression), message))
         }
+    }
+
+    /**
+     * `when` expressions on `expect` sealed classes in the common code of multiplatform projects still require an
+     * `else` branch. This happens because subclasses of `actual` platform implementations aren't known in the common
+     *  code.
+     */
+    private fun isNonExpectedSealedClass(type: KotlinType?): Boolean {
+        val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(type)
+        return sealedClassDescriptor != null && !sealedClassDescriptor.isExpect
     }
 }

@@ -154,6 +154,49 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
         }
 
         @Nested
+        inner class `Expected sealed class` {
+            @Test
+            fun `does not report when _expect_ sealed _when_ expression used as statement contains _else_ case`() {
+                val code = """
+                    expect sealed class Variant {
+                        object VariantA : Variant()
+                        class VariantB : Variant()
+                        object VariantC : Variant()
+                    }
+
+                    fun whenOnSealedFail(v: Variant) {
+                        when (v) {
+                            is Variant.VariantA -> {}
+                            is Variant.VariantB -> {}
+                            else -> {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when _expect_ sealed _when_ expression contains _else_ case`() {
+                val code = """
+                    expect sealed class Variant {
+                        object VariantA : Variant()
+                        class VariantB : Variant()
+                        object VariantC : Variant()
+                    }
+
+                    fun whenOnSealedFail(v: Variant) {
+                        val x = when (v) {
+                            is Variant.VariantA -> "a"
+                            is Variant.VariantB -> "b"
+                            else -> "other"
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+        }
+
+        @Nested
         inner class Boolean {
             @Test
             fun `reports when boolean _when_ expression used as statement contains _else_ case`() {
