@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -159,9 +160,9 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             fun `does not report when _expect_ sealed _when_ expression used as statement contains _else_ case`() {
                 val code = """
                     expect sealed class Variant {
-                        object VariantA : Variant()
-                        class VariantB : Variant()
-                        object VariantC : Variant()
+                        class VariantA : Variant
+                        class VariantB : Variant
+                        class VariantC : Variant
                     }
 
                     fun whenOnSealedFail(v: Variant) {
@@ -172,16 +173,16 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
             fun `does not report when _expect_ sealed _when_ expression contains _else_ case`() {
                 val code = """
                     expect sealed class Variant {
-                        object VariantA : Variant()
-                        class VariantB : Variant()
-                        object VariantC : Variant()
+                        class VariantA : Variant
+                        class VariantB : Variant
+                        class VariantC : Variant
                     }
 
                     fun whenOnSealedFail(v: Variant) {
@@ -192,7 +193,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
