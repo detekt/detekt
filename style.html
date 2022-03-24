@@ -939,7 +939,7 @@ Detekt will then report all method invocations that are forbidden.</p>
   <li>
     <p><code class="language-plaintext highlighter-rouge">methods</code> (default: <code class="language-plaintext highlighter-rouge">['kotlin.io.print', 'kotlin.io.println']</code>)</p>
 
-    <p>List of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature.</p>
+    <p>List of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code class="language-plaintext highlighter-rouge">java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature. If you want to forbid an extension function like<code class="language-plaintext highlighter-rouge">fun String.hello(a: Int)</code> you should add the receiver parameter as the first parameter like this: <code class="language-plaintext highlighter-rouge">hello(kotlin.String, kotlin.Int)</code></p>
   </li>
 </ul>
 
@@ -2760,7 +2760,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 23, 2022 <br />
+ Site last generated: Mar 24, 2022 <br />
                 </div>
             </div>
 </footer>
