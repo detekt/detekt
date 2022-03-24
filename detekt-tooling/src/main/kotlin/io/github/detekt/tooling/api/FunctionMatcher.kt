@@ -35,8 +35,9 @@ sealed class FunctionMatcher {
         override fun match(callableDescriptor: CallableDescriptor): Boolean {
             if (callableDescriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
 
-            val encounteredParamTypes = callableDescriptor.valueParameters
-                .map { it.type.fqNameOrNull()?.asString() }
+            val encounteredParamTypes =
+                (listOfNotNull(callableDescriptor.extensionReceiverParameter) + callableDescriptor.valueParameters)
+                    .map { it.type.fqNameOrNull()?.asString() }
 
             return encounteredParamTypes == parameters
         }
@@ -45,8 +46,9 @@ sealed class FunctionMatcher {
             if (bindingContext == BindingContext.EMPTY) return false
             if (function.name != fullyQualifiedName) return false
 
-            val encounteredParameters = function.valueParameters
-                .map { bindingContext[BindingContext.TYPE, it.typeReference]?.fqNameOrNull()?.toString() }
+            val encounteredParameters =
+                (listOfNotNull(function.receiverTypeReference) + function.valueParameters.map { it.typeReference })
+                    .map { bindingContext[BindingContext.TYPE, it]?.fqNameOrNull()?.toString() }
 
             return encounteredParameters == parameters
         }
