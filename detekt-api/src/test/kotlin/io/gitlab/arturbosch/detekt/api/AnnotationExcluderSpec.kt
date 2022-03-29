@@ -114,7 +114,7 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `Know where ends a package` {
+        inner class `Know where a package ends` {
             val helloWorldAnnotationsKtFile = compileContentForTest(
                 """
                     package com.Hello

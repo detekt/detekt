@@ -11,12 +11,12 @@ public abstract interface class io/github/detekt/tooling/api/DefaultConfiguratio
 	public static final field Companion Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;
 	public abstract fun copy (Ljava/nio/file/Path;)V
 	public abstract fun get ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun init (Lio/github/detekt/tooling/api/spec/ProcessingSpec;)V
+	public abstract fun init (Lio/github/detekt/tooling/api/spec/ExtensionsSpec;)V
 }
 
 public final class io/github/detekt/tooling/api/DefaultConfigurationProvider$Companion {
-	public final fun load (Lio/github/detekt/tooling/api/spec/ProcessingSpec;Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;Lio/github/detekt/tooling/api/spec/ProcessingSpec;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
+	public final fun load (Lio/github/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
+	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;Lio/github/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
 }
 
 public abstract interface class io/github/detekt/tooling/api/Detekt {
