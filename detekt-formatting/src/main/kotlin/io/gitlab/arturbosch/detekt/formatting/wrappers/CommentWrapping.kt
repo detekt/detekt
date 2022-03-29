@@ -3,33 +3,28 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
-import com.pinterest.ktlint.ruleset.experimental.ArgumentListWrappingRule
+import com.pinterest.ktlint.ruleset.experimental.CommentWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ * See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
  */
-@OptIn(FeatureInAlphaState::class)
-@AutoCorrectable(since = "1.0.0")
-class ArgumentListWrapping(config: Config) : FormattingRule(config) {
+@AutoCorrectable(since = "1.20.0")
+class CommentWrapping(config: Config) : FormattingRule(config) {
 
-    override val wrapping = ArgumentListWrappingRule()
-    override val issue = issueFor("Reports incorrect argument list wrapping")
+    override val wrapping = CommentWrappingRule()
+    override val issue = issueFor("Reports mis-indented code")
 
     @Configuration("indentation size")
     private val indentSize by config(4)
 
-    @Configuration("maximum line length")
-    private val maxLineLength by configWithAndroidVariants(120, 100)
-
+    @OptIn(FeatureInAlphaState::class)
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
-            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
         )
 }

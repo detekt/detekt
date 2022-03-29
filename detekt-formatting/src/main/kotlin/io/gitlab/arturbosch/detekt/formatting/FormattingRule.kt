@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.EditorConfig.Companion.fromMap
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
@@ -57,10 +56,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
-        overrideEditorConfig()?.let { overrides ->
-            val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
-            root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, oldEditorConfig.copy(overrides))
-        }
+
         val editorConfigProperties = overrideEditorConfigProperties()
 
         if (!editorConfigProperties.isNullOrEmpty()) {
@@ -78,8 +74,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
     }
 
-    open fun overrideEditorConfig(): Map<String, Any>? = null
-
     open fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String>? = null
 
     fun apply(node: ASTNode) {
@@ -89,8 +83,14 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
         // KtLint 0.44.0 is assuming that KtLint.EDITOR_CONFIG_USER_DATA_KEY is available on all the nodes.
         // If not, it crashes with a NPE. Here we're patching their behavior.
+        // This block is deprecated and will be removed in KtLint 0.46. But we have to suppress the
+        // deprecation warning because the ci runs with -Werror.
+        @Suppress("DEPRECATION")
         if (node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY) == null) {
-            node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, fromMap(emptyMap()))
+            node.putUserData(
+                KtLint.EDITOR_CONFIG_USER_DATA_KEY,
+                com.pinterest.ktlint.core.EditorConfig.Companion.fromMap(emptyMap())
+            )
         }
 
         wrapping.visit(node, autoCorrect) { offset, message, _ ->

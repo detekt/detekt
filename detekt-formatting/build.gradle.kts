@@ -13,7 +13,6 @@ dependencies {
     implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation(libs.ktlint.microutilsKotlinLoggingJvm)
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)

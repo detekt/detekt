@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
+import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.MaxLineLengthRule
@@ -9,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -34,8 +34,9 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
     @Configuration("ignore back ticked identifier")
     private val ignoreBackTickedIdentifier by config(false)
 
-    override fun overrideEditorConfig() = mapOf(MAX_LINE_LENGTH_KEY to maxLineLength)
-
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
-        mapOf(MaxLineLengthRule.ignoreBackTickedIdentifierProperty to ignoreBackTickedIdentifier.toString())
+        mapOf(
+            MaxLineLengthRule.ignoreBackTickedIdentifierProperty to ignoreBackTickedIdentifier.toString(),
+            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString(),
+        )
 }

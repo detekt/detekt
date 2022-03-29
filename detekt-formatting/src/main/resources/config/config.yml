@@ -13,11 +13,21 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+  BlockCommentInitialStarAlignment:
+    active: false
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
   CommentSpacing:
     active: true
+    autoCorrect: true
+  CommentWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+  DiscouragedCommentLocation:
+    active: false
     autoCorrect: true
   EnumEntryNameCase:
     active: false
@@ -28,6 +38,12 @@ formatting:
     active: true
     autoCorrect: true
     insertFinalNewLine: true
+  FunKeywordSpacing:
+    active: false
+    autoCorrect: true
+  FunctionTypeReferenceSpacing:
+    active: false
+    autoCorrect: true
   ImportOrdering:
     active: true
     autoCorrect: true
@@ -36,10 +52,17 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  KdocWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   MaximumLineLength:
     active: true
     maxLineLength: 120
     ignoreBackTickedIdentifier: false
+  ModifierListSpacing:
+    active: false
+    autoCorrect: true
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -81,6 +104,7 @@ formatting:
     autoCorrect: true
   NoWildcardImports:
     active: true
+    packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
   PackageName:
     active: false
     autoCorrect: true
@@ -135,6 +159,12 @@ formatting:
     autoCorrect: true
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
+  TypeArgumentListSpacing:
+    active: false
+    autoCorrect: true
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: false
+    autoCorrect: true
+  Wrapping:
+    active: true
     autoCorrect: true
