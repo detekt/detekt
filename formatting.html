@@ -520,6 +520,12 @@ in the command line interface.</p>
   </li>
 </ul>
 
+<h3 id="blockcommentinitialstaralignment">BlockCommentInitialStarAlignment</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
 <h3 id="chainwrapping">ChainWrapping</h3>
 
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
@@ -531,6 +537,28 @@ in the command line interface.</p>
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+
+<h3 id="commentwrapping">CommentWrapping</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<h4 id="configuration-options-1">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">indentSize</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
+
+    <p>indentation size</p>
+  </li>
+</ul>
+
+<h3 id="discouragedcommentlocation">DiscouragedCommentLocation</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <h3 id="enumentrynamecase">EnumEntryNameCase</h3>
 
@@ -556,7 +584,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options-1">Configuration options:</h4>
+<h4 id="configuration-options-2">Configuration options:</h4>
 
 <ul>
   <li>
@@ -565,6 +593,18 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
     <p>report absence or presence of a newline</p>
   </li>
 </ul>
+
+<h3 id="funkeywordspacing">FunKeywordSpacing</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<h3 id="functiontypereferencespacing">FunctionTypeReferenceSpacing</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <h3 id="importordering">ImportOrdering</h3>
 
@@ -575,7 +615,7 @@ https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3c
 
 <p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
 
-<h4 id="configuration-options-2">Configuration options:</h4>
+<h4 id="configuration-options-3">Configuration options:</h4>
 
 <ul>
   <li>
@@ -591,7 +631,7 @@ https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3c
 
 <p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
 
-<h4 id="configuration-options-3">Configuration options:</h4>
+<h4 id="configuration-options-4">Configuration options:</h4>
 
 <ul>
   <li>
@@ -608,6 +648,22 @@ https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3c
   </li>
 </ul>
 
+<h3 id="kdocwrapping">KdocWrapping</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
+<h4 id="configuration-options-5">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">indentSize</code> (default: <code class="language-plaintext highlighter-rouge">4</code>)</p>
+
+    <p>indentation size</p>
+  </li>
+</ul>
+
 <h3 id="maximumlinelength">MaximumLineLength</h3>
 
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
@@ -618,7 +674,7 @@ auto-correct the issue.</p>
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options-4">Configuration options:</h4>
+<h4 id="configuration-options-6">Configuration options:</h4>
 
 <ul>
   <li>
@@ -632,6 +688,12 @@ auto-correct the issue.</p>
     <p>ignore back ticked identifier</p>
   </li>
 </ul>
+
+<h3 id="modifierlistspacing">ModifierListSpacing</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
 
 <h3 id="modifierordering">ModifierOrdering</h3>
 
@@ -720,6 +782,16 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
+<h4 id="configuration-options-7">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">packagesToUseImportOnDemandProperty</code> (default: <code class="language-plaintext highlighter-rouge">'java.util.*,kotlinx.android.synthetic.**'</code>)</p>
+
+    <p>Defines allowed wildcard imports</p>
+  </li>
+</ul>
+
 <h3 id="packagename">PackageName</h3>
 
 <p>See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.</p>
@@ -732,7 +804,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 
-<h4 id="configuration-options-5">Configuration options:</h4>
+<h4 id="configuration-options-8">Configuration options:</h4>
 
 <ul>
   <li>
@@ -839,7 +911,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 <p><strong>Active by default</strong>: No</p>
 
-<h4 id="configuration-options-6">Configuration options:</h4>
+<h4 id="configuration-options-9">Configuration options:</h4>
 
 <ul>
   <li>
@@ -854,11 +926,23 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
   </li>
 </ul>
 
+<h3 id="typeargumentlistspacing">TypeArgumentListSpacing</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: No</p>
+
 <h3 id="unnecessaryparenthesesbeforetrailinglambda">UnnecessaryParenthesesBeforeTrailingLambda</h3>
 
 <p>See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.</p>
 
 <p><strong>Active by default</strong>: No</p>
+
+<h3 id="wrapping">Wrapping</h3>
+
+<p>See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.</p>
+
+<p><strong>Active by default</strong>: Yes - Since v1.20.0</p>
 
 
     <div class="tags">
@@ -876,7 +960,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 24, 2022 <br />
+ Site last generated: Mar 29, 2022 <br />
                 </div>
             </div>
 </footer>
