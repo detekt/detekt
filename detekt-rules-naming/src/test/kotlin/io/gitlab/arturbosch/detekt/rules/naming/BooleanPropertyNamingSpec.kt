@@ -27,9 +27,67 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `should warn about Kotlin Boolean override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    data class TestImpl (override var default: Boolean) : Test
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    data class TestImpl (override var default: Boolean) : Test
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
             fun `should warn about Kotlin Boolean nullable`() {
                 val code = """data class Test (var default: Boolean?)"""
                 val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `should warn about Kotlin Boolean nullable override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean?
+                    }
+
+                    data class TestImpl (override var default: Boolean?) : Test
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean nullable override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean?
+                    }
+
+                    data class TestImpl (override var default: Boolean?) : Test
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
@@ -43,9 +101,67 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `should warn about Kotlin Boolean initialized override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    data class TestImpl (override var default: Boolean = false) : Test
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean initialized override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    data class TestImpl (override var default: Boolean = false) : Test
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
             fun `should warn about Java Boolean`() {
                 val code = """data class Test (var default: java.lang.Boolean)"""
                 val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `should warn about Java Boolean override`() {
+                val code = """
+                    interface Test {
+                        val default: java.lang.Boolean
+                    }
+
+                    data class TestImpl (override var default: java.lang.Boolean) : Test
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Java Boolean override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: java.lang.Boolean
+                    }
+
+                    data class TestImpl (override var default: java.lang.Boolean) : Test
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
@@ -82,6 +198,39 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `should warn about Kotlin Boolean override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean                    
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean = true
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean override if isIgnoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean                    
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean = true
+                    }
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
             fun `should warn about Kotlin Boolean nullable`() {
                 val code = """
                     class Test {
@@ -89,6 +238,39 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     }
                 """
                 val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `should warn about Kotlin Boolean nullable override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean?
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean? = null
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean nullable override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean?
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean? = null
+                    }
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
@@ -106,6 +288,39 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `should warn about Kotlin Boolean initialized override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean = false
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Kotlin Boolean initialized override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default: Boolean = false
+                    }
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
             fun `should warn about inferred boolean type`() {
                 val code = """
                     class Test {
@@ -118,6 +333,39 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `should warn about inferred boolean type override`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default = true
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about inferred boolean type override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default = true
+                    }
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
             fun `should warn about Java Boolean`() {
                 val code = """
                     class Test {
@@ -125,6 +373,39 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     }
                 """
                 val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `should warn about Java Boolean override`() {
+                val code = """
+                    interface Test {
+                        val default: java.lang.Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default: java.lang.Boolean = java.lang.Boolean(true)
+                    }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).hasSize(2)
+            }
+
+            @Test
+            fun `should not warn about Java Boolean override if ignoreOverridden is true`() {
+                val code = """
+                    interface Test {
+                        val default: java.lang.Boolean
+                    }
+
+                    class TestImpl : Test {
+                        override var default: java.lang.Boolean = java.lang.Boolean(true)
+                    }
+                """
+                val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+                val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
             }
@@ -171,3 +452,4 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
 }
 
 private const val ALLOWED_PATTERN = "allowedPattern"
+private const val IGNORE_OVERRIDDEN = "ignoreOverridden"

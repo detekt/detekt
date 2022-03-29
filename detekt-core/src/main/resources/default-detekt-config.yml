@@ -284,6 +284,7 @@ naming:
   BooleanPropertyNaming:
     active: false
     allowedPattern: '^(is|has|are)'
+    ignoreOverridden: false
   ClassNaming:
     active: true
     classPattern: '[A-Z][a-zA-Z0-9]*'
