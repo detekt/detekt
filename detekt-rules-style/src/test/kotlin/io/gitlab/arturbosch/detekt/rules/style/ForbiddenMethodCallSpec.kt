@@ -334,5 +334,88 @@ class ForbiddenMethodCallSpec : Spek({
             ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        context("work with generics") {
+            val code = """
+                package org.example
+
+                fun <T, U> bar(a: T, b: U, c: String) = Unit
+
+                fun foo() {
+                    bar(1, "", "")
+                }
+            """
+
+            it("raise the issue") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("org.example.bar(T, U, kotlin.String)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("It doesn't raise any issue because the generics don't match") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("org.example.bar(U, T, kotlin.String)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+        }
+
+        context("work with generic extensions") {
+            val code = """
+                package org.example
+
+                fun <R> R.bar(a: String) = Unit
+
+                fun foo() {
+                    1.bar("")
+                }
+            """
+
+            it("raise the issue") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("org.example.bar(R, kotlin.String)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("It doesn't raise any issue because the type doesn't match") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("org.example.bar(kotlin.Int, kotlin.String)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+        }
+
+        context("Should distinguish between runCatching - #4448") {
+            val code = """
+                package org.example
+
+                class A {
+                    fun foo() {
+                        kotlin.runCatching {}
+                        runCatching {}
+                    }
+                }
+            """
+
+            it("forbid the one without receiver") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(() -> R)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings)
+                    .hasSize(1)
+                    .hasSourceLocation(5, 16)
+            }
+
+            it("forbid the one with receiver") {
+                val findings = ForbiddenMethodCall(
+                    TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(T, (T) -> R)")))
+                ).compileAndLintWithContext(env, code)
+                assertThat(findings)
+                    .hasSize(1)
+                    .hasSourceLocation(6, 9)
+            }
+        }
     }
 })

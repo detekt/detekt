@@ -246,6 +246,21 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String, kotlin.Int)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
+
+        @DisplayName("When generics foo(T, U)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "'fun <T, U> foo(a: T, b: U)',      true",
+            "'fun <T, U> foo(a: U, b: T)',      false",
+            "'fun <T, U> foo(a: String, b: U)', false",
+            "'fun <T, U> T.foo(a: U)',          true",
+            "'fun <T, U> U.foo(a: T)',          false",
+        )
+        fun `When foo(T, U)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(T, U)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
     }
 }
 
