@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
@@ -34,6 +35,9 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
+
+    @Configuration("ignores properties that have the override modifier")
+    private val ignoreOverridden: Boolean by config(true)
 
     override val issue = Issue(
         javaClass.simpleName, Severity.CodeSmell,
@@ -65,7 +69,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         val isBooleanType =
             typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME
 
-        if (isBooleanType && !name.contains(allowedPattern)) {
+        if (isBooleanType && !name.contains(allowedPattern) && !isIgnoreOverridden(declaration)) {
             report(reportCodeSmell(declaration, name))
         }
     }
@@ -88,6 +92,8 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
             ?.fqNameOrNull()
             .toString()
     }
+
+    private fun isIgnoreOverridden(declaration: KtCallableDeclaration) = ignoreOverridden && declaration.isOverride()
 
     companion object {
         const val KOTLIN_BOOLEAN_TYPE_NAME = "kotlin.Boolean"
