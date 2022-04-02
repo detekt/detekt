@@ -17,6 +17,7 @@ toc: true
   - CanBeNonNullableProperty - [#4379](https://github.com/detekt/detekt/pull/4379)
   - NullCheckOnMutableProperty - [#4353](https://github.com/detekt/detekt/pull/4353)
   - SuspendFunWithCoroutineScopeReceiver - [#4616](https://github.com/detekt/detekt/pull/4616)
+  - ElseCaseInsteadOfExhaustiveWhen - [#4632](https://github.com/detekt/detekt/pull/4632)
   - TrailingComma - From KtLint - [#4227](https://github.com/detekt/detekt/pull/4227)
   - UnnecessaryParenthesesBeforeTrailingLambda - From KtLint - [#4630](https://github.com/detekt/detekt/pull/4630)
   - BlockCommentInitialStarAlignment - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
@@ -48,7 +49,6 @@ toc: true
 
 - Add ignoreOverridden support for BooleanPropertyNaming rule - [#4654](https://github.com/detekt/detekt/pull/4654)
 - Fix regression generating configuration - [#4646](https://github.com/detekt/detekt/pull/4646)
-- Add ElseCaseInsteadOfExhaustiveWhen rule - [#4632](https://github.com/detekt/detekt/pull/4632)
 - Fix concurrency issue when creating PomModel (#4609) - [#4631](https://github.com/detekt/detekt/pull/4631)
 - UnnecessaryAbstractClass: fix false positive when the abstract class has properties in the primary constructor - [#4628](https://github.com/detekt/detekt/pull/4628)
 - Properly set toolVersion on DetektExtension - [#4623](https://github.com/detekt/detekt/pull/4623)
