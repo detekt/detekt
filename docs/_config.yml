@@ -117,4 +117,4 @@ description: "Meet detekt, a static code analysis tool for Kotlin."
 url: https://detekt.dev
 baseurl: ""
 
-detekt_version: 1.20.0-RC1
+detekt_version: 1.20.0-RC2
