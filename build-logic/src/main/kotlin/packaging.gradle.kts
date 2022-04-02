@@ -11,6 +11,10 @@ val sonatypePassword: String? = findProperty("sonatypePassword")
     ?.toString()
     ?: System.getenv("MAVEN_CENTRAL_PW")
 
+tasks.withType<Sign>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
+}
+
 publishing {
     repositories {
         maven {
