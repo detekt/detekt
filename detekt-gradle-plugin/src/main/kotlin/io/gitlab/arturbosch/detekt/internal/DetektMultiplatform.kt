@@ -11,10 +11,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.js
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import java.io.File
@@ -168,7 +165,4 @@ private fun Project.setReportOutputConvention(
 // We currently run type resolution only for Jvm & Android targets as
 // native/js targets needs a different compiler classpath.
 private val KotlinTarget.runWithTypeResolution: Boolean
-    get() = when (platformType) {
-        jvm, androidJvm -> true
-        common, js, native -> false
-    }
+    get() = platformType in setOf(jvm, androidJvm)
