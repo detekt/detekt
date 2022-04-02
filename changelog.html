@@ -478,19 +478,30 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1200-rc1---2022-02-26">1.20.0-RC1 - 2022-02-26</h4>
+  <h4 id="1200---2022-03-31">1.20.0 - 2022-03-31</h4>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
 <ul>
   <li>Thanks to our sponsors ❤️, we were able to buy a domain and move our website to <a href="https://detekt.dev/">https://detekt.dev/</a>.</li>
   <li>With this Detekt versions, rule authors <strong>can define the default configuration</strong> for their custom rules. This default configuration will be merged together with the user configuration and can be overridden by the user if they wish. More on this here <a href="https://github.com/detekt/detekt/pull/4315">#4315</a>. The <code class="language-plaintext highlighter-rouge">formatting</code> ruleset provided by Detekt is updated to use this new mechanism - <a href="https://github.com/detekt/detekt/pull/4352">#4352</a></li>
-  <li>We’ve added <strong>4 new rules</strong>:
+  <li>We’ve added <strong>15 new rules</strong>:
     <ul>
       <li>UnnecessaryInnerClass - <a href="https://github.com/detekt/detekt/pull/4394">#4394</a></li>
       <li>CanBeNonNullableProperty - <a href="https://github.com/detekt/detekt/pull/4379">#4379</a></li>
-      <li>TrailingComma - <a href="https://github.com/detekt/detekt/pull/4227">#4227</a></li>
       <li>NullCheckOnMutableProperty - <a href="https://github.com/detekt/detekt/pull/4353">#4353</a></li>
+      <li>SuspendFunWithCoroutineScopeReceiver - <a href="https://github.com/detekt/detekt/pull/4616">#4616</a></li>
+      <li>TrailingComma - From KtLint - <a href="https://github.com/detekt/detekt/pull/4227">#4227</a></li>
+      <li>UnnecessaryParenthesesBeforeTrailingLambda - From KtLint - <a href="https://github.com/detekt/detekt/pull/4630">#4630</a></li>
+      <li>BlockCommentInitialStarAlignment - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>CommentWrapping - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>DiscouragedCommentLocation - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>FunKeywordSpacing - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>FunctionTypeReferenceSpacing - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>KdocWrapping - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>ModifierListSpacing - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>TypeArgumentListSpacing - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
+      <li>Wrapping - From KtLint - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a></li>
     </ul>
   </li>
   <li>We’ve made several improvements to the <strong>console reporting</strong>:
@@ -502,17 +513,32 @@ $('#toc').on('click', 'a', function() {
     </ul>
   </li>
   <li>We fixed a <strong>regression</strong> introduced in <code class="language-plaintext highlighter-rouge">1.19.0</code> for users using <code class="language-plaintext highlighter-rouge">ignoreAnnotated</code> running <strong>without type resolution</strong> - <a href="https://github.com/detekt/detekt/pull/4570">#4570</a></li>
+  <li>For rules like <code class="language-plaintext highlighter-rouge">ForbiddenMethod</code> where you can specify a method name in the config file, now we added support for:
+    <ul>
+      <li>Matching functions with generics - <a href="https://github.com/detekt/detekt/pull/4460">#4460</a></li>
+      <li>Matching extension functions - <a href="https://github.com/detekt/detekt/pull/4459">#4459</a></li>
+    </ul>
+  </li>
   <li>We’ve fixed a security vulnerability related to XML parsing - <a href="https://github.com/detekt/detekt/pull/4499">#4499</a></li>
   <li>We’ve changed the behavior of the baseline task. Now the baseline is always update, even if you fixed all the issues in your codebase - <a href="https://github.com/detekt/detekt/pull/4445">#4445</a></li>
   <li>We now enable the naming ruleset by default also on tests. Previously they were excluded - <a href="https://github.com/detekt/detekt/pull/4438">#4438</a></li>
-  <li>This version of Detekt is built with Gradle <code class="language-plaintext highlighter-rouge">v7.4</code>, AGP <code class="language-plaintext highlighter-rouge">7.1.1</code> and Kotlin <code class="language-plaintext highlighter-rouge">1.6.10</code> (see <a href="https://github.com/detekt/detekt/pull/4530">#4530</a> <a href="https://github.com/detekt/detekt/pull/4573">#4573</a> <a href="https://github.com/detekt/detekt/pull/4133">#4133</a> <a href="https://github.com/detekt/detekt/pull/4277">#4277</a>)</li>
-  <li>This version of Detekt is wrapping KtLint version <code class="language-plaintext highlighter-rouge">0.43.2</code> (see <a href="https://github.com/detekt/detekt/pull/4227">#4227</a>)</li>
+  <li>This version of Detekt is built with Gradle <code class="language-plaintext highlighter-rouge">v7.4.1</code>, AGP <code class="language-plaintext highlighter-rouge">7.1.1</code> and Kotlin <code class="language-plaintext highlighter-rouge">1.6.10</code> (see <a href="https://github.com/detekt/detekt/pull/4530">#4530</a> <a href="https://github.com/detekt/detekt/pull/4573">#4573</a> <a href="https://github.com/detekt/detekt/pull/4133">#4133</a> <a href="https://github.com/detekt/detekt/pull/4277">#4277</a>)</li>
+  <li>This version of Detekt is wrapping KtLint version <code class="language-plaintext highlighter-rouge">0.45.1</code> (see <a href="https://github.com/detekt/detekt/pull/4227">#4227</a> - <a href="https://github.com/detekt/detekt/pull/4630">#4630</a> - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a>)</li>
   <li>For contributors: we migrated most of our tests <strong>from Spek to JUnit</strong> due to better support and tooling.</li>
 </ul>
 
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>Add ignoreOverridden support for BooleanPropertyNaming rule - <a href="https://github.com/detekt/detekt/pull/4654">#4654</a></li>
+  <li>Fix regression generating configuration - <a href="https://github.com/detekt/detekt/pull/4646">#4646</a></li>
+  <li>Add ElseCaseInsteadOfExhaustiveWhen rule - <a href="https://github.com/detekt/detekt/pull/4632">#4632</a></li>
+  <li>Fix concurrency issue when creating PomModel (#4609) - <a href="https://github.com/detekt/detekt/pull/4631">#4631</a></li>
+  <li>UnnecessaryAbstractClass: fix false positive when the abstract class has properties in the primary constructor - <a href="https://github.com/detekt/detekt/pull/4628">#4628</a></li>
+  <li>Properly set toolVersion on DetektExtension - <a href="https://github.com/detekt/detekt/pull/4623">#4623</a></li>
+  <li>NamedArguments: Ignore when argument values are the same as the parameter name - <a href="https://github.com/detekt/detekt/pull/4613">#4613</a></li>
+  <li>Parallel invocation of AnalysisFacade fails spuriously in 1.20.0-RC1 - <a href="https://github.com/detekt/detekt/issues/4609">#4609</a></li>
+  <li>NoSuchElementException after updating to 1.20.0-RC1 - <a href="https://github.com/detekt/detekt/issues/4604">#4604</a></li>
   <li>Better error classification in Gradle Enterprise. - <a href="https://github.com/detekt/detekt/pull/4586">#4586</a></li>
   <li>Fix for missing /kotlin folder when running on Android projects - <a href="https://github.com/detekt/detekt/pull/4554">#4554</a></li>
   <li>Deprecate continuationIndentSize from the Indentation rule - <a href="https://github.com/detekt/detekt/pull/4551">#4551</a></li>
@@ -556,6 +582,7 @@ $('#toc').on('click', 'a', function() {
 <h5 id="dependency-updates">Dependency Updates</h5>
 
 <ul>
+  <li>Update dependency gradle to v7.4.1 - <a href="https://github.com/detekt/detekt/pull/4622">#4622</a></li>
   <li>Update dependency com.android.tools.build:gradle to v7.1.2 - <a href="https://github.com/detekt/detekt/pull/4594">#4594</a></li>
   <li>Update dependency com.android.tools.build:gradle to v7.1.1 - <a href="https://github.com/detekt/detekt/pull/4561">#4561</a></li>
   <li>Update plugin pluginPublishing to v0.20.0 - <a href="https://github.com/detekt/detekt/pull/4502">#4502</a></li>
@@ -580,6 +607,7 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Fix typo in AvoidReferentialEquality rule description - <a href="https://github.com/detekt/detekt/pull/4644">#4644</a></li>
   <li>Housekeep Gradle scripts - <a href="https://github.com/detekt/detekt/pull/4589">#4589</a></li>
   <li>Refactor config printer to improve testability - <a href="https://github.com/detekt/detekt/pull/4580">#4580</a></li>
   <li>avoid usage of java stream for parameterized tests - <a href="https://github.com/detekt/detekt/pull/4579">#4579</a></li>
@@ -2948,7 +2976,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Mar 31, 2022 <br />
+ Site last generated: Apr 2, 2022 <br />
                 </div>
             </div>
 </footer>
