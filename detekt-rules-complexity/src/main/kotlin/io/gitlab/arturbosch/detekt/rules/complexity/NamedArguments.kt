@@ -13,8 +13,8 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParameterForArgument
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * Reports function invocations which have more parameters than a certain threshold and are all not named.

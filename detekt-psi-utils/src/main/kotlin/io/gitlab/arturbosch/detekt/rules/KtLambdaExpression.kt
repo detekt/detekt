@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 fun KtLambdaExpression.firstParameter(bindingContext: BindingContext) =
     bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()

@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.resolve.BindingContext.DELEGATED_PROPERTY_RESOLVED_C
 import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL
 import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL
 import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_NEXT_RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /*
