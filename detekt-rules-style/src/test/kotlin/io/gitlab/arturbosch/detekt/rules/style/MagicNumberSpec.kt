@@ -625,7 +625,7 @@ class MagicNumberSpec : Spek({
                 fun code(number: Number) = """
                 fun tested(someVal: Int, other: String = "default")
 
-                vaö t = tested(someVal = $number)
+                val t = tested(someVal = $number)
                 """
                 it("should ignore int by default") {
                     assertThat(MagicNumber().lint(code(53))).isEmpty()
