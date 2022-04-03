@@ -166,7 +166,7 @@ To test the code we use the `detekt-test` module and write a JUnit 5 testcase.
 ```kotlin
 class NumberOfLoopsProcessorSpec {
 
-	@Test
+    @Test
     fun `should expect two loops`() {
 		val code = """
 			fun main() {
