@@ -1,15 +1,3 @@
-config:
-  # is automatically ignored when custom-checks.jar is on the classpath
-  # however other CI checks use the argsfile where our plugin is not applied
-  # we need to care take of this by explicitly allowing this properties
-  excludes: 'custom-checks.*'
-
-custom-checks:
-  active: true
-  SpekTestDiscovery:
-    active: true
-    includes: ['**/test/**/*Spec.kt']
-
 comments:
   CommentOverPrivateProperty:
     active: true

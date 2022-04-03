@@ -14,7 +14,6 @@ reporting {
 jacoco.toolVersion = libs.versions.jacoco.get()
 
 dependencies {
-    jacocoAggregation(projects.customChecks)
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
     jacocoAggregation(projects.detektCore)
