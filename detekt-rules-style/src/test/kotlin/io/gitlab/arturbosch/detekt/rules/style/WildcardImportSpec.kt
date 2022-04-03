@@ -19,7 +19,7 @@ class WildcardImportSpec {
         inner class `a kt file with wildcard imports` {
             val code = """
                 import io.gitlab.arturbosch.detekt.*
-                import org.spekframework.*
+                import io.mockk.*
 
                 class Test {
                 }
@@ -43,7 +43,7 @@ class WildcardImportSpec {
 
             @Test
             fun `should not report excluded wildcard imports`() {
-                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("org.spekframework.*"))))
+                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("io.mockk.*"))))
 
                 val findings = rule.compileAndLint(code)
                 assertThat(findings).hasSize(1)
@@ -55,7 +55,7 @@ class WildcardImportSpec {
                     TestConfig(
                         mapOf(
                             EXCLUDED_IMPORTS to listOf(
-                                "org.spekframework.*",
+                                "io.mockk.*",
                                 "io.gitlab.arturbosch.detekt"
                             )
                         )
@@ -69,7 +69,7 @@ class WildcardImportSpec {
             @Test
             fun `should not report excluded wildcard imports when multiple are excluded using config string`() {
                 val rule =
-                    WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "org.spekframework.*, io.gitlab.arturbosch.detekt")))
+                    WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "io.mockk.*, io.gitlab.arturbosch.detekt")))
 
                 val findings = rule.compileAndLint(code)
                 assertThat(findings).isEmpty()
@@ -99,7 +99,7 @@ class WildcardImportSpec {
             val code = """
             package org
 
-            import org.spekframework.spek2.Spek
+            import io.mockk.mockk
 
             class Test {
             }
