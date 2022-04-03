@@ -96,10 +96,8 @@ class UnnecessaryParenthesesSpec {
         fun `does not report well behaved parentheses in super constructors`() {
             val code = """
                 class TestSpek : SubjectSpek({
-                    @Nested
-inner class `a simple test` {
-                        @Test
-fun `should do something`() {
+                    describe("a simple test") {
+                        it("should do something") {
                         }
                     }
                 })
@@ -111,10 +109,8 @@ fun `should do something`() {
         fun `does not report well behaved parentheses in constructors`() {
             val code = """
                 class TestSpek({
-                    @Nested
-inner class `a simple test` {
-                        @Test
-fun `should do something`() {
+                    describe("a simple test") {
+                        it("should do something") {
                         }
                     }
                 })

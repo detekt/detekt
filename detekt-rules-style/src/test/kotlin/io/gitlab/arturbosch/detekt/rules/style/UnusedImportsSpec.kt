@@ -188,10 +188,8 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             val escaped = """
                 package escaped
 
-                @Test
-fun `when`() {}
-                @Test
-fun `foo`() {}
+                fun `when`() {}
+                fun `foo`() {}
             """
             val lint = subject.lintWithContext(env, main, p, p2, escaped)
             with(lint) {
