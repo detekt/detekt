@@ -18,7 +18,7 @@ kotlin-scriptUtil = { module = "org.jetbrains.kotlin:kotlin-script-util", versio
 kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
-kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3"
+kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
 android-gradle = "com.android.tools.build:gradle:7.1.2"
