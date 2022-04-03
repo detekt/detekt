@@ -168,21 +168,21 @@ class NumberOfLoopsProcessorSpec {
 
     @Test
     fun `should expect two loops`() {
-		val code = """
-			fun main() {
-				for (i in 0..10) {
-					while (i < 5) {
-						println(i)
-					}
-				}
-			}
-		"""
+        val code = """
+            fun main() {
+                for (i in 0..10) {
+                    while (i < 5) {
+                        println(i)
+                    }
+                }
+            }
+        """
 
-		val ktFile = compileContentForTest(code)
-		NumberOfLoopsProcessor().onProcess(ktFile)
+        val ktFile = compileContentForTest(code)
+        NumberOfLoopsProcessor().onProcess(ktFile)
 
-		assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
-	}
+        assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
+    }
 }
 ```
 
