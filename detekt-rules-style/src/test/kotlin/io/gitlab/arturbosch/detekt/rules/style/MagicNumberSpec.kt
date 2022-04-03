@@ -906,7 +906,7 @@ class MagicNumberSpec {
 
             @ParameterizedTest
             @MethodSource("cases")
-            fun `'$codeWithMagicNumberInRange' reports a code smell if ranges are not ignored`(code: String) {
+            fun `reports a code smell if ranges are not ignored`(code: String) {
                 assertThat(MagicNumber(TestConfig(mapOf(IGNORE_RANGES to "false"))).lint(code))
                     .hasSize(1)
             }
