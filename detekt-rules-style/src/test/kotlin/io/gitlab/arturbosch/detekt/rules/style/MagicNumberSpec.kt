@@ -913,7 +913,7 @@ class MagicNumberSpec {
 
             @ParameterizedTest
             @MethodSource("cases")
-            fun `'$codeWithMagicNumberInRange' reports no finding if ranges are ignored`(code: String) {
+            fun `reports no finding if ranges are ignored`(code: String) {
                 assertThat(MagicNumber(TestConfig(mapOf(IGNORE_RANGES to "true"))).lint(code))
                     .isEmpty()
             }
