@@ -11,6 +11,9 @@ import org.spekframework.spek2.dsl.Root
 import org.spekframework.spek2.lifecycle.CachingMode
 import java.nio.file.Path
 
+@Deprecated(
+    "Use @KotlinCoreEnvironmentTest annotation on test classes instead. See detekt's tests for examples."
+)
 fun Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
     val wrapper by memoized(
         CachingMode.SCOPE,
