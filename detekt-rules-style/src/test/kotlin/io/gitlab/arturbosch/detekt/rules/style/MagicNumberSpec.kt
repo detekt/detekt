@@ -900,7 +900,7 @@ class MagicNumberSpec {
 
             @ParameterizedTest
             @MethodSource("cases")
-            fun `'$codeWithMagicNumberInRange' reports a code smell by default`(code: String) {
+            fun `reports a code smell by default`(code: String) {
                 assertThat(MagicNumber().lint(code)).hasSize(1)
             }
 
