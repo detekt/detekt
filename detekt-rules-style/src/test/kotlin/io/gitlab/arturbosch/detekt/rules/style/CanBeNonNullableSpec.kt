@@ -377,9 +377,20 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report open properties`() {
             val code = """
-                abstract class A {
+                open class A {
                     open val a: Int? = 5
                     open var b: Int? = 5
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report abstract properties`() {
+            val code = """
+                abstract class A {
+                    abstract val a: Int?
+                    abstract var b: Int?
                 }
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
