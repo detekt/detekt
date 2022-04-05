@@ -4,17 +4,20 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class MayBeConstSpec : Spek({
+class MayBeConstSpec {
 
-    val subject by memoized { MayBeConst() }
+    val subject = MayBeConst()
 
-    describe("MayBeConst rule") {
+    @Nested
+    inner class `MayBeConst rule` {
 
-        context("some valid constants") {
-            it("is a valid constant") {
+        @Nested
+        inner class `some valid constants` {
+            @Test
+            fun `is a valid constant`() {
                 val code = """
                     object Something {
                         const val X = 42
@@ -24,7 +27,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("is const vals in object") {
+            @Test
+            fun `is const vals in object`() {
                 val code = """
                 object Test {
                     const val TEST = "Test"
@@ -34,7 +38,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("isconst vals in companion objects") {
+            @Test
+            fun `isconst vals in companion objects`() {
                 val code = """
                 class Test {
                     companion object {
@@ -46,7 +51,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("does not report const vals that use other const vals") {
+            @Test
+            fun `does not report const vals that use other const vals`() {
                 val code = """
                 object Something {
                     const val A = 0
@@ -62,7 +68,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("does not report none const val candidates") {
+            @Test
+            fun `does not report none const val candidates`() {
                 val code = """
                 object Something {
                     const val a = 0
@@ -75,8 +82,10 @@ class MayBeConstSpec : Spek({
             }
         }
 
-        context("some vals that could be constants") {
-            it("is a simple val") {
+        @Nested
+        inner class `some vals that could be constants` {
+            @Test
+            fun `is a simple val`() {
                 val code = """
                 val x = 1
                 """
@@ -86,7 +95,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("is a simple JvmField val") {
+            @Test
+            fun `is a simple JvmField val`() {
                 val code = """
                 @JvmField val x = 1
                 """
@@ -96,7 +106,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("is a field in an object") {
+            @Test
+            fun `is a field in an object`() {
                 val code = """
                 object Test {
                     @JvmField val test = "Test"
@@ -108,7 +119,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("reports vals in companion objects") {
+            @Test
+            fun `reports vals in companion objects`() {
                 val code = """
                 class Test {
                     companion object {
@@ -123,8 +135,10 @@ class MayBeConstSpec : Spek({
             }
         }
 
-        context("vals that can be constants but detekt doesn't handle yet") {
-            it("is a constant binary expression") {
+        @Nested
+        inner class `vals that can be constants but detekt doesn't handle yet` {
+            @Test
+            fun `is a constant binary expression`() {
                 val code = """
                 object Something {
                     const val one = 1
@@ -137,7 +151,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("is a constant binary expression in a companion object") {
+            @Test
+            fun `is a constant binary expression in a companion object`() {
                 val code = """
                 class Test {
                     companion object {
@@ -152,7 +167,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("is a nested constant binary expression") {
+            @Test
+            fun `is a nested constant binary expression`() {
                 val code = """
                 object Something {
                     const val one = 1
@@ -165,7 +181,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("is a nested constant parenthesised expression") {
+            @Test
+            fun `is a nested constant parenthesised expression`() {
                 val code = """
                 object Something {
                     const val one = 1
@@ -178,7 +195,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("reports vals that use other const vals") {
+            @Test
+            fun `reports vals that use other const vals`() {
                 val code = """
                 object Something {
                     const val a = 0
@@ -193,7 +211,8 @@ class MayBeConstSpec : Spek({
                 )
             }
 
-            it("reports concatenated string vals") {
+            @Test
+            fun `reports concatenated string vals`() {
                 val code = """
                 object Something {
                     private const val A = "a"
@@ -207,32 +226,38 @@ class MayBeConstSpec : Spek({
             }
         }
 
-        context("vals that cannot be constants") {
-            it("does not report arrays") {
+        @Nested
+        inner class `vals that cannot be constants` {
+            @Test
+            fun `does not report arrays`() {
                 val code = "val arr = arrayOf(\"a\", \"b\")"
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("is a var") {
+            @Test
+            fun `is a var`() {
                 val code = "var test = 1"
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("has a getter") {
+            @Test
+            fun `has a getter`() {
                 val code = "val withGetter get() = 42"
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("is initialized to null") {
+            @Test
+            fun `is initialized to null`() {
                 val code = "val test = null"
                 subject.compileAndLint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("is a JvmField in a class") {
+            @Test
+            fun `is a JvmField in a class`() {
                 val code = """
                 class Test {
                     @JvmField val a = 3
@@ -242,7 +267,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("has some annotation") {
+            @Test
+            fun `has some annotation`() {
                 val code = """
                 annotation class A
 
@@ -252,7 +278,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("overrides something") {
+            @Test
+            fun `overrides something`() {
                 val code = """
                 interface Base {
                     val property: Int
@@ -266,13 +293,15 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("does not detect just a dollar as interpolation") {
+            @Test
+            fun `does not detect just a dollar as interpolation`() {
                 val code = """ val hasDollar = "$" """
                 subject.compileAndLint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
-            it("does not report interpolated strings") {
+            @Test
+            fun `does not report interpolated strings`() {
                 val innerCode = "\"\"\"object Test { val TEST = \"Test \$test_var\"}\"\"\""
                 val classReference = "\${AnotherClass::class.java.name}"
                 val staticReference = "\${AnotherClass.staticVariable}"
@@ -293,7 +322,8 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("does not report vals inside anonymous object declaration") {
+            @Test
+            fun `does not report vals inside anonymous object declaration`() {
                 subject.compileAndLint(
                     """
                     fun main() {
@@ -307,16 +337,19 @@ class MayBeConstSpec : Spek({
                 assertThat(subject.findings).isEmpty()
             }
 
-            it("does not report actual vals") {
+            @Test
+            fun `does not report actual vals`() {
                 // Until the [KotlinScriptEngine] can compile KMP, we will only lint.
                 subject.lint("""actual val abc123 = "abc123" """)
                 assertThat(subject.findings).isEmpty()
             }
         }
 
-        context("some const val candidates in nested objects") {
+        @Nested
+        inner class `some const val candidates in nested objects` {
 
-            it("reports the const val candidates") {
+            @Test
+            fun `reports the const val candidates`() {
                 val code = """
                     object Root {
                         const val ROOT_CONST = 1
@@ -341,4 +374,4 @@ class MayBeConstSpec : Spek({
             }
         }
     }
-})
+}

@@ -1,30 +1,31 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val ALLOW_VARS = "allowVars"
 private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
-class UseDataClassSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UseDataClassSpec(val env: KotlinCoreEnvironment) {
+    val subject = UseDataClass(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UseDataClass(Config.empty) }
+    @Nested
+    inner class `UseDataClass rule` {
 
-    describe("UseDataClass rule") {
+        @Nested
+        inner class `does not report invalid data class candidates` {
 
-        describe("does not report invalid data class candidates") {
-
-            it("does not report a valid class") {
+            @Test
+            fun `does not report a valid class`() {
                 val code = """
                     class NoDataClassCandidate(val i: Int) {
                         val i2: Int = 0
@@ -37,7 +38,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate class with additional method") {
+            @Test
+            fun `does not report a candidate class with additional method`() {
                 val code = """
                     class NoDataClassCandidateWithAdditionalMethod(val i: Int) {
                         fun f1() {
@@ -48,14 +50,16 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate class with a private constructor") {
+            @Test
+            fun `does not report a candidate class with a private constructor`() {
                 val code = """
                     class NoDataClassCandidateWithOnlyPrivateCtor1 private constructor(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate class with a private explicit constructor") {
+            @Test
+            fun `does not report a candidate class with a private explicit constructor`() {
                 val code = """
                     class NoDataClassCandidateWithOnlyPrivateCtor2 {
                         private constructor(i: Int)
@@ -64,7 +68,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate sealed class") {
+            @Test
+            fun `does not report a candidate sealed class`() {
                 val code = """
                     sealed class NoDataClassBecauseItsSealed {
                         data class Success(val any: Any) : NoDataClassBecauseItsSealed()
@@ -74,7 +79,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate enum class") {
+            @Test
+            fun `does not report a candidate enum class`() {
                 val code = """
                     enum class EnumNoDataClass(val i: Int) {
                         FIRST(1), SECOND(2);
@@ -83,14 +89,16 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate annotation class") {
+            @Test
+            fun `does not report a candidate annotation class`() {
                 val code = """
                     annotation class AnnotationNoDataClass(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a candidate with an interface that has methods") {
+            @Test
+            fun `does not report a candidate with an interface that has methods`() {
                 val code = """
                     interface SomeInterface {
                         fun foo(): Int
@@ -104,7 +112,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report an existing data class candidate with an interface") {
+            @Test
+            fun `does not report an existing data class candidate with an interface`() {
                 val code = """
                     interface SimpleInterface {
                         val i: Int
@@ -116,7 +125,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a class extending a class and implementing an interface") {
+            @Test
+            fun `does not report a class extending a class and implementing an interface`() {
                 val code = """
                     interface SimpleInterface {
                         val i: Int
@@ -130,7 +140,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("does not report a class with delegating interface") {
+            @Test
+            fun `does not report a class with delegating interface`() {
                 val code = """
                     interface I
                     class B() : I
@@ -141,16 +152,19 @@ class UseDataClassSpec : Spek({
             }
         }
 
-        describe("does report data class candidates") {
+        @Nested
+        inner class `does report data class candidates` {
 
-            it("does report a data class candidate") {
+            @Test
+            fun `does report a data class candidate`() {
                 val code = """
                     class DataClassCandidate1(val i: Int)
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with extra property") {
+            @Test
+            fun `does report a candidate class with extra property`() {
                 val code = """
                     class DataClassCandidateWithProperties(val i: Int) {
                         val i2: Int = 0
@@ -159,7 +173,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with extra public constructor") {
+            @Test
+            fun `does report a candidate class with extra public constructor`() {
                 val code = """
                     class DataClassCandidate2(val s: String) {
                         private constructor(i: Int) : this(i.toString())
@@ -168,7 +183,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with both a private and public constructor") {
+            @Test
+            fun `does report a candidate class with both a private and public constructor`() {
                 val code = """
                     class DataClassCandidate3 private constructor(val s: String) {
                         constructor(i: Int) : this(i.toString())
@@ -177,7 +193,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with overridden data class methods") {
+            @Test
+            fun `does report a candidate class with overridden data class methods`() {
                 val code = """
                     class DataClassCandidateWithOverriddenMethods(val i: Int) {
                         override fun equals(other: Any?): Boolean {
@@ -194,7 +211,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with a simple interface extension") {
+            @Test
+            fun `does report a candidate class with a simple interface extension`() {
                 val code = """
                     interface SimpleInterface
                     class DataClass(val i: Int): SimpleInterface
@@ -203,7 +221,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
-            it("does report a candidate class with an interface extension that overrides vals") {
+            @Test
+            fun `does report a candidate class with an interface extension that overrides vals`() {
                 val code = """
                     interface SimpleInterface {
                         val i: Int
@@ -216,9 +235,11 @@ class UseDataClassSpec : Spek({
             }
         }
 
-        describe("copy method") {
+        @Nested
+        inner class `copy method` {
 
-            it("does report with copy method") {
+            @Test
+            fun `does report with copy method`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String): D = D(a, b)
@@ -227,7 +248,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("does report with copy method which has an implicit return type") {
+            @Test
+            fun `does report with copy method which has an implicit return type`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) = D(a, b)
@@ -236,7 +258,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
-            it("does not report with copy method which has no parameters") {
+            @Test
+            fun `does not report with copy method which has no parameters`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(): D = D(0, "")
@@ -245,7 +268,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has more parameters than the primary constructor") {
+            @Test
+            fun `does not report with copy method which has more parameters than the primary constructor`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String, c: String): D = D(a, b + c)
@@ -254,7 +278,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has different parameter types") {
+            @Test
+            fun `does not report with copy method which has different parameter types`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: Int): D = D(a, b.toString())
@@ -263,7 +288,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has different parameter types 2") {
+            @Test
+            fun `does not report with copy method which has different parameter types 2`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String?): D = D(a, b.toString())
@@ -272,7 +298,8 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has a different return type") {
+            @Test
+            fun `does not report with copy method which has a different return type`() {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) {
@@ -283,15 +310,18 @@ class UseDataClassSpec : Spek({
             }
         }
 
-        describe("does report class with vars and allowVars") {
+        @Nested
+        inner class `does report class with vars and allowVars` {
 
-            it("does not report class with mutable constructor parameter") {
+            @Test
+            fun `does not report class with mutable constructor parameter`() {
                 val code = """class DataClassCandidateWithVar(var i: Int)"""
                 val config = TestConfig(mapOf(ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
-            it("does not report class with mutable properties") {
+            @Test
+            fun `does not report class with mutable properties`() {
                 val code = """
                     class DataClassCandidateWithProperties(var i: Int) {
                         var i2: Int = 0
@@ -301,7 +331,8 @@ class UseDataClassSpec : Spek({
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
-            it("does not report class with both mutable property and immutable parameters") {
+            @Test
+            fun `does not report class with both mutable property and immutable parameters`() {
                 val code = """
                     class DataClassCandidateWithMixedProperties(val i: Int) {
                         var i2: Int = 0
@@ -311,7 +342,8 @@ class UseDataClassSpec : Spek({
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
 
-            it("does not report class with both mutable parameter and immutable property") {
+            @Test
+            fun `does not report class with both mutable parameter and immutable property`() {
                 val code = """
                     class DataClassCandidateWithMixedProperties(var i: Int) {
                         val i2: Int = 0
@@ -322,11 +354,13 @@ class UseDataClassSpec : Spek({
             }
         }
 
-        it("does not report inline classes") {
+        @Test
+        fun `does not report inline classes`() {
             assertThat(subject.lint("inline class A(val x: Int)")).isEmpty()
         }
 
-        it("does not report value classes") {
+        @Test
+        fun `does not report value classes`() {
             val code = """
                 @JvmInline
                 value class A(val x: Int)
@@ -334,7 +368,8 @@ class UseDataClassSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report a class which has an ignored annotation") {
+        @Test
+        fun `does not report a class which has an ignored annotation`() {
             val code = """
                 import kotlin.SinceKotlin
 
@@ -345,7 +380,8 @@ class UseDataClassSpec : Spek({
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a class with a delegated property") {
+        @Test
+        fun `does not report a class with a delegated property`() {
             val code = """
                 import kotlin.properties.Delegates
                 class C(val i: Int) {
@@ -357,7 +393,8 @@ class UseDataClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports class with nested delegation") {
+        @Test
+        fun `reports class with nested delegation`() {
             val code = """
                 import kotlin.properties.Delegates
                 class C(val i: Int) {
@@ -371,7 +408,8 @@ class UseDataClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report inner classes") {
+        @Test
+        fun `does not report inner classes`() {
             val code = """
                 class Outer {
                     inner class Inner(val x: Int)
@@ -380,4 +418,4 @@ class UseDataClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

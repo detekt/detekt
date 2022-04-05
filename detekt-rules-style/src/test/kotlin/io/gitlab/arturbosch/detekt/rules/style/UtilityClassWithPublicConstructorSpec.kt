@@ -5,43 +5,55 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UtilityClassWithPublicConstructorSpec : Spek({
+class UtilityClassWithPublicConstructorSpec {
 
-    val subject by memoized { UtilityClassWithPublicConstructor(Config.empty) }
-    describe("UtilityClassWithPublicConstructor rule") {
+    val subject = UtilityClassWithPublicConstructor(Config.empty)
 
-        context("several UtilityClassWithPublicConstructor rule violations") {
+    @Nested
+    inner class `UtilityClassWithPublicConstructor rule` {
+
+        @Nested
+        inner class `several UtilityClassWithPublicConstructor rule violations` {
 
             lateinit var findings: List<Finding>
 
-            beforeEachTest {
+            @BeforeEach
+            fun beforeEachTest() {
                 findings = subject.lint(Case.UtilityClassesPositive.path())
             }
 
-            it("reports utility classes with a public constructor") {
+            @Test
+            fun `reports utility classes with a public constructor`() {
                 assertThat(findings).hasSize(6)
             }
 
-            it("reports utility classes which are marked as open") {
-                val count = findings.count { it.message.contains("The utility class OpenUtilityClass should be final.") }
+            @Test
+            fun `reports utility classes which are marked as open`() {
+                val count =
+                    findings.count { it.message.contains("The utility class OpenUtilityClass should be final.") }
                 assertThat(count).isEqualTo(1)
             }
         }
 
-        context("several classes which adhere to the UtilityClassWithPublicConstructor rule") {
+        @Nested
+        inner class `several classes which adhere to the UtilityClassWithPublicConstructor rule` {
 
-            it("does not report given classes") {
+            @Test
+            fun `does not report given classes`() {
                 val findings = subject.lint(Case.UtilityClassesNegative.path())
                 assertThat(findings).isEmpty()
             }
         }
 
-        context("annotations class") {
+        @Nested
+        inner class `annotations class` {
 
-            it("should not get triggered for utility class") {
+            @Test
+            fun `should not get triggered for utility class`() {
                 val code = """
                 @Retention(AnnotationRetention.SOURCE)
                 @StringDef(
@@ -59,4 +71,4 @@ class UtilityClassWithPublicConstructorSpec : Spek({
             }
         }
     }
-})
+}

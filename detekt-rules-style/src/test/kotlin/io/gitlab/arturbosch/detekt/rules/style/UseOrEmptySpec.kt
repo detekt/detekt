@@ -1,19 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseOrEmptySpec : Spek({
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UseOrEmpty() }
+@KotlinCoreEnvironmentTest
+class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
+    val subject = UseOrEmpty()
 
-    describe("report UseOrEmptySpec rule") {
-        it("emptyList") {
+    @Nested
+    inner class `report UseOrEmptySpec rule` {
+        @Test
+        fun `emptyList`() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: emptyList()
@@ -25,7 +26,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings[0]).hasMessage("This '?: emptyList()' can be replaced with 'orEmpty()' call")
         }
 
-        it("emptySet") {
+        @Test
+        fun `emptySet`() {
             val code = """
                 fun test(x: Set<Int>?) {
                     val a = x ?: emptySet()
@@ -35,7 +37,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("emptyMap") {
+        @Test
+        fun `emptyMap`() {
             val code = """
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: emptyMap()
@@ -45,7 +48,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("emptySequence") {
+        @Test
+        fun `emptySequence`() {
             val code = """
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: emptySequence()
@@ -55,7 +59,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("emptyArray") {
+        @Test
+        fun `emptyArray`() {
             val code = """
                 fun test(x: Array<Int>?) {
                     val a = x ?: emptyArray()
@@ -65,7 +70,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("listOf") {
+        @Test
+        fun `listOf`() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: listOf()
@@ -75,7 +81,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("setOf") {
+        @Test
+        fun `setOf`() {
             val code = """
                 fun test(x: Set<Int>?) {
                     val a = x ?: setOf()
@@ -85,7 +92,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("mapOf") {
+        @Test
+        fun `mapOf`() {
             val code = """
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: mapOf()
@@ -95,7 +103,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("sequenceOf") {
+        @Test
+        fun `sequenceOf`() {
             val code = """
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: sequenceOf()
@@ -105,7 +114,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("arrayOf") {
+        @Test
+        fun `arrayOf`() {
             val code = """
                 fun test(x: Array<Int>?) {
                     val a = x ?: arrayOf()
@@ -115,7 +125,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("empty string") {
+        @Test
+        fun `empty string`() {
             val code = """
                 fun test(x: String?) {
                     val a = x ?: ""
@@ -125,7 +136,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("mutable list") {
+        @Test
+        fun `mutable list`() {
             val code = """
                 fun test(x: MutableList<Int>?) {
                     val a = x ?: emptyList()
@@ -136,8 +148,10 @@ class UseOrEmptySpec : Spek({
         }
     }
 
-    describe("does not report UseOrEmptySpec rule") {
-        it("not null") {
+    @Nested
+    inner class `does not report UseOrEmptySpec rule` {
+        @Test
+        fun `not null`() {
             val code = """
                 fun test(x: List<Int>) {
                     val a = x ?: emptyList()
@@ -147,7 +161,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("not empty") {
+        @Test
+        fun `not empty`() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: listOf(1)
@@ -157,7 +172,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("different types") {
+        @Test
+        fun `different types`() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: emptySet()
@@ -167,7 +183,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("mutableListOf") {
+        @Test
+        fun `mutableListOf`() {
             val code = """
                 fun test(x: MutableList<Int>?) {
                     val a = x ?: mutableListOf()
@@ -177,7 +194,8 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("intArrayOf") {
+        @Test
+        fun `intArrayOf`() {
             val code = """
                 fun test(x: IntArray?) {
                     val a = x ?: intArrayOf()
@@ -187,4 +205,4 @@ class UseOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

@@ -4,15 +4,17 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ProtectedMemberInFinalClassSpec : Spek({
-    val subject by memoized { ProtectedMemberInFinalClass(Config.empty) }
+class ProtectedMemberInFinalClassSpec {
+    val subject = ProtectedMemberInFinalClass(Config.empty)
 
-    describe("check all variants of protected visibility modifier in final class") {
+    @Nested
+    inner class `check all variants of protected visibility modifier in final class` {
 
-        it("reports a protected field in a final class") {
+        @Test
+        fun `reports a protected field in a final class`() {
             val code = """
                 class Foo {
                     protected var i1 = 0
@@ -23,7 +25,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(2, 5)
         }
 
-        it("reports a protected constructor in a final class") {
+        @Test
+        fun `reports a protected constructor in a final class`() {
             val code = """
                 class Foo {
                     var i1: Int = 0
@@ -37,7 +40,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(3, 5)
         }
 
-        it("reports a protected function in a final class") {
+        @Test
+        fun `reports a protected function in a final class`() {
             val code = """
                 class Foo {
                     protected fun function() {}
@@ -48,7 +52,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(2, 5)
         }
 
-        it("reports an inner class with a protected field in a final class") {
+        @Test
+        fun `reports an inner class with a protected field in a final class`() {
             val code = """
                 class Foo {
                     inner class InnerClass2 {
@@ -61,7 +66,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(3, 9)
         }
 
-        it("reports a protected inner class with a protected field in a final class") {
+        @Test
+        fun `reports a protected inner class with a protected field in a final class`() {
             val code = """
                 class Fee {
                     protected inner class YetAnotherInnerClass {
@@ -77,7 +83,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             )
         }
 
-        it("reports a protected companion object in a final class") {
+        @Test
+        fun `reports a protected companion object in a final class`() {
             val code = """
                 class Foo {
                     protected companion object {
@@ -96,7 +103,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             )
         }
 
-        it("reports a protected companion object in an nested class") {
+        @Test
+        fun `reports a protected companion object in an nested class`() {
             val code = """
                 abstract class Foo {
                     protected companion object {
@@ -111,7 +119,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(4, 13)
         }
 
-        it("reports a protected field object in a final inner class") {
+        @Test
+        fun `reports a protected field object in a final inner class`() {
             val code = """
                 open class OpenClass {
                     inner class InnerClass {
@@ -124,7 +133,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(findings).hasSourceLocation(3, 9)
         }
 
-        it("reports a protected primary constructor in a final class") {
+        @Test
+        fun `reports a protected primary constructor in a final class`() {
             val code = """
                 class FinalClassWithProtectedConstructor protected constructor()
             """
@@ -134,9 +144,11 @@ class ProtectedMemberInFinalClassSpec : Spek({
         }
     }
 
-    describe("check valid occurrences of protected that should not be reported") {
+    @Nested
+    inner class `check valid occurrences of protected that should not be reported` {
 
-        it("does not report non-protected members in final class") {
+        @Test
+        fun `does not report non-protected members in final class`() {
             val code = """
                 abstract class BaseClass
                 class Foo : BaseClass() {
@@ -146,7 +158,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden fields") {
+        @Test
+        fun `does not report overridden fields`() {
             val code = """
                 abstract class BaseClass {
                     protected abstract val abstractProp : Int
@@ -159,7 +172,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden functions") {
+        @Test
+        fun `does not report overridden functions`() {
             val code = """
                 abstract class BaseClass {
                     protected abstract fun abstractFunction()
@@ -173,7 +187,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report protected definitions in abstract class") {
+        @Test
+        fun `does not report protected definitions in abstract class`() {
             val code = """
                 abstract class BaseClass {
                     protected abstract val abstractProp: Int
@@ -185,7 +200,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report protected definitions in sealed class") {
+        @Test
+        fun `does not report protected definitions in sealed class`() {
             val code = """
                 sealed class SealedClass {
                     protected fun a() {}
@@ -194,7 +210,8 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report protected definitions in enum class") {
+        @Test
+        fun `does not report protected definitions in enum class`() {
             val code = """
                 enum class EnumClass {
                     ;   
@@ -204,4 +221,4 @@ class ProtectedMemberInFinalClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

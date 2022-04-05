@@ -3,15 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ClassOrderingSpec : Spek({
-    val subject by memoized { ClassOrdering(Config.empty) }
+class ClassOrderingSpec {
+    val subject = ClassOrdering(Config.empty)
 
-    describe("ClassOrdering rule") {
+    @Nested
+    inner class `ClassOrdering rule` {
 
-        it("does not report when class contents are in expected order with property first") {
+        @Test
+        fun `does not report when class contents are in expected order with property first`() {
             val code = """
                 class InOrder(private val x: String) {
                     val y = x
@@ -33,7 +35,8 @@ class ClassOrderingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when class contents are in expected order with class initializer first") {
+        @Test
+        fun `does not report when class contents are in expected order with class initializer first`() {
             val code = """
                 class InOrder(private val x: String) {
                     init {
@@ -55,7 +58,8 @@ class ClassOrderingSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports when class initializer block is out of order") {
+        @Test
+        fun `reports when class initializer block is out of order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     val y = x
@@ -81,7 +85,8 @@ class ClassOrderingSpec : Spek({
             )
         }
 
-        it("reports when secondary constructor is out of order") {
+        @Test
+        fun `reports when secondary constructor is out of order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     constructor(z: Int): this(z.toString())
@@ -110,7 +115,8 @@ class ClassOrderingSpec : Spek({
             )
         }
 
-        it("reports when method is out of order") {
+        @Test
+        fun `reports when method is out of order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     fun returnX() = x
@@ -139,7 +145,8 @@ class ClassOrderingSpec : Spek({
                 .isEqualTo("secondary constructor should be declared before method declarations.")
         }
 
-        it("reports when companion object is out of order") {
+        @Test
+        fun `reports when companion object is out of order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     val y = x
@@ -163,7 +170,8 @@ class ClassOrderingSpec : Spek({
             assertThat(findings[0].message).isEqualTo("method `returnX()` should be declared before companion object.")
         }
 
-        it("does not report nested class order") {
+        @Test
+        fun `does not report nested class order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     val y = x
@@ -185,7 +193,8 @@ class ClassOrderingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
-        it("does not report anonymous object order") {
+        @Test
+        fun `does not report anonymous object order`() {
             val code = """
                 class OutOfOrder(private val x: String) {
                     val y = x
@@ -207,7 +216,8 @@ class ClassOrderingSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
-        it("report all issues with interleaving nested class") {
+        @Test
+        fun `report all issues with interleaving nested class`() {
             val code = """
                 class MultipleMisorders(private val x: String) {
                     companion object {
@@ -238,7 +248,8 @@ class ClassOrderingSpec : Spek({
                 .isEqualTo("property `y` should be declared before companion object.")
         }
 
-        it("does report all issues in a class with multiple misorderings") {
+        @Test
+        fun `does report all issues in a class with multiple misorderings`() {
             val code = """
                 class MultipleMisorders(private val x: String) {
                     companion object {
@@ -263,4 +274,4 @@ class ClassOrderingSpec : Spek({
                 .isEqualTo("property `y` should be declared before companion object.")
         }
     }
-})
+}

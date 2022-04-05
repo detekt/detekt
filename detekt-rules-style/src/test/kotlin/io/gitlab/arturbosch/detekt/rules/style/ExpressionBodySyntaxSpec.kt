@@ -4,19 +4,22 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
 
-class ExpressionBodySyntaxSpec : Spek({
-    val subject by memoized { ExpressionBodySyntax(Config.empty) }
+class ExpressionBodySyntaxSpec {
+    val subject = ExpressionBodySyntax(Config.empty)
 
-    describe("ExpressionBodySyntax rule") {
+    @Nested
+    inner class `ExpressionBodySyntax rule` {
 
-        context("several return statements") {
+        @Nested
+        inner class `several return statements` {
 
-            it("reports constant return") {
+            @Test
+            fun `reports constant return`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -28,7 +31,8 @@ class ExpressionBodySyntaxSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("reports return statement with method chain") {
+            @Test
+            fun `reports return statement with method chain`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -40,7 +44,8 @@ class ExpressionBodySyntaxSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("reports return statements with conditionals") {
+            @Test
+            fun `reports return statements with conditionals`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -55,7 +60,8 @@ class ExpressionBodySyntaxSpec : Spek({
                 ).hasSize(2)
             }
 
-            it("does not report multiple if statements") {
+            @Test
+            fun `does not report multiple if statements`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -68,7 +74,8 @@ class ExpressionBodySyntaxSpec : Spek({
                 ).isEmpty()
             }
 
-            it("does not report when using shortcut return") {
+            @Test
+            fun `does not report when using shortcut return`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -83,7 +90,8 @@ class ExpressionBodySyntaxSpec : Spek({
             }
         }
 
-        context("several return statements with multiline method chain") {
+        @Nested
+        inner class `several return statements with multiline method chain` {
 
             val code = """
                 fun stuff(): String {
@@ -93,17 +101,20 @@ class ExpressionBodySyntaxSpec : Spek({
                 }
             """
 
-            it("does not report with the default configuration") {
+            @Test
+            fun `does not report with the default configuration`() {
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports with includeLineWrapping = true configuration") {
+            @Test
+            fun `reports with includeLineWrapping = true configuration`() {
                 val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }
 
-        context("several return statements with multiline when expression") {
+        @Nested
+        inner class `several return statements with multiline when expression` {
 
             val code = """
                 fun stuff(arg: Int): Int {
@@ -114,17 +125,20 @@ class ExpressionBodySyntaxSpec : Spek({
                 }
             """
 
-            it("does not report with the default configuration") {
+            @Test
+            fun `does not report with the default configuration`() {
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports with includeLineWrapping = true configuration") {
+            @Test
+            fun `reports with includeLineWrapping = true configuration`() {
                 val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }
 
-        context("several return statements with multiline if expression") {
+        @Nested
+        inner class `several return statements with multiline if expression` {
 
             val code = """
                 fun stuff(arg: Int): Int {
@@ -133,14 +147,16 @@ class ExpressionBodySyntaxSpec : Spek({
                 }
             """
 
-            it("does not report with the default configuration") {
+            @Test
+            fun `does not report with the default configuration`() {
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports with includeLineWrapping = true configuration") {
+            @Test
+            fun `reports with includeLineWrapping = true configuration`() {
                 val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
                 assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
             }
         }
     }
-})
+}

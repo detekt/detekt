@@ -3,15 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ExplicitItLambdaParameterSpec : Spek({
-    val subject by memoized { ExplicitItLambdaParameter(Config.empty) }
+class ExplicitItLambdaParameterSpec {
+    val subject = ExplicitItLambdaParameter(Config.empty)
 
-    describe("ExplicitItLambdaParameter rule") {
-        context("single parameter lambda with name `it` declared explicitly") {
-            it("reports when parameter type is not declared") {
+    @Nested
+    inner class `ExplicitItLambdaParameter rule` {
+        @Nested
+        inner class `single parameter lambda with name 'it' declared explicitly` {
+            @Test
+            fun `reports when parameter type is not declared`() {
                 val findings = subject.compileAndLint(
                     """
                 fun f() {
@@ -21,7 +24,9 @@ class ExplicitItLambdaParameterSpec : Spek({
                 )
                 assertThat(findings).hasSize(1)
             }
-            it("reports when parameter type is declared explicitly") {
+
+            @Test
+            fun `reports when parameter type is declared explicitly`() {
                 val findings = subject.compileAndLint(
                     """
                 fun f() {
@@ -32,8 +37,11 @@ class ExplicitItLambdaParameterSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
         }
-        context("no parameter declared explicitly") {
-            it("does not report implicit `it` parameter usage") {
+
+        @Nested
+        inner class `no parameter declared explicitly` {
+            @Test
+            fun `does not report implicit 'it' parameter usage`() {
                 val findings = subject.compileAndLint(
                     """
                 fun f() {
@@ -47,8 +55,10 @@ class ExplicitItLambdaParameterSpec : Spek({
             }
         }
 
-        context("multiple parameters one of which with name `it` declared explicitly") {
-            it("reports when parameter types are not declared") {
+        @Nested
+        inner class `multiple parameters one of which with name 'it' declared explicitly` {
+            @Test
+            fun `reports when parameter types are not declared`() {
                 val findings = subject.compileAndLint(
                     """
                 fun f() {
@@ -58,7 +68,9 @@ class ExplicitItLambdaParameterSpec : Spek({
                 )
                 assertThat(findings).hasSize(1)
             }
-            it("reports when parameter types are declared explicitly") {
+
+            @Test
+            fun `reports when parameter types are declared explicitly`() {
                 val findings = subject.compileAndLint(
                     """
                 fun f() {
@@ -70,4 +82,4 @@ class ExplicitItLambdaParameterSpec : Spek({
             }
         }
     }
-})
+}

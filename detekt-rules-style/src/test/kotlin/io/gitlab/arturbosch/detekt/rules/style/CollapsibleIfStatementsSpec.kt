@@ -3,15 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class CollapsibleIfStatementsSpec : Spek({
-    val subject by memoized { CollapsibleIfStatements(Config.empty) }
+class CollapsibleIfStatementsSpec {
+    val subject = CollapsibleIfStatements(Config.empty)
 
-    describe("CollapsibleIfStatements rule") {
+    @Nested
+    inner class `CollapsibleIfStatements rule` {
 
-        it("reports if statements which can be merged") {
+        @Test
+        fun `reports if statements which can be merged`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -23,7 +25,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports nested if statements which can be merged") {
+        @Test
+        fun `reports nested if statements which can be merged`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -37,7 +40,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report else-if") {
+        @Test
+        fun `does not report else-if`() {
             val code = """
                 fun f() {
                     if (true) {}
@@ -49,7 +53,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report if-else") {
+        @Test
+        fun `does not report if-else`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -60,7 +65,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report if-elseif-else") {
+        @Test
+        fun `does not report if-elseif-else`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -72,7 +78,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report if with statements in the if body") {
+        @Test
+        fun `does not report if with statements in the if body`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -84,7 +91,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nested if-else") {
+        @Test
+        fun `does not report nested if-else`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -96,7 +104,8 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nested if-elseif") {
+        @Test
+        fun `does not report nested if-elseif`() {
             val code = """
                 fun f() {
                     if (true) {
@@ -108,4 +117,4 @@ class CollapsibleIfStatementsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

@@ -10,14 +10,16 @@ import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class RedundantVisibilityModifierRuleSpec : Spek({
-    val subject by memoized { RedundantVisibilityModifierRule() }
+class RedundantVisibilityModifierRuleSpec {
+    val subject = RedundantVisibilityModifierRule()
 
-    describe("RedundantVisibilityModifier rule") {
-        it("does not report overridden function of abstract class w/ public modifier") {
+    @Nested
+    inner class `RedundantVisibilityModifier rule` {
+        @Test
+        fun `does not report overridden function of abstract class with public modifier`() {
             val code = """
                 abstract class A {
                     abstract protected fun f()
@@ -30,7 +32,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden function of abstract class w/o public modifier") {
+        @Test
+        fun `does not report overridden function of abstract class without public modifier`() {
             val code = """
                 abstract class A {
                     abstract protected fun f()
@@ -43,7 +46,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden function of interface") {
+        @Test
+        fun `does not report overridden function of interface`() {
             val code = """
                 interface A {
                     fun f()
@@ -56,7 +60,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should ignore the issue by alias suppression") {
+        @Test
+        fun `should ignore the issue by alias suppression`() {
             val code = """
                 class Test {
                     @Suppress("RedundantVisibilityModifier")
@@ -66,7 +71,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports public function in class") {
+        @Test
+        fun `reports public function in class`() {
             val code = """
                 class Test {
                     public fun f() {}
@@ -75,7 +81,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report function in class w/o modifier") {
+        @Test
+        fun `does not report function in class without modifier`() {
             val code = """
                 class Test {
                     fun f() {}
@@ -84,7 +91,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports public class") {
+        @Test
+        fun `reports public class`() {
             val code = """
                 public class Test {
                     fun f() {}
@@ -93,7 +101,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports interface w/ public modifier") {
+        @Test
+        fun `reports interface with public modifier`() {
             val code = """
                 public interface Test {
                     public fun f()
@@ -102,7 +111,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("reports field w/ public modifier") {
+        @Test
+        fun `reports field with public modifier`() {
             val code = """
                 class Test {
                     public val str : String = "test"
@@ -111,7 +121,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report field w/o public modifier") {
+        @Test
+        fun `does not report field without public modifier`() {
             val code = """
                 class Test {
                     val str : String = "test"
@@ -120,7 +131,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden field w/o public modifier") {
+        @Test
+        fun `does not report overridden field without public modifier`() {
             val code = """
                 abstract class A {
                     abstract val test: String
@@ -133,7 +145,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report overridden field w/ public modifier") {
+        @Test
+        fun `does not report overridden field with public modifier`() {
             val code = """
                 abstract class A {
                     abstract val test: String
@@ -146,7 +159,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports internal modifier on nested class in private object") {
+        @Test
+        fun `reports internal modifier on nested class in private object`() {
             val code = """
                 private object A {
                     internal class InternalClass
@@ -155,7 +169,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports internal modifier on function declaration in private object") {
+        @Test
+        fun `reports internal modifier on function declaration in private object`() {
             val code = """
                 private object A {
                     internal fun internalFunction() {}
@@ -164,9 +179,10 @@ class RedundantVisibilityModifierRuleSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        describe("Explicit API mode") {
+        @Nested
+        inner class `Explicit API mode` {
 
-            val code by memoized {
+            val code =
                 compileContentForTest(
                     """
                     public class A() {
@@ -174,8 +190,8 @@ class RedundantVisibilityModifierRuleSpec : Spek({
                     }
                     """
                 )
-            }
-            val rule by memoized { RedundantVisibilityModifierRule() }
+
+            val rule = RedundantVisibilityModifierRule()
 
             fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
                 val languageVersionSettings = mockk<LanguageVersionSettings>()
@@ -187,20 +203,23 @@ class RedundantVisibilityModifierRuleSpec : Spek({
                 return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
             }
 
-            it("does not report public function in class if explicit API mode is set to strict") {
+            @Test
+            fun `does not report public function in class if explicit API mode is set to strict`() {
                 rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.STRICT))
                 assertThat(rule.findings).isEmpty()
             }
 
-            it("reports public function in class if explicit API mode is disabled") {
+            @Test
+            fun `reports public function in class if explicit API mode is disabled`() {
                 rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.DISABLED))
                 assertThat(rule.findings).hasSize(1)
             }
 
-            it("reports public function in class if compiler resources are not available") {
+            @Test
+            fun `reports public function in class if compiler resources are not available`() {
                 rule.visitFile(code, compilerResources = null)
                 assertThat(rule.findings).hasSize(1)
             }
         }
     }
-})
+}

@@ -1,24 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
-class ForbiddenMethodCallSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
-    val env: KotlinCoreEnvironment by memoized()
+    @Nested
+    inner class `ForbiddenMethodCall rule` {
 
-    describe("ForbiddenMethodCall rule") {
-
-        it("should report kotlin print usages by default") {
+        @Test
+        fun `should report kotlin print usages by default`() {
             val code = """
             fun main() {
                 print("3")
@@ -33,7 +33,8 @@ class ForbiddenMethodCallSpec : Spek({
             )
         }
 
-        it("should report nothing when methods are blank") {
+        @Test
+        fun `should report nothing when methods are blank`() {
             val code = """
             import java.lang.System
             fun main() {
@@ -48,7 +49,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report nothing when methods do not match") {
+        @Test
+        fun `should report nothing when methods do not match`() {
             val code = """
             import java.lang.System
             fun main() {
@@ -61,7 +63,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report method call when using the fully qualified name") {
+        @Test
+        fun `should report method call when using the fully qualified name`() {
             val code = """
             fun main() {
                 java.lang.System.out.println("hello")
@@ -74,7 +77,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasTextLocations(38 to 54)
         }
 
-        it("should report method call when not using the fully qualified name") {
+        @Test
+        fun `should report method call when not using the fully qualified name`() {
             val code = """
             import java.lang.System.out
             fun main() {
@@ -88,7 +92,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasTextLocations(49 to 65)
         }
 
-        it("should report multiple different methods") {
+        @Test
+        fun `should report multiple different methods`() {
             val code = """
             import java.lang.System
             fun main() {
@@ -110,7 +115,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
 
-        it("should report multiple different methods config with sting") {
+        @Test
+        fun `should report multiple different methods config with sting`() {
             val code = """
             import java.lang.System
             fun main() {
@@ -125,7 +131,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
         }
 
-        it("should report equals operator") {
+        @Test
+        fun `should report equals operator`() {
             val code = """
                 fun main() {
                     java.math.BigDecimal(5.5) == java.math.BigDecimal(5.5)
@@ -137,7 +144,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should report prefix operator") {
+        @Test
+        fun `should report prefix operator`() {
             val code = """
                 fun test() {
                     var i = 1
@@ -150,7 +158,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should report postfix operator") {
+        @Test
+        fun `should report postfix operator`() {
             val code = """
                 fun test() {
                     var i = 1
@@ -163,7 +172,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should report both methods when using just method name without full signature") {
+        @Test
+        fun `should report both methods when using just method name without full signature`() {
             val code = """
                 import java.time.Clock
                 import java.time.LocalDate
@@ -179,7 +189,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(2)
         }
 
-        it("should report parameterless method when full signature matches") {
+        @Test
+        fun `should report parameterless method when full signature matches`() {
             val code = """
                 import java.time.Clock
                 import java.time.LocalDate
@@ -196,7 +207,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(5, 26)
         }
 
-        it("should report method with param when full signature matches") {
+        @Test
+        fun `should report method with param when full signature matches`() {
             val code = """
                 import java.time.Clock
                 import java.time.LocalDate
@@ -213,7 +225,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(6, 27)
         }
 
-        it("should report method with multiple params when full signature matches") {
+        @Test
+        fun `should report method with multiple params when full signature matches`() {
             val code = """
                 import java.time.LocalDate
                 fun test() {
@@ -227,7 +240,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(3, 26)
         }
 
-        it("should report method with multiple params when full signature matches with additional spacing") {
+        @Test
+        fun `should report method with multiple params when full signature matches with additional spacing`() {
             val code = """
                 import java.time.LocalDate
                 fun test() {
@@ -241,7 +255,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(3, 26)
         }
 
-        it("should report method with multiple params when method has spaces and commas") {
+        @Test
+        fun `should report method with multiple params when method has spaces and commas`() {
             val code = """
                 package io.gitlab.arturbosch.detekt.rules.style
                 
@@ -258,7 +273,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(6, 13)
         }
 
-        it("should report method with default params") {
+        @Test
+        fun `should report method with default params`() {
             val code = """
                 package io.gitlab.arturbosch.detekt.rules.style
                 
@@ -280,7 +296,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSourceLocation(6, 13)
         }
 
-        it("should report overriding method calls") {
+        @Test
+        fun `should report overriding method calls`() {
             val code = """
                 package org.example.com
                 
@@ -303,7 +320,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(2)
         }
 
-        it("should report functions with lambda params") {
+        @Test
+        fun `should report functions with lambda params`() {
             val code = """
                 package org.example
 
@@ -319,7 +337,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("should report extension functions") {
+        @Test
+        fun `should report extension functions`() {
             val code = """
                 package org.example
 
@@ -335,7 +354,8 @@ class ForbiddenMethodCallSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        context("work with generics") {
+        @Nested
+        inner class `work with generics` {
             val code = """
                 package org.example
 
@@ -346,14 +366,16 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
 
-            it("raise the issue") {
+            @Test
+            fun `raise the issue`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("org.example.bar(T, U, kotlin.String)")))
                 ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
-            it("It doesn't raise any issue because the generics don't match") {
+            @Test
+            fun `It doesn't raise any issue because the generics don't match`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("org.example.bar(U, T, kotlin.String)")))
                 ).compileAndLintWithContext(env, code)
@@ -361,7 +383,8 @@ class ForbiddenMethodCallSpec : Spek({
             }
         }
 
-        context("work with generic extensions") {
+        @Nested
+        inner class `work with generic extensions` {
             val code = """
                 package org.example
 
@@ -372,14 +395,16 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
 
-            it("raise the issue") {
+            @Test
+            fun `raise the issue`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("org.example.bar(R, kotlin.String)")))
                 ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
-            it("It doesn't raise any issue because the type doesn't match") {
+            @Test
+            fun `It doesn't raise any issue because the type doesn't match`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("org.example.bar(kotlin.Int, kotlin.String)")))
                 ).compileAndLintWithContext(env, code)
@@ -387,7 +412,8 @@ class ForbiddenMethodCallSpec : Spek({
             }
         }
 
-        context("Should distinguish between runCatching - #4448") {
+        @Nested
+        inner class `Should distinguish between runCatching - #4448` {
             val code = """
                 package org.example
 
@@ -399,7 +425,8 @@ class ForbiddenMethodCallSpec : Spek({
                 }
             """
 
-            it("forbid the one without receiver") {
+            @Test
+            fun `forbid the one without receiver`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(() -> R)")))
                 ).compileAndLintWithContext(env, code)
@@ -408,7 +435,8 @@ class ForbiddenMethodCallSpec : Spek({
                     .hasSourceLocation(5, 16)
             }
 
-            it("forbid the one with receiver") {
+            @Test
+            fun `forbid the one with receiver`() {
                 val findings = ForbiddenMethodCall(
                     TestConfig(mapOf(METHODS to listOf("kotlin.runCatching(T, (T) -> R)")))
                 ).compileAndLintWithContext(env, code)
@@ -418,4 +446,4 @@ class ForbiddenMethodCallSpec : Spek({
             }
         }
     }
-})
+}

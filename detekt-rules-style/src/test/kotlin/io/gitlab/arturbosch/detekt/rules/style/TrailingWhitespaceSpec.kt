@@ -2,41 +2,51 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class TrailingWhitespaceSpec : Spek({
+class TrailingWhitespaceSpec {
 
-    val rule by memoized { TrailingWhitespace() }
+    @Nested
+    inner class `TrailingWhitespace rule` {
 
-    describe("TrailingWhitespace rule") {
+        @Nested
+        inner class `positive cases` {
 
-        context("positive cases") {
-
-            it("reports a line just with a whitespace") {
+            @Test
+            fun `reports a line just with a whitespace`() {
+                val rule = TrailingWhitespace()
                 rule.visit(" ".toKtFileContent())
                 assertThat(rule.findings).hasTextLocations(0 to 1)
             }
 
-            it("reports a commented line with a whitespace at the end") {
+            @Test
+            fun `reports a commented line with a whitespace at the end`() {
+                val rule = TrailingWhitespace()
                 rule.visit("// A comment ".toKtFileContent())
                 assertThat(rule.findings).hasTextLocations(12 to 13)
             }
 
-            it("reports a class declaration with a whitespace at the end") {
+            @Test
+            fun `reports a class declaration with a whitespace at the end`() {
+                val rule = TrailingWhitespace()
                 rule.visit("  class TrailingWhitespacePositive { \n  }".toKtFileContent())
                 assertThat(rule.findings).hasTextLocations(36 to 37)
             }
 
-            it("reports a print statement with a tab at the end") {
+            @Test
+            fun `reports a print statement with a tab at the end`() {
+                val rule = TrailingWhitespace()
                 rule.visit("\t\tprintln(\"A message\")\t".toKtFileContent())
                 assertThat(rule.findings).hasTextLocations(22 to 23)
             }
         }
 
-        context("negative cases") {
+        @Nested
+        inner class `negative cases` {
 
-            it("does not report a class and function declaration with no whitespaces at the end") {
+            @Test
+            fun `does not report a class and function declaration with no whitespaces at the end`() {
                 val code = """
                     class C {
 
@@ -46,11 +56,13 @@ class TrailingWhitespaceSpec : Spek({
                         }
                     }
                 """.trimIndent()
+                val rule = TrailingWhitespace()
                 rule.visit(code.toKtFileContent())
                 assertThat(rule.findings).isEmpty()
             }
 
-            it("does not report an indentation inside multi-line strings") {
+            @Test
+            fun `does not report an indentation inside multi-line strings`() {
                 val code = """
                     val multiLineStringWithIndents = ""${'"'}
                         Should ignore indent on the next line
@@ -58,12 +70,13 @@ class TrailingWhitespaceSpec : Spek({
                         Should ignore indent on the previous line
                     ""${'"'}
                 """.trim()
+                val rule = TrailingWhitespace()
                 rule.visit(code.toKtFileContent())
                 assertThat(rule.findings).isEmpty()
             }
         }
     }
-})
+}
 
 private fun String.toKtFileContent(): KtFileContent {
     val file = compileContentForTest(this)

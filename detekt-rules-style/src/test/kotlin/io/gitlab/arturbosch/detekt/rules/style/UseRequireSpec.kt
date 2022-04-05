@@ -1,24 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseRequireSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UseRequireSpec(val env: KotlinCoreEnvironment) {
+    val subject = UseRequire(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UseRequire(Config.empty) }
+    @Nested
+    inner class `UseRequire rule` {
 
-    describe("UseRequire rule") {
-
-        it("reports if a precondition throws an IllegalArgumentException") {
+        @Test
+        fun `reports if a precondition throws an IllegalArgumentException`() {
             val code = """
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException()
@@ -28,7 +28,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
-        it("reports if a precondition throws an IllegalArgumentException with more details") {
+        @Test
+        fun `reports if a precondition throws an IllegalArgumentException with more details`() {
             val code = """
                 fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException("More details")
@@ -38,7 +39,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
-        it("reports if a precondition throws a fully qualified IllegalArgumentException") {
+        @Test
+        fun `reports if a precondition throws a fully qualified IllegalArgumentException`() {
             val code = """
                 fun x(a: Int) {
                     if (a < 0) throw java.lang.IllegalArgumentException()
@@ -48,7 +50,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
-        it("reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias") {
+        @Test
+        fun `reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias`() {
             val code = """
                 fun x(a: Int) {
                     if (a < 0) throw kotlin.IllegalArgumentException()
@@ -58,7 +61,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
-        it("does not report if a precondition throws a different kind of exception") {
+        @Test
+        fun `does not report if a precondition throws a different kind of exception`() {
             val code = """
                 fun x(a: Int) {
                     if (a < 0) throw SomeBusinessException()
@@ -68,7 +72,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report an issue if the exception thrown has a message and a cause") {
+        @Test
+        fun `does not report an issue if the exception thrown has a message and a cause`() {
             val code = """
                 private fun x(a: Int): Nothing {
                     doSomething()
@@ -78,7 +83,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report an issue if the exception thrown as the only action in a block") {
+        @Test
+        fun `does not report an issue if the exception thrown as the only action in a block`() {
             val code = """
                 fun unsafeRunSync(): A =
                     foo.fold({ throw IllegalArgumentException("message") }, ::identity)
@@ -86,17 +92,20 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report an issue if the exception thrown unconditionally") {
+        @Test
+        fun `does not report an issue if the exception thrown unconditionally`() {
             val code = """fun doThrow() = throw IllegalArgumentException("message")"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report an issue if the exception thrown unconditionally in a function block") {
+        @Test
+        fun `does not report an issue if the exception thrown unconditionally in a function block`() {
             val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report if the exception thrown has a non-String argument") {
+        @Test
+        fun `does not report if the exception thrown has a non-String argument`() {
             val code = """
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
@@ -105,7 +114,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report if the exception thrown has a String literal argument and a non-String argument") {
+        @Test
+        fun `does not report if the exception thrown has a String literal argument and a non-String argument`() {
             val code = """
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
@@ -114,7 +124,8 @@ class UseRequireSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report if the exception thrown has a non-String literal argument") {
+        @Test
+        fun `does not report if the exception thrown has a non-String literal argument`() {
             val code = """
                 fun test(throwable: Throwable) {
                     val s = ""
@@ -124,9 +135,11 @@ class UseRequireSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        context("with binding context") {
+        @Nested
+        inner class `with binding context` {
 
-            it("does not report if the exception thrown has a non-String argument") {
+            @Test
+            fun `does not report if the exception thrown has a non-String argument`() {
                 val code = """
                     fun test(throwable: Throwable) {
                         if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
@@ -135,7 +148,8 @@ class UseRequireSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report if the exception thrown has a String literal argument and a non-String argument") {
+            @Test
+            fun `does not report if the exception thrown has a String literal argument and a non-String argument`() {
                 val code = """
                     fun test(throwable: Throwable) {
                         if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
@@ -144,7 +158,8 @@ class UseRequireSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("reports if the exception thrown has a non-String literal argument") {
+            @Test
+            fun `reports if the exception thrown has a non-String literal argument`() {
                 val code = """
                     fun test(throwable: Throwable) {
                         val s = ""
@@ -153,7 +168,9 @@ class UseRequireSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
-            it("reports if the exception thrown has a String literal argument") {
+
+            @Test
+            fun `reports if the exception thrown has a String literal argument`() {
                 val code = """
                     fun test(throwable: Throwable) {
                         if (throwable !is NumberFormatException) throw IllegalArgumentException("a")
@@ -163,9 +180,11 @@ class UseRequireSpec : Spek({
             }
         }
 
-        context("throw is not after a precondition") {
+        @Nested
+        inner class `throw is not after a precondition` {
 
-            it("does not report an issue if the exception is inside a when") {
+            @Test
+            fun `does not report an issue if the exception is inside a when`() {
                 val code = """
                     fun whenOrThrow(item : List<*>) = when(item) {
                         is ArrayList<*> -> 1
@@ -176,7 +195,8 @@ class UseRequireSpec : Spek({
                 assertThat(subject.lint(code)).isEmpty()
             }
 
-            it("does not report an issue if the exception is after a block") {
+            @Test
+            fun `does not report an issue if the exception is after a block`() {
                 val code = """
                     fun doSomethingOrThrow(test: Int): Int {
                         var index = 0
@@ -191,7 +211,8 @@ class UseRequireSpec : Spek({
                 assertThat(subject.lint(code)).isEmpty()
             }
 
-            it("does not report an issue if the exception is after a elvis operator") {
+            @Test
+            fun `does not report an issue if the exception is after a elvis operator`() {
                 val code = """
                     fun tryToCastOrThrow(list: List<*>) : LinkedList<*> {
                         val subclass = list as? LinkedList
@@ -203,4 +224,4 @@ class UseRequireSpec : Spek({
             }
         }
     }
-})
+}
