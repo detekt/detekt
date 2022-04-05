@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -474,7 +475,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         private fun KtProperty.isCandidate(): Boolean {
-            if (isOpen()) return false
+            if (isOpen() || isAbstract()) return false
             val isSetToNonNullable = initializer?.isNullableType() != true &&
                 getter?.isNullableType() != true &&
                 delegate?.returnsNullable() != true
