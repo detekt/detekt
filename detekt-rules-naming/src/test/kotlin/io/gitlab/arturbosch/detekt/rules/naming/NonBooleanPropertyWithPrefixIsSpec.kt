@@ -253,5 +253,33 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 assertThat(findings).hasSize(1)
             }
         }
+
+        @Nested
+        inner class `issue regression test` {
+            @Test
+            fun `issue 4674 should handle unknown type as correct`() {
+                val code = """
+                class Test {
+                    val isDebuggable get() = BuildConfig.DEBUG
+                }
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `issue 4675 check function reference type parameter`() {
+                val code = """
+                    val isRemoved = suspend { null == null }
+
+                    fun trueFun() = true
+                    val isReferenceBoolean = ::trueFun
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
+            }
+        }
     }
 }

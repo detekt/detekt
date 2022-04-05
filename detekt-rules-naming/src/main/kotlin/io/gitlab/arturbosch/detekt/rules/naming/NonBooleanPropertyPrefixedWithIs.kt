@@ -10,11 +10,14 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isBoolean
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
@@ -63,9 +66,14 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
         val name = declaration.identifierName()
 
         if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {
-            val typeName = getTypeName(declaration)
+            val type = getType(declaration)
+            val typeName = type?.getTypeName()
 
-            if (typeName != null && typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName) {
+            if (!typeName.isNullOrEmpty()
+                && typeName != kotlinBooleanTypeName
+                && typeName != javaBooleanTypeName
+                && !type.isBooleanFunctionReference()
+            ) {
                 report(
                     reportCodeSmell(declaration, name, typeName)
                 )
@@ -85,10 +93,17 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
         )
     }
 
-    private fun getTypeName(parameter: KtCallableDeclaration): String? {
-        return parameter.createTypeBindingForReturnType(bindingContext)
+    private fun getType(parameter: KtCallableDeclaration): KotlinType? =
+        parameter.createTypeBindingForReturnType(bindingContext)
             ?.type
-            ?.fqNameOrNull()
+
+    private fun KotlinType.getTypeName(): String? =
+        fqNameOrNull()
             ?.asString()
+
+    private fun KotlinType.isBooleanFunctionReference(): Boolean {
+        if (!isFunctionOrKFunctionTypeWithAnySuspendability) return false
+
+        return arguments.count() == 1 && arguments[0].type.isBoolean()
     }
 }
