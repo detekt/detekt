@@ -68,11 +68,11 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
         if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {
             val type = getType(declaration)
             val typeName = type?.getTypeName()
+            val isNotBooleanType = typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName
 
-            if (!typeName.isNullOrEmpty()
-                && typeName != kotlinBooleanTypeName
-                && typeName != javaBooleanTypeName
-                && !type.isBooleanFunctionReference()
+            if (!typeName.isNullOrEmpty() &&
+                isNotBooleanType &&
+                !type.isBooleanFunctionReference()
             ) {
                 report(
                     reportCodeSmell(declaration, name, typeName)
