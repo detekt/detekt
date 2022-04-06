@@ -290,6 +290,21 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `should not report when a property overrides a var`() {
+            val code = """
+                    interface I {
+                        var optionEnabled: Boolean
+                    }
+                    class Test {
+                        val test = object : I {
+                            override var optionEnabled: Boolean = false
+                        }
+                    }
+                """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `should not report assigned properties that have accessors that are accessed`() {
             val code = """
                 interface I {
