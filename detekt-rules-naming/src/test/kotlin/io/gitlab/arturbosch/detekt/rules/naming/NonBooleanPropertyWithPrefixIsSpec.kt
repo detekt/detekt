@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -251,6 +252,36 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 val findings = subject.compileAndLintWithContext(env, code)
 
                 assertThat(findings).hasSize(1)
+            }
+        }
+
+        @Nested
+        inner class `issue regression test` {
+            @Test
+            fun `issue 4674 should handle unknown type as correct`() {
+                val code = """
+                class Test {
+                    val isDebuggable get() = BuildConfig.DEBUG
+                }
+                """
+
+                // BuildConfig is missing in this test so we can't compile it
+                val findings = subject.lintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `issue 4675 check function reference type parameter`() {
+                val code = """
+                    val isRemoved = suspend { null == null }
+
+                    fun trueFun() = true
+                    val isReferenceBoolean = ::trueFun
+                """
+                val findings = subject.compileAndLintWithContext(env, code)
+
+                assertThat(findings).isEmpty()
             }
         }
     }
