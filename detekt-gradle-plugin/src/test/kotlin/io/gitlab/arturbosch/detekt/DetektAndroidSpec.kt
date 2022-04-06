@@ -271,7 +271,7 @@ class DetektAndroidSpec {
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_FLAVOR
                         detekt {
-                            ignoredBuildTypes = ["release"]
+                            ignoredBuildTypes = listOf("release")
                         }
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
@@ -326,7 +326,7 @@ class DetektAndroidSpec {
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_FLAVOR
                         detekt {
-                            ignoredVariants = ["youngHarryDebug", "oldHarryRelease"]
+                            ignoredVariants = listOf("youngHarryDebug", "oldHarryRelease")
                         }
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
@@ -381,7 +381,7 @@ class DetektAndroidSpec {
                         $LIB_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_FLAVOR
                         detekt {
-                            ignoredFlavors = ["youngHarry"]
+                            ignoredFlavors = listOf("youngHarry")
                         }
                     """.trimIndent(),
                     srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
@@ -440,38 +440,38 @@ internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.
 
 private val APP_PLUGIN_BLOCK = """
     plugins {
-        id "com.android.application"
-        id "kotlin-android"
-        id "io.gitlab.arturbosch.detekt"
+        id("com.android.application")
+        id("kotlin-android")
+        id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
 
 private val LIB_PLUGIN_BLOCK = """
     plugins {
-        id "com.android.library"
-        id "kotlin-android"
-        id "io.gitlab.arturbosch.detekt"
+        id("com.android.library")
+        id("kotlin-android")
+        id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
 
 private val ANDROID_BLOCK = """
     android {
-       compileSdkVersion 30
+       compileSdkVersion(30)
     }
 """.trimIndent()
 
 private val ANDROID_BLOCK_WITH_FLAVOR = """
     android {
-        compileSdkVersion 30
+        compileSdkVersion(30)
         flavorDimensions("age", "name")
         productFlavors {
-           harry {
+           create("harry") {
              dimension = "name"
            }
-           young {
+           create("young") {
              dimension = "age"
            }
-           old {
+           create("old") {
              dimension = "age"
            }
         }
@@ -479,7 +479,7 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 """.trimIndent()
 
 private val DETEKT_REPORTS_BLOCK = """
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         reports {
             txt.enabled = false
         }
@@ -488,7 +488,7 @@ private val DETEKT_REPORTS_BLOCK = """
 
 private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout) = DslGradleRunner(
     projectLayout = projectLayout,
-    buildFileName = "build.gradle",
+    buildFileName = "build.gradle.kts",
     mainBuildFileContent = """
         subprojects {
             repositories {

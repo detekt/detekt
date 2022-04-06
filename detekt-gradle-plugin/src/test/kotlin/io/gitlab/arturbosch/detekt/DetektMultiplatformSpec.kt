@@ -148,12 +148,12 @@ class DetektMultiplatformSpec {
                     1,
                     buildFileContent = """
                         plugins {
-                            id "kotlin-multiplatform"
-                            id "com.android.library"
-                            id "io.gitlab.arturbosch.detekt"
+                            id("kotlin-multiplatform")
+                            id("com.android.library")
+                            id("io.gitlab.arturbosch.detekt")
                         }
                         android {
-                            compileSdkVersion 30
+                            compileSdkVersion(30)
                             sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
                             buildTypes {
                                 release {
@@ -318,7 +318,7 @@ class DetektMultiplatformSpec {
 private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     return DslGradleRunner(
         projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply { projectLayoutAction() },
-        buildFileName = "build.gradle",
+        buildFileName = "build.gradle.kts",
         mainBuildFileContent = """
             subprojects {
                 repositories {
@@ -362,13 +362,13 @@ private fun assertDetektWithClasspath(buildResult: BuildResult) {
 
 private val KMM_PLUGIN_BLOCK = """
     plugins {
-        id "kotlin-multiplatform"
-        id "io.gitlab.arturbosch.detekt"
+        id("kotlin-multiplatform")
+        id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
 
 private val DETEKT_BLOCK = """
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         reports.txt.enabled = false
     }
 """.trimIndent()
