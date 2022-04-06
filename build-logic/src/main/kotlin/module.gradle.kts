@@ -92,7 +92,7 @@ tasks.withType<KotlinCompile>().configureEach {
         freeCompilerArgs = listOf(
             "-progressive",
             "-Xsuppress-version-warnings",
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-opt-in=kotlin.RequiresOptIn"
         )
         // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
         // Note: currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
