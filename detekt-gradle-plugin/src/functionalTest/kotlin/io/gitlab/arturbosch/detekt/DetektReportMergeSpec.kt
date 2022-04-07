@@ -101,7 +101,20 @@ class DetektReportMergeSpec {
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
             gradleRunner.setupProject()
-            gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { _ ->
+            gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
+                assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
+                assertThat(result.output).containsIgnoringWhitespaces(
+                    """
+                    Execution failed for task ':child1:detekt'.
+                    > Analysis failed with 2 weighted issues.
+                    """
+                )
+                assertThat(result.output).containsIgnoringWhitespaces(
+                    """
+                    Execution failed for task ':child2:detekt'.
+                    > Analysis failed with 4 weighted issues.
+                    """
+                )
                 assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
                 assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
                 assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
@@ -202,7 +215,20 @@ class DetektReportMergeSpec {
 
             val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
             gradleRunner.setupProject()
-            gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { _ ->
+            gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
+                assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
+                assertThat(result.output).containsIgnoringWhitespaces(
+                    """
+                    Execution failed for task ':child1:detekt'.
+                    > Analysis failed with 2 weighted issues.
+                    """
+                )
+                assertThat(result.output).containsIgnoringWhitespaces(
+                    """
+                    Execution failed for task ':child2:detekt'.
+                    > Analysis failed with 4 weighted issues.
+                    """
+                )
                 assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
                 assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
                 assertThat(projectFile("build/reports/detekt/merge.xml").readText())

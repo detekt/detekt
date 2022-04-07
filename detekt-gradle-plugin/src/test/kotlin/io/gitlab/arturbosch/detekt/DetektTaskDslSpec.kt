@@ -383,7 +383,7 @@ class DetektTaskDslSpec {
                 @BeforeAll
                 fun beforeGroup() {
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           destination = file("build/reports/custom.xml")
@@ -397,7 +397,10 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("If a custom report is specified, the reportId must be present")
+                    }
                 }
             }
 
@@ -406,7 +409,7 @@ class DetektTaskDslSpec {
                 @BeforeAll
                 fun beforeGroup() {
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "customJson"
@@ -420,7 +423,10 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("If a custom report is specified, the destination must be present")
+                    }
                 }
             }
 
@@ -431,7 +437,7 @@ class DetektTaskDslSpec {
                     val aDirectory = "\${rootDir}/src"
 
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "foo"
@@ -446,7 +452,9 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output).contains("Cannot write a file to a location pointing at a directory.")
+                    }
                 }
             }
 
@@ -456,7 +464,7 @@ class DetektTaskDslSpec {
                 @EnumSource(DetektReportType::class)
                 fun `fails the build`(wellKnownType: DetektReportType) {
                     val config = """
-                                        |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                        |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                         |    reports {
                                         |        custom {
                                         |            reportId = "${wellKnownType.reportId}"
@@ -467,7 +475,10 @@ class DetektTaskDslSpec {
                     """
 
                     gradleRunner = builder.withDetektConfig(config).build()
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("The custom report reportId may not be same as one of the default reports")
+                    }
                 }
             }
         }
