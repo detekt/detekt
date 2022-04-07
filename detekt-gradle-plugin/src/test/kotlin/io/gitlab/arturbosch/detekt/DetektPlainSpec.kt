@@ -15,7 +15,7 @@ class DetektPlainSpec {
             mainBuildFileContent = """
                 plugins {
                     id("io.gitlab.arturbosch.detekt")
-                    id("org.jetbrains.kotlin.jvm")
+                    kotlin("jvm")
                 }
 
                 repositories {
@@ -45,7 +45,7 @@ class DetektPlainSpec {
             baselineFiles = listOf("detekt-baseline.xml"),
             mainBuildFileContent = """
                 plugins {
-                    id("org.jetbrains.kotlin.jvm")
+                    kotlin("jvm")
                     id("io.gitlab.arturbosch.detekt")
                 }
 

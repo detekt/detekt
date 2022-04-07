@@ -441,7 +441,7 @@ internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.
 private val APP_PLUGIN_BLOCK = """
     plugins {
         id("com.android.application")
-        id("kotlin-android")
+        kotlin("android")
         id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
@@ -449,7 +449,7 @@ private val APP_PLUGIN_BLOCK = """
 private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
-        id("kotlin-android")
+        kotlin("android")
         id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()

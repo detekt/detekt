@@ -104,7 +104,7 @@ class ReportMergeSpec {
                     buildFileContent = """
                         plugins {
                             id("com.android.application")
-                            id("kotlin-android")
+                            kotlin("android")
                             id("io.gitlab.arturbosch.detekt")
                         }
                         android {
@@ -122,7 +122,7 @@ class ReportMergeSpec {
                     buildFileContent = """
                         plugins {
                             id("com.android.library")
-                            id("kotlin-android")
+                            kotlin("android")
                         }
                         android {
                            compileSdkVersion(30)

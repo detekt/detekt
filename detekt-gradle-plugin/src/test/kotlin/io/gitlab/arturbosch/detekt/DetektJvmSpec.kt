@@ -71,7 +71,7 @@ class DetektJvmSpec {
                 buildFileName = "build.gradle.kts",
                 mainBuildFileContent = """
                     plugins {
-                        id("org.jetbrains.kotlin.jvm")
+                        kotlin("jvm")
                         id("io.gitlab.arturbosch.detekt")
                     }
 
@@ -112,7 +112,7 @@ class DetektJvmSpec {
                 buildFileName = "build.gradle.kts",
                 mainBuildFileContent = """
                     plugins {
-                        id("org.jetbrains.kotlin.jvm")
+                        kotlin("jvm")
                         id("io.gitlab.arturbosch.detekt")
                     }
 
