@@ -397,7 +397,10 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("If a custom report is specified, the reportId must be present")
+                    }
                 }
             }
 
@@ -420,7 +423,10 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("If a custom report is specified, the destination must be present")
+                    }
                 }
             }
 
@@ -446,7 +452,9 @@ class DetektTaskDslSpec {
 
                 @Test
                 fun `fails the build`() {
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output).contains("Cannot write a file to a location pointing at a directory.")
+                    }
                 }
             }
 
@@ -467,7 +475,10 @@ class DetektTaskDslSpec {
                     """
 
                     gradleRunner = builder.withDetektConfig(config).build()
-                    gradleRunner.runDetektTaskAndExpectFailure()
+                    gradleRunner.runDetektTaskAndExpectFailure { result ->
+                        assertThat(result.output)
+                            .contains("The custom report reportId may not be same as one of the default reports")
+                    }
                 }
             }
         }
