@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.pluginPublishing)
 }
 
+detekt {
+    source.from("src/functionalTest/kotlin")
+}
+
 repositories {
     mavenCentral()
     google()
