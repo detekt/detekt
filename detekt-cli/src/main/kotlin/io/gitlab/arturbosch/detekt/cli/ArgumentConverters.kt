@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.ParameterException
+import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URL
 import java.nio.file.Path
@@ -47,6 +48,15 @@ class LanguageVersionConverter : IStringConverter<LanguageVersion> {
         val validValues by lazy { LanguageVersion.entries.joinToString { it.versionString } }
         return requireNotNull(LanguageVersion.fromFullVersionString(value)) {
             "\"$value\" passed to --language-version, expected one of [$validValues]"
+        }
+    }
+}
+
+class JvmTargetConverter : IStringConverter<JvmTarget> {
+    override fun convert(value: String): JvmTarget {
+        val validValues by lazy { JvmTarget.entries.joinToString { it.description } }
+        return checkNotNull(JvmTarget.fromString(value)) {
+            "Invalid value passed to --jvm-target, expected one of [$validValues]"
         }
     }
 }
