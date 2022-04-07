@@ -65,9 +65,9 @@ Usage: detekt [options]
       specified the current working directory is used.
     --jvm-target
       EXPERIMENTAL: Target version of the generated JVM bytecode that was 
-      generated during compilation and is now being used for type resolution 
-      (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16 or 17)
+      generated during compilation and is now being used for type resolution
       Default: 1.8
+      Possible Values: [1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     --language-version
       EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, 
       reports errors for all language features that came out later
