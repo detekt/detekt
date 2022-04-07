@@ -383,7 +383,7 @@ class DetektTaskDslSpec {
                 @BeforeAll
                 fun beforeGroup() {
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           destination = file("build/reports/custom.xml")
@@ -409,7 +409,7 @@ class DetektTaskDslSpec {
                 @BeforeAll
                 fun beforeGroup() {
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "customJson"
@@ -437,7 +437,7 @@ class DetektTaskDslSpec {
                     val aDirectory = "\${rootDir}/src"
 
                     val config = """
-                                |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                 |    reports {
                                 |        custom {
                                 |           reportId = "foo"
@@ -464,7 +464,7 @@ class DetektTaskDslSpec {
                 @EnumSource(DetektReportType::class)
                 fun `fails the build`(wellKnownType: DetektReportType) {
                     val config = """
-                                        |tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                                        |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                                         |    reports {
                                         |        custom {
                                         |            reportId = "${wellKnownType.reportId}"
