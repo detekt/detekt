@@ -322,7 +322,7 @@ Build scans are public so everyone can get insights on our build status.
 If you're a **maintaner** of a project under github.com/detekt/, you can request an access token
 to connect your local machine to the Gradle Enterprise instance, so you will also be publishign scans.
 
-To do you mush:
+You must follow the steps below:
 
 1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainer.
 2. An account on https://ge.detekt.dev/ will be created for you, which you need to configure upon login (e.g. reset your password).
