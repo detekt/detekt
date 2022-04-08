@@ -129,7 +129,7 @@ class MyRuleSpec(private val env: KotlinCoreEnvironment) {
 If you're using Spek for testing, you can use the `setupKotlinEnvironment()` util function, and get access to the `KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:  
 
 ```kotlin
-class MyRuleSpec : Spek({
+class MyRuleTest : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()

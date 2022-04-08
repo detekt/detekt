@@ -164,7 +164,7 @@ with the full qualify name of our processor as the content: `io.gitlab.arturbosc
 To test the code we use the `detekt-test` module and write a JUnit 5 testcase.
 
 ```kotlin
-class NumberOfLoopsProcessorSpec {
+class NumberOfLoopsProcessorTest {
 
     @Test
     fun `should expect two loops`() {
