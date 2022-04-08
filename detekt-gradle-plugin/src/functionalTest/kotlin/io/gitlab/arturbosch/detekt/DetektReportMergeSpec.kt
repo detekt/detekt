@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 
 class DetektReportMergeSpec {
     @Test
+    @Suppress("LongMethod")
     fun `Sarif merge is configured correctly for multi module project`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent =
@@ -81,6 +82,7 @@ class DetektReportMergeSpec {
     }
 
     @Test
+    @Suppress("LongMethod")
     fun `XML merge is configured correctly for multi module project`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent = """
