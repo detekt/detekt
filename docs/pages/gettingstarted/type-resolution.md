@@ -126,9 +126,22 @@ class MyRuleSpec(private val env: KotlinCoreEnvironment) {
 }
 ```
 
-If you're using Spek for testing, you can use the `setupKotlinEnvironment()` util function, and get access to the `KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:  
+If you're using Spek for testing, you can create a `setupKotlinEnvironment()` util function, and get access to the
+`KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:
 
 ```kotlin
+fun org.spekframework.spek2.dsl.Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
+    val wrapper by memoized(
+        CachingMode.SCOPE,
+        { createEnvironment(additionalJavaSourceRootPaths = listOfNotNull(additionalJavaSourceRootPath?.toFile())) },
+        { it.dispose() }
+    )
+
+    // `env` name is used for delegation
+    @Suppress("UNUSED_VARIABLE")
+    val env: KotlinCoreEnvironment by memoized(CachingMode.EACH_GROUP) { wrapper.env }
+}
+
 class MyRuleTest : Spek({
     setupKotlinEnvironment()
 
