@@ -19,7 +19,7 @@ class DetektJvmSpec {
 
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
+                buildFileName = "build.gradle.kts",
                 baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml", "detekt-baseline-test.xml"),
                 projectScript = {
                     apply<KotlinPluginWrapper>()
@@ -68,11 +68,11 @@ class DetektJvmSpec {
         inner class `report location set on extension & task` {
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
+                buildFileName = "build.gradle.kts",
                 mainBuildFileContent = """
                     plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
+                        kotlin("jvm")
+                        id("io.gitlab.arturbosch.detekt")
                     }
 
                     repositories {
@@ -86,7 +86,7 @@ class DetektJvmSpec {
                         }
                     }
 
-                    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         reports {
                             txt.destination = file("output-path2.txt")
                         }
@@ -109,11 +109,11 @@ class DetektJvmSpec {
         inner class `report location set on task only` {
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
+                buildFileName = "build.gradle.kts",
                 mainBuildFileContent = """
                     plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
+                        kotlin("jvm")
+                        id("io.gitlab.arturbosch.detekt")
                     }
 
                     repositories {
@@ -121,7 +121,7 @@ class DetektJvmSpec {
                         mavenLocal()
                     }
 
-                    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         reports {
                             txt.destination = file("output-path2.txt")
                         }

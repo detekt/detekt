@@ -5,25 +5,27 @@ import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Test
 
 class DetektTaskMultiModuleSpec {
 
     @Nested
     inner class `The Detekt Gradle plugin used in a multi module project` {
 
-        @ParameterizedTest(
-            name = "Using {0}, it is applied with defaults to all subprojects individually without " +
+        @Test
+        @DisplayName(
+            "it is applied with defaults to all subprojects individually without " +
                 "sources in root project using the subprojects block"
         )
-        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-        fun applyToSubprojectsWithoutSources(builder: DslTestBuilder) {
+        fun applyToSubprojectsWithoutSources() {
             val projectLayout = ProjectLayout(0).apply {
                 addSubmodule("child1", 2)
                 addSubmodule("child2", 4)
             }
+
+            val builder = DslTestBuilder.kotlin()
 
             val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
@@ -57,16 +59,18 @@ class DetektTaskMultiModuleSpec {
             }
         }
 
-        @ParameterizedTest(
-            name = "Using {0}, it is applied with defaults to main project and subprojects " +
+        @Test
+        @DisplayName(
+            "it is applied with defaults to main project and subprojects " +
                 "individually using the allprojects block"
         )
-        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-        fun applyWithAllprojectsBlock(builder: DslTestBuilder) {
+        fun applyWithAllprojectsBlock() {
             val projectLayout = ProjectLayout(1).apply {
                 addSubmodule("child1", 2)
                 addSubmodule("child2", 4)
             }
+
+            val builder = DslTestBuilder.kotlin()
 
             val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
@@ -98,13 +102,14 @@ class DetektTaskMultiModuleSpec {
             }
         }
 
-        @ParameterizedTest(name = "Using {0}, it uses custom configs when configured in allprojects block")
-        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-        fun usesCustomConfigsWhenConfiguredInAllprojectsBlock(builder: DslTestBuilder) {
+        @Test
+        fun `it uses custom configs when configured in allprojects block`() {
             val projectLayout = ProjectLayout(1).apply {
                 addSubmodule("child1", 2)
                 addSubmodule("child2", 4)
             }
+
+            val builder = DslTestBuilder.kotlin()
 
             val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
@@ -139,12 +144,9 @@ class DetektTaskMultiModuleSpec {
             }
         }
 
-        @ParameterizedTest(
-            name = "Using {0}, it allows changing defaults in allprojects block that can be " +
-                "overwritten in subprojects"
-        )
-        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-        fun allowsChangingDefaultsInAllProjectsThatAreOverwrittenInSubprojects(builder: DslTestBuilder) {
+        @Test
+        @DisplayName("it allows changing defaults in allprojects block that can be overwritten in subprojects")
+        fun allowsChangingDefaultsInAllProjectsThatAreOverwrittenInSubprojects() {
             val child2DetektConfig = """
                         |detekt {
                         |   reportsDir = file("build/custom")
@@ -156,6 +158,8 @@ class DetektTaskMultiModuleSpec {
                 addSubmodule("child1", 2)
                 addSubmodule("child2", 4, buildFileContent = child2DetektConfig)
             }
+
+            val builder = DslTestBuilder.kotlin()
 
             val mainBuildFileContent: String = """
                         |${builder.gradlePlugins}
@@ -192,9 +196,8 @@ class DetektTaskMultiModuleSpec {
             }
         }
 
-        @ParameterizedTest(name = "Using {0}, it can be applied to all files in entire project resulting in 1 report")
-        @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-        fun applyToAllFilesInProjectResultingInSingleReport(builder: DslTestBuilder) {
+        @Test
+        fun `it can be applied to all files in entire project resulting in 1 report`() {
             val projectLayout = ProjectLayout(1).apply {
                 addSubmodule("child1", 2)
                 addSubmodule("child2", 4)
@@ -209,7 +212,7 @@ class DetektTaskMultiModuleSpec {
                         |    )
                         |}
             """.trimMargin()
-            val gradleRunner = builder
+            val gradleRunner = DslTestBuilder.kotlin()
                 .withProjectLayout(projectLayout)
                 .withDetektConfig(detektConfig)
                 .build()

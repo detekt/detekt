@@ -4,8 +4,7 @@ import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Test
 
 class DetektTaskSpec {
 
@@ -14,16 +13,15 @@ class DetektTaskSpec {
         numberOfCodeSmellsInRootPerSourceDir = 15
     )
 
-    @ParameterizedTest(name = "Using {0}, build succeeds with more issues than threshold if ignoreFailures = true")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun ignoreFailures(builder: DslTestBuilder) {
+    @Test
+    fun `build succeeds with more issues than threshold if ignoreFailures = true`() {
         val config = """
             |detekt {
             |   ignoreFailures = true
             |}
         """
 
-        val gradleRunner = builder
+        val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayoutWithTooManyIssues)
             .withDetektConfig(config)
             .build()
@@ -33,16 +31,15 @@ class DetektTaskSpec {
         }
     }
 
-    @ParameterizedTest(name = "Using {0}, build fails with more issues than threshold successfully if ignoreFailures = false")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun doNotIgnoreFailures(builder: DslTestBuilder) {
+    @Test
+    fun `build fails with more issues than threshold successfully if ignoreFailures = false`() {
         val config = """
             |detekt {
             |   ignoreFailures = false
             |}
         """
 
-        val gradleRunner = builder
+        val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayoutWithTooManyIssues)
             .withDetektConfig(config)
             .build()

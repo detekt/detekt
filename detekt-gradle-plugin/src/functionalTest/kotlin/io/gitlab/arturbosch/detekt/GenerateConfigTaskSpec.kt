@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Test
 
 class GenerateConfigTaskSpec {
 
-    @ParameterizedTest(name = "Using {0}, can be executed without any configuration")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun emptyConfig(builder: DslTestBuilder) {
+    @Test
+    fun `can be executed without any configuration`() {
+        val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withConfigFile("config/detekt/detekt.yml").build()
 
         gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
@@ -19,9 +18,9 @@ class GenerateConfigTaskSpec {
         }
     }
 
-    @ParameterizedTest(name = "Using {0}, chooses the last config file when configured")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun `chooses the last config file when configured`(builder: DslTestBuilder) {
+    @Test
+    fun `chooses the last config file when configured`() {
+        val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
             """
                     |detekt {

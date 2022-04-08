@@ -4,13 +4,11 @@ import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Test
 
 class CreateBaselineTaskDslSpec {
-    @ParameterizedTest(name = "Using {0}, detektBaseline task can be executed when baseline file is specified")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun baselineTaskExecutableWhenBaselineFileSpecified(builder: DslTestBuilder) {
+    @Test
+    fun `detektBaseline task can be executed when baseline file is specified`() {
         val baselineFilename = "baseline.xml"
 
         val detektConfig = """
@@ -18,7 +16,7 @@ class CreateBaselineTaskDslSpec {
             |   baseline = file("$baselineFilename")
             |}
         """
-        val gradleRunner = builder
+        val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(
                     numberOfSourceFilesInRootPerSourceDir = 1,
@@ -35,14 +33,13 @@ class CreateBaselineTaskDslSpec {
         }
     }
 
-    @ParameterizedTest(name = "Using {0}, detektBaseline task can be executed when baseline file is not specified")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun baselineTaskExecutableWhenBaselineFileNotSpecified(builder: DslTestBuilder) {
+    @Test
+    fun `detektBaseline task can be executed when baseline file is not specified`() {
         val detektConfig = """
             |detekt {
             |}
         """
-        val gradleRunner = builder
+        val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(
                     numberOfSourceFilesInRootPerSourceDir = 1,
@@ -58,15 +55,14 @@ class CreateBaselineTaskDslSpec {
         }
     }
 
-    @ParameterizedTest(name = "Using {0}, detektBaseline task can not be executed when baseline file is specified null")
-    @MethodSource("io.gitlab.arturbosch.detekt.testkit.DslTestBuilder#builders")
-    fun baselineTaskNotExecutableWhenBaselineFileIsNull(builder: DslTestBuilder) {
+    @Test
+    fun `detektBaseline task can not be executed when baseline file is specified null`() {
         val detektConfig = """
             |detekt {
             |   baseline = null
             |}
         """
-        val gradleRunner = builder
+        val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(
                     numberOfSourceFilesInRootPerSourceDir = 1,
