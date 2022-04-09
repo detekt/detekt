@@ -319,14 +319,14 @@ build scans for all the builds executed on CI (not from forks).
 This is extremely helpful to debug build failures and have access to remote build cache.
 Build scans are public so everyone can get insights on our build status.
 
-If you're a **maintaner** of a project under github.com/detekt/, you can request an access token
-to connect your local machine to the Gradle Enterprise instance, so you will also be publishign scans.
+If you're a **maintainer** of a project under github.com/detekt/, you can request an access token
+to connect your local machine to the Gradle Enterprise instance, so you will also be publishing scans.
 
 You must follow the steps below:
 
-1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainer.
+1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainers.
 2. An account on https://ge.detekt.dev/ will be created for you, which you need to configure upon login (e.g. reset your password).
-3. Run the `./gradlew provisionGradleEnterpriseAccessKey` tasks from the Detekt root folder
+3. Run the `./gradlew provisionGradleEnterpriseAccessKey` task from the detekt root folder
 4. Complete the access key provisioning process (you will have to go through a browser).
 5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
 6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
