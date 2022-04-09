@@ -141,6 +141,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(3, 5)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via factory function, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
@@ -162,6 +163,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(4, 5)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via calculation lambda, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
@@ -450,6 +452,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(2, 1)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via factory function, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
@@ -469,6 +472,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(3, 1)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via calculation lambda, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
@@ -749,6 +753,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(3, 5)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via factory function, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
@@ -770,6 +775,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                     assertThat(result).hasSourceLocation(4, 5)
                 }
 
+                @Test
                 fun `detects var declaration with MutableState via calculation lambda, when configured`() {
                     val rule = DoubleMutabilityForCollection(
                         TestConfig(
