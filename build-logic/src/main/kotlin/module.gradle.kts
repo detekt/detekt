@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -52,39 +51,6 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-// Share sources folder with other projects for aggregated JaCoCo reports
-configurations.create("transitiveSourcesElements") {
-    isVisible = false
-    isCanBeResolved = false
-    isCanBeConsumed = true
-    attributes {
-        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
-        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("source-folders"))
-    }
-    sourceSets.main.get().withConvention(KotlinSourceSet::class) { kotlin }.srcDirs.forEach {
-        outgoing.artifact(it)
-    }
-}
-
-// Share the coverage data to be aggregated for the whole product
-configurations.create("coverageDataElements") {
-    isVisible = false
-    isCanBeResolved = false
-    isCanBeConsumed = true
-    attributes {
-        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
-        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("jacoco-coverage-data"))
-    }
-    // This will cause the test task to run if the coverage data is requested by the aggregation task
-    outgoing.artifact(
-        tasks.test.map { task ->
-            task.extensions.getByType<JacocoTaskExtension>().destinationFile!!
-        }
-    )
-}
-
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
@@ -106,7 +72,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
+        getByName("test", JvmTestSuite::class) {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
         }
     }
