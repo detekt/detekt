@@ -43,6 +43,8 @@ complexity:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   MethodOverloading:
     active: true
+  TooManyFunctions:
+    excludes: ['**/test/**', '**/functionalTest/**']
 
 coroutines:
   active: true
@@ -128,6 +130,10 @@ naming:
     active: true
   VariableMinLength:
     active: true
+
+performance:
+  SpreadOperator:
+    excludes: ['**/test/**', '**/functionalTest/**']
 
 potential-bugs:
   AvoidReferentialEquality:
