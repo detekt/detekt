@@ -90,7 +90,6 @@ gradlePlugin {
     testSourceSets(
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
-        sourceSets["test"]
     )
 }
 
