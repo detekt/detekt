@@ -50,6 +50,7 @@ class DetektJvmSpec {
                 assertThat(argumentString).contains("--classpath")
             }
 
+            @Test
             fun `configures detekt type resolution task test`() {
                 val project = gradleRunner.buildProject()
 
@@ -132,6 +133,7 @@ class DetektJvmSpec {
                 it.setupProject()
             }
 
+            @Test
             fun `logs a warning`() {
                 gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
                     assertThat(buildResult.output).doesNotContain("report location set on detekt {} extension will be ignored")
