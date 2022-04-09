@@ -115,7 +115,7 @@ If you're using JUnit 5 for testing, you can use the `@KotlinCoreEnvironmentTest
 accept a parameter of type `KotlinCoreEnvironment` in the class constructor. You can then access the environment by
 referencing the parameter specified in the constructor:
 
-```kolin
+```kotlin
 @KotlinCoreEnvironmentTest
 class MyRuleSpec(private val env: KotlinCoreEnvironment) {
     @Test
