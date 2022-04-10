@@ -90,8 +90,13 @@ gradlePlugin {
     testSourceSets(
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
-        sourceSets["test"]
     )
+}
+
+// Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
+// updates are made to the functional test suite.
+kotlin.target.compilations.getByName("functionalTest") {
+    associateWith(target.compilations.getByName("main"))
 }
 
 // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
