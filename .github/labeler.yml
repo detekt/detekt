@@ -1,0 +1,45 @@
+api:
+  - "**/*.api"
+  - "detekt-api/src/**/*"
+
+build:
+  - "**/*.gradle"
+  - "**/*.gradle.kts"
+  - "build-logic/**/*"
+
+ci:
+  - ".github/workflows/*"
+
+cli:
+  - "detekt-cli/src/**/*"
+
+core:
+  - "detekt-core/src/**/*"
+
+dependencies:
+  - "gradle/libs.versions.toml"
+
+documentation:
+  - "**/*.md"
+  - "docs/**/*"
+
+formatting:
+  - "detekt-formatting/src/**/*"
+
+gradle:
+  - "detekt-gradle-plugin/src/**/*"
+
+reports:
+  - "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/reporting/**/*"
+
+rules:
+  - "detekt-rules/src/**/*"
+  - "detekt-rules-complexity/src/**/*"
+  - "detekt-rules-coroutines/src/**/*"
+  - "detekt-rules-documentation/src/**/*"
+  - "detekt-rules-empty/src/**/*"
+  - "detekt-rules-errorprone/src/**/*"
+  - "detekt-rules-exceptions/src/**/*"
+  - "detekt-rules-naming/src/**/*"
+  - "detekt-rules-performance/src/**/*"
+  - "detekt-rules-style/src/**/*"
