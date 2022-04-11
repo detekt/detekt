@@ -29,6 +29,7 @@ allprojects {
         detekt(project(":detekt-cli"))
         detektPlugins(project(":custom-checks"))
         detektPlugins(project(":detekt-formatting"))
+        detektPlugins("com.github.BraisGabin:detekt-junit-rules:0.0.4")
     }
 
     tasks.withType<Detekt>().configureEach {
