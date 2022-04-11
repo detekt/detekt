@@ -111,10 +111,38 @@ If the `bindingContext` is not `EMPTY`, you are free to use it to resolve types 
 
 To test a rule that uses type resolution, you can use the [`lintWithContext`](https://github.com/detekt/detekt/blob/d3546ff0d539d57e7a502dacbf66e91587fff098/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L40-L44) and [`compileAndLintWithContext`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L63-L72) extension functions.
 
-If you're using Spek for testing, you can use the `setupKotlinEnvironment()` util function, and get access to the `KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:  
+If you're using JUnit 5 for testing, you can use the `@KotlinCoreEnvironmentTest` annotation on your test class, and
+accept a parameter of type `KotlinCoreEnvironment` in the class constructor. You can then access the environment by
+referencing the parameter specified in the constructor:
 
 ```kotlin
-class MyRuleSpec : Spek({
+@KotlinCoreEnvironmentTest
+class MyRuleSpec(private val env: KotlinCoreEnvironment) {
+    @Test
+    fun `reports cast that cannot succeed`() {
+        val code = """/* The code you want to test */"""
+        assertThat(MyRuleSpec().compileAndLintWithContext(env, code)).hasSize(1)
+    }
+}
+```
+
+If you're using Spek for testing, you can create a `setupKotlinEnvironment()` util function, and get access to the
+`KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:
+
+```kotlin
+fun org.spekframework.spek2.dsl.Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
+    val wrapper by memoized(
+        CachingMode.SCOPE,
+        { createEnvironment(additionalJavaSourceRootPaths = listOfNotNull(additionalJavaSourceRootPath?.toFile())) },
+        { it.dispose() }
+    )
+
+    // `env` name is used for delegation
+    @Suppress("UNUSED_VARIABLE")
+    val env: KotlinCoreEnvironment by memoized(CachingMode.EACH_GROUP) { wrapper.env }
+}
+
+class MyRuleTest : Spek({
     setupKotlinEnvironment()
 
     val env: KotlinCoreEnvironment by memoized()
@@ -126,4 +154,4 @@ class MyRuleSpec : Spek({
 })
 ```
 
-If you're using another testing framework (e.g. JUnit), you can use the [`createEnvironment()`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31) method from `detekt-test-utils`.
+If you're using another testing framework (e.g. JUnit 4), you can use the [`createEnvironment()`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31) method from `detekt-test-utils`.

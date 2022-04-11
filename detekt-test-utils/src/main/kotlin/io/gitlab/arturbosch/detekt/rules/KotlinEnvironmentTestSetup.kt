@@ -11,6 +11,10 @@ import org.spekframework.spek2.dsl.Root
 import org.spekframework.spek2.lifecycle.CachingMode
 import java.nio.file.Path
 
+@Deprecated(
+    "This is specific to Spek and will be removed in a future release. Documentation has been updated to " +
+        "show alternative approaches: https://detekt.dev/type-resolution.html#testing-a-rule-that-uses-type-resolution"
+)
 fun Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
     val wrapper by memoized(
         CachingMode.SCOPE,

@@ -7,7 +7,6 @@ pluginManagement {
 }
 
 include("code-coverage-report")
-include("custom-checks")
 include("detekt-api")
 include("detekt-cli")
 include("detekt-core")

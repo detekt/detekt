@@ -161,29 +161,29 @@ To let detekt know about the new processor, we specify a `resources/META-INF/ser
 with the full qualify name of our processor as the content: `io.gitlab.arturbosch.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
 
 
-To test the code we use the `detekt-test` module and write a `Spek` testcase.
+To test the code we use the `detekt-test` module and write a JUnit 5 testcase.
 
 ```kotlin
-class NumberOfLoopsProcessorSpec : Spek({
+class NumberOfLoopsProcessorTest {
 
-	it("should expect two loops") {
-		val code = """
-			fun main() {
-				for (i in 0..10) {
-					while (i < 5) {
-						println(i)
-					}
-				}
-			}
-		"""
+    @Test
+    fun `should expect two loops`() {
+        val code = """
+            fun main() {
+                for (i in 0..10) {
+                    while (i < 5) {
+                        println(i)
+                    }
+                }
+            }
+        """
 
-		val ktFile = compileContentForTest(code)
-		NumberOfLoopsProcessor().onProcess(ktFile)
+        val ktFile = compileContentForTest(code)
+        NumberOfLoopsProcessor().onProcess(ktFile)
 
-		assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
-	}
-})
-
+        assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
+    }
+}
 ```
 
 #### <a name="customreports">Custom Reports</a>
