@@ -146,7 +146,7 @@ class ValidateConfigSpec {
         @Nested
         inner class `configure additional exclude paths` {
 
-            fun patterns(str: String) = CommaSeparatedPattern(str).mapToRegex()
+            private fun patterns(str: String) = CommaSeparatedPattern(str).mapToRegex()
 
             @Test
             fun `does not report any complexity properties`() {

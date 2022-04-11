@@ -193,7 +193,7 @@ class RedundantVisibilityModifierRuleSpec {
 
             val rule = RedundantVisibilityModifierRule()
 
-            fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
+            private fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
                 val languageVersionSettings = mockk<LanguageVersionSettings>()
                 every {
                     hint(ExplicitApiMode::class)

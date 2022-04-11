@@ -641,7 +641,7 @@ class MagicNumberSpec {
         inner class `ignoring named arguments` {
             @Nested
             inner class `in constructor invocation` {
-                fun code(numberString: String) = """
+                private fun code(numberString: String) = """
                 data class Model(
                         val someVal: Int,
                         val other: String = "default"
@@ -705,7 +705,7 @@ class MagicNumberSpec {
             @Nested
             inner class `Issue#659 - false-negative reporting on unnamed argument when ignore is true` {
 
-                fun code(numberString: String) = """
+                private fun code(numberString: String) = """
                 data class Model(
                         val someVal: Int,
                         val other: String = "default"
@@ -722,7 +722,7 @@ class MagicNumberSpec {
 
             @Nested
             inner class `in function invocation` {
-                fun code(number: Number) = """
+                private fun code(number: Number) = """
                 fun tested(someVal: Int, other: String = "default")
 
                 val t = tested(someVal = $number)
@@ -888,7 +888,8 @@ class MagicNumberSpec {
         @Nested
         inner class `a number as part of a range` {
 
-            fun cases() = listOf(
+            @Suppress("UnusedPrivateMember")
+            private fun cases() = listOf(
                 "val range = 1..27",
                 "val range = (1..27)",
                 "val range = 27 downTo 1",
