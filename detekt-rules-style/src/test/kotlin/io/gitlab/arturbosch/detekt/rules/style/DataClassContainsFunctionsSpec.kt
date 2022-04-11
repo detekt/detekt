@@ -12,68 +12,64 @@ class DataClassContainsFunctionsSpec {
     val subject = DataClassContainsFunctions()
 
     @Nested
-    inner class `DataClassContainsFunctions rule` {
+    inner class `flagged functions in data class` {
+        val code = """
+            data class C(val s: String) {
+                fun f() {}
 
-        @Nested
-        inner class `flagged functions in data class` {
-            val code = """
-                data class C(val s: String) {
-                    fun f() {}
-
-                    data class Nested(val i: Int) {
-                        fun toConversion() = C(i.toString())
-                    }
+                data class Nested(val i: Int) {
+                    fun toConversion() = C(i.toString())
                 }
-            """
-
-            @Test
-            fun `reports valid data class with conversion function`() {
-                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
+        """
 
-            @Test
-            fun `reports valid data class without conversion function`() {
-                val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to ""))
-                val rule = DataClassContainsFunctions(config)
-                assertThat(rule.compileAndLint(code)).hasSize(2)
+        @Test
+        fun `reports valid data class with conversion function`() {
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports valid data class without conversion function`() {
+            val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to ""))
+            val rule = DataClassContainsFunctions(config)
+            assertThat(rule.compileAndLint(code)).hasSize(2)
+        }
+    }
+
+    @Test
+    fun `does not report a data class without a function`() {
+        val code = "data class C(val i: Int)"
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report a non-data class without a function`() {
+        val code = """
+            class C {
+                fun f() {}
             }
-        }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `does not report a data class without a function`() {
-            val code = "data class C(val i: Int)"
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `does not report a data class with overridden functions`() {
+        val code = """
+            data class C(val i: Int) {
 
-        @Test
-        fun `does not report a non-data class without a function`() {
-            val code = """
-                class C {
-                    fun f() {}
+                override fun hashCode(): Int {
+                    return super.hashCode()
                 }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
 
-        @Test
-        fun `does not report a data class with overridden functions`() {
-            val code = """
-                data class C(val i: Int) {
-
-                    override fun hashCode(): Int {
-                        return super.hashCode()
-                    }
-
-                    override fun equals(other: Any?): Boolean {
-                        return super.equals(other)
-                    }
-
-                    override fun toString(): String {
-                        return super.toString()
-                    }
+                override fun equals(other: Any?): Boolean {
+                    return super.equals(other)
                 }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+
+                override fun toString(): String {
+                    return super.toString()
+                }
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

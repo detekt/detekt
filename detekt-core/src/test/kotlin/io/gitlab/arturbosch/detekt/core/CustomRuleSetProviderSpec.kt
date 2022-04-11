@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
@@ -20,22 +19,18 @@ import org.junit.jupiter.api.Test
  */
 class CustomRuleSetProviderSpec {
 
-    @Nested
-    inner class `custom rule sets should be loadable through jars` {
-
-        @Test
-        fun `should load the sample provider`() {
-            val sampleRuleSet = resourceAsPath("sample-rule-set.jar")
-            val spec = createNullLoggingSpec {
-                extensions {
-                    disableDefaultRuleSets = true
-                    fromPaths { listOf(sampleRuleSet) }
-                }
+    @Test
+    fun `custom rule sets should be loadable through jars should load the sample provider`() {
+        val sampleRuleSet = resourceAsPath("sample-rule-set.jar")
+        val spec = createNullLoggingSpec {
+            extensions {
+                disableDefaultRuleSets = true
+                fromPaths { listOf(sampleRuleSet) }
             }
-
-            val providers = spec.withSettings { RuleSetLocator(this).load() }
-
-            assertThat(providers).filteredOn { it.ruleSetId == "sample" }.hasSize(1)
         }
+
+        val providers = spec.withSettings { RuleSetLocator(this).load() }
+
+        assertThat(providers).filteredOn { it.ruleSetId == "sample" }.hasSize(1)
     }
 }

@@ -11,48 +11,45 @@ import org.junit.jupiter.api.Test
 class RuleSetConfigPropertySpec {
 
     @Nested
-    inner class `Rule set config property delegate` {
-        @Nested
-        inner class `boolean property` {
-            @Test
-            fun `reads the value in config if present`() {
-                assertThat(TestRuleSetProvider.android.value(TestConfig("android" to "false")))
-                    .isEqualTo(false)
-            }
-
-            @Test
-            fun `uses the default value in config if not present`() {
-                assertThat(TestRuleSetProvider.android.value(TestConfig()))
-                    .isEqualTo(true)
-            }
+    inner class `boolean property` {
+        @Test
+        fun `reads the value in config if present`() {
+            assertThat(TestRuleSetProvider.android.value(TestConfig("android" to "false")))
+                .isEqualTo(false)
         }
 
-        @Nested
-        inner class `int property` {
-            @Test
-            fun `reads the value in config if present`() {
-                assertThat(TestRuleSetProvider.number.value(TestConfig("number" to "37"))).isEqualTo(37)
-            }
+        @Test
+        fun `uses the default value in config if not present`() {
+            assertThat(TestRuleSetProvider.android.value(TestConfig()))
+                .isEqualTo(true)
+        }
+    }
 
-            @Test
-            fun `uses the default value in config if not present`() {
-                assertThat(TestRuleSetProvider.number.value(TestConfig())).isEqualTo(42)
-            }
+    @Nested
+    inner class `int property` {
+        @Test
+        fun `reads the value in config if present`() {
+            assertThat(TestRuleSetProvider.number.value(TestConfig("number" to "37"))).isEqualTo(37)
         }
 
-        @Nested
-        inner class `string property` {
-            @Test
-            fun `reads the value in config if present`() {
-                assertThat(TestRuleSetProvider.fileName.value(TestConfig("fileName" to "main.kt")))
-                    .isEqualTo("main.kt")
-            }
+        @Test
+        fun `uses the default value in config if not present`() {
+            assertThat(TestRuleSetProvider.number.value(TestConfig())).isEqualTo(42)
+        }
+    }
 
-            @Test
-            fun `uses the default value in config if not present`() {
-                assertThat(TestRuleSetProvider.fileName.value(TestConfig()))
-                    .isEqualTo("test.kt")
-            }
+    @Nested
+    inner class `string property` {
+        @Test
+        fun `reads the value in config if present`() {
+            assertThat(TestRuleSetProvider.fileName.value(TestConfig("fileName" to "main.kt")))
+                .isEqualTo("main.kt")
+        }
+
+        @Test
+        fun `uses the default value in config if not present`() {
+            assertThat(TestRuleSetProvider.fileName.value(TestConfig()))
+                .isEqualTo("test.kt")
         }
     }
 }

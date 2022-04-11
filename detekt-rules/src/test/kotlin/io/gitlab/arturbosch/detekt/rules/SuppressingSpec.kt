@@ -12,58 +12,53 @@ import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class SuppressingSpec {
 
-    @Nested
-    inner class `Rule suppression` {
+    @Test
+    fun `all findings are suppressed on element levels`() {
+        val ktFile = compileForTest(resourceAsPath("SuppressedByElementAnnotation.kt"))
+        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        @Test
-        fun `all findings are suppressed on element levels`() {
-            val ktFile = compileForTest(resourceAsPath("SuppressedByElementAnnotation.kt"))
-            val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+        val findings = ruleSet.visitFile(ktFile)
 
-            val findings = ruleSet.visitFile(ktFile)
+        assertThat(findings).isEmpty()
+    }
 
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun `all findings are suppressed on file levels`() {
+        val ktFile = compileForTest(resourceAsPath("SuppressedElementsByFileAnnotation.kt"))
+        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        @Test
-        fun `all findings are suppressed on file levels`() {
-            val ktFile = compileForTest(resourceAsPath("SuppressedElementsByFileAnnotation.kt"))
-            val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+        val findings = ruleSet.visitFile(ktFile)
 
-            val findings = ruleSet.visitFile(ktFile)
+        assertThat(findings).isEmpty()
+    }
 
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun `all findings are suppressed on class levels`() {
+        val ktFile = compileForTest(resourceAsPath("SuppressedElementsByClassAnnotation.kt"))
+        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        @Test
-        fun `all findings are suppressed on class levels`() {
-            val ktFile = compileForTest(resourceAsPath("SuppressedElementsByClassAnnotation.kt"))
-            val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+        val findings = ruleSet.visitFile(ktFile)
 
-            val findings = ruleSet.visitFile(ktFile)
+        assertThat(findings).isEmpty()
+    }
 
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun `should suppress TooManyFunctionsRule on class level`() {
+        val rule = TooManyFunctions(TestConfig(mapOf("thresholdInClass" to "0")))
 
-        @Test
-        fun `should suppress TooManyFunctionsRule on class level`() {
-            val rule = TooManyFunctions(TestConfig(mapOf("thresholdInClass" to "0")))
+        val findings = rule.lint(resourceAsPath("SuppressedElementsByClassAnnotation.kt"))
 
-            val findings = rule.lint(resourceAsPath("SuppressedElementsByClassAnnotation.kt"))
+        assertThat(findings).isEmpty()
+    }
 
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun `should suppress StringLiteralDuplication on class level`() {
+        val path = resourceAsPath("SuppressStringLiteralDuplication.kt")
 
-        @Test
-        fun `should suppress StringLiteralDuplication on class level`() {
-            val path = resourceAsPath("SuppressStringLiteralDuplication.kt")
-
-            assertThat(StringLiteralDuplication().lint(path)).isEmpty()
-        }
+        assertThat(StringLiteralDuplication().lint(path)).isEmpty()
     }
 }

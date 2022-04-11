@@ -16,61 +16,52 @@ import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MultiRuleSpec {
 
-    @Nested
-    inner class `a multi rule` {
+    private val file = compileForTest(resourceAsPath("/cases/Default.kt"))
 
-        private val file = compileForTest(resourceAsPath("/cases/Default.kt"))
+    @Test
+    fun `should not run any rules if rule set defines the filter`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset.yml")
+        assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
+    }
 
-        @Nested
-        inner class `runs once on a KtFile for every rules and respects configured path filters` {
+    @Test
+    fun `should not run any rules if rule set defines the filter with string`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset-string.yml")
+        assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
+    }
 
-            @Test
-            fun `should not run any rules if rule set defines the filter`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset.yml")
-                assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
-            }
+    @Test
+    fun `should only run one rule as the other is filtered`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude.yml")
+        assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
+    }
 
-            @Test
-            fun `should not run any rules if rule set defines the filter with string`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset-string.yml")
-                assertThat(config.subConfig("TestMultiRule").shouldAnalyzeFile(file)).isFalse()
-            }
+    @Test
+    fun `should only run one rule as the other is filtered with string`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude-string.yml")
+        assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
+    }
 
-            @Test
-            fun `should only run one rule as the other is filtered`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
-            }
+    @Test
+    fun `should run both when no filter is applied`() {
+        val config = yamlConfig("/pathFilters/multi-rule-without-excludes.yml")
+        assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(2)
+    }
 
-            @Test
-            fun `should only run one rule as the other is filtered with string`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude-string.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
-            }
+    @Test
+    fun `should run none when both rules are filtered`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-excludes.yml")
+        assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
+    }
 
-            @Test
-            fun `should run both when no filter is applied`() {
-                val config = yamlConfig("/pathFilters/multi-rule-without-excludes.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(2)
-            }
-
-            @Test
-            fun `should run none when both rules are filtered`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-excludes.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
-            }
-
-            @Test
-            fun `should run none when both rules are filtered with string`() {
-                val config = yamlConfig("/pathFilters/multi-rule-with-excludes-string.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
-            }
-        }
+    @Test
+    fun `should run none when both rules are filtered with string`() {
+        val config = yamlConfig("/pathFilters/multi-rule-with-excludes-string.yml")
+        assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
     }
 }
 

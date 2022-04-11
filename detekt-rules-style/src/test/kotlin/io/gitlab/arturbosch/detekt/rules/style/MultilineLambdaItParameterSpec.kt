@@ -13,204 +13,201 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
     val subject = MultilineLambdaItParameter(Config.empty)
 
     @Nested
-    inner class `MultilineLambdaItParameter rule` {
-        @Nested
-        inner class `single parameter, multiline lambda with multiple statements` {
-            @Test
-            fun `reports when parameter name is implicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let {
-                        listOf(it)
-                        println(it)
-                    }
+    inner class `single parameter, multiline lambda with multiple statements` {
+        @Test
+        fun `reports when parameter name is implicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let {
+                    listOf(it)
+                    println(it)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(1)
             }
-
-            @Test
-            fun `reports when parameter name is explicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { it ->
-                        listOf(it)
-                        println(it)
-                    }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(1)
-            }
-
-            @Test
-            fun `does not report when parameter name is explicit and not 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { param ->
-                        listOf(param)
-                        println(param)
-                    }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
-
-            @Test
-            fun `does not report when lambda has no implicit parameter references`() {
-                val code = """
-                fun foo(f: (Int) -> Unit) {}
-                fun main() {
-                    foo {
-                        println(1)
-                        println(2)
-                        val it = 3
-                        println(it)
-                    }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
 
-        @Nested
-        inner class `single parameter, multiline lambda with a single statement` {
-            @Test
-            fun `does not report when parameter name is an implicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { 
-                        listOf(it)
-                    }
+        @Test
+        fun `reports when parameter name is explicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { it ->
+                    listOf(it)
+                    println(it)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
             }
-
-            @Test
-            fun `does not report when parameter name is an explicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { it ->
-                        listOf(it)
-                    }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
-
-            @Test
-            fun `does not report when parameter name is explicit and not 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { param ->
-                        listOf(param)
-                    }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
 
-        @Nested
-        inner class `single parameter, single-line lambda` {
-            @Test
-            fun `does not report when parameter name is an implicit 'it' with type resolution`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { listOf(it) }
+        @Test
+        fun `does not report when parameter name is explicit and not 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { param ->
+                    listOf(param)
+                    println(param)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
             }
-
-            @Test
-            fun `does not report when parameter name is an implicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { listOf(it) }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
-
-            @Test
-            fun `does not report when parameter name is an explicit 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { it -> listOf(it) }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
-
-            @Test
-            fun `does not report when parameter name is explicit and not 'it'`() {
-                val code = """
-                fun f() {
-                    val digits = 1234.let { param -> listOf(param) }
-                }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
 
-        @Nested
-        inner class `multiple parameters, multiline lambda` {
-            @Test
-            fun `reports when one of the explicit parameters is an 'it'`() {
-                val code = """
-                fun f() {
-                    val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it ->
-                        println(it)
-                        it + index 
-                    }
+        @Test
+        fun `does not report when lambda has no implicit parameter references`() {
+            val code = """
+            fun foo(f: (Int) -> Unit) {}
+            fun main() {
+                foo {
+                    println(1)
+                    println(2)
+                    val it = 3
+                    println(it)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(1)
             }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
 
-            @Test
-            fun `does not report when none of the explicit parameters is an 'it'`() {
-                val code = """
-                fun f() {
-                    val lambda = { item: Int, that: String -> 
-                        println(item)
-                        item.toString() + that 
-                    }
+    @Nested
+    inner class `single parameter, multiline lambda with a single statement` {
+        @Test
+        fun `does not report when parameter name is an implicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { 
+                    listOf(it)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
             }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
 
-        @Nested
-        inner class `no parameter, multiline lambda with multiple statements` {
-            @Test
-            fun `does not report when there is no parameter`() {
-                val code = """
-                fun f() {
-                    val string = StringBuilder().apply {
-                        append("a")
-                        append("b")
-                    }
+        @Test
+        fun `does not report when parameter name is an explicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { it ->
+                    listOf(it)
                 }
-                """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
             }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter name is explicit and not 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { param ->
+                    listOf(param)
+                }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `single parameter, single-line lambda` {
+        @Test
+        fun `does not report when parameter name is an implicit 'it' with type resolution`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { listOf(it) }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter name is an implicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { listOf(it) }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter name is an explicit 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { it -> listOf(it) }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter name is explicit and not 'it'`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let { param -> listOf(param) }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `multiple parameters, multiline lambda` {
+        @Test
+        fun `reports when one of the explicit parameters is an 'it'`() {
+            val code = """
+            fun f() {
+                val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it ->
+                    println(it)
+                    it + index 
+                }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when none of the explicit parameters is an 'it'`() {
+            val code = """
+            fun f() {
+                val lambda = { item: Int, that: String -> 
+                    println(item)
+                    item.toString() + that 
+                }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `no parameter, multiline lambda with multiple statements` {
+        @Test
+        fun `does not report when there is no parameter`() {
+            val code = """
+            fun f() {
+                val string = StringBuilder().apply {
+                    append("a")
+                    append("b")
+                }
+            }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
     }
 }

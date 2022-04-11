@@ -3,68 +3,63 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ConstructorParameterNamingSpec {
 
-    @Nested
-    inner class `parameters in a constructor of a class` {
+    @Test
+    fun `should detect no violations`() {
+        val code = """
+            class C(val param: String, private val privateParam: String)
 
-        @Test
-        fun `should detect no violations`() {
-            val code = """
-                class C(val param: String, private val privateParam: String)
+            class D {
+                constructor(param: String) {}
+                constructor(param: String, privateParam: String) {}
+            }
+        """
+        assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+    }
 
-                class D {
-                    constructor(param: String) {}
-                    constructor(param: String, privateParam: String) {}
-                }
-            """
-            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `should find some violations`() {
+        val code = """
+            class C(val PARAM: String, private val PRIVATE_PARAM: String)
 
-        @Test
-        fun `should find some violations`() {
-            val code = """
-                class C(val PARAM: String, private val PRIVATE_PARAM: String)
+            class C {
+                constructor(PARAM: String) {}
+                constructor(PARAM: String, PRIVATE_PARAM: String) {}
+            }
+        """
+        assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
+    }
 
-                class C {
-                    constructor(PARAM: String) {}
-                    constructor(PARAM: String, PRIVATE_PARAM: String) {}
-                }
-            """
-            assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
-        }
+    @Test
+    fun `should find a violation in the correct text location`() {
+        val code = """
+            class C(val PARAM: String)
+        """
+        assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
+    }
 
-        @Test
-        fun `should find a violation in the correct text location`() {
-            val code = """
-                class C(val PARAM: String)
-            """
-            assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
-        }
+    @Test
+    fun `should not complain about override by default`() {
+        val code = """
+            class C(override val PARAM: String) : I
 
-        @Test
-        fun `should not complain about override by default`() {
-            val code = """
-                class C(override val PARAM: String) : I
+            interface I { val PARAM: String }
+        """
+        assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+    }
 
-                interface I { val PARAM: String }
-            """
-            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `should not complain about override when ignore overridden = false`() {
+        val code = """
+            class C(override val PARAM: String) : I
 
-        @Test
-        fun `should not complain about override when ignore overridden = false`() {
-            val code = """
-                class C(override val PARAM: String) : I
-
-                interface I { val PARAM: String }
-            """
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
-        }
+            interface I { val PARAM: String }
+        """
+        val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
+        assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
     }
 }
 

@@ -3,22 +3,17 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class CognitiveComplexityProcessorSpec {
 
-    @Nested
-    inner class `CognitiveComplexityProcessor` {
+    @Test
+    fun `counts the complexity for the whole file`() {
+        val file = compileContentForTest(complexClass)
 
-        @Test
-        fun `counts the complexity for the whole file`() {
-            val file = compileContentForTest(complexClass)
+        val value = MetricProcessorTester(file)
+            .test(ProjectCognitiveComplexityProcessor(), CognitiveComplexity.KEY)
 
-            val value = MetricProcessorTester(file)
-                .test(ProjectCognitiveComplexityProcessor(), CognitiveComplexity.KEY)
-
-            assertThat(value).isEqualTo(46)
-        }
+        assertThat(value).isEqualTo(46)
     }
 }

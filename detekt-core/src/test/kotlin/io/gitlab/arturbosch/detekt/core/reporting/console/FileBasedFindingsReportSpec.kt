@@ -16,52 +16,48 @@ class FileBasedFindingsReportSpec {
     private val subject = createFileBasedFindingsReport()
 
     @Nested
-    inner class `findings report` {
-
-        @Nested
-        inner class `reports the debt per file and rule set with the overall debt` {
-
-            @Test
-            fun `has the reference content`() {
-                val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
-                val detektion = object : TestDetektion() {
-                    override val findings: Map<String, List<Finding>> = mapOf(
-                        "Ruleset1" to listOf(
-                            createFinding(fileName = "File1.kt"),
-                            createFinding(fileName = "File2.kt")
-                        ),
-                        "EmptyRuleset" to emptyList(),
-                        "Ruleset2" to listOf(createFinding(fileName = "File1.kt"))
-                    )
-                }
-
-                val output = subject.render(detektion)?.decolorized()
-
-                assertThat(output).isEqualTo(expectedContent)
-            }
-        }
+    inner class `reports the debt per file and rule set with the overall debt` {
 
         @Test
-        fun `reports no findings`() {
-            val detektion = TestDetektion()
-            assertThat(subject.render(detektion)).isNull()
-        }
-
-        @Test
-        fun `reports no findings when no rule set contains smells`() {
+        fun `has the reference content`() {
+            val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    "EmptySmells" to emptyList()
+                    "Ruleset1" to listOf(
+                        createFinding(fileName = "File1.kt"),
+                        createFinding(fileName = "File2.kt")
+                    ),
+                    "EmptyRuleset" to emptyList(),
+                    "Ruleset2" to listOf(createFinding(fileName = "File1.kt"))
                 )
             }
-            assertThat(subject.render(detektion)).isNull()
-        }
 
-        @Test
-        fun `should not add auto corrected issues to report`() {
-            val report = FileBasedFindingsReport()
-            AutoCorrectableIssueAssert.isReportNull(report)
+            val output = subject.render(detektion)?.decolorized()
+
+            assertThat(output).isEqualTo(expectedContent)
         }
+    }
+
+    @Test
+    fun `reports no findings`() {
+        val detektion = TestDetektion()
+        assertThat(subject.render(detektion)).isNull()
+    }
+
+    @Test
+    fun `reports no findings when no rule set contains smells`() {
+        val detektion = object : TestDetektion() {
+            override val findings: Map<String, List<Finding>> = mapOf(
+                "EmptySmells" to emptyList()
+            )
+        }
+        assertThat(subject.render(detektion)).isNull()
+    }
+
+    @Test
+    fun `should not add auto corrected issues to report`() {
+        val report = FileBasedFindingsReport()
+        AutoCorrectableIssueAssert.isReportNull(report)
     }
 }
 

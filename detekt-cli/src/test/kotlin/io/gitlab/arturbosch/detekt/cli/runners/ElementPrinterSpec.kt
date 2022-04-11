@@ -3,23 +3,18 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ElementPrinterSpec {
 
-    @Nested
-    inner class `element printer` {
+    @Test
+    fun `should print the ast as string`() {
+        val case = resourceAsPath("cases/Poko.kt")
+        val ktFile = compileForTest(case)
 
-        @Test
-        fun `should print the ast as string`() {
-            val case = resourceAsPath("cases/Poko.kt")
-            val ktFile = compileForTest(case)
+        val dump = ElementPrinter.dump(ktFile)
 
-            val dump = ElementPrinter.dump(ktFile)
-
-            assertThat(dump.trimIndent()).isEqualTo(expected)
-        }
+        assertThat(dump.trimIndent()).isEqualTo(expected)
     }
 }
 

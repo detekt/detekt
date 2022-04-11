@@ -11,33 +11,24 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ComplexityReportSpec {
 
-    @Nested
-    inner class `complexity report` {
+    @Test
+    fun `successfully generates a complexity report`() {
+        val report = ComplexityReport()
+        val expectedContent = readResourceContent("/reporting/complexity-report.txt")
+        val detektion = createDetektion()
+        addData(detektion)
+        assertThat(report.render(detektion)).isEqualTo(expectedContent)
+    }
 
-        @Nested
-        inner class `several complexity metrics` {
-
-            @Test
-            fun `successfully generates a complexity report`() {
-                val report = ComplexityReport()
-                val expectedContent = readResourceContent("/reporting/complexity-report.txt")
-                val detektion = createDetektion()
-                addData(detektion)
-                assertThat(report.render(detektion)).isEqualTo(expectedContent)
-            }
-
-            @Test
-            fun `returns null for missing complexity metrics in report`() {
-                val report = ComplexityReport()
-                val detektion = createDetektion()
-                assertThat(report.render(detektion)).isNull()
-            }
-        }
+    @Test
+    fun `returns null for missing complexity metrics in report`() {
+        val report = ComplexityReport()
+        val detektion = createDetektion()
+        assertThat(report.render(detektion)).isNull()
     }
 }
 
