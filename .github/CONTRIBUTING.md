@@ -331,6 +331,8 @@ You must follow the steps below:
 5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
 6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
 
+More information on this process could be found on the [official Gradle Enterprise documentation][8].
+
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
 [2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
@@ -338,3 +340,4 @@ You must follow the steps below:
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments
 [6]: https://ge.detekt.dev/
 [7]: mailto:info@detekt.dev
+[8]: https://docs.gradle.com/enterprise/gradle-plugin/#automated_access_key_provisioning
