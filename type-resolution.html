@@ -582,9 +582,36 @@ Gradle plugins from configuring Android-specific gradle tasks.</p>
 
 <p>To test a rule that uses type resolution, you can use the <a href="https://github.com/detekt/detekt/blob/d3546ff0d539d57e7a502dacbf66e91587fff098/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L40-L44"><code class="language-plaintext highlighter-rouge">lintWithContext</code></a> and <a href="https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L63-L72"><code class="language-plaintext highlighter-rouge">compileAndLintWithContext</code></a> extension functions.</p>
 
-<p>If you’re using Spek for testing, you can use the <code class="language-plaintext highlighter-rouge">setupKotlinEnvironment()</code> util function, and get access to the <code class="language-plaintext highlighter-rouge">KotlinCoreEnvironment</code> by simply calling <code class="language-plaintext highlighter-rouge">val env: KotlinCoreEnvironment by memoized()</code>:</p>
+<p>If you’re using JUnit 5 for testing, you can use the <code class="language-plaintext highlighter-rouge">@KotlinCoreEnvironmentTest</code> annotation on your test class, and
+accept a parameter of type <code class="language-plaintext highlighter-rouge">KotlinCoreEnvironment</code> in the class constructor. You can then access the environment by
+referencing the parameter specified in the constructor:</p>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyRuleSpec</span> <span class="p">:</span> <span class="nc">Spek</span><span class="p">({</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@KotlinCoreEnvironmentTest</span>
+<span class="kd">class</span> <span class="nc">MyRuleSpec</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">env</span><span class="p">:</span> <span class="nc">KotlinCoreEnvironment</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nd">@Test</span>
+    <span class="k">fun</span> <span class="nf">`reports</span> <span class="n">cast</span> <span class="n">that</span> <span class="n">cannot</span> <span class="nf">succeed`</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">code</span> <span class="p">=</span> <span class="s">"""/* The code you want to test */"""</span>
+        <span class="nf">assertThat</span><span class="p">(</span><span class="nc">MyRuleSpec</span><span class="p">().</span><span class="nf">compileAndLintWithContext</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">code</span><span class="p">)).</span><span class="nf">hasSize</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If you’re using Spek for testing, you can create a <code class="language-plaintext highlighter-rouge">setupKotlinEnvironment()</code> util function, and get access to the
+<code class="language-plaintext highlighter-rouge">KotlinCoreEnvironment</code> by simply calling <code class="language-plaintext highlighter-rouge">val env: KotlinCoreEnvironment by memoized()</code>:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">org</span><span class="p">.</span><span class="n">spekframework</span><span class="p">.</span><span class="n">spek2</span><span class="p">.</span><span class="n">dsl</span><span class="p">.</span><span class="nc">Root</span><span class="p">.</span><span class="nf">setupKotlinEnvironment</span><span class="p">(</span><span class="n">additionalJavaSourceRootPath</span><span class="p">:</span> <span class="nc">Path</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">wrapper</span> <span class="k">by</span> <span class="nf">memoized</span><span class="p">(</span>
+        <span class="nc">CachingMode</span><span class="p">.</span><span class="nc">SCOPE</span><span class="p">,</span>
+        <span class="p">{</span> <span class="nf">createEnvironment</span><span class="p">(</span><span class="n">additionalJavaSourceRootPaths</span> <span class="p">=</span> <span class="nf">listOfNotNull</span><span class="p">(</span><span class="n">additionalJavaSourceRootPath</span><span class="o">?.</span><span class="nf">toFile</span><span class="p">()))</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="nf">dispose</span><span class="p">()</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="c1">// `env` name is used for delegation</span>
+    <span class="nd">@Suppress</span><span class="p">(</span><span class="s">"UNUSED_VARIABLE"</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">env</span><span class="p">:</span> <span class="nc">KotlinCoreEnvironment</span> <span class="k">by</span> <span class="nf">memoized</span><span class="p">(</span><span class="nc">CachingMode</span><span class="p">.</span><span class="nc">EACH_GROUP</span><span class="p">)</span> <span class="p">{</span> <span class="n">wrapper</span><span class="p">.</span><span class="n">env</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">MyRuleTest</span> <span class="p">:</span> <span class="nc">Spek</span><span class="p">({</span>
     <span class="nf">setupKotlinEnvironment</span><span class="p">()</span>
 
     <span class="kd">val</span> <span class="py">env</span><span class="p">:</span> <span class="nc">KotlinCoreEnvironment</span> <span class="k">by</span> <span class="nf">memoized</span><span class="p">()</span>
@@ -596,7 +623,7 @@ Gradle plugins from configuring Android-specific gradle tasks.</p>
 <span class="p">})</span>
 </code></pre></div></div>
 
-<p>If you’re using another testing framework (e.g. JUnit), you can use the <a href="https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31"><code class="language-plaintext highlighter-rouge">createEnvironment()</code></a> method from <code class="language-plaintext highlighter-rouge">detekt-test-utils</code>.</p>
+<p>If you’re using another testing framework (e.g. JUnit 4), you can use the <a href="https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31"><code class="language-plaintext highlighter-rouge">createEnvironment()</code></a> method from <code class="language-plaintext highlighter-rouge">detekt-test-utils</code>.</p>
 
 
     <div class="tags">

@@ -631,28 +631,28 @@ Therefore we need to mention them in the configuration under <code class="langua
 <p>To let detekt know about the new processor, we specify a <code class="language-plaintext highlighter-rouge">resources/META-INF/services/io.gitlab.arturbosch.detekt.api.FileProcessListener</code> file 
 with the full qualify name of our processor as the content: <code class="language-plaintext highlighter-rouge">io.gitlab.arturbosch.detekt.sample.extensions.processors.NumberOfLoopsProcessor</code>.</p>
 
-<p>To test the code we use the <code class="language-plaintext highlighter-rouge">detekt-test</code> module and write a <code class="language-plaintext highlighter-rouge">Spek</code> testcase.</p>
+<p>To test the code we use the <code class="language-plaintext highlighter-rouge">detekt-test</code> module and write a JUnit 5 testcase.</p>
 
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">NumberOfLoopsProcessorSpec</span> <span class="p">:</span> <span class="nc">Spek</span><span class="p">({</span>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">NumberOfLoopsProcessorTest</span> <span class="p">{</span>
 
-	<span class="nf">it</span><span class="p">(</span><span class="s">"should expect two loops"</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">val</span> <span class="py">code</span> <span class="p">=</span> <span class="s">"""
-			fun main() {
-				for (i in 0..10) {
-					while (i &lt; 5) {
-						println(i)
-					}
-				}
-			}
-		"""</span>
+    <span class="nd">@Test</span>
+    <span class="k">fun</span> <span class="nf">`should</span> <span class="n">expect</span> <span class="n">two</span> <span class="nf">loops`</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">code</span> <span class="p">=</span> <span class="s">"""
+            fun main() {
+                for (i in 0..10) {
+                    while (i &lt; 5) {
+                        println(i)
+                    }
+                }
+            }
+        """</span>
 
-		<span class="kd">val</span> <span class="py">ktFile</span> <span class="p">=</span> <span class="nf">compileContentForTest</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-		<span class="nc">NumberOfLoopsProcessor</span><span class="p">().</span><span class="nf">onProcess</span><span class="p">(</span><span class="n">ktFile</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">ktFile</span> <span class="p">=</span> <span class="nf">compileContentForTest</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="nc">NumberOfLoopsProcessor</span><span class="p">().</span><span class="nf">onProcess</span><span class="p">(</span><span class="n">ktFile</span><span class="p">)</span>
 
-		<span class="nf">assertThat</span><span class="p">(</span><span class="n">ktFile</span><span class="p">.</span><span class="nf">getUserData</span><span class="p">(</span><span class="nc">NumberOfLoopsProcessor</span><span class="p">.</span><span class="n">numberOfLoopsKey</span><span class="p">)).</span><span class="nf">isEqualTo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">})</span>
-
+        <span class="nf">assertThat</span><span class="p">(</span><span class="n">ktFile</span><span class="p">.</span><span class="nf">getUserData</span><span class="p">(</span><span class="nc">NumberOfLoopsProcessor</span><span class="p">.</span><span class="n">numberOfLoopsKey</span><span class="p">)).</span><span class="nf">isEqualTo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <h4 id="custom-reports"><a name="customreports">Custom Reports</a></h4>
