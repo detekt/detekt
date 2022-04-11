@@ -42,12 +42,18 @@ tasks {
     }
 
     val runWithHelpFlag by registering(JavaExec::class) {
+        inputs.files(shadowJar)
+        outputs.upToDateWhen { true }
         classpath = files(shadowJar)
         args = listOf("--help")
     }
 
     val runWithArgsFile by registering(JavaExec::class) {
-        inputs.files(formattingJar) // ensures detekt-formatting JAR is built before this task is executed
+        // The task generating these jar files run first.
+        inputs.files(shadowJar, formattingJar)
+        // This task does not adopt incremental-build (up-to-date) check because it is reading
+        // the entire directory as the input source.
+        outputs.upToDateWhen { false }
         classpath = files(shadowJar)
         workingDir = rootDir
         args = listOf("@./config/detekt/argsfile", "-p", formattingJar.singleFile.path)
