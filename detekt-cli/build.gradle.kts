@@ -50,9 +50,7 @@ tasks {
     val runWithArgsFile by registering(JavaExec::class) {
         // The task generating these jar files run first.
         inputs.files(formattingJar)
-        // This task does not adopt incremental-build (up-to-date) check because it is reading
-        // the entire directory as the input source.
-        outputs.upToDateWhen { false }
+        doNotTrackState("The entire root directory is read as the input source.")
         classpath = files(shadowJar)
         workingDir = rootDir
         args = listOf("@./config/detekt/argsfile", "-p", formattingJar.singleFile.path)
