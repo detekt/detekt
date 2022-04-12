@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 
 /**
  * This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
- * taken from: https://kotlinlang.org/docs/coding-conventions.html#modifiers-order
+ * taken from: [Modifiers order](https://kotlinlang.org/docs/coding-conventions.html#modifiers-order)
  *
  * <noncompliant>
  * lateinit internal val str: String
