@@ -43,7 +43,9 @@ You can watch his excellent talk about **Static Code Analysis For Kotlin** on
 
 It is also possible to use [the CLI](cli.md) to create a hook that only runs on staged files. This has the advantage of speedier execution, by running on fewer files and avoiding the warm-up time of the gradle daemon.
 
-Please note, however, that a handful of checks will not work correctly with this approach. This is because they require full type resolution - see for example [ElseCaseInsteadOfExhaustiveWhen](https://detekt.dev/potential-bugs.html#elsecaseinsteadofexhaustivewhen). If you do adopt a partial hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
+Please note, however, that a handful of checks will not work correctly with this approach - those that require [type resolution](type-resolution.md). If you do adopt a partial hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
+
+This example has been put together using [pre-commit](https://pre-commit.com/), but the same principle can be applied to any kind of hook. 
 
 Hook definition in pre-commit:
 
