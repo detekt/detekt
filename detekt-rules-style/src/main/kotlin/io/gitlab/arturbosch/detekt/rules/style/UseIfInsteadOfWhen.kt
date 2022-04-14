@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * Binary expressions are better expressed using an `if` expression than a `when` expression.
  *
- * See https://kotlinlang.org/docs/coding-conventions.html#if-versus-when
+ * See [if versus when](https://kotlinlang.org/docs/coding-conventions.html#if-versus-when)
  *
  * <noncompliant>
  * when (x) {
