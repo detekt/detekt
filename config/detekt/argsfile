@@ -3,7 +3,7 @@
 -b
 ./config/detekt/baseline.xml
 -ex
-**/resources/**,**/detekt*/build/**,**/build-logic/build/**
+**/resources/**,**/detekt*/build/**,**/build-logic/build/**,**/build-logic/bin/**
 --build-upon-default-config
 -c
 ./config/detekt/detekt.yml
