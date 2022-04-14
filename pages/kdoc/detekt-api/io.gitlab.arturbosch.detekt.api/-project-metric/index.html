@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="projectmetric">ProjectMetric</h1>
 
 <p>[jvm]<br />
-open class <a href="index.html">ProjectMetric</a>(type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, priority: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)</p>
+open class <a href="index.html">ProjectMetric</a>(val type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val priority: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = -1, val isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = false, val conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = DEFAULT_FLOAT_CONVERSION_FACTOR)</p>
 
 <p>Anything that can be expressed as a numeric value for projects.</p>
 

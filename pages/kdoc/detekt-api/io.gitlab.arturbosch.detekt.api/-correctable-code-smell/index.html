@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="correctablecodesmell">CorrectableCodeSmell</h1>
 
 <p>[jvm]<br />
-open class <a href="index.html">CorrectableCodeSmell</a>(issue: <a href="../-issue/index.html">Issue</a>, entity: <a href="../-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt;, autoCorrectEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>) : <a href="../-code-smell/index.html">CodeSmell</a></p>
+open class <a href="index.html">CorrectableCodeSmell</a>(val issue: <a href="../-issue/index.html">Issue</a>, val entity: <a href="../-entity/index.html">Entity</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt; = emptyList(), val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt; = emptyList(), val autoCorrectEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>) : <a href="../-code-smell/index.html">CodeSmell</a></p>
 
 <p>Represents a code smell for that can be auto corrected.</p>
 

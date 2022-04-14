@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="thresholdedcodesmell">ThresholdedCodeSmell</h1>
 
 <p>[jvm]<br />
-open class <a href="index.html">ThresholdedCodeSmell</a>(issue: <a href="../-issue/index.html">Issue</a>, entity: <a href="../-entity/index.html">Entity</a>, metric: <a href="../-metric/index.html">Metric</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt;) : <a href="../-code-smell/index.html">CodeSmell</a></p>
+open class <a href="index.html">ThresholdedCodeSmell</a>(val issue: <a href="../-issue/index.html">Issue</a>, val entity: <a href="../-entity/index.html">Entity</a>, val metric: <a href="../-metric/index.html">Metric</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt; = emptyList()) : <a href="../-code-smell/index.html">CodeSmell</a></p>
 
 <p>Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.</p>
 

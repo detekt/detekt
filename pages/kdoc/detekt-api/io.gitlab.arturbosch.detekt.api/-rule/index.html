@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="rule">Rule</h1>
 
 <p>[jvm]<br />
-abstract class <a href="index.html">Rule</a>(ruleSetConfig: <a href="../-config/index.html">Config</a>, ruleContext: <a href="../-context/index.html">Context</a>) : <a href="../-base-rule/index.html">BaseRule</a>, <a href="../-config-aware/index.html">ConfigAware</a></p>
+abstract class <a href="index.html">Rule</a>(val ruleSetConfig: <a href="../-config/index.html">Config</a> = Config.empty, ruleContext: <a href="../-context/index.html">Context</a> = DefaultContext()) : <a href="../-base-rule/index.html">BaseRule</a>, <a href="../-config-aware/index.html">ConfigAware</a></p>
 
 <p>A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p>
 

@@ -483,7 +483,24 @@ $('#toc').on('click', 'a', function() {
 <h1 id="simplenotification">SimpleNotification</h1>
 
 <p>[jvm]<br />
-data class <a href="index.html">SimpleNotification</a>(message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, level: <a href="../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.html">Notification.Level</a>) : <a href="../../io.gitlab.arturbosch.detekt.api/-notification/index.html">Notification</a></p>
+data class <a href="index.html">SimpleNotification</a>(val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val level: <a href="../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.html">Notification.Level</a> = Notification.Level.Error) : <a href="../../io.gitlab.arturbosch.detekt.api/-notification/index.html">Notification</a></p>
+
+<h2 id="constructors">Constructors</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="-simple-notification.html">SimpleNotification</a></td>
+      <td>[jvm]<br />fun <a href="-simple-notification.html">SimpleNotification</a>(message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, level: <a href="../../io.gitlab.arturbosch.detekt.api/-notification/-level/index.html">Notification.Level</a> = Notification.Level.Error)</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="functions">Functions</h2>
 

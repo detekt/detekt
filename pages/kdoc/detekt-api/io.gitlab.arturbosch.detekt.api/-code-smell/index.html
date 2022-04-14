@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="codesmell">CodeSmell</h1>
 
 <p>[jvm]<br />
-open class <a href="index.html">CodeSmell</a>(issue: <a href="../-issue/index.html">Issue</a>, entity: <a href="../-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt;) : <a href="../-finding/index.html">Finding</a></p>
+open class <a href="index.html">CodeSmell</a>(val issue: <a href="../-issue/index.html">Issue</a>, val entity: <a href="../-entity/index.html">Entity</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-metric/index.html">Metric</a>&gt; = emptyList(), val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-entity/index.html">Entity</a>&gt; = emptyList()) : <a href="../-finding/index.html">Finding</a></p>
 
 <p>A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="../-issue/index.html">Issue</a>.</p>
 

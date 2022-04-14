@@ -498,11 +498,11 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-base-rule/index.html">BaseRule</a></td>
-      <td>[jvm]<br />abstract class <a href="-base-rule/index.html">BaseRule</a>(context: <a href="-context/index.html">Context</a>) : <a href="-detekt-visitor/index.html">DetektVisitor</a>, <a href="-context/index.html">Context</a><br />Defines the visiting mechanism for KtFile’s.</td>
+      <td>[jvm]<br />abstract class <a href="-base-rule/index.html">BaseRule</a>(context: <a href="-context/index.html">Context</a> = DefaultContext()) : <a href="-detekt-visitor/index.html">DetektVisitor</a>, <a href="-context/index.html">Context</a><br />Defines the visiting mechanism for KtFile’s.</td>
     </tr>
     <tr>
       <td><a href="-code-smell/index.html">CodeSmell</a></td>
-      <td>[jvm]<br />open class <a href="-code-smell/index.html">CodeSmell</a>(issue: <a href="-issue/index.html">Issue</a>, entity: <a href="-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-metric/index.html">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt;) : <a href="-finding/index.html">Finding</a><br />A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="-issue/index.html">Issue</a>.</td>
+      <td>[jvm]<br />open class <a href="-code-smell/index.html">CodeSmell</a>(val issue: <a href="-issue/index.html">Issue</a>, val entity: <a href="-entity/index.html">Entity</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-metric/index.html">Metric</a>&gt; = emptyList(), val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt; = emptyList()) : <a href="-finding/index.html">Finding</a><br />A code smell indicates any possible design problem inside a program’s source code. The type of a code smell is described by an <a href="-issue/index.html">Issue</a>.</td>
     </tr>
     <tr>
       <td><a href="-compactable/index.html">Compactable</a></td>
@@ -530,11 +530,11 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-correctable-code-smell/index.html">CorrectableCodeSmell</a></td>
-      <td>[jvm]<br />open class <a href="-correctable-code-smell/index.html">CorrectableCodeSmell</a>(issue: <a href="-issue/index.html">Issue</a>, entity: <a href="-entity/index.html">Entity</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-metric/index.html">Metric</a>&gt;, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt;, autoCorrectEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>) : <a href="-code-smell/index.html">CodeSmell</a><br />Represents a code smell for that can be auto corrected.</td>
+      <td>[jvm]<br />open class <a href="-correctable-code-smell/index.html">CorrectableCodeSmell</a>(val issue: <a href="-issue/index.html">Issue</a>, val entity: <a href="-entity/index.html">Entity</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val metrics: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-metric/index.html">Metric</a>&gt; = emptyList(), val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt; = emptyList(), val autoCorrectEnabled: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>) : <a href="-code-smell/index.html">CodeSmell</a><br />Represents a code smell for that can be auto corrected.</td>
     </tr>
     <tr>
       <td><a href="-debt/index.html">Debt</a></td>
-      <td>[jvm]<br />data class <a href="-debt/index.html">Debt</a>(days: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, hours: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, mins: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Debt describes the estimated amount of work needed to fix a given issue.</td>
+      <td>[jvm]<br />data class <a href="-debt/index.html">Debt</a>(val days: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = 0, val hours: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = 0, val mins: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = 0)<br />Debt describes the estimated amount of work needed to fix a given issue.</td>
     </tr>
     <tr>
       <td><a href="-default-context/index.html">DefaultContext</a></td>
@@ -550,7 +550,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-entity/index.html">Entity</a></td>
-      <td>[jvm]<br />data class <a href="-entity/index.html">Entity</a>(name: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, signature: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, location: <a href="-location/index.html">Location</a>, ktElement: KtElement?) : <a href="-compactable/index.html">Compactable</a><br />Stores information about a specific code fragment.</td>
+      <td>[jvm]<br />data class <a href="-entity/index.html">Entity</a>(name: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val signature: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val location: <a href="-location/index.html">Location</a>, val ktElement: KtElement? = null) : <a href="-compactable/index.html">Compactable</a><br />Stores information about a specific code fragment.</td>
     </tr>
     <tr>
       <td><a href="-extension/index.html">Extension</a></td>
@@ -574,19 +574,19 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-issue/index.html">Issue</a></td>
-      <td>[jvm]<br />data class <a href="-issue/index.html">Issue</a>(id: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, severity: <a href="-severity/index.html">Severity</a>, description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, debt: <a href="-debt/index.html">Debt</a>)<br />An issue represents a problem in the codebase.</td>
+      <td>[jvm]<br />data class <a href="-issue/index.html">Issue</a>(val id: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val severity: <a href="-severity/index.html">Severity</a>, val description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val debt: <a href="-debt/index.html">Debt</a>)<br />An issue represents a problem in the codebase.</td>
     </tr>
     <tr>
       <td><a href="-lazy-regex/index.html">LazyRegex</a></td>
-      <td>[jvm]<br /><del>class</del> <a href="-lazy-regex/index.html"><del>LazyRegex</del></a><del>(</del><del>key</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>,</del> <del>default</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>)</del> <del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html"><del>ReadOnlyProperty</del></a><del>&lt;</del><a href="-rule/index.html">Rule</a><del>,</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a><del>&gt;</del> <br />LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.</td>
+      <td>[jvm]<br /><del>class</del> <a href="-lazy-regex/index.html"><del>LazyRegex</del></a><del>(</del>key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, default: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>)</del> <del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html"><del>ReadOnlyProperty</del></a><del>&lt;</del><a href="-rule/index.html">Rule</a><del>,</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html">Regex</a><del>&gt;</del> <br />LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.</td>
     </tr>
     <tr>
       <td><a href="-location/index.html">Location</a></td>
-      <td>[jvm]<br />data class <a href="-location/index.html">Location</a>@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html">JvmOverloads</a>constructor(source: <a href="-source-location/index.html">SourceLocation</a>, text: <a href="-text-location/index.html">TextLocation</a>, file: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, filePath: FilePath) : <a href="-compactable/index.html">Compactable</a><br />Specifies a position within a source code fragment.</td>
+      <td>[jvm]<br />data class <a href="-location/index.html">Location</a>@<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html">JvmOverloads</a>constructor(val source: <a href="-source-location/index.html">SourceLocation</a>, val text: <a href="-text-location/index.html">TextLocation</a>, val file: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))) : <a href="-compactable/index.html">Compactable</a><br />Specifies a position within a source code fragment.</td>
     </tr>
     <tr>
       <td><a href="-metric/index.html">Metric</a></td>
-      <td>[jvm]<br />data class <a href="-metric/index.html">Metric</a>(type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, threshold: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value.</td>
+      <td>[jvm]<br />data class <a href="-metric/index.html">Metric</a>(val type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val threshold: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = false, val conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = DEFAULT_FLOAT_CONVERSION_FACTOR)<br />Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value.</td>
     </tr>
     <tr>
       <td><a href="-multi-rule/index.html">MultiRule</a></td>
@@ -602,7 +602,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-project-metric/index.html">ProjectMetric</a></td>
-      <td>[jvm]<br />open class <a href="-project-metric/index.html">ProjectMetric</a>(type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, priority: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>, conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Anything that can be expressed as a numeric value for projects.</td>
+      <td>[jvm]<br />open class <a href="-project-metric/index.html">ProjectMetric</a>(val type: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val value: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val priority: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = -1, val isDouble: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = false, val conversionFactor: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> = DEFAULT_FLOAT_CONVERSION_FACTOR)<br />Anything that can be expressed as a numeric value for projects.</td>
     </tr>
     <tr>
       <td><a href="-properties-aware/index.html">PropertiesAware</a></td>
@@ -614,7 +614,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-rule/index.html">Rule</a></td>
-      <td>[jvm]<br />abstract class <a href="-rule/index.html">Rule</a>(ruleSetConfig: <a href="-config/index.html">Config</a>, ruleContext: <a href="-context/index.html">Context</a>) : <a href="-base-rule/index.html">BaseRule</a>, <a href="-config-aware/index.html">ConfigAware</a><br />A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</td>
+      <td>[jvm]<br />abstract class <a href="-rule/index.html">Rule</a>(val ruleSetConfig: <a href="-config/index.html">Config</a> = Config.empty, ruleContext: <a href="-context/index.html">Context</a> = DefaultContext()) : <a href="-base-rule/index.html">BaseRule</a>, <a href="-config-aware/index.html">ConfigAware</a><br />A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</td>
     </tr>
     <tr>
       <td><a href="index.html#-1624699926%2FClasslikes%2F-879243379">RuleId</a></td>
@@ -622,7 +622,7 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-rule-set/index.html">RuleSet</a></td>
-      <td>[jvm]<br />class <a href="-rule-set/index.html">RuleSet</a>(id: <a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-base-rule/index.html">BaseRule</a>&gt;)<br />A rule set is a collection of rules and must be defined within a rule set provider implementation.</td>
+      <td>[jvm]<br />class <a href="-rule-set/index.html">RuleSet</a>(val id: <a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, val rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-base-rule/index.html">BaseRule</a>&gt;)<br />A rule set is a collection of rules and must be defined within a rule set provider implementation.</td>
     </tr>
     <tr>
       <td><a href="index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a></td>
@@ -650,27 +650,27 @@ $('#toc').on('click', 'a', function() {
     </tr>
     <tr>
       <td><a href="-source-location/index.html">SourceLocation</a></td>
-      <td>[jvm]<br />data class <a href="-source-location/index.html">SourceLocation</a>(line: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, column: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Stores line and column information of a location.</td>
+      <td>[jvm]<br />data class <a href="-source-location/index.html">SourceLocation</a>(val line: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val column: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Stores line and column information of a location.</td>
     </tr>
     <tr>
       <td><a href="-split-pattern/index.html">SplitPattern</a></td>
-      <td>[jvm]<br />open class <a href="-split-pattern/index.html">SplitPattern</a>(text: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, delimiters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, removeTrailingAsterisks: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>)<br />Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.</td>
+      <td>[jvm]<br />open class <a href="-split-pattern/index.html">SplitPattern</a>(text: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, delimiters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = ",", removeTrailingAsterisks: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> = true)<br />Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.</td>
     </tr>
     <tr>
       <td><a href="-text-location/index.html">TextLocation</a></td>
-      <td>[jvm]<br />data class <a href="-text-location/index.html">TextLocation</a>(start: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, end: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Stores character start and end positions of a text file.</td>
+      <td>[jvm]<br />data class <a href="-text-location/index.html">TextLocation</a>(val start: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>, val end: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>)<br />Stores character start and end positions of a text file.</td>
     </tr>
     <tr>
       <td><a href="-thresholded-code-smell/index.html">ThresholdedCodeSmell</a></td>
-      <td>[jvm]<br />open class <a href="-thresholded-code-smell/index.html">ThresholdedCodeSmell</a>(issue: <a href="-issue/index.html">Issue</a>, entity: <a href="-entity/index.html">Entity</a>, metric: <a href="-metric/index.html">Metric</a>, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt;) : <a href="-code-smell/index.html">CodeSmell</a><br />Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.</td>
+      <td>[jvm]<br />open class <a href="-thresholded-code-smell/index.html">ThresholdedCodeSmell</a>(val issue: <a href="-issue/index.html">Issue</a>, val entity: <a href="-entity/index.html">Entity</a>, val metric: <a href="-metric/index.html">Metric</a>, val message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val references: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-entity/index.html">Entity</a>&gt; = emptyList()) : <a href="-code-smell/index.html">CodeSmell</a><br />Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.</td>
     </tr>
     <tr>
       <td><a href="-threshold-rule/index.html">ThresholdRule</a></td>
-      <td>[jvm]<br /><del>abstract</del> <del>class</del> <a href="-threshold-rule/index.html"><del>ThresholdRule</del></a><del>(</del><del>config</del><del>:</del> <a href="-config/index.html">Config</a><del>,</del> <del>defaultThreshold</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><del>)</del> <del>:</del> <a href="-rule/index.html"><del>Rule</del></a><br />Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.</td>
+      <td>[jvm]<br /><del>abstract</del> <del>class</del> <a href="-threshold-rule/index.html"><del>ThresholdRule</del></a><del>(</del>config: <a href="-config/index.html">Config</a>, defaultThreshold: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><del>)</del> <del>:</del> <a href="-rule/index.html"><del>Rule</del></a><br />Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.</td>
     </tr>
     <tr>
       <td><a href="-unstable-api/index.html">UnstableApi</a></td>
-      <td>[jvm]<br />annotation class <a href="-unstable-api/index.html">UnstableApi</a>(reason: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)<br />Experimental detekt api which may change on minor or patch versions.</td>
+      <td>[jvm]<br />annotation class <a href="-unstable-api/index.html">UnstableApi</a>(val reason: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = "")<br />Experimental detekt api which may change on minor or patch versions.</td>
     </tr>
   </tbody>
 </table>
@@ -687,7 +687,7 @@ $('#toc').on('click', 'a', function() {
   <tbody>
     <tr>
       <td><a href="comma-separated-pattern.html">commaSeparatedPattern</a></td>
-      <td>[jvm]<br />fun <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>.<a href="comma-separated-pattern.html">commaSeparatedPattern</a>(vararg delimiters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = arrayOf(“,”)): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;<br />Splits given String into a sequence of strings splited by the provided delimiters (“,” by default).</td>
+      <td>[jvm]<br />fun <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>.<a href="comma-separated-pattern.html">commaSeparatedPattern</a>(vararg delimiters: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = arrayOf(",")): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;<br />Splits given String into a sequence of strings splited by the provided delimiters ("," by default).</td>
     </tr>
     <tr>
       <td><a href="config.html">config</a></td>

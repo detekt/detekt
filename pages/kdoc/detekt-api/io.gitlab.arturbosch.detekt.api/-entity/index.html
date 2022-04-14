@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="entity">Entity</h1>
 
 <p>[jvm]<br />
-data class <a href="index.html">Entity</a>(name: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, signature: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, location: <a href="../-location/index.html">Location</a>, ktElement: KtElement?) : <a href="../-compactable/index.html">Compactable</a></p>
+data class <a href="index.html">Entity</a>(name: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val signature: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, val location: <a href="../-location/index.html">Location</a>, val ktElement: KtElement? = null) : <a href="../-compactable/index.html">Compactable</a></p>
 
 <p>Stores information about a specific code fragment.</p>
 
@@ -499,7 +499,7 @@ data class <a href="index.html">Entity</a>(name: <a href="https://kotlinlang.org
   <tbody>
     <tr>
       <td><a href="-entity.html">Entity</a></td>
-      <td>[jvm]<br /><del>fun</del> <a href="-entity.html"><del>Entity</del></a><del>(</del><del>name</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>,</del> <del>className</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>,</del> <del>signature</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><del>,</del> <del>location</del><del>:</del> <a href="../-location/index.html">Location</a><del>,</del> <del>ktElement</del><del>:</del> KtElement? <del>=</del> <del>null</del><del>)</del></td>
+      <td>[jvm]<br /><del>fun</del> <a href="-entity.html"><del>Entity</del></a><del>(</del>name: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, className: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, signature: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, location: <a href="../-location/index.html">Location</a>, ktElement: KtElement? = null<del>)</del></td>
     </tr>
     <tr>
       <td><a href="-entity.html">Entity</a></td>

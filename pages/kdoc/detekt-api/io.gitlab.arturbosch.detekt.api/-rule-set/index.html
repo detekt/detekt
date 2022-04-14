@@ -483,7 +483,7 @@ $('#toc').on('click', 'a', function() {
 <h1 id="ruleset">RuleSet</h1>
 
 <p>[jvm]<br />
-class <a href="index.html">RuleSet</a>(id: <a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-base-rule/index.html">BaseRule</a>&gt;)</p>
+class <a href="index.html">RuleSet</a>(val id: <a href="../index.html#-2041591616%2FClasslikes%2F-879243379">RuleSetId</a>, val rules: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-base-rule/index.html">BaseRule</a>&gt;)</p>
 
 <p>A rule set is a collection of rules and must be defined within a rule set provider implementation.</p>
 
@@ -516,7 +516,7 @@ class <a href="index.html">RuleSet</a>(id: <a href="../index.html#-2041591616%2F
   <tbody>
     <tr>
       <td><a href="accept.html">accept</a></td>
-      <td>[jvm]<br /><del>fun</del> <a href="accept.html"><del>accept</del></a><del>(</del><del>file</del><del>:</del> KtFile<del>,</del> <del>bindingContext</del><del>:</del> BindingContext <del>=</del> <del>BindingContext.EMPTY</del><del>)</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;<br />Visits given file with all rules of this rule set, returning a list of all code smell findings.</td>
+      <td>[jvm]<br /><del>fun</del> <a href="accept.html"><del>accept</del></a><del>(</del>file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY<del>)</del><del>:</del> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../-finding/index.html">Finding</a>&gt;<br />Visits given file with all rules of this rule set, returning a list of all code smell findings.</td>
     </tr>
   </tbody>
 </table>
