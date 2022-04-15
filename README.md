@@ -112,9 +112,9 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 Gradle 6.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
-| Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
-| -------------- | ------ | ------ | --- | ----------------- | --------------- |
-| `1.19.0`       | `7.3.0` | `1.5.31` | `4.2.2`| `1.8`       | `17`            |
+| Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
+| -------------- | ------- | -------- | ------- | ----------------- | --------------- |
+| `1.20.0`       | `7.4.2` | `1.6.20` | `7.1.3` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
