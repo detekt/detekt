@@ -72,6 +72,27 @@ class OptionalWhenBracesSpec {
                 .hasSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
         }
 
+        @Test
+        fun `reports unnecessary braces when the single statement has comments inside`() {
+            val code = """
+                fun test(i: Int) {
+                    when {
+                        else -> {
+                            when (i) {
+                                // foo
+                                1 -> println(1)
+                                // bar
+                                else -> println(2)
+                            }
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code))
+                .hasSize(1)
+                .hasSourceLocations(SourceLocation(3, 9))
+        }
+
         @Nested
         inner class `the statement is a lambda expression` {
             @Test
