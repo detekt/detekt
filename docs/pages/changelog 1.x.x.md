@@ -59,7 +59,7 @@ us release this new version of Detekt. You're more than welcome to join our comm
 - We've fixed a security vulnerability related to XML parsing - [#4499](https://github.com/detekt/detekt/pull/4499)
 - We've changed the behavior of the baseline task. Now the baseline is always update, even if you fixed all the issues in your codebase - [#4445](https://github.com/detekt/detekt/pull/4445)
 - We now enable the naming ruleset by default also on tests. Previously they were excluded - [#4438](https://github.com/detekt/detekt/pull/4438)
-- This version of Detekt is built with Gradle `v7.4.1`, AGP `7.1.1` and Kotlin `1.6.20` (see [#4530](https://github.com/detekt/detekt/pull/4530) [#4573](https://github.com/detekt/detekt/pull/4573) [#4133](https://github.com/detekt/detekt/pull/4133) [#4277](https://github.com/detekt/detekt/pull/4277) [#4665](https://github.com/detekt/detekt/pull/4665))
+- This version of Detekt is built with Gradle `v7.4.2`, AGP `7.1.3` and Kotlin `1.6.20` (see [#4530](https://github.com/detekt/detekt/pull/4530) [#4573](https://github.com/detekt/detekt/pull/4573) [#4133](https://github.com/detekt/detekt/pull/4133) [#4277](https://github.com/detekt/detekt/pull/4277) [#4665](https://github.com/detekt/detekt/pull/4665))
 - This version of Detekt is wrapping KtLint version `0.45.2` (see [#4227](https://github.com/detekt/detekt/pull/4227) [#4630](https://github.com/detekt/detekt/pull/4630) [#4645](https://github.com/detekt/detekt/pull/4645) [#4690](https://github.com/detekt/detekt/pull/4690))
 - For contributors: we migrated all our tests **from Spek to JUnit** due to better support and tooling [#4670](https://github.com/detekt/detekt/pull/4670).
 
