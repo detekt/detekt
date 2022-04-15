@@ -478,14 +478,32 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h4 id="1200---2022-03-31">1.20.0 - 2022-03-31</h4>
+  <h4 id="1200---2022-04-14">1.20.0 - 2022-04-14</h4>
+
+<p>We’re extremely excited to share with you all the next upcoming stable release of Detekt: <code class="language-plaintext highlighter-rouge">1.20.0</code> 🎉
+This release is coming with 16 new rules, new API and functionalities and several stability improvements.</p>
+
+<p>First, much thanks to our sponsors ❤️ as we were able to buy a domain and move our website to <a href="https://detekt.dev/">https://detekt.dev/</a>.</p>
+
+<p>As for the feature shipped, we work a lot on the Reporting side: we added a new type of reporting, improved the styling of the existing one and
+generally reduced the unnecessary warnings of run with type resolution.</p>
+
+<p>For rules like <code class="language-plaintext highlighter-rouge">ForbiddenMethod</code> where you can configure a signature of a method you want to use in your rule, we added a new syntax
+that allows to reference generic methods &amp; extension functions.</p>
+
+<p>We update a lot of the libraries we depend on bringing Detekt up to the ecosystem: KtLint 0.45.2, Kotlin 1.6.20 and Gradle 7.4.2 to name a few.</p>
+
+<p>Finally, we also migrated all of our tests <strong>from Spek to JUnit</strong>. This was a huge effort that will hopefully make easier for contributors
+to be involved with Detekt.</p>
+
+<p>As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt. You’re more than welcome to join our community on the <a href="https://kotlinlang.slack.com/archives/C88E12QH4">#detekt</a> channel on KotlinLang’s Slack (you can <a href="https://surveys.jetbrains.com/s3/kotlin-slack-sign-up">get an invite here</a>).</p>
 
 <h5 id="notable-changes">Notable Changes</h5>
 
 <ul>
-  <li>Thanks to our sponsors ❤️, we were able to buy a domain and move our website to <a href="https://detekt.dev/">https://detekt.dev/</a>.</li>
   <li>With this Detekt versions, rule authors <strong>can define the default configuration</strong> for their custom rules. This default configuration will be merged together with the user configuration and can be overridden by the user if they wish. More on this here <a href="https://github.com/detekt/detekt/pull/4315">#4315</a>. The <code class="language-plaintext highlighter-rouge">formatting</code> ruleset provided by Detekt is updated to use this new mechanism - <a href="https://github.com/detekt/detekt/pull/4352">#4352</a></li>
-  <li>We’ve added <strong>15 new rules</strong>:
+  <li>We’ve added <strong>16 new rules</strong>:
     <ul>
       <li>UnnecessaryInnerClass - <a href="https://github.com/detekt/detekt/pull/4394">#4394</a></li>
       <li>CanBeNonNullableProperty - <a href="https://github.com/detekt/detekt/pull/4379">#4379</a></li>
@@ -523,14 +541,18 @@ $('#toc').on('click', 'a', function() {
   <li>We’ve fixed a security vulnerability related to XML parsing - <a href="https://github.com/detekt/detekt/pull/4499">#4499</a></li>
   <li>We’ve changed the behavior of the baseline task. Now the baseline is always update, even if you fixed all the issues in your codebase - <a href="https://github.com/detekt/detekt/pull/4445">#4445</a></li>
   <li>We now enable the naming ruleset by default also on tests. Previously they were excluded - <a href="https://github.com/detekt/detekt/pull/4438">#4438</a></li>
-  <li>This version of Detekt is built with Gradle <code class="language-plaintext highlighter-rouge">v7.4.1</code>, AGP <code class="language-plaintext highlighter-rouge">7.1.1</code> and Kotlin <code class="language-plaintext highlighter-rouge">1.6.10</code> (see <a href="https://github.com/detekt/detekt/pull/4530">#4530</a> <a href="https://github.com/detekt/detekt/pull/4573">#4573</a> <a href="https://github.com/detekt/detekt/pull/4133">#4133</a> <a href="https://github.com/detekt/detekt/pull/4277">#4277</a>)</li>
-  <li>This version of Detekt is wrapping KtLint version <code class="language-plaintext highlighter-rouge">0.45.1</code> (see <a href="https://github.com/detekt/detekt/pull/4227">#4227</a> - <a href="https://github.com/detekt/detekt/pull/4630">#4630</a> - <a href="https://github.com/detekt/detekt/pull/4645">#4645</a>)</li>
-  <li>For contributors: we migrated most of our tests <strong>from Spek to JUnit</strong> due to better support and tooling.</li>
+  <li>This version of Detekt is built with Gradle <code class="language-plaintext highlighter-rouge">v7.4.1</code>, AGP <code class="language-plaintext highlighter-rouge">7.1.1</code> and Kotlin <code class="language-plaintext highlighter-rouge">1.6.20</code> (see <a href="https://github.com/detekt/detekt/pull/4530">#4530</a> <a href="https://github.com/detekt/detekt/pull/4573">#4573</a> <a href="https://github.com/detekt/detekt/pull/4133">#4133</a> <a href="https://github.com/detekt/detekt/pull/4277">#4277</a> <a href="https://github.com/detekt/detekt/pull/4665">#4665</a>)</li>
+  <li>This version of Detekt is wrapping KtLint version <code class="language-plaintext highlighter-rouge">0.45.2</code> (see <a href="https://github.com/detekt/detekt/pull/4227">#4227</a> <a href="https://github.com/detekt/detekt/pull/4630">#4630</a> <a href="https://github.com/detekt/detekt/pull/4645">#4645</a> <a href="https://github.com/detekt/detekt/pull/4690">#4690</a>)</li>
+  <li>For contributors: we migrated all our tests <strong>from Spek to JUnit</strong> due to better support and tooling <a href="https://github.com/detekt/detekt/pull/4670">#4670</a>.</li>
 </ul>
 
 <h5 id="changelog">Changelog</h5>
 
 <ul>
+  <li>Display dynamic –jvm-target values when using –help flag - <a href="https://github.com/detekt/detekt/pull/4694">#4694</a></li>
+  <li>CanBeNonNullable shouldn’t consider abstract properties - <a href="https://github.com/detekt/detekt/pull/4686">#4686</a></li>
+  <li>NonBooleanPropertyPrefixedWithIs: Allow boolean function reference - <a href="https://github.com/detekt/detekt/pull/4684">#4684</a></li>
+  <li>[VarCouldBeVal] fix overrides false positives - <a href="https://github.com/detekt/detekt/pull/4664">#4664</a></li>
   <li>Add ignoreOverridden support for BooleanPropertyNaming rule - <a href="https://github.com/detekt/detekt/pull/4654">#4654</a></li>
   <li>Fix regression generating configuration - <a href="https://github.com/detekt/detekt/pull/4646">#4646</a></li>
   <li>Fix concurrency issue when creating PomModel (#4609) - <a href="https://github.com/detekt/detekt/pull/4631">#4631</a></li>
@@ -582,6 +604,12 @@ $('#toc').on('click', 'a', function() {
 <h5 id="dependency-updates">Dependency Updates</h5>
 
 <ul>
+  <li>Update plugin dokka to v1.6.20 - <a href="https://github.com/detekt/detekt/pull/4717">#4717</a></li>
+  <li>Update dependency com.android.tools.build:gradle to v7.1.3 - <a href="https://github.com/detekt/detekt/pull/4695">#4695</a></li>
+  <li>JaCoCo 0.8.8 - <a href="https://github.com/detekt/detekt/pull/4680">#4680</a></li>
+  <li>Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.1 - <a href="https://github.com/detekt/detekt/pull/4673">#4673</a></li>
+  <li>Update dependency gradle to v7.4.2 - <a href="https://github.com/detekt/detekt/pull/4658">#4658</a></li>
+  <li>Update dependency org.jetbrains.kotlinx:kotlinx-html-jvm to v0.7.5 - <a href="https://github.com/detekt/detekt/pull/4657">#4657</a></li>
   <li>Update dependency gradle to v7.4.1 - <a href="https://github.com/detekt/detekt/pull/4622">#4622</a></li>
   <li>Update dependency com.android.tools.build:gradle to v7.1.2 - <a href="https://github.com/detekt/detekt/pull/4594">#4594</a></li>
   <li>Update dependency com.android.tools.build:gradle to v7.1.1 - <a href="https://github.com/detekt/detekt/pull/4561">#4561</a></li>
@@ -607,6 +635,10 @@ $('#toc').on('click', 'a', function() {
 <h5 id="housekeeping--refactorings">Housekeeping &amp; Refactorings</h5>
 
 <ul>
+  <li>Add missing Test annotations - <a href="https://github.com/detekt/detekt/pull/4699">#4699</a></li>
+  <li>Add failure message assertions to Gradle’s “expect failure” tests - <a href="https://github.com/detekt/detekt/pull/4693">#4693</a></li>
+  <li>Drop (most) Groovy DSL tests - <a href="https://github.com/detekt/detekt/pull/4687">#4687</a></li>
+  <li>Check detekt-gradle-plugin functionalTest source when running detekt task - <a href="https://github.com/detekt/detekt/pull/4681">#4681</a></li>
   <li>Fix typo in AvoidReferentialEquality rule description - <a href="https://github.com/detekt/detekt/pull/4644">#4644</a></li>
   <li>Housekeep Gradle scripts - <a href="https://github.com/detekt/detekt/pull/4589">#4589</a></li>
   <li>Refactor config printer to improve testability - <a href="https://github.com/detekt/detekt/pull/4580">#4580</a></li>
@@ -2976,7 +3008,7 @@ This change lead to increasing the threshold to 15 (was ten).</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Apr 14, 2022 <br />
+ Site last generated: Apr 15, 2022 <br />
                 </div>
             </div>
 </footer>
