@@ -14,9 +14,9 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.api.tasks.bundling.Jar
 import java.util.Locale
 
 internal class DetektAndroid(private val project: Project) {
@@ -73,9 +73,10 @@ internal class DetektAndroid(private val project: Project) {
             baseExtension.variants
                 ?.matching { !extension.matchesIgnoredConfiguration(it) }
                 ?.all { variant ->
-                    project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
-                        mainTaskProvider.dependsOn(provider)
-                    }
+                    project.registerAndroidDetektTask(bootClasspath, extension, variant)
+                        .also { provider ->
+                            mainTaskProvider.dependsOn(provider)
+                        }
                     project.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
                         .also { provider ->
                             mainBaselineTaskProvider.dependsOn(provider)
@@ -119,7 +120,7 @@ internal fun Project.registerAndroidDetektTask(
         classpath.apply {
             setFrom(variant.getCompileClasspath(null).filter { it.exists() })
             from(bootClasspath)
-            from(intermediateClassesDirectory(variant))
+            // from(javaCompileDestination(variant))
         }
         dependsOn(variant.javaCompileProvider)
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
@@ -145,7 +146,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
         classpath.apply {
             setFrom(variant.getCompileClasspath(null).filter { it.exists() })
             from(bootClasspath)
-            from(intermediateClassesDirectory(variant))
+            from(javaCompileDestination(variant))
         }
         dependsOn(variant.javaCompileProvider)
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
@@ -154,7 +155,13 @@ internal fun Project.registerAndroidCreateBaselineTask(
             "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
     }
 
-private fun Project.intermediateClassesDirectory(variant: BaseVariant) =
-    layout
-        .buildDirectory
-        .dir("intermediates/javac/${variant.name}/classes")
+private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryProperty? {
+    val javaCompile = variant.javaCompileProvider.orNull
+    if (javaCompile == null) {
+        logger.warn(
+            "Unable to find Java compiler on variant '{}'. Detekt analysis can show false negatives.",
+            variant.name,
+        )
+    }
+    return javaCompile?.destinationDirectory
+}

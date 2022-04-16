@@ -458,7 +458,7 @@ class DetektAndroidSpec {
             @DisplayName("task :app:detektMain has javac intermediates on the classpath")
             fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
-                    assertThat(buildResult.output).doesNotContain("error: unresolved reference: databinding")
+                    assertThat(buildResult.output).doesNotContain("UnreachableCode")
                 }
             }
 
@@ -466,7 +466,7 @@ class DetektAndroidSpec {
             @DisplayName("task :app:detektTest has javac intermediates on the classpath")
             fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
-                    assertThat(buildResult.output).doesNotContain("error: unresolved reference: databinding")
+                    assertThat(buildResult.output).doesNotContain("UnreachableCode")
                 }
             }
         }
