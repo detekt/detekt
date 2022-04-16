@@ -68,14 +68,14 @@ internal class DetektMultiplatform(private val project: Project) {
                 extension,
                 compilation.androidVariant,
                 detektTaskName,
-                inputSource,
+                inputSource
             )
             registerAndroidCreateBaselineTask(
                 bootClasspath,
                 extension,
                 compilation.androidVariant,
                 baselineTaskName,
-                inputSource,
+                inputSource
             )
         }
     }

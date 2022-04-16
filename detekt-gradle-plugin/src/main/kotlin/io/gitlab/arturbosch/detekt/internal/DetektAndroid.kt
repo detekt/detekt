@@ -112,7 +112,7 @@ internal fun Project.registerAndroidDetektTask(
     extension: DetektExtension,
     variant: BaseVariant,
     taskName: String = DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize(),
-    extraInputSource: FileCollection? = null,
+    extraInputSource: FileCollection? = null
 ): TaskProvider<Detekt> =
     registerDetektTask(taskName, extension) {
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
@@ -129,8 +129,7 @@ internal fun Project.registerAndroidDetektTask(
             baseline.set(layout.file(project.provider { baselineFile }))
         }
         setReportOutputConventions(reports, extension, variant.name)
-        description =
-            "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
+        description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
 internal fun Project.registerAndroidCreateBaselineTask(
@@ -138,7 +137,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
     extension: DetektExtension,
     variant: BaseVariant,
     taskName: String = DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(),
-    extraInputSource: FileCollection? = null,
+    extraInputSource: FileCollection? = null
 ): TaskProvider<DetektCreateBaselineTask> =
     registerCreateBaselineTask(taskName, extension) {
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
@@ -151,8 +150,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
         dependsOn(variant.javaCompileProvider)
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
         baseline.set(project.layout.file(project.provider { variantBaselineFile }))
-        description =
-            "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
+        description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
     }
 
 private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryProperty? {
