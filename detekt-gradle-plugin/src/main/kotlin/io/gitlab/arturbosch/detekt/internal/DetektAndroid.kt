@@ -17,7 +17,6 @@ import org.gradle.api.Task
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import java.util.Locale
 
 internal class DetektAndroid(private val project: Project) {
 
