@@ -120,7 +120,7 @@ internal fun Project.registerAndroidDetektTask(
         classpath.apply {
             setFrom(variant.getCompileClasspath(null).filter { it.exists() })
             from(bootClasspath)
-            // from(javaCompileDestination(variant))
+            from(javaCompileDestination(variant))
         }
         dependsOn(variant.javaCompileProvider)
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
@@ -137,7 +137,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
     bootClasspath: FileCollection,
     extension: DetektExtension,
     variant: BaseVariant,
-    taskName: String = DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(Locale.ROOT),
+    taskName: String = DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(),
     extraInputSource: FileCollection? = null,
 ): TaskProvider<DetektCreateBaselineTask> =
     registerCreateBaselineTask(taskName, extension) {
