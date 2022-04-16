@@ -35,8 +35,7 @@ class DetektJvmSpec {
                         txt.destination = file("output-path2.txt")
                     }
                 }
-            """.trimIndent(),
-            dryRun = false
+            """.trimIndent()
         ).also {
             it.setupProject()
         }
@@ -70,8 +69,7 @@ class DetektJvmSpec {
                         txt.destination = file("output-path2.txt")
                     }
                 }
-            """.trimIndent(),
-            dryRun = false
+            """.trimIndent()
         ).also {
             it.setupProject()
         }
