@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException
 internal interface DetektInvoker {
 
     fun invokeCli(
-        arguments: List<CliArgument>,
+        arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
         ignoreFailures: Boolean = false
@@ -41,12 +41,11 @@ internal class DefaultCliInvoker(
 ) : DetektInvoker {
 
     override fun invokeCli(
-        arguments: List<CliArgument>,
+        arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
         ignoreFailures: Boolean
     ) {
-        val cliArguments = arguments.flatMap(CliArgument::toArgument)
         try {
             val loader = classLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
@@ -55,7 +54,7 @@ internal class DefaultCliInvoker(
                 Array<String>::class.java,
                 PrintStream::class.java,
                 PrintStream::class.java
-            ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
+            ).invoke(null, arguments.toTypedArray(), System.out, System.err)
             runner::class.java.getMethod("execute").invoke(runner)
         } catch (reflectionWrapper: InvocationTargetException) {
             val message = reflectionWrapper.targetException.message
@@ -72,15 +71,14 @@ internal class DefaultCliInvoker(
 private class DryRunInvoker(private val logger: Logger) : DetektInvoker {
 
     override fun invokeCli(
-        arguments: List<CliArgument>,
+        arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
         ignoreFailures: Boolean
     ) {
-        val cliArguments = arguments.flatMap(CliArgument::toArgument)
         logger.info("Invoking detekt with dry-run.")
         logger.info("Task: $taskName")
-        logger.info("Arguments: ${cliArguments.joinToString(" ")}")
+        logger.info("Arguments: ${arguments.joinToString(" ")}")
         logger.info("Classpath: ${classpath.files}")
         logger.info("Ignore failures: $ignoreFailures")
     }

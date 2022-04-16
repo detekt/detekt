@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
+import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CreateBaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
@@ -20,6 +21,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
@@ -114,19 +116,9 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     private val isDryRun: Boolean = project.isDryRunEnabled()
 
-    @InputFiles
-    @SkipWhenEmpty
-    @IgnoreEmptyDirectories
-    @PathSensitive(PathSensitivity.RELATIVE)
-    override fun getSource(): FileTree = super.getSource()
-
-    @TaskAction
-    fun baseline() {
-        if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
-            logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
-        }
-
-        val arguments = mutableListOf(
+    @get:Internal
+    internal val arguments: Provider<List<String>> = project.provider {
+        listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
             JvmTargetArgument(jvmTargetProp.orNull),
@@ -141,10 +133,23 @@ open class DetektCreateBaselineTask : SourceTask() {
             AllRulesArgument(allRules.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
-        )
+        ).flatMap(CliArgument::toArgument)
+    }
+
+    @InputFiles
+    @SkipWhenEmpty
+    @IgnoreEmptyDirectories
+    @PathSensitive(PathSensitivity.RELATIVE)
+    override fun getSource(): FileTree = super.getSource()
+
+    @TaskAction
+    fun baseline() {
+        if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
+            logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
+        }
 
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
-            arguments = arguments.toList(),
+            arguments = arguments.get(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
