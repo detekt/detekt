@@ -63,14 +63,12 @@ internal class DetektMultiplatform(private val project: Project) {
                 target.name.capitalize() + variant.name.capitalize()
             val baselineTaskName = DetektPlugin.BASELINE_TASK_NAME +
                 target.name.capitalize() + variant.name.capitalize()
-            val intermediatesJavacJar = project.registerIntermediatesJavacJarTask(variant)
             registerAndroidDetektTask(
                 bootClasspath,
                 extension,
                 compilation.androidVariant,
                 detektTaskName,
                 inputSource,
-                intermediatesJavacJar,
             )
             registerAndroidCreateBaselineTask(
                 bootClasspath,
@@ -78,7 +76,6 @@ internal class DetektMultiplatform(private val project: Project) {
                 compilation.androidVariant,
                 baselineTaskName,
                 inputSource,
-                intermediatesJavacJar,
             )
         }
     }
