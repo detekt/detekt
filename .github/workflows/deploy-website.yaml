@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build-detekt-docs:
     if: github.repository == 'detekt/detekt'
@@ -43,6 +46,8 @@ jobs:
           path: docs/pages/gettingstarted/cli-options.md
 
   build-website:
+    permissions:
+      contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
     needs: build-detekt-docs
     runs-on: ubuntu-latest
     container: jekyll/builder
