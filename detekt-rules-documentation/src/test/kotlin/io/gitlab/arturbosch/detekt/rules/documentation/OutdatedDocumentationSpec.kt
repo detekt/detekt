@@ -172,6 +172,18 @@ class OutdatedDocumentationSpec {
             }
 
             @Test
+            fun `should not report when doc match class params and no primary constructor`() {
+                val correctTypeParam = """
+                /**
+                 * Some description
+                 * @param T Description of type param
+                 */
+                class MyClass<T>
+                """
+                assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
+            }
+
+            @Test
             fun `should report when doc misses type param`() {
                 val missingTypeParam = """
                 /**
