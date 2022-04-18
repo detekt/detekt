@@ -96,7 +96,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             if (assignments.isNullOrEmpty()) return false
             val declarationDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
             return assignments.any {
-                it.getResolvedCall(bindingContext)?.resultingDescriptor == declarationDescriptor
+                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor
             }
         }
 
