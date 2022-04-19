@@ -298,6 +298,23 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
 
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `to call a function type variable of the member`() {
+                val code = """
+                    class A {
+                        val foo: () -> Unit = {}
+                        
+                        inner class B {
+                            fun bar() {
+                                foo()
+                            }
+                        }
+                    }
+                """.trimIndent()
+
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Nested
