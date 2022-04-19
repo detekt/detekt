@@ -98,6 +98,20 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `does not report variables that are re-assigned in generic class with receiver`() {
+            val code = """
+                class A<T> {
+                    private var a = 1
+                    
+                    fun foo(): A<T> = apply {
+                        a = 2
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `reports variables that are not re-assigned`() {
             val code = """
                 class A {
