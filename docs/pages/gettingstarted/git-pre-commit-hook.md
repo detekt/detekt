@@ -68,17 +68,14 @@ fileArray=($@)
 detektInput=$(IFS=,;printf  "%s" "${fileArray[*]}")
 echo "Input files: $detektInput"
 
-OUTPUT="/tmp/detekt-$(date +%s)"
-detekt --input "$detektInput" > $OUTPUT
+OUTPUT=$(detekt --input "$detektInput" 2>&1)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
-  cat $OUTPUT
-  rm $OUTPUT
+  echo $OUTPUT
   echo "***********************************************"
   echo "                 Detekt failed                 "
   echo " Please fix the above issues before committing "
   echo "***********************************************"
   exit $EXIT_CODE
 fi
-rm $OUTPUT
 ```
