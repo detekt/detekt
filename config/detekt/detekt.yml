@@ -243,7 +243,7 @@ style:
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
-    active: true
+    active: false # formatting already have this rule enabled
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'
