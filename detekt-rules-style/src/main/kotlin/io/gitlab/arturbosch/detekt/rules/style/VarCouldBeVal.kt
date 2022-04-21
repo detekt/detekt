@@ -8,8 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isLateinit
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -68,10 +71,13 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration("Whether to ignore uninitialized lateinit vars")
+    private val ignoreLateinitVar: Boolean by config(defaultValue = false)
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (bindingContext == BindingContext.EMPTY) return
-        val assignmentVisitor = AssignmentVisitor(bindingContext)
+        val assignmentVisitor = AssignmentVisitor(bindingContext, ignoreLateinitVar)
         file.accept(assignmentVisitor)
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
@@ -80,7 +86,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     }
 
     @Suppress("TooManyFunctions")
-    private class AssignmentVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
+    private class AssignmentVisitor(
+        private val bindingContext: BindingContext,
+        private val ignoreLateinitVar: Boolean
+    ) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
@@ -197,7 +206,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun KtProperty.isDeclarationCandidate(): Boolean {
             return when {
-                !isVar || isOverride() -> false
+                !isVar || isOverride() || (ignoreLateinitVar && isLateinit()) -> false
                 isLocal || isPrivate() -> true
                 else -> {
                     // Check for whether property belongs to an anonymous object
