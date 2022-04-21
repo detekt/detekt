@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  *
  * This rule is aimed at library maintainers. If you are developing a final application you can ignore this issue.
  *
- * More info: https://jakewharton.com/public-api-challenges-in-kotlin/
+ * More info: [Public API challenges in Kotlin](https://jakewharton.com/public-api-challenges-in-kotlin/)
  *
  * <noncompliant>
  * data class C(val a: String) // violation: public data class

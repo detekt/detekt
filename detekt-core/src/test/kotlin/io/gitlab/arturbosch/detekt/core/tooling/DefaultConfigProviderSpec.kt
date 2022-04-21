@@ -11,11 +11,11 @@ import java.nio.file.Files
 class DefaultConfigProviderSpec {
     @Nested
     inner class `defaultConfigProvider without plugins` {
-        val spec = createNullLoggingSpec {}
+        private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
 
         @Test
         fun `gets`() {
-            val config = DefaultConfigProvider().apply { init(spec) }.get()
+            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
             assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
@@ -25,7 +25,7 @@ class DefaultConfigProviderSpec {
         @Test
         fun `copies`() {
             val path = createTempFileForTest("test", "test")
-            DefaultConfigProvider().apply { init(spec) }.copy(path)
+            DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             assertThat(path)
                 .hasSameTextualContentAs(resourceAsPath("default-detekt-config.yml"))
@@ -34,15 +34,15 @@ class DefaultConfigProviderSpec {
 
     @Nested
     inner class `defaultConfigProvider with plugins` {
-        val spec = createNullLoggingSpec {
+        private val extensionsSpec = createNullLoggingSpec {
             extensions {
                 fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
-        }
+        }.extensionsSpec
 
         @Test
         fun `gets`() {
-            val config = DefaultConfigProvider().apply { init(spec) }.get()
+            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
             assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
@@ -52,7 +52,7 @@ class DefaultConfigProviderSpec {
         @Test
         fun `copies`() {
             val path = createTempFileForTest("test", "test")
-            DefaultConfigProvider().apply { init(spec) }.copy(path)
+            DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             val actual = String(Files.readAllBytes(path), Charsets.UTF_8)
             val expected = String(Files.readAllBytes(resourceAsPath("default-detekt-config.yml")), Charsets.UTF_8) +

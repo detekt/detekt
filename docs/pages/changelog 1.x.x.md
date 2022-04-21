@@ -6,32 +6,77 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.20.0-RC1 - 2022-02-26
+#### 1.20.0 - 2022-04-14
+
+We're extremely excited to share with you all the next upcoming stable release of Detekt: `1.20.0` 🎉
+This release is coming with 16 new rules, new API and functionalities and several stability improvements.
+
+First, much thanks to our sponsors ❤️ as we were able to buy a domain and move our website to [https://detekt.dev/](https://detekt.dev/).
+
+As for the feature shipped, we work a lot on the Reporting side: we added a new type of reporting, improved the styling of the existing one and
+generally reduced the unnecessary warnings of run with type resolution.
+
+For rules like `ForbiddenMethod` where you can configure a signature of a method you want to use in your rule, we added a new syntax
+that allows to reference generic methods & extension functions.
+
+We update a lot of the libraries we depend on bringing Detekt up to the ecosystem: KtLint 0.45.2, Kotlin 1.6.20 and Gradle 7.4.2 to name a few.
+
+Finally, we also migrated all of our tests **from Spek to JUnit**. This was a huge effort that will hopefully make easier for contributors
+to be involved with Detekt.
+
+As always, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
 
 ##### Notable Changes
 
-- Thanks to our sponsors ❤️, we were able to buy a domain and move our website to [https://detekt.dev/](https://detekt.dev/).
 - With this Detekt versions, rule authors **can define the default configuration** for their custom rules. This default configuration will be merged together with the user configuration and can be overridden by the user if they wish. More on this here [#4315](https://github.com/detekt/detekt/pull/4315). The `formatting` ruleset provided by Detekt is updated to use this new mechanism - [#4352](https://github.com/detekt/detekt/pull/4352)
-- We've added **4 new rules**:
+- We've added **16 new rules**:
   - UnnecessaryInnerClass - [#4394](https://github.com/detekt/detekt/pull/4394)
   - CanBeNonNullableProperty - [#4379](https://github.com/detekt/detekt/pull/4379)
-  - TrailingComma - [#4227](https://github.com/detekt/detekt/pull/4227)
   - NullCheckOnMutableProperty - [#4353](https://github.com/detekt/detekt/pull/4353)
+  - SuspendFunWithCoroutineScopeReceiver - [#4616](https://github.com/detekt/detekt/pull/4616)
+  - ElseCaseInsteadOfExhaustiveWhen - [#4632](https://github.com/detekt/detekt/pull/4632)
+  - TrailingComma - From KtLint - [#4227](https://github.com/detekt/detekt/pull/4227)
+  - UnnecessaryParenthesesBeforeTrailingLambda - From KtLint - [#4630](https://github.com/detekt/detekt/pull/4630)
+  - BlockCommentInitialStarAlignment - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - CommentWrapping - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - DiscouragedCommentLocation - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - FunKeywordSpacing - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - FunctionTypeReferenceSpacing - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - KdocWrapping - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - ModifierListSpacing - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - TypeArgumentListSpacing - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
+  - Wrapping - From KtLint - [#4645](https://github.com/detekt/detekt/pull/4645)
 - We've made several improvements to the **console reporting**:
   - The HTML report has now a better CSS styling - [#4447](https://github.com/detekt/detekt/pull/4447) 
   - The default reporting format is now `LiteFindingsReport` (which is more compact reporting and similar to other tools in the ecosystem. [You can see an example here](https://github.com/detekt/detekt/pull/4027)) - [#4449](https://github.com/detekt/detekt/pull/4449).
   - We've added issue details to findings on `FindingsReport` and `FileBasedFindingsReporter` - [#4464](https://github.com/detekt/detekt/pull/4464)
   - We suppressed several warnings reported when running with type resolution - [#4423](https://github.com/detekt/detekt/pull/4423)
 - We fixed a **regression** introduced in `1.19.0` for users using `ignoreAnnotated` running **without type resolution** - [#4570](https://github.com/detekt/detekt/pull/4570)
+- For rules like `ForbiddenMethod` where you can specify a method name in the config file, now we added support for:
+  - Matching functions with generics - [#4460](https://github.com/detekt/detekt/pull/4460)
+  - Matching extension functions - [#4459](https://github.com/detekt/detekt/pull/4459)
 - We've fixed a security vulnerability related to XML parsing - [#4499](https://github.com/detekt/detekt/pull/4499)
 - We've changed the behavior of the baseline task. Now the baseline is always update, even if you fixed all the issues in your codebase - [#4445](https://github.com/detekt/detekt/pull/4445)
 - We now enable the naming ruleset by default also on tests. Previously they were excluded - [#4438](https://github.com/detekt/detekt/pull/4438)
-- This version of Detekt is built with Gradle `v7.4`, AGP `7.1.1` and Kotlin `1.6.10` (see [#4530](https://github.com/detekt/detekt/pull/4530) [#4573](https://github.com/detekt/detekt/pull/4573) [#4133](https://github.com/detekt/detekt/pull/4133) [#4277](https://github.com/detekt/detekt/pull/4277))
-- This version of Detekt is wrapping KtLint version `0.43.2` (see [#4227](https://github.com/detekt/detekt/pull/4227))
-- For contributors: we migrated most of our tests **from Spek to JUnit** due to better support and tooling.
+- This version of Detekt is built with Gradle `v7.4.2`, AGP `7.1.3` and Kotlin `1.6.20` (see [#4530](https://github.com/detekt/detekt/pull/4530) [#4573](https://github.com/detekt/detekt/pull/4573) [#4133](https://github.com/detekt/detekt/pull/4133) [#4277](https://github.com/detekt/detekt/pull/4277) [#4665](https://github.com/detekt/detekt/pull/4665))
+- This version of Detekt is wrapping KtLint version `0.45.2` (see [#4227](https://github.com/detekt/detekt/pull/4227) [#4630](https://github.com/detekt/detekt/pull/4630) [#4645](https://github.com/detekt/detekt/pull/4645) [#4690](https://github.com/detekt/detekt/pull/4690))
+- For contributors: we migrated all our tests **from Spek to JUnit** due to better support and tooling [#4670](https://github.com/detekt/detekt/pull/4670).
 
 ##### Changelog
 
+- Display dynamic --jvm-target values when using --help flag - [#4694](https://github.com/detekt/detekt/pull/4694)
+- CanBeNonNullable shouldn't consider abstract properties - [#4686](https://github.com/detekt/detekt/pull/4686)
+- NonBooleanPropertyPrefixedWithIs: Allow boolean function reference - [#4684](https://github.com/detekt/detekt/pull/4684)
+- [VarCouldBeVal] fix overrides false positives - [#4664](https://github.com/detekt/detekt/pull/4664)
+- Add ignoreOverridden support for BooleanPropertyNaming rule - [#4654](https://github.com/detekt/detekt/pull/4654)
+- Fix regression generating configuration - [#4646](https://github.com/detekt/detekt/pull/4646)
+- Fix concurrency issue when creating PomModel (#4609) - [#4631](https://github.com/detekt/detekt/pull/4631)
+- UnnecessaryAbstractClass: fix false positive when the abstract class has properties in the primary constructor - [#4628](https://github.com/detekt/detekt/pull/4628)
+- Properly set toolVersion on DetektExtension - [#4623](https://github.com/detekt/detekt/pull/4623)
+- NamedArguments: Ignore when argument values are the same as the parameter name - [#4613](https://github.com/detekt/detekt/pull/4613)
+- Parallel invocation of AnalysisFacade fails spuriously in 1.20.0-RC1 - [#4609](https://github.com/detekt/detekt/issues/4609)
+- NoSuchElementException after updating to 1.20.0-RC1 - [#4604](https://github.com/detekt/detekt/issues/4604)
 - Better error classification in Gradle Enterprise. - [#4586](https://github.com/detekt/detekt/pull/4586)
 - Fix for missing /kotlin folder when running on Android projects - [#4554](https://github.com/detekt/detekt/pull/4554)
 - Deprecate continuationIndentSize from the Indentation rule - [#4551](https://github.com/detekt/detekt/pull/4551)
@@ -73,6 +118,13 @@ toc: true
 
 ##### Dependency Updates
 
+- Update plugin dokka to v1.6.20 - [#4717](https://github.com/detekt/detekt/pull/4717)
+- Update dependency com.android.tools.build:gradle to v7.1.3 - [#4695](https://github.com/detekt/detekt/pull/4695)
+- JaCoCo 0.8.8 - [#4680](https://github.com/detekt/detekt/pull/4680)
+- Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.1 - [#4673](https://github.com/detekt/detekt/pull/4673)
+- Update dependency gradle to v7.4.2 - [#4658](https://github.com/detekt/detekt/pull/4658)
+- Update dependency org.jetbrains.kotlinx:kotlinx-html-jvm to v0.7.5 - [#4657](https://github.com/detekt/detekt/pull/4657)
+- Update dependency gradle to v7.4.1 - [#4622](https://github.com/detekt/detekt/pull/4622)
 - Update dependency com.android.tools.build:gradle to v7.1.2 - [#4594](https://github.com/detekt/detekt/pull/4594)
 - Update dependency com.android.tools.build:gradle to v7.1.1 - [#4561](https://github.com/detekt/detekt/pull/4561)
 - Update plugin pluginPublishing to v0.20.0 - [#4502](https://github.com/detekt/detekt/pull/4502)
@@ -95,6 +147,11 @@ toc: true
 
 ##### Housekeeping & Refactorings
 
+- Add missing Test annotations - [#4699](https://github.com/detekt/detekt/pull/4699)
+- Add failure message assertions to Gradle's "expect failure" tests - [#4693](https://github.com/detekt/detekt/pull/4693)
+- Drop (most) Groovy DSL tests - [#4687](https://github.com/detekt/detekt/pull/4687)
+- Check detekt-gradle-plugin functionalTest source when running detekt task - [#4681](https://github.com/detekt/detekt/pull/4681)
+- Fix typo in AvoidReferentialEquality rule description - [#4644](https://github.com/detekt/detekt/pull/4644)
 - Housekeep Gradle scripts - [#4589](https://github.com/detekt/detekt/pull/4589)
 - Refactor config printer to improve testability - [#4580](https://github.com/detekt/detekt/pull/4580)
 - avoid usage of java stream for parameterized tests - [#4579](https://github.com/detekt/detekt/pull/4579)

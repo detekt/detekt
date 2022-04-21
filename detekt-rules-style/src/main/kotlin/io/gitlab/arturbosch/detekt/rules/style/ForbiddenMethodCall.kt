@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * This rule allows to set a list of forbidden methods. This can be used to discourage the use of unstable, experimental
@@ -48,7 +48,9 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
             "calls of all methods with this name or with full signature " +
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
-            "with this concrete signature."
+            "with this concrete signature. If you want to forbid an extension function like" +
+            "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
+            "`hello(kotlin.String, kotlin.Int)`"
     )
     private val methods: List<FunctionMatcher> by config(
         listOf(

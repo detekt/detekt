@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitClassReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.types.KotlinType
  * An anonymous object that does nothing other than the implementation of a single method
  * can be used as a lambda.
  *
- * See https://kotlinlang.org/docs/java-interop.html#sam-conversions
- * See https://kotlinlang.org/docs/fun-interfaces.html
+ * See [SAM conversions](https://kotlinlang.org/docs/java-interop.html#sam-conversions),
+ * [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
  *
  * <noncompliant>
  * object : Foo {

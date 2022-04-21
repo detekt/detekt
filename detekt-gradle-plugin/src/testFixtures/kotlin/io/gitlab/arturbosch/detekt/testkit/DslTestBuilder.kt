@@ -71,9 +71,6 @@ abstract class DslTestBuilder {
     companion object {
         fun kotlin(): DslTestBuilder = KotlinBuilder()
         fun groovy(): DslTestBuilder = GroovyBuilder()
-
-        @JvmStatic
-        fun builders(): Set<DslTestBuilder> = setOf(GroovyBuilder(), KotlinBuilder())
     }
 }
 

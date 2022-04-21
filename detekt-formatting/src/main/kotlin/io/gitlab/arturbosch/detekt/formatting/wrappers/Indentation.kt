@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
+import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
+import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -8,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
@@ -29,9 +31,11 @@ class Indentation(config: Config) : FormattingRule(config) {
     @Suppress("UnusedPrivateMember")
     private val continuationIndentSize by config(4)
 
-    override fun overrideEditorConfig() = mapOf(
-        INDENT_SIZE_KEY to indentSize,
-    )
+    @OptIn(FeatureInAlphaState::class)
+    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+        mapOf(
+            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+        )
 
     /**
      * [wrapping] is working with file's [node] and we don't want to highlight the whole file

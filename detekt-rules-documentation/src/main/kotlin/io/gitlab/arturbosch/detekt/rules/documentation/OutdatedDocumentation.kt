@@ -95,8 +95,8 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getClassDeclarations(klass: KtClass): List<Declaration> {
-        val ctor = klass.primaryConstructor ?: return emptyList()
-        val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
+        val ctor = klass.primaryConstructor
+        val constructorDeclarations = if (ctor != null) getPrimaryConstructorDeclarations(ctor) else emptyList()
         val typeParams = if (matchTypeParameters) {
             klass.typeParameters.mapNotNull { it.name.toParamOrNull() }
         } else emptyList()
@@ -152,6 +152,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
             .fold(emptyList()) { acc, declarations -> acc + declarations }
     }
 
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
         val knownTag = docTag.knownTag
         val subjectName = docTag.getSubjectName() ?: return emptyList()

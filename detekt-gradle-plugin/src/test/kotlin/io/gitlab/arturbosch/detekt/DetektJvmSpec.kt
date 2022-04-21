@@ -19,7 +19,7 @@ class DetektJvmSpec {
 
             val gradleRunner = DslGradleRunner(
                 projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
+                buildFileName = "build.gradle.kts",
                 baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml", "detekt-baseline-test.xml"),
                 projectScript = {
                     apply<KotlinPluginWrapper>()
@@ -50,6 +50,7 @@ class DetektJvmSpec {
                 assertThat(argumentString).contains("--classpath")
             }
 
+            @Test
             fun `configures detekt type resolution task test`() {
                 val project = gradleRunner.buildProject()
 
@@ -61,81 +62,6 @@ class DetektJvmSpec {
                 assertThat(argumentString).contains("--report sarif:")
                 assertThat(argumentString).doesNotContain("--report txt:")
                 assertThat(argumentString).contains("--classpath")
-            }
-        }
-
-        @Nested
-        inner class `report location set on extension & task` {
-            val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
-                mainBuildFileContent = """
-                    plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
-                    }
-
-                    repositories {
-                        mavenCentral()
-                        mavenLocal()
-                    }
-
-                    detekt {
-                        reports {
-                            txt.destination = file("output-path.txt")
-                        }
-                    }
-
-                    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-                        reports {
-                            txt.destination = file("output-path2.txt")
-                        }
-                    }
-                """.trimIndent(),
-                dryRun = false
-            ).also {
-                it.setupProject()
-            }
-
-            @Test
-            fun `logs a warning`() {
-                gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
-                    assertThat(buildResult.output).contains("TXT report location set on detekt {} extension will be ignored for detektMain task.")
-                }
-            }
-        }
-
-        @Nested
-        inner class `report location set on task only` {
-            val gradleRunner = DslGradleRunner(
-                projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-                buildFileName = "build.gradle",
-                mainBuildFileContent = """
-                    plugins {
-                        id "org.jetbrains.kotlin.jvm"
-                        id "io.gitlab.arturbosch.detekt"
-                    }
-
-                    repositories {
-                        mavenCentral()
-                        mavenLocal()
-                    }
-
-                    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-                        reports {
-                            txt.destination = file("output-path2.txt")
-                        }
-                    }
-                """.trimIndent(),
-                dryRun = false
-            ).also {
-                it.setupProject()
-            }
-
-            fun `logs a warning`() {
-                gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
-                    assertThat(buildResult.output).doesNotContain("report location set on detekt {} extension will be ignored")
-                }
             }
         }
     }

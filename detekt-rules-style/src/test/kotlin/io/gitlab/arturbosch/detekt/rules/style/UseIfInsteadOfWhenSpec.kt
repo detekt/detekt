@@ -2,16 +2,18 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object UseIfInsteadOfWhenSpec : Spek({
+class UseIfInsteadOfWhenSpec {
 
-    val subject by memoized { UseIfInsteadOfWhen() }
+    val subject = UseIfInsteadOfWhen()
 
-    describe("UseIfInsteadOfWhen rule") {
+    @Nested
+    inner class `UseIfInsteadOfWhen rule` {
 
-        it("reports when using two branches") {
+        @Test
+        fun `reports when using two branches`() {
             val code = """
                 fun function(): Boolean? {
                     val x = null
@@ -24,7 +26,8 @@ object UseIfInsteadOfWhenSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not report when using one branch") {
+        @Test
+        fun `does not report when using one branch`() {
             val code = """
                 fun function(): Boolean? {
                     val x = null
@@ -36,7 +39,8 @@ object UseIfInsteadOfWhenSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when using more than two branches") {
+        @Test
+        fun `does not report when using more than two branches`() {
             val code = """
                 fun function(): Boolean? {
                     val x = null
@@ -50,7 +54,8 @@ object UseIfInsteadOfWhenSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report when second branch is not 'else'") {
+        @Test
+        fun `does not report when second branch is not 'else'`() {
             val code = """
                 fun function(): Boolean? {
                     val x = null
@@ -64,4 +69,4 @@ object UseIfInsteadOfWhenSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
-})
+}

@@ -2,16 +2,20 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseArrayLiteralsInAnnotationsSpec : Spek({
+class UseArrayLiteralsInAnnotationsSpec {
 
-    val subject by memoized { UseArrayLiteralsInAnnotations() }
+    val subject = UseArrayLiteralsInAnnotations()
 
-    describe("suggests replacing arrayOf with [] syntax") {
+    @Nested
+    @DisplayName("suggests replacing arrayOf with [] syntax`")
+    inner class ReplaceArrayOfWithSquareBrackets {
 
-        it("finds an arrayOf usage") {
+        @Test
+        fun `finds an arrayOf usage`() {
             val findings = subject.compileAndLint(
                 """
             annotation class Test(val values: Array<String>)
@@ -23,7 +27,9 @@ class UseArrayLiteralsInAnnotationsSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("expects [] syntax") {
+        @Test
+        @DisplayName("expects [] syntax")
+        fun expectsBracketSyntax() {
             val findings = subject.compileAndLint(
                 """
             annotation class Test(val values: Array<String>)
@@ -35,4 +41,4 @@ class UseArrayLiteralsInAnnotationsSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

@@ -3,16 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class EqualsOnSignatureLineSpec : Spek({
-    val subject by memoized { EqualsOnSignatureLine(Config.empty) }
+class EqualsOnSignatureLineSpec {
+    val subject = EqualsOnSignatureLine(Config.empty)
 
-    describe("EqualsOnSignatureLine rule") {
+    @Nested
+    inner class `EqualsOnSignatureLine rule` {
 
-        context("with expression syntax and without a return type") {
-            it("reports when the equals is on a new line") {
+        @Nested
+        inner class `with expression syntax and without a return type` {
+            @Test
+            fun `reports when the equals is on a new line`() {
                 val findings = subject.compileAndLint(
                     """
                     fun foo()
@@ -22,7 +25,8 @@ class EqualsOnSignatureLineSpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("does not report when the equals is on the same line") {
+            @Test
+            fun `does not report when the equals is on the same line`() {
                 val findings = subject.compileAndLint(
                     """
                 fun foo() = 1
@@ -35,8 +39,10 @@ class EqualsOnSignatureLineSpec : Spek({
             }
         }
 
-        context("with expression syntax and with a return type") {
-            it("reports when the equals is on a new line") {
+        @Nested
+        inner class `with expression syntax and with a return type` {
+            @Test
+            fun `reports when the equals is on a new line`() {
                 val findings = subject.compileAndLint(
                     """
                 fun one(): Int
@@ -56,7 +62,8 @@ class EqualsOnSignatureLineSpec : Spek({
                 assertThat(findings).hasSize(3)
             }
 
-            it("does not report when the equals is on the same line") {
+            @Test
+            fun `does not report when the equals is on the same line`() {
                 val findings = subject.compileAndLint(
                     """
                 fun one(): Int =
@@ -93,8 +100,10 @@ class EqualsOnSignatureLineSpec : Spek({
             }
         }
 
-        context("with expression syntax and with a where clause") {
-            it("reports when the equals is on a new line") {
+        @Nested
+        inner class `with expression syntax and with a where clause` {
+            @Test
+            fun `reports when the equals is on a new line`() {
                 val findings = subject.compileAndLint(
                     """
                 fun <V> one(): Int where V : Number
@@ -115,7 +124,8 @@ class EqualsOnSignatureLineSpec : Spek({
                 assertThat(findings).hasSize(3)
             }
 
-            it("does not report when the equals is on the same line") {
+            @Test
+            fun `does not report when the equals is on the same line`() {
                 val findings = subject.compileAndLint(
                     """
                 fun <V> one(): Int where V : Number =
@@ -131,7 +141,8 @@ class EqualsOnSignatureLineSpec : Spek({
             }
         }
 
-        it("does not report non-expression functions") {
+        @Test
+        fun `does not report non-expression functions`() {
             val findings = subject.compileAndLint(
                 """
             fun foo() {
@@ -151,4 +162,4 @@ class EqualsOnSignatureLineSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

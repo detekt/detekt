@@ -4,12 +4,9 @@ plugins {
     signing
 }
 
-val sonatypeUsername: String? = findProperty("sonatypeUsername")
-    ?.toString()
-    ?: System.getenv("MAVEN_CENTRAL_USER")
-val sonatypePassword: String? = findProperty("sonatypePassword")
-    ?.toString()
-    ?: System.getenv("MAVEN_CENTRAL_PW")
+tasks.withType<Sign>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
+}
 
 publishing {
     repositories {
@@ -17,16 +14,16 @@ publishing {
             name = "mavenCentral"
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
             credentials {
-                username = sonatypeUsername
-                password = sonatypePassword
+                username = "SONATYPE_USERNAME".byProperty
+                password = "SONATYPE_PASSWORD".byProperty
             }
         }
         maven {
             name = "sonatypeSnapshot"
             url = uri("https://oss.sonatype.org/content/repositories/snapshots")
             credentials {
-                username = sonatypeUsername
-                password = sonatypePassword
+                username = "SONATYPE_USERNAME".byProperty
+                password = "SONATYPE_PASSWORD".byProperty
             }
         }
     }
@@ -60,10 +57,16 @@ publishing {
     }
 }
 
-if (findProperty("signing.keyId") != null) {
+val signingKey = "SIGNING_KEY".byProperty
+val signingPwd = "SIGNING_PWD".byProperty
+if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
+    logger.info("Signing disabled as the GPG key was not found")
+} else {
+    logger.info("GPG Key found - Signing enabled")
     signing {
+        useInMemoryPgpKeys(signingKey, signingPwd)
         sign(publishing.publications[DETEKT_PUBLICATION])
     }
-} else {
-    logger.info("Signing Disabled as the PGP key was not found")
 }
+
+val String.byProperty: String? get() = findProperty(this) as? String

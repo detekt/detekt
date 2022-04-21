@@ -4,13 +4,15 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
+class LibraryEntitiesShouldNotBePublicSpec {
 
-    describe("Library class cannot be public") {
-        it("should not report without explicit filters set") {
+    @Nested
+    inner class `Library class cannot be public` {
+        @Test
+        fun `should not report without explicit filters set`() {
             val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to "**"))
             assertThat(
                 subject.compileAndLint(
@@ -21,12 +23,12 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
             ).isEmpty()
         }
 
-        val subject by memoized {
-            LibraryEntitiesShouldNotBePublic()
-        }
+        @Nested
+        inner class `positive cases` {
+            val subject = LibraryEntitiesShouldNotBePublic()
 
-        describe("positive cases") {
-            it("should report a class") {
+            @Test
+            fun `should report a class`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -36,7 +38,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("should report a class with function") {
+            @Test
+            fun `should report a class with function`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -50,7 +53,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("should report a typealias") {
+            @Test
+            fun `should report a typealias`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -60,7 +64,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).hasSize(1)
             }
 
-            it("should report a typealias and a function") {
+            @Test
+            fun `should report a typealias and a function`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -71,7 +76,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).hasSize(2)
             }
 
-            it("should report a function") {
+            @Test
+            fun `should report a function`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -82,8 +88,12 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
             }
         }
 
-        describe("negative cases") {
-            it("should not report a class") {
+        @Nested
+        inner class `negative cases` {
+            val subject = LibraryEntitiesShouldNotBePublic()
+
+            @Test
+            fun `should not report a class`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -97,7 +107,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a class with function") {
+            @Test
+            fun `should not report a class with function`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -107,7 +118,8 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
                 ).isEmpty()
             }
 
-            it("should not report a typealias") {
+            @Test
+            fun `should not report a typealias`() {
                 assertThat(
                     subject.compileAndLint(
                         """
@@ -118,4 +130,4 @@ internal class LibraryEntitiesShouldNotBePublicSpec : Spek({
             }
         }
     }
-})
+}

@@ -186,6 +186,81 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
+
+        @DisplayName("When lambdas foo(() -> kotlin.String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun foo(a: () -> String),          true",
+            "fun foo(a: () -> Unit),            true",
+            "fun foo(a: (String) -> String),    false",
+            "fun foo(a: (String) -> Unit),      false",
+            "fun foo(a: (Int) -> Unit),         false",
+        )
+        fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(() -> kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When lambdas foo((kotlin.String) -> Unit)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun foo(a: () -> String),          false",
+            "fun foo(a: () -> Unit),            false",
+            "fun foo(a: (String) -> String),    true",
+            "fun foo(a: (String) -> Unit),      true",
+            "fun foo(a: (Int) -> Unit),         true",
+        )
+        fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When extension functions foo(kotlin.String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun String.foo(),              true",
+            "fun foo(a: String),            true",
+            "fun Int.foo(),                 false",
+            "fun String.foo(a: Int),        false",
+            "'fun foo(a: String, ba: Int)', false",
+        )
+        fun `When foo(kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When extension functions foo(kotlin.String, kotlin.Int)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun String.foo(),              false",
+            "fun foo(a: String),            false",
+            "fun Int.foo(),                 false",
+            "fun String.foo(a: Int),        true",
+            "'fun foo(a: String, ba: Int)', true",
+        )
+        fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String, kotlin.Int)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When generics foo(T, U)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "'fun <T, U> foo(a: T, b: U)',      true",
+            "'fun <T, U> foo(a: U, b: T)',      false",
+            "'fun <T, U> foo(a: String, b: U)', false",
+            "'fun <T, U> T.foo(a: U)',          true",
+            "'fun <T, U> U.foo(a: T)',          false",
+        )
+        fun `When foo(T, U)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("foo(T, U)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
     }
 }
 

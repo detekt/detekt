@@ -1,19 +1,21 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnnecessaryFilterSpec : Spek({
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UnnecessaryFilter() }
+@KotlinCoreEnvironmentTest
+class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnnecessaryFilter()
 
-    describe("UnnecessaryFilter") {
-        it("Filter with size") {
+    @Nested
+    inner class UnnecessaryFilterTest {
+        @Test
+        fun `Filter with size`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .filter { it > 1 }
@@ -25,7 +27,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings[0]).hasMessage("'filter { it > 1 }' can be replaced by 'size { it > 1 }'")
         }
 
-        it("Filter with count") {
+        @Test
+        fun `Filter with count`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .filter { it > 1 }
@@ -36,7 +39,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("Sequence with count") {
+        @Test
+        fun `Sequence with count`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .asSequence()
@@ -49,7 +53,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("None item") {
+        @Test
+        fun `None item`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .filter { it > 2 }
@@ -60,7 +65,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("Any item") {
+        @Test
+        fun `Any item`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .filter { it > 2 }
@@ -72,8 +78,10 @@ class UnnecessaryFilterSpec : Spek({
         }
     }
 
-    describe("Correct filter") {
-        it("Not stdlib count list function") {
+    @Nested
+    inner class `Correct filter` {
+        @Test
+        fun `Not stdlib count list function`() {
             val code = """
                 fun <T> List<T>.count() : Any{
                     return Any()
@@ -87,7 +95,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("Not stdlib count sequences function") {
+        @Test
+        fun `Not stdlib count sequences function`() {
             val code = """
                 fun <T> Sequence<T>.count() : Any{
                     return Any()
@@ -101,7 +110,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("Not stdlib filter function") {
+        @Test
+        fun `Not stdlib filter function`() {
             val code = """
                 fun filter() : List<Any>{
                     return emptyList()
@@ -114,7 +124,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("Filter with count") {
+        @Test
+        fun `Filter with count`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .count { it > 2 }
@@ -124,7 +135,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("None item") {
+        @Test
+        fun `None item`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .none { it > 2 }
@@ -134,7 +146,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("Any item") {
+        @Test
+        fun `Any item`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .any { it > 2 }
@@ -144,7 +157,8 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("Sequence with count") {
+        @Test
+        fun `Sequence with count`() {
             val code = """
                 val x = listOf(1, 2, 3)
                     .asSequence()
@@ -157,7 +171,8 @@ class UnnecessaryFilterSpec : Spek({
         }
 
         // https://github.com/detekt/detekt/issues/3541#issuecomment-815136831
-        it("Size in another statement") {
+        @Test
+        fun `Size in another statement`() {
             val code = """
                 fun foo() {
                     val strings = listOf("abc", "cde", "ader")
@@ -173,7 +188,9 @@ class UnnecessaryFilterSpec : Spek({
         }
 
         // https://github.com/detekt/detekt/issues/3541
-        it("Size/isEmpty()/isNotEmpty() in another statement") {
+        @Test
+        @DisplayName("Size/isEmpty()/isNotEmpty() in another statement")
+        fun filterUsedInOtherStatement() {
             val code = """
                 fun test(queryParts: List<String>, a: List<String>, b: List<String>, c: List<String>) {
                     val dbQueryParts = queryParts.filter { it.length > 1 }.take(3)
@@ -186,4 +203,4 @@ class UnnecessaryFilterSpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

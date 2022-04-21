@@ -1,30 +1,30 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
-class UnnecessaryAbstractClassSpec : Spek({
-    setupKotlinEnvironment()
-
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized {
+@KotlinCoreEnvironmentTest
+class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
+    val subject =
         UnnecessaryAbstractClass(TestConfig(mapOf(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated"))))
-    }
 
-    describe("UnnecessaryAbstractClass rule") {
+    @Nested
+    inner class `UnnecessaryAbstractClass rule` {
 
-        context("abstract classes with no concrete members") {
+        @Nested
+        inner class `abstract classes with no concrete members` {
             val message = "An abstract class without a concrete member can be refactored to an interface."
 
-            it("reports an abstract class with no concrete member") {
+            @Test
+            fun `reports an abstract class with no concrete member`() {
                 val code = """
                     abstract class A {
                         abstract val i: Int
@@ -36,32 +36,38 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertFindingMessage(findings, message)
             }
 
-            context("reports completely-empty abstract classes") {
-                it("case 1") {
+            @Nested
+            inner class `reports completely-empty abstract classes` {
+                @Test
+                fun `case 1`() {
                     val code = "abstract class A"
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
 
-                it("case 2") {
+                @Test
+                fun `case 2`() {
                     val code = "abstract class A()"
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
 
-                it("case 3") {
+                @Test
+                fun `case 3`() {
                     val code = "abstract class A {}"
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
 
-                it("case 4") {
+                @Test
+                fun `case 4`() {
                     val code = "abstract class A() {}"
                     val findings = subject.compileAndLintWithContext(env, code)
                     assertFindingMessage(findings, message)
                 }
 
-                it("that inherits from an interface") {
+                @Test
+                fun `that inherits from an interface`() {
                     val code = """
                         interface A {
                             val i: Int
@@ -72,7 +78,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                     assertFindingMessage(findings, message)
                 }
 
-                it("that inherits from another abstract class") {
+                @Test
+                fun `that inherits from another abstract class`() {
                     val code = """
                         @Deprecated("We don't care about this first class")
                         abstract class A {
@@ -85,7 +92,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 }
             }
 
-            it("does not report an abstract class with concrete members derived from a base class") {
+            @Test
+            fun `does not report an abstract class with concrete members derived from a base class`() {
                 val code = """
                     abstract class A {
                         abstract fun f()
@@ -99,7 +107,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report an abstract class with a internal abstract member") {
+            @Test
+            fun `does not report an abstract class with a internal abstract member`() {
                 val code = """
                     abstract class A {
                         internal abstract fun f()
@@ -107,7 +116,9 @@ class UnnecessaryAbstractClassSpec : Spek({
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
-            it("does not report an abstract class with a protected abstract member") {
+
+            @Test
+            fun `does not report an abstract class with a protected abstract member`() {
                 val code = """
                     abstract class A {
                         protected abstract fun f()
@@ -117,11 +128,13 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
         }
 
-        context("abstract classes with no abstract members") {
+        @Nested
+        inner class `abstract classes with no abstract members` {
 
             val message = "An abstract class without an abstract member can be refactored to a concrete class."
 
-            it("reports no abstract members in abstract class") {
+            @Test
+            fun `reports no abstract members in abstract class`() {
                 val code = """
                     abstract class A {
                         val i: Int = 0
@@ -132,7 +145,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertFindingMessage(findings, message)
             }
 
-            it("reports no abstract members in nested abstract class inside a concrete class") {
+            @Test
+            fun `reports no abstract members in nested abstract class inside a concrete class`() {
                 val code = """
                     class Outer {
                         abstract class Inner {
@@ -144,7 +158,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertFindingMessage(findings, message)
             }
 
-            it("reports no abstract members in nested abstract class inside an interface") {
+            @Test
+            fun `reports no abstract members in nested abstract class inside an interface`() {
                 val code = """
                     interface Inner {
                         abstract class A {
@@ -156,19 +171,22 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertFindingMessage(findings, message)
             }
 
-            it("reports no abstract members in an abstract class with just a constructor") {
+            @Test
+            fun `reports no abstract members in an abstract class with just a constructor`() {
                 val code = "abstract class A(val i: Int)"
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
-            it("reports no abstract members in an abstract class with a body and a constructor") {
+            @Test
+            fun `reports no abstract members in an abstract class with a body and a constructor`() {
                 val code = "abstract class A(val i: Int) {}"
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
-            it("reports an abstract class with no abstract member derived from a class with abstract members") {
+            @Test
+            fun `reports an abstract class with no abstract member derived from a class with abstract members`() {
                 val code = """
                     abstract class Base {
                         abstract val i: Int
@@ -190,9 +208,11 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
         }
 
-        context("abstract classes with members") {
+        @Nested
+        inner class `abstract classes with members` {
 
-            it("does not report an abstract class with members and an abstract class derived from it") {
+            @Test
+            fun `does not report an abstract class with members and an abstract class derived from it`() {
                 val code = """
                     abstract class A {
                         abstract val i: Int
@@ -206,7 +226,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report an abstract class with a constructor and an abstract class derived from it") {
+            @Test
+            fun `does not report an abstract class with a constructor and an abstract class derived from it`() {
                 val code = """
                     abstract class A(val i: Int) {
                         abstract fun f()
@@ -219,7 +240,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report an abstract class with a function derived from an interface") {
+            @Test
+            fun `does not report an abstract class with a function derived from an interface`() {
                 val code = """
                     abstract class A : Interface {
                         fun g() {}
@@ -232,7 +254,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report abstract classes with module annotation") {
+            @Test
+            fun `does not report abstract classes with module annotation`() {
                 val code = """
                     @Deprecated("test")
                     abstract class A {
@@ -247,7 +270,8 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
-            it("does not report abstract classes with properties in the primary constructor") {
+            @Test
+            fun `does not report abstract classes with properties in the primary constructor`() {
                 val code = """
                     interface I {
                         fun test(): Int
@@ -258,7 +282,7 @@ class UnnecessaryAbstractClassSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun assertFindingMessage(findings: List<Finding>, message: String) {
     assertThat(findings).hasSize(1)

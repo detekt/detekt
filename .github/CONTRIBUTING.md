@@ -10,9 +10,8 @@
 - We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
   new test classes. If your new rule requires type resolution (i.e. it utilises `BindingContext`) then annotate your
   test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinCoreEnvironment` as a parameter.
-  See `SpekTestDiscoverySpec.kt` in the `custom-checks` module for a complete example.
-- We are in the process of migrating existing [Spek](https://github.com/spekframework/spek) tests to JUnit 5. For easier
-  testing of these tests you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
+  See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../docs/pages/gettingstarted/type-resolution.md)
+  guide for details.
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
@@ -311,8 +310,33 @@ warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0
 - `gradle increment<Patch|Minor|Major>` - update version
 - `./scripts/release.sh` - publish all artifacts
 
+## Gradle Enterprise Access
+
+We do have access to a managed [Gradle Enterprise instance](6) that is publishing
+build scans for all the builds executed on CI (not from forks).
+
+This is extremely helpful to debug build failures and have access to remote build cache.
+Build scans are public so everyone can get insights on our build status.
+
+If you're a **maintainer** of a project under github.com/detekt/, you can request an access token
+to connect your local machine to the Gradle Enterprise instance, so you will also be publishing scans.
+
+You must follow the steps below:
+
+1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainers.
+2. An account on https://ge.detekt.dev/ will be created for you, which you need to configure upon login (e.g. reset your password).
+3. Run the `./gradlew provisionGradleEnterpriseAccessKey` task from the detekt root folder
+4. Complete the access key provisioning process (you will have to go through a browser).
+5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
+6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
+
+More information on this process could be found on the [official Gradle Enterprise documentation][8].
+
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
 [2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments
+[6]: https://ge.detekt.dev/
+[7]: mailto:info@detekt.dev
+[8]: https://docs.gradle.com/enterprise/gradle-plugin/#automated_access_key_provisioning

@@ -11,11 +11,11 @@ class DetektPlainSpec {
     inner class `When detekt is applied before JVM plugin` {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-            buildFileName = "build.gradle",
+            buildFileName = "build.gradle.kts",
             mainBuildFileContent = """
                 plugins {
-                    id "io.gitlab.arturbosch.detekt"
-                    id "org.jetbrains.kotlin.jvm"
+                    id("io.gitlab.arturbosch.detekt")
+                    kotlin("jvm")
                 }
 
                 repositories {
@@ -41,12 +41,12 @@ class DetektPlainSpec {
     inner class `When applying detekt in a project` {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-            buildFileName = "build.gradle",
+            buildFileName = "build.gradle.kts",
             baselineFiles = listOf("detekt-baseline.xml"),
             mainBuildFileContent = """
                 plugins {
-                    id "org.jetbrains.kotlin.jvm"
-                    id "io.gitlab.arturbosch.detekt"
+                    kotlin("jvm")
+                    id("io.gitlab.arturbosch.detekt")
                 }
 
                 repositories {
@@ -54,7 +54,7 @@ class DetektPlainSpec {
                     mavenLocal()
                 }
 
-                tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+                tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {
                         sarif.enabled = true
                         txt.enabled = false

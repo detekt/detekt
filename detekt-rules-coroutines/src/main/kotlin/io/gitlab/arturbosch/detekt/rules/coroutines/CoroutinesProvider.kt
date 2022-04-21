@@ -20,7 +20,8 @@ class CoroutinesProvider : DefaultRuleSetProvider {
             InjectDispatcher(config),
             RedundantSuspendModifier(config),
             SleepInsteadOfDelay(config),
-            SuspendFunWithFlowReturnType(config)
+            SuspendFunWithFlowReturnType(config),
+            SuspendFunWithCoroutineScopeReceiver(config)
         )
     )
 }

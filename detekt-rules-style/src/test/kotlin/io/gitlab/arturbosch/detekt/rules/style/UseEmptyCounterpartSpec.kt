@@ -1,22 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseEmptyCounterpartSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
+    val rule = UseEmptyCounterpart(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val rule by memoized { UseEmptyCounterpart(Config.empty) }
+    @Nested
+    inner class `UseEmptyCounterpart rule` {
 
-    describe("UseEmptyCounterpart rule") {
-
-        it("reports no-arg instantiation") {
+        @Test
+        fun `reports no-arg instantiation`() {
             val code = """
                 val array = arrayOf<Any>()
                 val list = listOf<Any>()
@@ -28,7 +28,8 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
         }
 
-        it("reports no-arg instantiation with inferred type parameters") {
+        @Test
+        fun `reports no-arg instantiation with inferred type parameters`() {
             val code = """
                 val array: Array<Any> = arrayOf()
                 val list: List<Any> = listOf()
@@ -40,7 +41,8 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
         }
 
-        it("does not report empty instantiation") {
+        @Test
+        fun `does not report empty instantiation`() {
             val code = """
                 val array = emptyArray<Any>()
                 val list = emptyList<Any>()
@@ -51,7 +53,8 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report instantiation with arguments") {
+        @Test
+        fun `does not report instantiation with arguments`() {
             val code = """
                 val array = arrayOf(0)
                 val list = listOf(0)
@@ -63,7 +66,8 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report no-arg custom function with same name as function with empty counterpart") {
+        @Test
+        fun `does not report no-arg custom function with same name as function with empty counterpart`() {
             val code = """
                 fun <T> arrayOf(): Array<T> = TODO()
                 fun <T> listOf(): List<T> = TODO()
@@ -82,4 +86,4 @@ class UseEmptyCounterpartSpec : Spek({
             assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -32,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
 /**
@@ -95,7 +96,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             if (assignments.isNullOrEmpty()) return false
             val declarationDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
             return assignments.any {
-                it.getResolvedCall(bindingContext)?.resultingDescriptor == declarationDescriptor
+                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor
             }
         }
 
@@ -196,7 +197,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun KtProperty.isDeclarationCandidate(): Boolean {
             return when {
-                !isVar -> false
+                !isVar || isOverride() -> false
                 isLocal || isPrivate() -> true
                 else -> {
                     // Check for whether property belongs to an anonymous object

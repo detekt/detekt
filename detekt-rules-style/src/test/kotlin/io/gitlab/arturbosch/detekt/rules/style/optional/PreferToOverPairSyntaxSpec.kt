@@ -1,22 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object PreferToOverPairSyntaxSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
+    val subject = PreferToOverPairSyntax(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { PreferToOverPairSyntax(Config.empty) }
+    @Nested
+    inner class `PreferToOverPairSyntax rule` {
 
-    describe("PreferToOverPairSyntax rule") {
-
-        it("reports if pair is created using pair constructor") {
+        @Test
+        fun `reports if pair is created using pair constructor`() {
             val code = """
                 val pair1 = Pair(1, 2)
                 val pair2: Pair<Int, Int> = Pair(1, 2)
@@ -28,7 +28,8 @@ object PreferToOverPairSyntaxSpec : Spek({
             assertThat(findings[0].message).endsWith("`1 to 2`.")
         }
 
-        it("reports if pair is created using a function that uses pair constructor") {
+        @Test
+        fun `reports if pair is created using a function that uses pair constructor`() {
             val code = """
                 val pair = createPair()
                 fun createPair() = Pair(1, 2)
@@ -38,12 +39,14 @@ object PreferToOverPairSyntaxSpec : Spek({
             assertThat(findings[0].message).endsWith("`1 to 2`.")
         }
 
-        it("does not report if it is created using the to syntax") {
+        @Test
+        fun `does not report if it is created using the to syntax`() {
             val code = "val pair = 1 to 2"
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report if a non-Kotlin Pair class was used") {
+        @Test
+        fun `does not report if a non-Kotlin Pair class was used`() {
             val code = """
                 val pair1 = Pair(1, 2)
                 val pair2: Pair<Int, Int> = Pair(1, 2)
@@ -54,7 +57,8 @@ object PreferToOverPairSyntaxSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        it("does not report if pair is created using a function that uses the to syntax") {
+        @Test
+        fun `does not report if pair is created using a function that uses the to syntax`() {
             val code = """
                 val pair = createPair()
                 fun createPair() = 1 to 2
@@ -62,4 +66,4 @@ object PreferToOverPairSyntaxSpec : Spek({
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
-})
+}

@@ -3,15 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class OptionalWhenBracesSpec : Spek({
-    val subject by memoized { OptionalWhenBraces() }
+class OptionalWhenBracesSpec {
+    val subject = OptionalWhenBraces()
 
-    describe("check optional braces in when expression") {
+    @Nested
+    inner class `check optional braces in when expression` {
 
-        it("does not report necessary braces") {
+        @Test
+        fun `does not report necessary braces`() {
             val code = """
                 fun x() {
                     when (1) {
@@ -30,7 +32,8 @@ class OptionalWhenBracesSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("reports unnecessary braces") {
+        @Test
+        fun `reports unnecessary braces`() {
             val code = """
                 fun x() {
                     when (1) {
@@ -42,7 +45,8 @@ class OptionalWhenBracesSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("reports unnecessary braces for nested when") {
+        @Test
+        fun `reports unnecessary braces for nested when`() {
             val code = """
                 import kotlin.random.Random
                 
@@ -68,8 +72,31 @@ class OptionalWhenBracesSpec : Spek({
                 .hasSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
         }
 
-        context("the statement is a lambda expression") {
-            it("does not report if the lambda has no arrow") {
+        @Test
+        fun `reports unnecessary braces when the single statement has comments inside`() {
+            val code = """
+                fun test(i: Int) {
+                    when {
+                        else -> {
+                            when (i) {
+                                // foo
+                                1 -> println(1)
+                                // bar
+                                else -> println(2)
+                            }
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code))
+                .hasSize(1)
+                .hasSourceLocations(SourceLocation(3, 9))
+        }
+
+        @Nested
+        inner class `the statement is a lambda expression` {
+            @Test
+            fun `does not report if the lambda has no arrow`() {
                 val code = """
                     fun test(b: Boolean): (Int) -> Int {
                         return when (b) {
@@ -81,7 +108,8 @@ class OptionalWhenBracesSpec : Spek({
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
-            it("reports if the lambda has an arrow") {
+            @Test
+            fun `reports if the lambda has an arrow`() {
                 val code = """
                     fun test(b: Boolean): (Int) -> Int {
                         return when (b) {
@@ -94,4 +122,4 @@ class OptionalWhenBracesSpec : Spek({
             }
         }
     }
-})
+}
