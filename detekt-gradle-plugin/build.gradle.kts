@@ -66,7 +66,6 @@ configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
-    implementation(projects.detektUtils)
 
     // Migrate to `implementation(testFixtures(project))` in test suite configuration when Gradle 7.5 released
     // (https://github.com/gradle/gradle/pull/19472)
