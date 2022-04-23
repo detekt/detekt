@@ -4,6 +4,7 @@ rootProject.name = "detekt"
 
 pluginManagement {
     includeBuild("build-logic")
+    includeBuild("detekt-gradle-plugin")
 }
 
 include("code-coverage-report")
@@ -12,7 +13,6 @@ include("detekt-cli")
 include("detekt-core")
 include("detekt-formatting")
 include("detekt-generator")
-include("detekt-gradle-plugin")
 include("detekt-metrics")
 include("detekt-parser")
 include("detekt-psi-utils")

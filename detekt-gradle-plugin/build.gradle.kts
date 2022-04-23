@@ -9,14 +9,13 @@ plugins {
     alias(libs.plugins.pluginPublishing)
 }
 
-detekt {
-    source.from("src/functionalTest/kotlin")
-}
-
 repositories {
     mavenCentral()
     google()
 }
+
+group = "io.gitlab.arturbosch.detekt"
+version = Versions.currentOrSnapshot()
 
 testing {
     suites {
