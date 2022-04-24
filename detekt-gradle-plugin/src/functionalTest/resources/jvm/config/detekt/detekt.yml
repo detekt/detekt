@@ -1,3 +1,0 @@
-potential-bugs:
-  ExitOutsideMain:
-    active: true
