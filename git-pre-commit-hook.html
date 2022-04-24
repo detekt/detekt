@@ -481,7 +481,7 @@ $('#toc').on('click', 'a', function() {
   <p>Detekt can be integrated into your development workflow by using a Git pre-commit hook.
 For that reason Git supports to run custom scripts automatically, when a specific action occurs.
 The mentioned pre-commit hook can be setup locally on your dev-machine.
-The following client-side detekt hook is triggered by a commit operation.</p>
+The following client-side detekt hook is triggered by a commit operation, and checks all files via the gradle task.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
 <span class="nb">echo</span> <span class="s2">"Running detekt check..."</span>
@@ -509,6 +509,45 @@ More information about Git hooks and how to install them can be found in
 You can watch his excellent talk about <strong>Static Code Analysis For Kotlin</strong> on 
 <a href="https://www.youtube.com/watch?v=LT6m5_LO2DQ">YouTube</a>.</p>
 
+<h2 id="only-run-on-staged-files">Only run on staged files</h2>
+
+<p>It is also possible to use <a href="/cli.html">the CLI</a> to create a hook that only runs on staged files. This has the advantage of speedier execution, by running on fewer files and avoiding the warm-up time of the gradle daemon.</p>
+
+<p>Please note, however, that a handful of checks requiring <a href="/type-resolution.html">type resolution</a> will not work correctly with this approach. If you do adopt a partial hook, it is recommended that you still implement a full <code class="language-plaintext highlighter-rouge">detekt</code> check as part of your CI pipeline.</p>
+
+<p>This example has been put together using <a href="https://pre-commit.com/">pre-commit</a>, but the same principle can be applied to any kind of hook.</p>
+
+<p>Hook definition in pre-commit:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">detekt</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">detekt check</span>
+  <span class="na">description</span><span class="pi">:</span> <span class="s">Runs `detekt` on modified .kt files.</span>
+  <span class="na">language</span><span class="pi">:</span> <span class="s">script</span>
+  <span class="na">entry</span><span class="pi">:</span> <span class="s">detekt.sh</span>
+  <span class="na">files</span><span class="pi">:</span> <span class="s">\.kt</span>
+</code></pre></div></div>
+
+<p>Script <code class="language-plaintext highlighter-rouge">detekt.sh</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">echo</span> <span class="s2">"Running detekt check..."</span>
+<span class="nv">fileArray</span><span class="o">=(</span><span class="nv">$@</span><span class="o">)</span>
+<span class="nv">detektInput</span><span class="o">=</span><span class="si">$(</span><span class="nv">IFS</span><span class="o">=</span>,<span class="p">;</span><span class="nb">printf</span>  <span class="s2">"%s"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">fileArray</span><span class="p">[*]</span><span class="k">}</span><span class="s2">"</span><span class="si">)</span>
+<span class="nb">echo</span> <span class="s2">"Input files: </span><span class="nv">$detektInput</span><span class="s2">"</span>
+
+<span class="nv">OUTPUT</span><span class="o">=</span><span class="si">$(</span>detekt <span class="nt">--input</span> <span class="s2">"</span><span class="nv">$detektInput</span><span class="s2">"</span> 2&gt;&amp;1<span class="si">)</span>
+<span class="nv">EXIT_CODE</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$EXIT_CODE</span> <span class="nt">-ne</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nb">echo</span> <span class="nv">$OUTPUT</span>
+  <span class="nb">echo</span> <span class="s2">"***********************************************"</span>
+  <span class="nb">echo</span> <span class="s2">"                 Detekt failed                 "</span>
+  <span class="nb">echo</span> <span class="s2">" Please fix the above issues before committing "</span>
+  <span class="nb">echo</span> <span class="s2">"***********************************************"</span>
+  <span class="nb">exit</span> <span class="nv">$EXIT_CODE</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
 
     <div class="tags">
         
@@ -525,7 +564,7 @@ You can watch his excellent talk about <strong>Static Code Analysis For Kotlin</
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2022 The detekt Team. All rights reserved. <br />
- Site last generated: Apr 23, 2022 <br />
+ Site last generated: Apr 24, 2022 <br />
                 </div>
             </div>
 </footer>
