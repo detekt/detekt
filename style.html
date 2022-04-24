@@ -2683,6 +2683,16 @@ the current state easier.</p>
 
 <p><strong>Aliases</strong>: CanBeVal</p>
 
+<h4 id="configuration-options-18">Configuration options:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ignoreLateinitVar</code> (default: <code class="language-plaintext highlighter-rouge">false</code>)</p>
+
+    <p>Whether to ignore uninitialized lateinit vars</p>
+  </li>
+</ul>
+
 <h4 id="noncompliant-code-65">Noncompliant Code:</h4>
 
 <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">example</span><span class="p">()</span> <span class="p">{</span>
@@ -2713,7 +2723,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
 
 <p><strong>Debt</strong>: 5min</p>
 
-<h4 id="configuration-options-18">Configuration options:</h4>
+<h4 id="configuration-options-19">Configuration options:</h4>
 
 <ul>
   <li>
