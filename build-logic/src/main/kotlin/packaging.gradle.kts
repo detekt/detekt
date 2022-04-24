@@ -41,15 +41,15 @@ publishing {
                 licenses {
                     license {
                         name.set("The Apache Software License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                         distribution.set("repo")
                     }
                 }
                 developers {
                     developer {
-                        id.set("Artur Bosch")
-                        name.set("Artur Bosch")
-                        email.set("arturbosch@gmx.de")
+                        id.set("Detekt Developers")
+                        name.set("Detekt Developers")
+                        email.set("info@detekt.dev")
                     }
                 }
                 scm {
