@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Finding</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>detekt-api</span>
+            </a>
+    </div>
+    <div>
+1.20.0    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="detekt-api::io.gitlab.arturbosch.detekt.api/Finding///PointingToDeclaration//-193512625">
+  <div class="breadcrumbs"><a href="../../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><a href="index.html">Finding</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Finding</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Finding</a> : <a href="../-compactable/index.html">Compactable</a>, <a href="../-has-entity/index.html">HasEntity</a>, <a href="../-has-metrics/index.html">HasMetrics</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.</p><p class="paragraph">Basic behaviour of a finding is that is can be assigned to an id and a source code position described as an entity. Metrics and entity references can also considered for deeper characterization.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Inheritors">Inheritors</button></div>
+    <div class="tabs-section-body">
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-1698323012%2FFunctions%2F-193512625" anchor-label="compact" id="-1698323012%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-compactable/compact.html"><span><span>compact</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1698323012%2FFunctions%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-compactable/compact.html"><span class="token function">compact</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Contract to format implementing object to a string representation.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1925962260%2FFunctions%2F-193512625" anchor-label="compactWithSignature" id="-1925962260%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-compactable/compact-with-signature.html"><span>compact</span><wbr></wbr><span>With</span><wbr></wbr><span><span>Signature</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1925962260%2FFunctions%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-compactable/compact-with-signature.html"><span class="token function">compactWithSignature</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Same as <a href="../-compactable/compact.html">compact</a> except the content should contain a substring which represents this exact findings via a custom identifier.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-446021195%2FFunctions%2F-193512625" anchor-label="messageOrDescription" id="-446021195%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="message-or-description.html"><span>message</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Description</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-446021195%2FFunctions%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="message-or-description.html"><span class="token function">messageOrDescription</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Explanation why this finding was raised.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1767178174%2FFunctions%2F-193512625" anchor-label="metricByType" id="1767178174%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-metrics/metric-by-type.html"><span>metric</span><wbr></wbr><span>By</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1767178174%2FFunctions%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-has-metrics/metric-by-type.html"><span class="token function">metricByType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-metric/index.html">Metric</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Finds the first metric matching given <a href="../-has-metrics/metric-by-type.html">type</a>.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-1824383076%2FProperties%2F-193512625" anchor-label="charPosition" id="-1824383076%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/char-position.html">charPosition</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1824383076%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-1824383076%2FProperties%2F-193512625" anchor-label="charPosition" id="-1824383076%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/char-position.html">charPosition</a><span class="token operator">: </span><a href="../-text-location/index.html">TextLocation</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2045224616%2FProperties%2F-193512625" anchor-label="entity" id="-2045224616%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/entity.html">entity</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2045224616%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-2045224616%2FProperties%2F-193512625" anchor-label="entity" id="-2045224616%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/entity.html">entity</a><span class="token operator">: </span><a href="../-entity/index.html">Entity</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-283343521%2FProperties%2F-193512625" anchor-label="file" id="-283343521%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/file.html">file</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-283343521%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-283343521%2FProperties%2F-193512625" anchor-label="file" id="-283343521%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/file.html">file</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="2034056332%2FProperties%2F-193512625" anchor-label="id" id="2034056332%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="id.html">id</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2034056332%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="2034056332%2FProperties%2F-193512625" anchor-label="id" id="2034056332%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="id.html">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1607972038%2FProperties%2F-193512625" anchor-label="issue" id="-1607972038%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="issue.html">issue</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1607972038%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-1607972038%2FProperties%2F-193512625" anchor-label="issue" id="-1607972038%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="issue.html">issue</a><span class="token operator">: </span><a href="../-issue/index.html">Issue</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1586192826%2FProperties%2F-193512625" anchor-label="location" id="-1586192826%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/location.html">location</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1586192826%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-1586192826%2FProperties%2F-193512625" anchor-label="location" id="-1586192826%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/location.html">location</a><span class="token operator">: </span><a href="../-location/index.html">Location</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-15069620%2FProperties%2F-193512625" anchor-label="message" id="-15069620%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="message.html">message</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-15069620%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-15069620%2FProperties%2F-193512625" anchor-label="message" id="-15069620%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="message.html">message</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1845091344%2FProperties%2F-193512625" anchor-label="metrics" id="-1845091344%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-metrics/metrics.html">metrics</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1845091344%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-1845091344%2FProperties%2F-193512625" anchor-label="metrics" id="-1845091344%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-metrics/metrics.html">metrics</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-metric/index.html">Metric</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1774614975%2FProperties%2F-193512625" anchor-label="references" id="1774614975%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="references.html">references</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1774614975%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="1774614975%2FProperties%2F-193512625" anchor-label="references" id="1774614975%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="references.html">references</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-entity/index.html">Entity</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1889692010%2FProperties%2F-193512625" anchor-label="severity" id="1889692010%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="severity.html">severity</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1889692010%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="1889692010%2FProperties%2F-193512625" anchor-label="severity" id="1889692010%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="severity.html">severity</a><span class="token operator">: </span><a href="../-severity-level/index.html">SeverityLevel</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-37525209%2FProperties%2F-193512625" anchor-label="signature" id="-37525209%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/signature.html">signature</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-37525209%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-37525209%2FProperties%2F-193512625" anchor-label="signature" id="-37525209%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/signature.html">signature</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1992095596%2FProperties%2F-193512625" anchor-label="startPosition" id="-1992095596%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-has-entity/start-position.html">startPosition</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1992095596%2FProperties%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><a data-name="-1992095596%2FProperties%2F-193512625" anchor-label="startPosition" id="-1992095596%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/start-position.html">startPosition</a><span class="token operator">: </span><a href="../-source-location/index.html">SourceLocation</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Inheritors</h2>
+      <div class="table" data-togglable="Inheritors"><a data-name="-805143357%2FInheritors%2F-193512625" anchor-label="CodeSmell" id="-805143357%2FInheritors%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-code-smell/index.html">CodeSmell</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-805143357%2FInheritors%2F-193512625"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
