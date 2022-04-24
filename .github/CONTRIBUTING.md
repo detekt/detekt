@@ -1,7 +1,7 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages.
-- Use `gradle build -x dokkaJekyll` to build the source but exclude documentation JAR generation to save time.
+- Use `gradle build -x dokkaHtml` to build the source but exclude documentation JAR generation to save time.
 - Make sure that `gradle detekt` does not report any errors.
 - This repository follows the [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html),
   which are enforced by ktlint when running `gradle detekt`.
