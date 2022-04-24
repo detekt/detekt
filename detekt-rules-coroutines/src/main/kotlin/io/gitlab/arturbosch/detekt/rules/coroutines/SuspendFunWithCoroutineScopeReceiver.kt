@@ -9,11 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
-import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -65,23 +62,6 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (bindingContext == BindingContext.EMPTY) return
         checkReceiver(function)
-        checkLambdaParameters(function.valueParameters)
-    }
-
-    private fun checkLambdaParameters(parameters: List<KtParameter>) {
-        for (it in parameters) {
-            val type = bindingContext[BindingContext.VALUE_PARAMETER, it]
-                ?.type?.takeIf { it.isSuspendFunctionType } ?: continue
-            if (type.getReceiverTypeFromFunctionType()?.isCoroutineScope() == true) {
-                report(
-                    CodeSmell(
-                        issue = issue,
-                        entity = Entity.Companion.from(it),
-                        message = "`suspend` function uses CoroutineScope as receiver."
-                    )
-                )
-            }
-        }
     }
 
     private fun checkReceiver(function: KtNamedFunction) {
