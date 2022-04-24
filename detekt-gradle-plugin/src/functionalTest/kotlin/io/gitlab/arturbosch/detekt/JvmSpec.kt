@@ -4,13 +4,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.nio.file.Files
 
 class JvmSpec {
     @Test
     fun `Type resolution on JVM`() {
-        val projectDir = checkNotNull(javaClass.classLoader.getResource("jvm")?.file)
+        val resourceDir = File(javaClass.classLoader.getResource("jvm")?.file!!)
+        val projectDir: File = Files.createTempDirectory("jvmWithTypeResolution").toFile()
+        resourceDir.copyRecursively(projectDir)
+
         val result = GradleRunner.create()
-            .withProjectDir(File(projectDir))
+            .withProjectDir(projectDir)
             .withPluginClasspath()
             .withArguments("detektMain")
             .buildAndFail()
