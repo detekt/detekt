@@ -82,4 +82,4 @@ jobs:
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test -x :detekt-gradle-plugin:test -Pcompile-test-snippets=true
+          arguments: test -Pcompile-test-snippets=true

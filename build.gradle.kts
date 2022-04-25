@@ -3,7 +3,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
     id("releasing")
-    alias(libs.plugins.detekt)
+    id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
     alias(libs.plugins.sonarqube)
 }
@@ -104,4 +104,8 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     exclude(resourceFiles)
     exclude(buildFiles)
     baseline.set(baselineFile)
+}
+
+tasks.register("build") {
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":build"))
 }
