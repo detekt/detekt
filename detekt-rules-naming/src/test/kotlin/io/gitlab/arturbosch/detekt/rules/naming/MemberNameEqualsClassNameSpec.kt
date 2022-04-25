@@ -17,289 +17,285 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
     val subject = MemberNameEqualsClassName(Config.empty)
 
-    @Nested
-    inner class `MemberNameEqualsClassName rule` {
-
-        val noIgnoreOverridden =
-            TestConfig(
-                mapOf(
-                    IGNORE_OVERRIDDEN to "false"
-                )
+    val noIgnoreOverridden =
+        TestConfig(
+            mapOf(
+                IGNORE_OVERRIDDEN to "false"
             )
+        )
 
-        @Nested
-        inner class `some classes with methods which don't have the same name` {
+    @Nested
+    inner class `some classes with methods which don't have the same name` {
 
-            @Test
-            fun `does not report a nested function with the same name as the class`() {
-                val code = """
-                    class MethodNameNotEqualsClassName {
-                        fun nestedFunction() {
-                            fun MethodNameNotEqualsClassName() {}
+        @Test
+        fun `does not report a nested function with the same name as the class`() {
+            val code = """
+                class MethodNameNotEqualsClassName {
+                    fun nestedFunction() {
+                        fun MethodNameNotEqualsClassName() {}
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a function with same name in nested class`() {
+            val code = """
+                class MethodNameNotEqualsClassName {
+                    class NestedNameEqualsTopClassName {
+                        fun MethodNameNotEqualsClassName() {}
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a function with the same name as a companion object`() {
+            val code = """
+                class StaticMethodNameEqualsObjectName {
+                    companion object A {
+                        fun A() {}
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `some classes with members which have the same name` {
+
+        @Test
+        fun `reports a method which is named after the class`() {
+            val code = """
+                class MethodNameEqualsClassName {
+                    fun methodNameEqualsClassName() {}
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a method which is named after the object`() {
+            val code = """
+                object MethodNameEqualsObjectName {
+                    fun MethodNameEqualsObjectName() {}
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a property which is named after the class`() {
+            val code = """
+                class PropertyNameEqualsClassName {
+                    val propertyNameEqualsClassName = 0
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a property which is named after the object`() {
+            val code = """
+                object PropertyNameEqualsObjectName {
+                    val propertyNameEqualsObjectName = 0
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a companion object function which is named after the class`() {
+            val code = """
+                class StaticMethodNameEqualsClassName {
+                    companion object {
+                        fun StaticMethodNameEqualsClassName() {}
+                    }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a method which is named after the class even when it's inside another one`() {
+            val code = """
+                class MethodNameContainer {
+                    class MethodNameEqualsNestedClassName {
+                        fun MethodNameEqualsNestedClassName() {}
+                    }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `doesn't report overridden methods which are named after the class`() {
+            val code = """
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override fun AbstractMethodNameEqualsClassName() {}
+                }
+                abstract class BaseClassForMethodNameEqualsClassName {
+                    abstract fun AbstractMethodNameEqualsClassName()
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `doesn't report an methods which are named after the interface`() {
+            val code = """
+                interface MethodNameEqualsInterfaceName {
+                    fun MethodNameEqualsInterfaceName() {}
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports overridden methods which are named after the class if they are not ignored`() {
+            val code = """
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override fun AbstractMethodNameEqualsClassName() {}
+                }
+                abstract class BaseClassForMethodNameEqualsClassName {
+                    abstract fun AbstractMethodNameEqualsClassName()
+                }
+            """
+            assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `doesn't report overridden properties which are named after the class`() {
+            val code = """
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override val AbstractMethodNameEqualsClassName = ""
+                }
+                abstract class BaseClassForMethodNameEqualsClassName {
+                    abstract val AbstractMethodNameEqualsClassName: String
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports overridden properties which are named after the class if they are not ignored`() {
+            val code = """
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override val AbstractMethodNameEqualsClassName = ""
+                }
+                abstract class BaseClassForMethodNameEqualsClassName {
+                    abstract val AbstractMethodNameEqualsClassName: String
+                }
+            """
+            assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `some companion object functions named after the class (factory functions)` {
+
+        @Test
+        fun `reports a function which has no return type`() {
+            val code = """
+                class WrongFactoryClass1 {
+
+                    companion object {
+                        fun wrongFactoryClass1() {}
+                    }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a function which has the wrong return type`() {
+            val code = """
+                class WrongFactoryClass2 {
+
+                    companion object {
+                        fun wrongFactoryClass2(): Int {
+                            return 0
                         }
                     }
-                """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+        }
 
-            @Test
-            fun `does not report a function with same name in nested class`() {
-                val code = """
-                    class MethodNameNotEqualsClassName {
-                        class NestedNameEqualsTopClassName {
-                            fun MethodNameNotEqualsClassName() {}
+        @Test
+        fun `reports a body-less function which has the wrong return type`() {
+            val code = """
+                class WrongFactoryClass3 {
+                
+                    companion object {
+                        fun wrongFactoryClass3() = 0
+                    }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `doesn't report a factory function`() {
+            val code = """
+                open class A {
+                    companion object {
+                        fun a(condition: Boolean): A {
+                            return if (condition) B() else C()
                         }
                     }
-                """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
+                }
+                
+                class B: A()
+                
+                class C: A()
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+        }
 
-            @Test
-            fun `does not report a function with the same name as a companion object`() {
-                val code = """
-                    class StaticMethodNameEqualsObjectName {
-                        companion object A {
-                            fun A() {}
+        @Test
+        fun `doesn't report a generic factory function`() {
+            val code = """
+                data class GenericClass<T>(val wrapped: T) {
+                    companion object {
+                        fun <T> genericClass(wrapped: T): GenericClass<T> {
+                            return GenericClass(wrapped)
+                        }
+                        fun genericClass(): GenericClass<String> {
+                            return GenericClass("wrapped")
                         }
                     }
-                """
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
+                }
+            """
+            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Nested
-        inner class `some classes with members which have the same name` {
+        @DisplayName("doesn't report a body-less factory function")
+        inner class IgnoreBodylessFactoryFunction {
+            val code = """
+                open class A {
+                  companion object {
+                    fun a(condition: Boolean) = if (condition) B() else C()
+                  }
+                }
+                
+                class B: A()
+
+                class C: A()
+            """
 
             @Test
-            fun `reports a method which is named after the class`() {
-                val code = """
-                    class MethodNameEqualsClassName {
-                        fun methodNameEqualsClassName() {}
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a method which is named after the object`() {
-                val code = """
-                    object MethodNameEqualsObjectName {
-                        fun MethodNameEqualsObjectName() {}
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a property which is named after the class`() {
-                val code = """
-                    class PropertyNameEqualsClassName {
-                        val propertyNameEqualsClassName = 0
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a property which is named after the object`() {
-                val code = """
-                    object PropertyNameEqualsObjectName {
-                        val propertyNameEqualsObjectName = 0
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a companion object function which is named after the class`() {
-                val code = """
-                    class StaticMethodNameEqualsClassName {
-                        companion object {
-                            fun StaticMethodNameEqualsClassName() {}
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a method which is named after the class even when it's inside another one`() {
-                val code = """
-                    class MethodNameContainer {
-                        class MethodNameEqualsNestedClassName {
-                            fun MethodNameEqualsNestedClassName() {}
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `doesn't report overridden methods which are named after the class`() {
-                val code = """
-                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                        override fun AbstractMethodNameEqualsClassName() {}
-                    }
-                    abstract class BaseClassForMethodNameEqualsClassName {
-                        abstract fun AbstractMethodNameEqualsClassName()
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `doesn't report an methods which are named after the interface`() {
-                val code = """
-                    interface MethodNameEqualsInterfaceName {
-                        fun MethodNameEqualsInterfaceName() {}
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `reports overridden methods which are named after the class if they are not ignored`() {
-                val code = """
-                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                        override fun AbstractMethodNameEqualsClassName() {}
-                    }
-                    abstract class BaseClassForMethodNameEqualsClassName {
-                        abstract fun AbstractMethodNameEqualsClassName()
-                    }
-                """
-                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `doesn't report overridden properties which are named after the class`() {
-                val code = """
-                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                        override val AbstractMethodNameEqualsClassName = ""
-                    }
-                    abstract class BaseClassForMethodNameEqualsClassName {
-                        abstract val AbstractMethodNameEqualsClassName: String
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `reports overridden properties which are named after the class if they are not ignored`() {
-                val code = """
-                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                        override val AbstractMethodNameEqualsClassName = ""
-                    }
-                    abstract class BaseClassForMethodNameEqualsClassName {
-                        abstract val AbstractMethodNameEqualsClassName: String
-                    }
-                """
-                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
-            }
-        }
-
-        @Nested
-        inner class `some companion object functions named after the class (factory functions)` {
-
-            @Test
-            fun `reports a function which has no return type`() {
-                val code = """
-                    class WrongFactoryClass1 {
-
-                        companion object {
-                            fun wrongFactoryClass1() {}
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a function which has the wrong return type`() {
-                val code = """
-                    class WrongFactoryClass2 {
-
-                        companion object {
-                            fun wrongFactoryClass2(): Int {
-                                return 0
-                            }
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            @Test
-            fun `reports a body-less function which has the wrong return type`() {
-                val code = """
-                    class WrongFactoryClass3 {
-                    
-                        companion object {
-                            fun wrongFactoryClass3() = 0
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
-            }
-
-            @Test
-            fun `doesn't report a factory function`() {
-                val code = """
-                    open class A {
-                        companion object {
-                            fun a(condition: Boolean): A {
-                                return if (condition) B() else C()
-                            }
-                        }
-                    }
-                    
-                    class B: A()
-                    
-                    class C: A()
-                """
+            fun `with type solving`() {
                 assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
-            fun `doesn't report a generic factory function`() {
-                val code = """
-                    data class GenericClass<T>(val wrapped: T) {
-                        companion object {
-                            fun <T> genericClass(wrapped: T): GenericClass<T> {
-                                return GenericClass(wrapped)
-                            }
-                            fun genericClass(): GenericClass<String> {
-                                return GenericClass("wrapped")
-                            }
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
-            }
-
-            @Nested
-            @DisplayName("doesn't report a body-less factory function")
-            inner class IgnoreBodylessFactoryFunction {
-                val code = """
-                    open class A {
-                      companion object {
-                        fun a(condition: Boolean) = if (condition) B() else C()
-                      }
-                    }
-                    
-                    class B: A()
-
-                    class C: A()
-                """
-
-                @Test
-                fun `with type solving`() {
-                    assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                @Test
-                fun `without type solving`() {
-                    assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
-                }
+            fun `without type solving`() {
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
             }
         }
     }

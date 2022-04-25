@@ -17,65 +17,62 @@ private val defaultConfiguration = Configuration(
 class ConfigurationSpec {
 
     @Nested
-    inner class `default value to list conversion` {
-        @Nested
-        inner class `empty default value` {
-            private val subject = defaultConfiguration.copy(defaultValue = of(""))
+    inner class `empty default value` {
+        private val subject = defaultConfiguration.copy(defaultValue = of(""))
 
-            @Test
-            fun `identifies default as not a list`() {
-                assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
-            }
-
-            @Test
-            fun `fails when attempting conversion`() {
-                assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
-            }
+        @Test
+        fun `identifies default as not a list`() {
+            assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
         }
 
-        @Nested
-        inner class `non list default value` {
-            private val subject = defaultConfiguration.copy(defaultValue = of("abc"))
+        @Test
+        fun `fails when attempting conversion`() {
+            assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
+        }
+    }
 
-            @Test
-            fun `identifies default as not a list`() {
-                assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
-            }
+    @Nested
+    inner class `non list default value` {
+        private val subject = defaultConfiguration.copy(defaultValue = of("abc"))
 
-            @Test
-            fun `fails when attempting conversion`() {
-                assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
-            }
+        @Test
+        fun `identifies default as not a list`() {
+            assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
         }
 
-        @Nested
-        inner class `empty list default value` {
-            private val subject = defaultConfiguration.copy(defaultValue = of(emptyList()))
+        @Test
+        fun `fails when attempting conversion`() {
+            assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
+        }
+    }
 
-            @Test
-            fun `identifies default as not a non empty list`() {
-                assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
-            }
+    @Nested
+    inner class `empty list default value` {
+        private val subject = defaultConfiguration.copy(defaultValue = of(emptyList()))
 
-            @Test
-            fun `fails when attempting conversion`() {
-                assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
-            }
+        @Test
+        fun `identifies default as not a non empty list`() {
+            assertThat(subject.isDefaultValueNonEmptyList()).isFalse()
         }
 
-        @Nested
-        inner class `bracket list default value` {
-            private val subject = defaultConfiguration.copy(defaultValue = of(listOf("a", "b")))
+        @Test
+        fun `fails when attempting conversion`() {
+            assertThatIllegalStateException().isThrownBy { subject.getDefaultValueAsList() }
+        }
+    }
 
-            @Test
-            fun `identifies default as a non empty list`() {
-                assertThat(subject.isDefaultValueNonEmptyList()).isTrue()
-            }
+    @Nested
+    inner class `bracket list default value` {
+        private val subject = defaultConfiguration.copy(defaultValue = of(listOf("a", "b")))
 
-            @Test
-            fun `converts to a list`() {
-                assertThat(subject.getDefaultValueAsList()).isEqualTo(listOf("a", "b"))
-            }
+        @Test
+        fun `identifies default as a non empty list`() {
+            assertThat(subject.isDefaultValueNonEmptyList()).isTrue()
+        }
+
+        @Test
+        fun `converts to a list`() {
+            assertThat(subject.getDefaultValueAsList()).isEqualTo(listOf("a", "b"))
         }
     }
 }

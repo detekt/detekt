@@ -23,7 +23,8 @@ class MainSpec {
     @Nested
     inner class `Build runner` {
 
-        fun runnerConfigs(): List<Arguments> {
+        @Suppress("UnusedPrivateMember")
+        private fun runnerConfigs(): List<Arguments> {
             return listOf(
                 arguments(arrayOf("--generate-config"), ConfigExporter::class),
                 arguments(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),

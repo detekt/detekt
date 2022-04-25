@@ -3,275 +3,270 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ClassOrderingSpec {
     val subject = ClassOrdering(Config.empty)
 
-    @Nested
-    inner class `ClassOrdering rule` {
+    @Test
+    fun `does not report when class contents are in expected order with property first`() {
+        val code = """
+            class InOrder(private val x: String) {
+                val y = x
 
-        @Test
-        fun `does not report when class contents are in expected order with property first`() {
-            val code = """
-                class InOrder(private val x: String) {
-                    val y = x
-
-                    init {
-                        check(x == "yes")
-                    }
-
-                    constructor(z: Int): this(z.toString())
-
-                    fun returnX() = x
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+                init {
+                    check(x == "yes")
                 }
-            """
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+                constructor(z: Int): this(z.toString())
 
-        @Test
-        fun `does not report when class contents are in expected order with class initializer first`() {
-            val code = """
-                class InOrder(private val x: String) {
-                    init {
-                        check(x == "yes")
-                    }
+                fun returnX() = x
 
-                    val y = x
-
-                    constructor(z: Int): this(z.toString())
-
-                    fun returnX() = x
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+                companion object {
+                    const val IMPORTANT_VALUE = 3
                 }
-            """
+            }
+        """
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `reports when class initializer block is out of order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    val y = x
-
-                    constructor(z: Int): this(z.toString())
-
-                    init {
-                        check(x == "yes")
-                    }
-
-                    fun returnX() = x
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+    @Test
+    fun `does not report when class contents are in expected order with class initializer first`() {
+        val code = """
+            class InOrder(private val x: String) {
+                init {
+                    check(x == "yes")
                 }
-            """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo(
-                "initializer blocks should be declared before secondary constructors."
-            )
-        }
+                val y = x
 
-        @Test
-        fun `reports when secondary constructor is out of order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    constructor(z: Int): this(z.toString())
+                constructor(z: Int): this(z.toString())
 
-                    val y = x
+                fun returnX() = x
 
-                    init {
-                        check(x == "yes")
-                    }
-
-                    fun returnX() = x
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+                companion object {
+                    const val IMPORTANT_VALUE = 3
                 }
-            """
+            }
+        """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings[0].message).isEqualTo(
-                "property `y` should be declared before secondary constructors."
-            )
-            assertThat(findings[1].message).isEqualTo(
-                "initializer blocks should be declared before secondary constructors."
-            )
-        }
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `reports when method is out of order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    fun returnX() = x
+    @Test
+    fun `reports when class initializer block is out of order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                val y = x
 
-                    val y = x
+                constructor(z: Int): this(z.toString())
 
-                    init {
-                        check(x == "yes")
-                    }
-
-                    constructor(z: Int): this(z.toString())
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+                init {
+                    check(x == "yes")
                 }
-            """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(3)
-            assertThat(findings[0].message)
-                .isEqualTo("property `y` should be declared before method declarations.")
-            assertThat(findings[1].message)
-                .isEqualTo("initializer blocks should be declared before method declarations.")
-            assertThat(findings[2].message)
-                .isEqualTo("secondary constructor should be declared before method declarations.")
-        }
+                fun returnX() = x
 
-        @Test
-        fun `reports when companion object is out of order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    val y = x
-
-                    init {
-                        check(x == "yes")
-                    }
-
-                    constructor(z: Int): this(z.toString())
-
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
-
-                    fun returnX() = x
+                companion object {
+                    const val IMPORTANT_VALUE = 3
                 }
-            """
+            }
+        """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("method `returnX()` should be declared before companion object.")
-        }
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).isEqualTo(
+            "initializer blocks should be declared before secondary constructors."
+        )
+    }
 
-        @Test
-        fun `does not report nested class order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    val y = x
+    @Test
+    fun `reports when secondary constructor is out of order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                constructor(z: Int): this(z.toString())
 
-                    init {
-                        check(x == "yes")
-                    }
+                val y = x
 
-                    constructor(z: Int): this(z.toString())
-
-                    class Nested {
-                        fun foo() = 2
-                    }
-
-                    fun returnX() = x
+                init {
+                    check(x == "yes")
                 }
-            """
 
-            assertThat(subject.compileAndLint(code)).hasSize(0)
-        }
+                fun returnX() = x
 
-        @Test
-        fun `does not report anonymous object order`() {
-            val code = """
-                class OutOfOrder(private val x: String) {
-                    val y = x
-
-                    init {
-                        check(x == "yes")
-                    }
-
-                    constructor(z: Int): this(z.toString())
-
-                    object AnonymousObject {
-                        fun foo() = 2
-                    }
-
-                    fun returnX() = x
+                companion object {
+                    const val IMPORTANT_VALUE = 3
                 }
-            """
+            }
+        """
 
-            assertThat(subject.compileAndLint(code)).hasSize(0)
-        }
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings[0].message).isEqualTo(
+            "property `y` should be declared before secondary constructors."
+        )
+        assertThat(findings[1].message).isEqualTo(
+            "initializer blocks should be declared before secondary constructors."
+        )
+    }
 
-        @Test
-        fun `report all issues with interleaving nested class`() {
-            val code = """
-                class MultipleMisorders(private val x: String) {
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
+    @Test
+    fun `reports when method is out of order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                fun returnX() = x
 
-                    class Nested { }
+                val y = x
 
-                    fun returnX() = x
-
-                    class Nested2 { }
-
-                    constructor(z: Int): this(z.toString())
-
-                    class Nested3 { }
-                    
-                    val y = x
+                init {
+                    check(x == "yes")
                 }
-            """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(3)
-            assertThat(findings[0].message)
-                .isEqualTo("method `returnX()` should be declared before companion object.")
-            assertThat(findings[1].message)
-                .isEqualTo("secondary constructor should be declared before companion object.")
-            assertThat(findings[2].message)
-                .isEqualTo("property `y` should be declared before companion object.")
-        }
+                constructor(z: Int): this(z.toString())
 
-        @Test
-        fun `does report all issues in a class with multiple misorderings`() {
-            val code = """
-                class MultipleMisorders(private val x: String) {
-                    companion object {
-                        const val IMPORTANT_VALUE = 3
-                    }
-
-                    fun returnX() = x
-
-                    constructor(z: Int): this(z.toString())
-                    
-                    val y = x
+                companion object {
+                    const val IMPORTANT_VALUE = 3
                 }
-            """
+            }
+        """
 
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(3)
-            assertThat(findings[0].message)
-                .isEqualTo("method `returnX()` should be declared before companion object.")
-            assertThat(findings[1].message)
-                .isEqualTo("secondary constructor should be declared before companion object.")
-            assertThat(findings[2].message)
-                .isEqualTo("property `y` should be declared before companion object.")
-        }
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings[0].message)
+            .isEqualTo("property `y` should be declared before method declarations.")
+        assertThat(findings[1].message)
+            .isEqualTo("initializer blocks should be declared before method declarations.")
+        assertThat(findings[2].message)
+            .isEqualTo("secondary constructor should be declared before method declarations.")
+    }
+
+    @Test
+    fun `reports when companion object is out of order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                val y = x
+
+                init {
+                    check(x == "yes")
+                }
+
+                constructor(z: Int): this(z.toString())
+
+                companion object {
+                    const val IMPORTANT_VALUE = 3
+                }
+
+                fun returnX() = x
+            }
+        """
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).isEqualTo("method `returnX()` should be declared before companion object.")
+    }
+
+    @Test
+    fun `does not report nested class order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                val y = x
+
+                init {
+                    check(x == "yes")
+                }
+
+                constructor(z: Int): this(z.toString())
+
+                class Nested {
+                    fun foo() = 2
+                }
+
+                fun returnX() = x
+            }
+        """
+
+        assertThat(subject.compileAndLint(code)).hasSize(0)
+    }
+
+    @Test
+    fun `does not report anonymous object order`() {
+        val code = """
+            class OutOfOrder(private val x: String) {
+                val y = x
+
+                init {
+                    check(x == "yes")
+                }
+
+                constructor(z: Int): this(z.toString())
+
+                object AnonymousObject {
+                    fun foo() = 2
+                }
+
+                fun returnX() = x
+            }
+        """
+
+        assertThat(subject.compileAndLint(code)).hasSize(0)
+    }
+
+    @Test
+    fun `report all issues with interleaving nested class`() {
+        val code = """
+            class MultipleMisorders(private val x: String) {
+                companion object {
+                    const val IMPORTANT_VALUE = 3
+                }
+
+                class Nested { }
+
+                fun returnX() = x
+
+                class Nested2 { }
+
+                constructor(z: Int): this(z.toString())
+
+                class Nested3 { }
+                
+                val y = x
+            }
+        """
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings[0].message)
+            .isEqualTo("method `returnX()` should be declared before companion object.")
+        assertThat(findings[1].message)
+            .isEqualTo("secondary constructor should be declared before companion object.")
+        assertThat(findings[2].message)
+            .isEqualTo("property `y` should be declared before companion object.")
+    }
+
+    @Test
+    fun `does report all issues in a class with multiple misorderings`() {
+        val code = """
+            class MultipleMisorders(private val x: String) {
+                companion object {
+                    const val IMPORTANT_VALUE = 3
+                }
+
+                fun returnX() = x
+
+                constructor(z: Int): this(z.toString())
+                
+                val y = x
+            }
+        """
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings[0].message)
+            .isEqualTo("method `returnX()` should be declared before companion object.")
+        assertThat(findings[1].message)
+            .isEqualTo("secondary constructor should be declared before companion object.")
+        assertThat(findings[2].message)
+            .isEqualTo("property `y` should be declared before companion object.")
     }
 }

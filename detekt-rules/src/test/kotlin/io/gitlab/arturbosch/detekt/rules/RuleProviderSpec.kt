@@ -16,31 +16,26 @@ import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
 class RuleProviderSpec {
 
-    @Nested
-    inner class `Rule Provider` {
-
-        @Test
-        fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
-            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
-            val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
-            providers.forEach { providerType ->
-                val packageName = getRulesPackageNameForProvider(providerType)
-                val provider = providerType.getDeclaredConstructor().newInstance()
-                val rules = getRules(provider)
-                val classes = getClasses(packageName)
-                classes.forEach { clazz ->
-                    val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
-                    assertThat(rule).withFailMessage(
-                        "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
-                    ).isNotNull()
-                }
+    @Test
+    fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
+        val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
+        val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
+        providers.forEach { providerType ->
+            val packageName = getRulesPackageNameForProvider(providerType)
+            val provider = providerType.getDeclaredConstructor().newInstance()
+            val rules = getRules(provider)
+            val classes = getClasses(packageName)
+            classes.forEach { clazz ->
+                val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
+                assertThat(rule).withFailMessage(
+                    "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
+                ).isNotNull()
             }
         }
     }
