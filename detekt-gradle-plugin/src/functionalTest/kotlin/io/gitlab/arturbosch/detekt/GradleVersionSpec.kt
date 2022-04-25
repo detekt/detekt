@@ -15,7 +15,7 @@ class GradleVersionSpec {
     @EnabledForJreRange(max = JAVA_13, disabledReason = "Gradle $gradleVersion unsupported on this Java version")
     fun runsOnOldestSupportedGradleVersion() {
         val builder = DslTestBuilder.kotlin()
-        val gradleRunner = builder.dryRun().withGradleVersion(gradleVersion).build()
+        val gradleRunner = builder.withGradleVersion(gradleVersion).build()
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         }
