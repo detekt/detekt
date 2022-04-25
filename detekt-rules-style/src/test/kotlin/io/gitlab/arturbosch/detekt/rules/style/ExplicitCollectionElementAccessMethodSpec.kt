@@ -435,6 +435,7 @@ class ExplicitCollectionElementAccessMethodSpec(val env: KotlinCoreEnvironment) 
 
             @Test
             fun `reports setter from java with 2 or less parameters`() {
+                // this test case ensures that the test environment are set up correctly.
                 val code = """
                     import com.example.fromjava.Rect
     
