@@ -15,7 +15,7 @@ class ObjectLiteralToLambdaSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class DefaultSourceTests(val env: KotlinCoreEnvironment) {
+    inner class WithDefaultSources(val env: KotlinCoreEnvironment) {
 
         @Nested
         inner class `report convertible expression` {
@@ -541,7 +541,7 @@ class ObjectLiteralToLambdaSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
-    inner class JavaSourceTests(val env: KotlinCoreEnvironment) {
+    inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `has other default methods`() {

@@ -10,12 +10,12 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class ExplicitCollectionElementAccessMethodSpec() {
+class ExplicitCollectionElementAccessMethodSpec {
     val subject = ExplicitCollectionElementAccessMethod(Config.empty)
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class DefaultSourceTests(val env: KotlinCoreEnvironment) {
+    inner class WithDefaultSources(val env: KotlinCoreEnvironment) {
         @Nested
         inner class `Kotlin map` {
 
@@ -424,7 +424,7 @@ class ExplicitCollectionElementAccessMethodSpec() {
 
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
-    inner class JavaSourceTests(val env: KotlinCoreEnvironment) {
+    inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `does not report if the function has 3 or more arguments and it's defined in java - #4288`() {
