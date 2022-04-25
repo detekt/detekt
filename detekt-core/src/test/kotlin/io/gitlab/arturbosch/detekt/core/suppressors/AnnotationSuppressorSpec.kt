@@ -498,7 +498,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         )
 
         @Test
-        fun `suppress if it have parameters with type solving`() {
+        fun `suppress if it has parameters with type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("Preview")),
                 env.getContextForPaths(listOf(root, *composableFiles)),
