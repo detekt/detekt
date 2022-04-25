@@ -466,4 +466,59 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
         }
     }
+
+    @Nested
+    inner class `Annotation with parameters` {
+        val composableFiles = arrayOf(
+            compileContentForTest(
+                """
+                    package androidx.compose.runtime
+
+                    annotation class Composable
+                """.trimIndent()
+            ),
+            compileContentForTest(
+                """
+                    package androidx.compose.ui.tooling.preview
+
+                    annotation class Preview(showBackground: Boolean = true)
+                """.trimIndent()
+            ),
+        )
+
+        val root = compileContentForTest(
+            """
+                import androidx.compose.runtime.Composable
+                import androidx.compose.ui.tooling.preview.Preview
+
+                @Composable
+                @Preview(showBackground = true)
+                fun function() = Unit
+            """.trimIndent()
+        )
+
+        @Test
+        fun `suppress if it have parameters with type solving`() {
+            val suppressor = annotationSuppressorFactory(
+                buildConfigAware("ignoreAnnotated" to listOf("Preview")),
+                env.getContextForPaths(listOf(root, *composableFiles)),
+            )!!
+
+            val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+            assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+        }
+
+        @Test
+        fun `suppress if it have parameters without type solving`() {
+            val suppressor = annotationSuppressorFactory(
+                buildConfigAware("ignoreAnnotated" to listOf("Preview")),
+                BindingContext.EMPTY,
+            )!!
+
+            val ktFunction = root.findChildByClass(KtFunction::class.java)!!
+
+            assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()
+        }
+    }
 }
