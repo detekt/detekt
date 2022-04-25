@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.github.detekt.test.utils.KotlinCoreEnvironmentWrapper
 import io.github.detekt.test.utils.createEnvironment
-import io.github.detekt.test.utils.resource
+import io.github.detekt.test.utils.resourceAsPath
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -58,7 +58,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         private fun ExtensionContext.additionalJavaSourcePaths(): List<File> {
             val annotation = requiredTestClass.annotations
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
-            return annotation.additionalJavaSourcePaths.map { Path.of(resource(it)).toFile() }
+            return annotation.additionalJavaSourcePaths.map { resourceAsPath(it).toFile() }
         }
     }
 
