@@ -434,6 +434,19 @@ class ExplicitCollectionElementAccessMethodSpec(val env: KotlinCoreEnvironment) 
             }
 
             @Test
+            fun `reports setter from java with 2 or less parameters`() {
+                val code = """
+                    import com.example.fromjava.Rect
+    
+                    fun foo() {
+                        val rect = Rect()
+                        rect.set(0, 1)
+                    }
+                """
+                assertThat(subject.lintWithContext(customEnv, code)).hasSize(1)
+            }
+
+            @Test
             fun `does not report if the function has 3 or more arguments and it's defined in java - #4288`() {
                 val code = """
                     import com.example.fromjava.Rect
