@@ -1,0 +1,35 @@
+complexity:
+  TooManyFunctions:
+    excludes: ["**/test/**", "**/functionalTest/**"]
+
+naming:
+  ClassNaming:
+    excludes: ["**/*Spec.kt"]
+  FunctionNaming:
+    active: true
+    excludes:
+      - "**/test/**"
+      - "**/androidTest/**"
+      - "**/commonTest/**"
+      - "**/functionalTest/**"
+      - "**/jvmTest/**"
+      - "**/jsTest/**"
+      - "**/iosTest/**"
+
+performance:
+  SpreadOperator:
+    excludes: ["**/test/**", "**/functionalTest/**"]
+
+style:
+  MagicNumber:
+    active: true
+    excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
+  MaxLineLength:
+    active: true
+    excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
+    excludeCommentStatements: true
+
+formatting:
+  active: true
+  MaximumLineLength:
+    active: false

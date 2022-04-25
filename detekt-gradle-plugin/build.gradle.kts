@@ -7,6 +7,8 @@ plugins {
     `java-test-fixtures`
     idea
     alias(libs.plugins.pluginPublishing)
+    // We use this published version of the Detekt plugin to self analyse this project.
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
 }
 
 repositories {
@@ -16,6 +18,13 @@ repositories {
 
 group = "io.gitlab.arturbosch.detekt"
 version = Versions.currentOrSnapshot()
+
+detekt {
+    source.from("src/functionalTest/kotlin")
+    buildUponDefaultConfig = true
+    baseline = file("config/gradle-plugin-baseline.xml")
+    config = files("config/gradle-plugin-detekt.yml")
+}
 
 testing {
     suites {
@@ -70,6 +79,9 @@ dependencies {
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
+
+    // We use this published version of the detekt-formatting to self analyse this project.
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
 }
 
 gradlePlugin {
