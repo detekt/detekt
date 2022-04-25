@@ -510,7 +510,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `suppress if it have parameters without type solving`() {
+        fun `suppress if it has parameters without type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("Preview")),
                 BindingContext.EMPTY,
