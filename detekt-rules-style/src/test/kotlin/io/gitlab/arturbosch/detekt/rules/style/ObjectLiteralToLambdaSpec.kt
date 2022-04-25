@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.createEnvironment
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assert
@@ -9,16 +7,15 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@KotlinCoreEnvironmentTest
-class ObjectLiteralToLambdaSpec(val env: KotlinCoreEnvironment) {
+class ObjectLiteralToLambdaSpec {
     val subject = ObjectLiteralToLambda()
 
     @Nested
-    inner class `ObjectLiteralToLambda rule` {
+    @KotlinCoreEnvironmentTest
+    inner class DefaultSourceTests(val env: KotlinCoreEnvironment) {
 
         @Nested
         inner class `report convertible expression` {
@@ -387,65 +384,6 @@ class ObjectLiteralToLambdaSpec(val env: KotlinCoreEnvironment) {
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
-
-            @Nested
-            inner class JavaSourceTests {
-
-                private val environmentWrapper =
-                    createEnvironment(additionalJavaSourceRootPaths = listOf(resourceAsPath("java").toFile()))
-                private val customEnv = environmentWrapper.env
-
-                @AfterAll
-                fun disposeEnvironment() {
-                    environmentWrapper.dispose()
-                }
-
-                @Test
-                fun `has other default methods`() {
-                    val code = """
-                    import com.example.fromjava.SamWithDefaultMethods
-                    
-                    fun main() {
-                        val x = object : SamWithDefaultMethods {
-                            override fun foo() {
-                                println()
-                            }
-                        }
-                    } 
-                    """
-
-                    subject.lintWithContext(customEnv, code).assert().hasSize(1)
-                }
-
-                @Test
-                fun `has only default methods`() {
-                    val code = """
-                    import com.example.fromjava.OnlyDefaultMethods
-                    
-                    fun main() {
-                        val x = object : OnlyDefaultMethods {
-                        }
-                    } 
-                    """
-                    subject.lintWithContext(customEnv, code).assert().isEmpty()
-                }
-
-                @Test
-                fun `implements a default method`() {
-                    val code = """
-                    import com.example.fromjava.OnlyDefaultMethods
-                    
-                    fun main() {
-                        val x = object : OnlyDefaultMethods {
-                            override fun foo() {
-                                println()
-                            }
-                        }
-                    } 
-                    """
-                    subject.lintWithContext(customEnv, code).assert().isEmpty()
-                }
-            }
         }
 
         @Nested
@@ -598,6 +536,57 @@ class ObjectLiteralToLambdaSpec(val env: KotlinCoreEnvironment) {
                     .hasSize(1)
                     .hasSourceLocations(SourceLocation(5, 19))
             }
+        }
+    }
+
+    @Nested
+    @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+    inner class JavaSourceTests(val env: KotlinCoreEnvironment) {
+
+        @Test
+        fun `has other default methods`() {
+            val code = """
+                    import com.example.fromjava.SamWithDefaultMethods
+                    
+                    fun main() {
+                        val x = object : SamWithDefaultMethods {
+                            override fun foo() {
+                                println()
+                            }
+                        }
+                    } 
+            """
+
+            subject.lintWithContext(env, code).assert().hasSize(1)
+        }
+
+        @Test
+        fun `has only default methods`() {
+            val code = """
+                    import com.example.fromjava.OnlyDefaultMethods
+                    
+                    fun main() {
+                        val x = object : OnlyDefaultMethods {
+                        }
+                    } 
+            """
+            subject.lintWithContext(env, code).assert().isEmpty()
+        }
+
+        @Test
+        fun `implements a default method`() {
+            val code = """
+                    import com.example.fromjava.OnlyDefaultMethods
+                    
+                    fun main() {
+                        val x = object : OnlyDefaultMethods {
+                            override fun foo() {
+                                println()
+                            }
+                        }
+                    } 
+            """
+            subject.lintWithContext(env, code).assert().isEmpty()
         }
     }
 }
