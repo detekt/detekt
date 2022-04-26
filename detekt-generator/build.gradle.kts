@@ -20,7 +20,7 @@ dependencies {
 
 val documentationDir = "${rootProject.rootDir}/website/docs/rules"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
-val cliOptionsFile = "${rootProject.rootDir}/website/docs/gettingstarted/cli-options.md"
+val cliOptionsFile = "${rootProject.rootDir}/website/docs/gettingstarted/_cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 

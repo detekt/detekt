@@ -165,4 +165,4 @@ target/
 # Avoid committing generated documentation to the repo
 /website/docs/rules
 /website/static/kdoc
-/website/docs/gettingstarted/cli-options.md
+/website/docs/gettingstarted/_cli-options.md

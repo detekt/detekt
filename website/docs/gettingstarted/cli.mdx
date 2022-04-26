@@ -1,20 +1,22 @@
 ---
 title: "Run detekt using Command Line Interface"
 keywords: [cli]
-sidebar: 
+sidebar:
 permalink: cli.html
 folder: gettingstarted
 summary:
 sidebar_position: 1
 ---
 
-import DetektVersionBanner from "../\_detekt-version-banner.mdx";
+import DetektVersionBanner from "../_detekt-version-banner.mdx";
+import CliOptions from "./_cli-options.md";
 
 ## Install the cli
 
 There are different ways to install the Command Line Interface (CLI):
 
 ### MacOS, with [Homebrew](https://brew.sh/):
+
 ```sh
 brew install detekt
 detekt [options]
@@ -22,7 +24,7 @@ detekt [options]
 
 ### Any OS:
 
-<DetektVersionBanner/>
+<DetektVersionBanner />
 
 ```sh
 curl -sSLO https://github.com/detekt/detekt/releases/download/v[detekt_version]/detekt-cli-[detekt_version].zip
@@ -35,7 +37,7 @@ unzip detekt-cli-[detekt_version].zip
 detekt will exit with one of the following exit codes:
 
 | Exit code | Description                                                                    |
-|-----------|--------------------------------------------------------------------------------|
+| --------- | ------------------------------------------------------------------------------ |
 | 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
 | 1         | An unexpected error occurred                                                   |
 | 2         | MaxIssues count was reached in BuildFailureReport.                             |
@@ -43,5 +45,4 @@ detekt will exit with one of the following exit codes:
 
 The following parameters are shown when `--help` is entered.
 
-{% include_relative cli-options.md %}
-
+<CliOptions />
