@@ -2,35 +2,31 @@ package io.github.detekt.metrics.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class LLOCVisitorSpec {
-    @Nested
-    inner class `LLOC Visitor` {
 
-        @Test
-        fun `defaultCaseHasOneClassAndAnnotationLine`() {
-            val file = compileContentForTest(default)
+    @Test
+    fun `defaultCaseHasOneClassAndAnnotationLine`() {
+        val file = compileContentForTest(default)
 
-            val lloc = with(file) {
-                accept(LLOCVisitor())
-                getUserData(logicalLinesKey)
-            }
-
-            assertThat(lloc).isEqualTo(2)
+        val lloc = with(file) {
+            accept(LLOCVisitor())
+            getUserData(logicalLinesKey)
         }
 
-        @Test
-        fun `llocOfComplexClass`() {
-            val file = compileContentForTest(complexClass)
+        assertThat(lloc).isEqualTo(2)
+    }
 
-            val lloc = with(file) {
-                accept(LLOCVisitor())
-                getUserData(logicalLinesKey)
-            }
+    @Test
+    fun `llocOfComplexClass`() {
+        val file = compileContentForTest(complexClass)
 
-            assertThat(lloc).isEqualTo(85)
+        val lloc = with(file) {
+            accept(LLOCVisitor())
+            getUserData(logicalLinesKey)
         }
+
+        assertThat(lloc).isEqualTo(85)
     }
 }

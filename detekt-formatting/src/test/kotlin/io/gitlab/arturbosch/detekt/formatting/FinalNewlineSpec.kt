@@ -4,54 +4,49 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class FinalNewlineSpec {
 
-    @Nested
-    inner class `FinalNewline rule` {
+    @Test
+    fun `should report missing new line by default`() {
+        val findings = FinalNewline(Config.empty)
+            .lint("fun main() = Unit")
 
-        @Test
-        fun `should report missing new line by default`() {
-            val findings = FinalNewline(Config.empty)
-                .lint("fun main() = Unit")
+        assertThat(findings).hasSize(1)
+    }
 
-            assertThat(findings).hasSize(1)
-        }
+    @Test
+    fun `should not report as new line is present`() {
+        val findings = FinalNewline(Config.empty).lint(
+            """
+                fun main() = Unit
 
-        @Test
-        fun `should not report as new line is present`() {
-            val findings = FinalNewline(Config.empty).lint(
+            """
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `should report new line when configured`() {
+        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
+            .lint(
                 """
-                    fun main() = Unit
+            fun main() = Unit
 
                 """
             )
 
-            assertThat(findings).isEmpty()
-        }
+        assertThat(findings).hasSize(1)
+    }
 
-        @Test
-        fun `should report new line when configured`() {
-            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
-                .lint(
-                    """
-                fun main() = Unit
+    @Test
+    fun `should not report when no new line is configured and not present`() {
+        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
+            .lint("fun main() = Unit")
 
-                    """
-                )
-
-            assertThat(findings).hasSize(1)
-        }
-
-        @Test
-        fun `should not report when no new line is configured and not present`() {
-            val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
-                .lint("fun main() = Unit")
-
-            assertThat(findings).isEmpty()
-        }
+        assertThat(findings).isEmpty()
     }
 }
 

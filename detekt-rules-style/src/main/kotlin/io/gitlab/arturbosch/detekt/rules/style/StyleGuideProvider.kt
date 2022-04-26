@@ -95,6 +95,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIsNullOrEmpty(config),
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),
+            UnnecessaryBackticks(config),
         )
     )
 }

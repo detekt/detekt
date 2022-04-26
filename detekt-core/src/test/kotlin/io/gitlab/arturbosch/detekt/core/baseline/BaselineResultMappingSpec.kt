@@ -13,7 +13,6 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
@@ -23,106 +22,102 @@ import java.nio.file.Path
 @OptIn(UnstableApi::class)
 class BaselineResultMappingSpec {
 
-    @Nested
-    inner class `a baseline result mapping` {
+    private val dir = createTempDirectoryForTest("baseline_format")
+    private val baselineFile = dir.resolve("baseline.xml")
+    private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
+    private lateinit var findings: Map<String, List<Finding>>
+    private lateinit var finding: Finding
 
-        private val dir = createTempDirectoryForTest("baseline_format")
-        private val baselineFile = dir.resolve("baseline.xml")
-        private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
-        private lateinit var findings: Map<String, List<Finding>>
-        private lateinit var finding: Finding
+    @BeforeEach
+    fun setupMocks() {
+        finding = mockk()
+        every { finding.id }.returns("SomeIssueId")
+        every { finding.signature }.returns("SomeSignature")
+        findings = mapOf("RuleSet" to listOf(finding))
+    }
 
-        @BeforeEach
-        fun setupMocks() {
-            finding = mockk()
-            every { finding.id }.returns("SomeIssueId")
-            every { finding.signature }.returns("SomeSignature")
-            findings = mapOf("RuleSet" to listOf(finding))
-        }
+    @AfterEach
+    fun tearDown() {
+        Files.deleteIfExists(baselineFile)
+    }
 
-        @AfterEach
-        fun tearDown() {
-            Files.deleteIfExists(baselineFile)
-        }
+    @Test
+    fun `should not create a new baseline file when no findings occurred`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
 
-        @Test
-        fun `should not create a new baseline file when no findings occurred`() {
-            val mapping = resultMapping(
-                baselineFile = baselineFile,
-                createBaseline = true,
-            )
+        mapping.transformFindings(emptyMap())
 
-            mapping.transformFindings(emptyMap())
+        assertThat(baselineFile.exists()).isFalse()
+    }
 
-            assertThat(baselineFile.exists()).isFalse()
-        }
+    @Test
+    fun `should not update an existing baseline file if option configured as false`() {
+        val existing = Baseline.load(existingBaselineFile)
+        val mapping = resultMapping(
+            baselineFile = existingBaselineFile,
+            createBaseline = false,
+        )
 
-        @Test
-        fun `should not update an existing baseline file if option configured as false`() {
-            val existing = Baseline.load(existingBaselineFile)
-            val mapping = resultMapping(
-                baselineFile = existingBaselineFile,
-                createBaseline = false,
-            )
+        mapping.transformFindings(findings)
 
-            mapping.transformFindings(findings)
+        val changed = Baseline.load(existingBaselineFile)
+        assertThat(existing).isEqualTo(changed)
+    }
 
-            val changed = Baseline.load(existingBaselineFile)
-            assertThat(existing).isEqualTo(changed)
-        }
+    @Test
+    fun `should not update an existing baseline file if option is not configured`() {
+        val existing = Baseline.load(existingBaselineFile)
+        val mapping = resultMapping(
+            baselineFile = existingBaselineFile,
+            createBaseline = null,
+        )
 
-        @Test
-        fun `should not update an existing baseline file if option is not configured`() {
-            val existing = Baseline.load(existingBaselineFile)
-            val mapping = resultMapping(
-                baselineFile = existingBaselineFile,
-                createBaseline = null,
-            )
+        mapping.transformFindings(findings)
 
-            mapping.transformFindings(findings)
+        val changed = Baseline.load(existingBaselineFile)
+        assertThat(existing).isEqualTo(changed)
+    }
 
-            val changed = Baseline.load(existingBaselineFile)
-            assertThat(existing).isEqualTo(changed)
-        }
+    @Test
+    fun `should not create a new baseline file if no file is configured`() {
+        val mapping = resultMapping(
+            baselineFile = null,
+            createBaseline = false,
+        )
 
-        @Test
-        fun `should not create a new baseline file if no file is configured`() {
-            val mapping = resultMapping(
-                baselineFile = null,
-                createBaseline = false,
-            )
+        mapping.transformFindings(findings)
 
-            mapping.transformFindings(findings)
+        assertThat(baselineFile.exists()).isFalse()
+    }
 
-            assertThat(baselineFile.exists()).isFalse()
-        }
+    @Test
+    fun `should create a new baseline file if a file is configured`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
 
-        @Test
-        fun `should create a new baseline file if a file is configured`() {
-            val mapping = resultMapping(
-                baselineFile = baselineFile,
-                createBaseline = true,
-            )
+        mapping.transformFindings(findings)
 
-            mapping.transformFindings(findings)
+        assertThat(baselineFile.exists()).isTrue()
+    }
 
-            assertThat(baselineFile.exists()).isTrue()
-        }
+    @Test
+    fun `should update an existing baseline file if a file is configured`() {
+        Files.copy(existingBaselineFile, baselineFile)
+        val existing = Baseline.load(baselineFile)
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
 
-        @Test
-        fun `should update an existing baseline file if a file is configured`() {
-            Files.copy(existingBaselineFile, baselineFile)
-            val existing = Baseline.load(baselineFile)
-            val mapping = resultMapping(
-                baselineFile = baselineFile,
-                createBaseline = true,
-            )
+        mapping.transformFindings(findings)
 
-            mapping.transformFindings(findings)
-
-            val changed = Baseline.load(baselineFile)
-            assertThat(existing).isNotEqualTo(changed)
-        }
+        val changed = Baseline.load(baselineFile)
+        assertThat(existing).isNotEqualTo(changed)
     }
 }
 

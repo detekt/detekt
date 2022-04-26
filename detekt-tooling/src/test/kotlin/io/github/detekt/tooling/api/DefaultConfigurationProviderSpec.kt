@@ -5,22 +5,17 @@ import io.github.detekt.tooling.api.spec.ExtensionId
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThatCode
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
 class DefaultConfigurationProviderSpec {
 
-    @Nested
-    inner class `default configuration` {
-
-        @Test
-        fun `loads first found instance`() {
-            assertThatCode {
-                DefaultConfigurationProvider.load(Spec)
-                    .copy(createTempFileForTest("test", "test"))
-            }.doesNotThrowAnyException()
-        }
+    @Test
+    fun `loads first found instance`() {
+        assertThatCode {
+            DefaultConfigurationProvider.load(Spec)
+                .copy(createTempFileForTest("test", "test"))
+        }.doesNotThrowAnyException()
     }
 }
 

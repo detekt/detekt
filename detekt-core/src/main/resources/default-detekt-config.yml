@@ -625,6 +625,8 @@ style:
     active: false
   UnnecessaryApply:
     active: true
+  UnnecessaryBackticks:
+    active: false
   UnnecessaryFilter:
     active: false
   UnnecessaryInheritance:

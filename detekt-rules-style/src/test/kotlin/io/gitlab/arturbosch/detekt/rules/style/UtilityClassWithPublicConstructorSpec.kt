@@ -14,61 +14,57 @@ class UtilityClassWithPublicConstructorSpec {
     val subject = UtilityClassWithPublicConstructor(Config.empty)
 
     @Nested
-    inner class `UtilityClassWithPublicConstructor rule` {
+    inner class `several UtilityClassWithPublicConstructor rule violations` {
 
-        @Nested
-        inner class `several UtilityClassWithPublicConstructor rule violations` {
+        lateinit var findings: List<Finding>
 
-            lateinit var findings: List<Finding>
-
-            @BeforeEach
-            fun beforeEachTest() {
-                findings = subject.lint(Case.UtilityClassesPositive.path())
-            }
-
-            @Test
-            fun `reports utility classes with a public constructor`() {
-                assertThat(findings).hasSize(6)
-            }
-
-            @Test
-            fun `reports utility classes which are marked as open`() {
-                val count =
-                    findings.count { it.message.contains("The utility class OpenUtilityClass should be final.") }
-                assertThat(count).isEqualTo(1)
-            }
+        @BeforeEach
+        fun beforeEachTest() {
+            findings = subject.lint(Case.UtilityClassesPositive.path())
         }
 
-        @Nested
-        inner class `several classes which adhere to the UtilityClassWithPublicConstructor rule` {
-
-            @Test
-            fun `does not report given classes`() {
-                val findings = subject.lint(Case.UtilityClassesNegative.path())
-                assertThat(findings).isEmpty()
-            }
+        @Test
+        fun `reports utility classes with a public constructor`() {
+            assertThat(findings).hasSize(6)
         }
 
-        @Nested
-        inner class `annotations class` {
+        @Test
+        fun `reports utility classes which are marked as open`() {
+            val count =
+                findings.count { it.message.contains("The utility class OpenUtilityClass should be final.") }
+            assertThat(count).isEqualTo(1)
+        }
+    }
 
-            @Test
-            fun `should not get triggered for utility class`() {
-                val code = """
-                @Retention(AnnotationRetention.SOURCE)
-                @StringDef(
-                    Gender.MALE,
-                    Gender.FEMALE
-                )
-                annotation class Gender {
-                    companion object {
-                        const val MALE = "male"
-                        const val FEMALE = "female"
-                    }
+    @Nested
+    inner class `several classes which adhere to the UtilityClassWithPublicConstructor rule` {
+
+        @Test
+        fun `does not report given classes`() {
+            val findings = subject.lint(Case.UtilityClassesNegative.path())
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `annotations class` {
+
+        @Test
+        fun `should not get triggered for utility class`() {
+            val code = """
+            @Retention(AnnotationRetention.SOURCE)
+            @StringDef(
+                Gender.MALE,
+                Gender.FEMALE
+            )
+            annotation class Gender {
+                companion object {
+                    const val MALE = "male"
+                    const val FEMALE = "female"
                 }
-                """
-                assertThat(subject.lint(code)).isEmpty()
             }
+            """
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

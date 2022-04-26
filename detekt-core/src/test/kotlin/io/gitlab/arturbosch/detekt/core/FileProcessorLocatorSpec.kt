@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import java.lang.reflect.Modifier
@@ -15,28 +14,24 @@ import java.lang.reflect.Modifier
  */
 class FileProcessorLocatorSpec {
 
-    @Nested
-    inner class `file processor locator` {
+    private val path = resourceAsPath("")
 
-        val path = resourceAsPath("")
+    @Test
+    fun `contains all processors`() {
+        val processors = createProcessingSettings(path).use { FileProcessorLocator(it).load() }
+        val processorClasses = getProcessorClasses()
 
-        @Test
-        fun `contains all processors`() {
-            val processors = createProcessingSettings(path).use { FileProcessorLocator(it).load() }
-            val processorClasses = getProcessorClasses()
+        assertThat(processorClasses).isNotEmpty
+        processorClasses
+            .filter { clazz -> processors.none { clazz == it.javaClass } }
+            .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
+    }
 
-            assertThat(processorClasses).isNotEmpty
-            processorClasses
-                .filter { clazz -> processors.none { clazz == it.javaClass } }
-                .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
-        }
-
-        @Test
-        fun `has disabled processors`() {
-            val config = yamlConfig("configs/disabled-processors.yml")
-            val processors = createProcessingSettings(path, config).use { FileProcessorLocator(it).load() }
-            assertThat(processors).isEmpty()
-        }
+    @Test
+    fun `has disabled processors`() {
+        val config = yamlConfig("configs/disabled-processors.yml")
+        val processors = createProcessingSettings(path, config).use { FileProcessorLocator(it).load() }
+        assertThat(processors).isEmpty()
     }
 }
 

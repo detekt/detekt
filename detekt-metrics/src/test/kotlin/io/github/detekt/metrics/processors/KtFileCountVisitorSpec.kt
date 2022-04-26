@@ -3,22 +3,18 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class KtFileCountVisitorSpec {
-    @Nested
-    inner class `files` {
 
-        @Test
-        fun `twoFiles`() {
-            val files = arrayOf(
-                compileContentForTest(default),
-                compileContentForTest(complexClass)
-            )
-            val count = files.sumOf { getData(it) }
-            assertThat(count).isEqualTo(2)
-        }
+    @Test
+    fun `twoFiles`() {
+        val files = arrayOf(
+            compileContentForTest(default),
+            compileContentForTest(complexClass)
+        )
+        val count = files.sumOf { getData(it) }
+        assertThat(count).isEqualTo(2)
     }
 }
 

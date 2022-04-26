@@ -22,53 +22,48 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class TopLevelAutoCorrectSpec {
 
-    @Nested
-    inner class `autoCorrect_ false on top level` {
-
-        @Test
-        fun `should format the test file but not print the modified content to disc`() {
-            val fileContentBeforeAutoCorrect = readResourceContent("cases/Test.kt")
-            val fileUnderTest = resourceAsPath("cases/Test.kt")
-            val spec = ProcessingSpec {
-                project {
-                    inputPaths = listOf(fileUnderTest)
-                }
-                config {
-                    resources = listOf(resourceUrl("configs/rule-and-ruleset-autocorrect-true.yaml"))
-                }
-                rules {
-                    autoCorrect = false // fixture
-                }
-                logging {
-                    outputChannel = NullPrintStream()
-                    errorChannel = NullPrintStream()
-                }
+    @Test
+    fun `should format the test file but not print the modified content to disc`() {
+        val fileContentBeforeAutoCorrect = readResourceContent("cases/Test.kt")
+        val fileUnderTest = resourceAsPath("cases/Test.kt")
+        val spec = ProcessingSpec {
+            project {
+                inputPaths = listOf(fileUnderTest)
             }
-
-            val contentChangedListener = object : FileProcessListener {
-                override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
-                    assertThat(files).hasSize(1)
-                    assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
-                }
+            config {
+                resources = listOf(resourceUrl("configs/rule-and-ruleset-autocorrect-true.yaml"))
             }
-
-            AnalysisFacade(spec).runAnalysis {
-                DefaultLifecycle(
-                    mockk(),
-                    it,
-                    inputPathsToKtFiles,
-                    processorsProvider = { listOf(contentChangedListener) },
-                    ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
-                )
+            rules {
+                autoCorrect = false // fixture
             }
-
-            assertThat(readResourceContent("cases/Test.kt")).isEqualTo(fileContentBeforeAutoCorrect)
+            logging {
+                outputChannel = NullPrintStream()
+                errorChannel = NullPrintStream()
+            }
         }
+
+        val contentChangedListener = object : FileProcessListener {
+            override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+                assertThat(files).hasSize(1)
+                assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
+            }
+        }
+
+        AnalysisFacade(spec).runAnalysis {
+            DefaultLifecycle(
+                mockk(),
+                it,
+                inputPathsToKtFiles,
+                processorsProvider = { listOf(contentChangedListener) },
+                ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
+            )
+        }
+
+        assertThat(readResourceContent("cases/Test.kt")).isEqualTo(fileContentBeforeAutoCorrect)
     }
 }
 

@@ -13,49 +13,45 @@ import org.junit.jupiter.api.Test
 class RuleSetSpec {
 
     @Nested
-    inner class `rule sets` {
+    inner class `should rule set be used` {
 
-        @Nested
-        inner class `should rule set be used` {
-
-            @Test
-            fun `is explicitly deactivated`() {
-                val config = yamlConfig("configs/deactivated_ruleset.yml")
-                assertThat(config.subConfig("comments").isActive()).isFalse()
-            }
-
-            @Test
-            fun `is active with an empty config`() {
-                assertThat(Config.empty.isActive()).isTrue()
-            }
+        @Test
+        fun `is explicitly deactivated`() {
+            val config = yamlConfig("configs/deactivated_ruleset.yml")
+            assertThat(config.subConfig("comments").isActive()).isFalse()
         }
 
-        @Nested
-        inner class `should rule analyze a file` {
+        @Test
+        fun `is active with an empty config`() {
+            assertThat(Config.empty.isActive()).isTrue()
+        }
+    }
 
-            private val file = compileForTest(resourceAsPath("/cases/Default.kt"))
+    @Nested
+    inner class `should rule analyze a file` {
 
-            @Test
-            fun `analyzes file with an empty config`() {
-                val config = Config.empty
-                assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
-            }
+        private val file = compileForTest(resourceAsPath("/cases/Default.kt"))
 
-            @Test
-            @DisplayName("should not analyze file with **/*.kt excludes")
-            fun ignoreExcludedKt() {
-                val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
-                assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
-            }
+        @Test
+        fun `analyzes file with an empty config`() {
+            val config = Config.empty
+            assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
+        }
 
-            @Test
-            fun `should analyze file as it's path is first excluded but then included`() {
-                val config = TestConfig(
-                    Config.EXCLUDES_KEY to "**/*.kt",
-                    Config.INCLUDES_KEY to "**/*.kt"
-                )
-                assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
-            }
+        @Test
+        @DisplayName("should not analyze file with **/*.kt excludes")
+        fun ignoreExcludedKt() {
+            val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
+            assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
+        }
+
+        @Test
+        fun `should analyze file as it's path is first excluded but then included`() {
+            val config = TestConfig(
+                Config.EXCLUDES_KEY to "**/*.kt",
+                Config.INCLUDES_KEY to "**/*.kt"
+            )
+            assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
         }
     }
 }

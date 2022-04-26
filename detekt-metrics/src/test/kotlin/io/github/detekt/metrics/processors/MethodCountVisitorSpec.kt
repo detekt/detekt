@@ -3,19 +3,15 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MethodCountVisitorSpec {
-    @Nested
-    inner class `Method Count Visitor` {
 
-        @Test
-        fun `defaultMethodCount`() {
-            val file = compileContentForTest(complexClass)
-            val count = getMethodCount(file)
-            assertThat(count).isEqualTo(6)
-        }
+    @Test
+    fun `defaultMethodCount`() {
+        val file = compileContentForTest(complexClass)
+        val count = getMethodCount(file)
+        assertThat(count).isEqualTo(6)
     }
 }
 
