@@ -73,9 +73,6 @@ dependencies {
 }
 
 gradlePlugin {
-    // hack to prevent building two jar's overwriting each other and leading to invalid signatures
-    // when publishing the Gradle plugin, this property must be present
-    isAutomatedPublishing = System.getProperty("automatePublishing")?.toBoolean() ?: false
     plugins {
         register("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
