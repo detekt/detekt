@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
+    runtimeOnly(libs.slf4j.nop)
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
