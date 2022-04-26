@@ -2,56 +2,54 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class ReferencedEncapsulatedPropertySpec {
-    val subject = ReferencedEncapsulatedProperty()
+class KDocReferencesNonPublicPropertySpec {
+    val subject = KDocReferencesNonPublicProperty()
 
-    @Nested
-    inner class `ReferencedEncapsulatedProperty rule` {
+    inner class `KDocReferencesNonPublicProperty rule` {
 
         @Test
-        fun `reports referenced encapsulated properties`() {
+        fun `reports referenced non-public properties`() {
             val code = """ 
             /**
              * Comment
-             * [prop1] - encapsulated property
+             * [prop1] - non-public property
              * [prop2] - public property
              */
             class Test {
-                private val prop1 = 0 // report
-                val prop2 = 0 // do not report
+                private val prop1 = 0
+                val prop2 = 0
             }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
-        fun `reports referenced encapsulated properties in private class`() {
+        fun `reports referenced non-public properties in private class`() {
             val code = """ 
             /**
              * Comment
-             * [prop1] - encapsulated property
+             * [prop1] - non-public property
              * [prop2] - public property
              */
             private class Test {
-                private val prop1 = 0 // report
-                val prop2 = 0 // do not report
+                private val prop1 = 0
+                val prop2 = 0
             }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
-        fun `reports referenced encapsulated properties in nested objects`() {
+        fun `reports referenced non-public properties in nested objects`() {
             val code = """ 
             /**
              * Comment
-             * [prop1] - encapsulated property
-             * [A.prop2] - encapsulated property
-             * [A.B.prop3] - encapsulated property
-             * [A.C.prop4] - encapsulated property
+             * [prop1] - non-public property
+             * [A.prop2] - non-public property
+             * [A.B.prop3] - non-public property
+             * [A.C.prop4] - non-public property
              */
             class Test {
                 private val prop1 = 0

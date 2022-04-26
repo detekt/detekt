@@ -16,31 +16,56 @@ import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
- * This rule will report any KDoc comments that refer to encapsulated properties of a class.
+ * This rule will report any KDoc comments that refer to non-public properties of a class.
  * Clients do not need to know the implementation details.
+ *
  * See [Encapsulation](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming))
+ *
+ * <noncompliant>
+ * /**
+ *  * Comment
+ *  * [prop1] - non-public property
+ *  * [prop2] - public property
+ *  */
+ * class Test {
+ *     private val prop1 = 0
+ *     val prop2 = 0
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * /**
+ *  * Comment
+ *  * [prop2] - public property
+ *  */
+ * class Test {
+ *     private val prop1 = 0
+ *     val prop2 = 0
+ * }
+ * </compliant>
+ *
  */
-class ReferencedEncapsulatedProperty(config: Config = Config.empty) : Rule(config) {
+class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
-        "KDoc comments should not refer to encapsulated properties.",
+        "KDoc comments should not refer to non-public properties.",
         Debt.FIVE_MINS
     )
 
     override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+
         val enclosingClass = property.getTopmostParentOfType<KtClass>()
         val comment = enclosingClass?.docComment?.text ?: return
 
-        if (property.isEncapsulatedInherited() && property.isReferencedInherited(comment)) {
+        if (property.isNonPublicInherited() && property.isReferencedInherited(comment)) {
             report(property)
         }
-
-        super.visitProperty(property)
     }
 
-    private fun KtProperty.isEncapsulatedInherited(): Boolean {
+    private fun KtProperty.isNonPublicInherited(): Boolean {
         if (!isPublic) {
             return true
         }
@@ -70,7 +95,7 @@ class ReferencedEncapsulatedProperty(config: Config = Config.empty) : Rule(confi
                 issue,
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} " +
-                    "is encapsulated and should not be referenced from KDoc comments."
+                    "is non-public and should not be referenced from KDoc comments."
             )
         )
     }
