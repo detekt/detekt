@@ -68,7 +68,7 @@ if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
     logger.info("GPG Key found - Signing enabled")
     signing {
         useInMemoryPgpKeys(signingKey, signingPwd)
-        sign(publishing.publications[DETEKT_PUBLICATION])
+        publishing.publications.forEach(::sign)
     }
 }
 

@@ -6,6 +6,7 @@ plugins {
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
+    signing
     alias(libs.plugins.pluginPublishing)
 }
 
@@ -145,3 +146,23 @@ with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 }
+
+tasks.withType<Sign>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
+}
+
+val signingKey = "SIGNING_KEY".byProperty
+val signingPwd = "SIGNING_PWD".byProperty
+if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
+    logger.info("Signing disabled as the GPG key was not found")
+} else {
+    logger.info("GPG Key found - Signing enabled")
+    afterEvaluate {
+        signing {
+            useInMemoryPgpKeys(signingKey, signingPwd)
+            publishing.publications.forEach(::sign)
+        }
+    }
+}
+
+val String.byProperty: String? get() = findProperty(this) as? String
