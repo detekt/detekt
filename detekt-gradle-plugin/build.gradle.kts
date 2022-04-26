@@ -25,9 +25,7 @@ testing {
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
 
-                // Workaround for gradle/gradle#16774, see
-                // https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
-                // This should be reviewed and dropped if fixed as planned in Gradle 7.5
+                // See https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
                 runtimeOnly(
                     files(
                         serviceOf<ModuleRegistry>()
@@ -66,8 +64,8 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
 
-    // Migrate to `implementation(testFixtures(project))` in test suite configuration when Gradle 7.5 released
-    // (https://github.com/gradle/gradle/pull/19472)
+    // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
+    // https://github.com/gradle/gradle/pull/19472
     functionalTestImplementation(testFixtures(project))
 
     pluginCompileOnly(libs.android.gradle)
