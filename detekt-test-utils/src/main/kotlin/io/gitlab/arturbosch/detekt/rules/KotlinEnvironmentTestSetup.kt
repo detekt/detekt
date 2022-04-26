@@ -47,8 +47,9 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
         val closeableWrapper = extensionContext.wrapper
-            ?: CloseableWrapper(createEnvironment(additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths()))
-                .also { extensionContext.wrapper = it }
+            ?: CloseableWrapper(
+                createEnvironment(additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths())
+            ).also { extensionContext.wrapper = it }
         return closeableWrapper.wrapper.env
     }
 
