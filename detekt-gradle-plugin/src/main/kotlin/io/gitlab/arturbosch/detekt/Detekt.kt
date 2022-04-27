@@ -41,8 +41,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -162,30 +162,26 @@ open class Detekt @Inject constructor(
         get() = basePathProp.getOrElse("")
         set(value) = basePathProp.set(value)
 
-    @get:Internal
+    @get:Nested
     var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
     val reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
+        @Internal
         get() = getTargetFileProvider(reports.xml)
 
     val htmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
+        @Internal
         get() = getTargetFileProvider(reports.html)
 
     val txtReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
+        @Internal
         get() = getTargetFileProvider(reports.txt)
 
     val sarifReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
+        @Internal
         get() = getTargetFileProvider(reports.sarif)
 
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()

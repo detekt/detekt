@@ -4,17 +4,23 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import java.io.File
 import javax.inject.Inject
 
-open class DetektReport @Inject constructor(val type: DetektReportType, objects: ObjectFactory) {
+open class DetektReport @Inject constructor(
+    @Internal val type: DetektReportType,
+    objects: ObjectFactory
+) {
 
+    @get:Internal
     @Deprecated("Use required.set(value)")
     var enabled: Boolean?
         get() = required.get()
         set(value) = required.set(value)
 
+    @get:Internal
     @Deprecated("Use outputLocation.set(value)")
     var destination: File?
         get() = outputLocation.asFile.orNull
