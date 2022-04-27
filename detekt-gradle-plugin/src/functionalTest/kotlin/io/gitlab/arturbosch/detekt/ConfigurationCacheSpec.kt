@@ -4,24 +4,17 @@ import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
 
 class ConfigurationCacheSpec {
-    @ParameterizedTest(name = "Given {0}, can be loaded from the configuration cache")
-    @CsvSource(
-        "regular invocation, 'detekt'",
-        "dry-run invocation, 'detekt,-Pdetekt-dry-run=true'",
-    )
-    @Suppress("UnusedPrivateMember") // `unused` is used in the parameterized test name
-    fun detektConfigCache(unused: String, arguments: String) {
+    @Test
+    fun `detekt task can be loaded from the configuration cache`() {
         val gradleRunner = DslTestBuilder.kotlin().build()
 
         // First run primes the cache
-        gradleRunner.runTasks("--configuration-cache", *arguments.split(',').toTypedArray())
+        gradleRunner.runTasks("--configuration-cache", "detekt")
 
         // Second run reuses the cache
-        val result = gradleRunner.runTasks("--configuration-cache", *arguments.split(',').toTypedArray())
+        val result = gradleRunner.runTasks("--configuration-cache", "detekt")
 
         assertThat(result.output).contains("Reusing configuration cache.")
     }
@@ -36,7 +29,6 @@ class ConfigurationCacheSpec {
                         |}
             """
             val gradleRunner = DslTestBuilder.kotlin()
-                .dryRun()
                 .withDetektConfig(detektConfig)
                 .build()
 
@@ -55,7 +47,6 @@ class ConfigurationCacheSpec {
         @Test
         fun `can be loaded from the configuration cache`() {
             val gradleRunner = DslTestBuilder.kotlin()
-                .dryRun()
                 .build()
 
             // First run primes the cache

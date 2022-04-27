@@ -86,7 +86,7 @@ Gradle plugins from configuring Android-specific gradle tasks.
 ## Enabling on Detekt CLI
 
 If you're using [Detekt via CLI](/docs/gettingstarted/cli), type resolution will be enabled only if you provide the `--classpath` and
-`--jvm-target` flags. See the list of [CLI options](/docs/gettingstarted/cli-options) for details.
+`--jvm-target` flags. See the list of [CLI options](/docs/gettingstarted/cli#use-the-cli) for details.
 
 ## Writing a rule that uses type resolution
 
