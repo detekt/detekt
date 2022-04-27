@@ -450,7 +450,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         rect.set(0, 1, 2)
                     }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }
