@@ -133,6 +133,13 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 4
+  NestedScopeFunctions:
+    active: false
+    threshold: 1
+    functions:
+      - 'apply'
+      - 'run'
+      - 'with'
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:
