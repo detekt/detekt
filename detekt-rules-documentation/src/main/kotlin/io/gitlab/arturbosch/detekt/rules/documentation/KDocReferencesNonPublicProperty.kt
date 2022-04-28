@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
@@ -66,12 +67,12 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
     }
 
     private fun KtProperty.isNonPublicInherited(): Boolean {
-        if (!isPublic) {
+        if (!isPublic && !isProtected()) {
             return true
         }
         var classOrObject = containingClassOrObject
         while (classOrObject != null && classOrObject is KtObjectDeclaration) {
-            if (!classOrObject.isPublic) {
+            if (!classOrObject.isPublic && !isProtected()) {
                 return true
             }
             classOrObject = classOrObject.containingClassOrObject

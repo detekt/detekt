@@ -78,8 +78,8 @@ class KDocReferencesNonPublicPropertySpec {
              * [A.B.prop2] - public property
              * [C.prop3] - public property
              */
-            class Test {
-                val prop1 = 0
+            open class Test {
+                protected val prop1 = 0
                 object A {
                     object B {
                         val prop2 = 0
