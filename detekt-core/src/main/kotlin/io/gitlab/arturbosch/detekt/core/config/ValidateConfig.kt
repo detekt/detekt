@@ -148,6 +148,6 @@ internal fun propertyShouldBeAnArray(
     reportAsError: Boolean,
 ): Notification =
     SimpleNotification(
-        "Property '$prop' should be an array instead of a String.",
+        "Property '$prop' should be a YAML array instead of a comma-separated String.",
         if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
     )
