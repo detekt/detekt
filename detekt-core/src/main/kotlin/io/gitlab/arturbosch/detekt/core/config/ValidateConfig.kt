@@ -99,6 +99,8 @@ internal fun validateConfig(
 
             if (!base.contains(prop)) {
                 notifications.add(propertyDoesNotExists(propertyPath))
+            } else if (current[prop] is String && base[prop] is List<*>) {
+                notifications.add(propertyShouldBeAnArray(propertyPath, warningsAsErrors))
             }
 
             val next = current[prop] as? Map<String, Any>
@@ -138,5 +140,14 @@ internal fun propertyIsDeprecated(
 ): Notification =
     SimpleNotification(
         "Property '$prop' is deprecated. $deprecationDescription.",
+        if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
+    )
+
+internal fun propertyShouldBeAnArray(
+    prop: String,
+    reportAsError: Boolean,
+): Notification =
+    SimpleNotification(
+        "Property '$prop' should be an array instead of a String.",
         if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
     )

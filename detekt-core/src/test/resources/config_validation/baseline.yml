@@ -1,3 +1,5 @@
+config:
+  warningsAsErrors: true
 complexity:
   LongMethod:
     active: true
