@@ -170,6 +170,12 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: ['kotlin', 'groovy', 'java'],
       },
+      algolia: {
+        appId: '5PZNXB7M3G',
+        apiKey: '6f23d0811156d77c936736893b97c5fd',
+        indexName: 'detekt',
+        contextualSearch: true,
+      },
     }),
 
   customFields: {
