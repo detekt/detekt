@@ -137,9 +137,9 @@ complexity:
     active: false
     threshold: 1
     functions:
-      - 'apply'
-      - 'run'
-      - 'with'
+      - 'kotlin.apply'
+      - 'kotlin.run'
+      - 'kotlin.with'
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:

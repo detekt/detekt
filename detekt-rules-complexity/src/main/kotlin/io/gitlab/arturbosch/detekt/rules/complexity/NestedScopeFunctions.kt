@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
@@ -11,9 +12,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * Although the scope functions are a way of making the code more concise, avoid overusing them: it can decrease
@@ -40,6 +43,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
  * second.c = first.b
  * </compliant>
  */
+@RequiresTypeResolution
 class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
@@ -52,8 +56,13 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
     @Configuration("Number of nested scope functions allowed.")
     private val threshold: Int by config(defaultValue = 1)
 
-    @Configuration("Set of scope function names which add complexity.")
-    private val functions: Set<String> by config(DEFAULT_FUNCTIONS) { it.toSet() }
+    @Configuration(
+        "Set of scope function names which add complexity. " +
+            "Function names have to be fully qualified. For example 'kotlin.apply'."
+    )
+    private val functions: List<FunctionMatcher> by config(DEFAULT_FUNCTIONS) {
+        it.toSet().map(FunctionMatcher::fromFunctionSignature)
+    }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         function.accept(FunctionDepthVisitor())
@@ -72,9 +81,9 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
 
     private companion object {
         val DEFAULT_FUNCTIONS = listOf(
-            "apply",
-            "run",
-            "with",
+            "kotlin.apply",
+            "kotlin.run",
+            "kotlin.with",
         )
     }
 
@@ -106,8 +115,19 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        private fun KtCallExpression.isScopeFunction(): Boolean =
-            getCallNameExpression()?.text?.let { functions.contains(it) }
-                ?: false
+        private fun KtCallExpression.isScopeFunction(): Boolean {
+            val descriptors = resolveDescriptors()
+            val descriptor = descriptors.find { it.matchesScopeFunction() }
+            return descriptor != null
+        }
+
+        private fun KtCallExpression.resolveDescriptors(): List<CallableDescriptor> =
+            getResolvedCall(bindingContext)?.resultingDescriptor
+                ?.let { listOf(it) + it.overriddenDescriptors }
+                ?: emptyList()
+
+        private fun CallableDescriptor.matchesScopeFunction(): Boolean {
+            return functions.find { it.match(this) } != null
+        }
     }
 }
