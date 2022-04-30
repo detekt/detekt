@@ -47,7 +47,7 @@ class NestedScopeFunctionsSpec {
         givenCode = """
             fun f() {
                 1.run {
-                    1.valid {
+                    "valid".apply {
                         with(1) { }
                     }
                 }
@@ -63,7 +63,7 @@ class NestedScopeFunctionsSpec {
             fun f() {
                 1.run { }
                 fun f2() {
-                    1.with { }
+                    with(1) { }
                 }
             }
         """

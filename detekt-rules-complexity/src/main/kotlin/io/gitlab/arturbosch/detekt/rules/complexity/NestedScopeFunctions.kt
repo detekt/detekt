@@ -82,7 +82,7 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
         private var depth = 0
 
         override fun visitCallExpression(expression: KtCallExpression) {
-            fun callSuper() = super.visitCallExpression(expression)
+            fun callSuper(): Unit = super.visitCallExpression(expression)
 
             if (expression.isScopeFunction()) {
                 doWithIncrementedDepth {
