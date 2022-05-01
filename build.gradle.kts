@@ -6,6 +6,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.dependencyAnalysis)
 }
 
 allprojects {
