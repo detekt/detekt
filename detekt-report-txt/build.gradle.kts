@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.detektApi)
+    compileOnly(projects.detektApi)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj)
 }
