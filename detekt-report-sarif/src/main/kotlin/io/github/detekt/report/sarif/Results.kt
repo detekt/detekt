@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 
-fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
+internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
     detektion.findings.flatMap { (ruleSetId, findings) ->
         findings.map { it.toResult(ruleSetId) }
     }
