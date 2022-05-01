@@ -38,6 +38,8 @@ private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 private const val PLACEHOLDER_VERSION = "@@@version@@@"
 private const val PLACEHOLDER_DATE = "@@@date@@@"
 
+private const val DETEKT_WEBSITE_BASE_URL = "https://detekt.dev"
+
 /**
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
  * See: https://detekt.dev/configurations.html#output-reports
@@ -121,7 +123,7 @@ class HtmlOutputReport : OutputReport() {
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("https://detekt.dev/docs/rules/${group.toLowerCase()}#${rule.toLowerCase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.toLowerCase()}#${rule.toLowerCase()}") {
                 +"Documentation"
             }
 
