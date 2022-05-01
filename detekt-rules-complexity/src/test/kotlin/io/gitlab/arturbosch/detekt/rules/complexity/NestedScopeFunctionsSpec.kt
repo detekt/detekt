@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -93,8 +94,25 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
         expectNoFindings()
     }
 
+    @Test
+    fun `should not report when binding context is empty`() {
+        givenCode = """
+            fun f() {
+                1.run {
+                    1.run { }
+                }
+            }
+        """
+        whenLintRunsWithoutContext()
+        expectNoFindings()
+    }
+
     private fun whenLintRuns() {
         actual = subject.compileAndLintWithContext(env, givenCode)
+    }
+
+    private fun whenLintRunsWithoutContext() {
+        actual = subject.compileAndLint(givenCode)
     }
 
     private fun expectSourceLocation(location: Pair<Int, Int>) {
