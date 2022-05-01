@@ -45,6 +45,16 @@ allprojects {
     }
 }
 
+dependencyAnalysis {
+    issues {
+        all {
+            onUsedTransitiveDependencies {
+                severity("ignore")
+            }
+        }
+    }
+}
+
 val analysisDir = file(projectDir)
 val baselineFile = file("$rootDir/config/detekt/baseline.xml")
 val configFile = file("$rootDir/config/detekt/detekt.yml")
