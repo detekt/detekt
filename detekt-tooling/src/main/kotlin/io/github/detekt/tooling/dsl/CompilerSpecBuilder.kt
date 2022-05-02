@@ -1,11 +1,12 @@
 package io.github.detekt.tooling.dsl
 
 import io.github.detekt.tooling.api.spec.CompilerSpec
+import org.jetbrains.kotlin.config.JvmTarget
 
 @ProcessingModelDsl
 class CompilerSpecBuilder : Builder<CompilerSpec> {
 
-    var jvmTarget: String = "1.8"
+    var jvmTarget: JvmTarget = JvmTarget.JVM_1_8
     var languageVersion: String? = null
     var classpath: String? = null
 
@@ -13,7 +14,7 @@ class CompilerSpecBuilder : Builder<CompilerSpec> {
 }
 
 private data class CompilerModel(
-    override val jvmTarget: String,
+    override val jvmTarget: JvmTarget,
     override val languageVersion: String?,
     override val classpath: String?
 ) : CompilerSpec

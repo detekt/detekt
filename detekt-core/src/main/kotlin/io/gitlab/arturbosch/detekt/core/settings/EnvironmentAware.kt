@@ -7,7 +7,6 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.Closeable
 import java.io.File
@@ -33,7 +32,7 @@ internal class EnvironmentFacade(
             projectSpec.inputPaths.toList(),
             classpath,
             compilerSpec.parseLanguageVersion(),
-            compilerSpec.parseJvmTarget()
+            compilerSpec.jvmTarget,
         )
         createKotlinCoreEnvironment(compilerConfiguration, disposable)
     }
@@ -52,8 +51,4 @@ internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
         return checkNotNull(version) { "Invalid value passed as language version." }
     }
     return languageVersion?.let(::parse)
-}
-
-internal fun CompilerSpec.parseJvmTarget(): JvmTarget {
-    return checkNotNull(JvmTarget.fromString(jvmTarget)) { "Invalid value passed to --jvm-target" }
 }
