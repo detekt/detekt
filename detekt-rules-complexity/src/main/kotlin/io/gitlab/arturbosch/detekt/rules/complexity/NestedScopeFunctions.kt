@@ -121,17 +121,15 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
 
         private fun KtCallExpression.isScopeFunction(): Boolean {
             val descriptors = resolveDescriptors()
-            val descriptor = descriptors.find { it.matchesScopeFunction() }
-            return descriptor != null
+            return !descriptors.any { it.matchesScopeFunction() }
         }
 
         private fun KtCallExpression.resolveDescriptors(): List<CallableDescriptor> =
             getResolvedCall(bindingContext)?.resultingDescriptor
                 ?.let { listOf(it) + it.overriddenDescriptors }
-                ?: emptyList()
+                .orEmpty()
 
-        private fun CallableDescriptor.matchesScopeFunction(): Boolean {
-            return functions.find { it.match(this) } != null
-        }
+        private fun CallableDescriptor.matchesScopeFunction(): Boolean =
+            !functions.any { it.match(this) }
     }
 }
