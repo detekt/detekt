@@ -192,6 +192,9 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>?) {
                     val a = x ?: emptySet()
                 }
+                fun test(c: Any?) {
+                    val x = c ?: emptyList<Int>()
+                }
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
