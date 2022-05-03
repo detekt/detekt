@@ -94,7 +94,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         )
 
         private val secondCalls = listOf(
-            SecondCall(FqName("kotlin.collections.List.size")),
+            SecondCall(FqName("kotlin.collections.List.size"), "count"),
             SecondCall(FqName("kotlin.collections.List.isEmpty"), "any"),
             SecondCall(FqName("kotlin.collections.isNotEmpty"), "none"),
             SecondCall(FqName("kotlin.collections.count")),
