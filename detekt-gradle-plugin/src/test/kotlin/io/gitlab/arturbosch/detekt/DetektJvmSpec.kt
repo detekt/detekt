@@ -26,6 +26,10 @@ class DetektJvmSpec {
                     reports.txt.required.set(false)
                 }
             }
+            tasks.named("detektTest", Detekt::class.java) {
+                it.jvmTarget = "1.8"
+                it.languageVersion = "1.6"
+            }
         },
     ).also(DslGradleRunner::setupProject)
 
@@ -41,6 +45,8 @@ class DetektJvmSpec {
         assertThat(argumentString).contains("--report sarif:")
         assertThat(argumentString).doesNotContain("--report txt:")
         assertThat(argumentString).contains("--classpath")
+        assertThat(argumentString).doesNotContain("--jvm-target")
+        assertThat(argumentString).doesNotContain("--language-version")
     }
 
     @Test
@@ -55,5 +61,7 @@ class DetektJvmSpec {
         assertThat(argumentString).contains("--report sarif:")
         assertThat(argumentString).doesNotContain("--report txt:")
         assertThat(argumentString).contains("--classpath")
+        assertThat(argumentString).contains("--jvm-target 1.8")
+        assertThat(argumentString).contains("--language-version 1.6")
     }
 }
