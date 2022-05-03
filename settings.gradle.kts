@@ -40,7 +40,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    `gradle-enterprise`
+    `gradle-enterprise` version "3.10"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.6.5"
 }
 
