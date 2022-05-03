@@ -57,8 +57,11 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
     }
 
-    private fun isIndexableGetter(expression: KtCallExpression): Boolean =
-        expression.calleeExpression?.text == "get" && expression.getFunctionDescriptor()?.isOperator == true
+    private fun isIndexableGetter(expression: KtCallExpression): Boolean {
+        if (expression.calleeExpression?.text != "get") return false
+        val descriptor = expression.getFunctionDescriptor() ?: return false
+        return descriptor.isOperator && descriptor.typeParameters.isEmpty()
+    }
 
     private fun isIndexableSetter(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
