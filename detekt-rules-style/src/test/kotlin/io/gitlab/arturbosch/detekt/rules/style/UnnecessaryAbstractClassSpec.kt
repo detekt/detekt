@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,6 +31,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
+            assertThat(findings).hasSourceLocation(1, 16)
         }
 
         @Nested
@@ -40,6 +41,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 val code = "abstract class A"
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
+                assertThat(findings).hasSourceLocation(1, 16)
             }
 
             @Test
@@ -173,6 +175,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             val code = "abstract class A(val i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
+            assertThat(findings).hasSourceLocation(1, 16)
         }
 
         @Test
@@ -180,6 +183,14 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             val code = "abstract class A(val i: Int) {}"
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
+        }
+
+        @Test
+        fun `reports no abstract members in an abstract class with just a constructor parameter`() {
+            val code = "abstract class A(i: Int)"
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingMessage(findings, message)
+            assertThat(findings).hasSourceLocation(1, 16)
         }
 
         @Test
@@ -282,5 +293,5 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
 
 private fun assertFindingMessage(findings: List<Finding>, message: String) {
     assertThat(findings).hasSize(1)
-    assertThat(findings.first().message).isEqualTo(message)
+    assertThat(findings.first()).hasMessage(message)
 }
