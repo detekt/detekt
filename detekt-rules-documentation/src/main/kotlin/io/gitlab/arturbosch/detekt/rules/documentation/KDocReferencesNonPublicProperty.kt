@@ -71,8 +71,8 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
             return true
         }
         var classOrObject = containingClassOrObject
-        while (classOrObject != null && classOrObject is KtObjectDeclaration) {
-            if (!classOrObject.isPublic && !isProtected()) {
+        while (classOrObject is KtObjectDeclaration) {
+            if (!classOrObject.isPublic) {
                 return true
             }
             classOrObject = classOrObject.containingClassOrObject
@@ -83,7 +83,7 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
     private fun KtProperty.isReferencedInherited(comment: String): Boolean {
         var qualifiedName = nameAsSafeName.asString()
         var classOrObject = containingClassOrObject
-        while (classOrObject != null && classOrObject is KtObjectDeclaration) {
+        while (classOrObject is KtObjectDeclaration) {
             qualifiedName = "${classOrObject.nameAsSafeName.asString()}.$qualifiedName"
             classOrObject = classOrObject.containingClassOrObject
         }
