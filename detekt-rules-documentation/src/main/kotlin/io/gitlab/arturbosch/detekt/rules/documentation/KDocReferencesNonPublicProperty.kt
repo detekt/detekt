@@ -20,8 +20,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * This rule will report any KDoc comments that refer to non-public properties of a class.
  * Clients do not need to know the implementation details.
  *
- * See [Encapsulation](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming))
- *
  * <noncompliant>
  * /**
  *  * Comment
