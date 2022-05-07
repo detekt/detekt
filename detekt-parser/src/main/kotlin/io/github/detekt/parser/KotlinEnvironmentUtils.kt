@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -98,6 +99,7 @@ fun createCompilerConfiguration(
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
+        configureJdkClasspathRoots()
     }
 }
 
