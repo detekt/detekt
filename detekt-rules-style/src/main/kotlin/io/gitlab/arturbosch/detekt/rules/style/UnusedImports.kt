@@ -115,14 +115,12 @@ class UnusedImports(config: Config) : Rule(config) {
         override fun visitDeclaration(dcl: KtDeclaration) {
             val kdoc = dcl.docComment?.getAllSections()
 
-            kdoc?.forEach {
-                it.getChildrenOfType<KDocTag>()
+            kdoc?.forEach { kdocSection ->
+                kdocSection.getChildrenOfType<KDocTag>()
                     .map { it.text }
                     .forEach { handleKDoc(it) }
 
-                it.getContent().let {
-                    handleKDoc(it)
-                }
+                handleKDoc(kdocSection.getContent())
             }
 
             super.visitDeclaration(dcl)
