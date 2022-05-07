@@ -66,6 +66,24 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `reports private variables that have the same name as those re-assigned within a known type`() {
+            val code = """
+            class MyClass(var a: Int)
+
+            private var a = 1
+            private val myObj = MyClass(1)
+
+            fun foo() {
+                with(myObj) {
+                    a = 2
+                }
+            }
+            """
+
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
     }
 
     @Nested
