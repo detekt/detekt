@@ -17,7 +17,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
- * Reports function invocations which have more parameters than a certain threshold and are all not named.
+ * Reports function invocations which have more arguments than a certain threshold and are all not named. Calls with
+ * too many arguments are more difficult to understand so a named arguments help.
  *
  * <noncompliant>
  * fun sum(a: Int, b: Int, c: Int, d: Int) {
@@ -37,7 +38,7 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "NamedArguments",
         Severity.Maintainability,
-        "Named arguments are required for function invocation with many parameters.",
+        "Named arguments are required for function calls with many arguments.",
         Debt.FIVE_MINS
     )
 
@@ -51,7 +52,9 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments
         if (valueArguments.size > threshold && expression.canNameArguments()) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
+            val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +
+                "than $threshold arguments you should set the name of each argument."
+            report(CodeSmell(issue, Entity.from(expression), message))
         } else {
             super.visitCallExpression(expression)
         }
