@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -113,7 +114,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -203,7 +204,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
