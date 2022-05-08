@@ -45,9 +45,9 @@ plugins {
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.7.2"
 }
 
-gradleEnterprise {
-    val isCiBuild = System.getenv("CI") != null
+val isCiBuild = System.getenv("CI") != null
 
+gradleEnterprise {
     buildScan {
         publishAlways()
 
@@ -62,6 +62,19 @@ gradleEnterprise {
 
         capture {
             isTaskInputFiles = true
+        }
+    }
+}
+
+buildCache {
+    local { isEnabled = false }
+    remote<HttpBuildCache> {
+        isPush = isCiBuild
+        isEnabled = true
+        url = uri("https://ge.detekt.dev/cache/")
+        credentials {
+            username = System.getenv("GRADLE_CACHE_USERNAME")
+            password = System.getenv("GRADLE_CACHE_PASSWORD")
         }
     }
 }

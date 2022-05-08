@@ -10,6 +10,8 @@ on:
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+  GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
+  GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_USERNAME }}
 
 permissions:
   contents: read
