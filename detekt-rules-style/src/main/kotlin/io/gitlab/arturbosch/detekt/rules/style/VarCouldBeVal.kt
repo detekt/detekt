@@ -105,7 +105,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             if (assignments.isNullOrEmpty()) return false
             val declarationDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
             return assignments.any {
-                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor
+                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor ||
+                    // inside an unknown types context? (example: with-statement with unknown type)
+                    // (i.e, it can't be resolved if the assignment is from the context or from an outer variable)
+                    it.getResolvedCall(bindingContext) == null
             }
         }
 
