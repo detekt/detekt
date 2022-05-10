@@ -4,3 +4,4 @@ style:
     maxLineLength: 120
   FaultyRule:
     active: true
+    isStacktraceEmpty: false
