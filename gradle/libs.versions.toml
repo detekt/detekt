@@ -20,7 +20,7 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
 
-android-gradle = "com.android.tools.build:gradle:7.1.3"
+android-gradle = "com.android.tools.build:gradle:7.2.0"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
