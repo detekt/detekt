@@ -283,19 +283,7 @@ it is not possible to incorporate it into the generic issue description.
 
 ## Contributing to the website
 
-Make sure to test your changes locally:
-
-- install ruby and jekyll
-- gem install bundler
-- bundler install
-- jekyll build
-- jekyll serve
-
-The following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/issues/7947) adopts to Ruby 2.7.0:
-
-```
-warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0)
-```
+Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main/website/README.md).
 
 ## Working on the Gradle plugin
 
