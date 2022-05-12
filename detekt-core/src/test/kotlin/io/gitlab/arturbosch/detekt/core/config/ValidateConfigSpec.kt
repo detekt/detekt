@@ -224,4 +224,27 @@ class ValidateConfigSpec {
             )
         }
     }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `reports a string that should be an array as a warning`(warningsAsErrors: Boolean) {
+        val config = yamlConfigFromContent(
+            """
+                config:
+                  warningsAsErrors: $warningsAsErrors
+                style:
+                  MagicNumber:
+                    ignoreNumbers: '-1,0,1,2'
+            """.trimIndent()
+        )
+
+        val result = validateConfig(config, baseline)
+
+        assertThat(result).contains(
+            propertyShouldBeAnArray(
+                "style>MagicNumber>ignoreNumbers",
+                reportAsError = warningsAsErrors
+            )
+        )
+    }
 }
