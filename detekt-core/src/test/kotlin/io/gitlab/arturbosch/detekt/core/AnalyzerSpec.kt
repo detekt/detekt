@@ -98,7 +98,7 @@ class AnalyzerSpec {
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
-                .hasMessageContaining(FaultyRule::class.java.name)
+                .hasMessageContaining("Location: ${FaultyRule::class.java.name}")
         }
 
         @Test
@@ -112,7 +112,7 @@ class AnalyzerSpec {
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
-                .hasMessageContaining("Unknown.")
+                .hasMessageContaining("Location: ${null}")
         }
     }
 }

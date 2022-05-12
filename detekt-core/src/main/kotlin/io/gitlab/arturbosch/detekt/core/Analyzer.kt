@@ -153,13 +153,9 @@ private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, Lis
 }
 
 private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing {
-    val location = error.stackTrace.firstOrNull()?.let {
-        "${it.fileName} => ${it.className} => ${it.methodName} => ${it.lineNumber}."
-    } ?: "Unknown."
-
     val message = """
     Analyzing ${file.absolutePath()} led to an exception. 
-    Location: $location
+    Location: ${error.stackTrace.firstOrNull()?.toString()}
     The original exception message was: ${error.localizedMessage}
     Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'
     If the exception message does not help, please feel free to create an issue on our GitHub page.
