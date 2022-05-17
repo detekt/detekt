@@ -32,6 +32,6 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
 
     companion object {
         const val ASCII_PATTERN = "*"
-        const val IDEA_PATTERN = "*,java.**,javax.**,kotlin.**,^"
+        const val IDEA_PATTERN = "*,java.**,javax.**,kotlin.**,kotlinx.**,^"
     }
 }
