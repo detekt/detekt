@@ -107,9 +107,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     }
 }
 
-internal fun loadDetektVersion(classLoader: ClassLoader): String =
+internal fun loadDetektVersion(classLoader: ClassLoader): String {
     // Other Gradle plugins can also have a versions.properties.
-    classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
+    val distinctVersions = classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
         Properties().run {
             val inputStream = versions.openConnection()
                 /*
@@ -124,4 +124,9 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String =
             load(inputStream)
             getProperty("detektVersion")
         }
-    }.distinct().single()
+    }.distinct()
+    return distinctVersions.singleOrNull() ?: error(
+        "You're importing two Detekt plugins which have different versions. " +
+            "(${distinctVersions.joinToString()}) Make sure to align the versions."
+    )
+}
