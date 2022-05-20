@@ -42,7 +42,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 plugins {
     // check https://gradle.com/enterprise/releases with new versions. GE plugin version should not lag behind Gradle version
     id("com.gradle.enterprise") version "3.10.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.6.6"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.7"
 }
 
 gradleEnterprise {
