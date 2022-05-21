@@ -24,7 +24,7 @@ fun FooButton(text: String, onClick: () -> Unit) { // Violation for FooButton()
 #### Configurations:
 Choose _either_ of the following options:
 
-* Augment default `functionPattern` to `'([A-Za-z][a-zA-Z0-9]*)|(`.*`)'` (default: `'([a-z][a-zA-Z0-9]*)|(`.*`)'`)
+* Augment default `functionPattern` to `'[a-zA-Z][a-zA-Z0-9]*'` (default is: `'[a-z][a-zA-Z0-9]*'`)
 * Set `ignoreAnnotated` to `['Composable']`
 
 ### TopLevelPropertyNaming
@@ -47,7 +47,7 @@ private val FooPadding = 16.dp
 
 #### Configurations:
 
-* Set `constantPattern` to `'[A-Z][A-Za-z0-9]*'` (default: `'[A-Z][_A-Z0-9]*'`)
+* Set `constantPattern` to `'[A-Z][A-Za-z0-9]*'` (default is: `'[A-Z][_A-Z0-9]*'`)
 
 
 ### LongParameterList
