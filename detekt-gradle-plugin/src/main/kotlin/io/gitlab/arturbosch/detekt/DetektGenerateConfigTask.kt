@@ -36,6 +36,9 @@ open class DetektGenerateConfigTask @Inject constructor(
     @get:Classpath
     val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
 
+    @get:Classpath
+    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
+
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -70,7 +73,7 @@ open class DetektGenerateConfigTask @Inject constructor(
 
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
             arguments = arguments.get(),
-            classpath = detektClasspath,
+            classpath = detektClasspath.plus(pluginClasspath),
             taskName = name,
         )
     }
