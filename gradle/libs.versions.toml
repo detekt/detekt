@@ -1,5 +1,5 @@
 [versions]
-dokka = "1.6.20"
+dokka = "1.6.21"
 jacoco = "0.8.8"
 kotlin = "1.6.21"
 ktlint = "0.45.2"
@@ -26,8 +26,6 @@ ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktli
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 
-dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "dokka"}
-
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.18" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
@@ -41,7 +39,6 @@ jcommander = "com.beust:jcommander:1.82"
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.9.0" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.20.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.21.0" }

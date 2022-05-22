@@ -13,150 +13,146 @@ class ExpressionBodySyntaxSpec {
     val subject = ExpressionBodySyntax(Config.empty)
 
     @Nested
-    inner class `ExpressionBodySyntax rule` {
+    inner class `several return statements` {
 
-        @Nested
-        inner class `several return statements` {
-
-            @Test
-            fun `reports constant return`() {
-                assertThat(
-                    subject.compileAndLint(
-                        """
-                    fun stuff(): Int {
-                        return 5
-                    }
-                        """
-                    )
-                ).hasSize(1)
-            }
-
-            @Test
-            fun `reports return statement with method chain`() {
-                assertThat(
-                    subject.compileAndLint(
-                        """
-                    fun stuff(): String {
-                        return StringBuilder().append(0).toString()
-                    }
-                        """
-                    )
-                ).hasSize(1)
-            }
-
-            @Test
-            fun `reports return statements with conditionals`() {
-                assertThat(
-                    subject.compileAndLint(
-                        """
-                    fun stuff(): Int {
-                        return if (true) return 5 else return 3
-                    }
-                    fun stuff(): Int {
-                        return try { return 5 } catch (e: Exception) { return 3 }
-                    }
-                        """
-                    )
-                ).hasSize(2)
-            }
-
-            @Test
-            fun `does not report multiple if statements`() {
-                assertThat(
-                    subject.compileAndLint(
-                        """
-                    fun stuff(): Boolean {
-                        if (true) return true
-                        return false
-                    }
-                        """
-                    )
-                ).isEmpty()
-            }
-
-            @Test
-            fun `does not report when using shortcut return`() {
-                assertThat(
-                    subject.compileAndLint(
-                        """
-                    fun caller(): String {
-                        return callee("" as String? ?: return "")
-                    }
-
-                    fun callee(a: String): String = ""
-                        """
-                    )
-                ).isEmpty()
-            }
+        @Test
+        fun `reports constant return`() {
+            assertThat(
+                subject.compileAndLint(
+                    """
+                fun stuff(): Int {
+                    return 5
+                }
+                    """
+                )
+            ).hasSize(1)
         }
 
-        @Nested
-        inner class `several return statements with multiline method chain` {
-
-            val code = """
+        @Test
+        fun `reports return statement with method chain`() {
+            assertThat(
+                subject.compileAndLint(
+                    """
                 fun stuff(): String {
-                    return StringBuilder()
-                        .append(1)
-                        .toString()
+                    return StringBuilder().append(0).toString()
                 }
-            """
-
-            @Test
-            fun `does not report with the default configuration`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `reports with includeLineWrapping = true configuration`() {
-                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
-                assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
-            }
+                    """
+                )
+            ).hasSize(1)
         }
 
-        @Nested
-        inner class `several return statements with multiline when expression` {
-
-            val code = """
-                fun stuff(arg: Int): Int {
-                    return when(arg) {
-                        0 -> 0
-                        else -> 1
-                    }
+        @Test
+        fun `reports return statements with conditionals`() {
+            assertThat(
+                subject.compileAndLint(
+                    """
+                fun stuff(): Int {
+                    return if (true) return 5 else return 3
                 }
-            """
-
-            @Test
-            fun `does not report with the default configuration`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `reports with includeLineWrapping = true configuration`() {
-                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
-                assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
-            }
+                fun stuff(): Int {
+                    return try { return 5 } catch (e: Exception) { return 3 }
+                }
+                    """
+                )
+            ).hasSize(2)
         }
 
-        @Nested
-        inner class `several return statements with multiline if expression` {
-
-            val code = """
-                fun stuff(arg: Int): Int {
-                    return if (arg == 0) 0
-                    else 1
+        @Test
+        fun `does not report multiple if statements`() {
+            assertThat(
+                subject.compileAndLint(
+                    """
+                fun stuff(): Boolean {
+                    if (true) return true
+                    return false
                 }
-            """
+                    """
+                )
+            ).isEmpty()
+        }
 
-            @Test
-            fun `does not report with the default configuration`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
-            }
+        @Test
+        fun `does not report when using shortcut return`() {
+            assertThat(
+                subject.compileAndLint(
+                    """
+                fun caller(): String {
+                    return callee("" as String? ?: return "")
+                }
 
-            @Test
-            fun `reports with includeLineWrapping = true configuration`() {
-                val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
-                assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+                fun callee(a: String): String = ""
+                    """
+                )
+            ).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `several return statements with multiline method chain` {
+
+        val code = """
+            fun stuff(): String {
+                return StringBuilder()
+                    .append(1)
+                    .toString()
             }
+        """
+
+        @Test
+        fun `does not report with the default configuration`() {
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports with includeLineWrapping = true configuration`() {
+            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `several return statements with multiline when expression` {
+
+        val code = """
+            fun stuff(arg: Int): Int {
+                return when(arg) {
+                    0 -> 0
+                    else -> 1
+                }
+            }
+        """
+
+        @Test
+        fun `does not report with the default configuration`() {
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports with includeLineWrapping = true configuration`() {
+            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `several return statements with multiline if expression` {
+
+        val code = """
+            fun stuff(arg: Int): Int {
+                return if (arg == 0) 0
+                else 1
+            }
+        """
+
+        @Test
+        fun `does not report with the default configuration`() {
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports with includeLineWrapping = true configuration`() {
+            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
         }
     }
 }

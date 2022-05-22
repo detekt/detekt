@@ -625,6 +625,8 @@ style:
     active: false
   UnnecessaryApply:
     active: true
+  UnnecessaryBackticks:
+    active: false
   UnnecessaryFilter:
     active: false
   UnnecessaryInheritance:
@@ -675,6 +677,7 @@ style:
     active: true
   VarCouldBeVal:
     active: true
+    ignoreLateinitVar: false
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
+import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CustomReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
@@ -204,8 +205,8 @@ open class Detekt @Inject constructor(
     }
 
     @get:Internal
-    internal val arguments
-        get() = mutableListOf(
+    internal val arguments: Provider<List<String>> = project.provider {
+        listOf(
             InputArgument(source),
             ClasspathArgument(classpath),
             LanguageVersionArgument(languageVersionProp.orNull),
@@ -224,7 +225,8 @@ open class Detekt @Inject constructor(
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
-        ) + convertCustomReportsToArguments()
+        ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
+    }
 
     @InputFiles
     @SkipWhenEmpty
@@ -250,7 +252,7 @@ open class Detekt @Inject constructor(
         }
 
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
-            arguments = arguments.toList(),
+            arguments = arguments.get(),
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name

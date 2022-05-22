@@ -13,63 +13,58 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
 @OptIn(UnstableApi::class)
 class SarifOutputReportSpec {
 
-    @Nested
-    inner class `sarif output report` {
+    @Test
+    fun `renders multiple issues`() {
+        val result = TestDetektion(
+            createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
+            createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
+            createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
+        )
 
-        @Test
-        fun `renders multiple issues`() {
-            val result = TestDetektion(
-                createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
-                createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
-                createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
-            )
+        val report = SarifOutputReport()
+            .apply { init(EmptySetupContext()) }
+            .render(result)
 
-            val report = SarifOutputReport()
-                .apply { init(EmptySetupContext()) }
-                .render(result)
+        assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
+    }
 
-            assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
-        }
+    @Test
+    fun `renders multiple issues with relative path`() {
+        val basePath = "/Users/tester/detekt/"
+        val result = TestDetektion(
+            createFindingForRelativePath(ruleName = "TestSmellA", basePath = basePath),
+            createFindingForRelativePath(ruleName = "TestSmellB", basePath = basePath),
+            createFindingForRelativePath(ruleName = "TestSmellC", basePath = basePath)
+        )
 
-        @Test
-        fun `renders multiple issues with relative path`() {
-            val basePath = "/Users/tester/detekt/"
-            val result = TestDetektion(
-                createFindingForRelativePath(ruleName = "TestSmellA", basePath = basePath),
-                createFindingForRelativePath(ruleName = "TestSmellB", basePath = basePath),
-                createFindingForRelativePath(ruleName = "TestSmellC", basePath = basePath)
-            )
-
-            val report = SarifOutputReport()
-                .apply {
-                    init(
-                        EmptySetupContext().apply {
-                            register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
-                        }
-                    )
-                }
-                .render(result)
-                .stripWhitespace()
-
-            val expectedReport = readResourceContent("relative_path.sarif.json")
-
-            // Note: Github CI uses D: drive, but it could be any drive for local development
-            val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
-                val winRoot = Paths.get("/").toAbsolutePath().toString().replace("\\", "/")
-                expectedReport.replace("file:///", "file://$winRoot")
-            } else {
-                expectedReport
+        val report = SarifOutputReport()
+            .apply {
+                init(
+                    EmptySetupContext().apply {
+                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
+                    }
+                )
             }
+            .render(result)
+            .stripWhitespace()
 
-            assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
+        val expectedReport = readResourceContent("relative_path.sarif.json")
+
+        // Note: Github CI uses D: drive, but it could be any drive for local development
+        val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
+            val winRoot = Paths.get("/").toAbsolutePath().toString().replace("\\", "/")
+            expectedReport.replace("file:///", "file://$winRoot")
+        } else {
+            expectedReport
         }
+
+        assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
     }
 }
 

@@ -3,25 +3,20 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class TooGenericExceptionSpec {
 
-    @Nested
-    inner class `TooGenericException rule` {
+    @Test
+    fun `should not report any as all catch exception rules are deactivated`() {
+        val config = yamlConfig("deactivated-exceptions.yml")
+        val ruleSet = ExceptionsProvider().instance(config)
+        val file = compileContentForTest(tooGenericExceptionCode)
 
-        @Test
-        fun `should not report any as all catch exception rules are deactivated`() {
-            val config = yamlConfig("deactivated-exceptions.yml")
-            val ruleSet = ExceptionsProvider().instance(config)
-            val file = compileContentForTest(tooGenericExceptionCode)
+        @Suppress("DEPRECATION")
+        val findings = ruleSet.accept(file)
 
-            @Suppress("DEPRECATION")
-            val findings = ruleSet.accept(file)
-
-            assertThat(findings).isEmpty()
-        }
+        assertThat(findings).isEmpty()
     }
 }
 

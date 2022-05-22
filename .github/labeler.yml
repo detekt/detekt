@@ -14,14 +14,14 @@ cli:
   - "detekt-cli/src/**/*"
 
 core:
-  - "detekt-core/src/**/*"
+  - "detekt-core/src/**/*.kt"
 
 dependencies:
   - "gradle/libs.versions.toml"
 
 documentation:
   - "**/*.md"
-  - "docs/**/*"
+  - "website/**/*"
 
 formatting:
   - "detekt-formatting/src/**/*"

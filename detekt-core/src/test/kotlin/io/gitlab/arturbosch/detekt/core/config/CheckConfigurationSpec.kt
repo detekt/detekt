@@ -13,85 +13,80 @@ import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class SupportConfigValidationSpec {
 
-    @Nested
-    inner class `support config validation` {
+    private val testDir = createTempDirectoryForTest("detekt-sample")
+    private val spec = createNullLoggingSpec {}
 
-        private val testDir = createTempDirectoryForTest("detekt-sample")
-        private val spec = createNullLoggingSpec {}
+    @Test
+    fun `fails when unknown properties are found`() {
+        val config = yamlConfigFromContent(
+            """
+            # Properties of custom rule sets get excluded by default.
+            sample-rule-set:
+              TooManyFunctions:
+                active: true
 
-        @Test
-        fun `fails when unknown properties are found`() {
-            val config = yamlConfigFromContent(
-                """
-                # Properties of custom rule sets get excluded by default.
-                sample-rule-set:
-                  TooManyFunctions:
-                    active: true
-
-                # This properties are unknown to detekt and must be excluded.
-                my_additional_properties:
-                  magic_number: 7
-                  magic_string: 'Hello World'
-                """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .isInstanceOf(InvalidConfig::class.java)
-                    .hasMessageContaining("Run failed with 1 invalid config property.")
-                    .hasMessageContaining("my_additional_properties")
-            }
+            # This properties are unknown to detekt and must be excluded.
+            my_additional_properties:
+              magic_number: 7
+              magic_string: 'Hello World'
+            """
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .isInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("Run failed with 1 invalid config property.")
+                .hasMessageContaining("my_additional_properties")
         }
+    }
 
-        @Test
-        fun `fails due to custom config validator want active to be booleans`() {
-            val config = yamlConfigFromContent(
-                """
-                # Properties of custom rule sets get excluded by default.
-                sample-rule-set:
-                  TooManyFunctions:
-                    # This property is tested via the SampleConfigValidator
-                    active: 1 # should be true
-                """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .isInstanceOf(InvalidConfig::class.java)
-                    .hasMessageContaining("Run failed with 1 invalid config property.")
-            }
+    @Test
+    fun `fails due to custom config validator want active to be booleans`() {
+        val config = yamlConfigFromContent(
+            """
+            # Properties of custom rule sets get excluded by default.
+            sample-rule-set:
+              TooManyFunctions:
+                # This property is tested via the SampleConfigValidator
+                active: 1 # should be true
+            """
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .isInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("Run failed with 1 invalid config property.")
         }
+    }
 
-        @Test
-        fun `passes with excluded new properties`() {
-            val config = yamlConfigFromContent(
-                """
-               config:
-                 validation: true
-                 # Additional properties can be useful when writing custom extensions.
-                 # However only properties defined in the default config are known to detekt.
-                 # All unknown properties are treated as errors if not excluded.
-                 excludes: 'my_additional_properties'
+    @Test
+    fun `passes with excluded new properties`() {
+        val config = yamlConfigFromContent(
+            """
+           config:
+             validation: true
+             # Additional properties can be useful when writing custom extensions.
+             # However only properties defined in the default config are known to detekt.
+             # All unknown properties are treated as errors if not excluded.
+             excludes: 'my_additional_properties'
 
-               # Properties of custom rule sets get excluded by default.
-               # If you want to validate them further, consider implementing a ConfigValidator.
-               sample-rule-set:
-                 TooManyFunctions:
-                   active: true
+           # Properties of custom rule sets get excluded by default.
+           # If you want to validate them further, consider implementing a ConfigValidator.
+           sample-rule-set:
+             TooManyFunctions:
+               active: true
 
-               # This properties are unknown to detekt and must be excluded.
-               my_additional_properties:
-                 magic_number: 7
-                 magic_string: 'Hello World'
-                """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .doesNotThrowAnyException()
-            }
+           # This properties are unknown to detekt and must be excluded.
+           my_additional_properties:
+             magic_number: 7
+             magic_string: 'Hello World'
+            """
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .doesNotThrowAnyException()
         }
     }
 }

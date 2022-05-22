@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ParameterListWrappingSpec {
@@ -17,26 +16,22 @@ class ParameterListWrappingSpec {
         subject = ParameterListWrapping(Config.empty)
     }
 
-    @Nested
-    inner class `ParameterListWrapping rule` {
+    @Test
+    fun `does not report correct ParameterListWrapping level`() {
+        val code = """
+            fun f(
+                a: Int
+            ) {}
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
+    }
 
-        @Test
-        fun `does not report correct ParameterListWrapping level`() {
-            val code = """
-                fun f(
-                    a: Int
-                ) {}
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports when max line length is exceeded`() {
-            val code = """
-                fun f(a: Int, b: Int, c: Int) {}
-            """.trimIndent()
-            val config = TestConfig("maxLineLength" to "10")
-            assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
-        }
+    @Test
+    fun `reports when max line length is exceeded`() {
+        val code = """
+            fun f(a: Int, b: Int, c: Int) {}
+        """.trimIndent()
+        val config = TestConfig("maxLineLength" to "10")
+        assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
     }
 }

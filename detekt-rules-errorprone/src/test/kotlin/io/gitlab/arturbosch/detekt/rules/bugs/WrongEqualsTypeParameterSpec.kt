@@ -3,87 +3,82 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class WrongEqualsTypeParameterSpec {
     private val subject = WrongEqualsTypeParameter(Config.empty)
 
-    @Nested
-    inner class `WrongEqualsTypeParameter rule` {
-
-        @Test
-        fun `does not report nullable Any as parameter`() {
-            val code = """
-                class A {
-                    override fun equals(other: Any?): Boolean {
-                        return super.equals(other)
-                    }
+    @Test
+    fun `does not report nullable Any as parameter`() {
+        val code = """
+            class A {
+                override fun equals(other: Any?): Boolean {
+                    return super.equals(other)
                 }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `reports a String as parameter`() {
-            val code = """
-                class A {
-                    fun equals(other: String): Boolean {
-                        return super.equals(other)
-                    }
+    @Test
+    fun `reports a String as parameter`() {
+        val code = """
+            class A {
+                fun equals(other: String): Boolean {
+                    return super.equals(other)
                 }
-            """
-            assertThat(subject.compileAndLint(code)).hasSize(1)
-        }
+            }
+        """
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
 
-        @Test
-        fun `does not report equals() with an additional parameter`() {
-            val code = """
-                class A {
-                    fun equals(other: Any?, i: Int): Boolean {
-                        return super.equals(other)
-                    }
+    @Test
+    fun `does not report equals() with an additional parameter`() {
+        val code = """
+            class A {
+                fun equals(other: Any?, i: Int): Boolean {
+                    return super.equals(other)
                 }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `does not report an overridden equals() with a different signature`() {
-            val code = """
-                interface I {
-                    fun equals(other: Any?, i: Int): Boolean
-                    fun equals(): Boolean
+    @Test
+    fun `does not report an overridden equals() with a different signature`() {
+        val code = """
+            interface I {
+                fun equals(other: Any?, i: Int): Boolean
+                fun equals(): Boolean
+            }
+            
+            class A : I {
+                override fun equals(other: Any?, i: Int): Boolean {
+                    return super.equals(other)
                 }
                 
-                class A : I {
-                    override fun equals(other: Any?, i: Int): Boolean {
-                        return super.equals(other)
-                    }
-                    
-                    override fun equals() = true
-                }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+                override fun equals() = true
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `does not report an interface declaration`() {
-            val code = """
-                interface I {
-                    fun equals(other: String)
-                }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `does not report an interface declaration`() {
+        val code = """
+            interface I {
+                fun equals(other: String)
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 
-        @Test
-        fun `does not report top level functions`() {
-            val code = """
-                fun equals(other: String) {}
-                fun equals(other: Any?) {}
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `does not report top level functions`() {
+        val code = """
+            fun equals(other: String) {}
+            fun equals(other: Any?) {}
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

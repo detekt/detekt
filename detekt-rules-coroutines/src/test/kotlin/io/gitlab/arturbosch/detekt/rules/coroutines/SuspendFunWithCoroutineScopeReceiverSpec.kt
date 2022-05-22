@@ -127,88 +127,6 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class SuspendFunWithCoroutineScopeLambda {
-
-        @Test
-        fun `reports when lambda parameter has suspend and explicit CoroutineScope receiver type`() {
-            val code = """
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.launch
-                import kotlinx.coroutines.delay
-                import kotlinx.coroutines.coroutineScope
-
-                suspend fun foo(action: suspend CoroutineScope.() -> Unit) = coroutineScope {
-                    action()
-                }
-            """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports when lambda parameter has suspend and inherited CoroutineScope receiver type`() {
-            val code = """
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.launch
-                import kotlinx.coroutines.delay
-                import kotlinx.coroutines.coroutineScope
-
-                interface TestScope: CoroutineScope
-
-                suspend fun foo(action: suspend TestScope.() -> Unit) = coroutineScope {
-                    val scope = object: TestScope, CoroutineScope by this { }
-                    scope.action()
-                }
-            """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `no report when lambda parameter has only CoroutineScope receiver type`() {
-            val code = """
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.launch
-                import kotlinx.coroutines.delay
-                import kotlinx.coroutines.coroutineScope
-
-                suspend fun foo(action: CoroutineScope.() -> Unit) = coroutineScope {
-                    action()
-                }
-            """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `no report when suspend lambda parameter has no CoroutineScope receiver type`() {
-            val code = """
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.launch
-                import kotlinx.coroutines.delay
-                import kotlinx.coroutines.coroutineScope
-
-                suspend fun foo(action: suspend Int.() -> Unit) {
-                    1.action()
-                }
-            """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `no report when suspend lambda parameter has no receiver`() {
-            val code = """
-                import kotlinx.coroutines.CoroutineScope
-                import kotlinx.coroutines.launch
-                import kotlinx.coroutines.delay
-                import kotlinx.coroutines.coroutineScope
-
-                suspend fun foo(action: suspend () -> Unit) {
-                    action()
-                }
-            """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-    }
-
-    @Nested
     inner class SuspendCoroutineFunWithCoroutineScopeLambda {
 
         @Test
@@ -223,7 +141,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                     action()
                 }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 }

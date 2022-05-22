@@ -4,5 +4,5 @@ gradle build || exit
 gradle publishAllPublicationsToMavenCentralRepository --max-workers 1 || exit
 gradle publishPlugins -DautomatePublishing=true || exit
 gradle githubRelease || exit
-gradle applyDocVersion applySelfAnalysisVersion || exit
+gradle applyDocVersion || exit
 gradle closeAndReleaseRepository || exit

@@ -43,6 +43,14 @@ internal class RulePrinterTest {
             val actual = RulePrinter.print(rule)
             assertThat(actual).contains(description)
         }
+
+        @Test
+        fun `with html tags`() {
+            val description = "The return type is Array<String>"
+            val rule = ruleTemplate.copy(description = description)
+            val actual = RulePrinter.print(rule)
+            assertThat(actual).contains("The return type is Array&lt;String&gt;")
+        }
     }
 
     @Nested

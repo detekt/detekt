@@ -65,16 +65,8 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/docs/_config.yml"))
-        linePartToFind.set("detekt_version:")
-        lineTransformation.set("detekt_version: ${Versions.DETEKT}")
-    }
-
-    register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/gradle/libs.versions.toml"))
-        linePartToFind.set("detekt = { id = \"io.gitlab.arturbosch.detekt\"")
-        lineTransformation.set(
-            "detekt = { id = \"io.gitlab.arturbosch.detekt\", version = \"${Versions.DETEKT}\" }"
-        )
+        fileToUpdate.set(file("${rootProject.rootDir}/website/docusaurus.config.js"))
+        linePartToFind.set("    detektVersion:")
+        lineTransformation.set("    detektVersion: '${Versions.DETEKT}'")
     }
 }

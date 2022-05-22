@@ -11,47 +11,42 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class CorrectableRulesFirstSpec {
 
-    @Nested
-    inner class `correctable rules are run first` {
+    @Test
+    fun `runs rule with id 'NonCorrectable' last`() {
+        var actualLastRuleId = ""
 
-        @Test
-        fun `runs rule with id 'NonCorrectable' last`() {
-            var actualLastRuleId = ""
-
-            class First(config: Config) : Rule(config) {
-                override val issue: Issue = justAnIssue.copy(id = "NonCorrectable")
-                override fun visitClass(klass: KtClass) {
-                    actualLastRuleId = issue.id
-                }
+        class First(config: Config) : Rule(config) {
+            override val issue: Issue = justAnIssue.copy(id = "NonCorrectable")
+            override fun visitClass(klass: KtClass) {
+                actualLastRuleId = issue.id
             }
-
-            class Last(config: Config) : Rule(config) {
-                override val issue: Issue = justAnIssue.copy(id = "Correctable")
-                override fun visitClass(klass: KtClass) {
-                    actualLastRuleId = issue.id
-                }
-            }
-
-            val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/one-correctable-rule.yml"))
-            val detector = Analyzer(
-                settings,
-                listOf(object : RuleSetProvider {
-                    override val ruleSetId: String = "Test"
-                    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(Last(config), First(config)))
-                }),
-                emptyList()
-            )
-
-            settings.use { detector.run(listOf(compileForTest(testFile))) }
-
-            assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
         }
+
+        class Last(config: Config) : Rule(config) {
+            override val issue: Issue = justAnIssue.copy(id = "Correctable")
+            override fun visitClass(klass: KtClass) {
+                actualLastRuleId = issue.id
+            }
+        }
+
+        val testFile = path.resolve("Test.kt")
+        val settings = createProcessingSettings(testFile, yamlConfig("configs/one-correctable-rule.yml"))
+        val detector = Analyzer(
+            settings,
+            listOf(object : RuleSetProvider {
+                override val ruleSetId: String = "Test"
+                override fun instance(config: Config) = RuleSet(ruleSetId, listOf(Last(config), First(config)))
+            }),
+            emptyList()
+        )
+
+        settings.use { detector.run(listOf(compileForTest(testFile))) }
+
+        assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
     }
 }
 

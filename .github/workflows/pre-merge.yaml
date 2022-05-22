@@ -11,6 +11,9 @@ on:
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
+permissions:
+  contents: read
+
 jobs:
   gradle:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
@@ -79,4 +82,4 @@ jobs:
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test -x :detekt-gradle-plugin:test -Pcompile-test-snippets=true
+          arguments: test -Pcompile-test-snippets=true

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -489,6 +490,26 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+        }
+    }
+
+    @Nested
+    inner class `lateinit vars - #4731` {
+        val code = """
+            public class A {
+                private lateinit var test: String
+            }
+        """.trimIndent()
+
+        @Test
+        fun `reports uninitialized lateinit vars by default`() {
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report uninitialized lateinit vars if disabled in config`() {
+            val subject = VarCouldBeVal(TestConfig("ignoreLateinitVar" to true))
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
