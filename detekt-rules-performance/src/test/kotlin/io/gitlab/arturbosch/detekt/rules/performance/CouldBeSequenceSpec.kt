@@ -51,4 +51,19 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
         """
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `sequence should not trigger rule`() {
+        val code = """
+        val mySequence = sequenceOf(1,10,4,6,8,39)
+        val processed = mySequence.filter {
+            it % 2 == 0
+        }.map {
+            it*2
+        }.filter {
+            it > 5
+        }.toList()
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
 }
