@@ -37,12 +37,12 @@ class MdOutputReportSpec {
     fun `contains zero findings`() {
         val result = mdReport.render(TestDetektion())
 
-        assertThat(result).contains("Total: 0")
+        assertThat(result).contains("Findings (0)")
     }
 
     @Test
     fun `contains the total number of findings`() {
-        assertThat(result).contains("Total: 3")
+        assertThat(result).contains("Findings (3)")
     }
 
     @Test
@@ -61,8 +61,8 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right number of issues per rule`() {
-        assertThat(result).contains("id_a: 2")
-        assertThat(result).contains("id_b: 1")
+        assertThat(result).contains("id_a (2)")
+        assertThat(result).contains("id_b (1)")
     }
 
     @Test

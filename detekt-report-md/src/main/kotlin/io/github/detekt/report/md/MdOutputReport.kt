@@ -21,7 +21,7 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
 
 /**
  * Contains rule violations in Markdown format report.
- * [See:](https://detekt.dev/docs/introduction/configurations/#output-reports)
+ * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
 class MdOutputReport : OutputReport() {
     override val ending: String = "md"
@@ -36,9 +36,7 @@ class MdOutputReport : OutputReport() {
         h2("Complexity Report") {
             renderComplexity(getComplexityMetrics(detektion))
         }
-        h2("Findings") {
-            renderFindings(detektion.findings)
-        }
+        renderFindings(detektion.findings)
         text(" ")
         val detektLink = link("detekt version ${renderVersion()}", "$DETEKT_WEBSITE_BASE_URL/")
         text("generated with $detektLink on ${renderDate()}")
@@ -73,16 +71,14 @@ class MdOutputReport : OutputReport() {
             .map { it.size }
             .fold(0) { a, b -> a + b }
 
-        h3("Total: %,d".format(Locale.US, total))
+        h2("Findings (%,d)".format(Locale.US, total))
 
         findings
             .filter { it.value.isNotEmpty() }
             .toList()
             .sortedBy { (group, _) -> group }
             .forEach { (group, groupFindings) ->
-                orderedListItem(group) {
-                    renderGroup(group, groupFindings)
-                }
+                renderGroup(group, groupFindings)
             }
     }
 
@@ -97,7 +93,7 @@ class MdOutputReport : OutputReport() {
     }
 
     private fun MdUtils.renderRule(rule: String, group: String, findings: List<Finding>) {
-        text("$rule: %,d ".format(Locale.US, findings.size))
+        h3("$group, $rule (%,d)".format(Locale.US, findings.size))
         text(findings.first().issue.description)
 
         val ruleLink = link(
