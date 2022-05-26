@@ -8,6 +8,16 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.generator.out.MarkdownContent
+import io.gitlab.arturbosch.detekt.generator.out.codeBlock
+import io.gitlab.arturbosch.detekt.generator.out.emptyLine
+import io.gitlab.arturbosch.detekt.generator.out.h1
+import io.gitlab.arturbosch.detekt.generator.out.h2
+import io.gitlab.arturbosch.detekt.generator.out.h3
+import io.gitlab.arturbosch.detekt.generator.out.item
+import io.gitlab.arturbosch.detekt.generator.out.list
+import io.gitlab.arturbosch.detekt.generator.out.markdown
+import io.gitlab.arturbosch.detekt.generator.out.paragraph
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -29,18 +39,22 @@ class MdOutputReport : OutputReport() {
     override val name = "Markdown report"
 
     override fun render(detektion: Detektion) = markdown {
-        h1("detekt")
-        h2("Metrics") {
-            renderMetrics(detektion.metrics)
-        }
-        h2("Complexity Report") {
-            renderComplexity(getComplexityMetrics(detektion))
-        }
+        h1 { "detekt" }
+
+        h2 { "Metrics" }
+        renderMetrics(detektion.metrics)
+
+        h2 { "Complexity Report" }
+        renderComplexity(getComplexityMetrics(detektion))
+
         renderFindings(detektion.findings)
-        text(" ")
-        val detektLink = link("detekt version ${renderVersion()}", "$DETEKT_WEBSITE_BASE_URL/")
-        text("generated with $detektLink on ${renderDate()}")
-    }.toString()
+        emptyLine()
+
+        paragraph {
+            val detektLink = link("detekt version ${renderVersion()}", "$DETEKT_WEBSITE_BASE_URL/")
+            "generated with $detektLink on ${renderDate()}"
+        }
+    }
 
     private fun renderVersion(): String = whichDetekt() ?: "unknown"
 
@@ -49,85 +63,88 @@ class MdOutputReport : OutputReport() {
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
     }
 
-    private fun MdUtils.renderMetrics(metrics: Collection<ProjectMetric>) {
-        metrics.forEach {
-            listItem(("%,d ${it.type}".format(Locale.US, it.value)))
-        }
-    }
-
-    private fun MdUtils.renderComplexity(complexityReport: List<String>) {
-        complexityReport.forEach {
-            listItem(it.trim())
-        }
-    }
-
     private fun getComplexityMetrics(detektion: Detektion): List<String> {
         return ComplexityReportGenerator.create(detektion).generate().orEmpty()
     }
+}
 
-    private fun MdUtils.renderFindings(findings: Map<String, List<Finding>>) {
-        val total = findings.values
-            .asSequence()
-            .map { it.size }
-            .fold(0) { a, b -> a + b }
-
-        h2("Findings (%,d)".format(Locale.US, total))
-
-        findings
-            .filter { it.value.isNotEmpty() }
-            .toList()
-            .sortedBy { (group, _) -> group }
-            .forEach { (group, groupFindings) ->
-                renderGroup(group, groupFindings)
-            }
-    }
-
-    private fun MdUtils.renderGroup(group: String, findings: List<Finding>) {
-        findings
-            .groupBy { it.id }
-            .toList()
-            .sortedBy { (rule, _) -> rule }
-            .forEach { (rule, ruleFindings) ->
-                renderRule(rule, group, ruleFindings)
-            }
-    }
-
-    private fun MdUtils.renderRule(rule: String, group: String, findings: List<Finding>) {
-        h3("$group, $rule (%,d)".format(Locale.US, findings.size))
-        text(findings.first().issue.description)
-
-        val ruleLink = link(
-            "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.toLowerCase(Locale.US)}#${rule.toLowerCase(Locale.US)}"
-        )
-        text(ruleLink)
-
-        findings
-            .sortedWith(compareBy({ it.file }, { it.location.source.line }, { it.location.source.column }))
-            .forEach {
-                renderFinding(it)
-            }
-    }
-
-    private fun MdUtils.renderFinding(finding: Finding) {
-        val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
-        val location = "${filePath.toUnifiedString()}:${finding.location.source.line}:${finding.location.source.column}"
-
-        listItem(location) {
-            if (finding.message.isNotEmpty()) {
-                codeBlock(finding.message, "")
-            }
-
-            val psiFile = finding.entity.ktElement?.containingFile
-            if (psiFile != null) {
-                val lineSequence = psiFile.text.splitToSequence('\n')
-                snippetCode(lineSequence, finding.startPosition)
-            }
-        }
+private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {
+    list {
+        metrics.forEach { item { "%,d ${it.type}".format(Locale.US, it.value) } }
     }
 }
 
-internal fun MdUtils.snippetCode(lines: Sequence<String>, location: SourceLocation) {
+private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
+    list {
+        complexityReport.forEach { item { it.trim() } }
+    }
+}
+
+private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) {
+    findings
+        .groupBy { it.id }
+        .toList()
+        .sortedBy { (rule, _) -> rule }
+        .forEach { (rule, ruleFindings) ->
+            renderRule(rule, group, ruleFindings)
+        }
+}
+
+private fun MarkdownContent.renderRule(rule: String, group: String, findings: List<Finding>) {
+    h3 { "$group, $rule (%,d)".format(Locale.US, findings.size) }
+    paragraph { (findings.first().issue.description) }
+
+    paragraph {
+        link(
+            "Documentation",
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.toLowerCase(Locale.US)}#${rule.toLowerCase(Locale.US)}"
+        )
+    }
+
+    list {
+        findings
+            .sortedWith(compareBy({ it.file }, { it.location.source.line }, { it.location.source.column }))
+            .forEach {
+                item { renderFinding(it) }
+            }
+    }
+}
+
+private fun MarkdownContent.renderFindings(findings: Map<String, List<Finding>>) {
+    val total = findings.values
+        .asSequence()
+        .map { it.size }
+        .fold(0) { a, b -> a + b }
+
+    h2 { "Findings (%,d)".format(Locale.US, total) }
+
+    findings
+        .filter { it.value.isNotEmpty() }
+        .toList()
+        .sortedBy { (group, _) -> group }
+        .forEach { (group, groupFindings) ->
+            renderGroup(group, groupFindings)
+        }
+}
+
+private fun MarkdownContent.renderFinding(finding: Finding): String {
+    val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
+    val location = "${filePath.toUnifiedString()}:${finding.location.source.line}:${finding.location.source.column}"
+
+    val message = if (finding.message.isNotEmpty()) {
+        codeBlock("") { finding.message }
+    } else { "" }
+
+    val psiFile = finding.entity.ktElement?.containingFile
+    val snippet = if (psiFile != null) {
+        val lineSequence = psiFile.text.splitToSequence('\n')
+        snippetCode(lineSequence, finding.startPosition)
+    } else { "" }
+
+    return "$location\n$message\n$snippet"
+}
+
+private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: SourceLocation): String {
     val dropLineCount = max(location.line - 1 - EXTRA_LINES_IN_SNIPPET, 0)
     val takeLineCount = EXTRA_LINES_IN_SNIPPET + 1 + min(location.line - 1, EXTRA_LINES_IN_SNIPPET)
     var currentLineNumber = dropLineCount + 1
@@ -150,5 +167,7 @@ internal fun MdUtils.snippetCode(lines: Sequence<String>, location: SourceLocati
             currentLineNumber++
         }
 
-    codeBlock(text, "kotlin")
+    return codeBlock("kotlin") { text }
 }
+
+internal fun MarkdownContent.link(text: String, url: String) = "[$text]($url)"
