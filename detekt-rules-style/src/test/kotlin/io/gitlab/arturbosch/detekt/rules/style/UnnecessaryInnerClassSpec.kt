@@ -275,6 +275,23 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `as a safe qualified expression`() {
+            val code = """
+                class A {
+                    var foo: String? = null
+
+                    inner class B {
+                        fun fooLength() {
+                            foo?.length
+                        }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `to call a function of the member`() {
             val code = """
                 class FooClass {
