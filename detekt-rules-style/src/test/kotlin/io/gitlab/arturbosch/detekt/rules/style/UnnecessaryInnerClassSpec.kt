@@ -356,6 +356,23 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `when the innermost class refers the outermost class via a labeled expression`() {
+            val code = """
+                class A {
+                    inner class B {
+                        inner class C {
+                            fun outer(): A {
+                                return this@A
+                            }
+                        }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Test
