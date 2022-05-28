@@ -370,6 +370,79 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report on non-null properties of a parameterized type`() {
+            val code = """
+                class P<T>(foo: T) {
+                    val a: T = foo
+                    val b: T? = null
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports on properties of an unnecessarily nullable parameterized type`() {
+            val code = """
+                class P<T>(foo: T) {
+                    val bar: T? = foo
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports on properties of an unnecessarily nullable parameterized type extending Any`() {
+            val code = """
+                class P<T : Any>(foo: T) {
+                    val bar: T? = foo
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report on properties of a parameterized type which must be nullable`() {
+            val code = """
+                class P<T : Any>(private val foo: T) {
+                    val a: T
+                        get() = foo
+                    val b: T? = foo.takeIf { Random.nextBoolean() }
+                    val c: T?
+                        get() = foo.takeIf { Random.nextBoolean() }
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report on properties of a parameterized type which resolve to Nothing`() {
+            val code = """
+                class P<T> {
+                    val foo: T
+                        get() = error("")
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports on properties of an unnecessarily nullable parameterized type which resolve to Nothing`() {
+            val code = """
+                class P<T> {
+                    val foo: T?
+                        get() = error("")
+                }
+            """.trimIndent()
+
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
     }
 
     @Test
