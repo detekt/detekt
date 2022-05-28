@@ -581,6 +581,8 @@ style:
     active: true
   NoTabs:
     active: false
+  NullableBooleanCheck:
+    active: false
   ObjectLiteralToLambda:
     active: false
   OptionalAbstractKeyword:
