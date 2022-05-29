@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.generator
 
+import io.github.detekt.tooling.out.yaml
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
 import io.gitlab.arturbosch.detekt.generator.out.PropertiesWriter
 import io.gitlab.arturbosch.detekt.generator.out.YamlWriter
-import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter

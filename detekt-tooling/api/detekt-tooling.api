@@ -338,3 +338,95 @@ public final class io/github/detekt/tooling/dsl/RulesSpecBuilder : io/github/det
 	public final fun setRunPolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;)V
 }
 
+public abstract class io/github/detekt/tooling/out/Markdown {
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun append (Ljava/lang/String;)V
+	public fun getContent ()Ljava/lang/String;
+	public fun setContent (Ljava/lang/String;)V
+}
+
+public final class io/github/detekt/tooling/out/MarkdownContent : io/github/detekt/tooling/out/Markdown {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/detekt/tooling/out/MarkdownContent;
+	public static synthetic fun copy$default (Lio/github/detekt/tooling/out/MarkdownContent;Ljava/lang/String;ILjava/lang/Object;)Lio/github/detekt/tooling/out/MarkdownContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getContent ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun setContent (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/detekt/tooling/out/MarkdownKt {
+	public static final fun bold (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)Ljava/lang/String;
+	public static final fun code (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)Ljava/lang/String;
+	public static final fun codeBlock (Lio/github/detekt/tooling/out/MarkdownContent;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Ljava/lang/String;
+	public static synthetic fun codeBlock$default (Lio/github/detekt/tooling/out/MarkdownContent;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Ljava/lang/String;
+	public static final fun crossOut (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)Ljava/lang/String;
+	public static final fun description (Lio/github/detekt/tooling/out/MarkdownList;Lkotlin/jvm/functions/Function0;)V
+	public static final fun emptyLine (Lio/github/detekt/tooling/out/MarkdownContent;)V
+	public static final fun h1 (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun h2 (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun h3 (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun h4 (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun item (Lio/github/detekt/tooling/out/MarkdownList;Lkotlin/jvm/functions/Function0;)V
+	public static final fun list (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function1;)V
+	public static final fun markdown (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun markdown (Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
+	public static final fun orderedList (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+	public static final fun paragraph (Lio/github/detekt/tooling/out/MarkdownContent;Lkotlin/jvm/functions/Function0;)V
+}
+
+public final class io/github/detekt/tooling/out/MarkdownList : io/github/detekt/tooling/out/Markdown {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/detekt/tooling/out/MarkdownList;
+	public static synthetic fun copy$default (Lio/github/detekt/tooling/out/MarkdownList;Ljava/lang/String;ILjava/lang/Object;)Lio/github/detekt/tooling/out/MarkdownList;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getContent ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun setContent (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class io/github/detekt/tooling/out/YML {
+	public synthetic fun <init> (ILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun append (Ljava/lang/String;)V
+	public final fun emptyLine ()V
+	public fun getContent ()Ljava/lang/String;
+	public fun getIndent ()I
+	public fun setContent (Ljava/lang/String;)V
+}
+
+public final class io/github/detekt/tooling/out/YamlKt {
+	public static final fun keyValue (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public static synthetic fun keyValue$default (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)V
+	public static final fun list (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Ljava/util/List;)V
+	public static final fun node (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static final fun times (ILkotlin/jvm/functions/Function0;)V
+	public static final fun yaml (Lio/github/detekt/tooling/out/YamlNode;Lkotlin/jvm/functions/Function0;)V
+	public static final fun yaml (Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
+}
+
+public final class io/github/detekt/tooling/out/YamlNode : io/github/detekt/tooling/out/YML {
+	public fun <init> ()V
+	public fun <init> (ILjava/lang/String;)V
+	public synthetic fun <init> (ILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lio/github/detekt/tooling/out/YamlNode;
+	public static synthetic fun copy$default (Lio/github/detekt/tooling/out/YamlNode;ILjava/lang/String;ILjava/lang/Object;)Lio/github/detekt/tooling/out/YamlNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getContent ()Ljava/lang/String;
+	public fun getIndent ()I
+	public fun hashCode ()I
+	public fun setContent (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+

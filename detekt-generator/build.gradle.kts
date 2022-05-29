@@ -10,10 +10,12 @@ dependencies {
     implementation(projects.detektRulesEmpty)
     implementation(projects.detektFormatting)
     implementation(projects.detektCli)
+    implementation(projects.detektTooling)
     implementation(libs.jcommander)
 
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
+    testImplementation(projects.detektTooling)
     testImplementation(libs.assertj)
     testImplementation(libs.reflections)
 }

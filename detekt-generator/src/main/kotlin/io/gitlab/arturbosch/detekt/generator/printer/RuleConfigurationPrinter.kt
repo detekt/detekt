@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
+import io.github.detekt.tooling.out.bold
+import io.github.detekt.tooling.out.code
+import io.github.detekt.tooling.out.crossOut
+import io.github.detekt.tooling.out.description
+import io.github.detekt.tooling.out.h4
+import io.github.detekt.tooling.out.item
+import io.github.detekt.tooling.out.list
+import io.github.detekt.tooling.out.markdown
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
-import io.gitlab.arturbosch.detekt.generator.out.bold
-import io.gitlab.arturbosch.detekt.generator.out.code
-import io.gitlab.arturbosch.detekt.generator.out.crossOut
-import io.gitlab.arturbosch.detekt.generator.out.description
-import io.gitlab.arturbosch.detekt.generator.out.h4
-import io.gitlab.arturbosch.detekt.generator.out.item
-import io.gitlab.arturbosch.detekt.generator.out.list
-import io.gitlab.arturbosch.detekt.generator.out.markdown
 
 internal object RuleConfigurationPrinter : DocumentationPrinter<List<Configuration>> {
 

@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
+import io.github.detekt.tooling.out.YamlNode
+import io.github.detekt.tooling.out.keyValue
+import io.github.detekt.tooling.out.list
+import io.github.detekt.tooling.out.node
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
-import io.gitlab.arturbosch.detekt.generator.out.YamlNode
-import io.gitlab.arturbosch.detekt.generator.out.keyValue
-import io.gitlab.arturbosch.detekt.generator.out.list
-import io.gitlab.arturbosch.detekt.generator.out.node
 
 internal fun YamlNode.printRuleSetPage(ruleSetPage: RuleSetPage) {
     printRuleSet(ruleSetPage.ruleSet, ruleSetPage.rules)

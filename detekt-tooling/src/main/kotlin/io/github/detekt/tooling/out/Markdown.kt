@@ -1,6 +1,6 @@
 @file:Suppress("detekt.TooManyFunctions")
 
-package io.gitlab.arturbosch.detekt.generator.out
+package io.github.detekt.tooling.out
 
 sealed class Markdown(open var content: String = "") {
     fun append(value: String) {

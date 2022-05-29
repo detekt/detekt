@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.generator.out
+package io.github.detekt.tooling.out
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
